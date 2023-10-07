@@ -1,0 +1,31 @@
+import {MenuItem, TextField} from '@mui/material';
+import React from 'react';
+
+interface INumberControlProps {
+  name: string;
+  value: number;
+  onChange: (value: number) => void;
+}
+
+const NumberControl: React.FC<INumberControlProps> = ({
+  name,
+  value,
+  onChange,
+}) => {
+  const onValueChange = (event: any) => {
+    onChange(+event.target.value);
+  };
+  return (
+    <TextField
+      label={name}
+      variant="standard"
+      margin="none"
+      type="number"
+      value={value}
+      onChange={onValueChange}
+      fullWidth
+    />
+  );
+};
+
+export {NumberControl};
