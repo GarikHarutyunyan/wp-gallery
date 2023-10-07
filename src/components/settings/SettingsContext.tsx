@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {LayoutType, Photo} from 'react-photo-album';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -48,6 +48,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [titlePosition, setTitlePosition] = useState<TitlePosition | 'hidden'>(
     'hidden'
   );
+  const isTitlePositionEditable: boolean = borderRadius <= 50;
   const [titleColor, setTitleColor] = useState<string>('Black');
   const [titleFontSize, setTitleFontSize] = useState<number>(20);
   // useLayoutEffect(() => {
@@ -60,6 +61,12 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   //     viewportSize < 480 ? 100 : viewportSize < 900 ? 150 : 200
   //   );
   // }, []);
+
+  useEffect(() => {
+    if (borderRadius > 50 && titlePosition !== 'hidden') {
+      setTitlePosition('hidden');
+    }
+  }, [borderRadius]);
 
   const settings: IThumbnailSettings = useMemo(
     () => ({
@@ -101,13 +108,19 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       <Paper variant="outlined" sx={{mb: 4, p: 2, textAlign: 'left'}}>
         <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
           <Filter>
-            <NumberControl name={'Width'} value={width} onChange={setWidth} />
+            <NumberControl
+              name={'Width'}
+              value={width}
+              onChange={setWidth}
+              min={0}
+            />
           </Filter>
           <Filter>
             <NumberControl
               name={'Height'}
               value={height}
               onChange={setHeight}
+              min={0}
             />
           </Filter>
           <Filter>
@@ -125,6 +138,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               name={'Columns'}
               value={columns}
               onChange={setColumns}
+              min={1}
             />
           </Filter>
           <Filter>
@@ -148,6 +162,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               name={'Border width'}
               value={borderWidth}
               onChange={setBorderWidth}
+              min={0}
             />
           </Filter>
           <Filter>
@@ -173,6 +188,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               value={titlePosition}
               options={TitlePositionOptions}
               onChange={setTitlePosition}
+              isDisabled={!isTitlePositionEditable}
             />
           </Filter>
           <Filter>

@@ -1,7 +1,7 @@
 import {ImageList, ImageListItem, ImageListItemBar} from '@mui/material';
 import {IThumbnailSettings} from 'components/settings';
 import {IImageDTO, TitlePosition} from 'data-structures';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useLayoutEffect, useMemo, useRef, useState} from 'react';
 
 interface IThumbnailGalleryProps {
   images: IImageDTO[];
@@ -38,7 +38,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     setContainerWidth((divElement as any)?.clientWidth);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     changeContainerWidth();
     window.addEventListener('resize', () => changeContainerWidth());
   }, []);
@@ -60,10 +60,10 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
 
   const validColumnsCount = useMemo(
     () => getValidColumnsCount(columns),
-    [columns, containerWidth]
+    [width, columns, containerWidth]
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     changeContainerWidth();
   }, [width, gap, columns, padding, borderWidth, validColumnsCount]);
 

@@ -5,12 +5,16 @@ interface INumberControlProps {
   name: string;
   value: number;
   onChange: (value: number) => void;
+  min?: number;
+  max?: number;
 }
 
 const NumberControl: React.FC<INumberControlProps> = ({
   name,
   value,
   onChange,
+  min,
+  max,
 }) => {
   const onValueChange = (event: any) => {
     onChange(+event.target.value);
@@ -24,6 +28,7 @@ const NumberControl: React.FC<INumberControlProps> = ({
       value={value}
       onChange={onValueChange}
       fullWidth
+      InputProps={{inputProps: {min, max}}}
     />
   );
 };

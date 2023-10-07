@@ -11,6 +11,7 @@ interface ISelectControlProps {
   value: string;
   options: ISelectOption[];
   onChange: any;
+  isDisabled?: boolean;
 }
 
 const SelectControl: React.FC<ISelectControlProps> = ({
@@ -18,6 +19,7 @@ const SelectControl: React.FC<ISelectControlProps> = ({
   value,
   options,
   onChange,
+  isDisabled,
 }) => {
   const onValueChange = (event: any) => {
     onChange(event.target.value);
@@ -32,6 +34,7 @@ const SelectControl: React.FC<ISelectControlProps> = ({
       margin="none"
       value={value}
       onChange={onValueChange}
+      disabled={isDisabled}
     >
       {options.map(({value, title}) => (
         <MenuItem key={value} value={value}>
