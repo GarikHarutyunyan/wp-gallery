@@ -1,0 +1,18 @@
+.thumnail-gallery__image:hover+.thumbnail-gallery__title_on-hover {
+    display: block;
+    pointer-events: none;
+}
+
+.thumbnail-gallery__title_on-hover {
+    display: none;
+
+}
+
+.thumbnail-gallery__title_hidden {
+    display: none;
+}
+
+.thumbnail-gallery__title-content_center {
+    text-align: center;
+    height: 100%;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Gallery from './components/Gallery';
-import { Gallery2 } from './components/Gallery2';
+import {Gallery2} from './components/Gallery2';
 
 function App() {
   return (

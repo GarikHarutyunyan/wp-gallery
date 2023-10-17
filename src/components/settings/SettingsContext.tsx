@@ -1,215 +1,133 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {LayoutType, Photo} from 'react-photo-album';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import {SliderControl} from './SliderControl';
-import {Filter} from './Filter';
-import {TextControl} from './TextControl';
-import {NumberControl} from './NumberControl';
-import ColorPicker from 'material-ui-color-picker';
-import {ColorControl} from './ColorControl';
-import {TitlePosition, TitlePositionOptions} from 'data-structures';
-import {SelectControl} from './SelectControl';
+import React, {useLayoutEffect, useState} from 'react';
+import {IThumbnailSettings, ThumbnailSettings} from './ThumbnailSettings';
+import {styled} from '@mui/material/styles';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabPanel from '@mui/lab/TabPanel';
+import Collapse from '@mui/material/Collapse';
+import IconButton, {IconButtonProps} from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import axios from 'axios';
+import Button from '@mui/material/Button';
+import {TitlePosition, TitleVisibility} from 'data-structures';
 
-const useLayoutEffect =
-  typeof document !== 'undefined' ? React.useLayoutEffect : React.useEffect;
-
-interface IThumbnailSettings {
-  width: number;
-  height: number;
-  columns: number;
-  gap: number;
-  backgroundColor: string;
-  padding: number;
-  paddingColor: string;
-  borderWidth: number;
-  borderRadius: number;
-  borderColor: string;
-
-  titlePosition: TitlePosition | 'hidden';
-  titleColor: string;
-  titleFontSize: number;
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
 }
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const {expand, ...other} = props;
+  return <IconButton {...other} />;
+})(({theme, expand}) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  margin: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
+const Aligner = styled((props: React.PropsWithChildren) => {
+  return <div {...props}></div>;
+})(() => ({
+  width: 'auto',
+  display: 'flex',
+  justifyContent: 'space-between',
+  margin: '0 20px',
+}));
 
 const SettingsContext = React.createContext<IThumbnailSettings | null>(null);
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
-  const [width, setWidth] = useState<number>(150);
-  const [height, setHeight] = useState<number>(150);
-  const [columns, setColumns] = useState<number>(3);
-  const [gap, setGap] = useState<number>(10);
-  const [backgroundColor, setBackgroundColor] = useState<string>('White');
-  const [padding, setPadding] = useState<number>(10);
-  const [paddingColor, setPaddingColor] = useState<string>('Skyblue');
-  const [borderRadius, setBorderRadius] = useState<number>(10);
-  const [borderColor, setBorderColor] = useState<string>('Blue');
-  const [borderWidth, setBorderWidth] = useState<number>(0);
+  const [thumbnailSettings, setThumbnailSettings] = useState<
+    IThumbnailSettings | undefined
+  >();
+  const [activeTab, setActiveTab] = useState<string>('gallery');
+  const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
-  const [titlePosition, setTitlePosition] = useState<TitlePosition | 'hidden'>(
-    'hidden'
-  );
-  const isTitlePositionEditable: boolean = borderRadius <= 50;
-  const [titleColor, setTitleColor] = useState<string>('Black');
-  const [titleFontSize, setTitleFontSize] = useState<number>(20);
-  // useLayoutEffect(() => {
-  //   const viewportSize = window.innerWidth;
+  const getData = async () => {
+    const dataElement = document.getElementsByClassName('aig-preview')?.[0];
+    const fetchUrl = dataElement?.getAttribute('data-options-url');
+    if (fetchUrl) {
+      const newThumbnailSettings: IThumbnailSettings = (
+        await axios.get(fetchUrl as string)
+      ).data;
 
-  //   setColumns(viewportSize < 480 ? 2 : viewportSize < 900 ? 3 : 5);
-  //   // setSpacing(viewportSize < 480 ? 10 : viewportSize < 900 ? 20 : 30);
-  //   setPadding(viewportSize < 480 ? 10 : viewportSize < 900 ? 20 : 30);
-  //   setTargetRowHeight(
-  //     viewportSize < 480 ? 100 : viewportSize < 900 ? 150 : 200
-  //   );
-  // }, []);
-
-  useEffect(() => {
-    if (borderRadius > 50 && titlePosition !== 'hidden') {
-      setTitlePosition('hidden');
+      setThumbnailSettings(newThumbnailSettings);
+    } else {
+      setThumbnailSettings({
+        width: 150,
+        height: 150,
+        columns: 5,
+        gap: 10,
+        backgroundColor: 'White',
+        padding: 10,
+        paddingColor: 'Skyblue',
+        borderRadius: 5,
+        titlePosition: TitlePosition.BELOW,
+        titleVisibility: TitleVisibility.NONE,
+        titleColor: 'Black',
+        titleFontSize: 20,
+      });
     }
-  }, [borderRadius]);
+  };
 
-  const settings: IThumbnailSettings = useMemo(
-    () => ({
-      width,
-      height,
-      columns,
-      gap,
-      backgroundColor,
-      padding,
-      paddingColor,
-      borderWidth,
-      borderRadius,
-      borderColor,
+  useLayoutEffect(() => {
+    getData();
+  }, []);
 
-      titlePosition,
-      titleColor,
-      titleFontSize,
-    }),
-    [
-      width,
-      height,
-      columns,
-      gap,
-      backgroundColor,
-      padding,
-      paddingColor,
-      borderWidth,
-      borderRadius,
-      borderColor,
+  const onSave = async () => {
+    const dataElement = document.getElementsByClassName('aig-preview')?.[0];
+    const fetchUrl = dataElement?.getAttribute('data-options-url');
 
-      titlePosition,
-      titleColor,
-      titleFontSize,
-    ]
-  );
+    if (fetchUrl) {
+      const newThumbnailSettings: IThumbnailSettings = (
+        await axios.put(fetchUrl as string, thumbnailSettings)
+      ).data;
+
+      // setThumbnailSettings(newThumbnailSettings);
+    }
+  };
+
+  const onActiveTabChange = (_: any, newActiveTab: string) => {
+    setActiveTab(newActiveTab);
+  };
 
   return (
-    <SettingsContext.Provider value={settings}>
-      <Paper variant="outlined" sx={{mb: 4, p: 2, textAlign: 'left'}}>
-        <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-          <Filter>
-            <NumberControl
-              name={'Width'}
-              value={width}
-              onChange={setWidth}
-              min={0}
-            />
-          </Filter>
-          <Filter>
-            <NumberControl
-              name={'Height'}
-              value={height}
-              onChange={setHeight}
-              min={0}
-            />
-          </Filter>
-          <Filter>
-            <NumberControl name={'Spacing'} value={gap} onChange={setGap} />
-          </Filter>
-          <Filter>
-            <ColorControl
-              name="Spacing color"
-              value={backgroundColor}
-              onChange={setBackgroundColor}
-            />
-          </Filter>
-          <Filter>
-            <NumberControl
-              name={'Columns'}
-              value={columns}
-              onChange={setColumns}
-              min={1}
-            />
-          </Filter>
-          <Filter>
-            <SliderControl
-              name="Padding"
-              min={0}
-              max={50}
-              value={padding}
-              onChange={(_, value) => setPadding(value)}
-            />
-          </Filter>
-          <Filter>
-            <ColorControl
-              name="Padding color"
-              value={paddingColor}
-              onChange={setPaddingColor}
-            />
-          </Filter>
-          <Filter>
-            <NumberControl
-              name={'Border width'}
-              value={borderWidth}
-              onChange={setBorderWidth}
-              min={0}
-            />
-          </Filter>
-          <Filter>
-            <SliderControl
-              name="Radius"
-              min={0}
-              max={100}
-              value={borderRadius}
-              onChange={(_, value) => setBorderRadius(value)}
-            />
-          </Filter>
-          <Filter>
-            <ColorControl
-              name="Border color"
-              value={borderColor}
-              onChange={setBorderColor}
-            />
-          </Filter>
-
-          <Filter>
-            <SelectControl
-              name={'Title position'}
-              value={titlePosition}
-              options={TitlePositionOptions}
-              onChange={setTitlePosition}
-              isDisabled={!isTitlePositionEditable}
-            />
-          </Filter>
-          <Filter>
-            <ColorControl
-              name="Title color"
-              value={titleColor}
-              onChange={setTitleColor}
-            />
-          </Filter>
-          <Filter>
-            <NumberControl
-              name={'Title font size'}
-              value={titleFontSize}
-              onChange={setTitleFontSize}
-            />
-          </Filter>
-        </Grid>
-      </Paper>
+    <SettingsContext.Provider value={thumbnailSettings || null}>
+      <TabContext value={activeTab}>
+        <Aligner>
+          <Tabs value={activeTab} onChange={onActiveTabChange}>
+            <Tab label="Gallery" value="gallery" />
+            <Tab label="Light Box" value="lightBox" />
+          </Tabs>
+          <span>
+            <Button variant="contained" onClick={onSave}>
+              {'Save'}
+            </Button>
+            <ExpandMore
+              expand={isExpanded}
+              onClick={() => setIsExpanded((prevValue) => !prevValue)}
+            >
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </span>
+        </Aligner>
+        <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+          <TabPanel value="gallery">
+            {thumbnailSettings && (
+              <ThumbnailSettings
+                value={thumbnailSettings as IThumbnailSettings}
+                onChange={setThumbnailSettings}
+              />
+            )}
+          </TabPanel>
+          <TabPanel value="lightBox">Item Two</TabPanel>
+        </Collapse>
+      </TabContext>
       {children}
     </SettingsContext.Provider>
   );
 };
 
-export {SettingsContext, SettingsProvider, type IThumbnailSettings};
+export {SettingsContext, SettingsProvider};

@@ -1,7 +1,9 @@
 import React from 'react';
 import {ThumbnailGallery} from './ThumbnailGallery';
 import {IImageDTO} from 'data-structures';
-import {IThumbnailSettings, useSettings} from '../../components/settings';
+import {useSettings} from '../../components/settings';
+import {ThumbnailGalleryWithDataFetching} from './ThumbnailGalleryWithDataFetching';
+import {IThumbnailSettings} from 'components/settings/ThumbnailSettings';
 
 const images: IImageDTO[] = [
   {
@@ -51,9 +53,11 @@ const images: IImageDTO[] = [
 ];
 
 const ThumbnailGalleryWithSettings = () => {
-  const settings: IThumbnailSettings = useSettings();
+  const settings: IThumbnailSettings | null = useSettings();
 
-  return <ThumbnailGallery images={images} settings={settings} />;
+  return settings ? (
+    <ThumbnailGalleryWithDataFetching images={images} settings={settings} />
+  ) : null;
 };
 
 export {ThumbnailGalleryWithSettings};

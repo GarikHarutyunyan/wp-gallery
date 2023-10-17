@@ -10,7 +10,7 @@ const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const {WebpackManifestPlugin} = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
@@ -38,7 +38,7 @@ const reactRefreshWebpackPluginRuntimeEntry = require.resolve(
 const babelRuntimeEntry = require.resolve('babel-preset-react-app');
 const babelRuntimeEntryHelpers = require.resolve(
   '@babel/runtime/helpers/esm/assertThisInitialized',
-  { paths: [babelRuntimeEntry] }
+  {paths: [babelRuntimeEntry]}
 );
 const babelRuntimeRegenerator = require.resolve('@babel/runtime/regenerator', {
   paths: [babelRuntimeEntry],
@@ -113,7 +113,7 @@ module.exports = function (webpackEnv) {
         // css is located in `static/css`, use '../../' to locate index.html folder
         // in production `paths.publicUrlOrPath` can be a relative path
         options: paths.publicUrlOrPath.startsWith('.')
-          ? { publicPath: '../../' }
+          ? {publicPath: '../../'}
           : {},
       },
       {
@@ -201,33 +201,38 @@ module.exports = function (webpackEnv) {
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: paths.appIndexJs,
+    // output: {
+    //   // The build folder.
+    //   path: paths.appBuild,
+    //   // Add /* filename */ comments to generated require()s in the output.
+    //   pathinfo: isEnvDevelopment,
+    //   // There will be one main bundle, and one file per asynchronous chunk.
+    //   // In development, it does not produce real files.
+    //   filename: isEnvProduction
+    //     ? 'static/js/[name].[contenthash:8].js'
+    //     : isEnvDevelopment && 'static/js/bundle.js',
+    //   // There are also additional JS chunk files if you use code splitting.
+    //   chunkFilename: isEnvProduction
+    //     ? 'static/js/[name].[contenthash:8].chunk.js'
+    //     : isEnvDevelopment && 'static/js/[name].chunk.js',
+    //   assetModuleFilename: 'static/media/[name].[hash][ext]',
+    //   // webpack uses `publicPath` to determine where the app is being served from.
+    //   // It requires a trailing slash, or the file assets will get an incorrect path.
+    //   // We inferred the "public path" (such as / or /my-project) from homepage.
+    //   publicPath: paths.publicUrlOrPath,
+    //   // Point sourcemap entries to original disk location (format as URL on Windows)
+    //   devtoolModuleFilenameTemplate: isEnvProduction
+    //     ? info =>
+    //         path
+    //           .relative(paths.appSrc, info.absoluteResourcePath)
+    //           .replace(/\\/g, '/')
+    //     : isEnvDevelopment &&
+    //       (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+    // },
     output: {
-      // The build folder.
-      path: paths.appBuild,
-      // Add /* filename */ comments to generated require()s in the output.
-      pathinfo: isEnvDevelopment,
-      // There will be one main bundle, and one file per asynchronous chunk.
-      // In development, it does not produce real files.
-      filename: isEnvProduction
-        ? 'static/js/[name].[contenthash:8].js'
-        : isEnvDevelopment && 'static/js/bundle.js',
-      // There are also additional JS chunk files if you use code splitting.
-      chunkFilename: isEnvProduction
-        ? 'static/js/[name].[contenthash:8].chunk.js'
-        : isEnvDevelopment && 'static/js/[name].chunk.js',
-      assetModuleFilename: 'static/media/[name].[hash][ext]',
-      // webpack uses `publicPath` to determine where the app is being served from.
-      // It requires a trailing slash, or the file assets will get an incorrect path.
-      // We inferred the "public path" (such as / or /my-project) from homepage.
-      publicPath: paths.publicUrlOrPath,
-      // Point sourcemap entries to original disk location (format as URL on Windows)
-      devtoolModuleFilenameTemplate: isEnvProduction
-        ? info =>
-            path
-              .relative(paths.appSrc, info.absoluteResourcePath)
-              .replace(/\\/g, '/')
-        : isEnvDevelopment &&
-          (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+      path: 'C:/wamp64/www/wordpress/wp-content/plugins/gallery/assets/js', //path.resolve(__dirname, 'build'),
+      filename: 'wp-gallery.js', // Change this to your desired filename
+      publicPath: '/',
     },
     cache: {
       type: 'filesystem',
@@ -237,7 +242,7 @@ module.exports = function (webpackEnv) {
       buildDependencies: {
         defaultWebpack: ['webpack/lib/'],
         config: [__filename],
-        tsconfig: [paths.appTsConfig, paths.appJsConfig].filter(f =>
+        tsconfig: [paths.appTsConfig, paths.appJsConfig].filter((f) =>
           fs.existsSync(f)
         ),
       },
@@ -307,8 +312,8 @@ module.exports = function (webpackEnv) {
       // `web` extension prefixes have been added for better support
       // for React Native Web.
       extensions: paths.moduleFileExtensions
-        .map(ext => `.${ext}`)
-        .filter(ext => useTypeScript || !ext.includes('ts')),
+        .map((ext) => `.${ext}`)
+        .filter((ext) => useTypeScript || !ext.includes('ts')),
       alias: {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
@@ -363,6 +368,10 @@ module.exports = function (webpackEnv) {
                 },
               },
             },
+            {
+              test: /\.css$/,
+              use: ['style-loader', 'css-loader'],
+            },
             // "url" loader works like "file" loader except that it embeds assets
             // smaller than specified limit in bytes as data URLs to avoid requests.
             // A missing `test` is equivalent to a match.
@@ -384,7 +393,7 @@ module.exports = function (webpackEnv) {
                     prettier: false,
                     svgo: false,
                     svgoConfig: {
-                      plugins: [{ removeViewBox: false }],
+                      plugins: [{removeViewBox: false}],
                     },
                     titleProp: true,
                     ref: true,
@@ -419,7 +428,7 @@ module.exports = function (webpackEnv) {
                     },
                   ],
                 ],
-                
+
                 plugins: [
                   isEnvDevelopment &&
                     shouldUseReactRefresh &&
@@ -447,13 +456,13 @@ module.exports = function (webpackEnv) {
                 presets: [
                   [
                     require.resolve('babel-preset-react-app/dependencies'),
-                    { helpers: true },
+                    {helpers: true},
                   ],
                 ],
                 cacheDirectory: true,
                 // See #6846 for context on why cacheCompression is disabled
                 cacheCompression: false,
-                
+
                 // Babel sourcemaps are needed for debugging into node_modules
                 // code.  Without the options below, debuggers like VSCode
                 // show incorrect code and set breakpoints on the wrong lines.
@@ -643,7 +652,7 @@ module.exports = function (webpackEnv) {
             return manifest;
           }, seed);
           const entrypointFiles = entrypoints.main.filter(
-            fileName => !fileName.endsWith('.map')
+            (fileName) => !fileName.endsWith('.map')
           );
 
           return {
@@ -708,14 +717,14 @@ module.exports = function (webpackEnv) {
             // '../cra-template-typescript/template/src/App.tsx'
             // otherwise.
             include: [
-              { file: '../**/src/**/*.{ts,tsx}' },
-              { file: '**/src/**/*.{ts,tsx}' },
+              {file: '../**/src/**/*.{ts,tsx}'},
+              {file: '**/src/**/*.{ts,tsx}'},
             ],
             exclude: [
-              { file: '**/src/**/__tests__/**' },
-              { file: '**/src/**/?(*.){spec|test}.*' },
-              { file: '**/src/setupProxy.*' },
-              { file: '**/src/setupTests.*' },
+              {file: '**/src/**/__tests__/**'},
+              {file: '**/src/**/?(*.){spec|test}.*'},
+              {file: '**/src/setupProxy.*'},
+              {file: '**/src/setupTests.*'},
             ],
           },
           logger: {

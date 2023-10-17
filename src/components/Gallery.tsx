@@ -16,20 +16,13 @@ const Gallery = () => {
   return (
     <div
       style={{
-        width: '75%',
+        width: '100%',
         margin: '0 auto',
       }}
     >
       <SettingsProvider>
         <ThumbnailGalleryWithSettings />
       </SettingsProvider>
-      {/* <Lightbox
-        plugins={[Fullscreen, Slideshow, Thumbnails, Zoom]}
-        open={selectedIndex > 0}
-        index={selectedIndex}
-        close={() => setSelectedIndex(-1)}
-        slides={itemData.map((data) => ({src: data.img}))}
-      /> */}
     </div>
   );
 };

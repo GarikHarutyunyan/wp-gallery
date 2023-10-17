@@ -1,7 +1,10 @@
 import {ImageList, ImageListItem, ImageListItemBar} from '@mui/material';
-import {IThumbnailSettings} from 'components/settings';
-import {IImageDTO, TitlePosition} from 'data-structures';
+import {useLightbox} from 'components/lightbox';
+import {IThumbnailSettings} from 'components/settings/ThumbnailSettings';
+import {IImageDTO, TitlePosition, TitleVisibility} from 'data-structures';
 import React, {useLayoutEffect, useMemo, useRef, useState} from 'react';
+import clsx from 'clsx';
+import './thumbnail-gallery.css';
 
 interface IThumbnailGalleryProps {
   images: IImageDTO[];
@@ -12,6 +15,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
   images,
   settings,
 }) => {
+  const {setActiveImageIndex} = useLightbox();
   const {
     width,
     height,
@@ -20,21 +24,19 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     backgroundColor,
     padding,
     paddingColor,
-    borderWidth,
     borderRadius,
-    borderColor,
-
     titlePosition,
+    titleVisibility,
     titleColor,
     titleFontSize,
   } = settings;
   const elementRef = useRef();
   const [containerWidth, setContainerWidth] = useState(0);
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const ratio: number = width / height;
 
   const changeContainerWidth = () => {
     const divElement = elementRef?.current;
-    console.log((divElement as any)?.clientWidth);
+
     setContainerWidth((divElement as any)?.clientWidth);
   };
 
@@ -44,12 +46,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
   }, []);
 
   const getValidColumnsCount = (columns: number): number => {
-    // debugger;
     if (
       !containerWidth ||
-      width * columns +
-        (columns - 1) * gap +
-        columns * 2 * (padding + borderWidth) <=
+      width * columns + (columns - 1) * gap + columns * 2 * padding <=
         containerWidth
     ) {
       return columns;
@@ -60,43 +59,30 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
 
   const validColumnsCount = useMemo(
     () => getValidColumnsCount(columns),
-    [width, columns, containerWidth]
+    [width, gap, columns, padding, containerWidth]
   );
 
-  useLayoutEffect(() => {
-    changeContainerWidth();
-  }, [width, gap, columns, padding, borderWidth, validColumnsCount]);
-
   const getWidth = useMemo((): number => {
-    debugger;
     if (containerWidth) {
       const gaap =
-        (validColumnsCount - 1) * gap +
-        validColumnsCount * 2 * (padding + borderWidth);
+        (validColumnsCount - 1) * gap + validColumnsCount * 2 * padding;
       const a = containerWidth - gaap;
 
       return a / validColumnsCount;
     }
 
     return width;
-  }, [
-    containerWidth,
-    width,
-    gap,
-    columns,
-    padding,
-    borderWidth,
-    validColumnsCount,
-  ]);
+  }, [containerWidth, width, gap, columns, padding, validColumnsCount]);
+
+  useLayoutEffect(() => {
+    changeContainerWidth();
+  }, [width, getWidth, gap, columns, padding, validColumnsCount]);
 
   return (
     <div
       style={{
         width:
-          width * columns +
-          (columns - 1) * gap +
-          columns * 2 * (padding + borderWidth) +
-          'px',
+          width * columns + (columns - 1) * gap + columns * 2 * padding + 'px',
         margin: '0 auto',
         overflow: 'hidden',
         maxWidth: '100%',
@@ -116,56 +102,62 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
           style={{margin: '0 auto'}}
         >
           {images.map((image, index) => (
-            <ImageListItem key={image.uri}>
-              <img
-                src={`${image.uri}?w=164&h=$164&fit=crop&auto=format`}
-                srcSet={`${image.uri}?w=164&h=$164&fit=crop&auto=format`}
-                alt={image.title}
-                loading="lazy"
-                onClick={() => setSelectedIndex(index)}
-                style={{
-                  width: getWidth + 'px',
-                  height: height + 'px',
-                  padding: padding + 'px',
-                  background: paddingColor,
-                  border: borderWidth + 'px solid' + borderColor,
-                  borderRadius: borderRadius + 'px',
-                }}
-              />
-              {titlePosition !== 'hidden' && (
-                <ImageListItemBar
-                  title={
-                    <span
-                      style={{
-                        color: titleColor,
-                        fontSize: titleFontSize + 'px',
-                      }}
-                    >
-                      {image.title}
-                    </span>
-                  }
-                  position={titlePosition as TitlePosition}
+            <div
+              onClick={() => setActiveImageIndex(index)}
+              style={{
+                borderRadius: borderRadius + '%',
+                overflow:
+                  titlePosition === TitlePosition.BELOW ? 'hidden' : 'unset',
+              }}
+            >
+              <ImageListItem key={image.uri}>
+                <img
+                  className={'thumnail-gallery__image'}
+                  src={`${image.uri}?w=164&h=$164&fit=crop&auto=format`}
+                  srcSet={`${image.uri}?w=164&h=$164&fit=crop&auto=format`}
+                  alt={image.title}
+                  loading="lazy"
                   style={{
-                    borderBottomLeftRadius:
-                      titlePosition === TitlePosition.BOTTOM
-                        ? borderRadius + 'px'
-                        : undefined,
-                    borderBottomRightRadius:
-                      titlePosition === TitlePosition.BOTTOM
-                        ? borderRadius + 'px'
-                        : undefined,
-                    borderTopLeftRadius:
-                      titlePosition === TitlePosition.TOP
-                        ? borderRadius + 'px'
-                        : undefined,
-                    borderTopRightRadius:
-                      titlePosition === TitlePosition.TOP
-                        ? borderRadius + 'px'
-                        : undefined,
+                    width: getWidth + 'px',
+                    height: getWidth * (1 / ratio) + 'px',
+                    padding: padding + 'px',
+                    background: paddingColor,
+                    borderRadius: borderRadius + '%',
                   }}
                 />
-              )}
-            </ImageListItem>
+                <div
+                  className={clsx('thumbnail-gallery__title', {
+                    'thumbnail-gallery__title_on-hover':
+                      titleVisibility === TitleVisibility.ON_HOVER &&
+                      titlePosition !== TitlePosition.BELOW,
+                    'thumbnail-gallery__title_hidden':
+                      titleVisibility === TitleVisibility.NONE,
+                  })}
+                >
+                  <ImageListItemBar
+                    className={clsx({
+                      'thumbnail-gallery__title-content_center':
+                        titlePosition === TitlePosition.CENTER,
+                    })}
+                    title={
+                      <span
+                        style={{
+                          color: titleColor,
+                          fontSize: titleFontSize + 'px',
+                        }}
+                      >
+                        {image.title}
+                      </span>
+                    }
+                    position={
+                      titlePosition !== TitlePosition.CENTER
+                        ? titlePosition
+                        : 'bottom'
+                    }
+                  />
+                </div>
+              </ImageListItem>
+            </div>
           ))}
         </ImageList>
       </div>
@@ -173,4 +165,4 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
   );
 };
 
-export {ThumbnailGallery};
+export {ThumbnailGallery, type IThumbnailGalleryProps};
