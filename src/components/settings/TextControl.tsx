@@ -16,6 +16,9 @@ const TextControl: React.FC<ITextControlProps> = ({name, value, onChange}) => {
       value={value}
       onChange={onChange}
       fullWidth
+      InputLabelProps={{
+        shrink: true,
+      }}
     />
   );
 };

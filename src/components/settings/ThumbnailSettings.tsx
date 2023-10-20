@@ -5,16 +5,20 @@ import {SliderControl} from './SliderControl';
 import {Filter} from './Filter';
 import {NumberControl} from './NumberControl';
 import {ColorControl} from './ColorControl';
+import Collapse from '@mui/material/Collapse';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
+  TitleAlignment,
+  TitleAlignmentOptions,
   TitlePosition,
   TitlePositionOptions,
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
 import {SelectControl} from './SelectControl';
-
-const useLayoutEffect =
-  typeof document !== 'undefined' ? React.useLayoutEffect : React.useEffect;
+import {FontControl} from './FontControl';
+import {Divider, Typography} from '@mui/material';
+import {Aligner, ExpandMore} from 'core-components';
 
 interface IThumbnailSettings {
   width: number;
@@ -26,19 +30,23 @@ interface IThumbnailSettings {
   paddingColor: string;
   borderRadius: number;
   titlePosition: TitlePosition;
+  titleAlignment: TitleAlignment;
   titleVisibility: TitleVisibility;
+  titleFontFamily: string;
   titleColor: string;
-  titleFontSize: number;
+  titleFontFamilySize: number;
 }
 
 interface IThumbnailSettingsProps {
   value: IThumbnailSettings;
   onChange: (newSettings: IThumbnailSettings) => void;
+  isLoading?: boolean;
 }
 
 const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
   value,
   onChange,
+  isLoading,
 }) => {
   const [width, setWidth] = useState<number>(value.width);
   const [height, setHeight] = useState<number>(value.height);
@@ -53,14 +61,23 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
   const [titlePosition, setTitlePosition] = useState<TitlePosition>(
     value.titlePosition
   );
+  const [titleAlignment, setTitleAlignment] = useState<TitleAlignment>(
+    value.titleAlignment
+  );
   const [titleVisibility, setTitleVisibility] = useState<TitleVisibility>(
     value.titleVisibility
   );
   const isTitlePositionEditable: boolean = borderRadius <= 50;
-  const [titleColor, setTitleColor] = useState<string>(value.titleColor);
-  const [titleFontSize, setTitleFontSize] = useState<number>(
-    value.titleFontSize
+  const [titleFontFamily, settitleFontFamily] = useState<string>(
+    value.titleFontFamily
   );
+  const [titleColor, setTitleColor] = useState<string>(value.titleColor);
+  const [titleFontFamilySize, settitleFontFamilySize] = useState<number>(
+    value.titleFontFamilySize
+  );
+
+  const [isMainExpanded, setIsMainExpanded] = useState(true);
+  const [isAdvancedExpanded, setIsAdvancedExpanded] = useState(false);
 
   useEffect(
     () =>
@@ -74,9 +91,11 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
         paddingColor,
         borderRadius,
         titlePosition,
+        titleAlignment,
         titleVisibility,
+        titleFontFamily,
         titleColor,
-        titleFontSize,
+        titleFontFamilySize,
       }),
     [
       width,
@@ -88,114 +107,186 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
       paddingColor,
       borderRadius,
       titlePosition,
+      titleAlignment,
       titleVisibility,
+      titleFontFamily,
       titleColor,
-      titleFontSize,
+      titleFontFamilySize,
     ]
   );
 
-  return (
-    <Paper variant="outlined" sx={{mb: 4, p: 2, textAlign: 'left'}}>
-      <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-        <Filter>
-          <NumberControl
-            name={'Width'}
-            value={width}
-            onChange={setWidth}
-            min={0}
-          />
-        </Filter>
-        <Filter>
-          <NumberControl
-            name={'Height'}
-            value={height}
-            onChange={setHeight}
-            min={0}
-          />
-        </Filter>
-        <Filter>
-          <SliderControl
-            name={'Spacing'}
-            value={gap}
-            min={0}
-            max={100}
-            onChange={(_, value) => setGap(value)}
-          />
-        </Filter>
-        <Filter>
-          <ColorControl
-            name="Spacing color"
-            value={backgroundColor}
-            onChange={setBackgroundColor}
-          />
-        </Filter>
-        <Filter>
-          <NumberControl
-            name={'Columns'}
-            value={columns}
-            onChange={setColumns}
-            min={1}
-          />
-        </Filter>
-        <Filter>
-          <SliderControl
-            name="Padding"
-            min={0}
-            max={100}
-            value={padding}
-            onChange={(_, value) => setPadding(value)}
-          />
-        </Filter>
-        <Filter>
-          <ColorControl
-            name="Padding color"
-            value={paddingColor}
-            onChange={setPaddingColor}
-          />
-        </Filter>
-        <Filter>
-          <SliderControl
-            name="Radius (%)"
-            min={0}
-            value={borderRadius}
-            max={50}
-            onChange={(_, value) => setBorderRadius(value)}
-          />
-        </Filter>
+  const onToggleMainExpand = () => setIsMainExpanded((prevValue) => !prevValue);
 
-        <Filter>
-          <SelectControl
-            name={'Title position'}
-            value={titlePosition}
-            options={TitlePositionOptions}
-            onChange={setTitlePosition}
-            isDisabled={!isTitlePositionEditable}
-          />
-        </Filter>
-        <Filter>
-          <SelectControl
-            name={'Title visibility'}
-            value={titleVisibility}
-            options={TitleVisibilityOptions}
-            onChange={setTitleVisibility}
-            isDisabled={!isTitlePositionEditable}
-          />
-        </Filter>
-        <Filter>
-          <ColorControl
-            name="Title color"
-            value={titleColor}
-            onChange={setTitleColor}
-          />
-        </Filter>
-        <Filter>
-          <NumberControl
-            name={'Title font size'}
-            value={titleFontSize}
-            onChange={setTitleFontSize}
-          />
-        </Filter>
-      </Grid>
+  const onToggleAdvancedExpand = () =>
+    setIsAdvancedExpanded((prevValue) => !prevValue);
+
+  return (
+    <Paper elevation={0} sx={{textAlign: 'left'}}>
+      <Aligner onClick={onToggleMainExpand}>
+        <Typography
+          gutterBottom
+          variant="subtitle1"
+          component="div"
+          style={{margin: '0 5px', cursor: 'default'}}
+        >
+          {'General'}
+        </Typography>
+        <span>
+          <ExpandMore expand={isMainExpanded}>
+            <ExpandMoreIcon />
+          </ExpandMore>
+        </span>
+      </Aligner>
+      <Collapse in={isMainExpanded} timeout="auto" unmountOnExit>
+        <Divider variant="middle" style={{margin: '15px 0'}} />
+        <Grid
+          container
+          columns={24}
+          rowSpacing={2}
+          columnSpacing={4}
+          marginBottom={4}
+        >
+          <Filter isLoading={isLoading}>
+            <NumberControl
+              name={'Width'}
+              value={width}
+              onChange={setWidth}
+              min={0}
+              unit={'px'}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <NumberControl
+              name={'Height'}
+              value={height}
+              onChange={setHeight}
+              min={0}
+              unit={'px'}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <NumberControl
+              name={'Columns'}
+              value={columns}
+              onChange={setColumns}
+              min={1}
+            />
+          </Filter>
+        </Grid>
+      </Collapse>
+      <Divider variant="middle" style={{margin: '15px 0'}} />
+      <Aligner onClick={onToggleAdvancedExpand}>
+        <Typography
+          gutterBottom
+          variant="subtitle1"
+          component="div"
+          style={{margin: '5px', cursor: 'default'}}
+        >
+          {'Advanced'}
+        </Typography>
+        <span>
+          <ExpandMore expand={isAdvancedExpanded}>
+            <ExpandMoreIcon />
+          </ExpandMore>
+        </span>
+      </Aligner>
+      <Collapse in={isAdvancedExpanded} timeout="auto" unmountOnExit>
+        <Divider variant="middle" style={{margin: '15px 0'}} />
+        <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+          <Filter isLoading={isLoading}>
+            <SliderControl
+              name={'Spacing (px)'}
+              value={gap}
+              min={0}
+              max={100}
+              onChange={(_, value) => setGap(value)}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <ColorControl
+              name="Spacing color"
+              value={backgroundColor}
+              onChange={setBackgroundColor}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <SliderControl
+              name="Padding (px)"
+              min={0}
+              max={100}
+              value={padding}
+              onChange={(_, value) => setPadding(value)}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <ColorControl
+              name="Padding color"
+              value={paddingColor}
+              onChange={setPaddingColor}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <SliderControl
+              name="Radius (%)"
+              min={0}
+              value={borderRadius}
+              max={50}
+              onChange={(_, value) => setBorderRadius(value)}
+            />
+          </Filter>
+
+          <Filter isLoading={isLoading}>
+            <SelectControl
+              name={'Title position'}
+              value={titlePosition}
+              options={TitlePositionOptions}
+              onChange={setTitlePosition}
+              isDisabled={!isTitlePositionEditable}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <SelectControl
+              name={'Title alignement'}
+              value={titleAlignment}
+              options={TitleAlignmentOptions}
+              onChange={setTitleAlignment}
+              isDisabled={!isTitlePositionEditable}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <FontControl
+              name={'Title font family'}
+              value={titleFontFamily}
+              onChange={settitleFontFamily}
+              isDisabled={!isTitlePositionEditable}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <SelectControl
+              name={'Title visibility'}
+              value={titleVisibility}
+              options={TitleVisibilityOptions}
+              onChange={setTitleVisibility}
+              isDisabled={!isTitlePositionEditable}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <ColorControl
+              name="Title color"
+              value={titleColor}
+              onChange={setTitleColor}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <NumberControl
+              name={'Title font size'}
+              value={titleFontFamilySize}
+              onChange={settitleFontFamilySize}
+              unit={'px'}
+            />
+          </Filter>
+        </Grid>
+      </Collapse>
     </Paper>
   );
 };

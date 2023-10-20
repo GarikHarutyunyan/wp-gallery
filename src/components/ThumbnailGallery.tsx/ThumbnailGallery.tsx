@@ -26,9 +26,11 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     paddingColor,
     borderRadius,
     titlePosition,
+    titleAlignment,
     titleVisibility,
+    titleFontFamily,
     titleColor,
-    titleFontSize,
+    titleFontFamilySize,
   } = settings;
   const elementRef = useRef();
   const [containerWidth, setContainerWidth] = useState(0);
@@ -135,6 +137,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                   })}
                 >
                   <ImageListItemBar
+                    style={{textAlign: titleAlignment}}
                     className={clsx({
                       'thumbnail-gallery__title-content_center':
                         titlePosition === TitlePosition.CENTER,
@@ -143,7 +146,8 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                       <span
                         style={{
                           color: titleColor,
-                          fontSize: titleFontSize + 'px',
+                          fontFamily: titleFontFamily,
+                          fontSize: titleFontFamilySize + 'px',
                         }}
                       >
                         {image.title}

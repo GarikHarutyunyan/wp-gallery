@@ -19,8 +19,9 @@ const ColorControl: React.FC<IColorControlProps> = ({
       label={name}
       variant="standard"
       margin="none"
-      // hintText={'asdasd'}
-      // floatingLabelText={'asdsad'}
+      InputLabelProps={{
+        shrink: true,
+      }}
       value={value}
       onChange={onChange}
       fullWidth
