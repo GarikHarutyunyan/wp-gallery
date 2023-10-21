@@ -28,7 +28,13 @@ const LightboxProvider: React.FC<
         open={activeImageIndex >= 0}
         index={activeImageIndex}
         close={() => setActiveImageIndex(-1)}
-        slides={images.map((image) => ({src: image.uri}))}
+        slides={images.map((image) => ({
+          src: image.uri,
+          srcSet: [
+            {src: image.uri, width: image.width, height: image.height},
+            {src: image.thumbnail_uri, width: 150, height: 150},
+          ],
+        }))}
         carousel={{
           preload: 20,
         }}

@@ -1,6 +1,6 @@
 import {ImageList, ImageListItem, ImageListItemBar} from '@mui/material';
 import {useLightbox} from 'components/lightbox';
-import {IThumbnailSettings} from 'components/settings/ThumbnailSettings';
+import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
 import {IImageDTO, TitlePosition, TitleVisibility} from 'data-structures';
 import React, {useLayoutEffect, useMemo, useRef, useState} from 'react';
 import clsx from 'clsx';
@@ -115,11 +115,11 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                   titlePosition === TitlePosition.BELOW ? 'hidden' : 'unset',
               }}
             >
-              <ImageListItem key={image.uri}>
+              <ImageListItem key={image.medium_large_uri}>
                 <img
                   className={'thumnail-gallery__image'}
-                  src={`${image.uri}?w=164&h=$164&fit=crop&auto=format`}
-                  srcSet={`${image.uri}?w=164&h=$164&fit=crop&auto=format`}
+                  src={`${image.medium_large_uri}?w=164&h=$164&fit=crop&auto=format`}
+                  srcSet={`${image.medium_large_uri}?w=164&h=$164&fit=crop&auto=format`}
                   alt={image.title}
                   loading="lazy"
                   style={{

@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {IThumbnailGalleryProps, ThumbnailGallery} from './ThumbnailGallery';
 import axios from 'axios';
 import {IImageDTO} from 'data-structures';
 import {DataFetcher} from './DataFetcher';
 import {LightboxProvider} from 'components/lightbox/LightboxContext';
-import {useLightbox} from 'components/lightbox';
 
 const ThumbnailGalleryWithDataFetching = (props: IThumbnailGalleryProps) => {
   const [images, setImages] = useState<IImageDTO[]>([]);
@@ -18,6 +17,10 @@ const ThumbnailGalleryWithDataFetching = (props: IThumbnailGalleryProps) => {
       const imgData: any[] = (await axios.get(fetchUrl)).data;
       const newImages: IImageDTO[] = imgData.map((data: any) => ({
         uri: data.url,
+        width: data.width,
+        height: data.height,
+        medium_large_uri: data.medium_large_url,
+        thumbnail_uri: data.thumbnail_url,
         title: data.title,
       }));
 
