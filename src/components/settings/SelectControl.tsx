@@ -4,6 +4,7 @@ import React from 'react';
 interface ISelectOption {
   title: string;
   value: string;
+  isDisabled?: boolean;
 }
 
 interface ISelectControlProps {
@@ -36,8 +37,8 @@ const SelectControl: React.FC<ISelectControlProps> = ({
       onChange={onValueChange}
       disabled={isDisabled}
     >
-      {options.map(({value, title}) => (
-        <MenuItem key={value} value={value}>
+      {options.map(({value, title, isDisabled}) => (
+        <MenuItem key={value} value={value} disabled={isDisabled}>
           {title}
         </MenuItem>
       ))}
@@ -45,4 +46,4 @@ const SelectControl: React.FC<ISelectControlProps> = ({
   );
 };
 
-export {SelectControl};
+export {SelectControl, type ISelectOption};
