@@ -1,12 +1,8 @@
 import React, {ReactNode, useEffect, useLayoutEffect, useState} from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {SliderControl} from './SliderControl';
-import {Filter} from './Filter';
-import {NumberControl} from './NumberControl';
-import {ColorControl} from './ColorControl';
+import {Filter} from '../settings/Filter';
 import Collapse from '@mui/material/Collapse';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   TitleAlignment,
   TitleAlignmentOptions,
@@ -15,11 +11,17 @@ import {
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
-import {ISelectOption, SelectControl} from './SelectControl';
-import {FontControl} from './FontControl';
+import {
+  FontControl,
+  NumberControl,
+  ISelectOption,
+  SliderControl,
+  SelectControl,
+  ColorControl,
+  SwitchControl,
+} from '../controls';
 import {Divider, Typography} from '@mui/material';
-import {Aligner, ExpandMore} from 'core-components';
-import {SwitchControl} from './SwitchControl';
+import {Aligner, ExpandMore, Section} from 'core-components';
 
 interface IThumbnailSettings {
   width: number;
@@ -78,9 +80,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
   const [titleFontFamilySize, settitleFontFamilySize] = useState<number>(
     value.titleFontFamilySize
   );
-
-  const [isMainExpanded, setIsMainExpanded] = useState(true);
-  const [isAdvancedExpanded, setIsAdvancedExpanded] = useState(false);
 
   useEffect(
     () =>
@@ -143,31 +142,11 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
     };
   }, [titlePosition]);
 
-  const onToggleMainExpand = () => setIsMainExpanded((prevValue) => !prevValue);
-
-  const onToggleAdvancedExpand = () =>
-    setIsAdvancedExpanded((prevValue) => !prevValue);
-
   const renderMainSettings = (): ReactNode => {
     return (
-      <>
-        <Aligner onClick={onToggleMainExpand}>
-          <Typography
-            gutterBottom
-            variant="subtitle1"
-            component="div"
-            style={{margin: '0 5px', cursor: 'default'}}
-          >
-            {'General'}
-          </Typography>
-          <span>
-            <ExpandMore expand={isMainExpanded}>
-              <ExpandMoreIcon />
-            </ExpandMore>
-          </span>
-        </Aligner>
-        <Collapse in={isMainExpanded} timeout="auto" unmountOnExit>
-          <Divider variant="middle" style={{margin: '15px 0'}} />
+      <Section
+        header={'General'}
+        body={
           <Grid
             container
             columns={24}
@@ -209,31 +188,17 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
               />
             </Filter>
           </Grid>
-        </Collapse>
-      </>
+        }
+        canExpand={true}
+      ></Section>
     );
   };
 
   const renderAdvancedSettings = (): ReactNode => {
     return (
-      <>
-        <Aligner onClick={onToggleAdvancedExpand}>
-          <Typography
-            gutterBottom
-            variant="subtitle1"
-            component="div"
-            style={{margin: '5px', cursor: 'default'}}
-          >
-            {'Advanced'}
-          </Typography>
-          <span>
-            <ExpandMore expand={isAdvancedExpanded}>
-              <ExpandMoreIcon />
-            </ExpandMore>
-          </span>
-        </Aligner>
-        <Collapse in={isAdvancedExpanded} timeout="auto" unmountOnExit>
-          <Divider variant="middle" style={{margin: '15px 0'}} />
+      <Section
+        header={'Advanced'}
+        body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
               <SliderControl
@@ -285,14 +250,16 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
                 isDisabled={!isTitlePositionEditable}
               />
             </Filter>
-            {titleVisibility !== TitleVisibility.NONE && renderTitleOptions()}
+            {titleVisibility !== TitleVisibility.NONE && renderTitleSettings()}
           </Grid>
-        </Collapse>
-      </>
+        }
+        canExpand={true}
+        defaultExpanded={false}
+      />
     );
   };
 
-  const renderTitleOptions = (): ReactNode => {
+  const renderTitleSettings = (): ReactNode => {
     return (
       <>
         <Filter isLoading={isLoading}>

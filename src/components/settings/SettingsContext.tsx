@@ -1,13 +1,14 @@
 import React, {ReactNode, useLayoutEffect, useState} from 'react';
-import {IThumbnailSettings, ThumbnailSettings} from './ThumbnailSettings';
+import {
+  IThumbnailSettings,
+  ThumbnailSettings,
+} from '../thumbnail-settings/ThumbnailSettings';
 import Tabs from '@mui/material/Tabs';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import Collapse from '@mui/material/Collapse';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Tooltip from '@mui/material/Tooltip';
 import axios from 'axios';
-import Button from '@mui/material/Button';
 import {TitleAlignment, TitlePosition, TitleVisibility} from 'data-structures';
 import {Paper, Typography} from '@mui/material';
 import Divider from '@mui/material/Divider';
@@ -139,7 +140,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               {'Save'}
             </LoadingButton>
           </Aligner>
-
           <TabPanel value="gallery">
             {thumbnailSettings && (
               <ThumbnailSettings
