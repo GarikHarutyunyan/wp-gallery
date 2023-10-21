@@ -15,10 +15,13 @@ import Divider from '@mui/material/Divider';
 import {Aligner, ExpandMore, Tab} from 'core-components';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
+import { useSnackbar } from 'notistack';
 
 const SettingsContext = React.createContext<IThumbnailSettings | null>(null);
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const [thumbnailSettings, setThumbnailSettings] = useState<
     IThumbnailSettings | undefined
   >();
@@ -75,12 +78,21 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
-      const newThumbnailSettings: IThumbnailSettings = (
-        await axios.put(fetchUrl as string, thumbnailSettings)
-      ).data;
-
+      try {
+        const newThumbnailSettings: IThumbnailSettings = (
+          await axios.put(fetchUrl as string, thumbnailSettings)
+        ).data;
+        
+        enqueueSnackbar('Settings are up to date!', {variant: 'success', anchorOrigin:{horizontal: 'right', vertical: 'top'}});
+        // setThumbnailSettings(newThumbnailSettings);
+      } catch (error) {
+        enqueueSnackbar('Cannot update options!', {variant: 'error',  anchorOrigin:{horizontal: 'right', vertical: 'top'} });
+        console.error(error)
+      }
+      
       setIsLoading(false);
-      // setThumbnailSettings(newThumbnailSettings);
+    } else {
+      enqueueSnackbar('Cannot update options!', {variant: 'error',  anchorOrigin:{horizontal: 'right', vertical: 'top'} });
     }
   };
 

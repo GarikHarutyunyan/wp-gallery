@@ -22,16 +22,23 @@ const FontControl: React.FC<IFontControlProps> = ({
     const fetchUrl: string = dataElement?.getAttribute(
       'data-get-google-fonts'
     ) as string;
-    if (fetchUrl) {
-      const fontData: object = (await axios.get(fetchUrl)).data;
-      const newOptions: any[] = Object.values(fontData).map((data: any) => ({
-        value: data,
-        title: data,
-      }));
 
-      setOptions(newOptions);
-    } else {
-      setOptions([]);
+    if(fetchUrl){
+
+      try{
+        const response = (await axios.get(fetchUrl));
+        const fontData: object = response.data;
+        const newOptions: any[] = Object.values(fontData).map((data: any) => ({
+          value: data,
+          title: data,
+        }));
+        
+        setOptions(newOptions);
+      }
+      catch (error){
+        console.error(error)
+        setOptions([]);
+      }
     }
   };
 
