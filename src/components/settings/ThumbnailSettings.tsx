@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {ReactNode, useEffect, useLayoutEffect, useState} from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {SliderControl} from './SliderControl';
@@ -15,7 +15,7 @@ import {
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
-import {SelectControl} from './SelectControl';
+import {ISelectOption, SelectControl} from './SelectControl';
 import {FontControl} from './FontControl';
 import {Divider, Typography} from '@mui/material';
 import {Aligner, ExpandMore} from 'core-components';
@@ -119,6 +119,29 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
       titleFontFamilySize,
     ]
   );
+
+  useLayoutEffect(() => {
+    const onHoverOption: ISelectOption | undefined =
+      TitleVisibilityOptions.find(
+        (option) => option.value === TitleVisibility.ON_HOVER
+      );
+
+    if (titlePosition === TitlePosition.BELOW) {
+      if (onHoverOption) {
+        onHoverOption.isDisabled = true;
+      }
+
+      if (titleVisibility === TitleVisibility.ON_HOVER) {
+        setTitleVisibility(TitleVisibility.ALWAYS_SHOWN);
+      }
+    }
+
+    return () => {
+      if (onHoverOption) {
+        onHoverOption.isDisabled = false;
+      }
+    };
+  }, [titlePosition]);
 
   const onToggleMainExpand = () => setIsMainExpanded((prevValue) => !prevValue);
 
@@ -253,33 +276,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
                 onChange={(_, value) => setBorderRadius(value)}
               />
             </Filter>
-
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                name={'Title position'}
-                value={titlePosition}
-                options={TitlePositionOptions}
-                onChange={setTitlePosition}
-                isDisabled={!isTitlePositionEditable}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                name={'Title alignement'}
-                value={titleAlignment}
-                options={TitleAlignmentOptions}
-                onChange={setTitleAlignment}
-                isDisabled={!isTitlePositionEditable}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <FontControl
-                name={'Title font family'}
-                value={titleFontFamily}
-                onChange={settitleFontFamily}
-                isDisabled={!isTitlePositionEditable}
-              />
-            </Filter>
             <Filter isLoading={isLoading}>
               <SelectControl
                 name={'Title visibility'}
@@ -289,23 +285,57 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
                 isDisabled={!isTitlePositionEditable}
               />
             </Filter>
-            <Filter isLoading={isLoading}>
-              <ColorControl
-                name="Title color"
-                value={titleColor}
-                onChange={setTitleColor}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                name={'Title font size'}
-                value={titleFontFamilySize}
-                onChange={settitleFontFamilySize}
-                unit={'px'}
-              />
-            </Filter>
+            {titleVisibility !== TitleVisibility.NONE && renderTitleOptions()}
           </Grid>
         </Collapse>
+      </>
+    );
+  };
+
+  const renderTitleOptions = (): ReactNode => {
+    return (
+      <>
+        <Filter isLoading={isLoading}>
+          <SelectControl
+            name={'Title position'}
+            value={titlePosition}
+            options={TitlePositionOptions}
+            onChange={setTitlePosition}
+            isDisabled={!isTitlePositionEditable}
+          />
+        </Filter>
+        <Filter isLoading={isLoading}>
+          <SelectControl
+            name={'Title alignement'}
+            value={titleAlignment}
+            options={TitleAlignmentOptions}
+            onChange={setTitleAlignment}
+            isDisabled={!isTitlePositionEditable}
+          />
+        </Filter>
+        <Filter isLoading={isLoading}>
+          <FontControl
+            name={'Title font family'}
+            value={titleFontFamily}
+            onChange={settitleFontFamily}
+            isDisabled={!isTitlePositionEditable}
+          />
+        </Filter>
+        <Filter isLoading={isLoading}>
+          <ColorControl
+            name="Title color"
+            value={titleColor}
+            onChange={setTitleColor}
+          />
+        </Filter>
+        <Filter isLoading={isLoading}>
+          <NumberControl
+            name={'Title font size'}
+            value={titleFontFamilySize}
+            onChange={settitleFontFamilySize}
+            unit={'px'}
+          />
+        </Filter>
       </>
     );
   };
