@@ -20,6 +20,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     width,
     height,
     columns,
+    showLightbox,
     gap,
     backgroundColor,
     padding,
@@ -105,7 +106,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
         >
           {images.map((image, index) => (
             <div
-              onClick={() => setActiveImageIndex(index)}
+              onClick={
+                showLightbox ? () => setActiveImageIndex(index) : undefined
+              }
               style={{
                 borderRadius: borderRadius + '%',
                 overflow:

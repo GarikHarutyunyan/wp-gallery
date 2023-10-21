@@ -1,18 +1,17 @@
 import React, {ReactNode, useLayoutEffect, useState} from 'react';
 import {IThumbnailSettings, ThumbnailSettings} from './ThumbnailSettings';
 import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import Collapse from '@mui/material/Collapse';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CircularProgress from '@mui/material/CircularProgress';
+import Tooltip from '@mui/material/Tooltip';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import {TitleAlignment, TitlePosition, TitleVisibility} from 'data-structures';
 import {Paper, Typography} from '@mui/material';
 import Divider from '@mui/material/Divider';
-import {Aligner, ExpandMore} from 'core-components';
+import {Aligner, ExpandMore, Tab} from 'core-components';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
 
@@ -26,6 +25,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const isLightBoxTabDisabled: boolean = !thumbnailSettings?.showLightbox;
 
   const getData = async () => {
     const dataElement = document.getElementsByClassName('aig-preview')?.[0];
@@ -47,6 +48,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         width: 150,
         height: 150,
         columns: 5,
+        showLightbox: true,
         gap: 10,
         backgroundColor: 'White',
         padding: 10,
@@ -113,27 +115,31 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       <Collapse in={isExpanded} timeout="auto" unmountOnExit>
         <Divider variant="middle" />
         <TabContext value={activeTab}>
-          <Tabs
-            value={activeTab}
-            onChange={onActiveTabChange}
-            style={{margin: '5px 20px'}}
-          >
-            <Aligner>
-              <span>
-                <Tab label="Gallery" value="gallery" />
-                <Tab label="Light Box" value="lightBox" />
-              </span>
-              <LoadingButton
-                loading={isLoading}
-                loadingPosition="start"
-                startIcon={isLoading && <SaveIcon />}
-                variant="outlined"
-                onClick={onSave}
-              >
-                {'Save'}
-              </LoadingButton>
-            </Aligner>
-          </Tabs>
+          <Aligner>
+            <Tabs
+              value={activeTab}
+              onChange={onActiveTabChange}
+              style={{margin: '5px 20px'}}
+            >
+              <Tab label="Gallery" value="gallery" />
+              <Tab
+                label="Light Box"
+                value="lightBox"
+                disabled={isLightBoxTabDisabled}
+              />
+            </Tabs>
+            <LoadingButton
+              loading={isLoading}
+              loadingPosition="start"
+              startIcon={isLoading && <SaveIcon />}
+              variant="outlined"
+              onClick={onSave}
+              style={{margin: '5px 20px'}}
+            >
+              {'Save'}
+            </LoadingButton>
+          </Aligner>
+
           <TabPanel value="gallery">
             {thumbnailSettings && (
               <ThumbnailSettings
