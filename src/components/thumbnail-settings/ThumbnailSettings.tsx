@@ -120,27 +120,27 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
   );
 
   useLayoutEffect(() => {
-    const onHoverOption: ISelectOption | undefined =
-      TitleVisibilityOptions.find(
-        (option) => option.value === TitleVisibility.ON_HOVER
+    const belowOption: ISelectOption | undefined =
+      TitlePositionOptions.find(
+        (option) => option.value === TitlePosition.BELOW
       );
 
-    if (titlePosition === TitlePosition.BELOW) {
-      if (onHoverOption) {
-        onHoverOption.isDisabled = true;
+    if (titleVisibility === TitleVisibility.ON_HOVER) {
+      if (belowOption) {
+        belowOption.isDisabled = true;
       }
 
-      if (titleVisibility === TitleVisibility.ON_HOVER) {
-        setTitleVisibility(TitleVisibility.ALWAYS_SHOWN);
+      if (titlePosition === TitlePosition.BELOW) {
+        setTitlePosition(TitlePosition.BOTTOM);
       }
     }
 
     return () => {
-      if (onHoverOption) {
-        onHoverOption.isDisabled = false;
+      if (belowOption) {
+        belowOption.isDisabled = false;
       }
     };
-  }, [titlePosition]);
+  }, [titleVisibility]);
 
   const renderMainSettings = (): ReactNode => {
     return (

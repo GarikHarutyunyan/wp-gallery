@@ -1,6 +1,4 @@
-import {MenuItem, TextField} from '@mui/material';
 import React from 'react';
-import ColorPicker from 'material-ui-color-picker';
 import {MakedColorPicker} from 'core-components/color-picker/ColorPicker';
 
 interface IColorControlProps {
