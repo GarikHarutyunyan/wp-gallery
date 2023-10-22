@@ -8,7 +8,7 @@ interface IFilterProps extends React.PropsWithChildren {
 const Filter: React.FC<IFilterProps> = ({children, isLoading}) => {
   return (
     <Grid item xs={12} sm={8} lg={6}>
-      {isLoading ? <Skeleton height={48} /> : children}
+      {isLoading ? <Skeleton height={52} /> : children}
     </Grid>
   );
 };
