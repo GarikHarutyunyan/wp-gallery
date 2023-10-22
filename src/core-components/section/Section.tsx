@@ -1,6 +1,8 @@
 import {Collapse, Divider, Typography} from '@mui/material';
 import {Aligner, ExpandMore} from 'core-components';
 import React, {ReactNode, useState} from 'react';
+import clsx from 'clsx';
+import './section.css';
 
 interface ISectionProps {
   header: ReactNode | string;
@@ -23,12 +25,15 @@ const Section: React.FC<ISectionProps> = ({
 
   return (
     <>
-      <Aligner onClick={onExpand}>
+      <Aligner
+        onClick={onExpand}
+        className={clsx({section__header_clickable: canExpand})}
+      >
         <Typography
           gutterBottom
           variant="subtitle1"
           component="div"
-          style={{margin: '0 5px', cursor: 'default'}}
+          style={{margin: '0 5px'}}
         >
           {header}
         </Typography>

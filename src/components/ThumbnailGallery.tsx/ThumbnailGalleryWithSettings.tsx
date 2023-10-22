@@ -6,17 +6,17 @@ import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSetting
 const images: IImageDTO[] = [
   {
     original: {
-      url: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
       width: 1000,
       height: 1000,
     },
     medium_large: {
-      url: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
       width: 500,
       height: 500,
     },
     thumbnail: {
-      url: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
       width: 200,
       height: 200,
     },
@@ -26,17 +26,17 @@ const images: IImageDTO[] = [
   },
   {
     original: {
-      url: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
+      url: 'https://images.unsplash.com/photo-1612144431180-2d672779556c?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c21hbGwlMjBzaXplfGVufDB8fDB8fHww',
       width: 1000,
       height: 1000,
     },
     medium_large: {
-      url: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
+      url: 'https://images.unsplash.com/photo-1612144431180-2d672779556c?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c21hbGwlMjBzaXplfGVufDB8fDB8fHww',
       width: 500,
       height: 500,
     },
     thumbnail: {
-      url: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
+      url: 'https://images.unsplash.com/photo-1612144431180-2d672779556c?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c21hbGwlMjBzaXplfGVufDB8fDB8fHww',
       width: 200,
       height: 200,
     },
@@ -46,17 +46,17 @@ const images: IImageDTO[] = [
   },
   {
     original: {
-      url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
+      url: 'https://www.shutterstock.com/image-vector/compact-size-icon-vector-illustration-260nw-489811306.jpg',
       width: 1000,
       height: 1000,
     },
     medium_large: {
-      url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
+      url: 'https://www.shutterstock.com/image-vector/compact-size-icon-vector-illustration-260nw-489811306.jpg',
       width: 500,
       height: 500,
     },
     thumbnail: {
-      url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
+      url: 'https://www.shutterstock.com/image-vector/compact-size-icon-vector-illustration-260nw-489811306.jpg',
       width: 200,
       height: 200,
     },
@@ -66,17 +66,17 @@ const images: IImageDTO[] = [
   },
   {
     original: {
-      url: 'https://i.pinimg.com/564x/b5/e9/97/b5e997177c6bf2ee2c9e4e0812defa6d.jpg',
+      url: 'https://www.shutterstock.com/image-vector/measuring-by-hands-width-size-260nw-1266046990.jpg',
       width: 1000,
       height: 1000,
     },
     medium_large: {
-      url: 'https://i.pinimg.com/564x/b5/e9/97/b5e997177c6bf2ee2c9e4e0812defa6d.jpg',
+      url: 'https://www.shutterstock.com/image-vector/measuring-by-hands-width-size-260nw-1266046990.jpg',
       width: 500,
       height: 500,
     },
     thumbnail: {
-      url: 'https://i.pinimg.com/564x/b5/e9/97/b5e997177c6bf2ee2c9e4e0812defa6d.jpg',
+      url: 'https://www.shutterstock.com/image-vector/measuring-by-hands-width-size-260nw-1266046990.jpg',
       width: 200,
       height: 200,
     },
@@ -86,17 +86,17 @@ const images: IImageDTO[] = [
   },
   {
     original: {
-      url: 'https://i.pinimg.com/564x/8d/e7/b2/8de7b2b5fd6830c21094edba3a6c6fc3.jpg',
+      url: 'https://www.shutterstock.com/image-vector/compact-size-small-scale-fit-260nw-1590167689.jpg',
       width: 1000,
       height: 1000,
     },
     medium_large: {
-      url: 'https://i.pinimg.com/564x/8d/e7/b2/8de7b2b5fd6830c21094edba3a6c6fc3.jpg',
+      url: 'https://www.shutterstock.com/image-vector/compact-size-small-scale-fit-260nw-1590167689.jpg',
       width: 500,
       height: 500,
     },
     thumbnail: {
-      url: 'https://i.pinimg.com/564x/8d/e7/b2/8de7b2b5fd6830c21094edba3a6c6fc3.jpg',
+      url: 'https://www.shutterstock.com/image-vector/compact-size-small-scale-fit-260nw-1590167689.jpg',
       width: 200,
       height: 200,
     },
@@ -106,17 +106,17 @@ const images: IImageDTO[] = [
   },
   {
     original: {
-      url: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
+      url: 'https://cdn.shopify.com/s/files/1/0529/2670/9917/files/sizeguide_480x480.png?v=1652793667',
       width: 1000,
       height: 1000,
     },
     medium_large: {
-      url: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
+      url: 'https://cdn.shopify.com/s/files/1/0529/2670/9917/files/sizeguide_480x480.png?v=1652793667',
       width: 500,
       height: 500,
     },
     thumbnail: {
-      url: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
+      url: 'https://cdn.shopify.com/s/files/1/0529/2670/9917/files/sizeguide_480x480.png?v=1652793667',
       width: 200,
       height: 200,
     },
@@ -126,17 +126,17 @@ const images: IImageDTO[] = [
   },
   {
     original: {
-      url: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
       width: 1000,
       height: 1000,
     },
     medium_large: {
-      url: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
       width: 500,
       height: 500,
     },
     thumbnail: {
-      url: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
       width: 200,
       height: 200,
     },
@@ -146,17 +146,17 @@ const images: IImageDTO[] = [
   },
   {
     original: {
-      url: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
+      url: 'https://cdn.shopify.com/s/files/1/0529/2670/9917/files/sizeguide_480x480.png?v=1652793667',
       width: 1000,
       height: 1000,
     },
     medium_large: {
-      url: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
+      url: 'https://cdn.shopify.com/s/files/1/0529/2670/9917/files/sizeguide_480x480.png?v=1652793667',
       width: 500,
       height: 500,
     },
     thumbnail: {
-      url: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
+      url: 'https://cdn.shopify.com/s/files/1/0529/2670/9917/files/sizeguide_480x480.png?v=1652793667',
       width: 200,
       height: 200,
     },
@@ -186,17 +186,17 @@ const images: IImageDTO[] = [
   },
   {
     original: {
-      url: 'https://i.pinimg.com/564x/d6/8a/bf/d68abfa3722e79d0f791dbfcc540dc76.jpg',
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
       width: 1000,
       height: 1000,
     },
     medium_large: {
-      url: 'https://i.pinimg.com/564x/d6/8a/bf/d68abfa3722e79d0f791dbfcc540dc76.jpg',
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
       width: 500,
       height: 500,
     },
     thumbnail: {
-      url: 'https://i.pinimg.com/564x/d6/8a/bf/d68abfa3722e79d0f791dbfcc540dc76.jpg',
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
       width: 200,
       height: 200,
     },
@@ -206,17 +206,17 @@ const images: IImageDTO[] = [
   },
   {
     original: {
-      url: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
       width: 1000,
       height: 1000,
     },
     medium_large: {
-      url: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
       width: 500,
       height: 500,
     },
     thumbnail: {
-      url: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
       width: 200,
       height: 200,
     },
