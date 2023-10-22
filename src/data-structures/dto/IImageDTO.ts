@@ -1,8 +1,13 @@
-export interface IImageDTO {
-  uri: string;
+interface IImageUrl {
+  url: string;
   width: number;
   height: number;
-  medium_large_uri: string;
-  thumbnail_uri: string;
+}
+export interface IImageDTO {
   title: string;
+  width: number;
+  height: number;
+  original: IImageUrl;
+  medium_large: IImageUrl;
+  thumbnail: IImageUrl;
 }

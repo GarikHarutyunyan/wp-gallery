@@ -15,12 +15,12 @@ import Divider from '@mui/material/Divider';
 import {Aligner, ExpandMore, Tab} from 'core-components';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
-import { useSnackbar } from 'notistack';
+import {useSnackbar} from 'notistack';
 
 const SettingsContext = React.createContext<IThumbnailSettings | null>(null);
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
-  const { enqueueSnackbar } = useSnackbar();
+  const {enqueueSnackbar} = useSnackbar();
 
   const [thumbnailSettings, setThumbnailSettings] = useState<
     IThumbnailSettings | undefined
@@ -82,17 +82,26 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         const newThumbnailSettings: IThumbnailSettings = (
           await axios.put(fetchUrl as string, thumbnailSettings)
         ).data;
-        
-        enqueueSnackbar('Settings are up to date!', {variant: 'success', anchorOrigin:{horizontal: 'right', vertical: 'top'}});
+
+        enqueueSnackbar('Settings are up to date!', {
+          variant: 'success',
+          anchorOrigin: {horizontal: 'right', vertical: 'top'},
+        });
         // setThumbnailSettings(newThumbnailSettings);
       } catch (error) {
-        enqueueSnackbar('Cannot update options!', {variant: 'error',  anchorOrigin:{horizontal: 'right', vertical: 'top'} });
-        console.error(error)
+        enqueueSnackbar('Cannot update options!', {
+          variant: 'error',
+          anchorOrigin: {horizontal: 'right', vertical: 'top'},
+        });
+        console.error(error);
       }
-      
+
       setIsLoading(false);
     } else {
-      enqueueSnackbar('Cannot update options!', {variant: 'error',  anchorOrigin:{horizontal: 'right', vertical: 'top'} });
+      enqueueSnackbar('Cannot update options!', {
+        variant: 'error',
+        anchorOrigin: {horizontal: 'right', vertical: 'top'},
+      });
     }
   };
 
@@ -143,8 +152,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
             </Tabs>
             <LoadingButton
               loading={isLoading}
-              loadingPosition="start"
-              startIcon={isLoading && <SaveIcon />}
+              loadingPosition="center"
               variant="outlined"
               onClick={onSave}
               style={{margin: '5px 20px'}}

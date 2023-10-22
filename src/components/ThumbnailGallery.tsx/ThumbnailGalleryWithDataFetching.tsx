@@ -16,11 +16,11 @@ const ThumbnailGalleryWithDataFetching = (props: IThumbnailGalleryProps) => {
     if (fetchUrl) {
       const imgData: any[] = (await axios.get(fetchUrl)).data;
       const newImages: IImageDTO[] = imgData.map((data: any) => ({
-        uri: data.url,
+        original: data.original,
         width: data.width,
         height: data.height,
-        medium_large_uri: data.medium_large_url,
-        thumbnail_uri: data.thumbnail_url,
+        medium_large: data.medium_large,
+        thumbnail: data.thumbnail,
         title: data.title,
       }));
 

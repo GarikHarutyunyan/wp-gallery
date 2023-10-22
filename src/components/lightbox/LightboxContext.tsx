@@ -29,12 +29,31 @@ const LightboxProvider: React.FC<
         index={activeImageIndex}
         close={() => setActiveImageIndex(-1)}
         slides={images.map((image) => ({
-          src: image.uri,
+          src: image.original.url,
           srcSet: [
-            {src: image.uri, width: image.width, height: image.height},
-            {src: image.thumbnail_uri, width: 150, height: 150},
+            {
+              src: image.original.url,
+              width: image.original.width,
+              height: image.original.height,
+            },
+            {
+              src: image.medium_large.url,
+              width: image.medium_large.width,
+              height: image.medium_large.height,
+            },
+            {
+              src: image.thumbnail.url,
+              width: image.thumbnail.width,
+              height: image.thumbnail.height,
+            },
           ],
+          metadata: image.thumbnail.url,
         }))}
+        render={{
+          thumbnail: ({slide}) => {
+            return <img src={(slide as any).metadata}></img>;
+          },
+        }}
         carousel={{
           preload: 20,
         }}

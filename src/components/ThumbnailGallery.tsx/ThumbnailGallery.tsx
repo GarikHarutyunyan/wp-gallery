@@ -115,11 +115,10 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                   titlePosition === TitlePosition.BELOW ? 'hidden' : 'unset',
               }}
             >
-              <ImageListItem key={image.medium_large_uri}>
+              <ImageListItem key={image.medium_large.url}>
                 <img
                   className={'thumnail-gallery__image'}
-                  src={`${image.medium_large_uri}?w=164&h=$164&fit=crop&auto=format`}
-                  srcSet={`${image.medium_large_uri}?w=164&h=$164&fit=crop&auto=format`}
+                  src={`${image.medium_large.url}`}
                   alt={image.title}
                   loading="lazy"
                   style={{
