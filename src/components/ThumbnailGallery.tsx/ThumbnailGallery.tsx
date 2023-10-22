@@ -49,15 +49,23 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
   }, []);
 
   const getValidColumnsCount = (columns: number): number => {
-    if (
-      !containerWidth ||
-      width * columns + (columns - 1) * gap + columns * 2 * padding <=
-        containerWidth
-    ) {
+    const containerBox: number = width + 2 * padding;
+
+    if (!containerWidth) {
       return columns;
     }
 
-    return getValidColumnsCount(columns - 1);
+    let validColumns = Math.floor(containerWidth / containerBox) + 1;
+
+    while (
+      (validColumns - 1) * containerBox + (validColumns - 2) * gap >
+        containerWidth ||
+      validColumns > columns
+    ) {
+      validColumns--;
+    }
+
+    return validColumns;
   };
 
   const validColumnsCount = useMemo(
@@ -67,11 +75,11 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
 
   const getWidth = useMemo((): number => {
     if (containerWidth) {
-      const gaap =
-        (validColumnsCount - 1) * gap + validColumnsCount * 2 * padding;
-      const a = containerWidth - gaap;
+      const busyWidth =
+        validColumnsCount * 2 * padding + (validColumnsCount - 1) * gap;
+      const freeWidth = containerWidth - busyWidth;
 
-      return a / validColumnsCount;
+      return freeWidth / validColumnsCount;
     }
 
     return width;
@@ -114,6 +122,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                 overflow:
                   titlePosition === TitlePosition.BELOW ? 'hidden' : 'unset',
               }}
+              key={image.original.url + index}
             >
               <ImageListItem key={image.medium_large.url}>
                 <img
