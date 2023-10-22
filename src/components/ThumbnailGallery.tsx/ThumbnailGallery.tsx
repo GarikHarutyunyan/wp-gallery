@@ -2,7 +2,13 @@ import {ImageList, ImageListItem, ImageListItemBar} from '@mui/material';
 import {useLightbox} from 'components/lightbox';
 import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
 import {IImageDTO, TitlePosition, TitleVisibility} from 'data-structures';
-import React, {useLayoutEffect, useMemo, useRef, useState} from 'react';
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import clsx from 'clsx';
 import './thumbnail-gallery.css';
 
@@ -43,13 +49,13 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     setContainerWidth((divElement as any)?.clientWidth);
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     changeContainerWidth();
     window.addEventListener('resize', () => changeContainerWidth());
   }, []);
 
-  const getValidColumnsCount = (columns: number): number => {
-    const containerBox: number = width + 2 * padding;
+  const getValidColumnsCount = (): number => {
+    const containerBox: number = +width + 2 * padding;
 
     if (!containerWidth) {
       return columns;
@@ -68,10 +74,13 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     return validColumns;
   };
 
-  const validColumnsCount = useMemo(
-    () => getValidColumnsCount(columns),
-    [width, gap, columns, padding, containerWidth]
-  );
+  const validColumnsCount = useMemo(getValidColumnsCount, [
+    width,
+    gap,
+    columns,
+    padding,
+    containerWidth,
+  ]);
 
   const getWidth = useMemo((): number => {
     if (containerWidth) {
