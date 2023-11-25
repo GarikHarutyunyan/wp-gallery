@@ -11,10 +11,11 @@ const addApplication = (rootElement: HTMLElement) => {
   const galleryId: string | undefined =
     rootElement.getAttribute('data-gallery-id') || undefined;
   const baseUrl: string | undefined = (window as any).reacg_global?.rest_root;
+  const nonce: string | undefined = (window as any).reacg_global?.rest_nonce;
 
   root.render(
     <React.StrictMode>
-      <AppInfoProvider galleryId={galleryId} baseUrl={baseUrl}>
+      <AppInfoProvider galleryId={galleryId} baseUrl={baseUrl} nonce={nonce}>
         <App />
       </AppInfoProvider>
     </React.StrictMode>

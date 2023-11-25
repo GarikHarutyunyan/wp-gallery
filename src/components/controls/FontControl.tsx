@@ -16,7 +16,7 @@ const FontControl: React.FC<IFontControlProps> = ({
   onChange,
   isDisabled,
 }) => {
-  const {baseUrl} = useContext(AppInfoContext);
+  const {baseUrl, nonce} = useContext(AppInfoContext);
   const [options, setOptions] = useState<any[]>([]);
 
   const getData = async () => {
@@ -26,7 +26,9 @@ const FontControl: React.FC<IFontControlProps> = ({
 
     if (fetchUrl) {
       try {
-        const response = await axios.get(fetchUrl);
+        const response = await axios.get(fetchUrl, {
+          headers: {'X-WP-Nonce': nonce},
+        });
         const fontData: object = response.data;
         const newOptions: any[] = Object.values(fontData).map((data: any) => ({
           value: data,
