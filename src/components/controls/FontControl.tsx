@@ -1,6 +1,7 @@
 import {MenuItem, TextField} from '@mui/material';
+import {AppInfoContext} from 'AppInfoContext';
 import axios from 'axios';
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useContext, useLayoutEffect, useState} from 'react';
 
 interface IFontControlProps {
   name: string;
@@ -15,13 +16,13 @@ const FontControl: React.FC<IFontControlProps> = ({
   onChange,
   isDisabled,
 }) => {
+  const {baseUrl} = useContext(AppInfoContext);
   const [options, setOptions] = useState<any[]>([]);
 
   const getData = async () => {
-    const dataElement = document.getElementsByClassName('reacg-preview')?.[0];
-    const fetchUrl: string = dataElement?.getAttribute(
-      'data-get-google-fonts'
-    ) as string;
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'google-fonts'
+      : undefined;
 
     if (fetchUrl) {
       try {

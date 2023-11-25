@@ -1,5 +1,5 @@
-import {useEffect, useRef, useState} from 'react';
-import {IThumbnailGalleryProps, ThumbnailGallery} from './ThumbnailGallery';
+import {useContext, useEffect, useRef, useState} from 'react';
+import {ThumbnailGallery} from './ThumbnailGallery';
 import axios from 'axios';
 import {IImageDTO, PaginationType} from 'data-structures';
 import {DataFetcher} from './DataFetcher';
@@ -7,21 +7,23 @@ import {LightboxProvider} from 'components/lightbox/LightboxContext';
 import {PaginationProvider} from './PaginationProvider';
 import {IThumbnailSettings} from 'components/thumbnail-settings';
 import {IAdvancedSettings} from 'components/advanced-settings';
+import {AppInfoContext} from 'AppInfoContext';
+import {AppTranslationsContext} from 'AppTranslationsContext';
 
 interface IThumbnailGalleryWithDataFetchingProps {
-  id: string;
   images: IImageDTO[];
   thumbnailSettings: IThumbnailSettings;
   advancedSettings: IAdvancedSettings;
 }
 
 const ThumbnailGalleryWithDataFetching = ({
-  id,
   images: propsImages,
   thumbnailSettings,
   advancedSettings,
 }: IThumbnailGalleryWithDataFetchingProps) => {
   const {itemsPerPage, paginationType} = advancedSettings;
+  const {galleryId, baseUrl} = useContext(AppInfoContext);
+  const {setLoadMoreText} = useContext(AppTranslationsContext);
   const [images, setImages] = useState<IImageDTO[]>([]);
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -34,10 +36,10 @@ const ThumbnailGalleryWithDataFetching = ({
   }, [itemsPerPage, paginationType]);
 
   const getData = async (page: number) => {
-    const dataElement = document.getElementById(id);
-    const fetchUrl: string = dataElement?.getAttribute(
-      'data-get-images-url'
-    ) as string;
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'gallery/' + galleryId + '/images'
+      : undefined;
+
     if (fetchUrl) {
       const perPageQueryString: string =
         paginationType !== PaginationType.NONE
@@ -67,24 +69,22 @@ const ThumbnailGalleryWithDataFetching = ({
   };
 
   const getItemsCount = async () => {
-    const dataElement = document.getElementsByClassName('reacg-preview')?.[0];
-    const fetchUrl: string = dataElement?.getAttribute(
-      'data-get-gallery-url'
-    ) as string;
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'gallery/' + galleryId
+      : undefined;
+
     if (fetchUrl) {
       const imgData: any = (await axios.get(`${fetchUrl}`)).data;
       const newImageCount: number = imgData?.images_count;
+      const loadMoreText: string | undefined =
+        imgData?.texts?.load_more || undefined;
 
+      loadMoreText && setLoadMoreText?.(loadMoreText);
       setImageCount(newImageCount);
     } else {
       setImageCount(0);
     }
   };
-
-  useEffect(() => {
-    getData(1);
-    getItemsCount();
-  }, []);
 
   const onPageChange = (_event?: any, newPage: number = currentPage + 1) => {
     return getData(newPage);

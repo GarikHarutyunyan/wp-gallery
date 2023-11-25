@@ -12,7 +12,7 @@ import 'yet-another-react-lightbox/styles.css';
 import {SettingsProvider} from './settings/SettingsContext';
 import {ThumbnailGalleryWithSettings} from './thumbnail-gallery/ThumbnailGalleryWithSettings';
 
-const Gallery = ({id}: any) => {
+const Gallery = () => {
   return (
     <div
       style={{
@@ -21,7 +21,7 @@ const Gallery = ({id}: any) => {
       }}
     >
       <SettingsProvider>
-        <ThumbnailGalleryWithSettings id={id} />
+        <ThumbnailGalleryWithSettings />
       </SettingsProvider>
     </div>
   );
