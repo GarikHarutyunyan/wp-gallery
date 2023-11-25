@@ -9,7 +9,7 @@ import {IThumbnailSettings} from 'components/thumbnail-settings';
 import {IAdvancedSettings} from 'components/advanced-settings';
 import {AppInfoContext} from 'AppInfoContext';
 import {AppTranslationsContext} from 'AppTranslationsContext';
-import {CircularProgress} from '@mui/material';
+import {CircularProgress, Paper, Typography} from '@mui/material';
 
 interface IThumbnailGalleryWithDataFetchingProps {
   images: IImageDTO[];
@@ -131,16 +131,32 @@ const ThumbnailGalleryWithDataFetching = ({
     return null;
   };
 
+  const renderContentPlaceholder = (): ReactElement => {
+    return (
+      <Paper variant={'outlined'} className={'content-placeholder'}>
+        <Typography gutterBottom variant="h6" component="div">
+          {'There is no data yet'}
+        </Typography>
+      </Paper>
+    );
+  };
+
   return (
     <LightboxProvider images={images}>
-      {renderThumbnailGallery()}
-      <PaginationProvider
-        type={paginationType}
-        pagesCount={pagesCount}
-        onLoad={onPageChange}
-        isFullyLoaded={isFullyLoaded}
-        settings={advancedSettings}
-      />
+      {images.length ? (
+        <>
+          {renderThumbnailGallery()}
+          <PaginationProvider
+            type={paginationType}
+            pagesCount={pagesCount}
+            onLoad={onPageChange}
+            isFullyLoaded={isFullyLoaded}
+            settings={advancedSettings}
+          />
+        </>
+      ) : (
+        renderContentPlaceholder()
+      )}
       <DataFetcher onClick={onReloadData} />
     </LightboxProvider>
   );

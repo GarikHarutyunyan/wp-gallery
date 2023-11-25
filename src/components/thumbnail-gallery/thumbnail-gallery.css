@@ -16,3 +16,11 @@
     text-align: center;
     height: 100%;
 }
+
+.content-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    height: 300px;
+}
