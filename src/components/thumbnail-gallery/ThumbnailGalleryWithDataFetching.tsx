@@ -1,4 +1,4 @@
-import {useContext, useEffect, useRef, useState} from 'react';
+import {ReactElement, ReactNode, useContext, useEffect, useState} from 'react';
 import {ThumbnailGallery} from './ThumbnailGallery';
 import axios from 'axios';
 import {IImageDTO, PaginationType} from 'data-structures';
@@ -9,6 +9,7 @@ import {IThumbnailSettings} from 'components/thumbnail-settings';
 import {IAdvancedSettings} from 'components/advanced-settings';
 import {AppInfoContext} from 'AppInfoContext';
 import {AppTranslationsContext} from 'AppTranslationsContext';
+import {CircularProgress} from '@mui/material';
 
 interface IThumbnailGalleryWithDataFetchingProps {
   images: IImageDTO[];
@@ -27,6 +28,7 @@ const ThumbnailGalleryWithDataFetching = ({
   const [images, setImages] = useState<IImageDTO[]>([]);
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const pagesCount: number = Math.ceil(imageCount / itemsPerPage);
   const isFullyLoaded: boolean = currentPage >= pagesCount;
@@ -86,8 +88,13 @@ const ThumbnailGalleryWithDataFetching = ({
     }
   };
 
-  const onPageChange = (_event?: any, newPage: number = currentPage + 1) => {
-    return getData(newPage);
+  const onPageChange = async (
+    _event?: any,
+    newPage: number = currentPage + 1
+  ) => {
+    setIsLoading(true);
+    await getData(newPage);
+    setIsLoading(false);
   };
 
   const onReloadData = () => {
@@ -98,9 +105,35 @@ const ThumbnailGalleryWithDataFetching = ({
     getItemsCount();
   };
 
+  const renderThumbnailGallery = (): ReactElement => {
+    const hideGallery: boolean =
+      isLoading && paginationType === PaginationType.SIMPLE;
+
+    return (
+      <>
+        {!hideGallery && (
+          <ThumbnailGallery settings={thumbnailSettings} images={images} />
+        )}
+        {renderLoader()}
+      </>
+    );
+  };
+
+  const renderLoader = (): ReactNode => {
+    if (isLoading) {
+      return (
+        <div className={'pagination-privider__loader-container'}>
+          <CircularProgress color="primary" size={60} />
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <LightboxProvider images={images}>
-      <ThumbnailGallery settings={thumbnailSettings} images={images} />
+      {renderThumbnailGallery()}
       <PaginationProvider
         type={paginationType}
         pagesCount={pagesCount}

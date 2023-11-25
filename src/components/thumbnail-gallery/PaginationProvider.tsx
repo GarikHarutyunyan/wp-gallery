@@ -1,10 +1,5 @@
 import React, {ReactNode, useContext, useEffect, useState} from 'react';
-import {
-  CircularProgress,
-  Grid,
-  Pagination,
-  PaginationItem,
-} from '@mui/material';
+import {Grid, Pagination, PaginationItem} from '@mui/material';
 import {PaginationType} from 'data-structures';
 import {Button} from 'core-components';
 import {useInView} from 'react-intersection-observer';
@@ -36,25 +31,12 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
     paginationTextColor,
   } = settings;
   const {loadMoreText} = useContext(AppTranslationsContext);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (inView && !isFullyLoaded) {
       onLoadData();
     }
   }, [inView]);
-
-  const renderLoader = (): ReactNode => {
-    if (isLoading) {
-      return (
-        <div className={'pagination-privider__loader-container'}>
-          <CircularProgress color="primary" size={60} />
-        </div>
-      );
-    }
-
-    return null;
-  };
 
   const renderContent = (): ReactNode => {
     let content: ReactNode = null;
@@ -118,10 +100,8 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
     return <div ref={ref} style={{visibility: 'hidden', height: 0}} />;
   };
 
-  const onLoadData = async () => {
-    setIsLoading(true);
-    await onLoad();
-    setIsLoading(false);
+  const onLoadData = async (...args: any) => {
+    onLoad(...args);
   };
 
   return type !== PaginationType.NONE ? (
@@ -134,7 +114,6 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
       style={{margin: '15px 0'}}
     >
       <Grid item xs={3}>
-        {renderLoader()}
         {renderContent()}
       </Grid>
     </Grid>

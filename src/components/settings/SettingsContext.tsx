@@ -67,15 +67,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       ).data;
 
       setThumbnailSettings(newThumbnailSettings);
-      setAdvancedSettings({
-        itemsPerPage: 8,
-        paginationType: PaginationType.SIMPLE,
-        activeButtonColor: 'blue',
-        inactiveButtonColor: 'inherit',
-        paginationButtonShape: PaginationButtonShape.CIRCULAR,
-        loadMoreButtonColor: 'blue',
-        paginationTextColor: 'green',
-      });
+      // TODO: remove as any after having grouped options
+      setAdvancedSettings(newThumbnailSettings as any);
       setIsLoading(false);
     } else {
       setThumbnailSettings({
