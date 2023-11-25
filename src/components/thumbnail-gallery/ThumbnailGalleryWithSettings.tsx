@@ -227,7 +227,7 @@ const images: IImageDTO[] = [
   },
 ];
 
-const ThumbnailGalleryWithSettings = ({id}: any) => {
+const ThumbnailGalleryWithSettings = () => {
   const {
     advancedSettings,
     thumbnailSettings,
@@ -241,7 +241,6 @@ const ThumbnailGalleryWithSettings = ({id}: any) => {
       images={images}
       advancedSettings={advancedSettings as any}
       thumbnailSettings={thumbnailSettings as any}
-      id={id}
     />
   ) : null;
 };

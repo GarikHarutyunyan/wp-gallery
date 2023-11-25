@@ -2,12 +2,15 @@ import React from 'react';
 import './App.css';
 import Gallery from './components/Gallery';
 import {SnackbarProvider} from 'notistack';
+import {AppTranslationsProvider} from 'AppTranslationsContext';
 
-function App({id}: any) {
+function App() {
   return (
-    <SnackbarProvider>
-      <Gallery id={id} />
-    </SnackbarProvider>
+    <AppTranslationsProvider>
+      <SnackbarProvider>
+        <Gallery />
+      </SnackbarProvider>
+    </AppTranslationsProvider>
   );
 }
 

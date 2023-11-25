@@ -1,4 +1,4 @@
-import React, {ReactNode, useLayoutEffect, useState} from 'react';
+import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
 import {
   IThumbnailSettings,
   ThumbnailSettings,
@@ -25,6 +25,7 @@ import {
   AdvancedSettings,
   IAdvancedSettings,
 } from 'components/advanced-settings';
+import {AppInfoContext} from 'AppInfoContext';
 
 const SettingsContext = React.createContext<{
   thumbnailSettings?: IThumbnailSettings;
@@ -34,6 +35,7 @@ const SettingsContext = React.createContext<{
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
 
+  const {galleryId, baseUrl} = useContext(AppInfoContext);
   const [thumbnailSettings, setThumbnailSettings] = useState<
     IThumbnailSettings | undefined
   >();
@@ -48,22 +50,26 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const isLightBoxTabDisabled: boolean = !thumbnailSettings?.showLightbox;
 
   const getData = async () => {
-    const dataElement = document.getElementsByClassName('reacg-preview')?.[0];
-    const fetchOptionsUrl = dataElement?.getAttribute('data-options-url');
+    const dataElement = document.getElementById('reacg-root' + galleryId);
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'options/' + galleryId
+      : undefined;
     const showControlsData: number = +(
       dataElement?.getAttribute('data-options-section') || 1
     );
+
     setShowControls(!!showControlsData);
-    if (fetchOptionsUrl) {
+
+    if (fetchUrl) {
       setIsLoading(true);
       const newThumbnailSettings: IThumbnailSettings = (
-        await axios.get(fetchOptionsUrl as string)
+        await axios.get(fetchUrl)
       ).data;
 
       setThumbnailSettings(newThumbnailSettings);
       setAdvancedSettings({
         itemsPerPage: 8,
-        paginationType: PaginationType.SCROLL,
+        paginationType: PaginationType.SIMPLE,
         activeButtonColor: 'blue',
         inactiveButtonColor: 'inherit',
         paginationButtonShape: PaginationButtonShape.CIRCULAR,
@@ -106,14 +112,15 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   }, []);
 
   const onSave = async () => {
-    const dataElement = document.getElementsByClassName('reacg-preview')?.[0];
-    const fetchUrl = dataElement?.getAttribute('data-options-url');
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'options/' + galleryId
+      : undefined;
 
     if (fetchUrl) {
       setIsLoading(true);
       try {
         const newThumbnailSettings: IThumbnailSettings = (
-          await axios.put(fetchUrl as string, thumbnailSettings)
+          await axios.put(fetchUrl, thumbnailSettings)
         ).data;
 
         enqueueSnackbar('Settings are up to date!', {

@@ -3,14 +3,20 @@ import ReactDOM from 'react-dom/client';
 import ReactDOM2 from 'react-dom';
 import './index.css';
 import App from './App';
+import {AppInfoProvider} from 'AppInfoContext';
 // import reportWebVitals from './reportWebVitals';
 
 const addApplication = (rootElement: HTMLElement) => {
   const root = ReactDOM.createRoot(rootElement);
+  const galleryId: string | undefined =
+    rootElement.getAttribute('data-gallery-id') || undefined;
+  const baseUrl: string | undefined = (window as any).reacg_global?.rest_root;
 
   root.render(
     <React.StrictMode>
-      <App id={rootElement.id} />
+      <AppInfoProvider galleryId={galleryId} baseUrl={baseUrl}>
+        <App />
+      </AppInfoProvider>
     </React.StrictMode>
   );
 };

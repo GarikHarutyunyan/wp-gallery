@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {ReactNode, useContext, useEffect, useState} from 'react';
 import {
   CircularProgress,
   Grid,
@@ -10,6 +10,7 @@ import {Button} from 'core-components';
 import {useInView} from 'react-intersection-observer';
 import {IAdvancedSettings} from 'components/advanced-settings';
 import './pagination-provider.css';
+import {AppTranslationsContext} from 'AppTranslationsContext';
 
 interface IPaginationProviderProps {
   type: PaginationType;
@@ -34,6 +35,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
     loadMoreButtonColor,
     paginationTextColor,
   } = settings;
+  const {loadMoreText} = useContext(AppTranslationsContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -107,7 +109,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
           color: paginationTextColor,
         }}
       >
-        {'Load more...'}
+        {loadMoreText + '...'}
       </Button>
     ) : null;
   };
