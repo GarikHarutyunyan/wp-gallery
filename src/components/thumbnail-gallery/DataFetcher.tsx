@@ -9,16 +9,16 @@ const DataFetcher: React.FC<IDataFetcherProps> = ({onClick}) => {
   const button: ReactElement = (
     <input
       type={'button'}
-      id={'reloadData'}
+      id={'reacg-reloadData'}
       onClick={onClick}
       style={{display: 'none'}}
     ></input>
   );
 
-  if (document.querySelector('.inside')) {
+  if (document.querySelector('body')) {
     return ReactDOM.createPortal(
       button,
-      document.querySelector('.inside') as Element
+      document.querySelector('body') as Element
     );
   }
 

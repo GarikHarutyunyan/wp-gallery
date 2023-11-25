@@ -9,21 +9,36 @@ import TabPanel from '@mui/lab/TabPanel';
 import Collapse from '@mui/material/Collapse';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
-import {TitleAlignment, TitlePosition, TitleVisibility} from 'data-structures';
+import {
+  PaginationButtonShape,
+  PaginationType,
+  TitleAlignment,
+  TitlePosition,
+  TitleVisibility,
+} from 'data-structures';
 import {Paper, Typography} from '@mui/material';
 import Divider from '@mui/material/Divider';
 import {Aligner, ExpandMore, Tab} from 'core-components';
 import LoadingButton from '@mui/lab/LoadingButton';
-import SaveIcon from '@mui/icons-material/Save';
 import {useSnackbar} from 'notistack';
+import {
+  AdvancedSettings,
+  IAdvancedSettings,
+} from 'components/advanced-settings';
 
-const SettingsContext = React.createContext<IThumbnailSettings | null>(null);
+const SettingsContext = React.createContext<{
+  thumbnailSettings?: IThumbnailSettings;
+  advancedSettings?: IAdvancedSettings;
+}>({});
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
 
   const [thumbnailSettings, setThumbnailSettings] = useState<
     IThumbnailSettings | undefined
+  >();
+  const [advancedSettings, setAdvancedSettings] = useState<
+    IAdvancedSettings | undefined
   >();
   const [activeTab, setActiveTab] = useState<string>('gallery');
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
@@ -46,6 +61,15 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       ).data;
 
       setThumbnailSettings(newThumbnailSettings);
+      setAdvancedSettings({
+        itemsPerPage: 8,
+        paginationType: PaginationType.SCROLL,
+        activeButtonColor: 'blue',
+        inactiveButtonColor: 'inherit',
+        paginationButtonShape: PaginationButtonShape.CIRCULAR,
+        loadMoreButtonColor: 'blue',
+        paginationTextColor: 'green',
+      });
       setIsLoading(false);
     } else {
       setThumbnailSettings({
@@ -64,6 +88,15 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         titleFontFamily: 'Roboto',
         titleColor: 'Black',
         titleFontFamilySize: 20,
+      });
+      setAdvancedSettings({
+        itemsPerPage: 8,
+        paginationType: PaginationType.SCROLL,
+        activeButtonColor: 'blue',
+        inactiveButtonColor: 'inherit',
+        paginationButtonShape: PaginationButtonShape.CIRCULAR,
+        loadMoreButtonColor: 'blue',
+        paginationTextColor: 'green',
       });
     }
   };
@@ -144,6 +177,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               style={{margin: '5px 20px'}}
             >
               <Tab label="Gallery" value="gallery" />
+              <Tab label="Advanced" value="advanced" />
               <Tab
                 label="Light Box"
                 value="lightBox"
@@ -169,6 +203,15 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               />
             )}
           </TabPanel>
+          <TabPanel value="advanced">
+            {advancedSettings && (
+              <AdvancedSettings
+                value={advancedSettings as IAdvancedSettings}
+                onChange={setAdvancedSettings}
+                isLoading={isLoading}
+              />
+            )}
+          </TabPanel>
           <TabPanel value="lightBox">Item Two</TabPanel>
         </TabContext>
       </Collapse>
@@ -176,7 +219,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   return (
-    <SettingsContext.Provider value={thumbnailSettings || null}>
+    <SettingsContext.Provider value={{thumbnailSettings, advancedSettings}}>
       {showControls && (
         <Paper
           variant={'outlined'}

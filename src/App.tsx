@@ -1,16 +1,13 @@
 import React from 'react';
 import './App.css';
 import Gallery from './components/Gallery';
-import { SnackbarProvider } from 'notistack';
+import {SnackbarProvider} from 'notistack';
 
-function App() {
+function App({id}: any) {
   return (
-    <SnackbarProvider >
-      <Gallery />
+    <SnackbarProvider>
+      <Gallery id={id} />
     </SnackbarProvider>
-    // <div style={{width:'800px', margin: '0 auto'}}>
-    //   <Gallery2 />
-    // </div>
   );
 }
 

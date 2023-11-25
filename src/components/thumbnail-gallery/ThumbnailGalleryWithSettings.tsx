@@ -1,7 +1,8 @@
 import {IImageDTO} from 'data-structures';
-import {useSettings} from '../../components/settings';
+import {useSettings} from '../settings';
 import {ThumbnailGalleryWithDataFetching} from './ThumbnailGalleryWithDataFetching';
 import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
+import {IAdvancedSettings} from 'components/advanced-settings';
 
 const images: IImageDTO[] = [
   {
@@ -226,11 +227,22 @@ const images: IImageDTO[] = [
   },
 ];
 
-const ThumbnailGalleryWithSettings = () => {
-  const settings: IThumbnailSettings | null = useSettings();
+const ThumbnailGalleryWithSettings = ({id}: any) => {
+  const {
+    advancedSettings,
+    thumbnailSettings,
+  }: {
+    thumbnailSettings?: IThumbnailSettings;
+    advancedSettings?: IAdvancedSettings;
+  } = useSettings();
 
-  return settings ? (
-    <ThumbnailGalleryWithDataFetching images={images} settings={settings} />
+  return advancedSettings && thumbnailSettings ? (
+    <ThumbnailGalleryWithDataFetching
+      images={images}
+      advancedSettings={advancedSettings as any}
+      thumbnailSettings={thumbnailSettings as any}
+      id={id}
+    />
   ) : null;
 };
 

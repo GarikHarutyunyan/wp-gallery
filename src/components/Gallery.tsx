@@ -10,9 +10,9 @@ import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'yet-another-react-lightbox/styles.css';
 import {SettingsProvider} from './settings/SettingsContext';
-import {ThumbnailGalleryWithSettings} from './ThumbnailGallery.tsx/ThumbnailGalleryWithSettings';
+import {ThumbnailGalleryWithSettings} from './thumbnail-gallery/ThumbnailGalleryWithSettings';
 
-const Gallery = () => {
+const Gallery = ({id}: any) => {
   return (
     <div
       style={{
@@ -21,7 +21,7 @@ const Gallery = () => {
       }}
     >
       <SettingsProvider>
-        <ThumbnailGalleryWithSettings />
+        <ThumbnailGalleryWithSettings id={id} />
       </SettingsProvider>
     </div>
   );

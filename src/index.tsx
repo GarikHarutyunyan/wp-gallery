@@ -1,17 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import ReactDOM2 from 'react-dom';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+// import reportWebVitals from './reportWebVitals';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const root = ReactDOM.createRoot(
-    document.getElementById('root') as HTMLElement
-  );
+const addApplication = (rootElement: HTMLElement) => {
+  const root = ReactDOM.createRoot(rootElement);
+
   root.render(
     <React.StrictMode>
-      <App />
+      <App id={rootElement.id} />
     </React.StrictMode>
+  );
+};
+
+const addApplicationById = () => {
+  const id: string | undefined = document.getElementById('reacg-loadApp')?.id;
+  const rootElement: HTMLElement | null = id
+    ? document.getElementById(id)
+    : null;
+
+  rootElement && addApplication(rootElement);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  const galleryContainers: any[] = Array.from(
+    document.getElementsByClassName('aig-gallery') as any
+  );
+
+  galleryContainers?.forEach((galleryContainer: any) => {
+    addApplication(galleryContainer);
+  });
+  ReactDOM2.createPortal(
+    <button id={'reacg-loadApp'} onClick={addApplicationById}></button>,
+    document.querySelector('body') as Element
   );
 });
 
