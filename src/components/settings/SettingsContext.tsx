@@ -26,6 +26,7 @@ import {
   IAdvancedSettings,
 } from 'components/advanced-settings';
 import {AppInfoContext} from 'AppInfoContext';
+import './settings-context.css';
 
 const SettingsContext = React.createContext<{
   thumbnailSettings?: IThumbnailSettings;
@@ -47,7 +48,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const isLightBoxTabDisabled: boolean = !thumbnailSettings?.showLightbox;
+  // const isLightBoxTabDisabled: boolean = !thumbnailSettings?.showLightbox;
 
   const getData = async () => {
     const dataElement = document.getElementById('reacg-root' + galleryId);
@@ -67,15 +68,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       ).data;
 
       setThumbnailSettings(newThumbnailSettings);
-      setAdvancedSettings({
-        itemsPerPage: 8,
-        paginationType: PaginationType.SIMPLE,
-        activeButtonColor: 'blue',
-        inactiveButtonColor: 'inherit',
-        paginationButtonShape: PaginationButtonShape.CIRCULAR,
-        loadMoreButtonColor: 'blue',
-        paginationTextColor: 'green',
-      });
+      // TODO: remove as any after having grouped options
+      setAdvancedSettings(newThumbnailSettings as any);
       setIsLoading(false);
     } else {
       setThumbnailSettings({
@@ -151,7 +145,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   const renderTitle = (): ReactNode => {
     return (
-      <Aligner>
+      <Aligner
+        onClick={() => setIsExpanded((prevValue) => !prevValue)}
+        className={'settings-provider__title'}
+      >
         <Typography
           gutterBottom
           variant="h5"
@@ -161,10 +158,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           {'Options'}
         </Typography>
         <span style={{margin: '10px'}}>
-          <ExpandMore
-            expand={isExpanded}
-            onClick={() => setIsExpanded((prevValue) => !prevValue)}
-          >
+          <ExpandMore expand={isExpanded}>
             <ExpandMoreIcon />
           </ExpandMore>
         </span>
@@ -185,11 +179,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
             >
               <Tab label="Gallery" value="gallery" />
               <Tab label="Advanced" value="advanced" />
-              <Tab
+              {/* <Tab
                 label="Light Box"
                 value="lightBox"
                 disabled={isLightBoxTabDisabled}
-              />
+              /> */}
             </Tabs>
             <LoadingButton
               loading={isLoading}
@@ -219,7 +213,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               />
             )}
           </TabPanel>
-          <TabPanel value="lightBox">Item Two</TabPanel>
+          {/* <TabPanel value="lightBox">Item Two</TabPanel> */}
         </TabContext>
       </Collapse>
     );
