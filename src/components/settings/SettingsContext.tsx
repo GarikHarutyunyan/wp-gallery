@@ -36,7 +36,7 @@ const SettingsContext = React.createContext<{
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
 
-  const {galleryId, baseUrl} = useContext(AppInfoContext);
+  const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
   const [thumbnailSettings, setThumbnailSettings] = useState<
     IThumbnailSettings | undefined
   >();
@@ -114,7 +114,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setIsLoading(true);
       try {
         const newThumbnailSettings: IThumbnailSettings = (
-          await axios.put(fetchUrl, thumbnailSettings)
+          await axios.put(
+            fetchUrl,
+            {...thumbnailSettings, ...advancedSettings},
+            {
+              headers: {'X-WP-Nonce': nonce},
+            }
+          )
         ).data;
 
         enqueueSnackbar('Settings are up to date!', {
