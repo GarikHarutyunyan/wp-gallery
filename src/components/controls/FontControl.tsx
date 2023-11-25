@@ -18,25 +18,23 @@ const FontControl: React.FC<IFontControlProps> = ({
   const [options, setOptions] = useState<any[]>([]);
 
   const getData = async () => {
-    const dataElement = document.getElementsByClassName('aig-preview')?.[0];
+    const dataElement = document.getElementsByClassName('reacg-preview')?.[0];
     const fetchUrl: string = dataElement?.getAttribute(
       'data-get-google-fonts'
     ) as string;
 
-    if(fetchUrl){
-
-      try{
-        const response = (await axios.get(fetchUrl));
+    if (fetchUrl) {
+      try {
+        const response = await axios.get(fetchUrl);
         const fontData: object = response.data;
         const newOptions: any[] = Object.values(fontData).map((data: any) => ({
           value: data,
           title: data,
         }));
-        
+
         setOptions(newOptions);
-      }
-      catch (error){
-        console.error(error)
+      } catch (error) {
+        console.error(error);
         setOptions([]);
       }
     }

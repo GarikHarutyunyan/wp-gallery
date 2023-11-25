@@ -48,7 +48,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const isLightBoxTabDisabled: boolean = !thumbnailSettings?.showLightbox;
 
   const getData = async () => {
-    const dataElement = document.getElementsByClassName('aig-preview')?.[0];
+    const dataElement = document.getElementsByClassName('reacg-preview')?.[0];
     const fetchOptionsUrl = dataElement?.getAttribute('data-options-url');
     const showControlsData: number = +(
       dataElement?.getAttribute('data-options-section') || 1
@@ -106,7 +106,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   }, []);
 
   const onSave = async () => {
-    const dataElement = document.getElementsByClassName('aig-preview')?.[0];
+    const dataElement = document.getElementsByClassName('reacg-preview')?.[0];
     const fetchUrl = dataElement?.getAttribute('data-options-url');
 
     if (fetchUrl) {

@@ -26,7 +26,7 @@ const addApplicationById = () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   const galleryContainers: any[] = Array.from(
-    document.getElementsByClassName('aig-gallery') as any
+    document.getElementsByClassName('reacg-gallery') as any
   );
 
   galleryContainers?.forEach((galleryContainer: any) => {

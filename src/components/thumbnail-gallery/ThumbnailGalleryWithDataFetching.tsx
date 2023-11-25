@@ -67,7 +67,7 @@ const ThumbnailGalleryWithDataFetching = ({
   };
 
   const getItemsCount = async () => {
-    const dataElement = document.getElementsByClassName('aig-preview')?.[0];
+    const dataElement = document.getElementsByClassName('reacg-preview')?.[0];
     const fetchUrl: string = dataElement?.getAttribute(
       'data-get-gallery-url'
     ) as string;
