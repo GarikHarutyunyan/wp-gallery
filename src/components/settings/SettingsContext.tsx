@@ -174,7 +174,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   const renderBody = (): ReactNode => {
     return (
-      <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+      <Collapse in={isExpanded} timeout="auto">
         <Divider variant="middle" />
         <TabContext value={activeTab}>
           <Aligner>
