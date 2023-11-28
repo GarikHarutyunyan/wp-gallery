@@ -23,7 +23,9 @@ const addApplication = (rootElement: HTMLElement) => {
 };
 
 const addApplicationById = () => {
-  const id: string | undefined = document.getElementById('reacg-loadApp')?.id;
+  const id: string | undefined =
+    document.getElementById('reacg-loadApp')?.getAttribute('data-id') ||
+    undefined;
   const rootElement: HTMLElement | null = id
     ? document.getElementById(id)
     : null;
@@ -42,6 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
   ReactDOM2.createPortal(
     <button id={'reacg-loadApp'} onClick={addApplicationById}></button>,
     document.querySelector('body') as Element
+  );
+
+  const div = document.createElement('div');
+  div.setAttribute('id', 'reacg-loadAppContainer');
+  const body = document.querySelector('body') as any;
+  body.append(div);
+  const rootElement = ReactDOM.createRoot(div);
+  rootElement.render(
+    <button id={'reacg-loadApp'} onClick={addApplicationById}></button>
   );
 });
 

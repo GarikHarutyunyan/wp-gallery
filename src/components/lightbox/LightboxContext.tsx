@@ -2,7 +2,7 @@ import React, {Dispatch, useState} from 'react';
 import Lightbox from 'yet-another-react-lightbox';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
 import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
-import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+// import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import {IImageDTO} from 'data-structures';
 
@@ -24,7 +24,7 @@ const LightboxProvider: React.FC<
   return (
     <LightboxContext.Provider value={{setActiveImageIndex}}>
       <Lightbox
-        plugins={[Fullscreen, Slideshow, Thumbnails, Zoom]}
+        plugins={[Fullscreen, Slideshow, Zoom]}
         open={activeImageIndex >= 0}
         index={activeImageIndex}
         close={() => setActiveImageIndex(-1)}
@@ -49,11 +49,11 @@ const LightboxProvider: React.FC<
           ],
           metadata: image.thumbnail.url,
         }))}
-        render={{
-          thumbnail: ({slide}) => {
-            return <img src={(slide as any).metadata}></img>;
-          },
-        }}
+        // render={{
+        //   thumbnail: ({slide}) => {
+        //     return <img src={(slide as any).metadata}></img>;
+        //   },
+        // }}
         carousel={{
           preload: 20,
         }}
