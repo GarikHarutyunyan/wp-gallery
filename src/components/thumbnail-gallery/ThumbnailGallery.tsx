@@ -118,7 +118,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
       >
         <ImageList
           cols={validColumnsCount}
-          gap={gap}
+          gap={+gap}
           style={{margin: '0 auto'}}
         >
           {images.map((image, index) => (
