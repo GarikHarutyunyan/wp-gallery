@@ -3,7 +3,7 @@ import {Grid, Pagination, PaginationItem} from '@mui/material';
 import {PaginationType} from 'data-structures';
 import {Button} from 'core-components';
 import {useInView} from 'react-intersection-observer';
-import {IAdvancedSettings} from 'components/advanced-settings';
+import {IGeneralSettings} from 'components/general-settings';
 import './pagination-provider.css';
 import {AppTranslationsContext} from 'AppTranslationsContext';
 
@@ -12,7 +12,7 @@ interface IPaginationProviderProps {
   onLoad: (_event?: any, page?: number) => void;
   pagesCount?: number;
   isFullyLoaded?: boolean;
-  settings: IAdvancedSettings;
+  settings: IGeneralSettings;
 }
 
 const PaginationProvider: React.FC<IPaginationProviderProps> = ({

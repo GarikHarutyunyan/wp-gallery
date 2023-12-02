@@ -11,7 +11,7 @@ import {
 import {ColorControl, NumberControl, SelectControl} from '../controls';
 import {Section} from 'core-components';
 
-interface IAdvancedSettings {
+interface IGeneralSettings {
   paginationType: PaginationType;
   itemsPerPage: number | undefined;
   activeButtonColor: string;
@@ -21,13 +21,13 @@ interface IAdvancedSettings {
   paginationTextColor: string;
 }
 
-interface IAdvancedSettingsProps {
-  value: IAdvancedSettings;
-  onChange: (newSettings: IAdvancedSettings) => void;
+interface IGeneralSettingsProps {
+  value: IGeneralSettings;
+  onChange: (newSettings: IGeneralSettings) => void;
   isLoading?: boolean;
 }
 
-const AdvancedSettings: React.FC<IAdvancedSettingsProps> = ({
+const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
   value,
   onChange,
   isLoading,
@@ -171,4 +171,4 @@ const AdvancedSettings: React.FC<IAdvancedSettingsProps> = ({
   );
 };
 
-export {AdvancedSettings, type IAdvancedSettings};
+export {GeneralSettings, type IGeneralSettings};

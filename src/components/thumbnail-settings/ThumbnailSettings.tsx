@@ -141,10 +141,10 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
     };
   }, [titleVisibility]);
 
-  const renderMainSettings = (): ReactNode => {
+  const renderBasicSettings = (): ReactNode => {
     return (
       <Section
-        header={'General'}
+        header={'Basic'}
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
@@ -187,7 +187,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
     );
   };
 
-  const renderAdvancedSettings = (): ReactNode => {
+  const renderGeneralSettings = (): ReactNode => {
     return (
       <Section
         header={'Advanced'}
@@ -302,8 +302,8 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
 
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
-      {renderMainSettings()}
-      {renderAdvancedSettings()}
+      {renderBasicSettings()}
+      {renderGeneralSettings()}
     </Paper>
   );
 };

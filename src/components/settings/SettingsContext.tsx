@@ -21,16 +21,13 @@ import Divider from '@mui/material/Divider';
 import {Aligner, ExpandMore, Tab} from 'core-components';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {useSnackbar} from 'notistack';
-import {
-  AdvancedSettings,
-  IAdvancedSettings,
-} from 'components/advanced-settings';
+import {GeneralSettings, IGeneralSettings} from 'components/general-settings';
 import {AppInfoContext} from 'AppInfoContext';
 import './settings-context.css';
 
 const SettingsContext = React.createContext<{
   thumbnailSettings?: IThumbnailSettings;
-  advancedSettings?: IAdvancedSettings;
+  generalSettings?: IGeneralSettings;
 }>({});
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
@@ -40,8 +37,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [thumbnailSettings, setThumbnailSettings] = useState<
     IThumbnailSettings | undefined
   >();
-  const [advancedSettings, setAdvancedSettings] = useState<
-    IAdvancedSettings | undefined
+  const [generalSettings, setGeneralSettings] = useState<
+    IGeneralSettings | undefined
   >();
   const [activeTab, setActiveTab] = useState<string>('gallery');
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
@@ -63,14 +60,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
-      const newSettings: IThumbnailSettings & IAdvancedSettings = (
+      const newSettings: IThumbnailSettings & IGeneralSettings = (
         await axios.get(fetchUrl, {
           headers: {'X-WP-Nonce': nonce},
         })
       ).data;
 
       setThumbnailSettings(extractThumbnailSettings(newSettings));
-      setAdvancedSettings(extractAdvancedSettings(newSettings));
+      setGeneralSettings(extractGeneralSettings(newSettings));
       setIsLoading(false);
     } else {
       setThumbnailSettings({
@@ -90,7 +87,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         titleColor: 'Black',
         titleFontSize: 20,
       });
-      setAdvancedSettings({
+      setGeneralSettings({
         itemsPerPage: 8,
         paginationType: PaginationType.SCROLL,
         activeButtonColor: 'blue',
@@ -103,7 +100,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const extractThumbnailSettings = (
-    settings: IThumbnailSettings & IAdvancedSettings
+    settings: IThumbnailSettings & IGeneralSettings
   ): IThumbnailSettings => {
     const {
       backgroundColor,
@@ -142,9 +139,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     };
   };
 
-  const extractAdvancedSettings = (
-    settings: IThumbnailSettings & IAdvancedSettings
-  ): IAdvancedSettings => {
+  const extractGeneralSettings = (
+    settings: IThumbnailSettings & IGeneralSettings
+  ): IGeneralSettings => {
     const {
       activeButtonColor,
       inactiveButtonColor,
@@ -153,7 +150,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       paginationButtonShape,
       paginationTextColor,
       paginationType,
-    }: IAdvancedSettings = settings;
+    }: IGeneralSettings = settings;
 
     return {
       activeButtonColor,
@@ -178,10 +175,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (fetchUrl) {
       setIsLoading(true);
       try {
-        const newSettings: IThumbnailSettings & IAdvancedSettings = (
+        const newSettings: IThumbnailSettings & IGeneralSettings = (
           await axios.put(
             fetchUrl,
-            {...thumbnailSettings, ...advancedSettings},
+            {...thumbnailSettings, ...generalSettings},
             {
               headers: {'X-WP-Nonce': nonce},
             }
@@ -189,7 +186,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         ).data;
 
         setThumbnailSettings(extractThumbnailSettings(newSettings));
-        setAdvancedSettings(extractAdvancedSettings(newSettings));
+        setGeneralSettings(extractGeneralSettings(newSettings));
         enqueueSnackbar('Settings are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -246,7 +243,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           <Aligner>
             <Tabs value={activeTab} onChange={onActiveTabChange}>
               <Tab label="Gallery" value="gallery" />
-              <Tab label="Advanced" value="advanced" />
+              <Tab label="General" value="general" />
               {/* <Tab
                 label="Light Box"
                 value="lightBox"
@@ -273,11 +270,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               />
             )}
           </TabPanel>
-          <TabPanel value="advanced">
-            {advancedSettings && (
-              <AdvancedSettings
-                value={advancedSettings as IAdvancedSettings}
-                onChange={setAdvancedSettings}
+          <TabPanel value="general">
+            {generalSettings && (
+              <GeneralSettings
+                value={generalSettings as IGeneralSettings}
+                onChange={setGeneralSettings}
                 isLoading={isLoading}
               />
             )}
@@ -289,7 +286,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   return (
-    <SettingsContext.Provider value={{thumbnailSettings, advancedSettings}}>
+    <SettingsContext.Provider value={{thumbnailSettings, generalSettings}}>
       {showControls && (
         <Paper className={'reacg-settings'}>
           {renderTitle()}
