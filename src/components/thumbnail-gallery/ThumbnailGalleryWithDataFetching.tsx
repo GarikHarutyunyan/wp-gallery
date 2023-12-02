@@ -43,6 +43,7 @@ const ThumbnailGalleryWithDataFetching = ({
       : undefined;
 
     if (fetchUrl) {
+      setIsLoading(true);
       const perPageQueryString: string =
         paginationType !== PaginationType.NONE
           ? `&per_page=${itemsPerPage}`
@@ -65,6 +66,7 @@ const ThumbnailGalleryWithDataFetching = ({
         setImages((prevImages) => [...prevImages, ...newImages]);
       }
       setCurrentPage(page);
+      setIsLoading(false);
     } else {
       setImages(propsImages);
     }
@@ -92,12 +94,11 @@ const ThumbnailGalleryWithDataFetching = ({
     _event?: any,
     newPage: number = currentPage + 1
   ) => {
-    setIsLoading(true);
-    await getData(newPage);
-    setIsLoading(false);
+    getData(newPage);
   };
 
-  const onReloadData = () => {
+  const onReloadData = async () => {
+    setIsLoading(true);
     setImages([]);
     setCurrentPage(0);
     setImageCount(0);
@@ -143,7 +144,7 @@ const ThumbnailGalleryWithDataFetching = ({
 
   return (
     <LightboxProvider images={images}>
-      {images.length ? (
+      {images.length || isLoading ? (
         <>
           {renderThumbnailGallery()}
           <PaginationProvider
