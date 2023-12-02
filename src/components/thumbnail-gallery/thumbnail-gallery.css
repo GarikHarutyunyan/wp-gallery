@@ -3,9 +3,12 @@
     pointer-events: none;
 }
 
+.thumnail-gallery__image_clickable {
+    cursor: pointer;
+}
+
 .thumbnail-gallery__title_on-hover {
     display: none;
-
 }
 
 .thumbnail-gallery__title_hidden {

@@ -135,7 +135,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
             >
               <ImageListItem key={image.medium_large.url}>
                 <img
-                  className={'thumnail-gallery__image'}
+                  className={clsx('thumnail-gallery__image', {
+                    'thumnail-gallery__image_clickable': showLightbox,
+                  })}
                   src={`${image.medium_large.url}`}
                   alt={image.title}
                   loading="lazy"
