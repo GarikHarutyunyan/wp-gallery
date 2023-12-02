@@ -64,7 +64,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (fetchUrl) {
       setIsLoading(true);
       const newSettings: IThumbnailSettings & IAdvancedSettings = (
-        await axios.get(fetchUrl)
+        await axios.get(fetchUrl, {
+          headers: {'X-WP-Nonce': nonce},
+        })
       ).data;
 
       setThumbnailSettings(extractThumbnailSettings(newSettings));

@@ -23,7 +23,7 @@ const ThumbnailGalleryWithDataFetching = ({
   advancedSettings,
 }: IThumbnailGalleryWithDataFetchingProps) => {
   const {itemsPerPage = 0, paginationType} = advancedSettings;
-  const {galleryId, baseUrl} = useContext(AppInfoContext);
+  const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
   const {setLoadMoreText} = useContext(AppTranslationsContext);
   const [images, setImages] = useState<IImageDTO[]>([]);
   const [imageCount, setImageCount] = useState<number>(0);
@@ -49,7 +49,9 @@ const ThumbnailGalleryWithDataFetching = ({
           ? `&per_page=${itemsPerPage}`
           : '';
       const imgData: any[] = (
-        await axios.get(`${fetchUrl}?page=${page}${perPageQueryString}`)
+        await axios.get(`${fetchUrl}?page=${page}${perPageQueryString}`, {
+          headers: {'X-WP-Nonce': nonce},
+        })
       ).data;
       const newImages: IImageDTO[] = imgData.map((data: any) => ({
         original: data.original,
@@ -78,7 +80,11 @@ const ThumbnailGalleryWithDataFetching = ({
       : undefined;
 
     if (fetchUrl) {
-      const imgData: any = (await axios.get(`${fetchUrl}`)).data;
+      const imgData: any = (
+        await axios.get(fetchUrl, {
+          headers: {'X-WP-Nonce': nonce},
+        })
+      ).data;
       const newImageCount: number = imgData?.images_count;
       const loadMoreText: string | undefined =
         imgData?.texts?.load_more || undefined;
