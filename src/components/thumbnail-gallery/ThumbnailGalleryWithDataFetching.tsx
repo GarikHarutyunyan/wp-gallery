@@ -22,7 +22,7 @@ const ThumbnailGalleryWithDataFetching = ({
   thumbnailSettings,
   advancedSettings,
 }: IThumbnailGalleryWithDataFetchingProps) => {
-  const {itemsPerPage, paginationType} = advancedSettings;
+  const {itemsPerPage = 0, paginationType} = advancedSettings;
   const {galleryId, baseUrl} = useContext(AppInfoContext);
   const {setLoadMoreText} = useContext(AppTranslationsContext);
   const [images, setImages] = useState<IImageDTO[]>([]);

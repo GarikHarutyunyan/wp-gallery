@@ -24,9 +24,9 @@ import {Divider, Typography} from '@mui/material';
 import {Aligner, ExpandMore, Section} from 'core-components';
 
 interface IThumbnailSettings {
-  width: number;
-  height: number;
-  columns: number;
+  width: number | undefined;
+  height: number | undefined;
+  columns: number | undefined;
   showLightbox: boolean;
   gap: number;
   backgroundColor: string;
@@ -38,7 +38,7 @@ interface IThumbnailSettings {
   titleVisibility: TitleVisibility;
   titleFontFamily: string;
   titleColor: string;
-  titleFontFamilySize: number;
+  titleFontFamilySize: number | undefined;
 }
 
 interface IThumbnailSettingsProps {
@@ -52,9 +52,9 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
   onChange,
   isLoading,
 }) => {
-  const [width, setWidth] = useState<number>(value.width);
-  const [height, setHeight] = useState<number>(value.height);
-  const [columns, setColumns] = useState<number>(value.columns);
+  const [width, setWidth] = useState<number | undefined>(value.width);
+  const [height, setHeight] = useState<number | undefined>(value.height);
+  const [columns, setColumns] = useState<number | undefined>(value.columns);
   const [showLightbox, setShowLightbox] = useState<boolean>(true);
   const [gap, setGap] = useState<number>(value.gap);
   const [backgroundColor, setBackgroundColor] = useState<string>(
@@ -77,9 +77,9 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
     value.titleFontFamily
   );
   const [titleColor, setTitleColor] = useState<string>(value.titleColor);
-  const [titleFontFamilySize, settitleFontFamilySize] = useState<number>(
-    value.titleFontFamilySize
-  );
+  const [titleFontFamilySize, setTitleFontFamilySize] = useState<
+    number | undefined
+  >(value.titleFontFamilySize);
 
   useEffect(
     () =>
@@ -120,10 +120,9 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
   );
 
   useLayoutEffect(() => {
-    const belowOption: ISelectOption | undefined =
-      TitlePositionOptions.find(
-        (option) => option.value === TitlePosition.BELOW
-      );
+    const belowOption: ISelectOption | undefined = TitlePositionOptions.find(
+      (option) => option.value === TitlePosition.BELOW
+    );
 
     if (titleVisibility === TitleVisibility.ON_HOVER) {
       if (belowOption) {
@@ -299,7 +298,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
           <NumberControl
             name={'Title font size'}
             value={titleFontFamilySize}
-            onChange={settitleFontFamilySize}
+            onChange={setTitleFontFamilySize}
             unit={'px'}
           />
         </Filter>

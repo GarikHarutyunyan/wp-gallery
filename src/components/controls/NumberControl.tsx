@@ -5,8 +5,8 @@ import Skeleton from '@mui/material/Skeleton';
 
 interface INumberControlProps {
   name: string;
-  value: number;
-  onChange: (value: number) => void;
+  value?: number;
+  onChange: (value: number | undefined) => void;
   min?: number;
   max?: number;
   unit?: string;
@@ -21,7 +21,12 @@ const NumberControl: React.FC<INumberControlProps> = ({
   unit,
 }) => {
   const onValueChange = (event: any) => {
-    onChange(+event.target.value);
+    const value: number | undefined =
+      event.target.value !== '' || !!event.target.value
+        ? +event.target.value
+        : undefined;
+
+    onChange(value);
   };
   return (
     <TextField

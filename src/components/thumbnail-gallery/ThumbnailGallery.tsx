@@ -23,9 +23,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
 }) => {
   const {setActiveImageIndex} = useLightbox();
   const {
-    width,
-    height,
-    columns,
+    width = 0,
+    height = 0,
+    columns = 0,
     showLightbox,
     gap,
     backgroundColor,
@@ -57,7 +57,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
   const getValidColumnsCount = (): number => {
     const containerBox: number = +width + 2 * padding;
 
-    if (!containerWidth) {
+    if (!containerWidth || !containerBox) {
       return columns;
     }
 
