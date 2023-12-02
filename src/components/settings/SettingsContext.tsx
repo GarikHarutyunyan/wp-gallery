@@ -261,7 +261,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               {'Save options'}
             </LoadingButton>
           </Aligner>
-          <TabPanel value="gallery">
+          <TabPanel value="gallery" className={'reacg-tab-panel'}>
             {thumbnailSettings && (
               <ThumbnailSettings
                 value={thumbnailSettings as IThumbnailSettings}
@@ -270,7 +270,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               />
             )}
           </TabPanel>
-          <TabPanel value="general">
+          <TabPanel value="general" className={'reacg-tab-panel'}>
             {generalSettings && (
               <GeneralSettings
                 value={generalSettings as IGeneralSettings}

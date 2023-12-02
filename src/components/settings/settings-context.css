@@ -9,3 +9,7 @@
     -ms-user-select: none;
     user-select: none;
 }
+
+.reacg-tab-panel {
+    padding: 15px 5px !important;
+}
