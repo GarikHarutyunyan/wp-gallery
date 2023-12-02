@@ -38,7 +38,7 @@ interface IThumbnailSettings {
   titleVisibility: TitleVisibility;
   titleFontFamily: string;
   titleColor: string;
-  titleFontFamilySize: number | undefined;
+  titleFontSize: number | undefined;
 }
 
 interface IThumbnailSettingsProps {
@@ -77,9 +77,9 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
     value.titleFontFamily
   );
   const [titleColor, setTitleColor] = useState<string>(value.titleColor);
-  const [titleFontFamilySize, setTitleFontFamilySize] = useState<
-    number | undefined
-  >(value.titleFontFamilySize);
+  const [titleFontSize, setTitleFontSize] = useState<number | undefined>(
+    value.titleFontSize
+  );
 
   useEffect(
     () =>
@@ -98,7 +98,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
         titleVisibility,
         titleFontFamily,
         titleColor,
-        titleFontFamilySize,
+        titleFontSize,
       }),
     [
       width,
@@ -115,7 +115,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
       titleVisibility,
       titleFontFamily,
       titleColor,
-      titleFontFamilySize,
+      titleFontSize,
     ]
   );
 
@@ -297,8 +297,8 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
         <Filter isLoading={isLoading}>
           <NumberControl
             name={'Title font size'}
-            value={titleFontFamilySize}
-            onChange={setTitleFontFamilySize}
+            value={titleFontSize}
+            onChange={setTitleFontSize}
             unit={'px'}
           />
         </Filter>

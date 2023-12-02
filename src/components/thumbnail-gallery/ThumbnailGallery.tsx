@@ -37,7 +37,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     titleVisibility,
     titleFontFamily,
     titleColor,
-    titleFontFamilySize,
+    titleFontSize,
   } = settings;
   const elementRef = useRef();
   const [containerWidth, setContainerWidth] = useState(0);
@@ -167,7 +167,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                         style={{
                           color: titleColor,
                           fontFamily: titleFontFamily,
-                          fontSize: titleFontFamilySize + 'px',
+                          fontSize: titleFontSize + 'px',
                         }}
                       >
                         {image.title}
