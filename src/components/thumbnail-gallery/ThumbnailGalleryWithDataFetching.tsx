@@ -22,7 +22,7 @@ const ThumbnailGalleryWithDataFetching = ({
   thumbnailSettings,
   generalSettings,
 }: IThumbnailGalleryWithDataFetchingProps) => {
-  const {itemsPerPage = 0, paginationType} = generalSettings;
+  const {itemsPerPage = 1, paginationType} = generalSettings;
   const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
   const {noDataText, setLoadMoreText, setNoDataText} = useContext(
     AppTranslationsContext
@@ -32,11 +32,12 @@ const ThumbnailGalleryWithDataFetching = ({
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const pagesCount: number = Math.ceil(imageCount / itemsPerPage);
+  const pagesCount: number =
+    itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
   const isFullyLoaded: boolean = currentPage >= pagesCount;
 
   useEffect(() => {
-    onReloadData();
+    itemsPerPage > 0 && onReloadData();
   }, [itemsPerPage, paginationType]);
 
   const getData = async (page: number) => {
