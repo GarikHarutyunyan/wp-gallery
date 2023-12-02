@@ -24,7 +24,7 @@ const Section: React.FC<ISectionProps> = ({
   };
 
   return (
-    <>
+    <div>
       <Aligner
         onClick={onExpand}
         className={clsx({section__header_clickable: canExpand})}
@@ -45,7 +45,7 @@ const Section: React.FC<ISectionProps> = ({
         <Divider variant="middle" style={{margin: '15px 0'}} />
         {body}
       </Collapse>
-    </>
+    </div>
   );
 };
 
