@@ -1,3 +1,7 @@
+.reacg-settings {
+    box-shadow: unset !important;
+}
+
 .settings-provider__title {
     cursor: pointer;
     -moz-user-select: none;

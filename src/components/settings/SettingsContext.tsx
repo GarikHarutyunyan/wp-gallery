@@ -237,15 +237,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   const renderBody = (): ReactNode => {
     return (
-      <Collapse in={isExpanded} timeout="auto">
-        <Divider variant="middle" />
+      <Collapse in={isExpanded} timeout="auto" style={{margin: '5px'}}>
         <TabContext value={activeTab}>
           <Aligner>
-            <Tabs
-              value={activeTab}
-              onChange={onActiveTabChange}
-              style={{margin: '5px 20px'}}
-            >
+            <Tabs value={activeTab} onChange={onActiveTabChange}>
               <Tab label="Gallery" value="gallery" />
               <Tab label="Advanced" value="advanced" />
               {/* <Tab
@@ -259,7 +254,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               loadingPosition="center"
               variant="outlined"
               onClick={onSave}
-              style={{margin: '5px 20px'}}
+              style={{margin: '5px 20px', textTransform: 'none'}}
               className={'button button-primary button-large'}
             >
               {'Save options'}
@@ -292,12 +287,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   return (
     <SettingsContext.Provider value={{thumbnailSettings, advancedSettings}}>
       {showControls && (
-        <Paper
-          variant={'outlined'}
-          style={{marginBottom: '20px'}}
-          className={'settings'}
-        >
+        <Paper className={'reacg-settings'}>
           {renderTitle()}
+          <Divider variant="middle" />
           {renderBody()}
         </Paper>
       )}

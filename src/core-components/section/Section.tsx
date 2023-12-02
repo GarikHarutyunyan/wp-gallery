@@ -1,4 +1,4 @@
-import {Collapse, Divider, Typography} from '@mui/material';
+import {Collapse, Divider, Paper, Typography} from '@mui/material';
 import {Aligner, ExpandMore} from 'core-components';
 import React, {ReactNode, useState} from 'react';
 import clsx from 'clsx';
@@ -23,29 +23,46 @@ const Section: React.FC<ISectionProps> = ({
     canExpand && setIsExpanded((prevState: boolean) => !prevState);
   };
 
-  return (
-    <div>
+  const renderHeader = (): ReactNode => {
+    return (
       <Aligner
         onClick={onExpand}
-        className={clsx({section__header_clickable: canExpand})}
+        className={clsx('reacg-section__header', {
+          'reacg-section__header_clickable': canExpand,
+        })}
       >
         <Typography
           gutterBottom
           variant="subtitle1"
           component="div"
-          style={{margin: '0 5px'}}
+          className={'reacg-section__title'}
         >
           {header}
         </Typography>
         <span>
-          <ExpandMore expand={isExpanded} />
+          <ExpandMore
+            expand={isExpanded}
+            className={'reacg-section__expand-more'}
+          />
         </span>
       </Aligner>
+    );
+  };
+
+  const renderBody = (): ReactNode => {
+    return (
       <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-        <Divider variant="middle" style={{margin: '15px 0'}} />
-        {body}
+        <div className={'reacg-section__body'}>{body}</div>
       </Collapse>
-    </div>
+    );
+  };
+
+  return (
+    <Paper variant={'outlined'} className={'reacg-section'}>
+      {renderHeader()}
+      {isExpanded && <Divider variant="middle" />}
+      {renderBody()}
+    </Paper>
   );
 };
 

@@ -146,13 +146,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
       <Section
         header={'General'}
         body={
-          <Grid
-            container
-            columns={24}
-            rowSpacing={2}
-            columnSpacing={4}
-            marginBottom={4}
-          >
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
               <NumberControl
                 name={'Width'}
@@ -189,7 +183,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
           </Grid>
         }
         canExpand={true}
-      ></Section>
+      />
     );
   };
 
@@ -309,7 +303,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderMainSettings()}
-      <Divider variant="middle" style={{margin: '15px 0'}} />
       {renderAdvancedSettings()}
     </Paper>
   );
