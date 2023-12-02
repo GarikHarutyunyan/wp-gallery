@@ -24,7 +24,9 @@ const ThumbnailGalleryWithDataFetching = ({
 }: IThumbnailGalleryWithDataFetchingProps) => {
   const {itemsPerPage = 0, paginationType} = advancedSettings;
   const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
-  const {setLoadMoreText} = useContext(AppTranslationsContext);
+  const {noDataText, setLoadMoreText, setNoDataText} = useContext(
+    AppTranslationsContext
+  );
   const [images, setImages] = useState<IImageDTO[]>([]);
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -87,9 +89,12 @@ const ThumbnailGalleryWithDataFetching = ({
       ).data;
       const newImageCount: number = imgData?.images_count;
       const loadMoreText: string | undefined =
-        imgData?.texts?.load_more || undefined;
+        (window as any).reacg_global?.text?.load_more || undefined;
+      const noDataText: string | undefined =
+        (window as any).reacg_global?.text?.no_data || undefined;
 
       loadMoreText && setLoadMoreText?.(loadMoreText);
+      noDataText && setNoDataText?.(noDataText);
       setImageCount(newImageCount);
     } else {
       setImageCount(0);
@@ -142,7 +147,7 @@ const ThumbnailGalleryWithDataFetching = ({
     return (
       <Paper variant={'outlined'} className={'content-placeholder'}>
         <Typography gutterBottom variant="h6" component="div">
-          {'There is no data yet'}
+          {noDataText}
         </Typography>
       </Paper>
     );
