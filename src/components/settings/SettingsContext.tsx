@@ -178,7 +178,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (fetchUrl) {
       setIsLoading(true);
       try {
-        const newThumbnailSettings: IThumbnailSettings = (
+        const newSettings: IThumbnailSettings & IAdvancedSettings = (
           await axios.put(
             fetchUrl,
             {...thumbnailSettings, ...advancedSettings},
@@ -188,11 +188,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           )
         ).data;
 
+        setThumbnailSettings(extractThumbnailSettings(newSettings));
+        setAdvancedSettings(extractAdvancedSettings(newSettings));
         enqueueSnackbar('Settings are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
-        // setThumbnailSettings(newThumbnailSettings);
+        setIsLoading(false);
       } catch (error) {
         enqueueSnackbar('Cannot update options!', {
           variant: 'error',
