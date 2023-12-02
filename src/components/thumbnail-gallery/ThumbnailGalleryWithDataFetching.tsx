@@ -6,7 +6,7 @@ import {DataFetcher} from './DataFetcher';
 import {LightboxProvider} from 'components/lightbox/LightboxContext';
 import {PaginationProvider} from './PaginationProvider';
 import {IThumbnailSettings} from 'components/thumbnail-settings';
-import {IAdvancedSettings} from 'components/advanced-settings';
+import {IGeneralSettings} from 'components/general-settings';
 import {AppInfoContext} from 'AppInfoContext';
 import {AppTranslationsContext} from 'AppTranslationsContext';
 import {CircularProgress, Paper, Typography} from '@mui/material';
@@ -14,15 +14,15 @@ import {CircularProgress, Paper, Typography} from '@mui/material';
 interface IThumbnailGalleryWithDataFetchingProps {
   images: IImageDTO[];
   thumbnailSettings: IThumbnailSettings;
-  advancedSettings: IAdvancedSettings;
+  generalSettings: IGeneralSettings;
 }
 
 const ThumbnailGalleryWithDataFetching = ({
   images: propsImages,
   thumbnailSettings,
-  advancedSettings,
+  generalSettings,
 }: IThumbnailGalleryWithDataFetchingProps) => {
-  const {itemsPerPage = 0, paginationType} = advancedSettings;
+  const {itemsPerPage = 1, paginationType} = generalSettings;
   const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
   const {noDataText, setLoadMoreText, setNoDataText} = useContext(
     AppTranslationsContext
@@ -32,11 +32,12 @@ const ThumbnailGalleryWithDataFetching = ({
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const pagesCount: number = Math.ceil(imageCount / itemsPerPage);
+  const pagesCount: number =
+    itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
   const isFullyLoaded: boolean = currentPage >= pagesCount;
 
   useEffect(() => {
-    onReloadData();
+    itemsPerPage > 0 && onReloadData();
   }, [itemsPerPage, paginationType]);
 
   const getData = async (page: number) => {
@@ -163,7 +164,7 @@ const ThumbnailGalleryWithDataFetching = ({
             pagesCount={pagesCount}
             onLoad={onPageChange}
             isFullyLoaded={isFullyLoaded}
-            settings={advancedSettings}
+            settings={generalSettings}
           />
         </>
       ) : (

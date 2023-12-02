@@ -28,6 +28,7 @@ const SwitchControl: React.FC<ISwitchControlProps> = ({
       <FormControlLabel
         control={<Switch checked={value} onChange={onValueChange} />}
         label={label}
+        style={{margin: '-5px'}}
       />
     </FormControl>
   );
