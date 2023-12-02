@@ -172,7 +172,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                           fontSize: titleFontSize + 'px',
                         }}
                       >
-                        {image.title}
+                        {image.title || '-'}
                       </span>
                     }
                     position={
