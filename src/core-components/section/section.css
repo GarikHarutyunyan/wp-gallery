@@ -1,7 +1,29 @@
-.section__header_clickable {
+.reacg-section {
+    margin-bottom: 10px;
+}
+
+.reacg-section__header {
+    display: flex;
+    align-items: center;
+}
+
+.reacg-section__header_clickable {
     cursor: pointer;
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.reacg-section__title {
+    padding: 10px 20px;
+    margin: 0 !important;
+}
+
+.reacg-section__expand-more {
+    padding: 10px;
+}
+
+.reacg-section__body {
+    padding: 20px;
 }

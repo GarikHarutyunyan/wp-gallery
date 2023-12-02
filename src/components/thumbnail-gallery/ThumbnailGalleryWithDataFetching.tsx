@@ -22,9 +22,11 @@ const ThumbnailGalleryWithDataFetching = ({
   thumbnailSettings,
   advancedSettings,
 }: IThumbnailGalleryWithDataFetchingProps) => {
-  const {itemsPerPage, paginationType} = advancedSettings;
-  const {galleryId, baseUrl} = useContext(AppInfoContext);
-  const {setLoadMoreText} = useContext(AppTranslationsContext);
+  const {itemsPerPage = 0, paginationType} = advancedSettings;
+  const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
+  const {noDataText, setLoadMoreText, setNoDataText} = useContext(
+    AppTranslationsContext
+  );
   const [images, setImages] = useState<IImageDTO[]>([]);
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -43,12 +45,15 @@ const ThumbnailGalleryWithDataFetching = ({
       : undefined;
 
     if (fetchUrl) {
+      setIsLoading(true);
       const perPageQueryString: string =
         paginationType !== PaginationType.NONE
           ? `&per_page=${itemsPerPage}`
           : '';
       const imgData: any[] = (
-        await axios.get(`${fetchUrl}?page=${page}${perPageQueryString}`)
+        await axios.get(`${fetchUrl}?page=${page}${perPageQueryString}`, {
+          headers: {'X-WP-Nonce': nonce},
+        })
       ).data;
       const newImages: IImageDTO[] = imgData.map((data: any) => ({
         original: data.original,
@@ -65,6 +70,7 @@ const ThumbnailGalleryWithDataFetching = ({
         setImages((prevImages) => [...prevImages, ...newImages]);
       }
       setCurrentPage(page);
+      setIsLoading(false);
     } else {
       setImages(propsImages);
     }
@@ -76,12 +82,19 @@ const ThumbnailGalleryWithDataFetching = ({
       : undefined;
 
     if (fetchUrl) {
-      const imgData: any = (await axios.get(`${fetchUrl}`)).data;
+      const imgData: any = (
+        await axios.get(fetchUrl, {
+          headers: {'X-WP-Nonce': nonce},
+        })
+      ).data;
       const newImageCount: number = imgData?.images_count;
       const loadMoreText: string | undefined =
-        imgData?.texts?.load_more || undefined;
+        (window as any).reacg_global?.text?.load_more || undefined;
+      const noDataText: string | undefined =
+        (window as any).reacg_global?.text?.no_data || undefined;
 
       loadMoreText && setLoadMoreText?.(loadMoreText);
+      noDataText && setNoDataText?.(noDataText);
       setImageCount(newImageCount);
     } else {
       setImageCount(0);
@@ -92,12 +105,11 @@ const ThumbnailGalleryWithDataFetching = ({
     _event?: any,
     newPage: number = currentPage + 1
   ) => {
-    setIsLoading(true);
-    await getData(newPage);
-    setIsLoading(false);
+    getData(newPage);
   };
 
-  const onReloadData = () => {
+  const onReloadData = async () => {
+    setIsLoading(true);
     setImages([]);
     setCurrentPage(0);
     setImageCount(0);
@@ -135,7 +147,7 @@ const ThumbnailGalleryWithDataFetching = ({
     return (
       <Paper variant={'outlined'} className={'content-placeholder'}>
         <Typography gutterBottom variant="h6" component="div">
-          {'There is no data yet'}
+          {noDataText}
         </Typography>
       </Paper>
     );
@@ -143,7 +155,7 @@ const ThumbnailGalleryWithDataFetching = ({
 
   return (
     <LightboxProvider images={images}>
-      {images.length ? (
+      {images.length || isLoading ? (
         <>
           {renderThumbnailGallery()}
           <PaginationProvider

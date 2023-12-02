@@ -63,13 +63,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
-      const newThumbnailSettings: IThumbnailSettings = (
-        await axios.get(fetchUrl)
+      const newSettings: IThumbnailSettings & IAdvancedSettings = (
+        await axios.get(fetchUrl, {
+          headers: {'X-WP-Nonce': nonce},
+        })
       ).data;
 
-      setThumbnailSettings(newThumbnailSettings);
-      // TODO: remove as any after having grouped options
-      setAdvancedSettings(newThumbnailSettings as any);
+      setThumbnailSettings(extractThumbnailSettings(newSettings));
+      setAdvancedSettings(extractAdvancedSettings(newSettings));
       setIsLoading(false);
     } else {
       setThumbnailSettings({
@@ -87,7 +88,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         titleVisibility: TitleVisibility.NONE,
         titleFontFamily: 'Roboto',
         titleColor: 'Black',
-        titleFontFamilySize: 20,
+        titleFontSize: 20,
       });
       setAdvancedSettings({
         itemsPerPage: 8,
@@ -99,6 +100,70 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         paginationTextColor: 'green',
       });
     }
+  };
+
+  const extractThumbnailSettings = (
+    settings: IThumbnailSettings & IAdvancedSettings
+  ): IThumbnailSettings => {
+    const {
+      backgroundColor,
+      borderRadius,
+      columns,
+      gap,
+      height,
+      padding,
+      paddingColor,
+      showLightbox,
+      titleAlignment,
+      titleColor,
+      titleFontFamily,
+      titleFontSize,
+      titlePosition,
+      titleVisibility,
+      width,
+    }: IThumbnailSettings = settings;
+
+    return {
+      backgroundColor,
+      borderRadius,
+      columns,
+      gap,
+      height,
+      padding,
+      paddingColor,
+      showLightbox,
+      titleAlignment,
+      titleColor,
+      titleFontFamily,
+      titleFontSize,
+      titlePosition,
+      titleVisibility,
+      width,
+    };
+  };
+
+  const extractAdvancedSettings = (
+    settings: IThumbnailSettings & IAdvancedSettings
+  ): IAdvancedSettings => {
+    const {
+      activeButtonColor,
+      inactiveButtonColor,
+      itemsPerPage,
+      loadMoreButtonColor,
+      paginationButtonShape,
+      paginationTextColor,
+      paginationType,
+    }: IAdvancedSettings = settings;
+
+    return {
+      activeButtonColor,
+      inactiveButtonColor,
+      itemsPerPage,
+      loadMoreButtonColor,
+      paginationButtonShape,
+      paginationTextColor,
+      paginationType,
+    };
   };
 
   useLayoutEffect(() => {
@@ -174,15 +239,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   const renderBody = (): ReactNode => {
     return (
-      <Collapse in={isExpanded} timeout="auto">
-        <Divider variant="middle" />
+      <Collapse in={isExpanded} timeout="auto" style={{margin: '5px'}}>
         <TabContext value={activeTab}>
           <Aligner>
-            <Tabs
-              value={activeTab}
-              onChange={onActiveTabChange}
-              style={{margin: '5px 20px'}}
-            >
+            <Tabs value={activeTab} onChange={onActiveTabChange}>
               <Tab label="Gallery" value="gallery" />
               <Tab label="Advanced" value="advanced" />
               {/* <Tab
@@ -196,9 +256,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               loadingPosition="center"
               variant="outlined"
               onClick={onSave}
-              style={{margin: '5px 20px'}}
+              style={{margin: '5px 20px', textTransform: 'none'}}
+              className={'button button-primary button-large'}
             >
-              {'Save'}
+              {'Save options'}
             </LoadingButton>
           </Aligner>
           <TabPanel value="gallery">
@@ -228,12 +289,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   return (
     <SettingsContext.Provider value={{thumbnailSettings, advancedSettings}}>
       {showControls && (
-        <Paper
-          variant={'outlined'}
-          style={{marginBottom: '20px'}}
-          className={'settings'}
-        >
+        <Paper className={'reacg-settings'}>
           {renderTitle()}
+          <Divider variant="middle" />
           {renderBody()}
         </Paper>
       )}

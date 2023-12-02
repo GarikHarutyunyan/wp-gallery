@@ -13,7 +13,7 @@ import {Section} from 'core-components';
 
 interface IAdvancedSettings {
   paginationType: PaginationType;
-  itemsPerPage: number;
+  itemsPerPage: number | undefined;
   activeButtonColor: string;
   inactiveButtonColor: string;
   paginationButtonShape: PaginationButtonShape;
@@ -35,7 +35,9 @@ const AdvancedSettings: React.FC<IAdvancedSettingsProps> = ({
   const [paginationType, setPaginationType] = useState<PaginationType>(
     value.paginationType
   );
-  const [itemsPerPage, setItemsPerPage] = useState<number>(value.itemsPerPage);
+  const [itemsPerPage, setItemsPerPage] = useState<number | undefined>(
+    value.itemsPerPage
+  );
   const [activeButtonColor, setActiveButtonColor] = useState<string>(
     value.activeButtonColor
   );

@@ -23,9 +23,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
 }) => {
   const {setActiveImageIndex} = useLightbox();
   const {
-    width,
-    height,
-    columns,
+    width = 0,
+    height = 0,
+    columns = 0,
     showLightbox,
     gap,
     backgroundColor,
@@ -37,7 +37,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     titleVisibility,
     titleFontFamily,
     titleColor,
-    titleFontFamilySize,
+    titleFontSize,
   } = settings;
   const elementRef = useRef();
   const [containerWidth, setContainerWidth] = useState(0);
@@ -57,7 +57,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
   const getValidColumnsCount = (): number => {
     const containerBox: number = +width + 2 * padding;
 
-    if (!containerWidth) {
+    if (!containerWidth || !containerBox) {
       return columns;
     }
 
@@ -118,7 +118,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
       >
         <ImageList
           cols={validColumnsCount}
-          gap={gap}
+          gap={+gap}
           style={{margin: '0 auto'}}
         >
           {images.map((image, index) => (
@@ -135,7 +135,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
             >
               <ImageListItem key={image.medium_large.url}>
                 <img
-                  className={'thumnail-gallery__image'}
+                  className={clsx('thumnail-gallery__image', {
+                    'thumnail-gallery__image_clickable': showLightbox,
+                  })}
                   src={`${image.medium_large.url}`}
                   alt={image.title}
                   loading="lazy"
@@ -167,10 +169,10 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                         style={{
                           color: titleColor,
                           fontFamily: titleFontFamily,
-                          fontSize: titleFontFamilySize + 'px',
+                          fontSize: titleFontSize + 'px',
                         }}
                       >
-                        {image.title}
+                        {image.title || '-'}
                       </span>
                     }
                     position={
