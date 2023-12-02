@@ -204,7 +204,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
             </Filter>
             <Filter isLoading={isLoading}>
               <ColorControl
-                name="Spacing color"
+                name="Background color"
                 value={backgroundColor}
                 onChange={setBackgroundColor}
               />
