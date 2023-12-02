@@ -80,13 +80,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
       <Section
         header={'Pagination'}
         body={
-          <Grid
-            container
-            columns={24}
-            rowSpacing={2}
-            columnSpacing={4}
-            marginBottom={4}
-          >
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
               <SelectControl
                 name={'Pagination Type'}
