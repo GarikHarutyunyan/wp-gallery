@@ -32,48 +32,19 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
   onChange,
   isLoading,
 }) => {
-  const [paginationType, setPaginationType] = useState<PaginationType>(
-    value.paginationType
-  );
-  const [itemsPerPage, setItemsPerPage] = useState<number | undefined>(
-    value.itemsPerPage
-  );
-  const [activeButtonColor, setActiveButtonColor] = useState<string>(
-    value.activeButtonColor
-  );
-  const [inactiveButtonColor, setInactiveButtonColor] = useState<string>(
-    value.inactiveButtonColor
-  );
-  const [paginationButtonShape, setPaginationButtonShape] =
-    useState<PaginationButtonShape>(value.paginationButtonShape);
-  const [loadMoreButtonColor, setLoadMoreButtonColor] = useState<string>(
-    value.loadMoreButtonColor
-  );
-  const [paginationTextColor, setPaginationTextColor] = useState<string>(
-    value.paginationTextColor
-  );
+  const {
+    paginationType,
+    itemsPerPage,
+    activeButtonColor,
+    inactiveButtonColor,
+    paginationButtonShape,
+    loadMoreButtonColor,
+    paginationTextColor,
+  } = value;
 
-  useEffect(
-    () =>
-      onChange({
-        paginationType,
-        itemsPerPage,
-        activeButtonColor,
-        inactiveButtonColor,
-        paginationButtonShape,
-        loadMoreButtonColor,
-        paginationTextColor,
-      }),
-    [
-      paginationType,
-      itemsPerPage,
-      activeButtonColor,
-      inactiveButtonColor,
-      paginationButtonShape,
-      loadMoreButtonColor,
-      paginationTextColor,
-    ]
-  );
+  const onInputValueChange = (inputValue: any, key?: string) => {
+    key && onChange({...value, [key]: inputValue});
+  };
 
   const renderMainSettings = (): ReactNode => {
     return (
@@ -83,19 +54,21 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
               <SelectControl
+                id={'paginationType'}
                 name={'Pagination Type'}
                 value={paginationType}
                 options={PaginationTypeOptions}
-                onChange={setPaginationType}
+                onChange={onInputValueChange}
               />
             </Filter>
             {paginationType !== PaginationType.NONE && (
               <>
                 <Filter isLoading={isLoading}>
                   <NumberControl
+                    id={'itemsPerPage'}
                     name={'Items Per Page'}
                     value={itemsPerPage}
-                    onChange={setItemsPerPage}
+                    onChange={onInputValueChange}
                     min={1}
                   />
                 </Filter>
@@ -103,24 +76,27 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                   <>
                     <Filter isLoading={isLoading}>
                       <ColorControl
+                        id={'activeButtonColor'}
                         name="Active button color"
                         value={activeButtonColor}
-                        onChange={setActiveButtonColor}
+                        onChange={onInputValueChange}
                       />
                     </Filter>
                     <Filter isLoading={isLoading}>
                       <ColorControl
+                        id={'inactiveButtonColor'}
                         name="Inctive button color"
                         value={inactiveButtonColor}
-                        onChange={setInactiveButtonColor}
+                        onChange={onInputValueChange}
                       />
                     </Filter>
                     <Filter isLoading={isLoading}>
                       <SelectControl
+                        id={'paginationButtonShape'}
                         name={'Button shape'}
                         value={paginationButtonShape}
                         options={PaginationButtonShapeOptions}
-                        onChange={setPaginationButtonShape}
+                        onChange={onInputValueChange}
                       />
                     </Filter>
                   </>
@@ -129,9 +105,10 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                   <>
                     <Filter isLoading={isLoading}>
                       <ColorControl
+                        id={'loadMoreButtonColor'}
                         name="Load more button color"
                         value={loadMoreButtonColor}
-                        onChange={setLoadMoreButtonColor}
+                        onChange={onInputValueChange}
                       />
                     </Filter>
                   </>
@@ -142,9 +119,10 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                   <>
                     <Filter isLoading={isLoading}>
                       <ColorControl
+                        id={'paginationTextColor'}
                         name="Button text color"
                         value={paginationTextColor}
-                        onChange={setPaginationTextColor}
+                        onChange={onInputValueChange}
                       />
                     </Filter>
                   </>

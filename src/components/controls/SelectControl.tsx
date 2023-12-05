@@ -8,6 +8,7 @@ interface ISelectOption {
 }
 
 interface ISelectControlProps {
+  id?: string;
   name: string;
   value: string;
   options: ISelectOption[];
@@ -16,6 +17,7 @@ interface ISelectControlProps {
 }
 
 const SelectControl: React.FC<ISelectControlProps> = ({
+  id,
   name,
   value,
   options,
@@ -23,7 +25,7 @@ const SelectControl: React.FC<ISelectControlProps> = ({
   isDisabled,
 }) => {
   const onValueChange = (event: any) => {
-    onChange(event.target.value);
+    onChange(event.target.value, id);
   };
 
   return (

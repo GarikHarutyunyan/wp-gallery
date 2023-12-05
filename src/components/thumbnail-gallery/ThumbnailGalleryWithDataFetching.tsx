@@ -51,8 +51,11 @@ const ThumbnailGalleryWithDataFetching = ({
         paginationType !== PaginationType.NONE
           ? `&per_page=${itemsPerPage}`
           : '';
+      const queryString: string = perPageQueryString
+        ? `?page=${page}${perPageQueryString}`
+        : '';
       const imgData: any[] = (
-        await axios.get(`${fetchUrl}?page=${page}${perPageQueryString}`, {
+        await axios.get(`${fetchUrl}${queryString}`, {
           headers: {'X-WP-Nonce': nonce},
         })
       ).data;
