@@ -233,7 +233,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
         </Filter>
         <Filter isLoading={isLoading}>
           <SelectControl
-            id={titleAlignment}
+            id={'titleAlignment'}
             name={'Title alignement'}
             value={titleAlignment}
             options={TitleAlignmentOptions}
