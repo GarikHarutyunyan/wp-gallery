@@ -37,7 +37,11 @@ const ThumbnailGalleryWithDataFetching = ({
   const isFullyLoaded: boolean = currentPage >= pagesCount;
 
   useEffect(() => {
-    itemsPerPage > 0 && onReloadData();
+    const reloadData = setTimeout(() => {
+      itemsPerPage > 0 && onReloadData();
+    }, 500);
+
+    return () => clearTimeout(reloadData);
   }, [itemsPerPage, paginationType]);
 
   const getData = async (page: number) => {
