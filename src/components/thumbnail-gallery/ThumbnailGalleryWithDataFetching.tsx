@@ -51,12 +51,13 @@ const ThumbnailGalleryWithDataFetching = ({
 
     if (fetchUrl) {
       setIsLoading(true);
+      const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       const perPageQueryString: string =
         paginationType !== PaginationType.NONE
           ? `&per_page=${itemsPerPage}`
           : '';
       const queryString: string = perPageQueryString
-        ? `?page=${page}${perPageQueryString}`
+        ? `${queryStringSeperator}page=${page}${perPageQueryString}`
         : '';
       const imgData: any[] = (
         await axios.get(`${fetchUrl}${queryString}`, {
