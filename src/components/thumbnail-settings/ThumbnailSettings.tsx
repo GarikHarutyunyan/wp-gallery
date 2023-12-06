@@ -24,9 +24,9 @@ import {Divider, Typography} from '@mui/material';
 import {Aligner, ExpandMore, Section} from 'core-components';
 
 interface IThumbnailSettings {
-  width: number | undefined;
-  height: number | undefined;
-  columns: number | undefined;
+  width?: number | undefined;
+  height?: number | undefined;
+  columns?: number | undefined;
   showLightbox: boolean;
   gap: number;
   backgroundColor: string;
@@ -38,7 +38,7 @@ interface IThumbnailSettings {
   titleVisibility: TitleVisibility;
   titleFontFamily: string;
   titleColor: string;
-  titleFontSize: number | undefined;
+  titleFontSize?: number | undefined;
 }
 
 interface IThumbnailSettingsProps {
@@ -52,72 +52,28 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
   onChange,
   isLoading,
 }) => {
-  const [width, setWidth] = useState<number | undefined>(value.width);
-  const [height, setHeight] = useState<number | undefined>(value.height);
-  const [columns, setColumns] = useState<number | undefined>(value.columns);
-  const [showLightbox, setShowLightbox] = useState<boolean>(true);
-  const [gap, setGap] = useState<number>(value.gap);
-  const [backgroundColor, setBackgroundColor] = useState<string>(
-    value.backgroundColor
-  );
-  const [padding, setPadding] = useState<number>(value.padding);
-  const [paddingColor, setPaddingColor] = useState<string>(value.paddingColor);
-  const [borderRadius, setBorderRadius] = useState<number>(value.borderRadius);
-  const [titlePosition, setTitlePosition] = useState<TitlePosition>(
-    value.titlePosition
-  );
-  const [titleAlignment, setTitleAlignment] = useState<TitleAlignment>(
-    value.titleAlignment
-  );
-  const [titleVisibility, setTitleVisibility] = useState<TitleVisibility>(
-    value.titleVisibility
-  );
+  const {
+    width,
+    height,
+    columns,
+    showLightbox,
+    gap,
+    backgroundColor,
+    padding,
+    paddingColor,
+    borderRadius,
+    titlePosition,
+    titleAlignment,
+    titleVisibility,
+    titleFontFamily,
+    titleColor,
+    titleFontSize,
+  } = value;
   const isTitlePositionEditable: boolean = borderRadius <= 50;
-  const [titleFontFamily, settitleFontFamily] = useState<string>(
-    value.titleFontFamily
-  );
-  const [titleColor, setTitleColor] = useState<string>(value.titleColor);
-  const [titleFontSize, setTitleFontSize] = useState<number | undefined>(
-    value.titleFontSize
-  );
 
-  useEffect(
-    () =>
-      onChange({
-        width,
-        height,
-        columns,
-        showLightbox,
-        gap,
-        backgroundColor,
-        padding,
-        paddingColor,
-        borderRadius,
-        titlePosition,
-        titleAlignment,
-        titleVisibility,
-        titleFontFamily,
-        titleColor,
-        titleFontSize,
-      }),
-    [
-      width,
-      height,
-      columns,
-      showLightbox,
-      gap,
-      backgroundColor,
-      padding,
-      paddingColor,
-      borderRadius,
-      titlePosition,
-      titleAlignment,
-      titleVisibility,
-      titleFontFamily,
-      titleColor,
-      titleFontSize,
-    ]
-  );
+  const onInputValueChange = (inputValue: any, key?: string) => {
+    key && onChange({...value, [key]: inputValue});
+  };
 
   useLayoutEffect(() => {
     const belowOption: ISelectOption | undefined = TitlePositionOptions.find(
@@ -130,7 +86,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
       }
 
       if (titlePosition === TitlePosition.BELOW) {
-        setTitlePosition(TitlePosition.BOTTOM);
+        onChange({...value, titlePosition: TitlePosition.BOTTOM});
       }
     }
 
@@ -149,35 +105,39 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
               <NumberControl
+                id={'width'}
                 name={'Width'}
                 value={width}
-                onChange={setWidth}
+                onChange={onInputValueChange}
                 min={0}
                 unit={'px'}
               />
             </Filter>
             <Filter isLoading={isLoading}>
               <NumberControl
+                id={'height'}
                 name={'Height'}
                 value={height}
-                onChange={setHeight}
+                onChange={onInputValueChange}
                 min={0}
                 unit={'px'}
               />
             </Filter>
             <Filter isLoading={isLoading}>
               <NumberControl
+                id={'columns'}
                 name={'Columns'}
                 value={columns}
-                onChange={setColumns}
+                onChange={onInputValueChange}
                 min={1}
               />
             </Filter>
             <Filter isLoading={isLoading}>
               <SwitchControl
+                id={'showLightbox'}
                 name={'Use lightbox'}
                 value={showLightbox}
-                onChange={setShowLightbox}
+                onChange={onInputValueChange}
               />
             </Filter>
           </Grid>
@@ -195,51 +155,57 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
               <SliderControl
+                id={'gap'}
                 name={'Spacing (px)'}
                 value={gap}
                 min={0}
                 max={100}
-                onChange={(_, value) => setGap(value)}
+                onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>
               <ColorControl
-                name="Background color"
+                id={'backgroundColor'}
+                name={'Background color'}
                 value={backgroundColor}
-                onChange={setBackgroundColor}
+                onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>
               <SliderControl
+                id={'padding'}
                 name="Padding (px)"
                 min={0}
                 max={100}
                 value={padding}
-                onChange={(_, value) => setPadding(value)}
+                onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>
               <ColorControl
+                id={'paddingColor'}
                 name="Padding color"
                 value={paddingColor}
-                onChange={setPaddingColor}
+                onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>
               <SliderControl
+                id={'borderRadius'}
                 name="Radius (%)"
                 min={0}
                 value={borderRadius}
                 max={50}
-                onChange={(_, value) => setBorderRadius(value)}
+                onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>
               <SelectControl
+                id={'titleVisibility'}
                 name={'Title visibility'}
                 value={titleVisibility}
                 options={TitleVisibilityOptions}
-                onChange={setTitleVisibility}
+                onChange={onInputValueChange}
                 isDisabled={!isTitlePositionEditable}
               />
             </Filter>
@@ -257,42 +223,47 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
       <>
         <Filter isLoading={isLoading}>
           <SelectControl
+            id={'titlePosition'}
             name={'Title position'}
             value={titlePosition}
             options={TitlePositionOptions}
-            onChange={setTitlePosition}
+            onChange={onInputValueChange}
             isDisabled={!isTitlePositionEditable}
           />
         </Filter>
         <Filter isLoading={isLoading}>
           <SelectControl
+            id={'titleAlignment'}
             name={'Title alignement'}
             value={titleAlignment}
             options={TitleAlignmentOptions}
-            onChange={setTitleAlignment}
+            onChange={onInputValueChange}
             isDisabled={!isTitlePositionEditable}
           />
         </Filter>
         <Filter isLoading={isLoading}>
           <FontControl
+            id={'titleFontFamily'}
             name={'Title font family'}
             value={titleFontFamily}
-            onChange={settitleFontFamily}
+            onChange={onInputValueChange}
             isDisabled={!isTitlePositionEditable}
           />
         </Filter>
         <Filter isLoading={isLoading}>
           <ColorControl
+            id={'titleColor'}
             name="Title color"
             value={titleColor}
-            onChange={setTitleColor}
+            onChange={onInputValueChange}
           />
         </Filter>
         <Filter isLoading={isLoading}>
           <NumberControl
+            id={'titleFontSize'}
             name={'Title font size'}
             value={titleFontSize}
-            onChange={setTitleFontSize}
+            onChange={onInputValueChange}
             unit={'px'}
           />
         </Filter>

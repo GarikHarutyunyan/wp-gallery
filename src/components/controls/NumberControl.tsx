@@ -4,15 +4,17 @@ import React from 'react';
 import Skeleton from '@mui/material/Skeleton';
 
 interface INumberControlProps {
+  id?: string;
   name: string;
   value?: number;
-  onChange: (value: number | undefined) => void;
+  onChange: (value: number | undefined, id?: string) => void;
   min?: number;
   max?: number;
   unit?: string;
 }
 
 const NumberControl: React.FC<INumberControlProps> = ({
+  id,
   name,
   value,
   onChange,
@@ -26,7 +28,7 @@ const NumberControl: React.FC<INumberControlProps> = ({
         ? +event.target.value
         : undefined;
 
-    onChange(value);
+    onChange(value, id);
   };
   return (
     <TextField

@@ -105,19 +105,19 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const {
       backgroundColor,
       borderRadius,
-      columns,
+      columns = 1,
       gap,
-      height,
+      height = 1,
       padding,
       paddingColor,
       showLightbox,
       titleAlignment,
       titleColor,
       titleFontFamily,
-      titleFontSize,
+      titleFontSize = 1,
       titlePosition,
       titleVisibility,
-      width,
+      width = 1,
     }: IThumbnailSettings = settings;
 
     return {
@@ -145,7 +145,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const {
       activeButtonColor,
       inactiveButtonColor,
-      itemsPerPage,
+      itemsPerPage = 1,
       loadMoreButtonColor,
       paginationButtonShape,
       paginationTextColor,
@@ -174,16 +174,23 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
+      const settings: IThumbnailSettings & IGeneralSettings = {
+        ...thumbnailSettings,
+        ...generalSettings,
+      } as IThumbnailSettings & IGeneralSettings;
+
+      const validSettings: IThumbnailSettings & IGeneralSettings =
+        Object.entries(settings).reduce(
+          (accumulator, [key, value]) => ({...accumulator, [key]: value || ''}),
+          {}
+        ) as IThumbnailSettings & IGeneralSettings;
+
       try {
-        const newSettings: IThumbnailSettings & IGeneralSettings = (
-          await axios.put(
-            fetchUrl,
-            {...thumbnailSettings, ...generalSettings},
-            {
-              headers: {'X-WP-Nonce': nonce},
-            }
-          )
-        ).data;
+        const response = await axios.put(fetchUrl, validSettings, {
+          headers: {'X-WP-Nonce': nonce},
+        });
+        const newSettings: IThumbnailSettings & IGeneralSettings =
+          response.data;
 
         setThumbnailSettings(extractThumbnailSettings(newSettings));
         setGeneralSettings(extractGeneralSettings(newSettings));

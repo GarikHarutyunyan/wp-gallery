@@ -37,7 +37,11 @@ const ThumbnailGalleryWithDataFetching = ({
   const isFullyLoaded: boolean = currentPage >= pagesCount;
 
   useEffect(() => {
-    itemsPerPage > 0 && onReloadData();
+    const reloadData = setTimeout(() => {
+      itemsPerPage > 0 && onReloadData();
+    }, 500);
+
+    return () => clearTimeout(reloadData);
   }, [itemsPerPage, paginationType]);
 
   const getData = async (page: number) => {
@@ -51,8 +55,11 @@ const ThumbnailGalleryWithDataFetching = ({
         paginationType !== PaginationType.NONE
           ? `&per_page=${itemsPerPage}`
           : '';
+      const queryString: string = perPageQueryString
+        ? `?page=${page}${perPageQueryString}`
+        : '';
       const imgData: any[] = (
-        await axios.get(`${fetchUrl}?page=${page}${perPageQueryString}`, {
+        await axios.get(`${fetchUrl}${queryString}`, {
           headers: {'X-WP-Nonce': nonce},
         })
       ).data;

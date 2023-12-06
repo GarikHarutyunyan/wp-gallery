@@ -23,9 +23,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
 }) => {
   const {setActiveImageIndex} = useLightbox();
   const {
-    width = 0,
-    height = 0,
-    columns = 0,
+    width = 1,
+    height = 1,
+    columns = 1,
     showLightbox,
     gap,
     backgroundColor,
@@ -37,7 +37,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     titleVisibility,
     titleFontFamily,
     titleColor,
-    titleFontSize,
+    titleFontSize = 1,
   } = settings;
   const elementRef = useRef();
   const [containerWidth, setContainerWidth] = useState(0);

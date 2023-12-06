@@ -1,12 +1,5 @@
-import MuiTab from '@material-ui/core/Tab';
-import {withStyles} from '@material-ui/core/styles';
+import {Tab as MuiTab} from '@mui/material';
 
-const Tab = withStyles({
-  root: {
-    '&.Mui-disabled': {
-      pointerEvents: 'auto',
-    },
-  },
-})(MuiTab);
+const Tab = MuiTab;
 
 export {Tab};

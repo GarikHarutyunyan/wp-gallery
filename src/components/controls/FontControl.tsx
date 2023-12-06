@@ -4,6 +4,7 @@ import axios from 'axios';
 import React, {useContext, useLayoutEffect, useState} from 'react';
 
 interface IFontControlProps {
+  id?: string;
   name: string;
   value: string;
   onChange: any;
@@ -11,6 +12,7 @@ interface IFontControlProps {
 }
 
 const FontControl: React.FC<IFontControlProps> = ({
+  id,
   name,
   value,
   onChange,
@@ -48,7 +50,7 @@ const FontControl: React.FC<IFontControlProps> = ({
   }, []);
 
   const onValueChange = (event: any) => {
-    onChange(event.target.value);
+    onChange(event.target.value, id);
   };
 
   return (

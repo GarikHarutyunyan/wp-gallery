@@ -5,20 +5,22 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
 interface ISwitchControlProps {
+  id?: string;
   name: string;
   value: boolean;
   label?: string;
-  onChange: (value: boolean) => void;
+  onChange: (value: boolean, id?: string) => void;
 }
 
 const SwitchControl: React.FC<ISwitchControlProps> = ({
+  id,
   name,
   value,
   label,
   onChange,
 }) => {
   const onValueChange = (event: any) => {
-    onChange(!!event.target.checked);
+    onChange(!!event.target.checked, id);
   };
   return (
     <FormControl>

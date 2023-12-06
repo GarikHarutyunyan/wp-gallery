@@ -1,12 +1,5 @@
-import MuiButton from '@material-ui/core/Button';
-import {withStyles} from '@material-ui/core/styles';
+import {Button as MuiButton} from '@mui/material';
 
-const Button = withStyles({
-  root: {
-    '&.Mui-disabled': {
-      pointerEvents: 'auto',
-    },
-  },
-})(MuiButton);
+const Button = MuiButton;
 
 export {Button};
