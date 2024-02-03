@@ -6,6 +6,10 @@
   margin-top: 20px;
 }
 
+#reacg-loadAppContainer {
+  display: none
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

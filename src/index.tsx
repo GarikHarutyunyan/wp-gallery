@@ -52,7 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
   body.append(div);
   const rootElement = ReactDOM.createRoot(div);
   rootElement.render(
-    <button id={'reacg-loadApp'} onClick={addApplicationById}></button>
+    <input
+      type={'button'}
+      id={'reacg-loadApp'}
+      onClick={addApplicationById}
+    ></input>
   );
 });
 
