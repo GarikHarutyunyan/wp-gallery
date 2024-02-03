@@ -1,8 +1,5 @@
 import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
-import {
-  IThumbnailSettings,
-  ThumbnailSettings,
-} from '../thumbnail-settings/ThumbnailSettings';
+import {IThumbnailSettings, ThumbnailSettings} from '../thumbnail-settings';
 import Tabs from '@mui/material/Tabs';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
@@ -10,6 +7,7 @@ import Collapse from '@mui/material/Collapse';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
 import {
+  LightboxThumbnailsPosition,
   PaginationButtonShape,
   PaginationType,
   TitleAlignment,
@@ -24,10 +22,15 @@ import {useSnackbar} from 'notistack';
 import {GeneralSettings, IGeneralSettings} from 'components/general-settings';
 import {AppInfoContext} from 'AppInfoContext';
 import './settings-context.css';
+import {
+  ILightboxSettings,
+  LightboxSettings,
+} from 'components/light-box-settings';
 
 const SettingsContext = React.createContext<{
   thumbnailSettings?: IThumbnailSettings;
   generalSettings?: IGeneralSettings;
+  lightboxSettings?: ILightboxSettings;
 }>({});
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
@@ -40,12 +43,15 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [generalSettings, setGeneralSettings] = useState<
     IGeneralSettings | undefined
   >();
+  const [lightboxSettings, setLightboxSettings] = useState<
+    ILightboxSettings | undefined
+  >();
   const [activeTab, setActiveTab] = useState<string>('gallery');
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // const isLightBoxTabDisabled: boolean = !thumbnailSettings?.showLightbox;
+  const isLightboxTabDisabled: boolean = !thumbnailSettings?.showLightbox;
 
   const getData = async () => {
     const dataElement = document.getElementById('reacg-root' + galleryId);
@@ -95,6 +101,24 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         paginationButtonShape: PaginationButtonShape.CIRCULAR,
         loadMoreButtonColor: 'blue',
         paginationTextColor: 'green',
+      });
+      setLightboxSettings({
+        areControlButtonsShown: false,
+        isInfinite: false,
+        padding: 15,
+        canDownload: true,
+        canZoom: true,
+        isFullscreenAllowed: false,
+        isSlideshowAllowed: false,
+        thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
+        thumbnailWidth: 80,
+        thumbnailHeight: 80,
+        thumbnailBorder: 2,
+        thumbnailBorderRadius: 20,
+        thumbnailBorderColor: 'white',
+        thumbnailPadding: 10,
+        thumbnailGap: 10,
+        isThumbnailsToggleShown: true,
       });
     }
   };
@@ -251,11 +275,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
             <Tabs value={activeTab} onChange={onActiveTabChange}>
               <Tab label="Gallery" value="gallery" />
               <Tab label="General" value="general" />
-              {/* <Tab
+              <Tab
                 label="Light Box"
-                value="lightBox"
-                disabled={isLightBoxTabDisabled}
-              /> */}
+                value="Lightbox"
+                disabled={isLightboxTabDisabled}
+              />
             </Tabs>
             <LoadingButton
               loading={isLoading}
@@ -286,14 +310,24 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               />
             )}
           </TabPanel>
-          {/* <TabPanel value="lightBox">Item Two</TabPanel> */}
+          <TabPanel value="Lightbox">
+            {lightboxSettings && (
+              <LightboxSettings
+                value={lightboxSettings as ILightboxSettings}
+                onChange={setLightboxSettings}
+                isLoading={isLoading}
+              />
+            )}
+          </TabPanel>
         </TabContext>
       </Collapse>
     );
   };
 
   return (
-    <SettingsContext.Provider value={{thumbnailSettings, generalSettings}}>
+    <SettingsContext.Provider
+      value={{thumbnailSettings, generalSettings, lightboxSettings}}
+    >
       {showControls && (
         <Paper className={'reacg-settings'}>
           {renderTitle()}

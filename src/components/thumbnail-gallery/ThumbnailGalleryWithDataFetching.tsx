@@ -10,17 +10,20 @@ import {IGeneralSettings} from 'components/general-settings';
 import {AppInfoContext} from 'AppInfoContext';
 import {AppTranslationsContext} from 'AppTranslationsContext';
 import {CircularProgress, Paper, Typography} from '@mui/material';
+import {ILightboxSettings} from 'components/light-box-settings';
 
 interface IThumbnailGalleryWithDataFetchingProps {
   images: IImageDTO[];
   thumbnailSettings: IThumbnailSettings;
   generalSettings: IGeneralSettings;
+  lightboxSettings: ILightboxSettings;
 }
 
 const ThumbnailGalleryWithDataFetching = ({
   images: propsImages,
   thumbnailSettings,
   generalSettings,
+  lightboxSettings,
 }: IThumbnailGalleryWithDataFetchingProps) => {
   const {itemsPerPage = 1, paginationType} = generalSettings;
   const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
@@ -163,7 +166,7 @@ const ThumbnailGalleryWithDataFetching = ({
   };
 
   return (
-    <LightboxProvider images={images}>
+    <LightboxProvider images={images} settings={lightboxSettings}>
       {images.length || isLoading ? (
         <>
           {renderThumbnailGallery()}

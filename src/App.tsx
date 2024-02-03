@@ -4,7 +4,7 @@ import Gallery from './components/Gallery';
 import {SnackbarProvider} from 'notistack';
 import {AppTranslationsProvider} from 'AppTranslationsContext';
 
-function App() {
+const App = () => {
   return (
     <AppTranslationsProvider>
       <SnackbarProvider>
@@ -12,6 +12,6 @@ function App() {
       </SnackbarProvider>
     </AppTranslationsProvider>
   );
-}
+};
 
 export default App;
