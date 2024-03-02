@@ -74,6 +74,8 @@ const ThumbnailGalleryWithDataFetching = ({
         medium_large: data.medium_large,
         thumbnail: data.thumbnail,
         title: data.title,
+        caption: data.caption,
+        description: data.description,
       }));
 
       if (paginationType === PaginationType.SIMPLE) {

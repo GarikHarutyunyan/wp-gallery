@@ -7,6 +7,7 @@ import Collapse from '@mui/material/Collapse';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
 import {
+  LightboxCaptionsPosition,
   LightboxThumbnailsPosition,
   PaginationButtonShape,
   PaginationType,
@@ -74,6 +75,29 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
       setThumbnailSettings(extractThumbnailSettings(newSettings));
       setGeneralSettings(extractGeneralSettings(newSettings));
+      setLightboxSettings({
+        isFullscreen: false,
+        width: 800,
+        height: 800,
+        areControlButtonsShown: false,
+        isInfinite: false,
+        padding: 15,
+        canDownload: true,
+        canZoom: true,
+        isFullscreenAllowed: false,
+        isSlideshowAllowed: false,
+        thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
+        thumbnailWidth: 80,
+        thumbnailHeight: 80,
+        thumbnailBorder: 2,
+        thumbnailBorderRadius: 20,
+        thumbnailBorderColor: 'white',
+        thumbnailPadding: 0,
+        thumbnailGap: 10,
+        captionsPosition: LightboxCaptionsPosition.BELOW,
+        captionFontFamily: 'Roboto',
+        captionColor: 'White',
+      });
       setIsLoading(false);
     } else {
       setThumbnailSettings({
@@ -86,7 +110,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         padding: 10,
         paddingColor: 'Skyblue',
         borderRadius: 5,
-        titlePosition: TitlePosition.BELOW,
+        titlePosition: TitlePosition.BOTTOM,
         titleAlignment: TitleAlignment.LEFT,
         titleVisibility: TitleVisibility.NONE,
         titleFontFamily: 'Roboto',
@@ -103,6 +127,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         paginationTextColor: 'green',
       });
       setLightboxSettings({
+        isFullscreen: false,
+        width: 800,
+        height: 800,
         areControlButtonsShown: false,
         isInfinite: false,
         padding: 15,
@@ -116,9 +143,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         thumbnailBorder: 2,
         thumbnailBorderRadius: 20,
         thumbnailBorderColor: 'white',
-        thumbnailPadding: 10,
+        thumbnailPadding: 0,
         thumbnailGap: 10,
-        isThumbnailsToggleShown: true,
+        captionsPosition: LightboxCaptionsPosition.BOTTOM,
+        captionFontFamily: 'Roboto',
+        captionColor: 'White',
       });
     }
   };
