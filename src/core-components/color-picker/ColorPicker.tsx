@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
 import {DEFAULT_CONVERTER, converters} from './transformers';
 import PickerDialog from './PickerDialog';
 import {TextField} from '@mui/material';

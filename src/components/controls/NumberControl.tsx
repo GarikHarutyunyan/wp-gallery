@@ -1,7 +1,6 @@
-import {MenuItem, TextField} from '@mui/material';
+import {TextField} from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import React from 'react';
-import Skeleton from '@mui/material/Skeleton';
 
 interface INumberControlProps {
   id?: string;
