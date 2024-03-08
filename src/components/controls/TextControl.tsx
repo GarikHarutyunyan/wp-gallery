@@ -1,4 +1,4 @@
-import {MenuItem, TextField} from '@mui/material';
+import {TextField} from '@mui/material';
 import React from 'react';
 
 interface ITextControlProps {
