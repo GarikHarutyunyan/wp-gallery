@@ -1,8 +1,7 @@
-import React, {ReactNode, useEffect, useLayoutEffect, useState} from 'react';
+import React, {ReactNode, useMemo} from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {Filter} from '../settings/Filter';
-import Collapse from '@mui/material/Collapse';
 import {
   TitleAlignment,
   TitleAlignmentOptions,
@@ -20,8 +19,7 @@ import {
   ColorControl,
   SwitchControl,
 } from '../controls';
-import {Divider, Typography} from '@mui/material';
-import {Aligner, ExpandMore, Section} from 'core-components';
+import {Section} from 'core-components';
 
 interface IThumbnailSettings {
   width?: number | undefined;
@@ -75,10 +73,10 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
     key && onChange({...value, [key]: inputValue});
   };
 
-  useLayoutEffect(() => {
-    const belowOption: ISelectOption | undefined = TitlePositionOptions.find(
+  const titlePositionOptions: ISelectOption[] = useMemo(() => {
+    const belowOption: ISelectOption = TitlePositionOptions.find(
       (option) => option.value === TitlePosition.BELOW
-    );
+    ) as ISelectOption;
 
     if (titleVisibility === TitleVisibility.ON_HOVER) {
       if (belowOption) {
@@ -88,13 +86,11 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
       if (titlePosition === TitlePosition.BELOW) {
         onChange({...value, titlePosition: TitlePosition.BOTTOM});
       }
+    } else {
+      belowOption.isDisabled = false;
     }
 
-    return () => {
-      if (belowOption) {
-        belowOption.isDisabled = false;
-      }
-    };
+    return TitlePositionOptions;
   }, [titleVisibility]);
 
   const renderBasicSettings = (): ReactNode => {
@@ -226,7 +222,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
             id={'titlePosition'}
             name={'Title position'}
             value={titlePosition}
-            options={TitlePositionOptions}
+            options={titlePositionOptions}
             onChange={onInputValueChange}
             isDisabled={!isTitlePositionEditable}
           />
