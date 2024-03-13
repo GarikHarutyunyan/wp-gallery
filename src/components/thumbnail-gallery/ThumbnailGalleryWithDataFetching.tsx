@@ -3,7 +3,7 @@ import {ThumbnailGallery} from './ThumbnailGallery';
 import axios from 'axios';
 import {IImageDTO, PaginationType} from 'data-structures';
 import {DataFetcher} from './DataFetcher';
-import {LightboxProvider} from 'components/lightbox/LightboxContext';
+import {VLightbox as Lightbox} from 'components/lightbox/Lightbox';
 import {PaginationProvider} from './PaginationProvider';
 import {IThumbnailSettings} from 'components/thumbnail-settings';
 import {IGeneralSettings} from 'components/general-settings';
@@ -26,11 +26,15 @@ const ThumbnailGalleryWithDataFetching = ({
   lightboxSettings,
 }: IThumbnailGalleryWithDataFetchingProps) => {
   const {itemsPerPage = 1, paginationType} = generalSettings;
+  const [activeImageIndex, setActiveImageIndex] = useState<number>(-1);
   const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
   const {noDataText, setLoadMoreText, setNoDataText} = useContext(
     AppTranslationsContext
   );
   const [images, setImages] = useState<IImageDTO[]>([]);
+  const [lightboxImages, setLightboxImages] = useState<
+    IImageDTO[] | undefined
+  >();
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -46,6 +50,34 @@ const ThumbnailGalleryWithDataFetching = ({
 
     return () => clearTimeout(reloadData);
   }, [itemsPerPage, paginationType]);
+
+  const getAllData = async () => {
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'gallery/' + galleryId + '/images'
+      : undefined;
+
+    if (fetchUrl) {
+      const imgData: any[] = (
+        await axios.get(fetchUrl, {
+          headers: {'X-WP-Nonce': nonce},
+        })
+      ).data;
+      const newImages: IImageDTO[] = imgData.map((data: any) => ({
+        original: data.original,
+        width: data.width,
+        height: data.height,
+        medium_large: data.medium_large,
+        thumbnail: data.thumbnail,
+        title: data.title,
+        description: data.description,
+        caption: data.caption,
+      }));
+
+      setLightboxImages(newImages);
+    } else {
+      setImages(images);
+    }
+  };
 
   const getData = async (page: number) => {
     const fetchUrl: string | undefined = baseUrl
@@ -125,10 +157,16 @@ const ThumbnailGalleryWithDataFetching = ({
   const onReloadData = async () => {
     setIsLoading(true);
     setImages([]);
+    setLightboxImages([]);
     setCurrentPage(0);
     setImageCount(0);
     getData(1);
     getItemsCount();
+  };
+
+  const onThumbClick = (index: number) => {
+    getAllData();
+    thumbnailSettings.showLightbox && setActiveImageIndex(index);
   };
 
   const renderThumbnailGallery = (): ReactElement => {
@@ -138,7 +176,11 @@ const ThumbnailGalleryWithDataFetching = ({
     return (
       <>
         {!hideGallery && (
-          <ThumbnailGallery settings={thumbnailSettings} images={images} />
+          <ThumbnailGallery
+            settings={thumbnailSettings}
+            images={images}
+            onClick={onThumbClick}
+          />
         )}
         {renderLoader()}
       </>
@@ -168,7 +210,7 @@ const ThumbnailGalleryWithDataFetching = ({
   };
 
   return (
-    <LightboxProvider images={images} settings={lightboxSettings}>
+    <>
       {images.length || isLoading ? (
         <>
           {renderThumbnailGallery()}
@@ -184,7 +226,13 @@ const ThumbnailGalleryWithDataFetching = ({
         renderContentPlaceholder()
       )}
       <DataFetcher onClick={onReloadData} />
-    </LightboxProvider>
+      <Lightbox
+        activeIndex={activeImageIndex}
+        onClose={() => setActiveImageIndex(-1)}
+        images={lightboxImages || images}
+        settings={lightboxSettings}
+      />
+    </>
   );
 };
 

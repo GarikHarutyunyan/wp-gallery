@@ -1,4 +1,4 @@
-import React, {Dispatch, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Lightbox from 'yet-another-react-lightbox';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
 import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
@@ -17,13 +17,9 @@ import 'yet-another-react-lightbox/plugins/captions.css';
 import './lightbox.css';
 import {createPortal} from 'react-dom';
 
-interface ILightboxData {
-  setActiveImageIndex: Dispatch<React.SetStateAction<number>>;
-}
-
-const LightboxContext = React.createContext<ILightboxData | null>(null);
-
 interface ILightboxProviderProps {
+  activeIndex: number;
+  onClose: () => void;
   images: IImageDTO[];
   settings: ILightboxSettings;
 }
@@ -53,10 +49,12 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   );
 };
 
-const LightboxProvider: React.FC<
-  React.PropsWithChildren & ILightboxProviderProps
-> = ({images, settings, children}) => {
-  const [activeImageIndex, setActiveImageIndex] = useState<number>(-1);
+const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
+  activeIndex,
+  onClose,
+  images,
+  settings,
+}) => {
   const {
     isFullscreen,
     width,
@@ -113,17 +111,14 @@ const LightboxProvider: React.FC<
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  const closeLightbox = () => {
-    setActiveImageIndex(-1);
-  };
 
   const renderLighbox = () => {
     return (
       <Lightbox
         plugins={plugins}
-        open={activeImageIndex >= 0}
-        index={activeImageIndex}
-        close={closeLightbox}
+        open={activeIndex >= 0}
+        index={activeIndex}
+        close={onClose}
         // @ts-ignore
         captions={{showToggle: true}}
         slides={images.map((image: IImageDTO) => ({
@@ -216,15 +211,11 @@ const LightboxProvider: React.FC<
   };
 
   return (
-    <LightboxContext.Provider value={{setActiveImageIndex}}>
+    <>
       {renderLighbox()}
-      <LightboxBackground
-        isVisible={activeImageIndex >= 0}
-        onClick={closeLightbox}
-      />
-      {children}
-    </LightboxContext.Provider>
+      <LightboxBackground isVisible={activeIndex >= 0} onClick={onClose} />
+    </>
   );
 };
 
-export {LightboxContext, LightboxProvider};
+export {VLightbox};

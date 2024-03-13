@@ -1,2 +1,1 @@
-export * from './LightboxContext';
-export * from './useLightbox';
+export * from './Lightbox';
