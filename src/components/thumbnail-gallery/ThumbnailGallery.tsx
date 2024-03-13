@@ -98,6 +98,20 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     changeContainerWidth();
   }, [width, getWidth, gap, columns, padding, validColumnsCount]);
 
+  const getImageSource = (image: IImageDTO) => {
+    if (width <= image.thumbnail.width && height <= image.thumbnail.height) {
+      return `${image.thumbnail.url}`;
+    }
+    if (
+      width <= image.medium_large.width &&
+      height <= image.medium_large.height
+    ) {
+      return `${image.medium_large.url}`;
+    }
+
+    return `${image.original.url}`;
+  };
+
   return (
     <div
       style={{
@@ -138,7 +152,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                   className={clsx('thumnail-gallery__image', {
                     'thumnail-gallery__image_clickable': showLightbox,
                   })}
-                  src={`${image.thumbnail.url}`}
+                  src={getImageSource(image)}
                   alt={image.title}
                   loading="lazy"
                   style={{
