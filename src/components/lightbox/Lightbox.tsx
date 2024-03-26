@@ -166,7 +166,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
           }
         }
         carousel={{
-          preload: 20,
+          preload: 5,
           finite: !isInfinite,
           padding,
         }}

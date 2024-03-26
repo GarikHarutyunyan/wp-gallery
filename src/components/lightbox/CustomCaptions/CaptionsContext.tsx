@@ -37,7 +37,7 @@ export function CaptionsContextProvider({captions, children}: any) {
       {children}
       <Description
         description={
-          (getSlide(slides as any, globalIndex) as any).description as any
+          (getSlide(slides as any, globalIndex) as any)?.description as any
         }
         style={{position: 'relative'}}
       />
