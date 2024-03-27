@@ -28,6 +28,12 @@ import {
   LightboxSettings,
 } from 'components/light-box-settings';
 
+type ThumbnailAndGeneralSettings = IThumbnailSettings & IGeneralSettings;
+
+interface ISettingsDTO extends ThumbnailAndGeneralSettings {
+  lightbox: ILightboxSettings;
+}
+
 const SettingsContext = React.createContext<{
   thumbnailSettings?: IThumbnailSettings;
   generalSettings?: IGeneralSettings;
@@ -67,7 +73,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
-      const newSettings: IThumbnailSettings & IGeneralSettings = (
+      const newSettings: ISettingsDTO = (
         await axios.get(fetchUrl, {
           headers: {'X-WP-Nonce': nonce},
         })
@@ -75,29 +81,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
       setThumbnailSettings(extractThumbnailSettings(newSettings));
       setGeneralSettings(extractGeneralSettings(newSettings));
-      setLightboxSettings({
-        isFullscreen: false,
-        width: 800,
-        height: 800,
-        areControlButtonsShown: false,
-        isInfinite: false,
-        padding: 15,
-        canDownload: true,
-        canZoom: true,
-        isFullscreenAllowed: false,
-        isSlideshowAllowed: false,
-        thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
-        thumbnailWidth: 80,
-        thumbnailHeight: 80,
-        thumbnailBorder: 2,
-        thumbnailBorderRadius: 20,
-        thumbnailBorderColor: 'white',
-        thumbnailPadding: 0,
-        thumbnailGap: 10,
-        captionsPosition: LightboxCaptionsPosition.BELOW,
-        captionFontFamily: 'Roboto',
-        captionColor: 'White',
-      });
+      setLightboxSettings(newSettings.lightbox);
+
       setIsLoading(false);
     } else {
       setThumbnailSettings({
@@ -227,23 +212,22 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
-      const settings: IThumbnailSettings & IGeneralSettings = {
+      const settings: ISettingsDTO = {
         ...thumbnailSettings,
         ...generalSettings,
-      } as IThumbnailSettings & IGeneralSettings;
+        lightbox: lightboxSettings as ILightboxSettings,
+      } as ISettingsDTO;
 
-      const validSettings: IThumbnailSettings & IGeneralSettings =
-        Object.entries(settings).reduce(
-          (accumulator, [key, value]) => ({...accumulator, [key]: value || ''}),
-          {}
-        ) as IThumbnailSettings & IGeneralSettings;
+      const validSettings: ISettingsDTO = Object.entries(settings).reduce(
+        (accumulator, [key, value]) => ({...accumulator, [key]: value || ''}),
+        {}
+      ) as ISettingsDTO;
 
       try {
         const response = await axios.put(fetchUrl, validSettings, {
           headers: {'X-WP-Nonce': nonce},
         });
-        const newSettings: IThumbnailSettings & IGeneralSettings =
-          response.data;
+        const newSettings: ISettingsDTO = response.data;
 
         setThumbnailSettings(extractThumbnailSettings(newSettings));
         setGeneralSettings(extractGeneralSettings(newSettings));
