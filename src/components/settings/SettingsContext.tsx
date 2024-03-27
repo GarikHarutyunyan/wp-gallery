@@ -323,7 +323,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               />
             )}
           </TabPanel>
-          <TabPanel value="Lightbox">
+          <TabPanel value="Lightbox" className={'reacg-tab-panel'}>
             {lightboxSettings && (
               <LightboxSettings
                 value={lightboxSettings as ILightboxSettings}
