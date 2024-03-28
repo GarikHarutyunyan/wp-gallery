@@ -57,21 +57,11 @@ const ThumbnailGalleryWithDataFetching = ({
       : undefined;
 
     if (fetchUrl) {
-      const imgData: any[] = (
+      const newImages: IImageDTO[] = (
         await axios.get(fetchUrl, {
           headers: {'X-WP-Nonce': nonce},
         })
-      ).data;
-      const newImages: IImageDTO[] = imgData.map((data: any) => ({
-        original: data.original,
-        width: data.width,
-        height: data.height,
-        medium_large: data.medium_large,
-        thumbnail: data.thumbnail,
-        title: data.title,
-        description: data.description,
-        caption: data.caption,
-      }));
+      ).data as IImageDTO[];
 
       setLightboxImages(newImages);
     } else {
@@ -94,21 +84,11 @@ const ThumbnailGalleryWithDataFetching = ({
       const queryString: string = perPageQueryString
         ? `${queryStringSeperator}page=${page}${perPageQueryString}`
         : '';
-      const imgData: any[] = (
+      const newImages: IImageDTO[] = (
         await axios.get(`${fetchUrl}${queryString}`, {
           headers: {'X-WP-Nonce': nonce},
         })
       ).data;
-      const newImages: IImageDTO[] = imgData.map((data: any) => ({
-        original: data.original,
-        width: data.width,
-        height: data.height,
-        medium_large: data.medium_large,
-        thumbnail: data.thumbnail,
-        title: data.title,
-        caption: data.caption,
-        description: data.description,
-      }));
 
       if (paginationType === PaginationType.SIMPLE) {
         setImages(newImages);

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Lightbox from 'yet-another-react-lightbox';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
 import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
+import Video from 'yet-another-react-lightbox/plugins/video';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import {
   IImageDTO,
@@ -79,7 +80,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
     captionColor,
   } = settings;
 
-  const plugins: any[] = [];
+  const plugins: any[] = [Video];
 
   if (canDownload) {
     plugins.push(Download as any);
@@ -138,6 +139,14 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
               </p>
             </>
           ),
+          type: image.type,
+          sources: [
+            {
+              src: image.original.url,
+              type: `video/${image.original.url.split('.').pop()}`,
+            },
+          ],
+          poster: image.medium_large.url,
           src: image.original.url,
           srcSet: [
             {

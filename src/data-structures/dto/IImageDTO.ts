@@ -3,8 +3,14 @@ interface IImageUrl {
   width: number;
   height: number;
 }
+
+enum ImageType {
+  IMAGE = 'image',
+  VIDEO = 'video',
+}
 export interface IImageDTO {
   title: string;
+  type: ImageType;
   caption: string;
   description: string;
   width: number;
