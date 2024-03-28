@@ -224,7 +224,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       ) as ISettingsDTO;
 
       try {
-        const response = await axios.put(fetchUrl, validSettings, {
+        const response = await axios.post(fetchUrl, validSettings, {
           headers: {'X-WP-Nonce': nonce},
         });
         const newSettings: ISettingsDTO = response.data;
