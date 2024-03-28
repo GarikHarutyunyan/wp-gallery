@@ -90,7 +90,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
             <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'isFullscreen'}
-                name={'Fullscreen'}
+                name={'Full width'}
                 value={isFullscreen}
                 onChange={onInputValueChange}
               />
@@ -145,38 +145,42 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                 onChange={onInputValueChange}
               />
             </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'canDownload'}
-                name={'Download'}
-                value={canDownload}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'canZoom'}
-                name={'Zoom'}
-                value={canZoom}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'isSlideshowAllowed'}
-                name={'Slideshow'}
-                value={isSlideshowAllowed}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'isFullscreenAllowed'}
-                name={'Fullscreen'}
-                value={isFullscreenAllowed}
-                onChange={onInputValueChange}
-              />
-            </Filter>
+            {areControlButtonsShown && (
+              <>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'canDownload'}
+                    name={'Download'}
+                    value={canDownload}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'canZoom'}
+                    name={'Zoom'}
+                    value={canZoom}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'isSlideshowAllowed'}
+                    name={'Slideshow'}
+                    value={isSlideshowAllowed}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'isFullscreenAllowed'}
+                    name={'Fullscreen'}
+                    value={isFullscreenAllowed}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+              </>
+            )}
             <Filter isLoading={isLoading}>
               <SelectControl
                 id={'captionsPosition'}
