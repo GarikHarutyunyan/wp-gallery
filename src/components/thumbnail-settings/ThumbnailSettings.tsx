@@ -17,7 +17,6 @@ import {
   SliderControl,
   SelectControl,
   ColorControl,
-  SwitchControl,
 } from '../controls';
 import {Section} from 'core-components';
 
@@ -25,7 +24,6 @@ interface IThumbnailSettings {
   width?: number | undefined;
   height?: number | undefined;
   columns?: number | undefined;
-  showLightbox: boolean;
   gap: number;
   backgroundColor: string;
   padding: number;
@@ -54,7 +52,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
     width,
     height,
     columns,
-    showLightbox,
     gap,
     backgroundColor,
     padding,
@@ -126,14 +123,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
                 value={columns}
                 onChange={onInputValueChange}
                 min={1}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'showLightbox'}
-                name={'Use lightbox'}
-                value={showLightbox}
-                onChange={onInputValueChange}
               />
             </Filter>
           </Grid>

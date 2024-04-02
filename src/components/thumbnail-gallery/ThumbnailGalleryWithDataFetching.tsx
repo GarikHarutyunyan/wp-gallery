@@ -166,7 +166,7 @@ const ThumbnailGalleryWithDataFetching = ({
 
   const onThumbClick = (index: number) => {
     getAllData();
-    thumbnailSettings.showLightbox && setActiveImageIndex(index);
+    setActiveImageIndex(index);
   };
 
   const renderThumbnailGallery = (): ReactElement => {
@@ -179,7 +179,7 @@ const ThumbnailGalleryWithDataFetching = ({
           <ThumbnailGallery
             settings={thumbnailSettings}
             images={images}
-            onClick={onThumbClick}
+            onClick={lightboxSettings.showLightbox ? onThumbClick : undefined}
           />
         )}
         {renderLoader()}
