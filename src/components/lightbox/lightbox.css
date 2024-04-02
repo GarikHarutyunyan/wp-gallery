@@ -47,6 +47,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 600;
 }
 
 .reacg-lightbox-captions__description {
