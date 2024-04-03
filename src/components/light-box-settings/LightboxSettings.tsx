@@ -29,6 +29,8 @@ interface ILightboxSettings {
   canDownload: boolean;
   canZoom: boolean;
   isSlideshowAllowed: boolean;
+  autoplay: boolean;
+  slideDuration: number;
   isFullscreenAllowed: boolean;
   thumbnailsPosition: LightboxThumbnailsPosition;
   thumbnailWidth: number;
@@ -65,6 +67,8 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
     canDownload,
     canZoom,
     isSlideshowAllowed,
+    autoplay,
+    slideDuration,
     isFullscreenAllowed,
     thumbnailsPosition,
     thumbnailWidth,
@@ -183,6 +187,30 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                         onChange={onInputValueChange}
                       />
                     </Filter>
+                  </>
+                )}
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'autoplay'}
+                    name={'Autoplay'}
+                    value={autoplay}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {(autoplay || isSlideshowAllowed) && (
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'slideDuration'}
+                      name={'Slide duration'}
+                      value={slideDuration}
+                      onChange={onInputValueChange}
+                      min={700}
+                      unit={'ms'}
+                    />
+                  </Filter>
+                )}
+                {areControlButtonsShown && (
+                  <>
                     <Filter isLoading={isLoading}>
                       <SwitchControl
                         id={'isFullscreenAllowed'}

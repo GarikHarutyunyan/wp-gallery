@@ -120,6 +120,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         canZoom: true,
         isFullscreenAllowed: false,
         isSlideshowAllowed: false,
+        autoplay: false,
+        slideDuration: 3000,
         thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
         thumbnailWidth: 80,
         thumbnailHeight: 80,

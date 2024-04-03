@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import Lightbox from 'yet-another-react-lightbox';
+import Lightbox, {SlideshowRef} from 'yet-another-react-lightbox';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
 import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
@@ -65,6 +65,8 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
     canDownload,
     canZoom,
     isSlideshowAllowed,
+    autoplay,
+    slideDuration,
     isFullscreenAllowed,
     thumbnailsPosition,
     thumbnailWidth,
@@ -87,7 +89,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
   if (canZoom) {
     plugins.push(Zoom as any);
   }
-  if (isSlideshowAllowed) {
+  if (isSlideshowAllowed || autoplay) {
     plugins.push(Slideshow as any);
   }
   if (isFullscreenAllowed) {
@@ -121,6 +123,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
         close={onClose}
         // @ts-ignore
         captions={{showToggle: true}}
+        slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={images.map((image: IImageDTO) => ({
           description: (
             <>
@@ -158,13 +161,12 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
           ],
           metadata: image.thumbnail.url,
         }))}
-        render={
-          {
-            // thumbnail: ({slide}) => {
-            //   return <img src={(slide as any).metadata}></img>;
-            // },
-          }
-        }
+        render={{
+          // thumbnail: ({slide}) => {
+          //   return <img src={(slide as any).metadata}></img>;
+          // },
+          buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
+        }}
         carousel={{
           preload: 5,
           finite: !isInfinite,
