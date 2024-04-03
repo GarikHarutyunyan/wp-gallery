@@ -2,7 +2,7 @@
     .yarl__slide_captions_container {
         padding-top: 0;
         padding-bottom: 0;
-        height: 4.5vw;
+        height: clamp(2.5rem, 5vw, 3rem);
     }
 }
 
@@ -30,28 +30,29 @@
 
 .reacg-lightbox-captions_below {
     .yarl__slide {
-        margin-bottom: 4.5vw;
+        margin-bottom: clamp(2.5rem, 5vw, 3rem);
     }
 }
 
 .reacg-lightbox-captions_above {
     .yarl__slide {
-        margin-top: 4.5vw;
+        margin-top: clamp(2.5rem, 5vw, 3rem);
     }
 }
 
 .reacg-lightbox-captions__title {
-    font-size: 1.5vw;
-    line-height: 1.5vw;
-    margin: 4px 0 10px;
+    font-size: clamp(1.1rem, 1.6vw, 2rem);
+    line-height: clamp(1.1rem, 1.6vw, 2rem);
+    margin: 4px 0 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 600;
 }
 
 .reacg-lightbox-captions__description {
-    font-size: 1.3vw;
-    line-height: 1.3vw;
+    font-size: clamp(1rem, 1.3vw, 2rem);
+    line-height: clamp(1rem, 1.3vw, 2rem);
     margin: 0;
     white-space: nowrap;
     overflow: hidden;

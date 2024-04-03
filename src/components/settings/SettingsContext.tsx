@@ -58,8 +58,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const isLightboxTabDisabled: boolean = !thumbnailSettings?.showLightbox;
-
   const getData = async () => {
     const dataElement = document.getElementById('reacg-root' + galleryId);
     const fetchUrl: string | undefined = baseUrl
@@ -89,7 +87,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         width: 150,
         height: 150,
         columns: 5,
-        showLightbox: true,
         gap: 10,
         backgroundColor: 'White',
         padding: 10,
@@ -112,6 +109,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         paginationTextColor: 'green',
       });
       setLightboxSettings({
+        showLightbox: true,
         isFullscreen: false,
         width: 800,
         height: 800,
@@ -122,6 +120,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         canZoom: true,
         isFullscreenAllowed: false,
         isSlideshowAllowed: false,
+        autoplay: false,
+        slideDuration: 3000,
         thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
         thumbnailWidth: 80,
         thumbnailHeight: 80,
@@ -148,7 +148,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       height = 1,
       padding,
       paddingColor,
-      showLightbox,
       titleAlignment,
       titleColor,
       titleFontFamily,
@@ -166,7 +165,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       height,
       padding,
       paddingColor,
-      showLightbox,
       titleAlignment,
       titleColor,
       titleFontFamily,
@@ -288,11 +286,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
             <Tabs value={activeTab} onChange={onActiveTabChange}>
               <Tab label="Gallery" value="gallery" />
               <Tab label="General" value="general" />
-              <Tab
-                label="Light Box"
-                value="Lightbox"
-                disabled={isLightboxTabDisabled}
-              />
+              <Tab label="Light Box" value="Lightbox" />
             </Tabs>
             <LoadingButton
               loading={isLoading}
