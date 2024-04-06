@@ -4,7 +4,7 @@ interface IImageUrl {
   height: number;
 }
 
-enum ImageType {
+export enum ImageType {
   IMAGE = 'image',
   VIDEO = 'video',
 }
