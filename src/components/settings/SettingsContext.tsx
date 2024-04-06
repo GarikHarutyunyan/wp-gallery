@@ -21,7 +21,7 @@ import {Align, Aligner, ExpandMore, Tab} from 'core-components';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {useSnackbar} from 'notistack';
 import {GeneralSettings, IGeneralSettings} from 'components/general-settings';
-import {AppInfoContext} from 'AppInfoContext';
+import {AppInfoContext} from 'contexts/AppInfoContext';
 import './settings-context.css';
 import {
   ILightboxSettings,

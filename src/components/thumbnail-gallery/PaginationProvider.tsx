@@ -5,7 +5,7 @@ import {Button} from 'core-components';
 import {useInView} from 'react-intersection-observer';
 import {IGeneralSettings} from 'components/general-settings';
 import './pagination-provider.css';
-import {AppTranslationsContext} from 'AppTranslationsContext';
+import {TranslationsContext} from 'contexts/TranslationsContext';
 
 interface IPaginationProviderProps {
   type: PaginationType;
@@ -30,7 +30,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
     loadMoreButtonColor,
     paginationTextColor,
   } = settings;
-  const {loadMoreText} = useContext(AppTranslationsContext);
+  const {loadMoreText} = useContext(TranslationsContext);
 
   useEffect(() => {
     if (inView && !isFullyLoaded) {

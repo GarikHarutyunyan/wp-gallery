@@ -7,8 +7,8 @@ import {VLightbox as Lightbox} from 'components/lightbox/Lightbox';
 import {PaginationProvider} from './PaginationProvider';
 import {IThumbnailSettings} from 'components/thumbnail-settings';
 import {IGeneralSettings} from 'components/general-settings';
-import {AppInfoContext} from 'AppInfoContext';
-import {AppTranslationsContext} from 'AppTranslationsContext';
+import {AppInfoContext} from 'contexts/AppInfoContext';
+import {TranslationsContext} from 'contexts/TranslationsContext';
 import {CircularProgress, Paper, Typography} from '@mui/material';
 import {ILightboxSettings} from 'components/light-box-settings';
 
@@ -28,9 +28,8 @@ const ThumbnailGalleryWithDataFetching = ({
   const {itemsPerPage = 1, paginationType} = generalSettings;
   const [activeImageIndex, setActiveImageIndex] = useState<number>(-1);
   const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
-  const {noDataText, setLoadMoreText, setNoDataText} = useContext(
-    AppTranslationsContext
-  );
+  const {noDataText, setLoadMoreText, setNoDataText} =
+    useContext(TranslationsContext);
   const [images, setImages] = useState<IImageDTO[]>([]);
   const [lightboxImages, setLightboxImages] = useState<
     IImageDTO[] | undefined
