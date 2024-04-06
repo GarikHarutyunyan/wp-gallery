@@ -38,6 +38,7 @@ const NumberControl: React.FC<INumberControlProps> = ({
       value={value}
       onChange={onValueChange}
       fullWidth
+      onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
       InputProps={{
         inputProps: {min, max},
         endAdornment: <InputAdornment position="end">{unit}</InputAdornment>,
