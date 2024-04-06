@@ -11,6 +11,14 @@ interface INumberControlProps {
   max?: number;
   unit?: string;
 }
+const numberInputOnWheelPreventChange = (e: any) => {
+  e.target.blur();
+  e.stopPropagation();
+
+  setTimeout(() => {
+    e.target.focus();
+  }, 0);
+};
 
 const NumberControl: React.FC<INumberControlProps> = ({
   id,
@@ -41,6 +49,7 @@ const NumberControl: React.FC<INumberControlProps> = ({
       InputProps={{
         inputProps: {min, max},
         endAdornment: <InputAdornment position="end">{unit}</InputAdornment>,
+        onWheel: numberInputOnWheelPreventChange,
       }}
       InputLabelProps={{
         shrink: true,
