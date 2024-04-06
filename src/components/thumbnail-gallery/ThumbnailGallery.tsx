@@ -126,9 +126,11 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     return `${image.original.url}`;
   };
 
-  const videoThumbnailIconSize: string = `${
-    Math.min(getWidth, getHeight, 55) - 10
-  }px`;
+  const videoThumbnailIconSize = useMemo<string>(() => {
+    const size: number = Math.min(getWidth, getHeight, 55) - 10;
+
+    return size > 0 ? `${size}px` : '0px';
+  }, [getWidth, getHeight]);
 
   return (
     <div
