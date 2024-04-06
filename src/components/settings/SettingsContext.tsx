@@ -338,7 +338,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
             >
               <Tab label="Gallery" value="gallery" />
               <Tab label="General" value="general" />
-              <Tab label="Light Box" value="Lightbox" />
+              <Tab label="Lightbox" value="Lightbox" />
             </Tabs>
             <Aligner align={Align.END}>
               <LoadingButton

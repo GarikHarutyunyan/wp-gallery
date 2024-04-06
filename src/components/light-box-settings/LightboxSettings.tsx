@@ -137,32 +137,52 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                 )}
                 <Filter isLoading={isLoading}>
                   <SwitchControl
+                    id={'autoplay'}
+                    name={'Autoplay'}
+                    value={autoplay}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {(autoplay || isSlideshowAllowed) && (
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'slideDuration'}
+                      name={'Time interval'}
+                      value={slideDuration}
+                      onChange={onInputValueChange}
+                      min={700}
+                      unit={'ms'}
+                    />
+                  </Filter>
+                )}
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
                     id={'areControlButtonsShown'}
                     name={'Show control buttons'}
                     value={areControlButtonsShown}
                     onChange={onInputValueChange}
                   />
                 </Filter>
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'isInfinite'}
-                    name={'Infinite'}
-                    value={isInfinite}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id={'padding'}
-                    name="Padding (px)"
-                    min={0}
-                    max={300}
-                    value={padding}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
+
                 {areControlButtonsShown && (
                   <>
+                    <Filter isLoading={isLoading}>
+                      <SwitchControl
+                        id={'isSlideshowAllowed'}
+                        name={'Slideshow'}
+                        value={isSlideshowAllowed}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+
+                    <Filter isLoading={isLoading}>
+                      <SwitchControl
+                        id={'isFullscreenAllowed'}
+                        name={'Fullscreen'}
+                        value={isFullscreenAllowed}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
                     <Filter isLoading={isLoading}>
                       <SwitchControl
                         id={'canDownload'}
@@ -179,52 +199,30 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                         onChange={onInputValueChange}
                       />
                     </Filter>
-                    <Filter isLoading={isLoading}>
-                      <SwitchControl
-                        id={'isSlideshowAllowed'}
-                        name={'Slideshow'}
-                        value={isSlideshowAllowed}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
                   </>
                 )}
                 <Filter isLoading={isLoading}>
                   <SwitchControl
-                    id={'autoplay'}
-                    name={'Autoplay'}
-                    value={autoplay}
+                    id={'isInfinite'}
+                    name={'Loop'}
+                    value={isInfinite}
                     onChange={onInputValueChange}
                   />
                 </Filter>
-                {(autoplay || isSlideshowAllowed) && (
-                  <Filter isLoading={isLoading}>
-                    <NumberControl
-                      id={'slideDuration'}
-                      name={'Slide duration'}
-                      value={slideDuration}
-                      onChange={onInputValueChange}
-                      min={700}
-                      unit={'ms'}
-                    />
-                  </Filter>
-                )}
-                {areControlButtonsShown && (
-                  <>
-                    <Filter isLoading={isLoading}>
-                      <SwitchControl
-                        id={'isFullscreenAllowed'}
-                        name={'Fullscreen'}
-                        value={isFullscreenAllowed}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                  </>
-                )}
+                <Filter isLoading={isLoading}>
+                  <SliderControl
+                    id={'padding'}
+                    name="Padding (px)"
+                    min={0}
+                    max={300}
+                    value={padding}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
                 <Filter isLoading={isLoading}>
                   <SelectControl
                     id={'captionsPosition'}
-                    name={'Captions position'}
+                    name={'Caption position'}
                     value={captionsPosition}
                     options={LightboxCaptionsPositionOptions}
                     onChange={onInputValueChange}
@@ -268,7 +266,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
             <Filter isLoading={isLoading}>
               <SelectControl
                 id={'thumbnailsPosition'}
-                name={'position'}
+                name={'Position'}
                 value={thumbnailsPosition}
                 options={LightboxThumbnailsPositionOptions}
                 onChange={onInputValueChange}
@@ -276,6 +274,34 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
             </Filter>
             {thumbnailsPosition !== LightboxThumbnailsPosition.NONE && (
               <>
+                <Filter isLoading={isLoading}>
+                  <SliderControl
+                    id={'thumbnailBorder'}
+                    name="Border (px)"
+                    min={0}
+                    max={100}
+                    value={thumbnailBorder}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <ColorControl
+                    id={'thumbnailBorderColor'}
+                    name="Border color"
+                    value={thumbnailBorderColor}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SliderControl
+                    id={'thumbnailBorderRadius'}
+                    name="Border radius (%)"
+                    min={0}
+                    value={thumbnailBorderRadius}
+                    max={50}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
                 <Filter isLoading={isLoading}>
                   <NumberControl
                     id={'thumbnailWidth'}
@@ -298,29 +324,11 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                 </Filter>
                 <Filter isLoading={isLoading}>
                   <SliderControl
-                    id={'thumbnailBorder'}
-                    name="Border (px)"
+                    id={'thumbnailGap'}
+                    name="Gap (px)"
                     min={0}
                     max={100}
-                    value={thumbnailBorder}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id={'thumbnailBorderRadius'}
-                    name="Radius (%)"
-                    min={0}
-                    value={thumbnailBorderRadius}
-                    max={50}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <ColorControl
-                    id={'thumbnailBorderColor'}
-                    name="Border color"
-                    value={thumbnailBorderColor}
+                    value={thumbnailGap}
                     onChange={onInputValueChange}
                   />
                 </Filter>
@@ -331,16 +339,6 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                     min={0}
                     max={100}
                     value={thumbnailPadding}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id={'thumbnailGap'}
-                    name="Gap (px)"
-                    min={0}
-                    max={100}
-                    value={thumbnailGap}
                     onChange={onInputValueChange}
                   />
                 </Filter>
