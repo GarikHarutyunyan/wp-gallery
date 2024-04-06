@@ -17,7 +17,7 @@ import {
 } from 'data-structures';
 import {Paper, Typography} from '@mui/material';
 import Divider from '@mui/material/Divider';
-import {Aligner, ExpandMore, Tab} from 'core-components';
+import {Align, Aligner, Button, ExpandMore, Tab} from 'core-components';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {useSnackbar} from 'notistack';
 import {GeneralSettings, IGeneralSettings} from 'components/general-settings';
@@ -229,6 +229,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
         setThumbnailSettings(extractThumbnailSettings(newSettings));
         setGeneralSettings(extractGeneralSettings(newSettings));
+        setLightboxSettings(newSettings.lightbox);
         enqueueSnackbar('Settings are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -245,6 +246,53 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setIsLoading(false);
     } else {
       enqueueSnackbar('Cannot update options!', {
+        variant: 'error',
+        anchorOrigin: {horizontal: 'right', vertical: 'top'},
+      });
+    }
+  };
+
+  const onReset = async (): Promise<void> => {
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'options/' + galleryId
+      : undefined;
+
+    if (fetchUrl) {
+      setIsLoading(true);
+      const settings: ISettingsDTO = {
+        ...thumbnailSettings,
+        ...generalSettings,
+        lightbox: lightboxSettings as ILightboxSettings,
+      } as ISettingsDTO;
+
+      try {
+        await axios.delete(fetchUrl, {
+          headers: {'X-WP-Nonce': nonce},
+        });
+        const response = await axios.get(fetchUrl, {
+          headers: {'X-WP-Nonce': nonce},
+        });
+        const newSettings: ISettingsDTO = response.data;
+
+        setThumbnailSettings(extractThumbnailSettings(newSettings));
+        setGeneralSettings(extractGeneralSettings(newSettings));
+        setLightboxSettings(newSettings.lightbox);
+        enqueueSnackbar('Settings are reset!', {
+          variant: 'success',
+          anchorOrigin: {horizontal: 'right', vertical: 'top'},
+        });
+        setIsLoading(false);
+      } catch (error) {
+        enqueueSnackbar('Cannot reset options!', {
+          variant: 'error',
+          anchorOrigin: {horizontal: 'right', vertical: 'top'},
+        });
+        console.error(error);
+      }
+
+      setIsLoading(false);
+    } else {
+      enqueueSnackbar('Cannot reset options!', {
         variant: 'error',
         anchorOrigin: {horizontal: 'right', vertical: 'top'},
       });
@@ -283,21 +331,37 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       <Collapse in={isExpanded} timeout="auto" style={{margin: '5px'}}>
         <TabContext value={activeTab}>
           <Aligner>
-            <Tabs value={activeTab} onChange={onActiveTabChange}>
+            <Tabs
+              value={activeTab}
+              onChange={onActiveTabChange}
+              style={{width: '100%'}}
+            >
               <Tab label="Gallery" value="gallery" />
               <Tab label="General" value="general" />
               <Tab label="Light Box" value="Lightbox" />
             </Tabs>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="center"
-              variant="outlined"
-              onClick={onSave}
-              style={{margin: '5px 20px', textTransform: 'none'}}
-              className={'button button-primary button-large'}
-            >
-              {'Save options'}
-            </LoadingButton>
+            <Aligner align={Align.END}>
+              <LoadingButton
+                loading={isLoading}
+                loadingPosition="center"
+                variant="outlined"
+                onClick={onSave}
+                style={{margin: '5px 5px', textTransform: 'none'}}
+                className={'button button-primary button-large'}
+              >
+                {'Save options'}
+              </LoadingButton>
+              <LoadingButton
+                loading={isLoading}
+                loadingPosition="center"
+                variant="outlined"
+                onClick={onReset}
+                style={{margin: '5px 5px', textTransform: 'none'}}
+                className={'button button-large'}
+              >
+                {'Reset'}
+              </LoadingButton>
+            </Aligner>
           </Aligner>
           <TabPanel value="gallery" className={'reacg-tab-panel'}>
             {thumbnailSettings && (
