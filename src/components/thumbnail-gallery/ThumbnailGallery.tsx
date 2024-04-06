@@ -117,8 +117,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
       return `${image.thumbnail.url}`;
     }
     if (
-      width <= image.medium_large.width &&
-      height <= image.medium_large.height
+      (width <= image.medium_large.width &&
+        height <= image.medium_large.height) ||
+      image.type === ImageType.VIDEO
     ) {
       return `${image.medium_large.url}`;
     }
