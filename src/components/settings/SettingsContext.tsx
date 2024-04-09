@@ -57,6 +57,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isReseting, setIsReseting] = useState(false);
 
   const getData = async () => {
     const dataElement = document.getElementById('reacg-root' + galleryId);
@@ -210,6 +212,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
+      setIsSaving(true);
       const settings: ISettingsDTO = {
         ...thumbnailSettings,
         ...generalSettings,
@@ -234,7 +237,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
-        setIsLoading(false);
       } catch (error) {
         enqueueSnackbar('Cannot update options!', {
           variant: 'error',
@@ -244,6 +246,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }
 
       setIsLoading(false);
+      setIsSaving(false);
     } else {
       enqueueSnackbar('Cannot update options!', {
         variant: 'error',
@@ -259,11 +262,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
-      const settings: ISettingsDTO = {
-        ...thumbnailSettings,
-        ...generalSettings,
-        lightbox: lightboxSettings as ILightboxSettings,
-      } as ISettingsDTO;
+      setIsReseting(true);
 
       try {
         await axios.delete(fetchUrl, {
@@ -281,7 +280,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
-        setIsLoading(false);
       } catch (error: any) {
         if (error?.response?.data?.errors?.nothing_deleted) {
           enqueueSnackbar('Settings already reset', {
@@ -298,6 +296,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }
 
       setIsLoading(false);
+      setIsReseting(false);
     } else {
       enqueueSnackbar('Cannot reset options!', {
         variant: 'error',
@@ -349,7 +348,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
             </Tabs>
             <Aligner align={Align.END}>
               <LoadingButton
-                loading={isLoading}
+                loading={isSaving}
                 loadingPosition={'center'}
                 variant={'outlined'}
                 onClick={onSave}
@@ -361,7 +360,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
                 {'Save options'}
               </LoadingButton>
               <LoadingButton
-                loading={isLoading}
+                loading={isReseting}
                 loadingPosition={'center'}
                 variant={'outlined'}
                 onClick={onReset}
