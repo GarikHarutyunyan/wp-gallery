@@ -1,11 +1,19 @@
-import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
-import {IThumbnailSettings, ThumbnailSettings} from '../thumbnail-settings';
-import Tabs from '@mui/material/Tabs';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import LoadingButton from '@mui/lab/LoadingButton';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
+import {Paper, Typography} from '@mui/material';
 import Collapse from '@mui/material/Collapse';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Divider from '@mui/material/Divider';
+import Tabs from '@mui/material/Tabs';
 import axios from 'axios';
+import {GeneralSettings, IGeneralSettings} from 'components/general-settings';
+import {
+  ILightboxSettings,
+  LightboxSettings,
+} from 'components/light-box-settings';
+import {AppInfoContext} from 'contexts/AppInfoContext';
+import {Align, Aligner, ExpandMore, Tab} from 'core-components';
 import {
   LightboxCaptionsPosition,
   LightboxThumbnailsPosition,
@@ -15,18 +23,10 @@ import {
   TitlePosition,
   TitleVisibility,
 } from 'data-structures';
-import {Paper, Typography} from '@mui/material';
-import Divider from '@mui/material/Divider';
-import {Align, Aligner, ExpandMore, Tab} from 'core-components';
-import LoadingButton from '@mui/lab/LoadingButton';
 import {useSnackbar} from 'notistack';
-import {GeneralSettings, IGeneralSettings} from 'components/general-settings';
-import {AppInfoContext} from 'contexts/AppInfoContext';
+import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
+import {IThumbnailSettings, ThumbnailSettings} from '../thumbnail-settings';
 import './settings-context.css';
-import {
-  ILightboxSettings,
-  LightboxSettings,
-} from 'components/light-box-settings';
 
 type ThumbnailAndGeneralSettings = IThumbnailSettings & IGeneralSettings;
 
@@ -328,7 +328,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   const renderBody = (): ReactNode => {
     return (
-      <Collapse in={isExpanded} timeout="auto" style={{margin: '5px'}}>
+      <Collapse in={isExpanded} timeout={'auto'} style={{margin: '5px'}}>
         <TabContext value={activeTab}>
           <Aligner>
             <Tabs
@@ -336,25 +336,27 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               onChange={onActiveTabChange}
               style={{width: '100%'}}
             >
-              <Tab label="Gallery" value="gallery" />
-              <Tab label="General" value="general" />
-              <Tab label="Lightbox" value="Lightbox" />
+              <Tab label={'Gallery'} value={'gallery'} />
+              <Tab label={'General'} value={'general'} />
+              <Tab label={'Lightbox'} value={'Lightbox'} />
             </Tabs>
             <Aligner align={Align.END}>
               <LoadingButton
                 loading={isLoading}
-                loadingPosition="center"
-                variant="outlined"
+                loadingPosition={'center'}
+                variant={'outlined'}
                 onClick={onSave}
                 style={{margin: '5px 5px', textTransform: 'none'}}
-                className={'button button-primary button-large'}
+                className={
+                  'button button-primary button-large save-settings-button'
+                }
               >
                 {'Save options'}
               </LoadingButton>
               <LoadingButton
                 loading={isLoading}
-                loadingPosition="center"
-                variant="outlined"
+                loadingPosition={'center'}
+                variant={'outlined'}
                 onClick={onReset}
                 style={{margin: '5px 5px', textTransform: 'none'}}
                 className={'button button-large'}
@@ -363,7 +365,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               </LoadingButton>
             </Aligner>
           </Aligner>
-          <TabPanel value="gallery" className={'reacg-tab-panel'}>
+          <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
             {thumbnailSettings && (
               <ThumbnailSettings
                 value={thumbnailSettings as IThumbnailSettings}
@@ -372,7 +374,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               />
             )}
           </TabPanel>
-          <TabPanel value="general" className={'reacg-tab-panel'}>
+          <TabPanel value={'general'} className={'reacg-tab-panel'}>
             {generalSettings && (
               <GeneralSettings
                 value={generalSettings as IGeneralSettings}
@@ -381,7 +383,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               />
             )}
           </TabPanel>
-          <TabPanel value="Lightbox" className={'reacg-tab-panel'}>
+          <TabPanel value={'Lightbox'} className={'reacg-tab-panel'}>
             {lightboxSettings && (
               <LightboxSettings
                 value={lightboxSettings as ILightboxSettings}
