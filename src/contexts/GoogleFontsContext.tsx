@@ -1,6 +1,6 @@
+import axios from 'axios';
 import React, {useContext, useLayoutEffect, useState} from 'react';
 import {AppInfoContext} from './AppInfoContext';
-import axios from 'axios';
 
 const GoogleFontsContext = React.createContext<{
   googleFonts?: any[];

@@ -1,0 +1,11 @@
+{
+  "cSpell.words": ["Mitigations"],
+  "git.openDiffOnClick": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true,
+    "source.sortMembers": true,
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true
+  }
+}

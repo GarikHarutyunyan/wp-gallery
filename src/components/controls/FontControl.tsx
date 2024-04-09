@@ -1,7 +1,6 @@
 import {MenuItem, TextField} from '@mui/material';
-import axios from 'axios';
-import React, {useContext, useLayoutEffect, useState} from 'react';
 import {GoogleFontsContext} from 'contexts/GoogleFontsContext';
+import React, {useContext} from 'react';
 
 interface IFontControlProps {
   id?: string;
