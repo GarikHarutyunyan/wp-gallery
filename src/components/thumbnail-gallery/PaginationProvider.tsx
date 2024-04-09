@@ -1,4 +1,4 @@
-import React, {ReactNode, useContext, useEffect, useState} from 'react';
+import React, {ReactNode, useContext, useEffect} from 'react';
 import {Grid, Pagination, PaginationItem} from '@mui/material';
 import {PaginationType} from 'data-structures';
 import {Button} from 'core-components';
@@ -22,7 +22,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   isFullyLoaded,
   settings,
 }) => {
-  const {ref, inView, entry} = useInView();
+  const {ref, inView} = useInView();
   const {
     activeButtonColor,
     inactiveButtonColor,
