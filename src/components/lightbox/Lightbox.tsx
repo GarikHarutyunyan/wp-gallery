@@ -1,21 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import Lightbox, {SlideshowRef} from 'yet-another-react-lightbox';
-import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
-import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import clsx from 'clsx';
+import {ILightboxSettings} from 'components/light-box-settings';
 import {
   IImageDTO,
   LightboxCaptionsPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
-import {ILightboxSettings} from 'components/light-box-settings';
-import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
-import Download from 'yet-another-react-lightbox/plugins/download';
-import clsx from 'clsx';
-import {Captions} from './CustomCaptions/Captions';
-import 'yet-another-react-lightbox/plugins/captions.css';
-import './lightbox.css';
+import React, {useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/plugins/captions.css';
+import Download from 'yet-another-react-lightbox/plugins/download';
+import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
+import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
+import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import {Captions} from './CustomCaptions/Captions';
+import './lightbox.css';
 
 interface ILightboxProviderProps {
   activeIndex: number;
@@ -176,12 +176,9 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
           position: thumbnailsPosition as any,
           width: thumbnailWidth,
           height: thumbnailHeight,
-          border: thumbnailBorder,
-          borderColor: thumbnailBorderColor,
-          borderRadius: thumbnailBorderRadius,
           padding: thumbnailPadding,
           gap: thumbnailGap,
-          // imageFit: 'contain',
+          imageFit: 'cover',
         }}
         className={clsx('reacg-lightbox', {
           'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
@@ -203,6 +200,14 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
               ? '100%'
               : `${Math.min(innerHeight, height)}px`,
             margin: 'auto',
+          },
+          thumbnail: {
+            '--yarl__thumbnails_thumbnail_active_border_color':
+              thumbnailBorderColor || 'transparent',
+            '--yarl__thumbnails_thumbnail_border_color':
+              thumbnailBorderColor || 'transparent',
+            '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
+            '--yarl__thumbnails_thumbnail_border': `${thumbnailBorder}px`,
           },
         }}
         portal={{
