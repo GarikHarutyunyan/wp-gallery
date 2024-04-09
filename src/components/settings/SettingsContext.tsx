@@ -277,17 +277,24 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setThumbnailSettings(extractThumbnailSettings(newSettings));
         setGeneralSettings(extractGeneralSettings(newSettings));
         setLightboxSettings(newSettings.lightbox);
-        enqueueSnackbar('Settings are reset!', {
+        enqueueSnackbar('Settings successfully reset', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
         setIsLoading(false);
-      } catch (error) {
-        enqueueSnackbar('Cannot reset options!', {
-          variant: 'error',
-          anchorOrigin: {horizontal: 'right', vertical: 'top'},
-        });
-        console.error(error);
+      } catch (error: any) {
+        if (error?.response?.data?.errors?.nothing_deleted) {
+          enqueueSnackbar('Settings already reset', {
+            variant: 'success',
+            anchorOrigin: {horizontal: 'right', vertical: 'top'},
+          });
+        } else {
+          enqueueSnackbar('Cannot reset options', {
+            variant: 'error',
+            anchorOrigin: {horizontal: 'right', vertical: 'top'},
+          });
+          console.error(error);
+        }
       }
 
       setIsLoading(false);
