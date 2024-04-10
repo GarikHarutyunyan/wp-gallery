@@ -1,7 +1,7 @@
 .reacg-lightbox {
     .yarl__slide_captions_container {
-        padding-top: 0;
-        padding-bottom: 0;
+        padding-top: 10px;
+        padding-bottom: 10px;
         height: clamp(2.5rem, 5vw, 3rem);
     }
 }
@@ -30,20 +30,20 @@
 
 .reacg-lightbox-captions_below {
     .yarl__slide {
-        margin-bottom: clamp(2.5rem, 5vw, 3rem);
+        margin-bottom: calc(clamp(2.5rem, 5vw, 3rem) + 20px);
     }
 }
 
 .reacg-lightbox-captions_above {
     .yarl__slide {
-        margin-top: clamp(2.5rem, 5vw, 3rem);
+        margin-top: calc(clamp(2.5rem, 5vw, 3rem) + 20px);
     }
 }
 
 .reacg-lightbox-captions__title {
     font-size: clamp(1.1rem, 1.6vw, 2rem);
     line-height: clamp(1.1rem, 1.6vw, 2rem);
-    margin: 4px 0 2px;
+    margin: 4px 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -52,7 +52,7 @@
 
 .reacg-lightbox-captions__description {
     font-size: clamp(1rem, 1.3vw, 2rem);
-    line-height: clamp(1rem, 1.3vw, 2rem);
+    line-height: clamp(1.3rem, 1.3vw, 2rem);
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
