@@ -5,6 +5,8 @@ interface IImageUrl {
 }
 export interface IImageDTO {
   title: string;
+  caption: string;
+  description: string;
   width: number;
   height: number;
   original: IImageUrl;

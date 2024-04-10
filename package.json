@@ -70,7 +70,7 @@
     "webpack-dev-server": "^4.6.0",
     "webpack-manifest-plugin": "^4.0.2",
     "workbox-webpack-plugin": "^6.4.1",
-    "yet-another-react-lightbox": "^3.12.2"
+    "yet-another-react-lightbox": "^3.17.0"
   },
   "scripts": {
     "start": "node scripts/start.js",
@@ -96,8 +96,9 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "css-loader": "^6.8.1",
-    "prettier": "3.0.3",
+    "prettier": "^3.0.3",
     "style-loader": "^3.3.3",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"

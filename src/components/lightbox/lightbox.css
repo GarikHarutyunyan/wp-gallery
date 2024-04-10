@@ -1,0 +1,61 @@
+.reacg-lightbox {
+    .yarl__slide_captions_container {
+        padding-top: 0;
+        padding-bottom: 0;
+        height: clamp(2.5rem, 5vw, 3rem);
+    }
+}
+
+.react-lightbox__background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000000;
+}
+
+.reacg-lightbox-control-buttons_hidden .yarl__toolbar .yarl__button:not(:last-child) {
+    display: none;
+}
+
+
+.reacg-lightbox-captions_top {
+    .yarl__slide_captions_container {
+        top: 0;
+        bottom: unset;
+    }
+}
+
+.reacg-lightbox-captions_below {
+    .yarl__slide {
+        margin-bottom: clamp(2.5rem, 5vw, 3rem);
+    }
+}
+
+.reacg-lightbox-captions_above {
+    .yarl__slide {
+        margin-top: clamp(2.5rem, 5vw, 3rem);
+    }
+}
+
+.reacg-lightbox-captions__title {
+    font-size: clamp(1.1rem, 1.6vw, 2rem);
+    line-height: clamp(1.1rem, 1.6vw, 2rem);
+    margin: 4px 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+}
+
+.reacg-lightbox-captions__description {
+    font-size: clamp(1rem, 1.3vw, 2rem);
+    line-height: clamp(1rem, 1.3vw, 2rem);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 2px 0 0;
+}

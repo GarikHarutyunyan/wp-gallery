@@ -1,11 +1,11 @@
-import React, {ReactNode, useContext, useEffect, useState} from 'react';
+import React, {ReactNode, useContext, useEffect} from 'react';
 import {Grid, Pagination, PaginationItem} from '@mui/material';
 import {PaginationType} from 'data-structures';
 import {Button} from 'core-components';
 import {useInView} from 'react-intersection-observer';
 import {IGeneralSettings} from 'components/general-settings';
 import './pagination-provider.css';
-import {AppTranslationsContext} from 'AppTranslationsContext';
+import {TranslationsContext} from 'contexts/TranslationsContext';
 
 interface IPaginationProviderProps {
   type: PaginationType;
@@ -22,7 +22,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   isFullyLoaded,
   settings,
 }) => {
-  const {ref, inView, entry} = useInView();
+  const {ref, inView} = useInView();
   const {
     activeButtonColor,
     inactiveButtonColor,
@@ -30,7 +30,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
     loadMoreButtonColor,
     paginationTextColor,
   } = settings;
-  const {loadMoreText} = useContext(AppTranslationsContext);
+  const {loadMoreText} = useContext(TranslationsContext);
 
   useEffect(() => {
     if (inView && !isFullyLoaded) {

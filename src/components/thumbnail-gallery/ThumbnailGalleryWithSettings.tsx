@@ -3,6 +3,7 @@ import {useSettings} from '../settings';
 import {ThumbnailGalleryWithDataFetching} from './ThumbnailGalleryWithDataFetching';
 import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
 import {IGeneralSettings} from 'components/general-settings';
+import {ILightboxSettings} from 'components/light-box-settings';
 
 const images: IImageDTO[] = [
   // {
@@ -231,9 +232,11 @@ const ThumbnailGalleryWithSettings = () => {
   const {
     generalSettings,
     thumbnailSettings,
+    lightboxSettings,
   }: {
     thumbnailSettings?: IThumbnailSettings;
     generalSettings?: IGeneralSettings;
+    lightboxSettings?: ILightboxSettings;
   } = useSettings();
 
   return generalSettings && thumbnailSettings ? (
@@ -241,6 +244,7 @@ const ThumbnailGalleryWithSettings = () => {
       images={images}
       generalSettings={generalSettings as any}
       thumbnailSettings={thumbnailSettings as any}
+      lightboxSettings={lightboxSettings as any}
     />
   ) : null;
 };

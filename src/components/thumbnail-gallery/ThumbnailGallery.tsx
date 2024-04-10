@@ -1,5 +1,4 @@
 import {ImageList, ImageListItem, ImageListItemBar} from '@mui/material';
-import {useLightbox} from 'components/lightbox';
 import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
 import {IImageDTO, TitlePosition, TitleVisibility} from 'data-structures';
 import React, {
@@ -15,18 +14,18 @@ import './thumbnail-gallery.css';
 interface IThumbnailGalleryProps {
   images: IImageDTO[];
   settings: IThumbnailSettings;
+  onClick?: (index: number) => void;
 }
 
 const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
   images,
   settings,
+  onClick,
 }) => {
-  const {setActiveImageIndex} = useLightbox();
   const {
     width = 1,
     height = 1,
     columns = 1,
-    showLightbox,
     gap,
     backgroundColor,
     padding,
@@ -137,9 +136,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
         >
           {images.map((image, index) => (
             <div
-              onClick={
-                showLightbox ? () => setActiveImageIndex(index) : undefined
-              }
+              onClick={() => onClick?.(index)}
               style={{
                 borderRadius: borderRadius + '%',
                 overflow:
@@ -150,7 +147,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
               <ImageListItem key={image.thumbnail.url}>
                 <img
                   className={clsx('thumnail-gallery__image', {
-                    'thumnail-gallery__image_clickable': showLightbox,
+                    'thumnail-gallery__image_clickable': !!onClick,
                   })}
                   src={getImageSource(image)}
                   alt={image.title}

@@ -2,16 +2,19 @@ import React from 'react';
 import './App.css';
 import Gallery from './components/Gallery';
 import {SnackbarProvider} from 'notistack';
-import {AppTranslationsProvider} from 'AppTranslationsContext';
+import {TranslationsProvider} from 'contexts/TranslationsContext';
+import {GoogleFontsProvider} from 'contexts/GoogleFontsContext';
 
-function App() {
+const App = () => {
   return (
-    <AppTranslationsProvider>
+    <TranslationsProvider>
       <SnackbarProvider>
-        <Gallery />
+        <GoogleFontsProvider>
+          <Gallery />
+        </GoogleFontsProvider>
       </SnackbarProvider>
-    </AppTranslationsProvider>
+    </TranslationsProvider>
   );
-}
+};
 
 export default App;

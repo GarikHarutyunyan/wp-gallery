@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import ReactDOM2 from 'react-dom';
 import './index.css';
 import App from './App';
-import {AppInfoProvider} from 'AppInfoContext';
+import {AppInfoProvider} from 'contexts/AppInfoContext';
 // import reportWebVitals from './reportWebVitals';
 
 const addApplication = (rootElement: HTMLElement) => {
