@@ -5,7 +5,7 @@ import {
   LightboxCaptionsPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useId, useState} from 'react';
 import {createPortal} from 'react-dom';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
@@ -25,11 +25,13 @@ interface ILightboxProviderProps {
 }
 
 interface ILightboxBackgroundProps {
+  id: string;
   isVisible: boolean;
   onClick: () => void;
 }
 
 const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
+  id,
   isVisible,
   onClick,
 }) => {
@@ -41,7 +43,7 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
       style={{display: isVisible ? 'block' : 'none'}}
     >
       <div
-        id={'reacg-lightbox__background-helper'}
+        id={`reacg-lightbox__background-helper${id}`}
         onClick={(e) => e.stopPropagation()}
       ></div>
     </div>,
@@ -80,6 +82,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
     captionFontFamily,
     captionColor,
   } = settings;
+  const lightboxId: string = useId();
 
   const plugins: any[] = [];
 
@@ -211,7 +214,9 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
           },
         }}
         portal={{
-          root: document.getElementById('reacg-lightbox__background-helper'),
+          root: document.getElementById(
+            `reacg-lightbox__background-helper${lightboxId}`
+          ),
         }}
       />
     );
@@ -220,7 +225,11 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
   return (
     <>
       {renderLighbox()}
-      <LightboxBackground isVisible={activeIndex >= 0} onClick={onClose} />
+      <LightboxBackground
+        isVisible={activeIndex >= 0}
+        onClick={onClose}
+        id={lightboxId}
+      />
     </>
   );
 };
