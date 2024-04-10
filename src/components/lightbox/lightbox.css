@@ -30,13 +30,13 @@
 
 .reacg-lightbox-captions_below {
     .yarl__slide {
-        margin-bottom: clamp(2.5rem, 5vw, 3rem);
+        margin-bottom: calc(clamp(2.5rem, 5vw, 3rem) + 20px);
     }
 }
 
 .reacg-lightbox-captions_above {
     .yarl__slide {
-        margin-top: clamp(2.5rem, 5vw, 3rem);
+        margin-top: calc(clamp(2.5rem, 5vw, 3rem) + 20px);
     }
 }
 
