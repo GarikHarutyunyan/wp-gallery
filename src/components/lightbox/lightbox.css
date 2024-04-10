@@ -43,7 +43,7 @@
 .reacg-lightbox-captions__title {
     font-size: clamp(1.1rem, 1.6vw, 2rem);
     line-height: clamp(1.1rem, 1.6vw, 2rem);
-    margin: 4px 0 2px;
+    margin: 4px 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
