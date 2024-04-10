@@ -1,13 +1,13 @@
-import React, {ReactNode} from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {Filter} from '../settings/Filter';
+import {Section} from 'core-components';
 import {
   LightboxCaptionsPosition,
   LightboxCaptionsPositionOptions,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
 } from 'data-structures';
+import React, {ReactNode} from 'react';
 import {
   ColorControl,
   FontControl,
@@ -16,7 +16,7 @@ import {
   SliderControl,
   SwitchControl,
 } from '../controls';
-import {Section} from 'core-components';
+import {Filter} from '../settings/Filter';
 
 interface ILightboxSettings {
   showLightbox: boolean;
@@ -143,7 +143,8 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                     onChange={onInputValueChange}
                   />
                 </Filter>
-                {(autoplay || isSlideshowAllowed) && (
+                {(autoplay ||
+                  (isSlideshowAllowed && areControlButtonsShown)) && (
                   <Filter isLoading={isLoading}>
                     <NumberControl
                       id={'slideDuration'}
