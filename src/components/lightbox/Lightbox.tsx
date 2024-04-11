@@ -190,6 +190,8 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
           position: thumbnailsPosition as any,
           width: thumbnailWidth,
           height: thumbnailHeight,
+          border: thumbnailBorder,
+          padding: thumbnailPadding,
           gap: thumbnailGap,
           imageFit: 'cover',
         }}
@@ -220,20 +222,19 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
             '--yarl__thumbnails_thumbnail_border_color':
               thumbnailBorderColor || 'transparent',
             '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
-            '--yarl__thumbnails_thumbnail_border': `${thumbnailBorder}px`,
-            '--yarl__thumbnails_thumbnail_padding': `${thumbnailPadding}px`,
-            'paddingInline': ![
-              LightboxThumbnailsPosition.START,
-              LightboxThumbnailsPosition.END,
-            ].includes(thumbnailsPosition)
-              ? 0
-              : undefined,
-            'paddingBlock': [
-              LightboxThumbnailsPosition.START,
-              LightboxThumbnailsPosition.END,
-            ].includes(thumbnailsPosition)
-              ? 0
-              : undefined,
+            // '--yarl__thumbnails_thumbnail_padding': `${thumbnailPadding}px`,
+            // 'paddingInline': ![
+            //   LightboxThumbnailsPosition.START,
+            //   LightboxThumbnailsPosition.END,
+            // ].includes(thumbnailsPosition)
+            //   ? 0
+            //   : undefined,
+            // 'paddingBlock': [
+            //   LightboxThumbnailsPosition.START,
+            //   LightboxThumbnailsPosition.END,
+            // ].includes(thumbnailsPosition)
+            //   ? 0
+            //   : undefined,
           },
         }}
         portal={{
