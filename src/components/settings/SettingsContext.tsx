@@ -265,9 +265,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setIsReseting(true);
 
       try {
-        await axios.delete(fetchUrl, {
-          headers: {'X-WP-Nonce': nonce},
-        });
+        const successMessage: string = (
+          await axios.delete(fetchUrl, {
+            headers: {'X-WP-Nonce': nonce},
+          })
+        ).data as string;
         const response = await axios.get(fetchUrl, {
           headers: {'X-WP-Nonce': nonce},
         });
@@ -276,23 +278,16 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setThumbnailSettings(extractThumbnailSettings(newSettings));
         setGeneralSettings(extractGeneralSettings(newSettings));
         setLightboxSettings(newSettings.lightbox);
-        enqueueSnackbar('Settings successfully reset', {
+        enqueueSnackbar(successMessage, {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
       } catch (error: any) {
-        if (error?.response?.data?.errors?.nothing_deleted) {
-          enqueueSnackbar('Settings already reset', {
-            variant: 'success',
-            anchorOrigin: {horizontal: 'right', vertical: 'top'},
-          });
-        } else {
-          enqueueSnackbar('Cannot reset options', {
-            variant: 'error',
-            anchorOrigin: {horizontal: 'right', vertical: 'top'},
-          });
-          console.error(error);
-        }
+        enqueueSnackbar('Cannot reset options', {
+          variant: 'error',
+          anchorOrigin: {horizontal: 'right', vertical: 'top'},
+        });
+        console.error(error);
       }
 
       setIsLoading(false);
