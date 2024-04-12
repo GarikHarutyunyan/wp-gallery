@@ -1,16 +1,16 @@
-import {ReactElement, ReactNode, useContext, useEffect, useState} from 'react';
-import {ThumbnailGallery} from './ThumbnailGallery';
+import {CircularProgress, Paper, Typography} from '@mui/material';
 import axios from 'axios';
-import {IImageDTO, PaginationType} from 'data-structures';
-import {DataFetcher} from './DataFetcher';
-import {VLightbox as Lightbox} from 'components/lightbox/Lightbox';
-import {PaginationProvider} from './PaginationProvider';
-import {IThumbnailSettings} from 'components/thumbnail-settings';
 import {IGeneralSettings} from 'components/general-settings';
+import {ILightboxSettings} from 'components/light-box-settings';
+import {VLightbox as Lightbox} from 'components/lightbox/Lightbox';
+import {IThumbnailSettings} from 'components/thumbnail-settings';
 import {AppInfoContext} from 'contexts/AppInfoContext';
 import {TranslationsContext} from 'contexts/TranslationsContext';
-import {CircularProgress, Paper, Typography} from '@mui/material';
-import {ILightboxSettings} from 'components/light-box-settings';
+import {IImageDTO, PaginationType} from 'data-structures';
+import {ReactElement, ReactNode, useContext, useEffect, useState} from 'react';
+import {DataFetcher} from './DataFetcher';
+import {PaginationProvider} from './PaginationProvider';
+import {ThumbnailGallery} from './ThumbnailGallery';
 
 interface IThumbnailGalleryWithDataFetchingProps {
   images: IImageDTO[];
@@ -163,8 +163,8 @@ const ThumbnailGalleryWithDataFetching = ({
     getItemsCount();
   };
 
-  const onThumbClick = (index: number) => {
-    getAllData();
+  const onThumbClick = async (index: number) => {
+    await getAllData();
     setActiveImageIndex(index);
   };
 
