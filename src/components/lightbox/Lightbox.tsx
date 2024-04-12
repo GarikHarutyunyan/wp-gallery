@@ -5,7 +5,7 @@ import {
   LightboxCaptionsPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
-import React, {useEffect, useId, useState} from 'react';
+import React, {useEffect, useId, useMemo, useState} from 'react';
 import {createPortal} from 'react-dom';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
@@ -36,6 +36,7 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   onClick,
 }) => {
   const element = document.getElementById('wpwrap') || document.body;
+
   return createPortal(
     <div
       onClick={onClick}
@@ -82,31 +83,41 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
     captionFontFamily,
     captionColor,
   } = settings;
-  const lightboxId: string = useId();
-
-  const plugins: any[] = [];
-
-  if (canDownload) {
-    plugins.push(Download as any);
-  }
-  if (canZoom) {
-    plugins.push(Zoom as any);
-  }
-  if (isSlideshowAllowed || autoplay) {
-    plugins.push(Slideshow as any);
-  }
-  if (isFullscreenAllowed) {
-    plugins.push(Fullscreen as any);
-  }
-  if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
-    plugins.push(Thumbnails as any);
-  }
-  if (captionsPosition !== LightboxCaptionsPosition.NONE) {
-    plugins.push(Captions as any);
-  }
-
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
+  const lightboxId: string = useId();
+
+  const plugins = useMemo<any[]>(() => {
+    const newPlugins: any[] = [];
+    if (canDownload) {
+      newPlugins.push(Download as any);
+    }
+    if (canZoom) {
+      newPlugins.push(Zoom as any);
+    }
+    if (isSlideshowAllowed || autoplay) {
+      newPlugins.push(Slideshow as any);
+    }
+    if (isFullscreenAllowed) {
+      newPlugins.push(Fullscreen as any);
+    }
+    if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
+      newPlugins.push(Thumbnails as any);
+    }
+    if (captionsPosition !== LightboxCaptionsPosition.NONE) {
+      newPlugins.push(Captions as any);
+    }
+
+    return newPlugins;
+  }, [
+    canDownload,
+    canZoom,
+    isSlideshowAllowed,
+    autoplay,
+    isFullscreenAllowed,
+    thumbnailsPosition,
+    captionsPosition,
+  ]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -179,7 +190,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
           position: thumbnailsPosition as any,
           width: thumbnailWidth,
           height: thumbnailHeight,
-          padding: thumbnailPadding,
+          border: thumbnailBorder,
           gap: thumbnailGap,
           imageFit: 'cover',
         }}
@@ -210,7 +221,8 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
             '--yarl__thumbnails_thumbnail_border_color':
               thumbnailBorderColor || 'transparent',
             '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
-            '--yarl__thumbnails_thumbnail_border': `${thumbnailBorder}px`,
+            'paddingTop': `${thumbnailPadding}px`,
+            'paddingBottom': `${thumbnailPadding}px`,
           },
         }}
         portal={{

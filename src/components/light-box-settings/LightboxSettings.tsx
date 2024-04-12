@@ -336,7 +336,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                 <Filter isLoading={isLoading}>
                   <SliderControl
                     id={'thumbnailPadding'}
-                    name="Padding (px)"
+                    name="Distance (px)"
                     min={0}
                     max={100}
                     value={thumbnailPadding}
