@@ -188,9 +188,10 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
         }}
         thumbnails={{
           position: thumbnailsPosition as any,
-          width: thumbnailWidth,
-          height: thumbnailHeight,
+          width: thumbnailWidth - 2 * thumbnailBorder,
+          height: thumbnailHeight - 2 * thumbnailBorder,
           border: thumbnailBorder,
+          padding: 0,
           gap: thumbnailGap,
           imageFit: 'cover',
         }}
