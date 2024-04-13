@@ -1,11 +1,11 @@
+import {GoogleFontsProvider} from 'contexts/GoogleFontsContext';
+import {TranslationsProvider} from 'contexts/TranslationsContext';
+import {SnackbarProvider} from 'notistack';
 import React from 'react';
 import './App.css';
 import Gallery from './components/Gallery';
-import {SnackbarProvider} from 'notistack';
-import {TranslationsProvider} from 'contexts/TranslationsContext';
-import {GoogleFontsProvider} from 'contexts/GoogleFontsContext';
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <TranslationsProvider>
       <SnackbarProvider>
