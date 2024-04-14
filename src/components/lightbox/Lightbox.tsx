@@ -210,11 +210,12 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
         })}
         styles={{
           root: {
-            width: isFullscreen ? '100%' : `${Math.min(innerWidth, width)}px`,
-            height: isFullscreen
+            'width': isFullscreen ? '100%' : `${Math.min(innerWidth, width)}px`,
+            'height': isFullscreen
               ? '100%'
               : `${Math.min(innerHeight, height)}px`,
-            margin: 'auto',
+            'margin': 'auto',
+            '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
           },
           thumbnail: {
             '--yarl__thumbnails_thumbnail_active_border_color':
@@ -222,30 +223,6 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
             '--yarl__thumbnails_thumbnail_border_color':
               thumbnailBorderColor || 'transparent',
             '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
-            'paddingTop': [
-              LightboxThumbnailsPosition.BOTTOM,
-              LightboxThumbnailsPosition.TOP,
-            ].includes(thumbnailsPosition)
-              ? `${thumbnailPadding}px`
-              : 0,
-            'paddingBottom': [
-              LightboxThumbnailsPosition.BOTTOM,
-              LightboxThumbnailsPosition.TOP,
-            ].includes(thumbnailsPosition)
-              ? `${thumbnailPadding}px`
-              : 0,
-            'paddingLeft': ![
-              LightboxThumbnailsPosition.BOTTOM,
-              LightboxThumbnailsPosition.TOP,
-            ].includes(thumbnailsPosition)
-              ? `${thumbnailPadding}px`
-              : 0,
-            'paddingRight': ![
-              LightboxThumbnailsPosition.BOTTOM,
-              LightboxThumbnailsPosition.TOP,
-            ].includes(thumbnailsPosition)
-              ? `${thumbnailPadding}px`
-              : 0,
           },
         }}
         portal={{
