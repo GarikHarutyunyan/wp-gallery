@@ -1,22 +1,22 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import Lightbox from 'yet-another-react-lightbox';
-import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
-import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
-import Video from 'yet-another-react-lightbox/plugins/video';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import clsx from 'clsx';
+import {ILightboxSettings} from 'components/light-box-settings';
 import {
   IImageDTO,
   LightboxCaptionsPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
-import {ILightboxSettings} from 'components/light-box-settings';
-import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
-import Download from 'yet-another-react-lightbox/plugins/download';
-import clsx from 'clsx';
-import {Captions} from './CustomCaptions/Captions';
-import 'yet-another-react-lightbox/plugins/captions.css';
-import './lightbox.css';
+import React, {useEffect, useId, useMemo, useState} from 'react';
 import {createPortal} from 'react-dom';
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/plugins/captions.css';
+import Download from 'yet-another-react-lightbox/plugins/download';
+import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
+import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
+import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+import Video from 'yet-another-react-lightbox/plugins/video';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import {Captions} from './CustomCaptions/Captions';
+import './lightbox.css';
 
 interface ILightboxProviderProps {
   activeIndex: number;
@@ -26,15 +26,18 @@ interface ILightboxProviderProps {
 }
 
 interface ILightboxBackgroundProps {
+  id: string;
   isVisible: boolean;
   onClick: () => void;
 }
 
 const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
+  id,
   isVisible,
   onClick,
 }) => {
   const element = document.getElementById('wpwrap') || document.body;
+
   return createPortal(
     <div
       onClick={onClick}
@@ -42,7 +45,7 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
       style={{display: isVisible ? 'block' : 'none'}}
     >
       <div
-        id={'reacg-lightbox__background-helper'}
+        id={`reacg-lightbox__background-helper${id}`}
         onClick={(e) => e.stopPropagation()}
       ></div>
     </div>,
@@ -81,31 +84,42 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
     captionFontFamily,
     captionColor,
   } = settings;
-  const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
-
-  const plugins: any[] = [Video];
-
-  if (canDownload) {
-    plugins.push(Download as any);
-  }
-  if (canZoom) {
-    plugins.push(Zoom as any);
-  }
-  if (isSlideshowAllowed || autoplay) {
-    plugins.push(Slideshow as any);
-  }
-  if (isFullscreenAllowed) {
-    plugins.push(Fullscreen as any);
-  }
-  if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
-    plugins.push(Thumbnails as any);
-  }
-  if (captionsPosition !== LightboxCaptionsPosition.NONE) {
-    plugins.push(Captions as any);
-  }
-
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
+  const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
+  const lightboxId: string = useId();
+
+  const plugins = useMemo<any[]>(() => {
+    const newPlugins: any[] = [Video];
+    if (canDownload) {
+      newPlugins.push(Download as any);
+    }
+    if (canZoom) {
+      newPlugins.push(Zoom as any);
+    }
+    if (isSlideshowAllowed || autoplay) {
+      newPlugins.push(Slideshow as any);
+    }
+    if (isFullscreenAllowed) {
+      newPlugins.push(Fullscreen as any);
+    }
+    if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
+      newPlugins.push(Thumbnails as any);
+    }
+    if (captionsPosition !== LightboxCaptionsPosition.NONE) {
+      newPlugins.push(Captions as any);
+    }
+
+    return newPlugins;
+  }, [
+    canDownload,
+    canZoom,
+    isSlideshowAllowed,
+    autoplay,
+    isFullscreenAllowed,
+    thumbnailsPosition,
+    captionsPosition,
+  ]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -186,16 +200,15 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
           finite: !isInfinite,
           padding,
         }}
+        // #TODO add generic validation mechanism to avoid this kind of checkings
         thumbnails={{
           position: thumbnailsPosition as any,
-          width: thumbnailWidth,
-          height: thumbnailHeight,
+          width: thumbnailWidth > 0 ? thumbnailWidth : 10,
+          height: thumbnailHeight > 0 ? thumbnailHeight : 10,
           border: thumbnailBorder,
-          borderColor: thumbnailBorderColor,
-          borderRadius: thumbnailBorderRadius,
-          padding: thumbnailPadding,
+          padding: 0,
           gap: thumbnailGap,
-          // imageFit: 'contain',
+          imageFit: 'cover',
         }}
         video={{
           autoPlay: videoAutoplay,
@@ -215,15 +228,25 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
         })}
         styles={{
           root: {
-            width: isFullscreen ? '100%' : `${Math.min(innerWidth, width)}px`,
-            height: isFullscreen
+            'width': isFullscreen ? '100%' : `${Math.min(innerWidth, width)}px`,
+            'height': isFullscreen
               ? '100%'
               : `${Math.min(innerHeight, height)}px`,
-            margin: 'auto',
+            'margin': 'auto',
+            '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
+          },
+          thumbnail: {
+            '--yarl__thumbnails_thumbnail_active_border_color':
+              thumbnailBorderColor || 'transparent',
+            '--yarl__thumbnails_thumbnail_border_color':
+              thumbnailBorderColor || 'transparent',
+            '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
           },
         }}
         portal={{
-          root: document.getElementById('reacg-lightbox__background-helper'),
+          root: document.getElementById(
+            `reacg-lightbox__background-helper${lightboxId}`
+          ),
         }}
         on={{
           slideshowStart: () => {
@@ -240,7 +263,11 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
   return (
     <>
       {renderLighbox()}
-      <LightboxBackground isVisible={activeIndex >= 0} onClick={onClose} />
+      <LightboxBackground
+        isVisible={activeIndex >= 0}
+        onClick={onClose}
+        id={lightboxId}
+      />
     </>
   );
 };

@@ -1,11 +1,19 @@
-import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
-import {IThumbnailSettings, ThumbnailSettings} from '../thumbnail-settings';
-import Tabs from '@mui/material/Tabs';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import LoadingButton from '@mui/lab/LoadingButton';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
+import {Paper, Typography} from '@mui/material';
 import Collapse from '@mui/material/Collapse';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Divider from '@mui/material/Divider';
+import Tabs from '@mui/material/Tabs';
 import axios from 'axios';
+import {GeneralSettings, IGeneralSettings} from 'components/general-settings';
+import {
+  ILightboxSettings,
+  LightboxSettings,
+} from 'components/light-box-settings';
+import {AppInfoContext} from 'contexts/AppInfoContext';
+import {Align, Aligner, ExpandMore, Tab} from 'core-components';
 import {
   LightboxCaptionsPosition,
   LightboxThumbnailsPosition,
@@ -15,18 +23,10 @@ import {
   TitlePosition,
   TitleVisibility,
 } from 'data-structures';
-import {Paper, Typography} from '@mui/material';
-import Divider from '@mui/material/Divider';
-import {Aligner, ExpandMore, Tab} from 'core-components';
-import LoadingButton from '@mui/lab/LoadingButton';
 import {useSnackbar} from 'notistack';
-import {GeneralSettings, IGeneralSettings} from 'components/general-settings';
-import {AppInfoContext} from 'AppInfoContext';
+import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
+import {IThumbnailSettings, ThumbnailSettings} from '../thumbnail-settings';
 import './settings-context.css';
-import {
-  ILightboxSettings,
-  LightboxSettings,
-} from 'components/light-box-settings';
 
 type ThumbnailAndGeneralSettings = IThumbnailSettings & IGeneralSettings;
 
@@ -57,6 +57,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isReseting, setIsReseting] = useState(false);
 
   const getData = async () => {
     const dataElement = document.getElementById('reacg-root' + galleryId);
@@ -210,6 +212,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
+      setIsSaving(true);
       const settings: ISettingsDTO = {
         ...thumbnailSettings,
         ...generalSettings,
@@ -229,11 +232,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
         setThumbnailSettings(extractThumbnailSettings(newSettings));
         setGeneralSettings(extractGeneralSettings(newSettings));
+        setLightboxSettings(newSettings.lightbox);
         enqueueSnackbar('Settings are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
-        setIsLoading(false);
       } catch (error) {
         enqueueSnackbar('Cannot update options!', {
           variant: 'error',
@@ -243,8 +246,54 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }
 
       setIsLoading(false);
+      setIsSaving(false);
     } else {
       enqueueSnackbar('Cannot update options!', {
+        variant: 'error',
+        anchorOrigin: {horizontal: 'right', vertical: 'top'},
+      });
+    }
+  };
+
+  const onReset = async (): Promise<void> => {
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'options/' + galleryId
+      : undefined;
+
+    if (fetchUrl) {
+      setIsLoading(true);
+      setIsReseting(true);
+
+      try {
+        const successMessage: string = (
+          await axios.delete(fetchUrl, {
+            headers: {'X-WP-Nonce': nonce},
+          })
+        ).data as string;
+        const response = await axios.get(fetchUrl, {
+          headers: {'X-WP-Nonce': nonce},
+        });
+        const newSettings: ISettingsDTO = response.data;
+
+        setThumbnailSettings(extractThumbnailSettings(newSettings));
+        setGeneralSettings(extractGeneralSettings(newSettings));
+        setLightboxSettings(newSettings.lightbox);
+        enqueueSnackbar(successMessage, {
+          variant: 'success',
+          anchorOrigin: {horizontal: 'right', vertical: 'top'},
+        });
+      } catch (error: any) {
+        enqueueSnackbar('Cannot reset options', {
+          variant: 'error',
+          anchorOrigin: {horizontal: 'right', vertical: 'top'},
+        });
+        console.error(error);
+      }
+
+      setIsLoading(false);
+      setIsReseting(false);
+    } else {
+      enqueueSnackbar('Cannot reset options!', {
         variant: 'error',
         anchorOrigin: {horizontal: 'right', vertical: 'top'},
       });
@@ -280,26 +329,44 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   const renderBody = (): ReactNode => {
     return (
-      <Collapse in={isExpanded} timeout="auto" style={{margin: '5px'}}>
+      <Collapse in={isExpanded} timeout={'auto'} style={{margin: '5px'}}>
         <TabContext value={activeTab}>
           <Aligner>
-            <Tabs value={activeTab} onChange={onActiveTabChange}>
-              <Tab label="Gallery" value="gallery" />
-              <Tab label="General" value="general" />
-              <Tab label="Light Box" value="Lightbox" />
-            </Tabs>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="center"
-              variant="outlined"
-              onClick={onSave}
-              style={{margin: '5px 20px', textTransform: 'none'}}
-              className={'button button-primary button-large'}
+            <Tabs
+              value={activeTab}
+              onChange={onActiveTabChange}
+              style={{width: '100%'}}
             >
-              {'Save options'}
-            </LoadingButton>
+              <Tab label={'Gallery'} value={'gallery'} />
+              <Tab label={'General'} value={'general'} />
+              <Tab label={'Lightbox'} value={'Lightbox'} />
+            </Tabs>
+            <Aligner align={Align.END}>
+              <LoadingButton
+                loading={isSaving}
+                loadingPosition={'center'}
+                variant={'outlined'}
+                onClick={onSave}
+                style={{margin: '5px 5px', textTransform: 'none'}}
+                className={
+                  'button button-primary button-large save-settings-button'
+                }
+              >
+                {'Save options'}
+              </LoadingButton>
+              <LoadingButton
+                loading={isReseting}
+                loadingPosition={'center'}
+                variant={'outlined'}
+                onClick={onReset}
+                style={{margin: '5px 5px', textTransform: 'none'}}
+                className={'button button-large'}
+              >
+                {'Reset'}
+              </LoadingButton>
+            </Aligner>
           </Aligner>
-          <TabPanel value="gallery" className={'reacg-tab-panel'}>
+          <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
             {thumbnailSettings && (
               <ThumbnailSettings
                 value={thumbnailSettings as IThumbnailSettings}
@@ -308,7 +375,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               />
             )}
           </TabPanel>
-          <TabPanel value="general" className={'reacg-tab-panel'}>
+          <TabPanel value={'general'} className={'reacg-tab-panel'}>
             {generalSettings && (
               <GeneralSettings
                 value={generalSettings as IGeneralSettings}
@@ -317,7 +384,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
               />
             )}
           </TabPanel>
-          <TabPanel value="Lightbox" className={'reacg-tab-panel'}>
+          <TabPanel value={'Lightbox'} className={'reacg-tab-panel'}>
             {lightboxSettings && (
               <LightboxSettings
                 value={lightboxSettings as ILightboxSettings}

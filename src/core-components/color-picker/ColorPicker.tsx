@@ -48,6 +48,7 @@ const ColorPicker: React.FC<IColorPickerProps & any> = ({
           setValue(e.target.value);
           onChange(e.target.value);
         }}
+        onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
         InputProps={{
           style: {color: value === undefined ? internalValue : value},
         }}

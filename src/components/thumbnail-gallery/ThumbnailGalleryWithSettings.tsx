@@ -1,9 +1,9 @@
+import {IGeneralSettings} from 'components/general-settings';
+import {ILightboxSettings} from 'components/light-box-settings';
+import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
 import {IImageDTO} from 'data-structures';
 import {useSettings} from '../settings';
 import {ThumbnailGalleryWithDataFetching} from './ThumbnailGalleryWithDataFetching';
-import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
-import {IGeneralSettings} from 'components/general-settings';
-import {ILightboxSettings} from 'components/light-box-settings';
 
 const images: IImageDTO[] = [
   // {
@@ -239,7 +239,7 @@ const ThumbnailGalleryWithSettings = () => {
     lightboxSettings?: ILightboxSettings;
   } = useSettings();
 
-  return generalSettings && thumbnailSettings ? (
+  return generalSettings && thumbnailSettings && lightboxSettings ? (
     <ThumbnailGalleryWithDataFetching
       images={images}
       generalSettings={generalSettings as any}
