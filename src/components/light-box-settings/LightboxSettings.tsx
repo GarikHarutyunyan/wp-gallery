@@ -280,7 +280,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                     id={'thumbnailBorder'}
                     name="Border (px)"
                     min={0}
-                    max={100}
+                    max={20}
                     value={thumbnailBorder}
                     onChange={onInputValueChange}
                   />
