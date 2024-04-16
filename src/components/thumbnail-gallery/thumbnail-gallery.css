@@ -1,3 +1,7 @@
+:root {
+    --yarl__thumbnails_thumbnail_icon_color: #707070
+}
+
 .thumnail-gallery__image:hover+.thumbnail-gallery__title_on-hover {
     display: block;
     pointer-events: none;
