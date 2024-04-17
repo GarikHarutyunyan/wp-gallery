@@ -132,6 +132,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         thumbnailBorderColor: 'white',
         thumbnailPadding: 0,
         thumbnailGap: 10,
+        backgroundColor: 'Black',
         captionsPosition: LightboxCaptionsPosition.BOTTOM,
         captionFontFamily: 'Roboto',
         captionColor: 'White',
