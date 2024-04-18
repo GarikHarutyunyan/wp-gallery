@@ -1,19 +1,16 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LoadingButton from '@mui/lab/LoadingButton';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import {Paper, Typography} from '@mui/material';
-import Collapse from '@mui/material/Collapse';
-import Divider from '@mui/material/Divider';
 import Tabs from '@mui/material/Tabs';
 import axios from 'axios';
+import clsx from 'clsx';
 import {GeneralSettings, IGeneralSettings} from 'components/general-settings';
 import {
   ILightboxSettings,
   LightboxSettings,
 } from 'components/light-box-settings';
 import {AppInfoContext} from 'contexts/AppInfoContext';
-import {Align, Aligner, ExpandMore, Tab} from 'core-components';
+import {Align, Aligner, Section, Tab} from 'core-components';
 import {
   LightboxCaptionsPosition,
   LightboxThumbnailsPosition,
@@ -26,6 +23,7 @@ import {
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
 import {IThumbnailSettings, ThumbnailSettings} from '../thumbnail-settings';
+import {SettingsPanelHeader} from './SettingsPanelHeader';
 import './settings-context.css';
 
 type ThumbnailAndGeneralSettings = IThumbnailSettings & IGeneralSettings;
@@ -54,7 +52,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     ILightboxSettings | undefined
   >();
   const [activeTab, setActiveTab] = useState<string>('gallery');
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -304,97 +301,76 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setActiveTab(newActiveTab);
   };
 
-  const renderTitle = (): ReactNode => {
-    return (
-      <Aligner
-        onClick={() => setIsExpanded((prevValue) => !prevValue)}
-        className={'settings-provider__title'}
-      >
-        <Typography
-          gutterBottom
-          variant="h5"
-          component="div"
-          style={{margin: '15px 20px'}}
-        >
-          {'Options'}
-        </Typography>
-        <span style={{margin: '10px'}}>
-          <ExpandMore expand={isExpanded}>
-            <ExpandMoreIcon />
-          </ExpandMore>
-        </span>
-      </Aligner>
-    );
-  };
-
   const renderBody = (): ReactNode => {
     return (
-      <Collapse in={isExpanded} timeout={'auto'} style={{margin: '5px'}}>
-        <TabContext value={activeTab}>
-          <Aligner>
-            <Tabs
-              value={activeTab}
-              onChange={onActiveTabChange}
-              style={{width: '100%'}}
+      <TabContext value={activeTab}>
+        <Aligner>
+          <Tabs
+            value={activeTab}
+            onChange={onActiveTabChange}
+            style={{width: '100%'}}
+          >
+            <Tab label={'Gallery'} value={'gallery'} />
+            <Tab label={'General'} value={'general'} />
+            <Tab label={'Lightbox'} value={'Lightbox'} />
+          </Tabs>
+          <Aligner align={Align.END}>
+            <LoadingButton
+              loading={isSaving}
+              loadingPosition={'center'}
+              variant={'outlined'}
+              onClick={onSave}
+              className={clsx(
+                'button button-large',
+                'button-primary',
+                'settings-panel_body-button'
+              )}
             >
-              <Tab label={'Gallery'} value={'gallery'} />
-              <Tab label={'General'} value={'general'} />
-              <Tab label={'Lightbox'} value={'Lightbox'} />
-            </Tabs>
-            <Aligner align={Align.END}>
-              <LoadingButton
-                loading={isSaving}
-                loadingPosition={'center'}
-                variant={'outlined'}
-                onClick={onSave}
-                style={{margin: '5px 5px', textTransform: 'none'}}
-                className={
-                  'button button-primary button-large save-settings-button'
-                }
-              >
-                {'Save options'}
-              </LoadingButton>
-              <LoadingButton
-                loading={isReseting}
-                loadingPosition={'center'}
-                variant={'outlined'}
-                onClick={onReset}
-                style={{margin: '5px 5px', textTransform: 'none'}}
-                className={'button button-large'}
-              >
-                {'Reset'}
-              </LoadingButton>
-            </Aligner>
+              {'Save options'}
+            </LoadingButton>
+            <LoadingButton
+              loading={isReseting}
+              loadingPosition={'center'}
+              variant={'outlined'}
+              onClick={onReset}
+              className={clsx(
+                'button',
+                'button-large',
+                'settings-panel_body-button'
+              )}
+            >
+              {'Reset'}
+            </LoadingButton>
           </Aligner>
-          <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
-            {thumbnailSettings && (
-              <ThumbnailSettings
-                value={thumbnailSettings as IThumbnailSettings}
-                onChange={setThumbnailSettings}
-                isLoading={isLoading}
-              />
-            )}
-          </TabPanel>
-          <TabPanel value={'general'} className={'reacg-tab-panel'}>
-            {generalSettings && (
-              <GeneralSettings
-                value={generalSettings as IGeneralSettings}
-                onChange={setGeneralSettings}
-                isLoading={isLoading}
-              />
-            )}
-          </TabPanel>
-          <TabPanel value={'Lightbox'} className={'reacg-tab-panel'}>
-            {lightboxSettings && (
-              <LightboxSettings
-                value={lightboxSettings as ILightboxSettings}
-                onChange={setLightboxSettings}
-                isLoading={isLoading}
-              />
-            )}
-          </TabPanel>
-        </TabContext>
-      </Collapse>
+        </Aligner>
+        <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
+          {thumbnailSettings && (
+            <ThumbnailSettings
+              value={thumbnailSettings as IThumbnailSettings}
+              onChange={setThumbnailSettings}
+              isLoading={isLoading}
+            />
+          )}
+        </TabPanel>
+        <TabPanel value={'general'} className={'reacg-tab-panel'}>
+          {generalSettings && (
+            <GeneralSettings
+              value={generalSettings as IGeneralSettings}
+              onChange={setGeneralSettings}
+              isLoading={isLoading}
+            />
+          )}
+        </TabPanel>
+        <TabPanel value={'Lightbox'} className={'reacg-tab-panel'}>
+          {lightboxSettings && (
+            <LightboxSettings
+              value={lightboxSettings as ILightboxSettings}
+              onChange={setLightboxSettings}
+              isLoading={isLoading}
+            />
+          )}
+        </TabPanel>
+      </TabContext>
     );
   };
 
@@ -403,11 +379,12 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       value={{thumbnailSettings, generalSettings, lightboxSettings}}
     >
       {showControls && (
-        <Paper className={'reacg-settings'}>
-          {renderTitle()}
-          <Divider variant="middle" />
-          {renderBody()}
-        </Paper>
+        <Section
+          header={<SettingsPanelHeader />}
+          body={renderBody()}
+          outlined={false}
+          className={'reacg-settings'}
+        />
       )}
       {children}
     </SettingsContext.Provider>

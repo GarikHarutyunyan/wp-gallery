@@ -1,7 +1,6 @@
-import React, {ReactNode, useMemo} from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {Filter} from '../settings/Filter';
+import {Section} from 'core-components';
 import {
   TitleAlignment,
   TitleAlignmentOptions,
@@ -10,15 +9,16 @@ import {
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
+import React, {ReactNode, useMemo} from 'react';
 import {
-  FontControl,
-  NumberControl,
-  ISelectOption,
-  SliderControl,
-  SelectControl,
   ColorControl,
+  FontControl,
+  ISelectOption,
+  NumberControl,
+  SelectControl,
+  SliderControl,
 } from '../controls';
-import {Section} from 'core-components';
+import {Filter} from '../settings/Filter';
 
 interface IThumbnailSettings {
   width?: number | undefined;
@@ -127,7 +127,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
             </Filter>
           </Grid>
         }
-        canExpand={true}
       />
     );
   };
@@ -197,7 +196,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
             {titleVisibility !== TitleVisibility.NONE && renderTitleSettings()}
           </Grid>
         }
-        canExpand={true}
         defaultExpanded={false}
       />
     );

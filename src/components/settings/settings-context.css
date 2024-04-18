@@ -2,12 +2,13 @@
     box-shadow: unset !important;
 }
 
-.settings-provider__title {
-    cursor: pointer;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+.settings-panel_header {
+    margin: 15px 20px !important
+}
+
+.settings-panel_body-button {
+    margin: 5px 5px !important;
+    text-transform: none !important;
 }
 
 .reacg-tab-panel {

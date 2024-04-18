@@ -253,8 +253,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
             )}
           </Grid>
         }
-        canExpand={true}
-      ></Section>
+      />
     );
   };
 
@@ -347,7 +346,6 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
             )}
           </Grid>
         }
-        canExpand={true}
       />
     );
   };
