@@ -40,6 +40,7 @@ interface ILightboxSettings {
   thumbnailBorderRadius: number;
   thumbnailPadding: number;
   thumbnailGap: number;
+  backgroundColor: string;
   captionsPosition: LightboxCaptionsPosition;
   captionFontFamily: string;
   captionColor: string;
@@ -78,6 +79,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
     thumbnailBorderRadius,
     thumbnailPadding,
     thumbnailGap,
+    backgroundColor,
     captionsPosition,
     captionFontFamily,
     captionColor,
@@ -221,6 +223,14 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>
+                  <ColorControl
+                      id={'backgroundColor'}
+                      name="Background color"
+                      value={backgroundColor}
+                      onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
                   <SelectControl
                     id={'captionsPosition'}
                     name={'Caption position'}
@@ -348,6 +358,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
           </Grid>
         }
         canExpand={true}
+        defaultExpanded={false}
       />
     );
   };

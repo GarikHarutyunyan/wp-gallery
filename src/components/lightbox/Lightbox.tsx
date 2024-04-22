@@ -80,6 +80,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
     thumbnailBorderColor,
     thumbnailPadding,
     thumbnailGap,
+    backgroundColor,
     captionsPosition,
     captionFontFamily,
     captionColor,
@@ -234,6 +235,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
               : `${Math.min(innerHeight, height)}px`,
             'margin': 'auto',
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
+            '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
           },
           thumbnail: {
             '--yarl__thumbnails_thumbnail_active_border_color':
@@ -242,6 +244,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
               thumbnailBorderColor || 'transparent',
             '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
           },
+          container: {backgroundColor: `${backgroundColor}`},
         }}
         portal={{
           root: document.getElementById(
