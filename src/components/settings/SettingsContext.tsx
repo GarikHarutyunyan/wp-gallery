@@ -11,18 +11,14 @@ import {
 } from 'components/light-box-settings';
 import {AppInfoContext} from 'contexts/AppInfoContext';
 import {Align, Aligner, Section, Tab} from 'core-components';
-import {
-  LightboxCaptionsPosition,
-  LightboxThumbnailsPosition,
-  PaginationButtonShape,
-  PaginationType,
-  TitleAlignment,
-  TitlePosition,
-  TitleVisibility,
-} from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
 import {IThumbnailSettings, ThumbnailSettings} from '../thumbnail-settings';
+import {
+  generalMockSettings,
+  lightboxMockSettings,
+  thumbnailMockSettings,
+} from './MockSettings';
 import {SettingsPanelHeader} from './SettingsPanelHeader';
 import './settings-context.css';
 
@@ -82,57 +78,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
       setIsLoading(false);
     } else {
-      setThumbnailSettings({
-        width: 150,
-        height: 150,
-        columns: 5,
-        gap: 10,
-        backgroundColor: 'White',
-        padding: 10,
-        paddingColor: 'Skyblue',
-        borderRadius: 5,
-        titlePosition: TitlePosition.BOTTOM,
-        titleAlignment: TitleAlignment.LEFT,
-        titleVisibility: TitleVisibility.NONE,
-        titleFontFamily: 'Roboto',
-        titleColor: 'Black',
-        titleFontSize: 20,
-      });
-      setGeneralSettings({
-        itemsPerPage: 8,
-        paginationType: PaginationType.SCROLL,
-        activeButtonColor: 'blue',
-        inactiveButtonColor: 'inherit',
-        paginationButtonShape: PaginationButtonShape.CIRCULAR,
-        loadMoreButtonColor: 'blue',
-        paginationTextColor: 'green',
-      });
-      setLightboxSettings({
-        showLightbox: true,
-        isFullscreen: false,
-        width: 800,
-        height: 800,
-        areControlButtonsShown: false,
-        isInfinite: false,
-        padding: 15,
-        canDownload: true,
-        canZoom: true,
-        isFullscreenAllowed: false,
-        isSlideshowAllowed: false,
-        autoplay: false,
-        slideDuration: 3000,
-        thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
-        thumbnailWidth: 80,
-        thumbnailHeight: 80,
-        thumbnailBorder: 2,
-        thumbnailBorderRadius: 20,
-        thumbnailBorderColor: 'white',
-        thumbnailPadding: 0,
-        thumbnailGap: 10,
-        captionsPosition: LightboxCaptionsPosition.BOTTOM,
-        captionFontFamily: 'Roboto',
-        captionColor: 'White',
-      });
+      setThumbnailSettings(thumbnailMockSettings);
+      setGeneralSettings(generalMockSettings);
+      setLightboxSettings(lightboxMockSettings);
     }
   };
 
