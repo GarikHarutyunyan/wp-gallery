@@ -28,6 +28,68 @@ interface ISettingsDTO extends ThumbnailAndGeneralSettings {
   lightbox: ILightboxSettings;
 }
 
+const extractThumbnailSettings = (
+  settings: IThumbnailSettings & IGeneralSettings
+): IThumbnailSettings => {
+  const {
+    backgroundColor,
+    borderRadius,
+    columns = 1,
+    gap,
+    height = 1,
+    padding,
+    paddingColor,
+    titleAlignment,
+    titleColor,
+    titleFontFamily,
+    titleFontSize = 1,
+    titlePosition,
+    titleVisibility,
+    width = 1,
+  }: IThumbnailSettings = settings;
+
+  return {
+    backgroundColor,
+    borderRadius,
+    columns,
+    gap,
+    height,
+    padding,
+    paddingColor,
+    titleAlignment,
+    titleColor,
+    titleFontFamily,
+    titleFontSize,
+    titlePosition,
+    titleVisibility,
+    width,
+  };
+};
+
+const extractGeneralSettings = (
+  settings: IThumbnailSettings & IGeneralSettings
+): IGeneralSettings => {
+  const {
+    activeButtonColor,
+    inactiveButtonColor,
+    itemsPerPage = 1,
+    loadMoreButtonColor,
+    paginationButtonShape,
+    paginationTextColor,
+    paginationType,
+  }: IGeneralSettings = settings;
+
+  return {
+    activeButtonColor,
+    inactiveButtonColor,
+    itemsPerPage,
+    loadMoreButtonColor,
+    paginationButtonShape,
+    paginationTextColor,
+    paginationType,
+  };
+};
+
 const SettingsContext = React.createContext<{
   thumbnailSettings?: IThumbnailSettings;
   generalSettings?: IGeneralSettings;
@@ -38,15 +100,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
 
   const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
-  const [thumbnailSettings, setThumbnailSettings] = useState<
-    IThumbnailSettings | undefined
-  >();
-  const [generalSettings, setGeneralSettings] = useState<
-    IGeneralSettings | undefined
-  >();
-  const [lightboxSettings, setLightboxSettings] = useState<
-    ILightboxSettings | undefined
-  >();
+  const [thumbnailSettings, setThumbnailSettings] =
+    useState<IThumbnailSettings>();
+  const [generalSettings, setGeneralSettings] = useState<IGeneralSettings>();
+  const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
   const [activeTab, setActiveTab] = useState<string>('gallery');
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -82,68 +139,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setGeneralSettings(generalMockSettings);
       setLightboxSettings(lightboxMockSettings);
     }
-  };
-
-  const extractThumbnailSettings = (
-    settings: IThumbnailSettings & IGeneralSettings
-  ): IThumbnailSettings => {
-    const {
-      backgroundColor,
-      borderRadius,
-      columns = 1,
-      gap,
-      height = 1,
-      padding,
-      paddingColor,
-      titleAlignment,
-      titleColor,
-      titleFontFamily,
-      titleFontSize = 1,
-      titlePosition,
-      titleVisibility,
-      width = 1,
-    }: IThumbnailSettings = settings;
-
-    return {
-      backgroundColor,
-      borderRadius,
-      columns,
-      gap,
-      height,
-      padding,
-      paddingColor,
-      titleAlignment,
-      titleColor,
-      titleFontFamily,
-      titleFontSize,
-      titlePosition,
-      titleVisibility,
-      width,
-    };
-  };
-
-  const extractGeneralSettings = (
-    settings: IThumbnailSettings & IGeneralSettings
-  ): IGeneralSettings => {
-    const {
-      activeButtonColor,
-      inactiveButtonColor,
-      itemsPerPage = 1,
-      loadMoreButtonColor,
-      paginationButtonShape,
-      paginationTextColor,
-      paginationType,
-    }: IGeneralSettings = settings;
-
-    return {
-      activeButtonColor,
-      inactiveButtonColor,
-      itemsPerPage,
-      loadMoreButtonColor,
-      paginationButtonShape,
-      paginationTextColor,
-      paginationType,
-    };
   };
 
   useLayoutEffect(() => {
@@ -260,7 +255,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           >
             <Tab label={'Gallery'} value={'gallery'} />
             <Tab label={'General'} value={'general'} />
-            <Tab label={'Lightbox'} value={'Lightbox'} />
+            <Tab label={'Lightbox'} value={'lightbox'} />
           </Tabs>
           <Aligner align={Align.END}>
             <LoadingButton
@@ -294,7 +289,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
           {thumbnailSettings && (
             <ThumbnailSettings
-              value={thumbnailSettings as IThumbnailSettings}
+              value={thumbnailSettings}
               onChange={setThumbnailSettings}
               isLoading={isLoading}
             />
@@ -303,16 +298,16 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         <TabPanel value={'general'} className={'reacg-tab-panel'}>
           {generalSettings && (
             <GeneralSettings
-              value={generalSettings as IGeneralSettings}
+              value={generalSettings}
               onChange={setGeneralSettings}
               isLoading={isLoading}
             />
           )}
         </TabPanel>
-        <TabPanel value={'Lightbox'} className={'reacg-tab-panel'}>
+        <TabPanel value={'lightbox'} className={'reacg-tab-panel'}>
           {lightboxSettings && (
             <LightboxSettings
-              value={lightboxSettings as ILightboxSettings}
+              value={lightboxSettings}
               onChange={setLightboxSettings}
               isLoading={isLoading}
             />
