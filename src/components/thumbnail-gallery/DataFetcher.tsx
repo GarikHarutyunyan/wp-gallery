@@ -12,7 +12,7 @@ const DataFetcher: React.FC<IDataFetcherProps> = ({onClick}) => {
       id={'reacg-reloadData'}
       onClick={onClick}
       style={{display: 'none'}}
-    ></input>
+    />
   );
 
   if (document.querySelector('body')) {
