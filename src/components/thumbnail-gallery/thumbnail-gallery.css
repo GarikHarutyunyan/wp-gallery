@@ -25,6 +25,10 @@
     height: 100%;
 }
 
+.thumbnail-gallery__video-icon {
+    cursor: pointer;
+}
+
 .content-placeholder {
     display: flex;
     justify-content: center;

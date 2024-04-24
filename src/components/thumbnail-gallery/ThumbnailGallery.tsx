@@ -1,4 +1,5 @@
 import {ImageList, ImageListItem, ImageListItemBar} from '@mui/material';
+import clsx from 'clsx';
 import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
 import {
   IImageDTO,
@@ -13,9 +14,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import clsx from 'clsx';
-import './thumbnail-gallery.css';
 import {createIcon} from 'yet-another-react-lightbox';
+import './thumbnail-gallery.css';
 
 interface IThumbnailGalleryProps {
   images: IImageDTO[];
@@ -221,7 +221,10 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                       height: videoThumbnailIconSize,
                       width: videoThumbnailIconSize,
                     }}
-                    className={'yarl__thumbnails_thumbnail_icon'}
+                    className={clsx(
+                      'yarl__thumbnails_thumbnail_icon',
+                      'thumbnail-gallery__video-icon'
+                    )}
                   />
                 )}
               </ImageListItem>

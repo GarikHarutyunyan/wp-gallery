@@ -236,6 +236,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
             'margin': 'auto',
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
+            '--yarl__slide_captions_container_background': `${backgroundColor}80`,
           },
           thumbnail: {
             '--yarl__thumbnails_thumbnail_active_border_color':
