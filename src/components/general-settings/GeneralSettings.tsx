@@ -1,15 +1,15 @@
-import React, {ReactNode} from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {Filter} from '../settings/Filter';
+import {Section} from 'core-components';
 import {
   PaginationButtonShape,
   PaginationButtonShapeOptions,
   PaginationType,
   PaginationTypeOptions,
 } from 'data-structures';
+import React, {ReactNode} from 'react';
 import {ColorControl, NumberControl, SelectControl} from '../controls';
-import {Section} from 'core-components';
+import {Filter} from '../settings/Filter';
 
 interface IGeneralSettings {
   paginationType: PaginationType;
@@ -85,7 +85,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                     <Filter isLoading={isLoading}>
                       <ColorControl
                         id={'inactiveButtonColor'}
-                        name="Inctive button color"
+                        name="Inactive button color"
                         value={inactiveButtonColor}
                         onChange={onInputValueChange}
                       />
@@ -132,7 +132,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
           </Grid>
         }
         canExpand={true}
-      ></Section>
+      />
     );
   };
 
