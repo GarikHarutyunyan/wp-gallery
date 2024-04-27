@@ -1,5 +1,7 @@
 import clsx from 'clsx';
+import {useData} from 'components/data-context/useData';
 import {ILightboxSettings} from 'components/light-box-settings';
+import {useSettings} from 'components/settings';
 import {
   IImageDTO,
   LightboxCaptionsPosition,
@@ -20,8 +22,6 @@ import './lightbox.css';
 interface ILightboxProviderProps {
   activeIndex: number;
   onClose: () => void;
-  images: IImageDTO[];
-  settings: ILightboxSettings;
 }
 
 interface ILightboxBackgroundProps {
@@ -52,12 +52,12 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   );
 };
 
-const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
+const VLightbox: React.FC<ILightboxProviderProps> = ({
   activeIndex,
   onClose,
-  images,
-  settings,
 }) => {
+  const {lightboxSettings: settings} = useSettings();
+  const {lightboxImages: images} = useData();
   const {
     isFullscreen,
     width,
@@ -82,7 +82,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
     captionsPosition,
     captionFontFamily,
     captionColor,
-  } = settings;
+  } = settings as ILightboxSettings;
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const lightboxId: string = useId();
@@ -138,7 +138,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
         // @ts-ignore
         captions={{showToggle: true}}
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
-        slides={images.map((image: IImageDTO) => ({
+        slides={images!.map((image: IImageDTO) => ({
           description: (
             <>
               <p

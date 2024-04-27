@@ -1,4 +1,7 @@
 import {ImageList, ImageListItem, ImageListItemBar} from '@mui/material';
+import clsx from 'clsx';
+import {useData} from 'components/data-context/useData';
+import {useSettings} from 'components/settings';
 import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
 import {IImageDTO, TitlePosition, TitleVisibility} from 'data-structures';
 import React, {
@@ -8,20 +11,15 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import clsx from 'clsx';
 import './thumbnail-gallery.css';
 
 interface IThumbnailGalleryProps {
-  images: IImageDTO[];
-  settings: IThumbnailSettings;
   onClick?: (index: number) => void;
 }
 
-const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
-  images,
-  settings,
-  onClick,
-}) => {
+const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
+  const {thumbnailSettings: settings} = useSettings();
+  const {images} = useData();
   const {
     width = 1,
     height = 1,
@@ -37,7 +35,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     titleFontFamily,
     titleColor,
     titleFontSize = 1,
-  } = settings;
+  } = settings as IThumbnailSettings;
   const elementRef = useRef();
   const [containerWidth, setContainerWidth] = useState(0);
   const ratio: number = width / height;
@@ -134,7 +132,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
           gap={+gap}
           style={{margin: '0 auto'}}
         >
-          {images.map((image, index) => (
+          {images!.map((image, index) => (
             <div
               onClick={() => onClick?.(index)}
               style={{
