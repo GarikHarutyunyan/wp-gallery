@@ -85,7 +85,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                     <Filter isLoading={isLoading}>
                       <ColorControl
                         id={'inactiveButtonColor'}
-                        name="Inctive button color"
+                        name="Inactive button color"
                         value={inactiveButtonColor}
                         onChange={onInputValueChange}
                       />

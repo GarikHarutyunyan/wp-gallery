@@ -3,7 +3,12 @@ import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
-import {IImageDTO, TitlePosition, TitleVisibility} from 'data-structures';
+import {
+  IImageDTO,
+  ImageType,
+  TitlePosition,
+  TitleVisibility,
+} from 'data-structures';
 import React, {
   useEffect,
   useLayoutEffect,
@@ -11,11 +16,17 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import {createIcon} from 'yet-another-react-lightbox';
 import './thumbnail-gallery.css';
 
 interface IThumbnailGalleryProps {
   onClick?: (index: number) => void;
 }
+
+const VideoThumbnailIcon = createIcon(
+  'VideoThumbnail',
+  <path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+);
 
 const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   const {thumbnailSettings: settings} = useSettings();
@@ -79,7 +90,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     containerWidth,
   ]);
 
-  const getWidth = useMemo((): number => {
+  const getWidth = useMemo<number>(() => {
     if (containerWidth) {
       const busyWidth =
         validColumnsCount * 2 * padding + (validColumnsCount - 1) * gap;
@@ -91,6 +102,10 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     return width;
   }, [containerWidth, width, gap, columns, padding, validColumnsCount]);
 
+  const getHeight = useMemo<number>(() => {
+    return getWidth * (1 / ratio);
+  }, [getWidth, ratio]);
+
   useLayoutEffect(() => {
     changeContainerWidth();
   }, [width, getWidth, gap, columns, padding, validColumnsCount]);
@@ -100,14 +115,21 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
       return `${image.thumbnail.url}`;
     }
     if (
-      width <= image.medium_large.width &&
-      height <= image.medium_large.height
+      (width <= image.medium_large.width &&
+        height <= image.medium_large.height) ||
+      image.type === ImageType.VIDEO
     ) {
       return `${image.medium_large.url}`;
     }
 
     return `${image.original.url}`;
   };
+
+  const videoThumbnailIconSize = useMemo<string>(() => {
+    const size: number = Math.min(getWidth, getHeight, 55) - 10;
+
+    return size > 0 ? `${size}px` : '0px';
+  }, [getWidth, getHeight]);
 
   return (
     <div
@@ -152,7 +174,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
                   loading="lazy"
                   style={{
                     width: getWidth + 'px',
-                    height: getWidth * (1 / ratio) + 'px',
+                    height: getHeight + 'px',
                     padding: padding + 'px',
                     background: paddingColor,
                     borderRadius: borderRadius + '%',
@@ -191,6 +213,18 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
                     }
                   />
                 </div>
+                {image.type === ImageType.VIDEO && (
+                  <VideoThumbnailIcon
+                    style={{
+                      height: videoThumbnailIconSize,
+                      width: videoThumbnailIconSize,
+                    }}
+                    className={clsx(
+                      'yarl__thumbnails_thumbnail_icon',
+                      'thumbnail-gallery__video-icon'
+                    )}
+                  />
+                )}
               </ImageListItem>
             </div>
           ))}

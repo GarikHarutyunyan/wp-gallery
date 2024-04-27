@@ -15,6 +15,7 @@ import Download from 'yet-another-react-lightbox/plugins/download';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
 import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+import Video from 'yet-another-react-lightbox/plugins/video';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import {Captions} from './CustomCaptions/Captions';
 import './lightbox.css';
@@ -79,16 +80,18 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     thumbnailBorderColor,
     thumbnailPadding,
     thumbnailGap,
+    backgroundColor,
     captionsPosition,
     captionFontFamily,
     captionColor,
   } = settings as ILightboxSettings;
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
+  const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const lightboxId: string = useId();
 
   const plugins = useMemo<any[]>(() => {
-    const newPlugins: any[] = [];
+    const newPlugins: any[] = [Video];
     if (canDownload) {
       newPlugins.push(Download as any);
     }
@@ -128,6 +131,54 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const slides = useMemo(() => {
+    return images.map((image: IImageDTO) => ({
+      description: (
+        <>
+          <p
+            className={'reacg-lightbox-captions__title'}
+            style={{color: captionColor, fontFamily: captionFontFamily}}
+          >
+            {image.title}
+          </p>
+          <p
+            className={'reacg-lightbox-captions__description'}
+            style={{color: captionColor, fontFamily: captionFontFamily}}
+          >
+            {image.description}
+          </p>
+        </>
+      ),
+      type: image.type,
+      sources: [
+        {
+          src: image.original.url,
+          type: `video/${image.original.url.split('.').pop()}`,
+        },
+      ],
+      poster: image.medium_large.url,
+      src: image.original.url,
+      srcSet: [
+        {
+          src: image.original.url,
+          width: image.original.width,
+          height: image.original.height,
+        },
+        {
+          src: image.medium_large.url,
+          width: image.medium_large.width,
+          height: image.medium_large.height,
+        },
+        {
+          src: image.thumbnail.url,
+          width: image.thumbnail.width,
+          height: image.thumbnail.height,
+        },
+      ],
+      metadata: image.thumbnail.url,
+    }));
+  }, [images, captionColor, captionFontFamily]);
+
   const renderLighbox = () => {
     return (
       <Lightbox
@@ -138,43 +189,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         // @ts-ignore
         captions={{showToggle: true}}
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
-        slides={images!.map((image: IImageDTO) => ({
-          description: (
-            <>
-              <p
-                className={'reacg-lightbox-captions__title'}
-                style={{color: captionColor, fontFamily: captionFontFamily}}
-              >
-                {image.title}
-              </p>
-              <p
-                className={'reacg-lightbox-captions__description'}
-                style={{color: captionColor, fontFamily: captionFontFamily}}
-              >
-                {image.description}
-              </p>
-            </>
-          ),
-          src: image.original.url,
-          srcSet: [
-            {
-              src: image.original.url,
-              width: image.original.width,
-              height: image.original.height,
-            },
-            {
-              src: image.medium_large.url,
-              width: image.medium_large.width,
-              height: image.medium_large.height,
-            },
-            {
-              src: image.thumbnail.url,
-              width: image.thumbnail.width,
-              height: image.thumbnail.height,
-            },
-          ],
-          metadata: image.thumbnail.url,
-        }))}
+        slides={slides}
         render={{
           // thumbnail: ({slide}) => {
           //   return <img src={(slide as any).metadata}></img>;
@@ -195,6 +210,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           padding: 0,
           gap: thumbnailGap,
           imageFit: 'cover',
+        }}
+        video={{
+          autoPlay: videoAutoplay,
         }}
         className={clsx('reacg-lightbox', {
           'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
@@ -217,6 +235,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               : `${Math.min(innerHeight, height)}px`,
             'margin': 'auto',
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
+            '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
+            '--yarl__slide_captions_container_background': `${backgroundColor}80`,
           },
           thumbnail: {
             '--yarl__thumbnails_thumbnail_active_border_color':
@@ -225,11 +245,20 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               thumbnailBorderColor || 'transparent',
             '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
           },
+          container: {backgroundColor: `${backgroundColor}`},
         }}
         portal={{
           root: document.getElementById(
             `reacg-lightbox__background-helper${lightboxId}`
           ),
+        }}
+        on={{
+          slideshowStart: () => {
+            if (!videoAutoplay) setVideoAutoplay(true);
+          },
+          slideshowStop: () => {
+            if (videoAutoplay) setVideoAutoplay(false);
+          },
         }}
       />
     );
