@@ -1,16 +1,17 @@
 import {CircularProgress} from '@mui/material';
 import {VLightbox as Lightbox} from 'components/lightbox/Lightbox';
-import {PaginationType} from 'data-structures';
+import {GalleryType, PaginationType} from 'data-structures';
 import React, {ReactNode, useState} from 'react';
 import {useData} from './data-context/useData';
 import {IGeneralSettings} from './general-settings';
 import {ILightboxSettings} from './light-box-settings';
+import {MosaicGallery} from './mosaic-gallery/MosaicGallery';
 import {useSettings} from './settings';
 import {PaginationProvider} from './thumbnail-gallery/PaginationProvider';
 import {ThumbnailGallery} from './thumbnail-gallery/ThumbnailGallery';
 
 const Gallery: React.FC = () => {
-  const {generalSettings, lightboxSettings} = useSettings();
+  const {type, generalSettings, lightboxSettings} = useSettings();
   const {
     isLoading,
     pagesCount,
@@ -29,7 +30,11 @@ const Gallery: React.FC = () => {
       !!isLoading && paginationType === PaginationType.SIMPLE;
 
     return !hideGallery ? (
-      <ThumbnailGallery onClick={showLightbox ? openLightbox : undefined} />
+      type === GalleryType.MOSAIC ? (
+        <MosaicGallery onClick={showLightbox ? openLightbox : undefined} />
+      ) : (
+        <ThumbnailGallery onClick={showLightbox ? openLightbox : undefined} />
+      )
     ) : null;
   };
 
