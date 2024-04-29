@@ -37,6 +37,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     titleFontFamily,
     titleColor,
     titleFontSize = 1,
+    hoverEffect,
   } = settings;
   const elementRef = useRef();
   const [containerWidth, setContainerWidth] = useState(0);
@@ -145,6 +146,11 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
               key={image.original.url + index}
             >
               <ImageListItem key={image.thumbnail.url}>
+                <div className={clsx('thumnail-gallery__image', 'thumnail-gallery__image_overflow', 'thumnail-gallery__image_' + hoverEffect)}
+                     style={{
+                       width: getWidth + 'px',
+                       height: getWidth * (1 / ratio) + 'px',
+                     }}>
                 <img
                   className={clsx('thumnail-gallery__image', {
                     'thumnail-gallery__image_clickable': !!onClick,
@@ -160,6 +166,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                     borderRadius: borderRadius + '%',
                   }}
                 />
+                </div>
                 <div
                   className={clsx('thumbnail-gallery__title', {
                     'thumbnail-gallery__title_on-hover':

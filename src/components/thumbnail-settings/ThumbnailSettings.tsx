@@ -9,6 +9,8 @@ import {
   TitlePositionOptions,
   TitleVisibility,
   TitleVisibilityOptions,
+  HoverEffect,
+  HoverEffectOptions,
 } from 'data-structures';
 import {
   FontControl,
@@ -35,6 +37,7 @@ interface IThumbnailSettings {
   titleFontFamily: string;
   titleColor: string;
   titleFontSize?: number | undefined;
+  hoverEffect: HoverEffect;
 }
 
 interface IThumbnailSettingsProps {
@@ -63,6 +66,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
     titleFontFamily,
     titleColor,
     titleFontSize,
+    hoverEffect,
   } = value;
   const isTitlePositionEditable: boolean = borderRadius <= 50;
 
@@ -182,6 +186,15 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
                 value={borderRadius}
                 max={50}
                 onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                  id={'hoverEffect'}
+                  name={'Hover effect'}
+                  value={hoverEffect}
+                  options={HoverEffectOptions}
+                  onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>

@@ -22,6 +22,7 @@ import {
   TitleAlignment,
   TitlePosition,
   TitleVisibility,
+  HoverEffect,
 } from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
@@ -100,6 +101,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         titleFontFamily: 'Roboto',
         titleColor: 'Black',
         titleFontSize: 20,
+        hoverEffect: HoverEffect.NONE,
       });
       setGeneralSettings({
         itemsPerPage: 8,
@@ -158,6 +160,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       titlePosition,
       titleVisibility,
       width = 1,
+      hoverEffect,
     }: IThumbnailSettings = settings;
 
     return {
@@ -175,6 +178,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       titlePosition,
       titleVisibility,
       width,
+      hoverEffect,
     };
   };
 
