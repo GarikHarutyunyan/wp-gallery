@@ -159,10 +159,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
           {images.map((image, index) => (
             <div
               onClick={() => onClick?.(index)}
-              style={{
-                borderRadius: borderRadius + '%',
-                overflow:
-                  titlePosition === TitlePosition.BELOW ? 'hidden' : 'unset',
               }}
               key={image.original.url + index}
             >
@@ -183,6 +179,15 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                   }}
                 />
                 <div
+                  style={borderRadius !== 0 && titlePosition !== TitlePosition.BELOW ? {
+                    width: getWidth + 2 * padding + 'px',
+                    height: getHeight + 2 * padding + 'px',
+                    borderRadius: borderRadius + '%',
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    overflow: "hidden",
+                  } : {}}
                   className={clsx('thumbnail-gallery__title', {
                     'thumbnail-gallery__title_on-hover':
                       titleVisibility === TitleVisibility.ON_HOVER &&
@@ -192,7 +197,11 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                   })}
                 >
                   <ImageListItemBar
-                    style={{textAlign: titleAlignment}}
+                    style={{
+                      textAlign: titleAlignment,
+                      paddingLeft: borderRadius !== 0 && (titlePosition === TitlePosition.TOP || titlePosition === TitlePosition.BOTTOM) ? "calc(" + borderRadius / 2 + "%)" : 0,
+                      paddingRight: borderRadius !== 0 && (titlePosition === TitlePosition.TOP || titlePosition === TitlePosition.BOTTOM) ? "calc(" + borderRadius / 2 + "%)" : 0,
+                  }}
                     className={clsx({
                       'thumbnail-gallery__title-content_center':
                         titlePosition === TitlePosition.CENTER,
