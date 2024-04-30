@@ -169,25 +169,39 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
               key={image.original.url + index}
             >
               <ImageListItem key={image.thumbnail.url}>
-                <div className={clsx('thumnail-gallery__image', 'thumnail-gallery__image_overflow', 'thumnail-gallery__image_' + hoverEffect)}
+                <div className={clsx('thumnail-gallery__image_wrap',
+                    'thumnail-gallery__image_overflow',
+                    'thumnail-gallery__image_' + hoverEffect)}
                      style={{
                        width: getWidth + 'px',
                        height: getHeight + 'px',
                        margin: padding + 'px',
                        borderRadius: borderRadius + '%',
                      }}>
-                <img
-                  className={clsx('thumnail-gallery__image', {
-                    'thumnail-gallery__image_clickable': !!onClick,
-                  })}
-                  src={getImageSource(image)}
-                  alt={image.title}
-                  loading="lazy"
-                  style={{
-                    width: getWidth + 'px',
-                    height: getHeight + 'px',
-                  }}
-                />
+                  <img
+                    className={clsx('thumnail-gallery__image', {
+                      'thumnail-gallery__image_clickable': !!onClick,
+                    })}
+                    src={getImageSource(image)}
+                    alt={image.title}
+                    loading="lazy"
+                    style={{
+                      width: getWidth + 'px',
+                      height: getHeight + 'px',
+                    }}
+                  />
+                  {image.type === ImageType.VIDEO && (
+                      <VideoThumbnailIcon
+                          style={{
+                            height: videoThumbnailIconSize,
+                            width: videoThumbnailIconSize,
+                          }}
+                          className={clsx(
+                              'yarl__thumbnails_thumbnail_icon',
+                              'thumbnail-gallery__video-icon'
+                          )}
+                      />
+                  )}
                 </div>
                 <div
                   className={clsx('thumbnail-gallery__title', {
@@ -222,18 +236,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                     }
                   />
                 </div>
-                {image.type === ImageType.VIDEO && (
-                  <VideoThumbnailIcon
-                    style={{
-                      height: videoThumbnailIconSize,
-                      width: videoThumbnailIconSize,
-                    }}
-                    className={clsx(
-                      'yarl__thumbnails_thumbnail_icon',
-                      'thumbnail-gallery__video-icon'
-                    )}
-                  />
-                )}
               </ImageListItem>
             </div>
           ))}

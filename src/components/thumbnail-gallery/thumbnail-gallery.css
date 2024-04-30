@@ -3,7 +3,7 @@
     --yarl__thumbnails_thumbnail_icon_filter: none
 }
 
-.thumnail-gallery__image:hover+.thumbnail-gallery__title_on-hover {
+.thumnail-gallery__image_wrap:hover+.thumbnail-gallery__title_on-hover {
     display: block;
     pointer-events: none;
 }
@@ -35,6 +35,10 @@
     align-items: center;
     margin-bottom: 20px;
     height: 300px;
+}
+
+.thumnail-gallery__image_wrap {
+    position: relative;
 }
 
 .thumnail-gallery__image_overflow {
@@ -86,13 +90,13 @@
 }
 
 /* Blur */
-.thumnail-gallery__image_blur img {
+.thumnail-gallery__image_blur {
     -webkit-filter: blur(3px);
     filter: blur(3px);
     -webkit-transition: .3s ease-in-out;
     transition: .3s ease-in-out;
 }
-.thumnail-gallery__image_blur img:hover {
+.thumnail-gallery__image_blur:hover {
     -webkit-filter: blur(0);
     filter: blur(0);
 }
