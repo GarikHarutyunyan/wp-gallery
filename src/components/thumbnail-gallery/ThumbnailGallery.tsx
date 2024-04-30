@@ -162,6 +162,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
               onClick={() => onClick?.(index)}
               style={{
                 borderRadius: borderRadius + '%',
+                background: paddingColor,
                 overflow:
                   titlePosition === TitlePosition.BELOW ? 'hidden' : 'unset',
               }}
@@ -171,7 +172,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                 <div className={clsx('thumnail-gallery__image', 'thumnail-gallery__image_overflow', 'thumnail-gallery__image_' + hoverEffect)}
                      style={{
                        width: getWidth + 'px',
-                       height: getWidth * (1 / ratio) + 'px',
+                       height: getHeight + 'px',
+                       margin: padding + 'px',
+                       borderRadius: borderRadius + '%',
                      }}>
                 <img
                   className={clsx('thumnail-gallery__image', {
@@ -183,9 +186,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                   style={{
                     width: getWidth + 'px',
                     height: getHeight + 'px',
-                    padding: padding + 'px',
-                    background: paddingColor,
-                    borderRadius: borderRadius + '%',
                   }}
                 />
                 </div>
