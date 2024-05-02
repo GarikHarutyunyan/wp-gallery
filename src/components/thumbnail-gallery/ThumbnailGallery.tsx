@@ -48,6 +48,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     titleFontFamily,
     titleColor,
     titleFontSize = 1,
+    hoverEffect,
   } = settings;
   const elementRef = useRef();
   const [containerWidth, setContainerWidth] = useState(0);
@@ -161,27 +162,47 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
               onClick={() => onClick?.(index)}
               style={{
                 borderRadius: borderRadius + '%',
+                background: paddingColor,
                 overflow:
                   titlePosition === TitlePosition.BELOW ? 'hidden' : 'unset',
               }}
               key={image.original.url + index}
             >
               <ImageListItem key={image.thumbnail.url}>
-                <img
-                  className={clsx('thumnail-gallery__image', {
-                    'thumnail-gallery__image_clickable': !!onClick,
-                  })}
-                  src={getImageSource(image)}
-                  alt={image.title}
-                  loading="lazy"
-                  style={{
-                    width: getWidth + 'px',
-                    height: getHeight + 'px',
-                    padding: padding + 'px',
-                    background: paddingColor,
-                    borderRadius: borderRadius + '%',
-                  }}
-                />
+                <div className={clsx('thumnail-gallery__image_wrapper',
+                    'thumnail-gallery__image-wrapper_overflow',
+                    'thumnail-gallery__image-wrapper_' + hoverEffect,
+                    {'thumnail-gallery__image-wrapper_clickable': !!onClick},
+                  )}
+                     style={{
+                       width: getWidth + 'px',
+                       height: getHeight + 'px',
+                       margin: padding + 'px',
+                       borderRadius: borderRadius + '%',
+                     }}>
+                  <img
+                    className={clsx('thumnail-gallery__image')}
+                    src={getImageSource(image)}
+                    alt={image.title}
+                    loading="lazy"
+                    style={{
+                      width: getWidth + 'px',
+                      height: getHeight + 'px',
+                    }}
+                  />
+                  {image.type === ImageType.VIDEO && (
+                      <VideoThumbnailIcon
+                          style={{
+                            height: videoThumbnailIconSize,
+                            width: videoThumbnailIconSize,
+                          }}
+                          className={clsx(
+                              'yarl__thumbnails_thumbnail_icon',
+                              {'thumbnail-gallery__video-icon': !!onClick},
+                          )}
+                      />
+                  )}
+                </div>
                 <div
                   className={clsx('thumbnail-gallery__title', {
                     'thumbnail-gallery__title_on-hover':
@@ -218,18 +239,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                     }
                   />
                 </div>
-                {image.type === ImageType.VIDEO && (
-                  <VideoThumbnailIcon
-                    style={{
-                      height: videoThumbnailIconSize,
-                      width: videoThumbnailIconSize,
-                    }}
-                    className={clsx(
-                      'yarl__thumbnails_thumbnail_icon',
-                      'thumbnail-gallery__video-icon'
-                    )}
-                  />
-                )}
               </ImageListItem>
             </div>
           ))}
