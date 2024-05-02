@@ -1,8 +1,8 @@
 import {ISelectOption} from 'components/controls/SelectControl';
 
 export enum HoverEffect {
-  ZOOM_OUT = 'zoom_out',
-  ZOOM_IN = 'zoom_in',
+  ZOOM_IN = 'zoom-in',
+  ZOOM_OUT = 'zoom-out',
   SLIDE = 'slide',
   ROTATE = 'rotate',
   BLUR = 'blur',
@@ -16,8 +16,8 @@ export enum HoverEffect {
 }
 
 export const HoverEffectOptions: ISelectOption[] = [
-  {value: HoverEffect.ZOOM_OUT, title: 'Zoom out'},
   {value: HoverEffect.ZOOM_IN, title: 'Zoom in'},
+  {value: HoverEffect.ZOOM_OUT, title: 'Zoom out'},
   {value: HoverEffect.SLIDE, title: 'Slide'},
   {value: HoverEffect.ROTATE, title: 'Rotate'},
   {value: HoverEffect.BLUR, title: 'Blur'},

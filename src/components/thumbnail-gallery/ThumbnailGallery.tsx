@@ -169,9 +169,11 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
               key={image.original.url + index}
             >
               <ImageListItem key={image.thumbnail.url}>
-                <div className={clsx('thumnail-gallery__image_wrap',
-                    'thumnail-gallery__image_overflow',
-                    'thumnail-gallery__image_' + hoverEffect)}
+                <div className={clsx('thumnail-gallery__image_wrapper',
+                    'thumnail-gallery__image-wrapper_overflow',
+                    'thumnail-gallery__image-wrapper_' + hoverEffect,
+                    {'thumnail-gallery__image-wrapper_clickable': !!onClick},
+                  )}
                      style={{
                        width: getWidth + 'px',
                        height: getHeight + 'px',
@@ -179,9 +181,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                        borderRadius: borderRadius + '%',
                      }}>
                   <img
-                    className={clsx('thumnail-gallery__image', {
-                      'thumnail-gallery__image_clickable': !!onClick,
-                    })}
+                    className={clsx('thumnail-gallery__image')}
                     src={getImageSource(image)}
                     alt={image.title}
                     loading="lazy"
@@ -198,7 +198,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                           }}
                           className={clsx(
                               'yarl__thumbnails_thumbnail_icon',
-                              'thumbnail-gallery__video-icon'
+                              {'thumbnail-gallery__video-icon': !!onClick},
                           )}
                       />
                   )}
