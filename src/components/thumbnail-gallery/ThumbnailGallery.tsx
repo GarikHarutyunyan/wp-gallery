@@ -134,6 +134,55 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
     return size > 0 ? `${size}px` : '0px';
   }, [getWidth, getHeight]);
 
+  const renderTitle = (image: IImageDTO) => {
+      let paddingTitle = "0";
+      if ( titlePosition === TitlePosition.BELOW ) {
+          paddingTitle = padding + "px";
+      }
+      else if ( titlePosition !== TitlePosition.CENTER ) {
+          paddingTitle = borderRadius / 2 + "%";
+      }
+    return <div
+        className={clsx('thumbnail-gallery__title', {
+          'thumbnail-gallery__title_on-hover':
+              titleVisibility === TitleVisibility.ON_HOVER &&
+              titlePosition !== TitlePosition.BELOW,
+          'thumbnail-gallery__title_hidden':
+              titleVisibility === TitleVisibility.NONE,
+        })}
+    >
+      <ImageListItemBar
+          style={{
+            textAlign: titleAlignment,
+            /*margin: titlePosition !== TitlePosition.BELOW ? padding + "px" : 0,*/
+            paddingLeft: paddingTitle,
+            paddingRight: paddingTitle,
+
+          }}
+          className={clsx({
+            'thumbnail-gallery__title-content_center':
+                titlePosition === TitlePosition.CENTER,
+          })}
+          title={
+            <span
+                style={{
+                  color: titleColor,
+                  fontFamily: titleFontFamily,
+                  fontSize: titleFontSize + 'px',
+                }}
+            >
+                        {image.title || <br />}
+                      </span>
+          }
+          position={
+            titlePosition !== TitlePosition.CENTER
+                ? titlePosition
+                : 'bottom'
+          }
+      />
+    </div>
+  };
+
   return (
     <div
       style={{
@@ -161,84 +210,52 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
             <div
               onClick={() => onClick?.(index)}
               style={{
-                borderRadius: borderRadius + '%',
-                background: paddingColor,
-                overflow:
-                  titlePosition === TitlePosition.BELOW ? 'hidden' : 'unset',
+                  overflow: titlePosition === TitlePosition.BELOW ? 'hidden' : 'unset',
               }}
               key={image.original.url + index}
             >
               <ImageListItem key={image.thumbnail.url}>
-                <div className={clsx('thumnail-gallery__image_wrapper',
-                    'thumnail-gallery__image-wrapper_overflow',
-                    'thumnail-gallery__image-wrapper_' + hoverEffect,
-                    {'thumnail-gallery__image-wrapper_clickable': !!onClick},
-                  )}
-                     style={{
-                       width: getWidth + 'px',
-                       height: getHeight + 'px',
-                       margin: padding + 'px',
-                       borderRadius: borderRadius + '%',
-                     }}>
-                  <img
-                    className={clsx('thumnail-gallery__image')}
-                    src={getImageSource(image)}
-                    alt={image.title}
-                    loading="lazy"
-                    style={{
-                      width: getWidth + 'px',
-                      height: getHeight + 'px',
-                    }}
-                  />
-                  {image.type === ImageType.VIDEO && (
-                      <VideoThumbnailIcon
-                          style={{
-                            height: videoThumbnailIconSize,
-                            width: videoThumbnailIconSize,
-                          }}
-                          className={clsx(
-                              'yarl__thumbnails_thumbnail_icon',
-                              {'thumbnail-gallery__video-icon': !!onClick},
-                          )}
-                      />
-                  )}
-                </div>
-                <div
-                  className={clsx('thumbnail-gallery__title', {
-                    'thumbnail-gallery__title_on-hover':
-                      titleVisibility === TitleVisibility.ON_HOVER &&
-                      titlePosition !== TitlePosition.BELOW,
-                    'thumbnail-gallery__title_hidden':
-                      titleVisibility === TitleVisibility.NONE,
-                  })}
-                >
-                  <ImageListItemBar
-                    style={{
-                      textAlign: titleAlignment,
-                      margin: titlePosition !== TitlePosition.BELOW ? padding + "px" : 0,
-                    }}
-                    className={clsx({
-                      'thumbnail-gallery__title-content_center':
-                        titlePosition === TitlePosition.CENTER,
-                    })}
-                    title={
-                      <span
+                <div style={{
+                    background: paddingColor,
+                    borderRadius: borderRadius + '%',
+                }}>
+                    <div className={clsx('thumbnail-gallery__image-wrapper',
+                        'thumbnail-gallery__image-wrapper_overflow',
+                        'thumbnail-gallery__image-wrapper_' + hoverEffect,
+                        {'thumbnail-gallery__image-wrapper_clickable': !!onClick},
+                      )}
+                         style={{
+                           width: getWidth + 'px',
+                           height: getHeight + 'px',
+                           margin: padding + 'px',
+                           borderRadius: borderRadius + '%',
+                         }}>
+                      <img
+                        className={clsx('thumbnail-gallery__image')}
+                        src={getImageSource(image)}
+                        alt={image.title}
+                        loading="lazy"
                         style={{
-                          color: titleColor,
-                          fontFamily: titleFontFamily,
-                          fontSize: titleFontSize + 'px',
+                          width: getWidth + 'px',
+                          height: getHeight + 'px',
                         }}
-                      >
-                        {image.title || <br />}
-                      </span>
-                    }
-                    position={
-                      titlePosition !== TitlePosition.CENTER
-                        ? titlePosition
-                        : 'bottom'
-                    }
-                  />
+                      />
+                      {image.type === ImageType.VIDEO && (
+                          <VideoThumbnailIcon
+                              style={{
+                                height: videoThumbnailIconSize,
+                                width: videoThumbnailIconSize,
+                              }}
+                              className={clsx(
+                                  'yarl__thumbnails_thumbnail_icon',
+                                  {'thumbnail-gallery__video-icon': !!onClick},
+                              )}
+                          />
+                      )}
+                      { titlePosition !== TitlePosition.BELOW ? renderTitle(image) : null }
+                    </div>
                 </div>
+                { titlePosition === TitlePosition.BELOW ? renderTitle(image) : null }
               </ImageListItem>
             </div>
           ))}
