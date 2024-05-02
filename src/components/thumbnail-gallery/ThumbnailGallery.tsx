@@ -213,7 +213,10 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                   })}
                 >
                   <ImageListItemBar
-                    style={{textAlign: titleAlignment}}
+                    style={{
+                      textAlign: titleAlignment,
+                      margin: titlePosition !== TitlePosition.BELOW ? padding + "px" : 0,
+                    }}
                     className={clsx({
                       'thumbnail-gallery__title-content_center':
                         titlePosition === TitlePosition.CENTER,
