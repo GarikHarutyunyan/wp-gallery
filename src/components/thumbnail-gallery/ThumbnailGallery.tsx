@@ -52,6 +52,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
   const elementRef = useRef();
   const [containerWidth, setContainerWidth] = useState(0);
   const ratio: number = width / height;
+  const titlePadding = borderRadius !== 0 && [TitlePosition.TOP, TitlePosition.BOTTOM].includes(titlePosition) ? borderRadius / 2 + "%" : 0;
 
   const changeContainerWidth = () => {
     const divElement = elementRef?.current;
@@ -159,7 +160,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
           {images.map((image, index) => (
             <div
               onClick={() => onClick?.(index)}
-              }}
               key={image.original.url + index}
             >
               <ImageListItem key={image.thumbnail.url}>
@@ -183,10 +183,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                     width: getWidth + 2 * padding + 'px',
                     height: getHeight + 2 * padding + 'px',
                     borderRadius: borderRadius + '%',
-                    position: "absolute",
-                    left: 0,
-                    top: 0,
-                    overflow: "hidden",
                   } : {}}
                   className={clsx('thumbnail-gallery__title', {
                     'thumbnail-gallery__title_on-hover':
@@ -194,13 +190,15 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({
                       titlePosition !== TitlePosition.BELOW,
                     'thumbnail-gallery__title_hidden':
                       titleVisibility === TitleVisibility.NONE,
+                    'thumbnail-gallery__title_absolute':
+                        borderRadius !== 0 && titlePosition !== TitlePosition.BELOW
                   })}
                 >
                   <ImageListItemBar
                     style={{
                       textAlign: titleAlignment,
-                      paddingLeft: borderRadius !== 0 && (titlePosition === TitlePosition.TOP || titlePosition === TitlePosition.BOTTOM) ? "calc(" + borderRadius / 2 + "%)" : 0,
-                      paddingRight: borderRadius !== 0 && (titlePosition === TitlePosition.TOP || titlePosition === TitlePosition.BOTTOM) ? "calc(" + borderRadius / 2 + "%)" : 0,
+                      paddingLeft: titlePadding,
+                      paddingRight: titlePadding,
                   }}
                     className={clsx({
                       'thumbnail-gallery__title-content_center':

@@ -36,3 +36,10 @@
     margin-bottom: 20px;
     height: 300px;
 }
+
+.thumbnail-gallery__title_absolute {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+}
