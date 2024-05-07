@@ -64,3 +64,65 @@
 .react-lightbox__background .yarl__thumbnails_vignette {
     background: none;
 }
+
+/* Fade */
+.reacg-lightbox-animation-fade .yarl__slide .yarl__slide_wrapper {
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+.reacg-lightbox-animation-fade .yarl__slide.yarl__slide_current .yarl__slide_wrapper {
+    transition: opacity 0.5s ease;
+    opacity: 1;
+}
+
+/* Zoom */
+.reacg-lightbox-animation-zoom .yarl__slide .yarl__slide_wrapper {
+   transform: scale(0.5) !important;
+   transition: transform 0.5s ease;
+}
+.reacg-lightbox-animation-zoom .yarl__slide.yarl__slide_current .yarl__slide_wrapper {
+    transform: scale(1) !important;
+    transition: transform 0.5s ease;
+}
+
+/* Slide vertical */
+.reacg-lightbox-animation-slide-vertical .yarl__slide .yarl__slide_wrapper {
+   transition: top 0.3s ease-in-out;
+   top: 100%;
+   position: absolute;
+}
+.reacg-lightbox-animation-slide-vertical .yarl__slide.yarl__slide_current .yarl__slide_wrapper {
+    transition: top 0.3s ease-in-out;
+    top: 0;
+    position: absolute;
+}
+
+/* Flip horizontal */
+.reacg-lightbox-animation-flip .yarl__slide .yarl__slide_wrapper {
+   transform: rotateY(180deg);
+   transition: transform 0.5s ease-in-out;
+}
+.reacg-lightbox-animation-flip .yarl__slide.yarl__slide_current .yarl__slide_wrapper {
+    transform: rotateY(0deg);
+    transition: transform 0.5s ease-in-out;
+}
+
+/* Rotate horizontal */
+.reacg-lightbox-animation-rotate .yarl__slide .yarl__slide_wrapper {
+   transform: rotate(180deg);
+   transition: transform 0.5s ease-in-out;
+}
+.reacg-lightbox-animation-rotate .yarl__slide.yarl__slide_current .yarl__slide_wrapper {
+    transform: rotate(0deg);
+    transition: transform 0.5s ease-in-out;
+}
+
+/* Blur */
+.reacg-lightbox-animation-blur .yarl__slide .yarl__slide_wrapper {
+   transition: filter 0.5s ease-in-out;
+   filter: blur(10px);
+}
+.reacg-lightbox-animation-blur .yarl__slide.yarl__slide_current .yarl__slide_wrapper {
+    transition: filter 0.5s ease-in-out;
+    filter: blur(0);
+}

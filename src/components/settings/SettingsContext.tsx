@@ -8,21 +8,19 @@ import Divider from '@mui/material/Divider';
 import Tabs from '@mui/material/Tabs';
 import axios from 'axios';
 import {GeneralSettings, IGeneralSettings} from 'components/general-settings';
-import {
-  ILightboxSettings,
-  LightboxSettings,
-} from 'components/light-box-settings';
+import {ILightboxSettings, LightboxSettings,} from 'components/light-box-settings';
 import {AppInfoContext} from 'contexts/AppInfoContext';
 import {Align, Aligner, ExpandMore, Tab} from 'core-components';
 import {
+  HoverEffect,
   LightboxCaptionsPosition,
+  LightboxImageAnimation,
   LightboxThumbnailsPosition,
   PaginationButtonShape,
   PaginationType,
   TitleAlignment,
   TitlePosition,
   TitleVisibility,
-  HoverEffect,
 } from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
@@ -126,6 +124,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         isSlideshowAllowed: false,
         autoplay: false,
         slideDuration: 3000,
+        animation: LightboxImageAnimation.SLIDE_HORIZONTAL,
         thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
         thumbnailWidth: 80,
         thumbnailHeight: 80,
