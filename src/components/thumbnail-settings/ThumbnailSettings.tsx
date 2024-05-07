@@ -131,7 +131,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
     );
   };
 
-  const renderGeneralSettings = (): ReactNode => {
+  const renderAdvancedSettings = (): ReactNode => {
     return (
       <Section
         header={'Advanced'}
@@ -257,7 +257,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderBasicSettings()}
-      {renderGeneralSettings()}
+      {renderAdvancedSettings()}
     </Paper>
   );
 };

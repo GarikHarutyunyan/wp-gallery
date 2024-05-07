@@ -1,7 +1,9 @@
 import {IGeneralSettings} from 'components/general-settings';
 import {ILightboxSettings} from 'components/light-box-settings';
+import {IMosaicSettings} from 'components/mosaic-settings';
 import {IThumbnailSettings} from 'components/thumbnail-settings';
 import {
+  Direction,
   LightboxCaptionsPosition,
   LightboxThumbnailsPosition,
   PaginationButtonShape,
@@ -26,6 +28,17 @@ const thumbnailMockSettings: IThumbnailSettings = {
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
+};
+
+const mosaicMockSettings: IMosaicSettings = {
+  width: 70,
+  direction: Direction.VERTICAL,
+  gap: 5,
+  backgroundColor: '',
+  padding: 5,
+  paddingColor: '',
+  rowHeight: 250,
+  columns: 5,
 };
 
 const generalMockSettings: IGeneralSettings = {
@@ -60,9 +73,15 @@ const lightboxMockSettings: ILightboxSettings = {
   thumbnailBorderColor: 'white',
   thumbnailPadding: 0,
   thumbnailGap: 10,
+  backgroundColor: '',
   captionsPosition: LightboxCaptionsPosition.BOTTOM,
   captionFontFamily: 'Roboto',
   captionColor: 'White',
 };
 
-export {generalMockSettings, lightboxMockSettings, thumbnailMockSettings};
+export {
+  generalMockSettings,
+  lightboxMockSettings,
+  mosaicMockSettings,
+  thumbnailMockSettings,
+};

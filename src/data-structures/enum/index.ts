@@ -1,3 +1,4 @@
+export * from './Direction';
 export * from './GalleryType';
 export * from './LightboxCaptionsPosition';
 export * from './LightboxThumbnailsPosition';

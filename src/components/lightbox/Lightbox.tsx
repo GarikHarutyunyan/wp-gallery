@@ -132,7 +132,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   }, []);
 
   const slides = useMemo(() => {
-    return images.map((image: IImageDTO) => ({
+    return images!.map((image: IImageDTO) => ({
       description: (
         <>
           <p

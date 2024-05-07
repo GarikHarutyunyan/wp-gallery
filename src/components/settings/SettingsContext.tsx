@@ -1,37 +1,40 @@
-import {Typography} from '@mui/material';
 import axios from 'axios';
-import {SelectControl} from 'components/controls';
 import {IGeneralSettings} from 'components/general-settings';
 import {ILightboxSettings} from 'components/light-box-settings';
+import {IMosaicSettings} from 'components/mosaic-settings';
 import {AppInfoContext} from 'contexts/AppInfoContext';
 import {Section} from 'core-components';
-import {GalleryType, GalleryTypeOptions} from 'data-structures';
+import {GalleryType} from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {useContext, useLayoutEffect, useState} from 'react';
 import {IThumbnailSettings} from '../thumbnail-settings';
-import {Filter} from './Filter';
 import {
   generalMockSettings,
   lightboxMockSettings,
+  mosaicMockSettings,
   thumbnailMockSettings,
 } from './MockSettings';
-import {SettingsPanelBody} from './SettingsPanelBody';
-import {SettingsPanelHeader} from './SettingsPanelHeader';
+import {OptionsPanelBody} from './OptionsPanelBody';
+import {OptionsPanelHeader} from './OptionsPanelHeader';
 import {
   extractGeneralSettings,
   extractThumbnailSettings,
 } from './TemporaryHelpers';
+import {TypePanelBody} from './TypePanelBody ';
+import {TypePanelHeader} from './TypePanelHeader';
 import './settings-context.css';
 
 type ThumbnailAndGeneralSettings = IThumbnailSettings & IGeneralSettings;
 
 interface ISettingsDTO extends ThumbnailAndGeneralSettings {
+  mosaic: IMosaicSettings;
   lightbox: ILightboxSettings;
 }
 
 const SettingsContext = React.createContext<{
   type: GalleryType;
   thumbnailSettings?: IThumbnailSettings;
+  mosaicSettings?: IMosaicSettings;
   generalSettings?: IGeneralSettings;
   lightboxSettings?: ILightboxSettings;
 }>({type: GalleryType.THUMBNAILS});
@@ -42,11 +45,12 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
+  const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
   const [generalSettings, setGeneralSettings] = useState<IGeneralSettings>();
   const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [type, setType] = useState<GalleryType>(GalleryType.THUMBNAILS);
+  const [type, setType] = useState<GalleryType>(GalleryType.MOSAIC);
 
   const getData = async () => {
     const dataElement = document.getElementById('reacg-root' + galleryId);
@@ -68,12 +72,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       ).data;
 
       setThumbnailSettings(extractThumbnailSettings(newSettings));
+      setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
       setGeneralSettings(extractGeneralSettings(newSettings));
       setLightboxSettings(newSettings.lightbox);
 
       setIsLoading(false);
     } else {
       setThumbnailSettings(thumbnailMockSettings);
+      setMosaicSettings(mosaicMockSettings);
       setGeneralSettings(generalMockSettings);
       setLightboxSettings(lightboxMockSettings);
     }
@@ -176,44 +182,31 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   return (
     <SettingsContext.Provider
-      value={{type, thumbnailSettings, generalSettings, lightboxSettings}}
+      value={{
+        type,
+        thumbnailSettings,
+        mosaicSettings,
+        generalSettings,
+        lightboxSettings,
+      }}
     >
       {showControls && (
         <>
           <Section
-            header={
-              <Typography
-                gutterBottom
-                variant="h5"
-                component="div"
-                className={'settings-panel_header'}
-              >
-                {'Type'}
-              </Typography>
-            }
-            body={
-              <Filter isLoading={isLoading}>
-                <SelectControl
-                  id={'titlePosition'}
-                  name={'Title position'}
-                  value={type}
-                  options={GalleryTypeOptions}
-                  onChange={setType}
-                  // isDisabled={!isTitlePositionEditable}
-                />
-              </Filter>
-            }
+            header={<TypePanelHeader />}
+            body={<TypePanelBody isLoading={isLoading} onChange={setType} />}
             outlined={false}
             className={'reacg-settings'}
           />
           <Section
-            header={<SettingsPanelHeader />}
+            header={<OptionsPanelHeader />}
             body={
-              <SettingsPanelBody
+              <OptionsPanelBody
                 isLoading={isLoading}
                 onSave={onSave}
                 onReset={onReset}
                 changeThumbnailSettings={setThumbnailSettings}
+                changeMosaicSettings={setMosaicSettings}
                 changeGeneralSettings={setGeneralSettings}
                 changeLightboxSettings={setLightboxSettings}
               />

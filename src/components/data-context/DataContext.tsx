@@ -294,6 +294,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         })
       ).data;
       const newImages: IImageDTO[] = imgData.map((data: any) => ({
+        type: data.type,
         original: data.original,
         width: data.width,
         height: data.height,
@@ -330,6 +331,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         })
       ).data;
       const newImages: IImageDTO[] = imgData.map((data: any) => ({
+        type: data.type,
         original: data.original,
         width: data.width,
         height: data.height,

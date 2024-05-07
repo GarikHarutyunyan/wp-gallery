@@ -60,7 +60,7 @@ const Section: React.FC<ISectionProps> = ({
 
   const renderBody = (): ReactNode => {
     return (
-      <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+      <Collapse in={isExpanded} timeout={'auto'} unmountOnExit>
         <div className={'reacg-section__body'}>{body}</div>
       </Collapse>
     );
@@ -69,10 +69,14 @@ const Section: React.FC<ISectionProps> = ({
   return (
     <Paper
       variant={outlined ? 'outlined' : undefined}
-      className={clsx('reacg-section', className)}
+      className={clsx(
+        'reacg-section',
+        {'reacg-section_outlined': outlined},
+        className
+      )}
     >
       {renderHeader()}
-      {isExpanded || !outlined ? <Divider variant="middle" /> : null}
+      {isExpanded || !outlined ? <Divider variant={'middle'} /> : null}
       {renderBody()}
     </Paper>
   );

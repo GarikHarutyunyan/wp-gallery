@@ -61,7 +61,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                 onChange={onInputValueChange}
               />
             </Filter>
-            {paginationType !== PaginationType.NONE && (
+            {paginationType !== PaginationType.NONE ? (
               <>
                 <Filter isLoading={isLoading}>
                   <NumberControl
@@ -72,7 +72,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                     min={1}
                   />
                 </Filter>
-                {paginationType === PaginationType.SIMPLE && (
+                {paginationType === PaginationType.SIMPLE ? (
                   <>
                     <Filter isLoading={isLoading}>
                       <ColorControl
@@ -100,8 +100,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                       />
                     </Filter>
                   </>
-                )}
-                {paginationType === PaginationType.LOAD_MORE && (
+                ) : null}
+                {paginationType === PaginationType.LOAD_MORE ? (
                   <>
                     <Filter isLoading={isLoading}>
                       <ColorControl
@@ -112,10 +112,10 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                       />
                     </Filter>
                   </>
-                )}
+                ) : null}
                 {[PaginationType.LOAD_MORE, PaginationType.SIMPLE].includes(
                   paginationType
-                ) && (
+                ) ? (
                   <>
                     <Filter isLoading={isLoading}>
                       <ColorControl
@@ -126,9 +126,9 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                       />
                     </Filter>
                   </>
-                )}
+                ) : null}
               </>
-            )}
+            ) : null}
           </Grid>
         }
       />

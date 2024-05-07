@@ -52,7 +52,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
             'button',
             'button-large',
             'button-primary',
-            'settings-panel_body-button'
+            'options-panel_body-button'
           )}
         >
           {'Save options'}
@@ -65,7 +65,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
           className={clsx(
             'button',
             'button-large',
-            'settings-panel_body-button'
+            'options-panel_body-button'
           )}
         >
           {'Reset'}

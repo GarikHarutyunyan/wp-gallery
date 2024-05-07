@@ -1,17 +1,17 @@
 import {Typography} from '@mui/material';
 import React from 'react';
 
-const SettingsPanelHeader: React.FC = () => {
+const OptionsPanelHeader: React.FC = () => {
   return (
     <Typography
       gutterBottom
       variant="h5"
       component="div"
-      className={'settings-panel_header'}
+      className={'options-panel_header'}
     >
       {'Options'}
     </Typography>
   );
 };
 
-export {SettingsPanelHeader};
+export {OptionsPanelHeader};

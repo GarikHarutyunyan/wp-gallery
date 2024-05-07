@@ -1,9 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import ReactDOM2 from 'react-dom';
-import './index.css';
-import App from './App';
 import {AppInfoProvider} from 'contexts/AppInfoContext';
+import React from 'react';
+import ReactDOM2 from 'react-dom';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css';
 // import reportWebVitals from './reportWebVitals';
 
 const addApplication = (rootElement: HTMLElement) => {
@@ -12,10 +12,17 @@ const addApplication = (rootElement: HTMLElement) => {
     rootElement.getAttribute('data-gallery-id') || undefined;
   const baseUrl: string | undefined = (window as any).reacg_global?.rest_root;
   const nonce: string | undefined = (window as any).reacg_global?.rest_nonce;
+  const pluginUrl: string | undefined = (window as any).reacg_global
+    ?.plugin_url;
 
   root.render(
     <React.StrictMode>
-      <AppInfoProvider galleryId={galleryId} baseUrl={baseUrl} nonce={nonce}>
+      <AppInfoProvider
+        galleryId={galleryId}
+        baseUrl={baseUrl}
+        nonce={nonce}
+        pluginUrl={pluginUrl}
+      >
         <App />
       </AppInfoProvider>
     </React.StrictMode>

@@ -2,11 +2,12 @@
     box-shadow: unset !important;
 }
 
-.settings-panel_header {
+.options-panel_header,
+.type-panel_header {
     margin: 15px 20px !important
 }
 
-.settings-panel_body-button {
+.options-panel_body-button {
     margin: 5px 5px !important;
     text-transform: none !important;
 }
