@@ -106,24 +106,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         const newType: GalleryType = response.data.type;
 
         setType(newType);
-        enqueueSnackbar('Type is up to date!', {
-          variant: 'success',
-          anchorOrigin: {horizontal: 'right', vertical: 'top'},
-        });
       } catch (error) {
-        enqueueSnackbar('Cannot update type!', {
-          variant: 'error',
-          anchorOrigin: {horizontal: 'right', vertical: 'top'},
-        });
         console.error(error);
       }
 
       setIsLoading(false);
-    } else {
-      enqueueSnackbar('Cannot update type!', {
-        variant: 'error',
-        anchorOrigin: {horizontal: 'right', vertical: 'top'},
-      });
     }
   };
 
