@@ -6,6 +6,8 @@ import {
   LightboxCaptionsPositionOptions,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
+  LightboxImageAnimation,
+  LightboxImageAnimationOptions,
 } from 'data-structures';
 import React, {ReactNode} from 'react';
 import {
@@ -31,6 +33,7 @@ interface ILightboxSettings {
   isSlideshowAllowed: boolean;
   autoplay: boolean;
   slideDuration: number;
+  imageAnimation: LightboxImageAnimation;
   isFullscreenAllowed: boolean;
   thumbnailsPosition: LightboxThumbnailsPosition;
   thumbnailWidth: number;
@@ -70,6 +73,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
     isSlideshowAllowed,
     autoplay,
     slideDuration,
+    imageAnimation,
     isFullscreenAllowed,
     thumbnailsPosition,
     thumbnailWidth,
@@ -158,6 +162,15 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                     />
                   </Filter>
                 )}
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                      id={'imageAnimation'}
+                      name={'Animation'}
+                      value={imageAnimation}
+                      options={LightboxImageAnimationOptions}
+                      onChange={onInputValueChange}
+                  />
+                </Filter>
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'areControlButtonsShown'}

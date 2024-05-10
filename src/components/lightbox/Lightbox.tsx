@@ -3,6 +3,7 @@ import {ILightboxSettings} from 'components/light-box-settings';
 import {
   IImageDTO,
   LightboxCaptionsPosition,
+  LightboxImageAnimation,
   LightboxThumbnailsPosition,
 } from 'data-structures';
 import React, {useEffect, useId, useMemo, useState} from 'react';
@@ -71,6 +72,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
     isSlideshowAllowed,
     autoplay,
     slideDuration,
+    imageAnimation,
     isFullscreenAllowed,
     thumbnailsPosition,
     thumbnailWidth,
@@ -190,6 +192,7 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
         captions={{showToggle: true}}
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
+        animation={{swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1, easing: { swipe: "ease-out", navigation: "ease-in-out" }}}
         render={{
           // thumbnail: ({slide}) => {
           //   return <img src={(slide as any).metadata}></img>;
@@ -215,7 +218,8 @@ const VLightbox: React.FC<React.PropsWithChildren & ILightboxProviderProps> = ({
         video={{
           autoPlay: videoAutoplay,
         }}
-        className={clsx('reacg-lightbox', {
+        className={clsx('reacg-lightbox',
+          'reacg-lightbox-animation-' + imageAnimation, {
           'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
           'reacg-lightbox-captions':
             captionsPosition !== LightboxCaptionsPosition.NONE,
