@@ -16,28 +16,25 @@ import {
 } from './MockSettings';
 import {OptionsPanelBody} from './OptionsPanelBody';
 import {OptionsPanelHeader} from './OptionsPanelHeader';
-import {
-  extractGeneralSettings,
-  extractThumbnailSettings,
-} from './TemporaryHelpers';
 import {TypePanelBody} from './TypePanelBody ';
 import {TypePanelHeader} from './TypePanelHeader';
 import './settings-context.css';
 
-type ThumbnailAndGeneralSettings = IThumbnailSettings & IGeneralSettings;
-
-interface ISettingsDTO extends ThumbnailAndGeneralSettings {
+interface ISettingsDTO {
+  type: GalleryType;
+  general: IGeneralSettings;
+  thumbnails: IThumbnailSettings;
   mosaic: IMosaicSettings;
   lightbox: ILightboxSettings;
 }
 
 const SettingsContext = React.createContext<{
-  type: GalleryType;
+  type?: GalleryType;
+  generalSettings?: IGeneralSettings;
   thumbnailSettings?: IThumbnailSettings;
   mosaicSettings?: IMosaicSettings;
-  generalSettings?: IGeneralSettings;
   lightboxSettings?: ILightboxSettings;
-}>({type: GalleryType.THUMBNAILS});
+}>({});
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
@@ -50,7 +47,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [type, setType] = useState<GalleryType>(GalleryType.MOSAIC);
+  const [type, setType] = useState<GalleryType>();
 
   const getData = async () => {
     const dataElement = document.getElementById('reacg-root' + galleryId);
@@ -71,16 +68,18 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         })
       ).data;
 
-      setThumbnailSettings(extractThumbnailSettings(newSettings));
+      setType(newSettings.type);
+      setGeneralSettings(newSettings.general || generalMockSettings);
+      setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
-      setGeneralSettings(extractGeneralSettings(newSettings));
       setLightboxSettings(newSettings.lightbox);
 
       setIsLoading(false);
     } else {
+      setType(GalleryType.THUMBNAILS);
+      setGeneralSettings(generalMockSettings);
       setThumbnailSettings(thumbnailMockSettings);
       setMosaicSettings(mosaicMockSettings);
-      setGeneralSettings(generalMockSettings);
       setLightboxSettings(lightboxMockSettings);
     }
   };
@@ -88,6 +87,45 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   useLayoutEffect(() => {
     getData();
   }, []);
+
+  const onTypeChange = async (newType: GalleryType): Promise<void> => {
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'options/' + galleryId
+      : undefined;
+
+    if (fetchUrl) {
+      setIsLoading(true);
+      const settings: ISettingsDTO = {
+        type: newType,
+      } as ISettingsDTO;
+
+      try {
+        const response = await axios.post(fetchUrl, settings, {
+          headers: {'X-WP-Nonce': nonce},
+        });
+        const newType: GalleryType = response.data.type;
+
+        setType(newType);
+        enqueueSnackbar('Type is up to date!', {
+          variant: 'success',
+          anchorOrigin: {horizontal: 'right', vertical: 'top'},
+        });
+      } catch (error) {
+        enqueueSnackbar('Cannot update type!', {
+          variant: 'error',
+          anchorOrigin: {horizontal: 'right', vertical: 'top'},
+        });
+        console.error(error);
+      }
+
+      setIsLoading(false);
+    } else {
+      enqueueSnackbar('Cannot update type!', {
+        variant: 'error',
+        anchorOrigin: {horizontal: 'right', vertical: 'top'},
+      });
+    }
+  };
 
   const onSave = async (): Promise<void> => {
     const fetchUrl: string | undefined = baseUrl
@@ -97,11 +135,12 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (fetchUrl) {
       setIsLoading(true);
       const settings: ISettingsDTO = {
-        ...thumbnailSettings,
-        ...generalSettings,
-        lightbox: lightboxSettings as ILightboxSettings,
+        general: generalSettings,
+        thumbnails: thumbnailSettings,
+        lightbox: lightboxSettings,
       } as ISettingsDTO;
 
+      // ??
       const validSettings: ISettingsDTO = Object.entries(settings).reduce(
         (accumulator, [key, value]) => ({...accumulator, [key]: value || ''}),
         {}
@@ -113,10 +152,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         });
         const newSettings: ISettingsDTO = response.data;
 
-        setThumbnailSettings(extractThumbnailSettings(newSettings));
-        setGeneralSettings(extractGeneralSettings(newSettings));
+        setGeneralSettings(newSettings.general);
+        setThumbnailSettings(newSettings.thumbnails);
+        setMosaicSettings(newSettings.mosaic);
         setLightboxSettings(newSettings.lightbox);
-        enqueueSnackbar('Settings are up to date!', {
+        enqueueSnackbar('Options are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
@@ -156,8 +196,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         });
         const newSettings: ISettingsDTO = response.data;
 
-        setThumbnailSettings(extractThumbnailSettings(newSettings));
-        setGeneralSettings(extractGeneralSettings(newSettings));
+        setGeneralSettings(newSettings.general);
+        setThumbnailSettings(newSettings.thumbnails);
+        setMosaicSettings(newSettings.mosaic);
         setLightboxSettings(newSettings.lightbox);
         enqueueSnackbar(successMessage, {
           variant: 'success',
@@ -194,7 +235,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         <>
           <Section
             header={<TypePanelHeader />}
-            body={<TypePanelBody isLoading={isLoading} onChange={setType} />}
+            body={
+              <TypePanelBody isLoading={isLoading} onChange={onTypeChange} />
+            }
             outlined={false}
             className={'reacg-settings'}
           />
@@ -205,9 +248,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
                 isLoading={isLoading}
                 onSave={onSave}
                 onReset={onReset}
+                changeGeneralSettings={setGeneralSettings}
                 changeThumbnailSettings={setThumbnailSettings}
                 changeMosaicSettings={setMosaicSettings}
-                changeGeneralSettings={setGeneralSettings}
                 changeLightboxSettings={setLightboxSettings}
               />
             }
