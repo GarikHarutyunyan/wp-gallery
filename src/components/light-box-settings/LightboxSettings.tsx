@@ -33,7 +33,7 @@ interface ILightboxSettings {
   isSlideshowAllowed: boolean;
   autoplay: boolean;
   slideDuration: number;
-  animation: LightboxImageAnimation;
+  imageAnimation: LightboxImageAnimation;
   isFullscreenAllowed: boolean;
   thumbnailsPosition: LightboxThumbnailsPosition;
   thumbnailWidth: number;
@@ -73,7 +73,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
     isSlideshowAllowed,
     autoplay,
     slideDuration,
-    animation,
+    imageAnimation,
     isFullscreenAllowed,
     thumbnailsPosition,
     thumbnailWidth,
@@ -164,9 +164,9 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                 )}
                 <Filter isLoading={isLoading}>
                   <SelectControl
-                      id={'animation'}
+                      id={'imageAnimation'}
                       name={'Animation'}
-                      value={animation}
+                      value={imageAnimation}
                       options={LightboxImageAnimationOptions}
                       onChange={onInputValueChange}
                   />

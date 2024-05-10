@@ -124,7 +124,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         isSlideshowAllowed: false,
         autoplay: false,
         slideDuration: 3000,
-        animation: LightboxImageAnimation.SLIDE_HORIZONTAL,
+        imageAnimation: LightboxImageAnimation.SLIDEH,
         thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
         thumbnailWidth: 80,
         thumbnailHeight: 80,

@@ -86,12 +86,12 @@
 }
 
 /* Slide vertical */
-.reacg-lightbox-animation-slide-vertical .yarl__slide .yarl__slide_wrapper {
+.reacg-lightbox-animation-slideV .yarl__slide .yarl__slide_wrapper {
    transition: top 0.3s ease-in-out;
    top: 100%;
    position: absolute;
 }
-.reacg-lightbox-animation-slide-vertical .yarl__slide.yarl__slide_current .yarl__slide_wrapper {
+.reacg-lightbox-animation-slideV .yarl__slide.yarl__slide_current .yarl__slide_wrapper {
     transition: top 0.3s ease-in-out;
     top: 0;
     position: absolute;
