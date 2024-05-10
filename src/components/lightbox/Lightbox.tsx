@@ -210,6 +210,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           padding: 0,
           gap: thumbnailGap,
           imageFit: 'cover',
+          vignette: false,
         }}
         video={{
           autoPlay: videoAutoplay,

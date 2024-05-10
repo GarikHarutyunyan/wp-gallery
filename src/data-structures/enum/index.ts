@@ -1,5 +1,6 @@
 export * from './Direction';
 export * from './GalleryType';
+export * from './HoverEffect';
 export * from './LightboxCaptionsPosition';
 export * from './LightboxThumbnailsPosition';
 export * from './PaginationButtonShape';
