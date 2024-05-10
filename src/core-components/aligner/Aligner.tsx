@@ -14,15 +14,20 @@ interface IAlignerProps
   align?: Align;
 }
 
-const Aligner = (props: React.PropsWithChildren<IAlignerProps>) => {
+const Aligner = ({
+  style,
+  align,
+  ...restProps
+}: React.PropsWithChildren<IAlignerProps>) => {
   return (
     <div
       style={{
         width: '100%',
         display: 'flex',
-        justifyContent: props.align || Align.SPACE_BETWEEN,
+        justifyContent: align || Align.SPACE_BETWEEN,
+        ...style,
       }}
-      {...props}
+      {...restProps}
     />
   );
 };

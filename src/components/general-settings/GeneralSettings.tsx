@@ -1,14 +1,21 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import {useSettings} from 'components/settings';
 import {Section} from 'core-components';
 import {
+  GalleryType,
   PaginationButtonShape,
   PaginationButtonShapeOptions,
   PaginationType,
   PaginationTypeOptions,
 } from 'data-structures';
-import React, {ReactNode} from 'react';
-import {ColorControl, NumberControl, SelectControl} from '../controls';
+import React, {ReactNode, useEffect} from 'react';
+import {
+  ColorControl,
+  ISelectOption,
+  NumberControl,
+  SelectControl,
+} from '../controls';
 import {Filter} from '../settings/Filter';
 
 interface IGeneralSettings {
@@ -41,10 +48,27 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
     loadMoreButtonColor,
     paginationTextColor,
   } = value;
+  const {type} = useSettings();
+
+  useEffect(() => {
+    if (type === GalleryType.MOSAIC) {
+      onInputValueChange(PaginationType.SIMPLE, 'paginationType');
+    }
+  }, [type]);
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     key && onChange({...value, [key]: inputValue});
   };
+
+  const filteredPaginationTypeOptions =
+    type === GalleryType.MOSAIC
+      ? PaginationTypeOptions.filter(
+          (option: ISelectOption) =>
+            ![PaginationType.SCROLL, PaginationType.LOAD_MORE].includes(
+              option.value as PaginationType
+            )
+        )
+      : PaginationTypeOptions;
 
   const renderMainSettings = (): ReactNode => {
     return (
@@ -57,7 +81,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                 id={'paginationType'}
                 name={'Pagination Type'}
                 value={paginationType}
-                options={PaginationTypeOptions}
+                options={filteredPaginationTypeOptions}
                 onChange={onInputValueChange}
               />
             </Filter>

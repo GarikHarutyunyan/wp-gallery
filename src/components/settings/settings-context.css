@@ -1,5 +1,21 @@
 .reacg-settings {
     box-shadow: unset !important;
+
+    .type-option {
+        cursor: pointer;
+    }
+
+    .type-option__title {
+        margin: 2px 0 0;
+        font-weight: bold;
+    }
+
+    .type-option__image {
+        width: 140px;
+        height: 100px;
+        margin: 5px;
+        border-radius: 2px;
+    }
 }
 
 .options-panel_header,

@@ -1,4 +1,5 @@
 import {Box} from '@mui/material';
+import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {IMosaicSettings} from 'components/mosaic-settings';
 import {useSettings} from 'components/settings';
@@ -92,37 +93,26 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
         photos={photos}
         componentsProps={{
           containerProps: {style: {background: backgroundColor}},
-          imageProps: {style: {background: paddingColor}},
+          imageProps: {style: {background: paddingColor, objectFit: 'cover'}},
         }}
-        // renderPhoto={({
-        //   photo,
-        //   layout,
-        //   imageProps: {style, ...restImageProps},
-        // }) => {
-        //   return (
-        //     <div
-        //       style={{position: 'relative', cursor: 'pointer', ...style}}
-        //       onClick={() => (onClick as Function)(layout.index)}
-        //     >
-        //       <img
-        //         style={{objectFit: 'cover', width: '100%', height: '100%'}}
-        //         {...(restImageProps as any)}
-        //       />
-        //       {photo.type === ImageType.VIDEO && (
-        //         <VideoThumbnailIcon
-        //           style={{
-        //             height: getThumbnailIconSize(layout.width, layout.height),
-        //             width: getThumbnailIconSize(layout.width, layout.height),
-        //           }}
-        //           className={clsx(
-        //             'yarl__thumbnails_thumbnail_icon',
-        //             'thumbnail-gallery__video-icon'
-        //           )}
-        //         />
-        //       )}
-        //     </div>
-        //   );
-        // }}
+        onClick={({index}) => onClick!(index)}
+        renderPhoto={({photo, layout, wrapperStyle, renderDefaultPhoto}) => (
+          <div style={{position: 'relative', ...wrapperStyle}}>
+            {renderDefaultPhoto({wrapped: true})}
+            {photo.type === ImageType.VIDEO && (
+              <VideoThumbnailIcon
+                style={{
+                  height: getThumbnailIconSize(layout.width, layout.height),
+                  width: getThumbnailIconSize(layout.width, layout.height),
+                }}
+                className={clsx(
+                  'yarl__thumbnails_thumbnail_icon',
+                  'thumbnail-gallery__video-icon'
+                )}
+              />
+            )}
+          </div>
+        )}
       />
     </Box>
   );

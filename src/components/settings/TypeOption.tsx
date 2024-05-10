@@ -3,20 +3,15 @@ import {AppInfoContext} from 'contexts/AppInfoContext';
 import {GalleryType} from 'data-structures';
 import React, {useContext} from 'react';
 
+const activeColor: string = '#135C92';
+const inactiveColor: string = '#86A3B8';
+
 interface ITypeOptionProps {
   title: string;
   value: GalleryType;
   isSelected: boolean;
   onClick: (value: GalleryType) => void;
 }
-
-const fetchImage = async () => {
-  const response = await import(`../../assets/mosaic.png`);
-  console.log(response.default);
-  //   setSrc(response.default);
-};
-
-fetchImage();
 
 const TypeOption: React.FC<ITypeOptionProps> = ({
   title,
@@ -31,26 +26,23 @@ const TypeOption: React.FC<ITypeOptionProps> = ({
   };
 
   return (
-    <div>
+    <div onClick={onOptionClick} className={'type-option'}>
       <Typography
-        gutterBottom
-        variant="subtitle2"
-        component="div"
-        style={{margin: '5px'}}
+        variant={'subtitle1'}
+        component={'div'}
+        color={isSelected ? activeColor : inactiveColor}
+        align={'center'}
+        className={'type-option__title'}
       >
         {title}
       </Typography>
-      <div onClick={onOptionClick} style={{margin: '5px'}}>
-        <img
-          style={{
-            width: '200px',
-            height: '140px',
-            backgroundColor: isSelected ? '#135C92' : '#86A3B8',
-            borderRadius: '2px',
-          }}
-          src={`${pluginUrl}/assets/images/${value}.png`}
-        />
-      </div>
+      <img
+        style={{
+          backgroundColor: isSelected ? activeColor : inactiveColor,
+        }}
+        src={`${pluginUrl}/assets/images/${value}.png`}
+        className={'type-option__image'}
+      />
     </div>
   );
 };

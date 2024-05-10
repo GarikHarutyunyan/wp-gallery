@@ -17,7 +17,7 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
   const {type} = useSettings();
 
   return (
-    <Aligner align={Align.START}>
+    <Aligner align={Align.START} style={{margin: '10px 10px 0'}}>
       {GalleryTypeOptions.map((option: ISelectOption) => {
         return (
           <TypeOption
