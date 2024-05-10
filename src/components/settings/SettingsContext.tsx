@@ -140,7 +140,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         lightbox: lightboxSettings,
       } as ISettingsDTO;
 
-      // ??
       const validSettings: ISettingsDTO = Object.entries(settings).reduce(
         (accumulator, [key, value]) => ({...accumulator, [key]: value || ''}),
         {}
