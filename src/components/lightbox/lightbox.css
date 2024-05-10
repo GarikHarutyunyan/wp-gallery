@@ -59,8 +59,3 @@
     text-overflow: ellipsis;
     padding: 0 2px 0 0;
 }
-
-/* To remove filmstrip background color gradient.*/
-.react-lightbox__background .yarl__thumbnails_vignette {
-    background: none;
-}
