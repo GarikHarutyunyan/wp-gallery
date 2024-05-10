@@ -4,6 +4,7 @@ import {IMosaicSettings} from 'components/mosaic-settings';
 import {IThumbnailSettings} from 'components/thumbnail-settings';
 import {
   Direction,
+  HoverEffect,
   LightboxCaptionsPosition,
   LightboxThumbnailsPosition,
   PaginationButtonShape,
@@ -28,6 +29,7 @@ const thumbnailMockSettings: IThumbnailSettings = {
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
+  hoverEffect: HoverEffect.BLUR,
 };
 
 const mosaicMockSettings: IMosaicSettings = {

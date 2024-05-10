@@ -1,5 +1,6 @@
 import {IGeneralSettings} from 'components/general-settings';
 import {IThumbnailSettings} from 'components/thumbnail-settings';
+import {HoverEffect} from 'data-structures';
 
 const extractThumbnailSettings = (
   settings: IThumbnailSettings & IGeneralSettings
@@ -19,6 +20,7 @@ const extractThumbnailSettings = (
     titlePosition,
     titleVisibility,
     width = 1,
+    hoverEffect = HoverEffect.BLUR,
   }: IThumbnailSettings = settings;
 
   return {
@@ -36,6 +38,7 @@ const extractThumbnailSettings = (
     titlePosition,
     titleVisibility,
     width,
+    hoverEffect,
   };
 };
 
