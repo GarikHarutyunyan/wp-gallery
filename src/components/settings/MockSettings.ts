@@ -6,6 +6,7 @@ import {
   Direction,
   HoverEffect,
   LightboxCaptionsPosition,
+  LightboxImageAnimation,
   LightboxThumbnailsPosition,
   PaginationButtonShape,
   PaginationType,
@@ -79,6 +80,7 @@ const lightboxMockSettings: ILightboxSettings = {
   captionsPosition: LightboxCaptionsPosition.BOTTOM,
   captionFontFamily: 'Roboto',
   captionColor: 'White',
+  imageAnimation: LightboxImageAnimation.BLUR,
 };
 
 export {

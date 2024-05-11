@@ -93,11 +93,17 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
         photos={photos}
         componentsProps={{
           containerProps: {style: {background: backgroundColor}},
-          imageProps: {style: {background: paddingColor, objectFit: 'cover'}},
+          imageProps: {style: {objectFit: 'cover'}},
         }}
         onClick={({index}) => onClick!(index)}
         renderPhoto={({photo, layout, wrapperStyle, renderDefaultPhoto}) => (
-          <div style={{position: 'relative', ...wrapperStyle}}>
+          <div
+            style={{
+              position: 'relative',
+              background: paddingColor,
+              ...wrapperStyle,
+            }}
+          >
             {renderDefaultPhoto({wrapped: true})}
             {photo.type === ImageType.VIDEO && (
               <VideoThumbnailIcon
