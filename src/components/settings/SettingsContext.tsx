@@ -6,7 +6,7 @@ import {AppInfoContext} from 'contexts/AppInfoContext';
 import {Section} from 'core-components';
 import {GalleryType} from 'data-structures';
 import {useSnackbar} from 'notistack';
-import React, {useContext, useLayoutEffect, useState} from 'react';
+import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
 import {IThumbnailSettings} from '../thumbnail-settings';
 import {
   generalMockSettings,
@@ -207,6 +207,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
+  const renderChildren = (): ReactNode => {
+    if (showControls) {
+      return <div style={{margin: '0 20px'}}>{children}</div>;
+    }
+    return children;
+  };
+
   return (
     <SettingsContext.Provider
       value={{
@@ -245,7 +252,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           />
         </>
       )}
-      {children}
+      {renderChildren()}
     </SettingsContext.Provider>
   );
 };
