@@ -10,7 +10,7 @@ import {TranslationsContext} from 'contexts/TranslationsContext';
 interface IPaginationProviderProps {
   type: PaginationType;
   onLoad: (_event?: any, page?: number) => void;
-  pagesCount?: number;
+  pagesCount: number;
   isFullyLoaded?: boolean;
   settings: IGeneralSettings;
 }
@@ -58,7 +58,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   };
 
   const renderPagination = (): ReactNode => {
-    return (
+    return pagesCount > 1 ? (
       <Pagination
         count={pagesCount}
         color={'primary'}
@@ -78,7 +78,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
           />
         )}
       />
-    );
+    ) : null;
   };
 
   const renderLoadMoreButton = (): ReactNode => {
