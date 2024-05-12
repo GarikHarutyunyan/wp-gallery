@@ -1,10 +1,20 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {Section} from 'core-components';
-import {Direction, DirectionOptions} from 'data-structures';
+import {
+  Direction,
+  DirectionOptions,
+  TitleAlignment,
+  TitleAlignmentOptions,
+  TitlePosition,
+  TitlePositionOptions,
+  TitleVisibility,
+  TitleVisibilityOptions,
+} from 'data-structures';
 import React, {ReactNode} from 'react';
 import {
   ColorControl,
+  FontControl,
   NumberControl,
   SelectControl,
   SliderControl,
@@ -20,6 +30,12 @@ interface IMosaicSettings {
   paddingColor: string;
   rowHeight: number;
   columns?: number | undefined;
+  titlePosition: TitlePosition;
+  titleAlignment: TitleAlignment;
+  titleVisibility: TitleVisibility;
+  titleFontFamily: string;
+  titleColor: string;
+  titleFontSize?: number | undefined;
 }
 
 interface IMosaicSettingsProps {
@@ -42,6 +58,12 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({
     paddingColor,
     rowHeight,
     columns,
+    titlePosition,
+    titleAlignment,
+    titleVisibility,
+    titleFontFamily,
+    titleColor,
+    titleFontSize,
   } = value;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -143,10 +165,70 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({
                 onChange={onInputValueChange}
               />
             </Filter>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'titleVisibility'}
+                name={'Title visibility'}
+                value={titleVisibility}
+                options={TitleVisibilityOptions}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            {titleVisibility !== TitleVisibility.NONE && renderTitleSettings()}
           </Grid>
         }
         defaultExpanded={false}
       />
+    );
+  };
+
+  const renderTitleSettings = (): ReactNode => {
+    return (
+      <>
+        <Filter isLoading={isLoading}>
+          <SelectControl
+            id={'titlePosition'}
+            name={'Title position'}
+            value={titlePosition}
+            options={TitlePositionOptions}
+            onChange={onInputValueChange}
+          />
+        </Filter>
+        <Filter isLoading={isLoading}>
+          <SelectControl
+            id={'titleAlignment'}
+            name={'Title alignement'}
+            value={titleAlignment}
+            options={TitleAlignmentOptions}
+            onChange={onInputValueChange}
+          />
+        </Filter>
+        <Filter isLoading={isLoading}>
+          <FontControl
+            id={'titleFontFamily'}
+            name={'Title font family'}
+            value={titleFontFamily}
+            onChange={onInputValueChange}
+          />
+        </Filter>
+        <Filter isLoading={isLoading}>
+          <ColorControl
+            id={'titleColor'}
+            name="Title color"
+            value={titleColor}
+            onChange={onInputValueChange}
+          />
+        </Filter>
+        <Filter isLoading={isLoading}>
+          <NumberControl
+            id={'titleFontSize'}
+            name={'Title font size'}
+            value={titleFontSize}
+            onChange={onInputValueChange}
+            unit={'px'}
+          />
+        </Filter>
+      </>
     );
   };
 

@@ -6,7 +6,7 @@ import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSetting
 import {
   IImageDTO,
   ImageType,
-  TitlePosition,
+  ThumbnailTitlePosition,
   TitleVisibility,
 } from 'data-structures';
 import React, {
@@ -134,9 +134,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
 
   const renderTitle = (image: IImageDTO) => {
     let paddingTitle = '0';
-    if (titlePosition === TitlePosition.BELOW) {
+    if (titlePosition === ThumbnailTitlePosition.BELOW) {
       paddingTitle = padding + 'px';
-    } else if (titlePosition !== TitlePosition.CENTER) {
+    } else if (titlePosition !== ThumbnailTitlePosition.CENTER) {
       paddingTitle = borderRadius / 2 + '%';
     }
     return (
@@ -144,7 +144,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
         className={clsx('thumbnail-gallery__title', {
           'thumbnail-gallery__title_on-hover':
             titleVisibility === TitleVisibility.ON_HOVER &&
-            titlePosition !== TitlePosition.BELOW,
+            titlePosition !== ThumbnailTitlePosition.BELOW,
           'thumbnail-gallery__title_hidden':
             titleVisibility === TitleVisibility.NONE,
         })}
@@ -152,13 +152,13 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
         <ImageListItemBar
           style={{
             textAlign: titleAlignment,
-            /*margin: titlePosition !== TitlePosition.BELOW ? padding + "px" : 0,*/
+            /*margin: titlePosition !== ThumbnailTitlePosition.BELOW ? padding + "px" : 0,*/
             paddingLeft: paddingTitle,
             paddingRight: paddingTitle,
           }}
           className={clsx({
             'thumbnail-gallery__title-content_center':
-              titlePosition === TitlePosition.CENTER,
+              titlePosition === ThumbnailTitlePosition.CENTER,
           })}
           title={
             <span
@@ -172,7 +172,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
             </span>
           }
           position={
-            titlePosition !== TitlePosition.CENTER ? titlePosition : 'bottom'
+            titlePosition !== ThumbnailTitlePosition.CENTER
+              ? titlePosition
+              : 'bottom'
           }
         />
       </div>
@@ -207,7 +209,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
               onClick={() => onClick?.(index)}
               style={{
                 overflow:
-                  titlePosition === TitlePosition.BELOW ? 'hidden' : 'unset',
+                  titlePosition === ThumbnailTitlePosition.BELOW
+                    ? 'hidden'
+                    : 'unset',
               }}
               key={image.original.url + index}
             >
@@ -253,12 +257,12 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
                         })}
                       />
                     )}
-                    {titlePosition !== TitlePosition.BELOW
+                    {titlePosition !== ThumbnailTitlePosition.BELOW
                       ? renderTitle(image)
                       : null}
                   </div>
                 </div>
-                {titlePosition === TitlePosition.BELOW
+                {titlePosition === ThumbnailTitlePosition.BELOW
                   ? renderTitle(image)
                   : null}
               </ImageListItem>

@@ -10,6 +10,7 @@ import {
   LightboxThumbnailsPosition,
   PaginationButtonShape,
   PaginationType,
+  ThumbnailTitlePosition,
   TitleAlignment,
   TitlePosition,
   TitleVisibility,
@@ -24,7 +25,7 @@ const thumbnailMockSettings: IThumbnailSettings = {
   padding: 10,
   paddingColor: 'Skyblue',
   borderRadius: 5,
-  titlePosition: TitlePosition.BOTTOM,
+  titlePosition: ThumbnailTitlePosition.BOTTOM,
   titleAlignment: TitleAlignment.LEFT,
   titleVisibility: TitleVisibility.NONE,
   titleFontFamily: 'Roboto',
@@ -42,6 +43,12 @@ const mosaicMockSettings: IMosaicSettings = {
   paddingColor: '',
   rowHeight: 250,
   columns: 5,
+  titlePosition: TitlePosition.BOTTOM,
+  titleAlignment: TitleAlignment.LEFT,
+  titleVisibility: TitleVisibility.NONE,
+  titleFontFamily: 'Roboto',
+  titleColor: 'Black',
+  titleFontSize: 20,
 };
 
 const generalMockSettings: IGeneralSettings = {

@@ -1,12 +1,19 @@
-import {Box} from '@mui/material';
+import {Box, ImageListItemBar} from '@mui/material';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {IMosaicSettings} from 'components/mosaic-settings';
 import {useSettings} from 'components/settings';
-import {Direction, IImageDTO, ImageType} from 'data-structures';
-import {useMemo} from 'react';
+import {
+  Direction,
+  IImageDTO,
+  ImageType,
+  TitlePosition,
+  TitleVisibility,
+} from 'data-structures';
+import {ReactNode, useMemo} from 'react';
 import PhotoAlbum from 'react-photo-album';
 import {createIcon} from 'yet-another-react-lightbox';
+import './mosaic-gallery.css';
 
 const VideoThumbnailIcon = createIcon(
   'VideoThumbnail',
@@ -35,6 +42,12 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
     rowHeight,
     width,
     columns,
+    titlePosition,
+    titleAlignment,
+    titleVisibility,
+    titleFontFamily,
+    titleColor,
+    titleFontSize,
   } = settings as IMosaicSettings;
 
   const photos = useMemo(() => {
@@ -82,6 +95,48 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
     });
   }, [images]);
 
+  const renderTitle = (src: string): ReactNode => {
+    const image = images?.find(
+      (image) => image.original.url === src
+    ) as IImageDTO;
+
+    return image ? (
+      <div
+        className={clsx('mosaic-gallery__title', {
+          'mosaic-gallery__title_on-hover':
+            titleVisibility === TitleVisibility.ON_HOVER,
+          'mosaic-gallery__title_hidden':
+            titleVisibility === TitleVisibility.NONE,
+        })}
+      >
+        <ImageListItemBar
+          style={{
+            textAlign: titleAlignment,
+            /*margin: titlePosition !== TitlePosition.BELOW ? padding + "px" : 0,*/
+          }}
+          className={clsx({
+            'mosaic-gallery__title-content_center':
+              titlePosition === TitlePosition.CENTER,
+          })}
+          title={
+            <span
+              style={{
+                color: titleColor,
+                fontFamily: titleFontFamily,
+                fontSize: `${titleFontSize}px`,
+              }}
+            >
+              {image.title || <br />}
+            </span>
+          }
+          position={
+            titlePosition !== TitlePosition.CENTER ? titlePosition : 'bottom'
+          }
+        />
+      </div>
+    ) : null;
+  };
+
   return (
     <Box sx={{width: `${width}%`, mx: 'auto'}}>
       <PhotoAlbum
@@ -103,8 +158,10 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
               background: paddingColor,
               ...wrapperStyle,
             }}
+            className={'mosaic-gallery__image-wrapper'}
           >
             {renderDefaultPhoto({wrapped: true})}
+            {renderTitle(photo.src)}
             {photo.type === ImageType.VIDEO && (
               <VideoThumbnailIcon
                 style={{
@@ -113,7 +170,7 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
                 }}
                 className={clsx(
                   'yarl__thumbnails_thumbnail_icon',
-                  'thumbnail-gallery__video-icon'
+                  'mosaic-gallery__video-icon'
                 )}
               />
             )}

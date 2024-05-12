@@ -1,0 +1,28 @@
+.mosaic-gallery__video-icon {
+    cursor: pointer;
+}
+
+.mosaic-gallery__title_on-hover {
+    display: none;
+}
+
+.mosaic-gallery__title_hidden {
+    display: none;
+}
+
+.mosaic-gallery__title-content_center {
+    text-align: center;
+    height: 100%;
+}
+
+.mosaic-gallery__title_absolute {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+}
+
+.mosaic-gallery__image-wrapper:hover .mosaic-gallery__title_on-hover {
+    display: block;
+    pointer-events: none;
+}
