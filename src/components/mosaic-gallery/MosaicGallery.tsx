@@ -99,6 +99,10 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
     const image = images?.find(
       (image) => image.original.url === src
     ) as IImageDTO;
+    // let paddingTitle = '0';
+    // if (titlePosition !== TitlePosition.CENTER) {
+    //   paddingTitle = borderRadius / 2 + '%';
+    // }
 
     return image ? (
       <div
@@ -113,6 +117,8 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
           style={{
             textAlign: titleAlignment,
             /*margin: titlePosition !== TitlePosition.BELOW ? padding + "px" : 0,*/
+            // paddingLeft: paddingTitle,
+            // paddingRight: paddingTitle,
           }}
           className={clsx({
             'mosaic-gallery__title-content_center':
@@ -154,26 +160,27 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
         renderPhoto={({photo, layout, wrapperStyle, renderDefaultPhoto}) => (
           <div
             style={{
-              position: 'relative',
               background: paddingColor,
               ...wrapperStyle,
             }}
             className={'mosaic-gallery__image-wrapper'}
           >
-            {renderDefaultPhoto({wrapped: true})}
-            {renderTitle(photo.src)}
-            {photo.type === ImageType.VIDEO && (
-              <VideoThumbnailIcon
-                style={{
-                  height: getThumbnailIconSize(layout.width, layout.height),
-                  width: getThumbnailIconSize(layout.width, layout.height),
-                }}
-                className={clsx(
-                  'yarl__thumbnails_thumbnail_icon',
-                  'mosaic-gallery__video-icon'
-                )}
-              />
-            )}
+            <div style={{position: 'relative'}}>
+              {renderDefaultPhoto({wrapped: true})}
+              {renderTitle(photo.src)}
+              {photo.type === ImageType.VIDEO && (
+                <VideoThumbnailIcon
+                  style={{
+                    height: getThumbnailIconSize(layout.width, layout.height),
+                    width: getThumbnailIconSize(layout.width, layout.height),
+                  }}
+                  className={clsx(
+                    'yarl__thumbnails_thumbnail_icon',
+                    'mosaic-gallery__video-icon'
+                  )}
+                />
+              )}
+            </div>
           </div>
         )}
       />

@@ -26,3 +26,7 @@
     display: block;
     pointer-events: none;
 }
+
+.mosaic-gallery__image-wrapper img {
+    object-fit: cover;
+}
