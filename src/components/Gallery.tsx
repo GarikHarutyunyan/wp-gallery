@@ -59,7 +59,7 @@ const Gallery: React.FC = () => {
     return (
       <PaginationProvider
         type={paginationType}
-        pagesCount={pagesCount}
+        pagesCount={pagesCount || 1}
         onLoad={onPageChange as any}
         isFullyLoaded={isFullyLoaded}
         settings={generalSettings as IGeneralSettings}
