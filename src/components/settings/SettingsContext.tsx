@@ -125,6 +125,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         general: generalSettings,
         thumbnails: thumbnailSettings,
         lightbox: lightboxSettings,
+        mosaic: mosaicSettings,
       } as ISettingsDTO;
 
       const validSettings: ISettingsDTO = Object.entries(settings).reduce(

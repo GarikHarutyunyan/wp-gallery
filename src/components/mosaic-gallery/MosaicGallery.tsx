@@ -1,30 +1,12 @@
-import {Box, ImageListItemBar} from '@mui/material';
-import clsx from 'clsx';
+import {Box} from '@mui/material';
 import {useData} from 'components/data-context/useData';
 import {IMosaicSettings} from 'components/mosaic-settings';
 import {useSettings} from 'components/settings';
-import {
-  Direction,
-  IImageDTO,
-  ImageType,
-  TitlePosition,
-  TitleVisibility,
-} from 'data-structures';
-import {ReactNode, useMemo} from 'react';
+import {Direction, IImageDTO, ImageType} from 'data-structures';
+import React, {ReactNode, useCallback, useMemo} from 'react';
 import PhotoAlbum from 'react-photo-album';
-import {createIcon} from 'yet-another-react-lightbox';
+import {MosaicGalleryItem} from './MosaicGalleryItem';
 import './mosaic-gallery.css';
-
-const VideoThumbnailIcon = createIcon(
-  'VideoThumbnail',
-  <path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-);
-
-const getThumbnailIconSize = (width: number, height: number) => {
-  const size: number = Math.min(width, height, 55) - 10;
-
-  return size > 0 ? `${size}px` : '0px';
-};
 
 interface IMosaicGalleryProps {
   onClick?: (index: number) => void;
@@ -33,37 +15,17 @@ interface IMosaicGalleryProps {
 const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
   const {mosaicSettings: settings} = useSettings();
   const {images} = useData();
-  const {
-    direction,
-    gap,
-    backgroundColor,
-    padding,
-    paddingColor,
-    rowHeight,
-    width,
-    columns,
-    titlePosition,
-    titleAlignment,
-    titleVisibility,
-    titleFontFamily,
-    titleColor,
-    titleFontSize,
-  } = settings as IMosaicSettings;
+  const {direction, gap, backgroundColor, padding, rowHeight, width, columns} =
+    settings as IMosaicSettings;
 
   const photos = useMemo(() => {
     return images!.map((image: IImageDTO, index: number) => {
-      const width =
-        image.type !== ImageType.VIDEO
-          ? image.original.width
-          : image.medium_large.width;
-      const height =
-        image.type !== ImageType.VIDEO
-          ? image.original.height
-          : image.medium_large.height;
-      const src =
-        image.type !== ImageType.VIDEO
-          ? image.original.url
-          : image.medium_large.url;
+      const isVideo: boolean = image.type === ImageType.VIDEO;
+      const width = isVideo ? image.medium_large.width : image.original.width;
+      const height = isVideo
+        ? image.medium_large.height
+        : image.original.height;
+      const src = isVideo ? image.medium_large.url : image.original.url;
       const srcSet = [
         {
           src: image.medium_large.url,
@@ -77,7 +39,7 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
         },
       ];
 
-      if (image.type !== ImageType.VIDEO) {
+      if (!isVideo) {
         srcSet.unshift({
           src: image.original.url,
           width: image.original.width,
@@ -89,59 +51,32 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
         width,
         height,
         src,
-        type: image.type,
         srcSet,
+        url: image.original.url,
       };
     });
   }, [images]);
 
-  const renderTitle = (src: string): ReactNode => {
-    const image = images?.find(
-      (image) => image.original.url === src
-    ) as IImageDTO;
-    // let paddingTitle = '0';
-    // if (titlePosition !== TitlePosition.CENTER) {
-    //   paddingTitle = borderRadius / 2 + '%';
-    // }
+  const renderMosaicGalleryItem = useCallback(
+    ({photo, layout, wrapperStyle, renderDefaultPhoto}: any): ReactNode => {
+      const image = images?.find(
+        (image) => image.original.url === photo.url
+      ) as IImageDTO;
 
-    return image ? (
-      <div
-        className={clsx('mosaic-gallery__title', {
-          'mosaic-gallery__title_on-hover':
-            titleVisibility === TitleVisibility.ON_HOVER,
-          'mosaic-gallery__title_hidden':
-            titleVisibility === TitleVisibility.NONE,
-        })}
-      >
-        <ImageListItemBar
-          style={{
-            textAlign: titleAlignment,
-            /*margin: titlePosition !== TitlePosition.BELOW ? padding + "px" : 0,*/
-            // paddingLeft: paddingTitle,
-            // paddingRight: paddingTitle,
-          }}
-          className={clsx({
-            'mosaic-gallery__title-content_center':
-              titlePosition === TitlePosition.CENTER,
-          })}
-          title={
-            <span
-              style={{
-                color: titleColor,
-                fontFamily: titleFontFamily,
-                fontSize: `${titleFontSize}px`,
-              }}
-            >
-              {image.title || <br />}
-            </span>
-          }
-          position={
-            titlePosition !== TitlePosition.CENTER ? titlePosition : 'bottom'
-          }
-        />
-      </div>
-    ) : null;
-  };
+      return image ? (
+        <MosaicGalleryItem
+          image={image}
+          width={layout.width}
+          height={layout.height}
+          style={wrapperStyle}
+          key={image.original.url}
+        >
+          {renderDefaultPhoto({wrapped: true})}
+        </MosaicGalleryItem>
+      ) : null;
+    },
+    [images]
+  );
 
   return (
     <Box sx={{width: `${width}%`, mx: 'auto'}}>
@@ -154,35 +89,9 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
         photos={photos}
         componentsProps={{
           containerProps: {style: {background: backgroundColor}},
-          imageProps: {style: {objectFit: 'cover'}},
         }}
         onClick={({index}) => onClick!(index)}
-        renderPhoto={({photo, layout, wrapperStyle, renderDefaultPhoto}) => (
-          <div
-            style={{
-              background: paddingColor,
-              ...wrapperStyle,
-            }}
-            className={'mosaic-gallery__image-wrapper'}
-          >
-            <div style={{position: 'relative'}}>
-              {renderDefaultPhoto({wrapped: true})}
-              {renderTitle(photo.src)}
-              {photo.type === ImageType.VIDEO && (
-                <VideoThumbnailIcon
-                  style={{
-                    height: getThumbnailIconSize(layout.width, layout.height),
-                    width: getThumbnailIconSize(layout.width, layout.height),
-                  }}
-                  className={clsx(
-                    'yarl__thumbnails_thumbnail_icon',
-                    'mosaic-gallery__video-icon'
-                  )}
-                />
-              )}
-            </div>
-          </div>
-        )}
+        renderPhoto={renderMosaicGalleryItem}
       />
     </Box>
   );

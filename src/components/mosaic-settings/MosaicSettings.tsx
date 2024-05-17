@@ -30,6 +30,7 @@ interface IMosaicSettings {
   paddingColor: string;
   rowHeight: number;
   columns?: number | undefined;
+  borderRadius: number;
   titlePosition: TitlePosition;
   titleAlignment: TitleAlignment;
   titleVisibility: TitleVisibility;
@@ -58,6 +59,7 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({
     paddingColor,
     rowHeight,
     columns,
+    borderRadius,
     titlePosition,
     titleAlignment,
     titleVisibility,
@@ -80,7 +82,7 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({
               <SliderControl
                 id={'width'}
                 name="Width (%)"
-                min={0}
+                min={10}
                 max={100}
                 value={width}
                 onChange={onInputValueChange}
@@ -162,6 +164,16 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({
                 id={'paddingColor'}
                 name="Padding color"
                 value={paddingColor}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SliderControl
+                id={'borderRadius'}
+                name="Radius (%)"
+                min={0}
+                value={borderRadius}
+                max={20}
                 onChange={onInputValueChange}
               />
             </Filter>
