@@ -121,3 +121,9 @@
     transition: filter 0.5s ease-in-out;
     filter: blur(0);
 }
+
+/* Thumbnails imageFit: 'cover' option is not affected on video thumbnails*/
+.reacg-lightbox .yarl__thumbnails_thumbnail img {
+    -o-object-fit: cover;
+    object-fit: cover;
+}

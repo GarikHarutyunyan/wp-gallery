@@ -237,7 +237,10 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
                     }}
                   >
                     <img
-                      className={clsx('thumbnail-gallery__image')}
+                      className={clsx(
+                        'thumbnail-gallery__image',
+                        'MuiImageListItem-img'
+                      )}
                       src={getImageSource(image)}
                       alt={image.title}
                       loading="lazy"
