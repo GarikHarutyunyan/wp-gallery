@@ -62,6 +62,9 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
       const image = images?.find(
         (image) => image.original.url === photo.url
       ) as IImageDTO;
+      const index = images?.findIndex(
+        (image) => image.original.url === photo.url
+      ) as number;
 
       return image ? (
         <MosaicGalleryItem
@@ -70,6 +73,7 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
           height={layout.height}
           style={wrapperStyle}
           key={image.original.url}
+          onClick={onImageClick(index)}
         >
           {renderDefaultPhoto({wrapped: true})}
         </MosaicGalleryItem>
@@ -77,6 +81,9 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
     },
     [images]
   );
+
+  const onImageClick = (index: number) =>
+    onClick ? () => onClick(index) : undefined;
 
   return (
     <Box sx={{width: `${width}%`, mx: 'auto'}}>
@@ -90,7 +97,6 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
         componentsProps={{
           containerProps: {style: {background: backgroundColor}},
         }}
-        onClick={({index}) => onClick!(index)}
         renderPhoto={renderMosaicGalleryItem}
       />
     </Box>

@@ -26,6 +26,7 @@ interface IMosaicGalleryItemProps extends React.PropsWithChildren {
   image: IImageDTO;
   width: number;
   height: number;
+  onClick?: () => void;
   style: CSSProperties;
 }
 
@@ -33,6 +34,7 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
   image,
   width,
   height,
+  onClick,
   style,
   children,
 }) => {
@@ -101,7 +103,10 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
         borderRadius: `${borderRadius}px`,
         ...style,
       }}
-      className={'mosaic-gallery__image-wrapper'}
+      className={clsx('mosaic-gallery__image-wrapper', {
+        'mosaic-gallery__image-wrapper_clickable': !!onClick,
+      })}
+      onClick={onClick}
     >
       <div
         style={{

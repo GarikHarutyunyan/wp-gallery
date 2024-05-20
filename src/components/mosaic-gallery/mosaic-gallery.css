@@ -30,3 +30,7 @@
 .mosaic-gallery__image-wrapper img {
     object-fit: cover;
 }
+
+.mosaic-gallery__image-wrapper_clickable {
+    cursor: pointer;
+}
