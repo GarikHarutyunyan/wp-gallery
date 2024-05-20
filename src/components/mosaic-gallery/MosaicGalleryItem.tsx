@@ -98,7 +98,7 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
     <div
       style={{
         background: paddingColor,
-        borderRadius: borderRadius + '%',
+        borderRadius: `${borderRadius}px`,
         ...style,
       }}
       className={'mosaic-gallery__image-wrapper'}
@@ -107,7 +107,7 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
         style={{
           position: 'relative',
           overflow: 'hidden',
-          borderRadius: borderRadius + '%',
+          borderRadius: `${borderRadius}px`,
         }}
       >
         {children}

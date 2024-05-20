@@ -32,11 +32,11 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
           width: image.medium_large.width,
           height: image.medium_large.height,
         },
-        {
-          src: image.thumbnail.url,
-          width: image.thumbnail.width,
-          height: image.thumbnail.height,
-        },
+        // {
+        //   src: image.thumbnail.url,
+        //   width: image.thumbnail.width,
+        //   height: image.thumbnail.height,
+        // },
       ];
 
       if (!isVideo) {

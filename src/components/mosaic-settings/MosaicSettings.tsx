@@ -170,10 +170,10 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({
             <Filter isLoading={isLoading}>
               <SliderControl
                 id={'borderRadius'}
-                name="Radius (%)"
+                name="Radius (px)"
                 min={0}
                 value={borderRadius}
-                max={20}
+                max={50}
                 onChange={onInputValueChange}
               />
             </Filter>
