@@ -57,6 +57,11 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
     });
   }, [images]);
 
+  const onImageClick = useCallback(
+    (index: number) => (onClick ? () => onClick(index) : undefined),
+    [onClick]
+  );
+
   const renderMosaicGalleryItem = useCallback(
     ({photo, layout, wrapperStyle, renderDefaultPhoto}: any): ReactNode => {
       const image = images?.find(
@@ -79,11 +84,8 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
         </MosaicGalleryItem>
       ) : null;
     },
-    [images]
+    [images, onImageClick]
   );
-
-  const onImageClick = (index: number) =>
-    onClick ? () => onClick(index) : undefined;
 
   return (
     <Box sx={{width: `${width}%`, mx: 'auto'}}>
