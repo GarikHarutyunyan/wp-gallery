@@ -40,6 +40,7 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
 }) => {
   const {mosaicSettings} = useSettings();
   const {
+    padding,
     paddingColor,
     borderRadius,
     titleVisibility,
@@ -49,6 +50,8 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
     titleFontFamily,
     titleFontSize,
   } = mosaicSettings as IMosaicSettings;
+  const imageBorderRadius =
+    padding + 15 < borderRadius ? borderRadius - padding : borderRadius / 2;
 
   const renderTitle = (): ReactNode => {
     // let paddingTitle = '0';
@@ -112,7 +115,7 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
         style={{
           position: 'relative',
           overflow: 'hidden',
-          borderRadius: `${borderRadius}px`,
+          borderRadius: `${imageBorderRadius}px`,
         }}
       >
         {children}
