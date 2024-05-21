@@ -9,6 +9,7 @@ export enum ImageType {
   VIDEO = 'video',
 }
 export interface IImageDTO {
+  id: string;
   title: string;
   type: ImageType;
   caption: string;

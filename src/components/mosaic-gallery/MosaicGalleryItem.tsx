@@ -54,11 +54,6 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
     padding + 15 < borderRadius ? borderRadius - padding : borderRadius / 2;
 
   const renderTitle = (): ReactNode => {
-    // let paddingTitle = '0';
-    // if (titlePosition !== TitlePosition.CENTER) {
-    //   paddingTitle = borderRadius / 2 + '%';
-    // }
-
     return image ? (
       <div
         className={clsx('mosaic-gallery__title', {
@@ -72,9 +67,6 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
         <ImageListItemBar
           style={{
             textAlign: titleAlignment,
-            /*margin: titlePosition !== TitlePosition.BELOW ? padding + "px" : 0,*/
-            // paddingLeft: paddingTitle,
-            // paddingRight: paddingTitle,
           }}
           className={clsx({
             'mosaic-gallery__title-content_center':

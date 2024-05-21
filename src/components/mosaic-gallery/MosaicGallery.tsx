@@ -48,11 +48,12 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
       }
 
       return {
+        key: image.id,
         width,
         height,
         src,
         srcSet,
-        url: image.original.url,
+        id: image.id,
       };
     });
   }, [images]);
@@ -64,11 +65,9 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
 
   const renderMosaicGalleryItem = useCallback(
     ({photo, layout, wrapperStyle, renderDefaultPhoto}: any): ReactNode => {
-      const image = images?.find(
-        (image) => image.original.url === photo.url
-      ) as IImageDTO;
+      const image = images?.find((image) => image.id === photo.id) as IImageDTO;
       const index = images?.findIndex(
-        (image) => image.original.url === photo.url
+        (image) => image.id === photo.id
       ) as number;
 
       return image ? (
