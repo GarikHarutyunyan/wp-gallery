@@ -13,8 +13,11 @@
     .type-option__image {
         width: 140px;
         height: 100px;
-        margin: 5px;
         border-radius: 2px;
+    }
+
+    .type-option__image-container {
+        margin: 5px;
     }
 }
 

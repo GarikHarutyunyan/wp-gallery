@@ -36,13 +36,15 @@ const TypeOption: React.FC<ITypeOptionProps> = ({
       >
         {title}
       </Typography>
-      <img
-        style={{
-          backgroundColor: isSelected ? activeColor : inactiveColor,
-        }}
-        src={`${pluginUrl}/assets/images/${value}.png`}
-        className={'type-option__image'}
-      />
+      <div className={'type-option__image-container'}>
+        <img
+          style={{
+            backgroundColor: isSelected ? activeColor : inactiveColor,
+          }}
+          src={`${pluginUrl}/assets/images/${value}.png`}
+          className={'type-option__image'}
+        />
+      </div>
     </div>
   );
 };
