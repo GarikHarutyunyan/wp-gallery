@@ -50,6 +50,7 @@ const mosaicMockSettings: IMosaicSettings = {
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
+  hoverEffect: HoverEffect.BLUR,
 };
 
 const generalMockSettings: IGeneralSettings = {
