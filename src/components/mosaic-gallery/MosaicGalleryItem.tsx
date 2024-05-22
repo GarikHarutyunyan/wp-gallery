@@ -51,7 +51,7 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
     titleFontSize,
   } = mosaicSettings as IMosaicSettings;
   const imageBorderRadius =
-    padding + 15 < borderRadius ? borderRadius - padding : borderRadius / 2;
+    padding < borderRadius ? borderRadius - padding : borderRadius / 2;
 
   const renderTitle = (): ReactNode => {
     return image ? (
