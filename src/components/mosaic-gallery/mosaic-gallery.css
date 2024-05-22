@@ -22,6 +22,11 @@
     overflow: hidden;
 }
 
+.mosaic-gallery__image-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
 .mosaic-gallery__image-wrapper:hover .mosaic-gallery__title_on-hover {
     display: block;
     pointer-events: none;

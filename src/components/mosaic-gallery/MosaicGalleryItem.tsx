@@ -98,15 +98,13 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
         borderRadius: `${borderRadius}px`,
         ...style,
       }}
-      className={clsx('mosaic-gallery__image-wrapper', {
-        'mosaic-gallery__image-wrapper_clickable': !!onClick,
-      })}
       onClick={onClick}
     >
       <div
+        className={clsx('mosaic-gallery__image-wrapper', {
+          'mosaic-gallery__image-wrapper_clickable': !!onClick,
+        })}
         style={{
-          position: 'relative',
-          overflow: 'hidden',
           borderRadius: `${imageBorderRadius}px`,
         }}
       >
