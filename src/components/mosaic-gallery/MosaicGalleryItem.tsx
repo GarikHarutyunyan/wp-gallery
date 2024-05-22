@@ -49,6 +49,7 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
     titleColor,
     titleFontFamily,
     titleFontSize,
+    hoverEffect,
   } = mosaicSettings as IMosaicSettings;
   const imageBorderRadius =
     padding < borderRadius ? borderRadius - padding : borderRadius / 2;
@@ -101,9 +102,12 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
       onClick={onClick}
     >
       <div
-        className={clsx('mosaic-gallery__image-wrapper', {
-          'mosaic-gallery__image-wrapper_clickable': !!onClick,
-        })}
+          className={clsx(
+              'mosaic-gallery__image-wrapper',
+              'mosaic-gallery__image-wrapper_overflow',
+              'mosaic-gallery__image-wrapper_' + hoverEffect,
+	          {'mosaic-gallery__image-wrapper_clickable': !!onClick}
+          )}
         style={{
           borderRadius: `${imageBorderRadius}px`,
         }}

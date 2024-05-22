@@ -4,6 +4,8 @@ import {Section} from 'core-components';
 import {
   Direction,
   DirectionOptions,
+  HoverEffect,
+  HoverEffectOptions,
   TitleAlignment,
   TitleAlignmentOptions,
   TitlePosition,
@@ -37,6 +39,7 @@ interface IMosaicSettings {
   titleFontFamily: string;
   titleColor: string;
   titleFontSize?: number | undefined;
+  hoverEffect: HoverEffect;
 }
 
 interface IMosaicSettingsProps {
@@ -66,6 +69,7 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({
     titleFontFamily,
     titleColor,
     titleFontSize,
+    hoverEffect,
   } = value;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -175,6 +179,15 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({
                 value={borderRadius}
                 max={50}
                 onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                  id={'hoverEffect'}
+                  name={'Hover effect'}
+                  value={hoverEffect}
+                  options={HoverEffectOptions}
+                  onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>
