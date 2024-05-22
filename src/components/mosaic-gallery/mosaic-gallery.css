@@ -22,7 +22,7 @@
     overflow: hidden;
 }
 
-.mosaic-gallery__image-container:hover .mosaic-gallery__title_on-hover {
+.mosaic-gallery__image-wrapper:hover .mosaic-gallery__title_on-hover {
     display: block;
     pointer-events: none;
 }
@@ -31,7 +31,7 @@
     object-fit: cover;
 }
 
-.mosaic-gallery__image-container_clickable {
+.mosaic-gallery__image-wrapper_clickable {
     cursor: pointer;
 }
 
