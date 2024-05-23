@@ -52,7 +52,7 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
     hoverEffect,
   } = mosaicSettings as IMosaicSettings;
   const imageBorderRadius =
-    padding < borderRadius ? borderRadius - padding : borderRadius / 2;
+    padding < borderRadius / 2 ? borderRadius - padding : borderRadius / 2;
 
   const renderTitle = (): ReactNode => {
     return image ? (
