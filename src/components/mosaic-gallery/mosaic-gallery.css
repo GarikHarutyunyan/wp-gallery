@@ -1,7 +1,3 @@
-.mosaic-gallery__video-icon {
-    cursor: pointer;
-}
-
 .mosaic-gallery__title_on-hover {
     display: none;
 }
@@ -31,7 +27,8 @@
     object-fit: cover;
 }
 
-.mosaic-gallery__image-wrapper_clickable {
+.mosaic-gallery__image-wrapper_clickable,
+.mosaic-gallery__video-icon {
     cursor: pointer;
 }
 
