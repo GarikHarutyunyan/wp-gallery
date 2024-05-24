@@ -210,7 +210,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   const renderChildren = (): ReactNode => {
     if (showControls) {
-      return <div style={{margin: '0 15px'}}>{children}</div>;
+      return <div style={{margin: '0 14px'}}>{children}</div>;
     }
     return children;
   };
