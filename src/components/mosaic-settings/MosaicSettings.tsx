@@ -2,36 +2,38 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {Section} from 'core-components';
 import {
+  Direction,
+  DirectionOptions,
   HoverEffect,
   HoverEffectOptions,
-  ThumbnailTitlePosition,
-  ThumbnailTitlePositionOptions,
   TitleAlignment,
   TitleAlignmentOptions,
+  TitlePosition,
+  TitlePositionOptions,
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
-import React, {ReactNode, useMemo} from 'react';
+import React, {ReactNode} from 'react';
 import {
   ColorControl,
   FontControl,
-  ISelectOption,
   NumberControl,
   SelectControl,
   SliderControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
 
-interface IThumbnailSettings {
-  width?: number | undefined;
-  height?: number | undefined;
-  columns?: number | undefined;
+interface IMosaicSettings {
+  width: number;
+  direction: Direction;
   gap: number;
   backgroundColor: string;
   padding: number;
   paddingColor: string;
+  rowHeight: number;
+  columns?: number | undefined;
   borderRadius: number;
-  titlePosition: ThumbnailTitlePosition;
+  titlePosition: TitlePosition;
   titleAlignment: TitleAlignment;
   titleVisibility: TitleVisibility;
   titleFontFamily: string;
@@ -40,25 +42,26 @@ interface IThumbnailSettings {
   hoverEffect: HoverEffect;
 }
 
-interface IThumbnailSettingsProps {
-  value: IThumbnailSettings;
-  onChange: (newSettings: IThumbnailSettings) => void;
+interface IMosaicSettingsProps {
+  value: IMosaicSettings;
+  onChange: (newSettings: IMosaicSettings) => void;
   isLoading?: boolean;
 }
 
-const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
+const MosaicSettings: React.FC<IMosaicSettingsProps> = ({
   value,
   onChange,
   isLoading,
 }) => {
   const {
     width,
-    height,
-    columns,
+    direction,
     gap,
     backgroundColor,
     padding,
     paddingColor,
+    rowHeight,
+    columns,
     borderRadius,
     titlePosition,
     titleAlignment,
@@ -68,34 +71,10 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
     titleFontSize,
     hoverEffect,
   } = value;
-  const isThumbnailTitlePositionEditable: boolean = borderRadius <= 50;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     key && onChange({...value, [key]: inputValue});
   };
-
-  const titlePositionOptions: ISelectOption[] = useMemo(() => {
-    const belowOption: ISelectOption = ThumbnailTitlePositionOptions.find(
-      (option) => option.value === ThumbnailTitlePosition.BELOW
-    ) as ISelectOption;
-
-    if (titleVisibility === TitleVisibility.ON_HOVER) {
-      if (belowOption) {
-        belowOption.isDisabled = true;
-      }
-
-      if (titlePosition === ThumbnailTitlePosition.BELOW) {
-        onChange({
-          ...value,
-          titlePosition: ThumbnailTitlePosition.BOTTOM,
-        });
-      }
-    } else {
-      belowOption.isDisabled = false;
-    }
-
-    return ThumbnailTitlePositionOptions;
-  }, [titleVisibility]);
 
   const renderBasicSettings = (): ReactNode => {
     return (
@@ -104,34 +83,46 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
-              <NumberControl
+              <SliderControl
                 id={'width'}
-                name={'Width'}
+                name="Width (%)"
+                min={10}
+                max={100}
                 value={width}
                 onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
               />
             </Filter>
             <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'height'}
-                name={'Height'}
-                value={height}
+              <SelectControl
+                id={'direction'}
+                name={'Direction'}
+                value={direction}
+                options={DirectionOptions}
                 onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
               />
             </Filter>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'columns'}
-                name={'Columns'}
-                value={columns}
-                onChange={onInputValueChange}
-                min={1}
-              />
-            </Filter>
+            {direction === Direction.HORIZONTAL ? (
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'rowHeight'}
+                  name={'Row height'}
+                  value={rowHeight}
+                  onChange={onInputValueChange}
+                  min={0}
+                  unit={'px'}
+                />
+              </Filter>
+            ) : (
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'columns'}
+                  name={'Columns'}
+                  value={columns}
+                  onChange={onInputValueChange}
+                  min={1}
+                />
+              </Filter>
+            )}
           </Grid>
         }
       />
@@ -183,7 +174,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
             <Filter isLoading={isLoading}>
               <SliderControl
                 id={'borderRadius'}
-                name="Radius (%)"
+                name="Radius (px)"
                 min={0}
                 value={borderRadius}
                 max={50}
@@ -192,11 +183,11 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
             </Filter>
             <Filter isLoading={isLoading}>
               <SelectControl
-                id={'hoverEffect'}
-                name={'Hover effect'}
-                value={hoverEffect}
-                options={HoverEffectOptions}
-                onChange={onInputValueChange}
+                  id={'hoverEffect'}
+                  name={'Hover effect'}
+                  value={hoverEffect}
+                  options={HoverEffectOptions}
+                  onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>
@@ -206,7 +197,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
                 value={titleVisibility}
                 options={TitleVisibilityOptions}
                 onChange={onInputValueChange}
-                isDisabled={!isThumbnailTitlePositionEditable}
               />
             </Filter>
             {titleVisibility !== TitleVisibility.NONE && renderTitleSettings()}
@@ -225,9 +215,8 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
             id={'titlePosition'}
             name={'Title position'}
             value={titlePosition}
-            options={titlePositionOptions}
+            options={TitlePositionOptions}
             onChange={onInputValueChange}
-            isDisabled={!isThumbnailTitlePositionEditable}
           />
         </Filter>
         <Filter isLoading={isLoading}>
@@ -237,7 +226,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
             value={titleAlignment}
             options={TitleAlignmentOptions}
             onChange={onInputValueChange}
-            isDisabled={!isThumbnailTitlePositionEditable}
           />
         </Filter>
         <Filter isLoading={isLoading}>
@@ -246,7 +234,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
             name={'Title font family'}
             value={titleFontFamily}
             onChange={onInputValueChange}
-            isDisabled={!isThumbnailTitlePositionEditable}
           />
         </Filter>
         <Filter isLoading={isLoading}>
@@ -278,4 +265,4 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
   );
 };
 
-export {ThumbnailSettings, type IThumbnailSettings};
+export {MosaicSettings, type IMosaicSettings};

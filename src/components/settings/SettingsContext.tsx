@@ -1,41 +1,38 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import LoadingButton from '@mui/lab/LoadingButton';
-import TabContext from '@mui/lab/TabContext';
-import TabPanel from '@mui/lab/TabPanel';
-import {Paper, Typography} from '@mui/material';
-import Collapse from '@mui/material/Collapse';
-import Divider from '@mui/material/Divider';
-import Tabs from '@mui/material/Tabs';
 import axios from 'axios';
-import {GeneralSettings, IGeneralSettings} from 'components/general-settings';
-import {ILightboxSettings, LightboxSettings,} from 'components/light-box-settings';
+import {IGeneralSettings} from 'components/general-settings';
+import {ILightboxSettings} from 'components/light-box-settings';
+import {IMosaicSettings} from 'components/mosaic-settings';
 import {AppInfoContext} from 'contexts/AppInfoContext';
-import {Align, Aligner, ExpandMore, Tab} from 'core-components';
-import {
-  HoverEffect,
-  LightboxCaptionsPosition,
-  LightboxImageAnimation,
-  LightboxThumbnailsPosition,
-  PaginationButtonShape,
-  PaginationType,
-  TitleAlignment,
-  TitlePosition,
-  TitleVisibility,
-} from 'data-structures';
+import {Section} from 'core-components';
+import {GalleryType} from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
-import {IThumbnailSettings, ThumbnailSettings} from '../thumbnail-settings';
+import {IThumbnailSettings} from '../thumbnail-settings';
+import {
+  generalMockSettings,
+  lightboxMockSettings,
+  mosaicMockSettings,
+  thumbnailMockSettings,
+} from './MockSettings';
+import {OptionsPanelBody} from './OptionsPanelBody';
+import {OptionsPanelHeader} from './OptionsPanelHeader';
+import {TypePanelBody} from './TypePanelBody ';
+import {TypePanelHeader} from './TypePanelHeader';
 import './settings-context.css';
 
-type ThumbnailAndGeneralSettings = IThumbnailSettings & IGeneralSettings;
-
-interface ISettingsDTO extends ThumbnailAndGeneralSettings {
+interface ISettingsDTO {
+  type: GalleryType;
+  general: IGeneralSettings;
+  thumbnails: IThumbnailSettings;
+  mosaic: IMosaicSettings;
   lightbox: ILightboxSettings;
 }
 
 const SettingsContext = React.createContext<{
-  thumbnailSettings?: IThumbnailSettings;
+  type?: GalleryType;
   generalSettings?: IGeneralSettings;
+  thumbnailSettings?: IThumbnailSettings;
+  mosaicSettings?: IMosaicSettings;
   lightboxSettings?: ILightboxSettings;
 }>({});
 
@@ -43,21 +40,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
 
   const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
-  const [thumbnailSettings, setThumbnailSettings] = useState<
-    IThumbnailSettings | undefined
-  >();
-  const [generalSettings, setGeneralSettings] = useState<
-    IGeneralSettings | undefined
-  >();
-  const [lightboxSettings, setLightboxSettings] = useState<
-    ILightboxSettings | undefined
-  >();
-  const [activeTab, setActiveTab] = useState<string>('gallery');
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  const [thumbnailSettings, setThumbnailSettings] =
+    useState<IThumbnailSettings>();
+  const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
+  const [generalSettings, setGeneralSettings] = useState<IGeneralSettings>();
+  const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [isReseting, setIsReseting] = useState(false);
+  const [type, setType] = useState<GalleryType>();
 
   const getData = async () => {
     const dataElement = document.getElementById('reacg-root' + galleryId);
@@ -78,149 +68,64 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         })
       ).data;
 
-      setThumbnailSettings(extractThumbnailSettings(newSettings));
-      setGeneralSettings(extractGeneralSettings(newSettings));
+      setType(newSettings.type);
+      setGeneralSettings(newSettings.general || generalMockSettings);
+      setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
+      setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
       setLightboxSettings(newSettings.lightbox);
 
       setIsLoading(false);
     } else {
-      setThumbnailSettings({
-        width: 150,
-        height: 150,
-        columns: 5,
-        gap: 10,
-        backgroundColor: 'White',
-        padding: 10,
-        paddingColor: 'Skyblue',
-        borderRadius: 5,
-        titlePosition: TitlePosition.BOTTOM,
-        titleAlignment: TitleAlignment.LEFT,
-        titleVisibility: TitleVisibility.NONE,
-        titleFontFamily: 'Roboto',
-        titleColor: 'Black',
-        titleFontSize: 20,
-        hoverEffect: HoverEffect.NONE,
-      });
-      setGeneralSettings({
-        itemsPerPage: 8,
-        paginationType: PaginationType.SCROLL,
-        activeButtonColor: 'blue',
-        inactiveButtonColor: 'inherit',
-        paginationButtonShape: PaginationButtonShape.CIRCULAR,
-        loadMoreButtonColor: 'blue',
-        paginationTextColor: 'green',
-      });
-      setLightboxSettings({
-        showLightbox: true,
-        isFullscreen: false,
-        width: 800,
-        height: 800,
-        areControlButtonsShown: false,
-        isInfinite: false,
-        padding: 15,
-        canDownload: true,
-        canZoom: true,
-        isFullscreenAllowed: false,
-        isSlideshowAllowed: false,
-        autoplay: false,
-        slideDuration: 3000,
-        imageAnimation: LightboxImageAnimation.SLIDEH,
-        thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
-        thumbnailWidth: 80,
-        thumbnailHeight: 80,
-        thumbnailBorder: 2,
-        thumbnailBorderRadius: 20,
-        thumbnailBorderColor: 'white',
-        thumbnailPadding: 0,
-        thumbnailGap: 10,
-        backgroundColor: 'Black',
-        captionsPosition: LightboxCaptionsPosition.BOTTOM,
-        captionFontFamily: 'Roboto',
-        captionColor: 'White',
-      });
+      setType(GalleryType.THUMBNAILS);
+      setGeneralSettings(generalMockSettings);
+      setThumbnailSettings(thumbnailMockSettings);
+      setMosaicSettings(mosaicMockSettings);
+      setLightboxSettings(lightboxMockSettings);
     }
-  };
-
-  const extractThumbnailSettings = (
-    settings: IThumbnailSettings & IGeneralSettings
-  ): IThumbnailSettings => {
-    const {
-      backgroundColor,
-      borderRadius,
-      columns = 1,
-      gap,
-      height = 1,
-      padding,
-      paddingColor,
-      titleAlignment,
-      titleColor,
-      titleFontFamily,
-      titleFontSize = 1,
-      titlePosition,
-      titleVisibility,
-      width = 1,
-      hoverEffect,
-    }: IThumbnailSettings = settings;
-
-    return {
-      backgroundColor,
-      borderRadius,
-      columns,
-      gap,
-      height,
-      padding,
-      paddingColor,
-      titleAlignment,
-      titleColor,
-      titleFontFamily,
-      titleFontSize,
-      titlePosition,
-      titleVisibility,
-      width,
-      hoverEffect,
-    };
-  };
-
-  const extractGeneralSettings = (
-    settings: IThumbnailSettings & IGeneralSettings
-  ): IGeneralSettings => {
-    const {
-      activeButtonColor,
-      inactiveButtonColor,
-      itemsPerPage = 1,
-      loadMoreButtonColor,
-      paginationButtonShape,
-      paginationTextColor,
-      paginationType,
-    }: IGeneralSettings = settings;
-
-    return {
-      activeButtonColor,
-      inactiveButtonColor,
-      itemsPerPage,
-      loadMoreButtonColor,
-      paginationButtonShape,
-      paginationTextColor,
-      paginationType,
-    };
   };
 
   useLayoutEffect(() => {
     getData();
   }, []);
 
-  const onSave = async () => {
+  const onTypeChange = async (newType: GalleryType): Promise<void> => {
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'options/' + galleryId
       : undefined;
 
     if (fetchUrl) {
       setIsLoading(true);
-      setIsSaving(true);
       const settings: ISettingsDTO = {
-        ...thumbnailSettings,
-        ...generalSettings,
-        lightbox: lightboxSettings as ILightboxSettings,
+        type: newType,
+      } as ISettingsDTO;
+
+      try {
+        const response = await axios.post(fetchUrl, settings, {
+          headers: {'X-WP-Nonce': nonce},
+        });
+        const newType: GalleryType = response.data.type;
+
+        setType(newType);
+      } catch (error) {
+        console.error(error);
+      }
+
+      setIsLoading(false);
+    }
+  };
+
+  const onSave = async (): Promise<void> => {
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'options/' + galleryId
+      : undefined;
+
+    if (fetchUrl) {
+      setIsLoading(true);
+      const settings: ISettingsDTO = {
+        general: generalSettings,
+        thumbnails: thumbnailSettings,
+        lightbox: lightboxSettings,
+        mosaic: mosaicSettings,
       } as ISettingsDTO;
 
       const validSettings: ISettingsDTO = Object.entries(settings).reduce(
@@ -234,10 +139,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         });
         const newSettings: ISettingsDTO = response.data;
 
-        setThumbnailSettings(extractThumbnailSettings(newSettings));
-        setGeneralSettings(extractGeneralSettings(newSettings));
+        setGeneralSettings(newSettings.general);
+        setThumbnailSettings(newSettings.thumbnails);
+        setMosaicSettings(newSettings.mosaic);
         setLightboxSettings(newSettings.lightbox);
-        enqueueSnackbar('Settings are up to date!', {
+        enqueueSnackbar('Options are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
@@ -250,7 +156,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }
 
       setIsLoading(false);
-      setIsSaving(false);
     } else {
       enqueueSnackbar('Cannot update options!', {
         variant: 'error',
@@ -266,7 +171,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
-      setIsReseting(true);
 
       try {
         const successMessage: string = (
@@ -279,8 +183,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         });
         const newSettings: ISettingsDTO = response.data;
 
-        setThumbnailSettings(extractThumbnailSettings(newSettings));
-        setGeneralSettings(extractGeneralSettings(newSettings));
+        setGeneralSettings(newSettings.general);
+        setThumbnailSettings(newSettings.thumbnails);
+        setMosaicSettings(newSettings.mosaic);
         setLightboxSettings(newSettings.lightbox);
         enqueueSnackbar(successMessage, {
           variant: 'success',
@@ -295,7 +200,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }
 
       setIsLoading(false);
-      setIsReseting(false);
     } else {
       enqueueSnackbar('Cannot reset options!', {
         variant: 'error',
@@ -304,116 +208,52 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
-  const onActiveTabChange = (_: any, newActiveTab: string) => {
-    setActiveTab(newActiveTab);
-  };
-
-  const renderTitle = (): ReactNode => {
-    return (
-      <Aligner
-        onClick={() => setIsExpanded((prevValue) => !prevValue)}
-        className={'settings-provider__title'}
-      >
-        <Typography
-          gutterBottom
-          variant="h5"
-          component="div"
-          style={{margin: '15px 20px'}}
-        >
-          {'Options'}
-        </Typography>
-        <span style={{margin: '10px'}}>
-          <ExpandMore expand={isExpanded}>
-            <ExpandMoreIcon />
-          </ExpandMore>
-        </span>
-      </Aligner>
-    );
-  };
-
-  const renderBody = (): ReactNode => {
-    return (
-      <Collapse in={isExpanded} timeout={'auto'} style={{margin: '5px'}}>
-        <TabContext value={activeTab}>
-          <Aligner>
-            <Tabs
-              value={activeTab}
-              onChange={onActiveTabChange}
-              style={{width: '100%'}}
-            >
-              <Tab label={'Gallery'} value={'gallery'} />
-              <Tab label={'General'} value={'general'} />
-              <Tab label={'Lightbox'} value={'Lightbox'} />
-            </Tabs>
-            <Aligner align={Align.END}>
-              <LoadingButton
-                loading={isSaving}
-                loadingPosition={'center'}
-                variant={'outlined'}
-                onClick={onSave}
-                style={{margin: '5px 5px', textTransform: 'none'}}
-                className={
-                  'button button-primary button-large save-settings-button'
-                }
-              >
-                {'Save options'}
-              </LoadingButton>
-              <LoadingButton
-                loading={isReseting}
-                loadingPosition={'center'}
-                variant={'outlined'}
-                onClick={onReset}
-                style={{margin: '5px 5px', textTransform: 'none'}}
-                className={'button button-large'}
-              >
-                {'Reset'}
-              </LoadingButton>
-            </Aligner>
-          </Aligner>
-          <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
-            {thumbnailSettings && (
-              <ThumbnailSettings
-                value={thumbnailSettings as IThumbnailSettings}
-                onChange={setThumbnailSettings}
-                isLoading={isLoading}
-              />
-            )}
-          </TabPanel>
-          <TabPanel value={'general'} className={'reacg-tab-panel'}>
-            {generalSettings && (
-              <GeneralSettings
-                value={generalSettings as IGeneralSettings}
-                onChange={setGeneralSettings}
-                isLoading={isLoading}
-              />
-            )}
-          </TabPanel>
-          <TabPanel value={'Lightbox'} className={'reacg-tab-panel'}>
-            {lightboxSettings && (
-              <LightboxSettings
-                value={lightboxSettings as ILightboxSettings}
-                onChange={setLightboxSettings}
-                isLoading={isLoading}
-              />
-            )}
-          </TabPanel>
-        </TabContext>
-      </Collapse>
-    );
+  const renderChildren = (): ReactNode => {
+    if (showControls) {
+      return <div style={{margin: '0 14px'}}>{children}</div>;
+    }
+    return children;
   };
 
   return (
     <SettingsContext.Provider
-      value={{thumbnailSettings, generalSettings, lightboxSettings}}
+      value={{
+        type,
+        thumbnailSettings,
+        mosaicSettings,
+        generalSettings,
+        lightboxSettings,
+      }}
     >
       {showControls && (
-        <Paper className={'reacg-settings'}>
-          {renderTitle()}
-          <Divider variant="middle" />
-          {renderBody()}
-        </Paper>
+        <>
+          <Section
+            header={<TypePanelHeader />}
+            body={
+              <TypePanelBody isLoading={isLoading} onChange={onTypeChange} />
+            }
+            outlined={false}
+            className={'reacg-settings'}
+          />
+          <Section
+            header={<OptionsPanelHeader />}
+            body={
+              <OptionsPanelBody
+                isLoading={isLoading}
+                onSave={onSave}
+                onReset={onReset}
+                changeGeneralSettings={setGeneralSettings}
+                changeThumbnailSettings={setThumbnailSettings}
+                changeMosaicSettings={setMosaicSettings}
+                changeLightboxSettings={setLightboxSettings}
+              />
+            }
+            outlined={false}
+            className={'reacg-settings'}
+          />
+        </>
       )}
-      {children}
+      {renderChildren()}
     </SettingsContext.Provider>
   );
 };

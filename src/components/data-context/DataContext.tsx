@@ -1,11 +1,20 @@
+import {Paper, Typography} from '@mui/material';
+import axios from 'axios';
 import {IGeneralSettings} from 'components/general-settings';
-import {ILightboxSettings} from 'components/light-box-settings';
-import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
-import {IImageDTO} from 'data-structures';
+import {AppInfoContext} from 'contexts/AppInfoContext';
+import {TranslationsContext} from 'contexts/TranslationsContext';
+import {IImageDTO, PaginationType} from 'data-structures';
+import {
+  ReactElement,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {useSettings} from '../settings';
-import {ThumbnailGalleryWithDataFetching} from './ThumbnailGalleryWithDataFetching';
+import {DataFetcher} from '../thumbnail-gallery/DataFetcher';
 
-const images: IImageDTO[] = [
+const propsImages: IImageDTO[] = [
   // {
   //   original: {
   //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
@@ -228,25 +237,193 @@ const images: IImageDTO[] = [
   // },
 ];
 
-const ThumbnailGalleryWithSettings = () => {
-  const {
-    generalSettings,
-    thumbnailSettings,
-    lightboxSettings,
-  }: {
-    thumbnailSettings?: IThumbnailSettings;
-    generalSettings?: IGeneralSettings;
-    lightboxSettings?: ILightboxSettings;
-  } = useSettings();
+const DataContext = createContext<{
+  images?: IImageDTO[];
+  lightboxImages?: IImageDTO[];
+  isLoading?: boolean;
+  pagesCount?: number;
+  onPageChange?: (_: any, page: number) => void;
+  isFullyLoaded?: boolean;
+  loadAllLightboxImages?: () => Promise<void>;
+}>({});
 
-  return generalSettings && thumbnailSettings && lightboxSettings ? (
-    <ThumbnailGalleryWithDataFetching
-      images={images}
-      generalSettings={generalSettings as any}
-      thumbnailSettings={thumbnailSettings as any}
-      lightboxSettings={lightboxSettings as any}
-    />
-  ) : null;
+interface IGalleryWithDataFetchingProps {}
+
+const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
+  const {generalSettings} = useSettings();
+  const {itemsPerPage = 1, paginationType} =
+    generalSettings as IGeneralSettings;
+  const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
+  const {noDataText, setLoadMoreText, setNoDataText} =
+    useContext(TranslationsContext);
+  const [images, setImages] = useState<IImageDTO[]>([]);
+  const [lightboxImages, setLightboxImages] = useState<
+    IImageDTO[] | undefined
+  >();
+  const [imageCount, setImageCount] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const pagesCount: number =
+    itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
+  const isFullyLoaded: boolean = currentPage >= pagesCount;
+
+  useEffect(() => {
+    const reloadData = setTimeout(() => {
+      itemsPerPage > 0 && onReloadData();
+    }, 500);
+
+    return () => clearTimeout(reloadData);
+  }, [itemsPerPage, paginationType]);
+
+  const loadAllLightboxImages = async (): Promise<void> => {
+    const newLightboxImages: IImageDTO[] = await (getAllData as Function)();
+
+    setLightboxImages(newLightboxImages);
+  };
+
+  const getAllData = async (): Promise<IImageDTO[]> => {
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'gallery/' + galleryId + '/images'
+      : undefined;
+
+    if (fetchUrl) {
+      const imgData: any[] = (
+        await axios.get(fetchUrl, {
+          headers: {'X-WP-Nonce': nonce},
+        })
+      ).data;
+      const newImages: IImageDTO[] = imgData.map((data: any) => ({
+        id: data.id,
+        type: data.type,
+        original: data.original,
+        width: data.width,
+        height: data.height,
+        medium_large: data.medium_large,
+        thumbnail: data.thumbnail,
+        title: data.title,
+        description: data.description,
+        caption: data.caption,
+      }));
+
+      return newImages;
+    }
+    return images;
+  };
+
+  const getData = async (page: number) => {
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'gallery/' + galleryId + '/images'
+      : undefined;
+
+    if (fetchUrl) {
+      setIsLoading(true);
+      const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
+      const perPageQueryString: string =
+        paginationType !== PaginationType.NONE
+          ? `&per_page=${itemsPerPage}`
+          : '';
+      const queryString: string = perPageQueryString
+        ? `${queryStringSeperator}page=${page}${perPageQueryString}`
+        : '';
+      const imgData: any[] = (
+        await axios.get(`${fetchUrl}${queryString}`, {
+          headers: {'X-WP-Nonce': nonce},
+        })
+      ).data;
+      const newImages: IImageDTO[] = imgData.map((data: any) => ({
+        id: data.id,
+        type: data.type,
+        original: data.original,
+        width: data.width,
+        height: data.height,
+        medium_large: data.medium_large,
+        thumbnail: data.thumbnail,
+        title: data.title,
+        caption: data.caption,
+        description: data.description,
+      }));
+
+      if (paginationType === PaginationType.SIMPLE) {
+        setImages(newImages);
+      } else {
+        setImages((prevImages) => [...prevImages, ...newImages]);
+      }
+      setCurrentPage(page);
+      setIsLoading(false);
+    } else {
+      setImages(propsImages);
+    }
+  };
+
+  const getItemsCount = async () => {
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'gallery/' + galleryId
+      : undefined;
+
+    if (fetchUrl) {
+      const imgData: any = (
+        await axios.get(fetchUrl, {
+          headers: {'X-WP-Nonce': nonce},
+        })
+      ).data;
+      const newImageCount: number = imgData?.images_count;
+      const loadMoreText: string | undefined =
+        (window as any).reacg_global?.text?.load_more || undefined;
+      const noDataText: string | undefined =
+        (window as any).reacg_global?.text?.no_data || undefined;
+
+      loadMoreText && setLoadMoreText?.(loadMoreText);
+      noDataText && setNoDataText?.(noDataText);
+      setImageCount(newImageCount);
+    } else {
+      setImageCount(0);
+    }
+  };
+
+  const onPageChange = async (
+    _event?: any,
+    newPage: number = currentPage + 1
+  ): Promise<void> => {
+    getData(newPage);
+  };
+
+  const onReloadData = async () => {
+    setIsLoading(true);
+    setImages([]);
+    setLightboxImages([]);
+    setCurrentPage(0);
+    setImageCount(0);
+    getData(1);
+    getItemsCount();
+  };
+
+  const renderContentPlaceholder = (): ReactElement => {
+    return (
+      <Paper variant={'outlined'} className={'content-placeholder'}>
+        <Typography gutterBottom variant="h6" component="div">
+          {noDataText}
+        </Typography>
+      </Paper>
+    );
+  };
+
+  return (
+    <DataContext.Provider
+      value={{
+        images,
+        lightboxImages,
+        isLoading,
+        pagesCount,
+        onPageChange,
+        isFullyLoaded,
+        loadAllLightboxImages,
+      }}
+    >
+      {images.length || isLoading ? children : renderContentPlaceholder()}
+      <DataFetcher onClick={onReloadData} />
+    </DataContext.Provider>
+  );
 };
 
-export {ThumbnailGalleryWithSettings};
+export {DataContext, DataProvider};

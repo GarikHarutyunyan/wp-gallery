@@ -1,22 +1,88 @@
-import React from 'react';
-import 'yet-another-react-lightbox/plugins/thumbnails.css';
-import 'yet-another-react-lightbox/styles.css';
-import {SettingsProvider} from './settings/SettingsContext';
-import {ThumbnailGalleryWithSettings} from './thumbnail-gallery/ThumbnailGalleryWithSettings';
+import {CircularProgress} from '@mui/material';
+import {VLightbox as Lightbox} from 'components/lightbox/Lightbox';
+import {GalleryType, PaginationType} from 'data-structures';
+import React, {ReactNode, useState} from 'react';
+import {useData} from './data-context/useData';
+import {IGeneralSettings} from './general-settings';
+import {ILightboxSettings} from './light-box-settings';
+import {MosaicGallery} from './mosaic-gallery/MosaicGallery';
+import {useSettings} from './settings';
+import {PaginationProvider} from './thumbnail-gallery/PaginationProvider';
+import {ThumbnailGallery} from './thumbnail-gallery/ThumbnailGallery';
 
 const Gallery: React.FC = () => {
+  const {type, generalSettings, lightboxSettings} = useSettings();
+  const {
+    isLoading,
+    pagesCount,
+    onPageChange,
+    isFullyLoaded,
+    loadAllLightboxImages,
+  } = useData();
+
+  const {paginationType} = generalSettings as IGeneralSettings;
+  const {showLightbox} = lightboxSettings as ILightboxSettings;
+
+  const [activeImageIndex, setActiveImageIndex] = useState<number>(-1);
+
+  const renderGallery = (): ReactNode => {
+    const hideGallery: boolean =
+      !!isLoading && paginationType === PaginationType.SIMPLE;
+
+    return !hideGallery ? (
+      type === GalleryType.MOSAIC ? (
+        <MosaicGallery onClick={showLightbox ? openLightbox : undefined} />
+      ) : (
+        <ThumbnailGallery onClick={showLightbox ? openLightbox : undefined} />
+      )
+    ) : null;
+  };
+
+  const openLightbox = async (index: number): Promise<void> => {
+    await (loadAllLightboxImages as Function)();
+    setActiveImageIndex(index);
+  };
+
+  const renderLoader = (): ReactNode => {
+    if (isLoading) {
+      return (
+        <div className={'pagination-privider__loader-container'}>
+          <CircularProgress color="primary" size={60} />
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  const renderPaginationProvider = () => {
+    return (
+      <PaginationProvider
+        type={paginationType}
+        pagesCount={pagesCount || 1}
+        onLoad={onPageChange as any}
+        isFullyLoaded={isFullyLoaded}
+        settings={generalSettings as IGeneralSettings}
+      />
+    );
+  };
+
+  const renderLightbox = (): ReactNode => {
+    return <Lightbox activeIndex={activeImageIndex} onClose={closeLightbox} />;
+  };
+
+  const closeLightbox = (): void => {
+    setActiveImageIndex(-1);
+  };
+
   return (
-    <div
-      style={{
-        width: '100%',
-        margin: '0 auto',
-      }}
-    >
-      <SettingsProvider>
-        <ThumbnailGalleryWithSettings />
-      </SettingsProvider>
-    </div>
+    <>
+      {renderGallery()}
+      {renderLoader()}
+      {renderPaginationProvider()}
+      {renderLightbox()}
+    </>
   );
 };
 
-export default Gallery;
+export {Gallery};

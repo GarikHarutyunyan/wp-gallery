@@ -237,10 +237,10 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                 </Filter>
                 <Filter isLoading={isLoading}>
                   <ColorControl
-                      id={'backgroundColor'}
-                      name="Background color"
-                      value={backgroundColor}
-                      onChange={onInputValueChange}
+                    id={'backgroundColor'}
+                    name="Background color"
+                    value={backgroundColor}
+                    onChange={onInputValueChange}
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>
@@ -276,8 +276,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
             )}
           </Grid>
         }
-        canExpand={true}
-      ></Section>
+      />
     );
   };
 
@@ -370,8 +369,6 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
             )}
           </Grid>
         }
-        canExpand={true}
-        defaultExpanded={false}
       />
     );
   };

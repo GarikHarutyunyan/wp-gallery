@@ -1,7 +1,8 @@
 import {Collapse, Divider, Paper, Typography} from '@mui/material';
+import clsx from 'clsx';
 import {Aligner, ExpandMore} from 'core-components';
 import React, {ReactNode, useState} from 'react';
-import clsx from 'clsx';
+import {TypeUtils} from 'utils';
 import './section.css';
 
 interface ISectionProps {
@@ -9,13 +10,17 @@ interface ISectionProps {
   body: ReactNode;
   canExpand?: boolean;
   defaultExpanded?: boolean;
+  outlined?: boolean;
+  className?: string;
 }
 
 const Section: React.FC<ISectionProps> = ({
   header,
   body,
-  canExpand,
+  canExpand = true,
   defaultExpanded = true,
+  outlined = true,
+  className,
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(defaultExpanded);
 
@@ -31,14 +36,18 @@ const Section: React.FC<ISectionProps> = ({
           'reacg-section__header_clickable': canExpand,
         })}
       >
-        <Typography
-          gutterBottom
-          variant="subtitle1"
-          component="div"
-          className={'reacg-section__title'}
-        >
-          {header}
-        </Typography>
+        {TypeUtils.isString(header) ? (
+          <Typography
+            gutterBottom
+            variant="subtitle1"
+            component="div"
+            className={'reacg-section__title'}
+          >
+            {header}
+          </Typography>
+        ) : (
+          header
+        )}
         <span>
           <ExpandMore
             expand={isExpanded}
@@ -51,16 +60,23 @@ const Section: React.FC<ISectionProps> = ({
 
   const renderBody = (): ReactNode => {
     return (
-      <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+      <Collapse in={isExpanded} timeout={'auto'} unmountOnExit>
         <div className={'reacg-section__body'}>{body}</div>
       </Collapse>
     );
   };
 
   return (
-    <Paper variant={'outlined'} className={'reacg-section'}>
+    <Paper
+      variant={outlined ? 'outlined' : undefined}
+      className={clsx(
+        'reacg-section',
+        {'reacg-section_outlined': outlined},
+        className
+      )}
+    >
       {renderHeader()}
-      {isExpanded && <Divider variant="middle" />}
+      {isExpanded || !outlined ? <Divider variant={'middle'} /> : null}
       {renderBody()}
     </Paper>
   );

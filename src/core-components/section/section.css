@@ -1,5 +1,5 @@
 .reacg-section {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .reacg-section__header {
@@ -24,6 +24,10 @@
     padding: 10px;
 }
 
-.reacg-section__body {
+.reacg-section_outlined .reacg-section__body {
     padding: 20px;
+}
+
+.reacg-section__body {
+    padding: 5px 10px;
 }
