@@ -116,11 +116,17 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
       return `${image.thumbnail.url}`;
     }
     if (
-      (width <= image.medium_large.width &&
-        height <= image.medium_large.height) ||
-      image.type === ImageType.VIDEO
+      width <= image.medium_large.width &&
+      height <= image.medium_large.height
     ) {
       return `${image.medium_large.url}`;
+    }
+
+    if (
+      (width <= image.large.width && height <= image.large.height) ||
+      image.type === ImageType.VIDEO
+    ) {
+      return `${image.large.url}`;
     }
 
     return `${image.original.url}`;
@@ -134,11 +140,13 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
 
   const renderTitle = (image: IImageDTO) => {
     let paddingTitle = '0';
+
     if (titlePosition === ThumbnailTitlePosition.BELOW) {
       paddingTitle = padding + 'px';
     } else if (titlePosition !== ThumbnailTitlePosition.CENTER) {
       paddingTitle = borderRadius / 2 + '%';
     }
+
     return (
       <div
         className={clsx('thumbnail-gallery__title', {

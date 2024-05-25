@@ -28,9 +28,19 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
       const src = isVideo ? image.medium_large.url : image.original.url;
       const srcSet = [
         {
+          src: image.large.url,
+          width: image.large.width,
+          height: image.large.height,
+        },
+        {
           src: image.medium_large.url,
           width: image.medium_large.width,
           height: image.medium_large.height,
+        },
+        {
+          src: image.thumbnail.url,
+          width: image.thumbnail.width,
+          height: image.thumbnail.height,
         },
       ];
 
