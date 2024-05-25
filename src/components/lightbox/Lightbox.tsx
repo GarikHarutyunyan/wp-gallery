@@ -167,6 +167,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           height: image.original.height,
         },
         {
+          src: image.large.url,
+          width: image.large.width,
+          height: image.large.height,
+        },
+        {
           src: image.medium_large.url,
           width: image.medium_large.width,
           height: image.medium_large.height,
@@ -192,11 +197,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         captions={{showToggle: true}}
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
-        animation={{swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1, easing: { swipe: "ease-out", navigation: "ease-in-out" }}}
+        animation={{
+          swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
+          easing: {swipe: 'ease-out', navigation: 'ease-in-out'},
+        }}
         render={{
-          // thumbnail: ({slide}) => {
-          //   return <img src={(slide as any).metadata}></img>;
-          // },
           buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
         }}
         carousel={{
@@ -218,20 +223,23 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         video={{
           autoPlay: videoAutoplay,
         }}
-        className={clsx('reacg-lightbox',
-          'reacg-lightbox-animation-' + imageAnimation, {
-          'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
-          'reacg-lightbox-captions':
-            captionsPosition !== LightboxCaptionsPosition.NONE,
-          'reacg-lightbox-captions_top': [
-            LightboxCaptionsPosition.TOP,
-            LightboxCaptionsPosition.ABOVE,
-          ].includes(captionsPosition),
-          'reacg-lightbox-captions_below':
-            captionsPosition === LightboxCaptionsPosition.BELOW,
-          'reacg-lightbox-captions_above':
-            captionsPosition === LightboxCaptionsPosition.ABOVE,
-        })}
+        className={clsx(
+          'reacg-lightbox',
+          'reacg-lightbox-animation-' + imageAnimation,
+          {
+            'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
+            'reacg-lightbox-captions':
+              captionsPosition !== LightboxCaptionsPosition.NONE,
+            'reacg-lightbox-captions_top': [
+              LightboxCaptionsPosition.TOP,
+              LightboxCaptionsPosition.ABOVE,
+            ].includes(captionsPosition),
+            'reacg-lightbox-captions_below':
+              captionsPosition === LightboxCaptionsPosition.BELOW,
+            'reacg-lightbox-captions_above':
+              captionsPosition === LightboxCaptionsPosition.ABOVE,
+          }
+        )}
         styles={{
           root: {
             'width': isFullscreen ? '100%' : `${Math.min(innerWidth, width)}px`,

@@ -17,6 +17,7 @@ export interface IImageDTO {
   width: number;
   height: number;
   original: IImageUrl;
+  large: IImageUrl;
   medium_large: IImageUrl;
   thumbnail: IImageUrl;
 }
