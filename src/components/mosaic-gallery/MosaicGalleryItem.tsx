@@ -119,10 +119,9 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
               height: getThumbnailIconSize(width, height),
               width: getThumbnailIconSize(width, height),
             }}
-            className={clsx(
-              'yarl__thumbnails_thumbnail_icon',
-              'mosaic-gallery__video-icon'
-            )}
+            className={clsx('yarl__thumbnails_thumbnail_icon', {
+              'mosaic-gallery__video-icon': !!onClick,
+            })}
           />
         )}
         {renderTitle()}
