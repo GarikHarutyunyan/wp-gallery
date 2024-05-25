@@ -16,6 +16,10 @@
     z-index: 1000000;
 }
 
+.yarl__toolbar {
+    z-index: 1;
+}
+
 .reacg-lightbox-control-buttons_hidden .yarl__toolbar .yarl__button:not(:last-child) {
     display: none;
 }
