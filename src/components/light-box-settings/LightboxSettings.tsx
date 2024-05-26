@@ -1,13 +1,14 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import {useSettings} from 'components/settings';
 import {Section} from 'core-components';
 import {
   LightboxCaptionsPosition,
   LightboxCaptionsPositionOptions,
-  LightboxThumbnailsPosition,
-  LightboxThumbnailsPositionOptions,
   LightboxImageAnimation,
   LightboxImageAnimationOptions,
+  LightboxThumbnailsPosition,
+  LightboxThumbnailsPositionOptions,
 } from 'data-structures';
 import React, {ReactNode} from 'react';
 import {
@@ -50,16 +51,12 @@ interface ILightboxSettings {
 }
 
 interface ILightboxSettingsProps {
-  value: ILightboxSettings;
-  onChange: (newSettings: ILightboxSettings) => void;
   isLoading?: boolean;
 }
 
-const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
-  value,
-  onChange,
-  isLoading,
-}) => {
+const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
+  const {lightboxSettings: value, changeLightboxSettings: onChange} =
+    useSettings();
   const {
     showLightbox,
     isFullscreen,
@@ -87,7 +84,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
     captionsPosition,
     captionFontFamily,
     captionColor,
-  } = value;
+  } = value as ILightboxSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     key && onChange({...value, [key]: inputValue});
@@ -164,11 +161,11 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                 )}
                 <Filter isLoading={isLoading}>
                   <SelectControl
-                      id={'imageAnimation'}
-                      name={'Animation'}
-                      value={imageAnimation}
-                      options={LightboxImageAnimationOptions}
-                      onChange={onInputValueChange}
+                    id={'imageAnimation'}
+                    name={'Animation'}
+                    value={imageAnimation}
+                    options={LightboxImageAnimationOptions}
+                    onChange={onInputValueChange}
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>

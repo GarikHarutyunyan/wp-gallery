@@ -32,6 +32,7 @@ const thumbnailMockSettings: IThumbnailSettings = {
   titleColor: 'Black',
   titleFontSize: 20,
   hoverEffect: HoverEffect.BLUR,
+  paginationType: PaginationType.SIMPLE,
 };
 
 const mosaicMockSettings: IMosaicSettings = {
@@ -51,11 +52,11 @@ const mosaicMockSettings: IMosaicSettings = {
   titleColor: 'Black',
   titleFontSize: 20,
   hoverEffect: HoverEffect.BLUR,
+  paginationType: PaginationType.SIMPLE,
 };
 
 const generalMockSettings: IGeneralSettings = {
   itemsPerPage: 8,
-  paginationType: PaginationType.SCROLL,
   activeButtonColor: 'blue',
   inactiveButtonColor: 'inherit',
   paginationButtonShape: PaginationButtonShape.CIRCULAR,

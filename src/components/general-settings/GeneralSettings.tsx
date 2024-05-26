@@ -9,7 +9,7 @@ import {
   PaginationType,
   PaginationTypeOptions,
 } from 'data-structures';
-import React, {ReactNode, useEffect} from 'react';
+import React, {ReactNode, useEffect, useMemo} from 'react';
 import {
   ColorControl,
   ISelectOption,
@@ -19,7 +19,6 @@ import {
 import {Filter} from '../settings/Filter';
 
 interface IGeneralSettings {
-  paginationType: PaginationType;
   itemsPerPage: number | undefined;
   activeButtonColor: string;
   inactiveButtonColor: string;
@@ -29,26 +28,39 @@ interface IGeneralSettings {
 }
 
 interface IGeneralSettingsProps {
-  value: IGeneralSettings;
-  onChange: (newSettings: IGeneralSettings) => void;
   isLoading?: boolean;
 }
 
-const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
-  value,
-  onChange,
-  isLoading,
-}) => {
+const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   const {
-    paginationType,
+    generalSettings: value,
+    changeGeneralSettings: onChange,
+    type,
+    thumbnailSettings,
+    changeThumbnailSettings,
+    mosaicSettings,
+    changeMosaicSettings,
+  } = useSettings();
+  const {} = useSettings();
+  const {
     itemsPerPage,
     activeButtonColor,
     inactiveButtonColor,
     paginationButtonShape,
     loadMoreButtonColor,
     paginationTextColor,
-  } = value;
-  const {type} = useSettings();
+  } = value as IGeneralSettings;
+
+  const paginationType: PaginationType = useMemo(() => {
+    if (type === GalleryType.MOSAIC) {
+      return mosaicSettings!.paginationType;
+    }
+    if (type === GalleryType.THUMBNAILS) {
+      return thumbnailSettings!.paginationType;
+    }
+
+    return PaginationType.NONE;
+  }, [type, mosaicSettings, thumbnailSettings]);
 
   useEffect(() => {
     if (type === GalleryType.MOSAIC) {
@@ -58,6 +70,15 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     key && onChange({...value, [key]: inputValue});
+  };
+
+  const onPaginationTypeChange = (inputValue: any, key?: string) => {
+    if (type === GalleryType.MOSAIC) {
+      key && changeMosaicSettings({...mosaicSettings, [key]: inputValue});
+    }
+    if (type === GalleryType.THUMBNAILS) {
+      key && changeThumbnailSettings({...thumbnailSettings, [key]: inputValue});
+    }
   };
 
   const filteredPaginationTypeOptions =
@@ -82,7 +103,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                 name={'Pagination Type'}
                 value={paginationType}
                 options={filteredPaginationTypeOptions}
-                onChange={onInputValueChange}
+                onChange={onPaginationTypeChange}
               />
             </Filter>
             {paginationType !== PaginationType.NONE ? (

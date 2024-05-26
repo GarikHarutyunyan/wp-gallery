@@ -1,15 +1,9 @@
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import {GeneralSettings, IGeneralSettings} from 'components/general-settings';
-import {
-  ILightboxSettings,
-  LightboxSettings,
-} from 'components/light-box-settings';
-import {IMosaicSettings, MosaicSettings} from 'components/mosaic-settings';
-import {
-  IThumbnailSettings,
-  ThumbnailSettings,
-} from 'components/thumbnail-settings';
+import {GeneralSettings} from 'components/general-settings';
+import {LightboxSettings} from 'components/light-box-settings';
+import {MosaicSettings} from 'components/mosaic-settings';
+import {ThumbnailSettings} from 'components/thumbnail-settings';
 import {GalleryType} from 'data-structures';
 import React, {ReactNode, useState} from 'react';
 import {SettingsPanelTabs} from './SettingsPanelTabs';
@@ -19,20 +13,12 @@ interface IOptionsPanelBodyProps {
   isLoading: boolean;
   onSave: () => Promise<void>;
   onReset: () => Promise<void>;
-  changeThumbnailSettings: (settings: IThumbnailSettings) => void;
-  changeMosaicSettings: (settings: IMosaicSettings) => void;
-  changeGeneralSettings: (settings: IGeneralSettings) => void;
-  changeLightboxSettings: (settings: ILightboxSettings) => void;
 }
 
 const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   isLoading,
   onSave,
   onReset,
-  changeThumbnailSettings,
-  changeMosaicSettings,
-  changeGeneralSettings,
-  changeLightboxSettings,
 }) => {
   const {
     type,
@@ -54,27 +40,11 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   };
 
   const renderThumbnailSetting = (): ReactNode => {
-    return (
-      thumbnailSettings && (
-        <ThumbnailSettings
-          value={thumbnailSettings}
-          onChange={changeThumbnailSettings}
-          isLoading={isLoading}
-        />
-      )
-    );
+    return thumbnailSettings && <ThumbnailSettings isLoading={isLoading} />;
   };
 
   const renderMosaicSetting = (): ReactNode => {
-    return (
-      mosaicSettings && (
-        <MosaicSettings
-          value={mosaicSettings}
-          onChange={changeMosaicSettings}
-          isLoading={isLoading}
-        />
-      )
-    );
+    return mosaicSettings && <MosaicSettings isLoading={isLoading} />;
   };
 
   return (
@@ -89,22 +59,10 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
         {renderGalleryOptions()}
       </TabPanel>
       <TabPanel value={'general'} className={'reacg-tab-panel'}>
-        {generalSettings && (
-          <GeneralSettings
-            value={generalSettings}
-            onChange={changeGeneralSettings}
-            isLoading={isLoading}
-          />
-        )}
+        {generalSettings && <GeneralSettings isLoading={isLoading} />}
       </TabPanel>
       <TabPanel value={'lightbox'} className={'reacg-tab-panel'}>
-        {lightboxSettings && (
-          <LightboxSettings
-            value={lightboxSettings}
-            onChange={changeLightboxSettings}
-            isLoading={isLoading}
-          />
-        )}
+        {lightboxSettings && <LightboxSettings isLoading={isLoading} />}
       </TabPanel>
     </TabContext>
   );

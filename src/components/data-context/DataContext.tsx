@@ -3,12 +3,13 @@ import axios from 'axios';
 import {IGeneralSettings} from 'components/general-settings';
 import {AppInfoContext} from 'contexts/AppInfoContext';
 import {TranslationsContext} from 'contexts/TranslationsContext';
-import {IImageDTO, PaginationType} from 'data-structures';
+import {GalleryType, IImageDTO, PaginationType} from 'data-structures';
 import {
   ReactElement,
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import {useSettings} from '../settings';
@@ -250,9 +251,21 @@ const DataContext = createContext<{
 interface IGalleryWithDataFetchingProps {}
 
 const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
-  const {generalSettings} = useSettings();
-  const {itemsPerPage = 1, paginationType} =
-    generalSettings as IGeneralSettings;
+  const {type, generalSettings, thumbnailSettings, mosaicSettings} =
+    useSettings();
+
+  const paginationType: PaginationType = useMemo(() => {
+    if (type === GalleryType.MOSAIC) {
+      return mosaicSettings!.paginationType;
+    }
+    if (type === GalleryType.THUMBNAILS) {
+      return thumbnailSettings!.paginationType;
+    }
+
+    return PaginationType.NONE;
+  }, [type, mosaicSettings, thumbnailSettings]);
+
+  const {itemsPerPage = 1} = generalSettings as IGeneralSettings;
   const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
   const {noDataText, setLoadMoreText, setNoDataText} =
     useContext(TranslationsContext);
