@@ -34,6 +34,10 @@ const SettingsContext = React.createContext<{
   thumbnailSettings?: IThumbnailSettings;
   mosaicSettings?: IMosaicSettings;
   lightboxSettings?: ILightboxSettings;
+  changeGeneralSettings?: any;
+  changeThumbnailSettings?: any;
+  changeMosaicSettings?: any;
+  changeLightboxSettings?: any;
 }>({});
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
@@ -223,6 +227,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         mosaicSettings,
         generalSettings,
         lightboxSettings,
+        changeGeneralSettings: setGeneralSettings,
+        changeThumbnailSettings: setThumbnailSettings,
+        changeMosaicSettings: setMosaicSettings,
+        changeLightboxSettings: setLightboxSettings,
       }}
     >
       {showControls && (
@@ -242,10 +250,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
                 isLoading={isLoading}
                 onSave={onSave}
                 onReset={onReset}
-                changeGeneralSettings={setGeneralSettings}
-                changeThumbnailSettings={setThumbnailSettings}
-                changeMosaicSettings={setMosaicSettings}
-                changeLightboxSettings={setLightboxSettings}
               />
             }
             outlined={false}

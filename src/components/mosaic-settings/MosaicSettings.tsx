@@ -1,11 +1,13 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import {useSettings} from 'components/settings';
 import {Section} from 'core-components';
 import {
   Direction,
   DirectionOptions,
   HoverEffect,
   HoverEffectOptions,
+  PaginationType,
   TitleAlignment,
   TitleAlignmentOptions,
   TitlePosition,
@@ -40,19 +42,15 @@ interface IMosaicSettings {
   titleColor: string;
   titleFontSize?: number | undefined;
   hoverEffect: HoverEffect;
+  paginationType: PaginationType;
 }
 
 interface IMosaicSettingsProps {
-  value: IMosaicSettings;
-  onChange: (newSettings: IMosaicSettings) => void;
   isLoading?: boolean;
 }
 
-const MosaicSettings: React.FC<IMosaicSettingsProps> = ({
-  value,
-  onChange,
-  isLoading,
-}) => {
+const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
+  const {mosaicSettings: value, changeMosaicSettings: onChange} = useSettings();
   const {
     width,
     direction,
@@ -70,7 +68,7 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({
     titleColor,
     titleFontSize,
     hoverEffect,
-  } = value;
+  } = value as IMosaicSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     key && onChange({...value, [key]: inputValue});
@@ -183,11 +181,11 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({
             </Filter>
             <Filter isLoading={isLoading}>
               <SelectControl
-                  id={'hoverEffect'}
-                  name={'Hover effect'}
-                  value={hoverEffect}
-                  options={HoverEffectOptions}
-                  onChange={onInputValueChange}
+                id={'hoverEffect'}
+                name={'Hover effect'}
+                value={hoverEffect}
+                options={HoverEffectOptions}
+                onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>

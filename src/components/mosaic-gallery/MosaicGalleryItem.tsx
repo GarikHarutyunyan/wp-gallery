@@ -63,7 +63,7 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
           'mosaic-gallery__title_hidden':
             titleVisibility === TitleVisibility.NONE,
         })}
-        key={image.original.url}
+        key={image.id}
       >
         <ImageListItemBar
           style={{

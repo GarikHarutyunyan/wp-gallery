@@ -1,9 +1,11 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import {useSettings} from 'components/settings';
 import {Section} from 'core-components';
 import {
   HoverEffect,
   HoverEffectOptions,
+  PaginationType,
   ThumbnailTitlePosition,
   ThumbnailTitlePositionOptions,
   TitleAlignment,
@@ -38,19 +40,16 @@ interface IThumbnailSettings {
   titleColor: string;
   titleFontSize?: number | undefined;
   hoverEffect: HoverEffect;
+  paginationType: PaginationType;
 }
 
 interface IThumbnailSettingsProps {
-  value: IThumbnailSettings;
-  onChange: (newSettings: IThumbnailSettings) => void;
   isLoading?: boolean;
 }
 
-const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
-  value,
-  onChange,
-  isLoading,
-}) => {
+const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
+  const {thumbnailSettings: value, changeThumbnailSettings: onChange} =
+    useSettings();
   const {
     width,
     height,
@@ -67,7 +66,8 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({
     titleColor,
     titleFontSize,
     hoverEffect,
-  } = value;
+  } = value as IThumbnailSettings;
+
   const isThumbnailTitlePositionEditable: boolean = borderRadius <= 50;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
