@@ -326,6 +326,9 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const getData = async (page: number) => {
+    if ( isLoading ) {
+      return;
+    }
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'gallery/' + galleryId + '/images'
       : undefined;
