@@ -9,7 +9,7 @@ import {
   PaginationType,
   PaginationTypeOptions,
 } from 'data-structures';
-import React, {ReactNode, useEffect, useMemo} from 'react';
+import React, {ReactNode, useMemo} from 'react';
 import {
   ColorControl,
   ISelectOption,
@@ -41,7 +41,6 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     mosaicSettings,
     changeMosaicSettings,
   } = useSettings();
-  const {} = useSettings();
   const {
     itemsPerPage,
     activeButtonColor,
@@ -61,12 +60,6 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
 
     return PaginationType.NONE;
   }, [type, mosaicSettings, thumbnailSettings]);
-
-  useEffect(() => {
-    if (type === GalleryType.MOSAIC) {
-      onInputValueChange(PaginationType.SIMPLE, 'paginationType');
-    }
-  }, [type]);
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     key && onChange({...value, [key]: inputValue});
