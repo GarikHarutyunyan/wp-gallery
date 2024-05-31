@@ -1,16 +1,20 @@
 import axios from 'axios';
-import {IGeneralSettings} from 'components/general-settings';
-import {ILightboxSettings} from 'components/light-box-settings';
-import {IMosaicSettings} from 'components/mosaic-settings';
 import {AppInfoContext} from 'contexts/AppInfoContext';
 import {Section} from 'core-components';
-import {GalleryType} from 'data-structures';
+import {
+  GalleryType,
+  IGeneralSettings,
+  ILightboxSettings,
+  IMasonrySettings,
+  IMosaicSettings,
+  IThumbnailSettings,
+} from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
-import {IThumbnailSettings} from '../thumbnail-settings';
 import {
   generalMockSettings,
   lightboxMockSettings,
+  masonryMockSettings,
   mosaicMockSettings,
   thumbnailMockSettings,
 } from './MockSettings';
@@ -25,6 +29,7 @@ interface ISettingsDTO {
   general: IGeneralSettings;
   thumbnails: IThumbnailSettings;
   mosaic: IMosaicSettings;
+  masonry: IMasonrySettings;
   lightbox: ILightboxSettings;
 }
 
@@ -33,10 +38,12 @@ const SettingsContext = React.createContext<{
   generalSettings?: IGeneralSettings;
   thumbnailSettings?: IThumbnailSettings;
   mosaicSettings?: IMosaicSettings;
+  masonrySettings?: IMasonrySettings;
   lightboxSettings?: ILightboxSettings;
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
+  changeMasonrySettings?: any;
   changeLightboxSettings?: any;
 }>({});
 
@@ -47,6 +54,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
+  const [masonrySettings, setMasonrySettings] = useState<IMasonrySettings>();
   const [generalSettings, setGeneralSettings] = useState<IGeneralSettings>();
   const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
   const [showControls, setShowControls] = useState<boolean>(false);
@@ -76,6 +84,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setGeneralSettings(newSettings.general || generalMockSettings);
       setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
+      setMasonrySettings(newSettings.masonry || mosaicMockSettings);
       setLightboxSettings(newSettings.lightbox);
 
       setIsLoading(false);
@@ -84,6 +93,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setGeneralSettings(generalMockSettings);
       setThumbnailSettings(thumbnailMockSettings);
       setMosaicSettings(mosaicMockSettings);
+      setMasonrySettings(masonryMockSettings);
       setLightboxSettings(lightboxMockSettings);
     }
   };
@@ -130,6 +140,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         thumbnails: thumbnailSettings,
         lightbox: lightboxSettings,
         mosaic: mosaicSettings,
+        masonry: masonrySettings,
       } as ISettingsDTO;
 
       const validSettings: ISettingsDTO = Object.entries(settings).reduce(
@@ -146,6 +157,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setGeneralSettings(newSettings.general);
         setThumbnailSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
+        setMasonrySettings(newSettings.masonry);
         setLightboxSettings(newSettings.lightbox);
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
@@ -190,6 +202,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setGeneralSettings(newSettings.general);
         setThumbnailSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
+        setMasonrySettings(newSettings.masonry);
         setLightboxSettings(newSettings.lightbox);
         enqueueSnackbar(successMessage, {
           variant: 'success',
@@ -225,11 +238,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         type,
         thumbnailSettings,
         mosaicSettings,
+        masonrySettings,
         generalSettings,
         lightboxSettings,
         changeGeneralSettings: setGeneralSettings,
         changeThumbnailSettings: setThumbnailSettings,
         changeMosaicSettings: setMosaicSettings,
+        changeMasonrySettings: setMasonrySettings,
         changeLightboxSettings: setLightboxSettings,
       }}
     >

@@ -4,12 +4,12 @@ import {useSettings} from 'components/settings';
 import {Section} from 'core-components';
 import {
   GalleryType,
-  PaginationButtonShape,
+  IGeneralSettings,
   PaginationButtonShapeOptions,
   PaginationType,
   PaginationTypeOptions,
 } from 'data-structures';
-import React, {ReactNode, useEffect, useMemo} from 'react';
+import React, {ReactNode, useMemo} from 'react';
 import {
   ColorControl,
   ISelectOption,
@@ -18,14 +18,28 @@ import {
 } from '../controls';
 import {Filter} from '../settings/Filter';
 
-interface IGeneralSettings {
-  itemsPerPage: number | undefined;
-  activeButtonColor: string;
-  inactiveButtonColor: string;
-  paginationButtonShape: PaginationButtonShape;
-  loadMoreButtonColor: string;
-  paginationTextColor: string;
-}
+const getPaginationTypeOptions = (type: GalleryType) => {
+  let options = PaginationTypeOptions;
+
+  switch (type) {
+    case GalleryType.MOSAIC:
+      options = PaginationTypeOptions.filter(
+        (option: ISelectOption) =>
+          ![PaginationType.SCROLL, PaginationType.LOAD_MORE].includes(
+            option.value as PaginationType
+          )
+      );
+      break;
+    case GalleryType.MASONRY:
+      options = PaginationTypeOptions.filter(
+        (option: ISelectOption) =>
+          ![PaginationType.SIMPLE].includes(option.value as PaginationType)
+      );
+      break;
+  }
+
+  return options;
+};
 
 interface IGeneralSettingsProps {
   isLoading?: boolean;
@@ -40,8 +54,9 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     changeThumbnailSettings,
     mosaicSettings,
     changeMosaicSettings,
+    masonrySettings,
+    changeMasonrySettings,
   } = useSettings();
-  const {} = useSettings();
   const {
     itemsPerPage,
     activeButtonColor,
@@ -58,15 +73,12 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     if (type === GalleryType.THUMBNAILS) {
       return thumbnailSettings!.paginationType;
     }
+    if (type === GalleryType.MASONRY) {
+      return masonrySettings!.paginationType;
+    }
 
     return PaginationType.NONE;
   }, [type, mosaicSettings, thumbnailSettings]);
-
-  useEffect(() => {
-    if (type === GalleryType.MOSAIC) {
-      onInputValueChange(PaginationType.SIMPLE, 'paginationType');
-    }
-  }, [type]);
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     key && onChange({...value, [key]: inputValue});
@@ -79,17 +91,14 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     if (type === GalleryType.THUMBNAILS) {
       key && changeThumbnailSettings({...thumbnailSettings, [key]: inputValue});
     }
+    if (type === GalleryType.MASONRY) {
+      key && changeMasonrySettings({...masonrySettings, [key]: inputValue});
+    }
   };
 
-  const filteredPaginationTypeOptions =
-    type === GalleryType.MOSAIC
-      ? PaginationTypeOptions.filter(
-          (option: ISelectOption) =>
-            ![PaginationType.SCROLL, PaginationType.LOAD_MORE].includes(
-              option.value as PaginationType
-            )
-        )
-      : PaginationTypeOptions;
+  const filteredPaginationTypeOptions = getPaginationTypeOptions(
+    type as GalleryType
+  );
 
   const renderMainSettings = (): ReactNode => {
     return (
@@ -187,4 +196,4 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   );
 };
 
-export {GeneralSettings, type IGeneralSettings};
+export {GeneralSettings};

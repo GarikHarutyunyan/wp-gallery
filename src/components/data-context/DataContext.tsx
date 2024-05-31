@@ -1,9 +1,13 @@
 import {Paper, Typography} from '@mui/material';
 import axios from 'axios';
-import {IGeneralSettings} from 'components/general-settings';
 import {AppInfoContext} from 'contexts/AppInfoContext';
 import {TranslationsContext} from 'contexts/TranslationsContext';
-import {GalleryType, IImageDTO, PaginationType} from 'data-structures';
+import {
+  GalleryType,
+  IGeneralSettings,
+  IImageDTO,
+  PaginationType,
+} from 'data-structures';
 import {
   ReactElement,
   createContext,
@@ -326,7 +330,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const getData = async (page: number) => {
-    if ( isLoading ) {
+    if (isLoading) {
       return;
     }
     const fetchUrl: string | undefined = baseUrl

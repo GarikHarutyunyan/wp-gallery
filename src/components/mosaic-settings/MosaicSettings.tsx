@@ -5,12 +5,9 @@ import {Section} from 'core-components';
 import {
   Direction,
   DirectionOptions,
-  HoverEffect,
   HoverEffectOptions,
-  PaginationType,
-  TitleAlignment,
+  IMosaicSettings,
   TitleAlignmentOptions,
-  TitlePosition,
   TitlePositionOptions,
   TitleVisibility,
   TitleVisibilityOptions,
@@ -24,26 +21,6 @@ import {
   SliderControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
-
-interface IMosaicSettings {
-  width: number;
-  direction: Direction;
-  gap: number;
-  backgroundColor: string;
-  padding: number;
-  paddingColor: string;
-  rowHeight: number;
-  columns?: number | undefined;
-  borderRadius: number;
-  titlePosition: TitlePosition;
-  titleAlignment: TitleAlignment;
-  titleVisibility: TitleVisibility;
-  titleFontFamily: string;
-  titleColor: string;
-  titleFontSize?: number | undefined;
-  hoverEffect: HoverEffect;
-  paginationType: PaginationType;
-}
 
 interface IMosaicSettingsProps {
   isLoading?: boolean;
@@ -263,4 +240,4 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
   );
 };
 
-export {MosaicSettings, type IMosaicSettings};
+export {MosaicSettings};

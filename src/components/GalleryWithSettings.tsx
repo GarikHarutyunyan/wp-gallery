@@ -1,6 +1,8 @@
-import {IGeneralSettings} from 'components/general-settings';
-import {ILightboxSettings} from 'components/light-box-settings';
-import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
+import {
+  IGeneralSettings,
+  ILightboxSettings,
+  IThumbnailSettings,
+} from 'data-structures';
 import {Gallery} from './Gallery';
 import {DataProvider} from './data-context/DataContext';
 import {useSettings} from './settings';

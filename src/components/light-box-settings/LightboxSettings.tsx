@@ -3,9 +3,9 @@ import Paper from '@mui/material/Paper';
 import {useSettings} from 'components/settings';
 import {Section} from 'core-components';
 import {
+  ILightboxSettings,
   LightboxCaptionsPosition,
   LightboxCaptionsPositionOptions,
-  LightboxImageAnimation,
   LightboxImageAnimationOptions,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
@@ -20,35 +20,6 @@ import {
   SwitchControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
-
-interface ILightboxSettings {
-  showLightbox: boolean;
-  isFullscreen: boolean;
-  width: number;
-  height: number;
-  areControlButtonsShown: boolean;
-  isInfinite: boolean;
-  padding: number;
-  canDownload: boolean;
-  canZoom: boolean;
-  isSlideshowAllowed: boolean;
-  autoplay: boolean;
-  slideDuration: number;
-  imageAnimation: LightboxImageAnimation;
-  isFullscreenAllowed: boolean;
-  thumbnailsPosition: LightboxThumbnailsPosition;
-  thumbnailWidth: number;
-  thumbnailHeight: number;
-  thumbnailBorder: number;
-  thumbnailBorderColor: string;
-  thumbnailBorderRadius: number;
-  thumbnailPadding: number;
-  thumbnailGap: number;
-  backgroundColor: string;
-  captionsPosition: LightboxCaptionsPosition;
-  captionFontFamily: string;
-  captionColor: string;
-}
 
 interface ILightboxSettingsProps {
   isLoading?: boolean;
@@ -378,4 +349,4 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
   );
 };
 
-export {LightboxSettings, type ILightboxSettings};
+export {LightboxSettings};

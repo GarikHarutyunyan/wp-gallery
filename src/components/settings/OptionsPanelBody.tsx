@@ -2,6 +2,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import {GeneralSettings} from 'components/general-settings';
 import {LightboxSettings} from 'components/light-box-settings';
+import {MasonrySettings} from 'components/masonry-settings';
 import {MosaicSettings} from 'components/mosaic-settings';
 import {ThumbnailSettings} from 'components/thumbnail-settings';
 import {GalleryType} from 'data-structures';
@@ -24,6 +25,7 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     type,
     thumbnailSettings,
     mosaicSettings,
+    masonrySettings,
     generalSettings,
     lightboxSettings,
   } = useSettings();
@@ -34,9 +36,16 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   };
 
   const renderGalleryOptions = (): ReactNode => {
-    return type === GalleryType.THUMBNAILS
-      ? renderThumbnailSetting()
-      : renderMosaicSetting();
+    let galleryOprions = renderThumbnailSetting();
+    switch (type) {
+      case GalleryType.MOSAIC:
+        galleryOprions = renderMosaicSetting();
+        break;
+      case GalleryType.MASONRY:
+        galleryOprions = renderMasonrySetting();
+        break;
+    }
+    return galleryOprions;
   };
 
   const renderThumbnailSetting = (): ReactNode => {
@@ -45,6 +54,10 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
 
   const renderMosaicSetting = (): ReactNode => {
     return mosaicSettings && <MosaicSettings isLoading={isLoading} />;
+  };
+
+  const renderMasonrySetting = (): ReactNode => {
+    return masonrySettings && <MasonrySettings isLoading={isLoading} />;
   };
 
   return (
