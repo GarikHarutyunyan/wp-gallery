@@ -90,12 +90,21 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
     },
     [images, onImageClick]
   );
+  let initialColumnsCount = columns || 4;
+  let initialContainerWidth = 1000; // Approximate container initial width in pxs.
 
   return (
     <Box sx={{width: `${width}%`, mx: 'auto'}}>
       <PhotoAlbum
         layout={direction === Direction.VERTICAL ? 'columns' : 'rows'}
-        columns={columns}
+        columns={(containerWidth) => {
+          for (let column = 1; column <= initialColumnsCount; column++) {
+            if (containerWidth <= column * initialContainerWidth / initialColumnsCount) {
+              return column;
+            }
+          }
+          return initialColumnsCount;
+        }}
         spacing={gap}
         padding={padding}
         targetRowHeight={rowHeight}
