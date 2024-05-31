@@ -9,6 +9,8 @@ import React, {ReactNode, useCallback, useMemo} from 'react';
 import PhotoAlbum, {LayoutType} from 'react-photo-album';
 import {PhotoAlbumItem} from './PhotoAlbumItem';
 
+const initialContainerWidth = 1000; // Approximate container initial width in pxs.
+
 interface IPhotoAlbumProps extends WithStyleAndClassName {
   images: IImageDTO[];
   width: number;
@@ -34,6 +36,8 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
   settings,
   onClick,
 }) => {
+  const initialColumnsCount = columns || 4;
+
   const photos = useMemo(() => {
     return images!.map((image: IImageDTO) => {
       const isVideo: boolean = image.type === ImageType.VIDEO;
@@ -112,7 +116,17 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
     <Box sx={{width: `${width}%`, mx: 'auto'}}>
       <PhotoAlbum
         layout={layout}
-        columns={columns}
+        columns={(containerWidth) => {
+          for (let column = 1; column <= initialColumnsCount; column++) {
+            if (
+              containerWidth <=
+              (column * initialContainerWidth) / initialColumnsCount
+            ) {
+              return column;
+            }
+          }
+          return initialColumnsCount;
+        }}
         spacing={gap}
         padding={padding}
         targetRowHeight={rowHeight}
