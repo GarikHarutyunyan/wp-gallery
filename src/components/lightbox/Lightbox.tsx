@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
-import {ILightboxSettings} from 'components/light-box-settings';
 import {useSettings} from 'components/settings';
 import {
   IImageDTO,
+  ILightboxSettings,
   LightboxCaptionsPosition,
   LightboxImageAnimation,
   LightboxThumbnailsPosition,

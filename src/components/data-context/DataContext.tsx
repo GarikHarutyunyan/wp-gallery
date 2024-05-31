@@ -1,9 +1,13 @@
 import {Paper, Typography} from '@mui/material';
 import axios from 'axios';
-import {IGeneralSettings} from 'components/general-settings';
 import {AppInfoContext} from 'contexts/AppInfoContext';
 import {TranslationsContext} from 'contexts/TranslationsContext';
-import {GalleryType, IImageDTO, PaginationType} from 'data-structures';
+import {
+  GalleryType,
+  IGeneralSettings,
+  IImageDTO,
+  PaginationType,
+} from 'data-structures';
 import {
   ReactElement,
   createContext,
@@ -248,11 +252,14 @@ const DataContext = createContext<{
   loadAllLightboxImages?: () => Promise<void>;
 }>({});
 
-interface IGalleryWithDataFetchingProps {}
-
 const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
-  const {type, generalSettings, thumbnailSettings, mosaicSettings} =
-    useSettings();
+  const {
+    type,
+    generalSettings,
+    thumbnailSettings,
+    mosaicSettings,
+    masonrySettings,
+  } = useSettings();
 
   const paginationType: PaginationType = useMemo(() => {
     if (type === GalleryType.MOSAIC) {
@@ -261,9 +268,12 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (type === GalleryType.THUMBNAILS) {
       return thumbnailSettings!.paginationType;
     }
+    if (type === GalleryType.MASONRY) {
+      return masonrySettings!.paginationType;
+    }
 
     return PaginationType.NONE;
-  }, [type, mosaicSettings, thumbnailSettings]);
+  }, [type, mosaicSettings, thumbnailSettings, masonrySettings]);
 
   const {itemsPerPage = 1} = generalSettings as IGeneralSettings;
   const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
@@ -326,7 +336,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const getData = async (page: number) => {
-    if ( isLoading ) {
+    if (isLoading) {
       return;
     }
     const fetchUrl: string | undefined = baseUrl

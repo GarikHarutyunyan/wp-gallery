@@ -1,10 +1,11 @@
-import {IGeneralSettings} from 'components/general-settings';
-import {ILightboxSettings} from 'components/light-box-settings';
-import {IMosaicSettings} from 'components/mosaic-settings';
-import {IThumbnailSettings} from 'components/thumbnail-settings';
 import {
   Direction,
   HoverEffect,
+  IGeneralSettings,
+  ILightboxSettings,
+  IMasonrySettings,
+  IMosaicSettings,
+  IThumbnailSettings,
   LightboxCaptionsPosition,
   LightboxImageAnimation,
   LightboxThumbnailsPosition,
@@ -43,6 +44,24 @@ const mosaicMockSettings: IMosaicSettings = {
   padding: 5,
   paddingColor: '',
   rowHeight: 250,
+  columns: 5,
+  borderRadius: 5,
+  titlePosition: TitlePosition.BOTTOM,
+  titleAlignment: TitleAlignment.LEFT,
+  titleVisibility: TitleVisibility.NONE,
+  titleFontFamily: 'Roboto',
+  titleColor: 'Black',
+  titleFontSize: 20,
+  hoverEffect: HoverEffect.BLUR,
+  paginationType: PaginationType.SIMPLE,
+};
+
+const masonryMockSettings: IMasonrySettings = {
+  width: 70,
+  gap: 5,
+  backgroundColor: '',
+  padding: 5,
+  paddingColor: '',
   columns: 5,
   borderRadius: 5,
   titlePosition: TitlePosition.BOTTOM,
@@ -96,6 +115,7 @@ const lightboxMockSettings: ILightboxSettings = {
 export {
   generalMockSettings,
   lightboxMockSettings,
+  masonryMockSettings,
   mosaicMockSettings,
   thumbnailMockSettings,
 };

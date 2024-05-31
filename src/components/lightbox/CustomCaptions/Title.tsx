@@ -1,20 +1,18 @@
-import * as React from 'react';
-
 import clsx from 'clsx';
-import {useCaptions} from './CaptionsContext';
+import * as React from 'react';
 import {
-  Slide,
   cssClass,
   cssVar,
   useController,
   useLightboxProps,
 } from 'yet-another-react-lightbox';
+import {useCaptions} from './CaptionsContext';
 
 const cssPrefix = (className: string) => cssClass(`slide_${className}`);
 
 export type TitleProps = Pick<any, 'title'>;
 
-export function Title({title}: any) {
+export const Title: React.FC<any> = ({title}: any) => {
   const {toolbarWidth} = useController();
   const {styles} = useLightboxProps() as any;
   const {visible} = useCaptions();
@@ -42,4 +40,4 @@ export function Title({title}: any) {
       </div>
     </div>
   );
-}
+};

@@ -1,11 +1,10 @@
-import React, {ReactNode, useContext, useEffect} from 'react';
 import {Grid, Pagination, PaginationItem} from '@mui/material';
-import {PaginationType} from 'data-structures';
-import {Button} from 'core-components';
-import {useInView} from 'react-intersection-observer';
-import {IGeneralSettings} from 'components/general-settings';
-import './pagination-provider.css';
 import {TranslationsContext} from 'contexts/TranslationsContext';
+import {Button} from 'core-components';
+import {IGeneralSettings, PaginationType} from 'data-structures';
+import React, {ReactNode, useContext, useEffect} from 'react';
+import {useInView} from 'react-intersection-observer';
+import './pagination-provider.css';
 
 interface IPaginationProviderProps {
   type: PaginationType;

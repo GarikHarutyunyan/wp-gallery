@@ -1,10 +1,14 @@
 import {CircularProgress} from '@mui/material';
 import {VLightbox as Lightbox} from 'components/lightbox/Lightbox';
-import {GalleryType, PaginationType} from 'data-structures';
-import React, {ReactNode, useMemo, useState} from 'react';
+import {
+  GalleryType,
+  IGeneralSettings,
+  ILightboxSettings,
+  PaginationType,
+} from 'data-structures';
+import React, {ReactElement, ReactNode, useMemo, useState} from 'react';
 import {useData} from './data-context/useData';
-import {IGeneralSettings} from './general-settings';
-import {ILightboxSettings} from './light-box-settings';
+import {MasonryGallery} from './masonry-gallery/MasonryGallery';
 import {MosaicGallery} from './mosaic-gallery/MosaicGallery';
 import {useSettings} from './settings';
 import {PaginationProvider} from './thumbnail-gallery/PaginationProvider';
@@ -17,6 +21,7 @@ const Gallery: React.FC = () => {
     lightboxSettings,
     mosaicSettings,
     thumbnailSettings,
+    masonrySettings,
   } = useSettings();
   const {
     isLoading,
@@ -33,9 +38,12 @@ const Gallery: React.FC = () => {
     if (type === GalleryType.THUMBNAILS) {
       return thumbnailSettings!.paginationType;
     }
+    if (type === GalleryType.MASONRY) {
+      return masonrySettings!.paginationType;
+    }
 
     return PaginationType.NONE;
-  }, [type, mosaicSettings, thumbnailSettings]);
+  }, [type, mosaicSettings, thumbnailSettings, masonrySettings]);
 
   const {showLightbox} = lightboxSettings as ILightboxSettings;
 
@@ -45,13 +53,31 @@ const Gallery: React.FC = () => {
     const hideGallery: boolean =
       !!isLoading && paginationType === PaginationType.SIMPLE;
 
-    return !hideGallery ? (
-      type === GalleryType.MOSAIC ? (
-        <MosaicGallery onClick={showLightbox ? openLightbox : undefined} />
-      ) : (
-        <ThumbnailGallery onClick={showLightbox ? openLightbox : undefined} />
-      )
-    ) : null;
+    if (hideGallery) {
+      return null;
+    }
+    let gallery: ReactElement = <></>;
+
+    switch (type) {
+      case GalleryType.MOSAIC:
+        gallery = (
+          <MosaicGallery onClick={showLightbox ? openLightbox : undefined} />
+        );
+        break;
+      case GalleryType.MASONRY:
+        gallery = (
+          <MasonryGallery onClick={showLightbox ? openLightbox : undefined} />
+        );
+        break;
+      case GalleryType.THUMBNAILS:
+      default:
+        gallery = (
+          <ThumbnailGallery onClick={showLightbox ? openLightbox : undefined} />
+        );
+        break;
+    }
+
+    return gallery;
   };
 
   const openLightbox = async (index: number): Promise<void> => {

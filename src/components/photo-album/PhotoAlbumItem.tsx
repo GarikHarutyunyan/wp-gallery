@@ -1,15 +1,15 @@
 import {ImageListItemBar} from '@mui/material';
 import clsx from 'clsx';
-import {IMosaicSettings} from 'components/mosaic-settings';
-import {useSettings} from 'components/settings';
 import {
   IImageDTO,
+  IMasonrySettings,
   ImageType,
   TitlePosition,
   TitleVisibility,
 } from 'data-structures';
 import React, {CSSProperties, ReactNode} from 'react';
 import {createIcon} from 'yet-another-react-lightbox';
+import './photo-album.css';
 
 const VideoThumbnailIcon = createIcon(
   'VideoThumbnail',
@@ -22,23 +22,24 @@ const getThumbnailIconSize = (width: number, height: number) => {
   return size > 0 ? `${size}px` : '0px';
 };
 
-interface IMosaicGalleryItemProps extends React.PropsWithChildren {
+interface IPhotoAlbumItemProps extends React.PropsWithChildren {
   image: IImageDTO;
   width: number;
   height: number;
   onClick?: () => void;
+  settings: IMasonrySettings;
   style: CSSProperties;
 }
 
-const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
+const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
   image,
   width,
   height,
   onClick,
+  settings,
   style,
   children,
 }) => {
-  const {mosaicSettings} = useSettings();
   const {
     padding,
     paddingColor,
@@ -50,17 +51,17 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
     titleFontFamily,
     titleFontSize,
     hoverEffect,
-  } = mosaicSettings as IMosaicSettings;
+  } = settings;
   const imageBorderRadius =
     padding < borderRadius / 2 ? borderRadius - padding : borderRadius / 2;
 
   const renderTitle = (): ReactNode => {
     return image ? (
       <div
-        className={clsx('mosaic-gallery__title', {
-          'mosaic-gallery__title_on-hover':
+        className={clsx('photo-album-item__title', {
+          'photo-album-item__title_on-hover':
             titleVisibility === TitleVisibility.ON_HOVER,
-          'mosaic-gallery__title_hidden':
+          'photo-album-item__title_hidden':
             titleVisibility === TitleVisibility.NONE,
         })}
         key={image.id}
@@ -70,7 +71,7 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
             textAlign: titleAlignment,
           }}
           className={clsx({
-            'mosaic-gallery__title-content_center':
+            'photo-album-item__title-content_center':
               titlePosition === TitlePosition.CENTER,
           })}
           title={
@@ -103,10 +104,10 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
     >
       <div
         className={clsx(
-          'mosaic-gallery__image-wrapper',
-          'mosaic-gallery__image-wrapper_overflow',
-          'mosaic-gallery__image-wrapper_' + hoverEffect,
-          {'mosaic-gallery__image-wrapper_clickable': !!onClick}
+          'photo-album-item__image-wrapper',
+          'photo-album-item__image-wrapper_overflow',
+          'photo-album-item__image-wrapper_' + hoverEffect,
+          {'photo-album-item__image-wrapper_clickable': !!onClick}
         )}
         style={{
           borderRadius: `${imageBorderRadius}px`,
@@ -120,7 +121,7 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
               width: getThumbnailIconSize(width, height),
             }}
             className={clsx('yarl__thumbnails_thumbnail_icon', {
-              'mosaic-gallery__video-icon': !!onClick,
+              'photo-album-item__video-icon': !!onClick,
             })}
           />
         )}
@@ -130,4 +131,4 @@ const MosaicGalleryItem: React.FC<IMosaicGalleryItemProps> = ({
   );
 };
 
-export {MosaicGalleryItem};
+export {PhotoAlbumItem};

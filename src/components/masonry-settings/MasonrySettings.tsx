@@ -4,39 +4,36 @@ import {useSettings} from 'components/settings';
 import {Section} from 'core-components';
 import {
   HoverEffectOptions,
-  IThumbnailSettings,
-  ThumbnailTitlePosition,
-  ThumbnailTitlePositionOptions,
+  IMasonrySettings,
   TitleAlignmentOptions,
+  TitlePositionOptions,
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
-import React, {ReactNode, useMemo} from 'react';
+import React, {ReactNode} from 'react';
 import {
   ColorControl,
   FontControl,
-  ISelectOption,
   NumberControl,
   SelectControl,
   SliderControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
 
-interface IThumbnailSettingsProps {
+interface IMasonrySettingsProps {
   isLoading?: boolean;
 }
 
-const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
-  const {thumbnailSettings: value, changeThumbnailSettings: onChange} =
+const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
+  const {masonrySettings: value, changeMasonrySettings: onChange} =
     useSettings();
   const {
     width,
-    height,
-    columns,
     gap,
     backgroundColor,
     padding,
     paddingColor,
+    columns,
     borderRadius,
     titlePosition,
     titleAlignment,
@@ -45,36 +42,11 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
     titleColor,
     titleFontSize,
     hoverEffect,
-  } = value as IThumbnailSettings;
-
-  const isThumbnailTitlePositionEditable: boolean = borderRadius <= 50;
+  } = value as IMasonrySettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     key && onChange({...value, [key]: inputValue});
   };
-
-  const titlePositionOptions: ISelectOption[] = useMemo(() => {
-    const belowOption: ISelectOption = ThumbnailTitlePositionOptions.find(
-      (option) => option.value === ThumbnailTitlePosition.BELOW
-    ) as ISelectOption;
-
-    if (titleVisibility === TitleVisibility.ON_HOVER) {
-      if (belowOption) {
-        belowOption.isDisabled = true;
-      }
-
-      if (titlePosition === ThumbnailTitlePosition.BELOW) {
-        onChange({
-          ...value,
-          titlePosition: ThumbnailTitlePosition.BOTTOM,
-        });
-      }
-    } else {
-      belowOption.isDisabled = false;
-    }
-
-    return ThumbnailTitlePositionOptions;
-  }, [titleVisibility]);
 
   const renderBasicSettings = (): ReactNode => {
     return (
@@ -83,25 +55,16 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
-              <NumberControl
+              <SliderControl
                 id={'width'}
-                name={'Width'}
+                name="Width (%)"
+                min={10}
+                max={100}
                 value={width}
                 onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
               />
             </Filter>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'height'}
-                name={'Height'}
-                value={height}
-                onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
-              />
-            </Filter>
+
             <Filter isLoading={isLoading}>
               <NumberControl
                 id={'columns'}
@@ -162,7 +125,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
             <Filter isLoading={isLoading}>
               <SliderControl
                 id={'borderRadius'}
-                name="Radius (%)"
+                name="Radius (px)"
                 min={0}
                 value={borderRadius}
                 max={50}
@@ -185,7 +148,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                 value={titleVisibility}
                 options={TitleVisibilityOptions}
                 onChange={onInputValueChange}
-                isDisabled={!isThumbnailTitlePositionEditable}
               />
             </Filter>
             {titleVisibility !== TitleVisibility.NONE && renderTitleSettings()}
@@ -204,9 +166,8 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
             id={'titlePosition'}
             name={'Title position'}
             value={titlePosition}
-            options={titlePositionOptions}
+            options={TitlePositionOptions}
             onChange={onInputValueChange}
-            isDisabled={!isThumbnailTitlePositionEditable}
           />
         </Filter>
         <Filter isLoading={isLoading}>
@@ -216,7 +177,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
             value={titleAlignment}
             options={TitleAlignmentOptions}
             onChange={onInputValueChange}
-            isDisabled={!isThumbnailTitlePositionEditable}
           />
         </Filter>
         <Filter isLoading={isLoading}>
@@ -225,7 +185,6 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
             name={'Title font family'}
             value={titleFontFamily}
             onChange={onInputValueChange}
-            isDisabled={!isThumbnailTitlePositionEditable}
           />
         </Filter>
         <Filter isLoading={isLoading}>
@@ -257,4 +216,4 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
   );
 };
 
-export {ThumbnailSettings};
+export {MasonrySettings};

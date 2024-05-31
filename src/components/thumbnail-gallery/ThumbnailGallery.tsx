@@ -2,9 +2,9 @@ import {ImageList, ImageListItem, ImageListItemBar} from '@mui/material';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
-import {IThumbnailSettings} from 'components/thumbnail-settings/ThumbnailSettings';
 import {
   IImageDTO,
+  IThumbnailSettings,
   ImageType,
   ThumbnailTitlePosition,
   TitleVisibility,
@@ -160,7 +160,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
         <ImageListItemBar
           style={{
             textAlign: titleAlignment,
-            /*margin: titlePosition !== ThumbnailTitlePosition.BELOW ? padding + "px" : 0,*/
             paddingLeft: paddingTitle,
             paddingRight: paddingTitle,
           }}
