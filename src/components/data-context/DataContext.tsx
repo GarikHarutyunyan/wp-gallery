@@ -252,11 +252,14 @@ const DataContext = createContext<{
   loadAllLightboxImages?: () => Promise<void>;
 }>({});
 
-interface IGalleryWithDataFetchingProps {}
-
 const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
-  const {type, generalSettings, thumbnailSettings, mosaicSettings} =
-    useSettings();
+  const {
+    type,
+    generalSettings,
+    thumbnailSettings,
+    mosaicSettings,
+    masonrySettings,
+  } = useSettings();
 
   const paginationType: PaginationType = useMemo(() => {
     if (type === GalleryType.MOSAIC) {
@@ -265,9 +268,12 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (type === GalleryType.THUMBNAILS) {
       return thumbnailSettings!.paginationType;
     }
+    if (type === GalleryType.MASONRY) {
+      return masonrySettings!.paginationType;
+    }
 
     return PaginationType.NONE;
-  }, [type, mosaicSettings, thumbnailSettings]);
+  }, [type, mosaicSettings, thumbnailSettings, masonrySettings]);
 
   const {itemsPerPage = 1} = generalSettings as IGeneralSettings;
   const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);

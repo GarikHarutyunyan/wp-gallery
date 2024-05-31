@@ -78,7 +78,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     }
 
     return PaginationType.NONE;
-  }, [type, mosaicSettings, thumbnailSettings]);
+  }, [type, mosaicSettings, thumbnailSettings, masonrySettings]);
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     key && onChange({...value, [key]: inputValue});

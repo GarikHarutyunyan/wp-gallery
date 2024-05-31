@@ -1,12 +1,7 @@
-import {useCaptions} from './CaptionsContext';
-import {
-  Slide,
-  cssClass,
-  cssVar,
-  useLightboxProps,
-} from 'yet-another-react-lightbox';
-import {defaultCaptionsProps, useCaptionsProps} from './Captions';
 import clsx from 'clsx';
+import {cssClass, cssVar, useLightboxProps} from 'yet-another-react-lightbox';
+import {defaultCaptionsProps, useCaptionsProps} from './Captions';
+import {useCaptions} from './CaptionsContext';
 
 const cssPrefix = (className: string) => cssClass(`slide_${className}`);
 

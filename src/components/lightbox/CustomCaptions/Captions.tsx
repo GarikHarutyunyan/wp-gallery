@@ -1,14 +1,11 @@
-import {Title} from './Title';
-import {Description} from './Description';
-import {CaptionsButton} from './CaptionsButton';
-import {CaptionsContextProvider} from './CaptionsContext';
 import {
-  LightboxProps,
-  PluginProps,
   addToolbarButton,
   createModule,
   useLightboxProps,
 } from 'yet-another-react-lightbox';
+import {CaptionsButton} from './CaptionsButton';
+import {CaptionsContextProvider} from './CaptionsContext';
+import {Title} from './Title';
 
 export function Captions({augment, addModule}: any) {
   augment(

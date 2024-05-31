@@ -21,6 +21,7 @@ const Gallery: React.FC = () => {
     lightboxSettings,
     mosaicSettings,
     thumbnailSettings,
+    masonrySettings,
   } = useSettings();
   const {
     isLoading,
@@ -37,9 +38,12 @@ const Gallery: React.FC = () => {
     if (type === GalleryType.THUMBNAILS) {
       return thumbnailSettings!.paginationType;
     }
+    if (type === GalleryType.MASONRY) {
+      return masonrySettings!.paginationType;
+    }
 
     return PaginationType.NONE;
-  }, [type, mosaicSettings, thumbnailSettings]);
+  }, [type, mosaicSettings, thumbnailSettings, masonrySettings]);
 
   const {showLightbox} = lightboxSettings as ILightboxSettings;
 

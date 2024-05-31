@@ -43,6 +43,7 @@ const TypeOption: React.FC<ITypeOptionProps> = ({
           }}
           src={`${pluginUrl}/assets/images/${value}.png`}
           className={'type-option__image'}
+          alt={title}
         />
       </div>
     </div>
