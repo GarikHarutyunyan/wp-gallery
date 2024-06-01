@@ -52,7 +52,8 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
             'button',
             'button-large',
             'button-primary',
-            'options-panel_body-button'
+            'options-panel_body-button',
+            'save-settings-button'
           )}
         >
           {'Save options'}
