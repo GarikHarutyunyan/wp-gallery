@@ -227,7 +227,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   const renderChildren = (): ReactNode => {
     if (showControls) {
-      return <div className={'reacg-galler-wrapper'}>{children}</div>;
+      return <div className={'reacg-gallery-wrapper'}>{children}</div>;
     }
     return children;
   };
