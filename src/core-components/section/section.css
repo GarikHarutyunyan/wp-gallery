@@ -31,3 +31,7 @@
 .reacg-section__body {
     padding: 5px 10px;
 }
+
+#gallery-preview .reacg-gallery-wrapper {
+    margin: 0 14px;
+}
