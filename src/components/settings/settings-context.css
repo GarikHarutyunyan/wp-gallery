@@ -12,8 +12,9 @@
 
     .type-option__image {
         width: 140px;
-        height: 100px;
+        height: auto;
         border-radius: 2px;
+        max-width: 100%;
     }
 
     .type-option__image-container {
