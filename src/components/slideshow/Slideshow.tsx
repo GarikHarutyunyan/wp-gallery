@@ -11,7 +11,7 @@ import {
   LightboxThumbnailsPosition,
 } from 'data-structures';
 import React, {useEffect, useMemo, useState} from 'react';
-import Lightbox from 'yet-another-react-lightbox';
+import Lightbox, {SlideshowRef} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Inline from 'yet-another-react-lightbox/plugins/inline';
 import YARLSlideshow from 'yet-another-react-lightbox/plugins/slideshow';
@@ -48,6 +48,7 @@ const Slideshow: React.FC = () => {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
+  const slideshowRef = React.useRef<SlideshowRef>(null);
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Inline, Video];
     if (isSlideshowAllowed || autoplay) {
@@ -72,6 +73,14 @@ const Slideshow: React.FC = () => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    if (autoplay) {
+      slideshowRef.current?.play();
+    } else {
+      slideshowRef.current?.pause();
+    }
+  }, [autoplay]);
 
   const slides = useMemo(() => {
     return images!.map((image: IImageDTO) => ({
@@ -139,6 +148,7 @@ const Slideshow: React.FC = () => {
         slideshow={{
           autoplay,
           delay: slideDuration > 700 ? slideDuration : 700,
+          ref: slideshowRef,
         }}
         slides={slides}
         animation={{
