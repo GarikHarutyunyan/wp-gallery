@@ -1,0 +1,133 @@
+.reacg-slideshow {
+    .yarl__slide_captions_container {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        height: clamp(2.5rem, 5vw, 3rem);
+    }
+}
+
+.yarl__toolbar {
+    z-index: 1;
+}
+
+.reacg-slideshow-control-buttons_hidden .yarl__toolbar .yarl__button:not(:last-child) {
+    display: none;
+}
+
+
+.reacg-slideshow-captions_top {
+    .yarl__slide_captions_container {
+        top: 0;
+        bottom: unset;
+    }
+}
+
+.reacg-slideshow-captions_below {
+    .yarl__slide {
+        margin-bottom: calc(clamp(2.5rem, 5vw, 3rem) + 20px);
+    }
+}
+
+.reacg-slideshow-captions_above {
+    .yarl__slide {
+        margin-top: calc(clamp(2.5rem, 5vw, 3rem) + 20px);
+    }
+}
+
+.reacg-slideshow-captions__title {
+    font-size: clamp(1.1rem, 1.6vw, 2rem);
+    line-height: clamp(1.1rem, 1.6vw, 2rem);
+    margin: 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+}
+
+.reacg-slideshow-captions__description {
+    font-size: clamp(1rem, 1.3vw, 2rem);
+    line-height: clamp(1.3rem, 1.3vw, 2rem);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 2px 0 0;
+}
+
+/* Fade */
+.reacg-slideshow-animation-fade .yarl__slide .yarl__slide_image {
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+
+.reacg-slideshow-animation-fade .yarl__slide.yarl__slide_current .yarl__slide_image {
+    transition: opacity 0.5s ease;
+    opacity: 1;
+}
+
+/* Zoom */
+.reacg-slideshow-animation-zoom .yarl__slide .yarl__slide_image {
+    transform: scale(0.5) !important;
+    transition: transform 0.5s ease;
+}
+
+.reacg-slideshow-animation-zoom .yarl__slide.yarl__slide_current .yarl__slide_image {
+    transform: scale(1) !important;
+    transition: transform 0.5s ease;
+}
+
+/* Slide vertical */
+.reacg-slideshow-animation-slideV .yarl__slide .yarl__slide_image {
+    transition: top 0.3s ease-in-out;
+    top: 100%;
+    position: absolute;
+}
+
+.reacg-slideshow-animation-slideV .yarl__slide.yarl__slide_current .yarl__slide_image {
+    transition: top 0.3s ease-in-out;
+    top: 0;
+    position: absolute;
+}
+
+/* Flip horizontal */
+.reacg-slideshow-animation-flip .yarl__slide .yarl__slide_image {
+    transform: rotateY(180deg);
+    transition: transform 0.5s ease-in-out;
+}
+
+.reacg-slideshow-animation-flip .yarl__slide.yarl__slide_current .yarl__slide_image {
+    transform: rotateY(0deg);
+    transition: transform 0.5s ease-in-out;
+}
+
+/* Rotate horizontal */
+.reacg-slideshow-animation-rotate .yarl__slide .yarl__slide_image {
+    transform: rotate(180deg);
+    transition: transform 0.5s ease-in-out;
+}
+
+.reacg-slideshow-animation-rotate .yarl__slide.yarl__slide_current .yarl__slide_image {
+    transform: rotate(0deg);
+    transition: transform 0.5s ease-in-out;
+}
+
+/* Blur */
+.reacg-slideshow-animation-blur .yarl__slide .yarl__slide_image {
+    transition: filter 0.5s ease-in-out;
+    filter: blur(10px);
+}
+
+.reacg-slideshow-animation-blur .yarl__slide.yarl__slide_current .yarl__slide_image {
+    transition: filter 0.5s ease-in-out;
+    filter: blur(0);
+}
+
+/* Thumbnails imageFit: 'cover' option is not affected on video thumbnails*/
+.reacg-slideshow .yarl__thumbnails_thumbnail img {
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+.react-slideshow_clickable .yarl__slide_image {
+    cursor: pointer;
+}

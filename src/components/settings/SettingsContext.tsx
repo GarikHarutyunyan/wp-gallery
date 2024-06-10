@@ -7,6 +7,8 @@ import {
   ILightboxSettings,
   IMasonrySettings,
   IMosaicSettings,
+  ISettingsDTO,
+  ISlideshowSettings,
   IThumbnailSettings,
 } from 'data-structures';
 import {useSnackbar} from 'notistack';
@@ -16,6 +18,7 @@ import {
   lightboxMockSettings,
   masonryMockSettings,
   mosaicMockSettings,
+  slideshowMockSettings,
   thumbnailMockSettings,
 } from './MockSettings';
 import {OptionsPanelBody} from './OptionsPanelBody';
@@ -24,26 +27,19 @@ import {TypePanelBody} from './TypePanelBody ';
 import {TypePanelHeader} from './TypePanelHeader';
 import './settings-context.css';
 
-interface ISettingsDTO {
-  type: GalleryType;
-  general: IGeneralSettings;
-  thumbnails: IThumbnailSettings;
-  mosaic: IMosaicSettings;
-  masonry: IMasonrySettings;
-  lightbox: ILightboxSettings;
-}
-
 const SettingsContext = React.createContext<{
   type?: GalleryType;
   generalSettings?: IGeneralSettings;
   thumbnailSettings?: IThumbnailSettings;
   mosaicSettings?: IMosaicSettings;
   masonrySettings?: IMasonrySettings;
+  slideshowSettings?: ISlideshowSettings;
   lightboxSettings?: ILightboxSettings;
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
   changeMasonrySettings?: any;
+  changeSlideshowSettings?: any;
   changeLightboxSettings?: any;
 }>({});
 
@@ -55,6 +51,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
   const [masonrySettings, setMasonrySettings] = useState<IMasonrySettings>();
+  const [slideshowSettings, setSlideshowSettings] =
+    useState<ISlideshowSettings>();
   const [generalSettings, setGeneralSettings] = useState<IGeneralSettings>();
   const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
   const [showControls, setShowControls] = useState<boolean>(false);
@@ -85,6 +83,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
       setMasonrySettings(newSettings.masonry || mosaicMockSettings);
+      setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
 
       setIsLoading(false);
@@ -94,6 +93,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setThumbnailSettings(thumbnailMockSettings);
       setMosaicSettings(mosaicMockSettings);
       setMasonrySettings(masonryMockSettings);
+      setSlideshowSettings(slideshowMockSettings);
       setLightboxSettings(lightboxMockSettings);
     }
   };
@@ -141,6 +141,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         lightbox: lightboxSettings,
         mosaic: mosaicSettings,
         masonry: masonrySettings,
+        slideshow: slideshowSettings,
       } as ISettingsDTO;
 
       const validSettings: ISettingsDTO = Object.entries(settings).reduce(
@@ -158,6 +159,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setThumbnailSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
         setMasonrySettings(newSettings.masonry);
+        setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
@@ -203,6 +205,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setThumbnailSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
         setMasonrySettings(newSettings.masonry);
+        setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
         enqueueSnackbar(successMessage, {
           variant: 'success',
@@ -239,12 +242,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         thumbnailSettings,
         mosaicSettings,
         masonrySettings,
+        slideshowSettings,
         generalSettings,
         lightboxSettings,
         changeGeneralSettings: setGeneralSettings,
         changeThumbnailSettings: setThumbnailSettings,
         changeMosaicSettings: setMosaicSettings,
         changeMasonrySettings: setMasonrySettings,
+        changeSlideshowSettings: setSlideshowSettings,
         changeLightboxSettings: setLightboxSettings,
       }}
     >
