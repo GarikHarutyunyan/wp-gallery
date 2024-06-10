@@ -127,7 +127,3 @@
     -o-object-fit: cover;
     object-fit: cover;
 }
-
-.react-slideshow_clickable .yarl__slide_image {
-    cursor: pointer;
-}

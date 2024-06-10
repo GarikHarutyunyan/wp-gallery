@@ -79,12 +79,7 @@ const Gallery: React.FC = () => {
         );
         break;
       case GalleryType.SLIDESHOW:
-        gallery = (
-          <Slideshow
-            onClick={showLightbox ? openLightbox : undefined}
-            key={images?.length}
-          />
-        );
+        gallery = <Slideshow key={images?.length} />;
         break;
       case GalleryType.THUMBNAILS:
       default:

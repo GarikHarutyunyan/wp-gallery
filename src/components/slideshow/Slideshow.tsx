@@ -19,11 +19,7 @@ import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import Video from 'yet-another-react-lightbox/plugins/video';
 import './slideshow.css';
 
-interface ISlideshowProps {
-  onClick?: (index: number) => void;
-}
-
-const Slideshow: React.FC<ISlideshowProps> = ({onClick}) => {
+const Slideshow: React.FC = () => {
   const {slideshowSettings: settings} = useSettings();
   const {images} = useData();
   const {
@@ -188,7 +184,6 @@ const Slideshow: React.FC<ISlideshowProps> = ({onClick}) => {
               captionsPosition === LightboxCaptionsPosition.BELOW,
             'reacg-slideshow-captions_above':
               captionsPosition === LightboxCaptionsPosition.ABOVE,
-            'react-slideshow_clickable': !!onClick,
           }
         )}
         styles={{
@@ -215,9 +210,6 @@ const Slideshow: React.FC<ISlideshowProps> = ({onClick}) => {
           },
           slideshowStop: () => {
             if (videoAutoplay) setVideoAutoplay(false);
-          },
-          click: ({index}) => {
-            onClick?.(index);
           },
         }}
       />
