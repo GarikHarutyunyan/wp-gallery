@@ -193,8 +193,6 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         open={activeIndex >= 0}
         index={activeIndex}
         close={onClose}
-        // @ts-ignore
-        captions={{showToggle: true}}
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
         animation={{

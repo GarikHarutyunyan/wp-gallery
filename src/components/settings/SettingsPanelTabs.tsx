@@ -22,7 +22,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [isReseting, setIsReseting] = useState(false);
   const {type} = useSettings();
-  const showOnlyGalleryOptions: boolean = type !== GalleryType.SLIDESHOW;
+  const showOnlyGalleryOptions: boolean = type === GalleryType.SLIDESHOW;
 
   const save = async () => {
     setIsSaving(true);
@@ -44,11 +44,11 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         style={{width: '100%'}}
       >
         <Tab label={'Gallery'} value={'gallery'} />
-        {showOnlyGalleryOptions ? (
-          <>
-            <Tab label={'General'} value={'general'} />
-            <Tab label={'Lightbox'} value={'lightbox'} />
-          </>
+        {!showOnlyGalleryOptions ? (
+          <Tab label={'General'} value={'general'} />
+        ) : null}
+        {!showOnlyGalleryOptions ? (
+          <Tab label={'Lightbox'} value={'lightbox'} />
         ) : null}
       </Tabs>
       <Aligner align={Align.END}>

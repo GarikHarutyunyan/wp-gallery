@@ -123,7 +123,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
             <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'isSlideshowAllowed'}
-                name={'Slideshow'}
+                name={'Play / Pause'}
                 value={isSlideshowAllowed}
                 onChange={onInputValueChange}
               />

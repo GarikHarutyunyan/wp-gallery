@@ -7,7 +7,7 @@ import {MosaicSettings} from 'components/mosaic-settings';
 import {SlideshowSettings} from 'components/slideshow-settings';
 import {ThumbnailSettings} from 'components/thumbnail-settings';
 import {GalleryType} from 'data-structures';
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import {SettingsPanelTabs} from './SettingsPanelTabs';
 import {useSettings} from './useSettings';
 
@@ -28,15 +28,19 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     mosaicSettings,
     masonrySettings,
     slideshowSettings,
-    generalSettings,
-    lightboxSettings,
   } = useSettings();
   const [activeTab, setActiveTab] = useState<string>('gallery');
-  const showOnlyGalleryOptions: boolean = type !== GalleryType.SLIDESHOW;
+  const showOnlyGalleryOptions: boolean = type === GalleryType.SLIDESHOW;
 
   const onActiveTabChange = (_: any, newActiveTab: string) => {
     setActiveTab(newActiveTab);
   };
+
+  useEffect(() => {
+    if (showOnlyGalleryOptions) {
+      onActiveTabChange(null, 'gallery');
+    }
+  }, [type]);
 
   const renderGalleryOptions = (): ReactNode => {
     let galleryOprions = renderThumbnailSettings();
@@ -81,13 +85,13 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
       <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
         {renderGalleryOptions()}
       </TabPanel>
-      {showOnlyGalleryOptions ? (
+      {!showOnlyGalleryOptions ? (
         <>
           <TabPanel value={'general'} className={'reacg-tab-panel'}>
-            {generalSettings && <GeneralSettings isLoading={isLoading} />}
+            <GeneralSettings isLoading={isLoading} />
           </TabPanel>
           <TabPanel value={'lightbox'} className={'reacg-tab-panel'}>
-            {lightboxSettings && <LightboxSettings isLoading={isLoading} />}
+            <LightboxSettings isLoading={isLoading} />
           </TabPanel>
         </>
       ) : null}
