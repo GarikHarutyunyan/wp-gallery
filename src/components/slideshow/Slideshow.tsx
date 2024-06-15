@@ -45,8 +45,13 @@ const Slideshow: React.FC = () => {
     captionFontFamily,
     captionColor,
   } = settings as ISlideshowSettings;
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-  const [innerHeight, setInnerHeight] = useState(window.innerHeight);
+  const wrapper = document.getElementsByClassName('reacg-gallery-wrapper')[0];
+  const [innerWidth, setInnerWidth] = useState(wrapper.clientWidth);
+  const showThumbnails: boolean =
+    thumbnailsPosition !== LightboxThumbnailsPosition.END;
+  const minHeight: number = showThumbnails
+    ? thumbnailHeight + thumbnailPadding * 2
+    : height;
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const slideshowRef = React.useRef<SlideshowRef>(null);
   const plugins = useMemo<any[]>(() => {
@@ -66,8 +71,7 @@ const Slideshow: React.FC = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setInnerWidth(window.innerWidth);
-      setInnerHeight(window.innerHeight);
+      setInnerWidth(wrapper.clientWidth);
     };
     window.addEventListener('resize', handleResize);
 
@@ -139,7 +143,7 @@ const Slideshow: React.FC = () => {
     <Box
       sx={{
         width: `${Math.min(innerWidth, width)}px`,
-        height: `${Math.min(innerHeight, height)}px`,
+        height: `${Math.max(minHeight, height)}px`,
         mx: 'auto',
       }}
     >
