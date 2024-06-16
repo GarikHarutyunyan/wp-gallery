@@ -77,16 +77,18 @@
 }
 
 /* Slide vertical */
-.reacg-slideshow-animation-slideV .yarl__slide .yarl__slide_image {
-    transition: top 0.3s ease-in-out;
-    top: 100%;
+.reacg-slideshow-animation-slideV .yarl__slide {
+    transition: transform 0.3s ease-in-out;
+    top: 50%;
     position: absolute;
+    transform: translate(0, 200%);
 }
 
-.reacg-slideshow-animation-slideV .yarl__slide.yarl__slide_current .yarl__slide_image {
-    transition: top 0.3s ease-in-out;
-    top: 0;
+.reacg-slideshow-animation-slideV .yarl__slide.yarl__slide_current {
+    transition: transform 0.3s ease-in-out;
+    top: 50%;
     position: absolute;
+    transform: translate(0, -50%);
 }
 
 /* Flip horizontal */
