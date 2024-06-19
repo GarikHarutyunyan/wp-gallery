@@ -40,7 +40,7 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     if (showOnlyGalleryOptions) {
       onActiveTabChange(null, 'gallery');
     }
-  }, [type]);
+  }, [showOnlyGalleryOptions]);
 
   const renderGalleryOptions = (): ReactNode => {
     let galleryOprions = renderThumbnailSettings();
