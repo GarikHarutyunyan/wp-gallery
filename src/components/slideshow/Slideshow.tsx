@@ -52,6 +52,9 @@ const Slideshow: React.FC = () => {
   const minHeight: number = showThumbnails
     ? thumbnailHeight + thumbnailPadding * 2
     : height;
+  const ratio: number = width / height;
+  const containerWidth: number = Math.min(innerWidth, width);
+  const containerHeight: number = Math.max(minHeight, containerWidth / ratio);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const slideshowRef = React.useRef<SlideshowRef>(null);
   const plugins = useMemo<any[]>(() => {
@@ -142,8 +145,8 @@ const Slideshow: React.FC = () => {
   return (
     <Box
       sx={{
-        width: `${Math.min(innerWidth, width)}px`,
-        height: `${Math.max(minHeight, height)}px`,
+        width: `${containerWidth}px`,
+        height: `${containerHeight}px`,
         mx: 'auto',
       }}
     >
