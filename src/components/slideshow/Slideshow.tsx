@@ -77,12 +77,12 @@ const Slideshow: React.FC = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setInnerWidth(wrapper.clientWidth);
+      setInnerWidth(wrapper?.clientWidth || width);
     };
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [wrapper?.clientWidth]);
 
   useEffect(() => {
     if (autoplay) {
