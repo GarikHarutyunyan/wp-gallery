@@ -46,7 +46,9 @@ const Slideshow: React.FC = () => {
     captionColor,
   } = settings as ISlideshowSettings;
   const wrapper = document.getElementsByClassName('reacg-gallery-wrapper')[0];
-  const [innerWidth, setInnerWidth] = useState(wrapper.clientWidth);
+  const [innerWidth, setInnerWidth] = useState<number>(
+    wrapper?.clientWidth || width
+  );
   const showThumbnails: boolean =
     thumbnailsPosition !== LightboxThumbnailsPosition.END;
   const minHeight: number = showThumbnails
