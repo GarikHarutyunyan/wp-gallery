@@ -58,6 +58,7 @@ const Slideshow: React.FC = () => {
   const containerWidth: number = Math.min(innerWidth, width);
   const containerHeight: number = Math.max(minHeight, containerWidth / ratio);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
+  const [index, setIndex] = useState(0);
   const slideshowRef = React.useRef<SlideshowRef>(null);
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Inline, Video];
@@ -144,6 +145,10 @@ const Slideshow: React.FC = () => {
     }));
   }, [images, captionColor, captionFontFamily]);
 
+  useEffect(() => {
+    setIndex(0);
+  }, [isInfinite]);
+
   return (
     <Box
       sx={{
@@ -153,6 +158,7 @@ const Slideshow: React.FC = () => {
       }}
     >
       <Lightbox
+        index={index}
         plugins={plugins}
         slideshow={{
           autoplay,
@@ -228,6 +234,7 @@ const Slideshow: React.FC = () => {
           slideshowStop: () => {
             if (videoAutoplay) setVideoAutoplay(false);
           },
+          view: ({index: currentIndex}) => setIndex(currentIndex),
         }}
       />
     </Box>
