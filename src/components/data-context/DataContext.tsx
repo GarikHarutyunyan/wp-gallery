@@ -1,6 +1,6 @@
 import {Paper, Typography} from '@mui/material';
 import axios from 'axios';
-import {AppInfoContext} from 'contexts/AppInfoContext';
+import {useAppInfo} from 'contexts/AppInfoContext';
 import {TranslationsContext} from 'contexts/TranslationsContext';
 import {
   GalleryType,
@@ -276,7 +276,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   }, [type, mosaicSettings, thumbnailSettings, masonrySettings]);
 
   const {itemsPerPage = 1} = generalSettings as IGeneralSettings;
-  const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
+  const {galleryId, baseUrl, nonce} = useAppInfo();
   const {noDataText, setLoadMoreText, setNoDataText} =
     useContext(TranslationsContext);
   const [images, setImages] = useState<IImageDTO[]>([]);

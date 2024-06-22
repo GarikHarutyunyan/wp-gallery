@@ -1,13 +1,13 @@
 import axios from 'axios';
-import React, {useContext, useLayoutEffect, useState} from 'react';
-import {AppInfoContext} from './AppInfoContext';
+import React, {useLayoutEffect, useState} from 'react';
+import {useAppInfo} from './AppInfoContext';
 
 const GoogleFontsContext = React.createContext<{
   googleFonts?: any[];
 }>({});
 
 const GoogleFontsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
-  const {baseUrl, nonce} = useContext(AppInfoContext);
+  const {baseUrl, nonce} = useAppInfo();
   const [options, setOptions] = useState<any[]>([]);
 
   const getData = async () => {

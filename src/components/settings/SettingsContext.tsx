@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {AppInfoContext} from 'contexts/AppInfoContext';
+import {useAppInfo} from 'contexts/AppInfoContext';
 import {Section} from 'core-components';
 import {
   GalleryType,
@@ -12,13 +12,7 @@ import {
   IThumbnailSettings,
 } from 'data-structures';
 import {useSnackbar} from 'notistack';
-import React, {
-  ReactNode,
-  useContext,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, {ReactNode, useLayoutEffect, useRef, useState} from 'react';
 import {
   generalMockSettings,
   lightboxMockSettings,
@@ -53,7 +47,7 @@ const SettingsContext = React.createContext<{
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
 
-  const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
+  const {galleryId, baseUrl, nonce} = useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
