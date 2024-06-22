@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {AppInfoContext} from 'contexts/AppInfoContext';
+import {useAppInfo} from 'contexts/AppInfoContext';
 import {Section} from 'core-components';
 import {
   GalleryType,
@@ -7,15 +7,18 @@ import {
   ILightboxSettings,
   IMasonrySettings,
   IMosaicSettings,
+  ISettingsDTO,
+  ISlideshowSettings,
   IThumbnailSettings,
 } from 'data-structures';
 import {useSnackbar} from 'notistack';
-import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
+import React, {ReactNode, useLayoutEffect, useRef, useState} from 'react';
 import {
   generalMockSettings,
   lightboxMockSettings,
   masonryMockSettings,
   mosaicMockSettings,
+  slideshowMockSettings,
   thumbnailMockSettings,
 } from './MockSettings';
 import {OptionsPanelBody} from './OptionsPanelBody';
@@ -24,42 +27,39 @@ import {TypePanelBody} from './TypePanelBody ';
 import {TypePanelHeader} from './TypePanelHeader';
 import './settings-context.css';
 
-interface ISettingsDTO {
-  type: GalleryType;
-  general: IGeneralSettings;
-  thumbnails: IThumbnailSettings;
-  mosaic: IMosaicSettings;
-  masonry: IMasonrySettings;
-  lightbox: ILightboxSettings;
-}
-
 const SettingsContext = React.createContext<{
   type?: GalleryType;
   generalSettings?: IGeneralSettings;
   thumbnailSettings?: IThumbnailSettings;
   mosaicSettings?: IMosaicSettings;
   masonrySettings?: IMasonrySettings;
+  slideshowSettings?: ISlideshowSettings;
   lightboxSettings?: ILightboxSettings;
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
   changeMasonrySettings?: any;
+  changeSlideshowSettings?: any;
   changeLightboxSettings?: any;
+  wrapperRef?: any;
 }>({});
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
 
-  const {galleryId, baseUrl, nonce} = useContext(AppInfoContext);
+  const {galleryId, baseUrl, nonce} = useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
   const [masonrySettings, setMasonrySettings] = useState<IMasonrySettings>();
+  const [slideshowSettings, setSlideshowSettings] =
+    useState<ISlideshowSettings>();
   const [generalSettings, setGeneralSettings] = useState<IGeneralSettings>();
   const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
+  const wrapperRef = useRef(null);
 
   const getData = async () => {
     const dataElement = document.getElementById('reacg-root' + galleryId);
@@ -85,6 +85,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
       setMasonrySettings(newSettings.masonry || mosaicMockSettings);
+      setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
 
       setIsLoading(false);
@@ -94,6 +95,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setThumbnailSettings(thumbnailMockSettings);
       setMosaicSettings(mosaicMockSettings);
       setMasonrySettings(masonryMockSettings);
+      setSlideshowSettings(slideshowMockSettings);
       setLightboxSettings(lightboxMockSettings);
     }
   };
@@ -141,6 +143,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         lightbox: lightboxSettings,
         mosaic: mosaicSettings,
         masonry: masonrySettings,
+        slideshow: slideshowSettings,
       } as ISettingsDTO;
 
       const validSettings: ISettingsDTO = Object.entries(settings).reduce(
@@ -158,6 +161,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setThumbnailSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
         setMasonrySettings(newSettings.masonry);
+        setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
@@ -203,6 +207,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setThumbnailSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
         setMasonrySettings(newSettings.masonry);
+        setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
         enqueueSnackbar(successMessage, {
           variant: 'success',
@@ -226,10 +231,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const renderChildren = (): ReactNode => {
-    if (showControls) {
-      return <div className={'reacg-gallery-wrapper'}>{children}</div>;
-    }
-    return children;
+    return (
+      <div ref={wrapperRef} className={'reacg-gallery-wrapper'}>
+        {children}
+      </div>
+    );
   };
 
   return (
@@ -239,13 +245,16 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         thumbnailSettings,
         mosaicSettings,
         masonrySettings,
+        slideshowSettings,
         generalSettings,
         lightboxSettings,
         changeGeneralSettings: setGeneralSettings,
         changeThumbnailSettings: setThumbnailSettings,
         changeMosaicSettings: setMosaicSettings,
         changeMasonrySettings: setMasonrySettings,
+        changeSlideshowSettings: setSlideshowSettings,
         changeLightboxSettings: setLightboxSettings,
+        wrapperRef,
       }}
     >
       {showControls && (

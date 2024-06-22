@@ -11,6 +11,7 @@ import {useData} from './data-context/useData';
 import {MasonryGallery} from './masonry-gallery/MasonryGallery';
 import {MosaicGallery} from './mosaic-gallery/MosaicGallery';
 import {useSettings} from './settings';
+import {Slideshow} from './slideshow';
 import {PaginationProvider} from './thumbnail-gallery/PaginationProvider';
 import {ThumbnailGallery} from './thumbnail-gallery/ThumbnailGallery';
 
@@ -29,6 +30,7 @@ const Gallery: React.FC = () => {
     onPageChange,
     isFullyLoaded,
     loadAllLightboxImages,
+    images,
   } = useData();
 
   const paginationType: PaginationType = useMemo(() => {
@@ -43,7 +45,12 @@ const Gallery: React.FC = () => {
     }
 
     return PaginationType.NONE;
-  }, [type, mosaicSettings, thumbnailSettings, masonrySettings]);
+  }, [
+    type,
+    mosaicSettings?.paginationType,
+    thumbnailSettings?.paginationType,
+    masonrySettings?.paginationType,
+  ]);
 
   const {showLightbox} = lightboxSettings as ILightboxSettings;
 
@@ -68,6 +75,9 @@ const Gallery: React.FC = () => {
         gallery = (
           <MasonryGallery onClick={showLightbox ? openLightbox : undefined} />
         );
+        break;
+      case GalleryType.SLIDESHOW:
+        gallery = <Slideshow key={images?.length} />;
         break;
       case GalleryType.THUMBNAILS:
       default:

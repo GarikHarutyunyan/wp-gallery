@@ -1,7 +1,7 @@
 import {Typography} from '@mui/material';
-import {AppInfoContext} from 'contexts/AppInfoContext';
+import {useAppInfo} from 'contexts/AppInfoContext';
 import {GalleryType} from 'data-structures';
-import React, {useContext} from 'react';
+import React from 'react';
 
 const activeColor: string = '#135C92';
 const inactiveColor: string = '#86A3B8';
@@ -19,7 +19,7 @@ const TypeOption: React.FC<ITypeOptionProps> = ({
   isSelected,
   onClick,
 }) => {
-  const {pluginUrl} = useContext(AppInfoContext);
+  const {pluginUrl} = useAppInfo();
 
   const onOptionClick = () => {
     onClick(value);

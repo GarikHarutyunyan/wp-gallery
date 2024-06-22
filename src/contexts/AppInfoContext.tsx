@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 const AppInfoContext = React.createContext<{
   galleryId?: string;
@@ -28,4 +28,12 @@ const AppInfoProvider: React.FC<IAppInfoProviderProps> = ({
   );
 };
 
-export {AppInfoContext, AppInfoProvider};
+const useAppInfo = () => {
+  const context = useContext(AppInfoContext);
+  if (!context)
+    throw new Error('useAppInfo must be used within a AppInfoContext');
+
+  return context;
+};
+
+export {AppInfoContext, AppInfoProvider, useAppInfo};

@@ -1,5 +1,6 @@
 import {
   Direction,
+  GalleryType,
   HoverEffect,
   LightboxCaptionsPosition,
   LightboxImageAnimation,
@@ -54,21 +55,18 @@ export interface IMosaicSettings extends IMasonrySettings {
   rowHeight: number;
 }
 
-export interface ILightboxSettings {
-  showLightbox: boolean;
-  isFullscreen: boolean;
+export interface ISlideshowSettings {
   width: number;
   height: number;
-  areControlButtonsShown: boolean;
-  isInfinite: boolean;
   padding: number;
-  canDownload: boolean;
-  canZoom: boolean;
-  isSlideshowAllowed: boolean;
   autoplay: boolean;
+  isInfinite: boolean;
   slideDuration: number;
   imageAnimation: LightboxImageAnimation;
-  isFullscreenAllowed: boolean;
+  backgroundColor: string;
+  captionsPosition: LightboxCaptionsPosition;
+  captionFontFamily: string;
+  captionColor: string;
   thumbnailsPosition: LightboxThumbnailsPosition;
   thumbnailWidth: number;
   thumbnailHeight: number;
@@ -77,10 +75,16 @@ export interface ILightboxSettings {
   thumbnailBorderRadius: number;
   thumbnailPadding: number;
   thumbnailGap: number;
-  backgroundColor: string;
-  captionsPosition: LightboxCaptionsPosition;
-  captionFontFamily: string;
-  captionColor: string;
+  isSlideshowAllowed: boolean;
+}
+
+export interface ILightboxSettings extends ISlideshowSettings {
+  showLightbox: boolean;
+  isFullscreen: boolean;
+  areControlButtonsShown: boolean;
+  canDownload: boolean;
+  canZoom: boolean;
+  isFullscreenAllowed: boolean;
 }
 
 export interface IGeneralSettings {
@@ -90,4 +94,14 @@ export interface IGeneralSettings {
   paginationButtonShape: PaginationButtonShape;
   loadMoreButtonColor: string;
   paginationTextColor: string;
+}
+
+export interface ISettingsDTO {
+  type: GalleryType;
+  general: IGeneralSettings;
+  thumbnails: IThumbnailSettings;
+  mosaic: IMosaicSettings;
+  masonry: IMasonrySettings;
+  slideshow: ISlideshowSettings;
+  lightbox: ILightboxSettings;
 }

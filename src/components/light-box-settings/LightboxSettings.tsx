@@ -153,7 +153,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                     <Filter isLoading={isLoading}>
                       <SwitchControl
                         id={'isSlideshowAllowed'}
-                        name={'Slideshow'}
+                        name={'Play / Pause'}
                         value={isSlideshowAllowed}
                         onChange={onInputValueChange}
                       />

@@ -35,3 +35,20 @@
 .reacg-tab-panel {
     padding: 15px 5px !important;
 }
+
+.type-panel-select__body {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.type-panel-select__image {
+    width: 30px;
+    height: auto;
+    border-radius: 2px;
+    max-width: 100%;
+}
+
+.type-panel-select__title {
+    margin-left: 10px !important;
+}

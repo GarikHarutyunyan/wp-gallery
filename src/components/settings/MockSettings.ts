@@ -5,6 +5,7 @@ import {
   ILightboxSettings,
   IMasonrySettings,
   IMosaicSettings,
+  ISlideshowSettings,
   IThumbnailSettings,
   LightboxCaptionsPosition,
   LightboxImageAnimation,
@@ -74,6 +75,29 @@ const masonryMockSettings: IMasonrySettings = {
   paginationType: PaginationType.SIMPLE,
 };
 
+const slideshowMockSettings: ISlideshowSettings = {
+  width: 800,
+  height: 800,
+  isInfinite: false,
+  padding: 15,
+  autoplay: false,
+  slideDuration: 3000,
+  backgroundColor: '',
+  captionsPosition: LightboxCaptionsPosition.BOTTOM,
+  captionFontFamily: 'Roboto',
+  captionColor: 'White',
+  imageAnimation: LightboxImageAnimation.BLUR,
+  thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
+  thumbnailWidth: 80,
+  thumbnailHeight: 80,
+  thumbnailBorder: 2,
+  thumbnailBorderRadius: 20,
+  thumbnailBorderColor: 'white',
+  thumbnailPadding: 0,
+  thumbnailGap: 10,
+  isSlideshowAllowed: true,
+};
+
 const generalMockSettings: IGeneralSettings = {
   itemsPerPage: 8,
   activeButtonColor: 'blue',
@@ -117,5 +141,6 @@ export {
   lightboxMockSettings,
   masonryMockSettings,
   mosaicMockSettings,
+  slideshowMockSettings,
   thumbnailMockSettings,
 };

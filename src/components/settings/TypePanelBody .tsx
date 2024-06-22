@@ -1,8 +1,10 @@
+import {useMediaQuery, useTheme} from '@mui/material';
 import {ISelectOption} from 'components/controls';
 import {Align, Aligner} from 'core-components';
 import {GalleryType, GalleryTypeOptions} from 'data-structures';
 import React from 'react';
 import {TypeOption} from './TypeOption';
+import {TypePanelSelect} from './TypePanelSelect';
 import {useSettings} from './useSettings';
 
 interface ITypePanelBodyProps {
@@ -15,15 +17,21 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
   onChange,
 }) => {
   const {type} = useSettings();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  return (
+  if (!type) return null;
+
+  return isMobile ? (
+    <TypePanelSelect value={type} onChange={onChange} />
+  ) : (
     <Aligner align={Align.START} style={{margin: '10px 10px 0'}}>
-      {GalleryTypeOptions.map((option: ISelectOption) => {
+      {GalleryTypeOptions.map(({value, title}: ISelectOption) => {
         return (
           <TypeOption
-            title={option.title}
-            value={option.value as GalleryType}
-            isSelected={type === option.value}
+            title={title}
+            value={value as GalleryType}
+            isSelected={type === value}
             onClick={onChange}
           />
         );
@@ -33,14 +41,3 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
 };
 
 export {TypePanelBody};
-
-{
-  /* <SelectControl
-        id={'titlePosition'}
-        name={'Title position'}
-        value={type}
-        options={GalleryTypeOptions}
-        onChange={onChange}
-        // isDisabled={!isTitlePositionEditable}
-      /> */
-}

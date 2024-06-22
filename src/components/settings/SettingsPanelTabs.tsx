@@ -1,8 +1,10 @@
 import LoadingButton from '@mui/lab/LoadingButton';
-import {Tab, Tabs} from '@mui/material';
+import {Tab, Tabs, useMediaQuery, useTheme} from '@mui/material';
 import clsx from 'clsx';
 import {Align, Aligner} from 'core-components';
+import {GalleryType} from 'data-structures';
 import React, {useState} from 'react';
+import {useSettings} from './useSettings';
 
 interface ISettingsPanelTabsProps {
   activeTab: string;
@@ -19,6 +21,10 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
 }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isReseting, setIsReseting] = useState(false);
+  const {type} = useSettings();
+  const showOnlyGalleryOptions: boolean = type === GalleryType.SLIDESHOW;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const save = async () => {
     setIsSaving(true);
@@ -31,16 +37,21 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
     await onReset();
     setIsReseting(false);
   };
+
   return (
-    <Aligner>
+    <Aligner style={{flexDirection: isMobile ? 'column-reverse' : 'row'}}>
       <Tabs
         value={activeTab}
         onChange={onActiveTabChange}
         style={{width: '100%'}}
       >
         <Tab label={'Gallery'} value={'gallery'} />
-        <Tab label={'General'} value={'general'} />
-        <Tab label={'Lightbox'} value={'lightbox'} />
+        {!showOnlyGalleryOptions ? (
+          <Tab label={'General'} value={'general'} />
+        ) : null}
+        {!showOnlyGalleryOptions ? (
+          <Tab label={'Lightbox'} value={'lightbox'} />
+        ) : null}
       </Tabs>
       <Aligner align={Align.END}>
         <LoadingButton
