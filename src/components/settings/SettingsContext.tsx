@@ -12,7 +12,13 @@ import {
   IThumbnailSettings,
 } from 'data-structures';
 import {useSnackbar} from 'notistack';
-import React, {ReactNode, useContext, useLayoutEffect, useState} from 'react';
+import React, {
+  ReactNode,
+  useContext,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   generalMockSettings,
   lightboxMockSettings,
@@ -41,6 +47,7 @@ const SettingsContext = React.createContext<{
   changeMasonrySettings?: any;
   changeSlideshowSettings?: any;
   changeLightboxSettings?: any;
+  wrapperRef?: any;
 }>({});
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
@@ -58,6 +65,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
+  const wrapperRef = useRef(null);
 
   const getData = async () => {
     const dataElement = document.getElementById('reacg-root' + galleryId);
@@ -229,10 +237,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const renderChildren = (): ReactNode => {
-    if (showControls) {
-      return <div className={'reacg-gallery-wrapper'}>{children}</div>;
-    }
-    return children;
+    return (
+      <div ref={wrapperRef} className={'reacg-gallery-wrapper'}>
+        {children}
+      </div>
+    );
   };
 
   return (
@@ -251,6 +260,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeMasonrySettings: setMasonrySettings,
         changeSlideshowSettings: setSlideshowSettings,
         changeLightboxSettings: setLightboxSettings,
+        wrapperRef,
       }}
     >
       {showControls && (

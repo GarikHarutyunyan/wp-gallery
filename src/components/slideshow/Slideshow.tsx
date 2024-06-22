@@ -20,12 +20,11 @@ import Video from 'yet-another-react-lightbox/plugins/video';
 import './slideshow.css';
 
 const Slideshow: React.FC = () => {
-  const {slideshowSettings: settings} = useSettings();
+  const {slideshowSettings: settings, wrapperRef} = useSettings();
   const {images} = useData();
   const {
     width,
     height,
-    // areControlButtonsShown,
     isInfinite,
     padding,
     isSlideshowAllowed,
@@ -45,7 +44,7 @@ const Slideshow: React.FC = () => {
     captionFontFamily,
     captionColor,
   } = settings as ISlideshowSettings;
-  const wrapper = document.getElementsByClassName('reacg-gallery-wrapper')[0];
+  const wrapper = wrapperRef.current;
   const [innerWidth, setInnerWidth] = useState<number>(
     wrapper?.clientWidth || width
   );
