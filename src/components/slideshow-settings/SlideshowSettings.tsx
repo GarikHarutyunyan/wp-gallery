@@ -6,6 +6,7 @@ import {
   ISlideshowSettings,
   LightboxCaptionsPosition,
   LightboxCaptionsPositionOptions,
+  LightboxImageAnimation,
   LightboxImageAnimationOptions,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
@@ -116,7 +117,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                 id={'imageAnimation'}
                 name={'Animation'}
                 value={imageAnimation}
-                options={LightboxImageAnimationOptions}
+                options={LightboxImageAnimationOptions.filter(option => option.value !== LightboxImageAnimation.SLIDEV)}
                 onChange={onInputValueChange}
               />
             </Filter>
