@@ -271,3 +271,7 @@
         opacity: 0;
     }
 }
+
+.photo-album-item__title .MuiImageListItemBar-titleWrap {
+    color: inherit;
+}

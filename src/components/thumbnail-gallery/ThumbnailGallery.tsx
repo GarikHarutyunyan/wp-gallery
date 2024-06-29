@@ -162,6 +162,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
             textAlign: titleAlignment,
             paddingLeft: paddingTitle,
             paddingRight: paddingTitle,
+            color: titleColor,
           }}
           className={clsx({
             'thumbnail-gallery__title-content_center':

@@ -69,6 +69,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
         <ImageListItemBar
           style={{
             textAlign: titleAlignment,
+            color: titleColor,
           }}
           className={clsx({
             'photo-album-item__title-content_center':

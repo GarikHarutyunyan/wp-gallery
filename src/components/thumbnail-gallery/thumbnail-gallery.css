@@ -275,3 +275,7 @@
         opacity: 0;
     }
 }
+
+.thumbnail-gallery__title .MuiImageListItemBar-titleWrap {
+    color: inherit;
+}
