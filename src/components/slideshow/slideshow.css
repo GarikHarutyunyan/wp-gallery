@@ -114,3 +114,7 @@
     -o-object-fit: cover;
     object-fit: cover;
 }
+
+.reacg-slideshow button:hover {
+    background: none;
+}
