@@ -33,7 +33,7 @@ const thumbnailMockSettings: IThumbnailSettings = {
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
-  hoverEffect: HoverEffect.BLUR,
+  hoverEffect: HoverEffect.NONE,
   paginationType: PaginationType.SIMPLE,
 };
 
