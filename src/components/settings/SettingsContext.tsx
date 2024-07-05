@@ -105,29 +105,29 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   }, []);
 
   const onTypeChange = async (newType: GalleryType): Promise<void> => {
-    const fetchUrl: string | undefined = baseUrl
-      ? baseUrl + 'options/' + galleryId
-      : undefined;
+    // const fetchUrl: string | undefined = baseUrl
+    //   ? baseUrl + 'options/' + galleryId
+    //   : undefined;
+    setType(newType);
+    // if (fetchUrl) {
+    //   setIsLoading(true);
+    //   const settings: ISettingsDTO = {
+    //     type: newType,
+    //   } as ISettingsDTO;
 
-    if (fetchUrl) {
-      setIsLoading(true);
-      const settings: ISettingsDTO = {
-        type: newType,
-      } as ISettingsDTO;
+    //   try {
+    //     const response = await axios.post(fetchUrl, settings, {
+    //       headers: {'X-WP-Nonce': nonce},
+    //     });
+    //     const newType: GalleryType = response.data.type;
 
-      try {
-        const response = await axios.post(fetchUrl, settings, {
-          headers: {'X-WP-Nonce': nonce},
-        });
-        const newType: GalleryType = response.data.type;
+    //     setType(newType);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
 
-        setType(newType);
-      } catch (error) {
-        console.error(error);
-      }
-
-      setIsLoading(false);
-    }
+    //   setIsLoading(false);
+    // }
   };
 
   const onSave = async (): Promise<void> => {
