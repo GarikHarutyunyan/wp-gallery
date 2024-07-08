@@ -115,6 +115,7 @@
     object-fit: cover;
 }
 
-.reacg-slideshow button:hover {
+.reacg-slideshow button:hover,
+.reacg-slideshow button:focus {
     background: none;
 }
