@@ -1,5 +1,6 @@
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
+import {CarouselSettings} from 'components/carousel-settings/CarouselSettings';
 import {GeneralSettings} from 'components/general-settings';
 import {LightboxSettings} from 'components/light-box-settings';
 import {MasonrySettings} from 'components/masonry-settings';
@@ -28,9 +29,11 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     mosaicSettings,
     masonrySettings,
     slideshowSettings,
+    carouselSettings,
   } = useSettings();
   const [activeTab, setActiveTab] = useState<string>('gallery');
-  const showOnlyGalleryOptions: boolean = type === GalleryType.SLIDESHOW;
+  const showOnlyGalleryOptions: boolean =
+    type === GalleryType.SLIDESHOW || type === GalleryType.CAROUSEL;
 
   const onActiveTabChange = (_: any, newActiveTab: string) => {
     setActiveTab(newActiveTab);
@@ -54,6 +57,9 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
       case GalleryType.SLIDESHOW:
         galleryOprions = renderSlideshowSettings();
         break;
+      case GalleryType.CAROUSEL:
+        galleryOprions = renderCarouselSettings();
+        break;
     }
     return galleryOprions;
   };
@@ -72,6 +78,10 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
 
   const renderSlideshowSettings = (): ReactNode => {
     return slideshowSettings && <SlideshowSettings isLoading={isLoading} />;
+  };
+
+  const renderCarouselSettings = (): ReactNode => {
+    return carouselSettings && <CarouselSettings isLoading={isLoading} />;
   };
 
   return (

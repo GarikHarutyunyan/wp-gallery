@@ -7,6 +7,7 @@ import {
   PaginationType,
 } from 'data-structures';
 import React, {ReactElement, ReactNode, useMemo, useState} from 'react';
+import {CarouselGallery} from './carousel-gallery/CarouselGallery';
 import {useData} from './data-context/useData';
 import {MasonryGallery} from './masonry-gallery/MasonryGallery';
 import {MosaicGallery} from './mosaic-gallery/MosaicGallery';
@@ -80,9 +81,13 @@ const Gallery: React.FC = () => {
         gallery = <Slideshow key={images?.length} />;
         break;
       case GalleryType.THUMBNAILS:
-      default:
         gallery = (
           <ThumbnailGallery onClick={showLightbox ? openLightbox : undefined} />
+        );
+        break;
+      case GalleryType.CAROUSEL:
+        gallery = (
+          <CarouselGallery onClick={showLightbox ? openLightbox : undefined} />
         );
         break;
     }

@@ -96,6 +96,19 @@ export interface IGeneralSettings {
   paginationTextColor: string;
 }
 
+export interface ICarouselSettings {
+  width: number;
+  height: number;
+  gap: number;
+  backgroundColor: string;
+  loop: boolean;
+  pagination: boolean;
+  effects: string;
+  autoplay: boolean;
+  delay: number;
+  playAndPouseAllowed: boolean;
+}
+
 export interface ISettingsDTO {
   type: GalleryType;
   general: IGeneralSettings;
@@ -104,4 +117,5 @@ export interface ISettingsDTO {
   masonry: IMasonrySettings;
   slideshow: ISlideshowSettings;
   lightbox: ILightboxSettings;
+  carousel: ICarouselSettings;
 }

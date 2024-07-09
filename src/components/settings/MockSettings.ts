@@ -1,6 +1,7 @@
 import {
   Direction,
   HoverEffect,
+  ICarouselSettings,
   IGeneralSettings,
   ILightboxSettings,
   IMasonrySettings,
@@ -136,7 +137,21 @@ const lightboxMockSettings: ILightboxSettings = {
   imageAnimation: LightboxImageAnimation.BLUR,
 };
 
+const carouselMockSettings: ICarouselSettings = {
+  width: 800,
+  height: 800,
+  gap: 20,
+  backgroundColor: '',
+  loop: false,
+  pagination: true,
+  effects: 'coverflow',
+  autoplay: false,
+  delay: 3000,
+  playAndPouseAllowed: false,
+};
+
 export {
+  carouselMockSettings,
   generalMockSettings,
   lightboxMockSettings,
   masonryMockSettings,
