@@ -29,6 +29,17 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     autoplay,
     delay,
     playAndPouseAllowed,
+    slidesDepth,
+    rotate,
+    modifier,
+    scale,
+    imagesCount,
+    spaceBetween,
+    centeredSlides,
+    stretch,
+    shadow,
+    shadowOffset,
+    shadowScale,
   } = value as ICarouselSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -127,6 +138,129 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 onChange={onInputValueChange}
               />
             </Filter>
+
+            {effects === 'coverflow' ? (
+              <>
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'slidesDepth'}
+                    name={'Slides Depth'}
+                    value={slidesDepth}
+                    onChange={onInputValueChange}
+                    min={-1000}
+                    unit={'px'}
+                  />
+                </Filter>
+
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'modifier'}
+                    name={'Slides modifier'}
+                    value={modifier}
+                    onChange={onInputValueChange}
+                    min={0.1}
+                    max={4}
+                    unit={'%'}
+                  />
+                </Filter>
+
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'rotate'}
+                    name={'Slides rotate'}
+                    value={rotate}
+                    onChange={onInputValueChange}
+                    min={1}
+                    unit={'%'}
+                  />
+                </Filter>
+
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'scale'}
+                    name={'Slides scale'}
+                    value={scale}
+                    onChange={onInputValueChange}
+                    min={0}
+                    max={2}
+                    unit={'%'}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'imagesCount'}
+                    name={'Images count'}
+                    value={imagesCount}
+                    onChange={onInputValueChange}
+                    min={1}
+                    max={10}
+                    unit={'things'}
+                  />
+                </Filter>
+
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'spaceBetween'}
+                    name={'Space Between'}
+                    value={spaceBetween}
+                    onChange={onInputValueChange}
+                    min={0}
+                    unit={'px'}
+                  />
+                </Filter>
+
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'centeredSlides'}
+                    name={'Slides centered'}
+                    value={centeredSlides}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'stretch'}
+                    name={'Slides stretch'}
+                    value={stretch}
+                    onChange={onInputValueChange}
+                    min={0}
+                    unit={'px'}
+                  />
+                </Filter>
+              </>
+            ) : (
+              <>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'shadow'}
+                    name={'Shadow'}
+                    value={shadow}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'shadowOffset'}
+                    name={'ShadowOffset'}
+                    value={shadowOffset}
+                    onChange={onInputValueChange}
+                    min={1}
+                    unit={'%'}
+                  />
+                </Filter>
+
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'shadowScale'}
+                    name={'shadowScale'}
+                    value={shadowScale}
+                    onChange={onInputValueChange}
+                    min={1}
+                    unit={'shadowScale'}
+                  />
+                </Filter>
+              </>
+            )}
           </Grid>
         }
       />

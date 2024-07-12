@@ -148,8 +148,21 @@ const carouselMockSettings: ICarouselSettings = {
   autoplay: false,
   delay: 3000,
   playAndPouseAllowed: false,
+  slidesDepth: -100,
+  scale: 1.2,
+  rotate: 80,
+  modifier: 0.2,
+  imagesCount: 4,
+  spaceBetween: 10,
+  centeredSlides: true,
+  stretch: 0,
+  slideShadows: true,
+  shadow: true,
+  shadowOffset: 20,
+  shadowScale: 0.94,
+  perSlideOffset: 8,
+  perSlideRotate: 2,
 };
-
 export {
   carouselMockSettings,
   generalMockSettings,

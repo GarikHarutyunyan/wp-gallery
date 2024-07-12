@@ -1,9 +1,9 @@
 .reacg-gallery-wrapper {
   margin: 0px auto;
   margin-bottom: 32px;
-  overflow: hidden;
   max-width: 100%;
   height: 100vh;
+  padding: 14px;
 }
 
 .swiper {
@@ -15,14 +15,8 @@
 .swiper-slide {
   background-position: center;
   background-size: cover;
-  width: 300px;
-  height: 300px;
-}
-
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
+  width: 200px;
+  height: 200px;
 }
 
 .swiper-3d {
@@ -31,11 +25,11 @@
 
 .autoplay-progress {
   position: absolute;
+  bottom: 0;
   right: 16px;
-  bottom: 16px;
   z-index: 10;
-  width: 48px;
-  height: 48px;
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,4 +61,15 @@
 
 swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal {
   margin-top: 55px;
+}
+
+.lazy-load-image-background {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
 }

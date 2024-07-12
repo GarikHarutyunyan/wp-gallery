@@ -1,8 +1,11 @@
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import IconButton from '@mui/material/IconButton';
-import {IImageDTO} from 'data-structures';
+import Paper from '@mui/material/Paper';
+import {useSettings} from 'components/settings';
+import {ICarouselSettings, IImageDTO} from 'data-structures';
 import React, {useEffect, useRef, useState} from 'react';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import './CarouselGallery.css';
 interface ISwiperGalleryProps {
@@ -30,6 +33,42 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const progressContent = useRef<HTMLSpanElement>(null);
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
+  const {carouselSettings: settings} = useSettings();
+  const {
+    slidesDepth,
+    rotate,
+    modifier,
+    scale,
+    stretch,
+    shadow,
+    shadowOffset,
+    shadowScale,
+  } = settings as ICarouselSettings;
+
+  const key = effects.effect + 'Effect';
+
+  useEffect(() => {
+    let swiper = swiperRef.current?.swiper;
+    swiper.params[key].depth = slidesDepth;
+    swiper.params[key].modifier = modifier;
+    swiper.params[key].rotate = rotate;
+    swiper.params[key].scale = scale;
+    swiper.params[key].stretch = stretch;
+    swiper.params[key].shadow = shadow;
+
+    console.log(swiper);
+  }, [
+    slidesDepth,
+    modifier,
+    rotate,
+    scale,
+    stretch,
+    shadow,
+    shadowOffset,
+    shadowScale,
+  ]);
+
+  console.log(key);
 
   const onAutoplayTimeLeft = (swiper: any, time: number, progress: number) => {
     if (progressCircle.current && progressContent.current) {
@@ -43,7 +82,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
-
+    swiper.params[key].shadow = false;
     if (swiper?.autoplay) {
       swiper.autoplay.stop();
     }
@@ -83,20 +122,26 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   };
 
   return (
-    <div>
+    <Paper elevation={11} sx={{padding: '0px 20px 0px 20px'}}>
       <Swiper
         ref={swiperRef}
         autoplay={{delay: delay}}
         onAutoplayTimeLeft={onAutoplayTimeLeft}
         grabCursor={true}
         loop={loop}
+        loopedSlides={10}
         pagination={pagination}
         {...effects}
         style={{background: backgroundColor, ...effects.style}}
       >
         {images?.map((val: any) => (
           <SwiperSlide key={Math.random()}>
-            <img src={val.original.url} alt={`Slide ${val.id}`} />
+            <img
+              key={Math.random()}
+              src={val.original.url}
+              className="swiper-lazy"
+              alt={`Slide ${val.id}`}
+            />
           </SwiperSlide>
         ))}
 
@@ -122,7 +167,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           </IconButton>
         )}
       </Swiper>
-    </div>
+    </Paper>
   );
 };
 

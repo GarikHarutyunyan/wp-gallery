@@ -107,6 +107,21 @@ export interface ICarouselSettings {
   autoplay: boolean;
   delay: number;
   playAndPouseAllowed: boolean;
+  slidesDepth: number;
+  scale: number;
+  rotate: number;
+  modifier: number;
+  imagesCount: number;
+  spaceBetween: number;
+  centeredSlides: boolean;
+  stretch: number;
+  slideShadows: boolean;
+  shadow: boolean;
+  shadowOffset: number;
+  shadowScale: number;
+  perSlideOffset: number;
+  perSlideRotate: number;
+  // rotate:boolean;
 }
 
 export interface ISettingsDTO {

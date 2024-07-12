@@ -55,6 +55,7 @@
     "react-dev-utils": "^12.0.1",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^9.5.2",
+    "react-lazy-load-image-component": "^1.6.2",
     "react-photo-album": "^2.3.1",
     "react-refresh": "^0.11.0",
     "resolve": "^1.20.0",
@@ -98,6 +99,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/react-lazy-load-image-component": "^1.6.4",
     "css-loader": "^6.8.1",
     "prettier": "^3.0.3",
     "style-loader": "^3.3.3",
