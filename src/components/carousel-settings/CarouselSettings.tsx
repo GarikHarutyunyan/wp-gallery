@@ -4,6 +4,7 @@ import {
   ColorControl,
   NumberControl,
   SelectControl,
+  SliderControl,
   SwitchControl,
 } from 'components/controls';
 import {useSettings} from 'components/settings';
@@ -37,9 +38,8 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     spaceBetween,
     centeredSlides,
     stretch,
-    shadow,
-    shadowOffset,
-    shadowScale,
+    rotateCard,
+    perSlideOffset,
   } = value as ICarouselSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -228,38 +228,30 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   />
                 </Filter>
               </>
-            ) : (
+            ) : effects === 'cards' ? (
               <>
                 <Filter isLoading={isLoading}>
                   <SwitchControl
-                    id={'shadow'}
-                    name={'Shadow'}
-                    value={shadow}
+                    id={'rotateCard'}
+                    name={'Rotate cards'}
+                    value={rotateCard}
                     onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'shadowOffset'}
-                    name={'ShadowOffset'}
-                    value={shadowOffset}
-                    onChange={onInputValueChange}
-                    min={1}
-                    unit={'%'}
                   />
                 </Filter>
 
                 <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'shadowScale'}
-                    name={'shadowScale'}
-                    value={shadowScale}
+                  <SliderControl
+                    id={'perSlideOffset'}
+                    name={'Per slide off set'}
+                    value={perSlideOffset}
                     onChange={onInputValueChange}
                     min={1}
-                    unit={'shadowScale'}
+                    max={20}
                   />
                 </Filter>
               </>
+            ) : (
+              <div></div>
             )}
           </Grid>
         }

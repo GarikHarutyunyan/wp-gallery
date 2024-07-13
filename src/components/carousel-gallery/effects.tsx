@@ -5,14 +5,13 @@ import {
   EffectCards,
   EffectCoverflow,
   EffectCreative,
-  EffectCube,
   EffectFlip,
   Navigation,
   Pagination,
 } from 'swiper/modules';
 export const useSwiperEffects = () => {
   const {carouselSettings: settings} = useSettings();
-  const {slidesDepth, spaceBetween, imagesCount, centeredSlides} =
+  const {spaceBetween, imagesCount, centeredSlides} =
     settings as ICarouselSettings;
 
   const coverflow = {
@@ -42,37 +41,15 @@ export const useSwiperEffects = () => {
     modules: [EffectCoverflow, Pagination, Autoplay, Navigation],
   };
 
-  const cube = {
-    id: 2,
-    effect: 'cube',
-    cubeEffect: {
-      shadow: true,
-      slideShadows: true,
-      shadowOffset: 20,
-      shadowScale: 0.94,
-    },
-    modules: [EffectCube, Pagination, Autoplay, Navigation],
-    navigation: true,
-    // preloadImages: false,
-    // lazy: {
-    //   loadOnTransitionStart: false,
-    //   loadPrevNext: true,
-    // },
-
-    // watchSlidesProgress: true,
-    // watchSlidesVisibility: true,
-    style: {width: '300px', height: '300px', padding: '50px'},
-  };
-
   const cards = {
-    id: 3,
+    id: 2,
     effect: 'cards',
     modules: [EffectCards, Autoplay, Navigation],
     navigation: true,
-    preloadImages: false,
-
-    cubeEffect: {
-      perSlideOffset: 101,
+    cardsEffect: {
+      rotate: false,
+      perSlideOffset: 8,
+      perSlideRotate: 2,
     },
     // lazy: {
     //   loadOnTransitionStart: false,
@@ -85,7 +62,7 @@ export const useSwiperEffects = () => {
   };
 
   const creative = {
-    id: 4,
+    id: 3,
     effect: 'creative',
     creativeEffect: {
       prev: {
@@ -99,7 +76,7 @@ export const useSwiperEffects = () => {
     modules: [EffectCreative, Autoplay],
   };
   const flip = {
-    id: 5,
+    id: 4,
     effect: 'flip',
     modules: [EffectFlip, Pagination, Navigation, Autoplay],
     navigation: true,
@@ -114,9 +91,5 @@ export const useSwiperEffects = () => {
     style: {width: '300px', height: '300px', padding: '50px'},
   };
 
-  // useEffect(() => {
-  //   coverflow.coverflowEffect.depth = slidesDepth; // Adjusting depth
-  // }, [slidesDepth]);
-
-  return {coverflow, cube, cards, creative, flip};
+  return {coverflow, cards, creative, flip};
 };

@@ -159,9 +159,9 @@ const carouselMockSettings: ICarouselSettings = {
   slideShadows: true,
   shadow: true,
   shadowOffset: 20,
-  shadowScale: 0.94,
+  shadowOpacity: 9,
   perSlideOffset: 8,
-  perSlideRotate: 2,
+  rotateCard: false,
 };
 export {
   carouselMockSettings,

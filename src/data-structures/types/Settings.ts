@@ -118,10 +118,9 @@ export interface ICarouselSettings {
   slideShadows: boolean;
   shadow: boolean;
   shadowOffset: number;
-  shadowScale: number;
+  shadowOpacity: number;
   perSlideOffset: number;
-  perSlideRotate: number;
-  // rotate:boolean;
+  rotateCard: boolean;
 }
 
 export interface ISettingsDTO {

@@ -2,12 +2,20 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
-import {useSettings} from 'components/settings';
-import {ICarouselSettings, IImageDTO} from 'data-structures';
+import useConfigureSwiper from 'custom-hooks/useConfigureSwiper';
+import {IImageDTO} from 'data-structures';
 import React, {useEffect, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import 'swiper/css';
+import 'swiper/css/effect-cards';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/effect-creative';
+import 'swiper/css/effect-cube';
+import 'swiper/css/effect-flip';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import {Swiper, SwiperSlide} from 'swiper/react';
-import './CarouselGallery.css';
+import './carousel-gallery/CarouselGallery.css';
 interface ISwiperGalleryProps {
   images: IImageDTO[];
   backgroundColor: string;
@@ -33,42 +41,9 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const progressContent = useRef<HTMLSpanElement>(null);
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
-  const {carouselSettings: settings} = useSettings();
-  const {
-    slidesDepth,
-    rotate,
-    modifier,
-    scale,
-    stretch,
-    shadow,
-    shadowOffset,
-    shadowScale,
-  } = settings as ICarouselSettings;
 
   const key = effects.effect + 'Effect';
-
-  useEffect(() => {
-    let swiper = swiperRef.current?.swiper;
-    swiper.params[key].depth = slidesDepth;
-    swiper.params[key].modifier = modifier;
-    swiper.params[key].rotate = rotate;
-    swiper.params[key].scale = scale;
-    swiper.params[key].stretch = stretch;
-    swiper.params[key].shadow = shadow;
-
-    console.log(swiper);
-  }, [
-    slidesDepth,
-    modifier,
-    rotate,
-    scale,
-    stretch,
-    shadow,
-    shadowOffset,
-    shadowScale,
-  ]);
-
-  console.log(key);
+  useConfigureSwiper(swiperRef, key);
 
   const onAutoplayTimeLeft = (swiper: any, time: number, progress: number) => {
     if (progressCircle.current && progressContent.current) {

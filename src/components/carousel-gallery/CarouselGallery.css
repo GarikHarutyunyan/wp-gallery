@@ -73,3 +73,12 @@ swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal {
   width: 100%;
   height: 100%;
 }
+
+.swiper-cube .swiper-cube-shadow::before {
+  content: none;
+}
+
+.swiper-cube .swiper-cube-shadow {
+  background: black;
+  filter: blur(50px);
+}
