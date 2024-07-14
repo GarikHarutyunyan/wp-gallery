@@ -58,7 +58,7 @@ export const useSwiperEffects = () => {
 
     // watchSlidesProgress: true,
     // watchSlidesVisibility: true,
-    style: {width: '300px', height: '300px', padding: '150px'},
+    style: {width: '400px', height: '400px', padding: '150px'},
   };
 
   const creative = {

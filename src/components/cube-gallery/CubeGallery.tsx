@@ -3,7 +3,7 @@ import {useSettings} from 'components/settings';
 import {SwiperGallery} from 'components/SwiperGallery';
 import {ICarouselSettings} from 'data-structures';
 import React from 'react';
-import {Autoplay, EffectCube, Navigation, Pagination} from 'swiper/modules';
+import {Autoplay, EffectCube} from 'swiper/modules';
 import '../carousel-gallery/CarouselGallery';
 
 interface ITCarouselGalleryProps {
@@ -15,7 +15,7 @@ const CubeGallery: React.FC<ITCarouselGalleryProps> = ({onClick}) => {
   const {carouselSettings: settings} = useSettings();
   const {
     backgroundColor,
-    width,
+
     loop,
     pagination,
     autoplay,
@@ -29,16 +29,11 @@ const CubeGallery: React.FC<ITCarouselGalleryProps> = ({onClick}) => {
     cubeEffect: {
       shadow: true,
       slideShadows: true,
+      shadowOffset: 20,
+      shadowScale: 0.94,
     },
-    modules: [EffectCube, Pagination, Autoplay, Navigation],
-    navigation: true,
-    breakpoints: {
-      480: {
-        slidesPerView: 1,
-        spaceBetween: 10,
-        resistanceRatio: 0.85,
-      },
-    },
+    modules: [EffectCube, Autoplay],
+
     // preloadImages: false,
     // lazy: {
     //   loadOnTransitionStart: false,
@@ -47,14 +42,12 @@ const CubeGallery: React.FC<ITCarouselGalleryProps> = ({onClick}) => {
 
     // watchSlidesProgress: true,
     // watchSlidesVisibility: true,
-    style: {width: '300px', height: '300px', padding: '50px'},
   };
 
   return (
     <SwiperGallery
       key={'cube'}
       effects={effects}
-      pagination={pagination}
       loop={loop}
       backgroundColor={backgroundColor}
       images={images || []}

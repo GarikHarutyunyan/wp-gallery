@@ -138,8 +138,8 @@ const lightboxMockSettings: ILightboxSettings = {
 };
 
 const carouselMockSettings: ICarouselSettings = {
-  width: 800,
-  height: 800,
+  width: 300,
+  height: 300,
   gap: 20,
   backgroundColor: '',
   loop: false,

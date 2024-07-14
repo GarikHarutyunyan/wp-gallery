@@ -1,16 +1,9 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {
-  ColorControl,
-  NumberControl,
-  SelectControl,
-  SliderControl,
-  SwitchControl,
-} from 'components/controls';
+import {ColorControl, NumberControl, SwitchControl} from 'components/controls';
 import {useSettings} from 'components/settings';
 import {Section} from 'core-components';
 import {ICarouselSettings} from 'data-structures';
-import {CarouselEffectsOptions} from 'data-structures/enum/CarouselEffectType';
 import React, {ReactNode} from 'react';
 import {Filter} from '../settings/Filter';
 interface ICarouselSettingsProps {
@@ -85,25 +78,6 @@ const CubeSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
 
             <Filter isLoading={isLoading}>
               <SwitchControl
-                id={'pagination'}
-                name={'Pagination'}
-                value={pagination}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'effects'}
-                name={'CarouselEffects'}
-                value={effects}
-                options={CarouselEffectsOptions}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-
-            <Filter isLoading={isLoading}>
-              <SwitchControl
                 id={'autoplay'}
                 name={'Autoplay'}
                 value={autoplay}
@@ -136,17 +110,6 @@ const CubeSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   id={'shadow'}
                   name={'Slide shadow'}
                   value={shadow}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-
-              <Filter isLoading={isLoading}>
-                <SliderControl
-                  id={'shadowOpacity'}
-                  name="Shadow opacity (%)"
-                  min={0}
-                  max={10}
-                  value={shadowOpacity}
                   onChange={onInputValueChange}
                 />
               </Filter>

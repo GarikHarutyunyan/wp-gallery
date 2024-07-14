@@ -15,9 +15,23 @@ const useConfigureSwiper = (swiperRef: any, key: string): void => {
     rotateCard,
     perSlideOffset,
     shadowOffset,
+    width,
+    height,
   } = settings as ICarouselSettings;
 
   const [upDate, setUpdate] = useState(0);
+
+  const updateSwiperDimensions = () => {
+    const cubeSwiper = document.querySelector('.swiper') as HTMLElement;
+    const parent = document.querySelector('.reacg-gallery') as HTMLElement;
+    if (cubeSwiper) {
+      cubeSwiper.style.width = `${width}px`;
+      cubeSwiper.style.height = `${height}px`;
+      cubeSwiper.style.maxWidth = `80%`;
+      cubeSwiper.style.maxHeight = `100vh`;
+    }
+  };
+
   useEffect(() => {
     let swiper = swiperRef.current?.swiper;
     if (key === 'coverflowEffect') {
@@ -30,14 +44,17 @@ const useConfigureSwiper = (swiperRef: any, key: string): void => {
       swiper.params[key].rotate = rotateCard;
       swiper.params[key].perSlideOffset = perSlideOffset;
       setUpdate(upDate + 1);
-      console.log('yey');
     } else if (key === 'cubeEffect') {
       const cubeShadow = document.querySelector(
         '.swiper-cube .swiper-cube-shadow'
       ) as HTMLElement;
-
+      updateSwiperDimensions();
       cubeShadow.style.width = shadow ? '100%' : '0%';
-      cubeShadow.style.opacity = shadowOpacity / 10 + '';
+
+      window.addEventListener('resize', updateSwiperDimensions);
+      return () => {
+        window.removeEventListener('resize', updateSwiperDimensions);
+      };
     }
 
     if (swiper.params) console.log(swiper);
@@ -52,6 +69,8 @@ const useConfigureSwiper = (swiperRef: any, key: string): void => {
     shadowOpacity,
     shadowOffset,
     shadow,
+    width,
+    height,
   ]);
 };
 
