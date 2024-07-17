@@ -13,19 +13,8 @@ interface ICarouselSettingsProps {
 const CubeSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
   const {carouselSettings: value, changeCarouselSettings: onChange} =
     useSettings();
-  const {
-    width,
-    height,
-    backgroundColor,
-    loop,
-    pagination,
-    effects,
-    autoplay,
-    delay,
-    playAndPouseAllowed,
-    shadow,
-    shadowOpacity,
-  } = value as ICarouselSettings;
+  const {width, height, backgroundColor, loop, autoplay, delay, shadow} =
+    value as ICarouselSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     key && onChange({...value, [key]: inputValue});

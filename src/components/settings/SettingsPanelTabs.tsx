@@ -23,7 +23,9 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
   const [isReseting, setIsReseting] = useState(false);
   const {type} = useSettings();
   const showOnlyGalleryOptions: boolean =
-    type === GalleryType.SLIDESHOW || type === GalleryType.CAROUSEL;
+    type === GalleryType.SLIDESHOW ||
+    type === GalleryType.CAROUSEL ||
+    type === GalleryType.CUBE;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
