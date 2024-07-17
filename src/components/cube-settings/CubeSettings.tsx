@@ -96,14 +96,6 @@ const CubeSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
               />
             </Filter>
 
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'playAndPouseAllowed'}
-                name={'Play / Pause'}
-                value={playAndPouseAllowed}
-                onChange={onInputValueChange}
-              />
-            </Filter>
             <>
               <Filter isLoading={isLoading}>
                 <SwitchControl

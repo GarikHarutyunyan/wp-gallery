@@ -1,5 +1,3 @@
-import PauseIcon from '@mui/icons-material/Pause';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import useConfigureSwiper from 'custom-hooks/useConfigureSwiper';
@@ -206,7 +204,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         loopedSlides={10}
         pagination={pagination || false}
         {...effects}
-        style={{background: backgroundColor}}
+        style={{background: key !== 'cubeEffect' && backgroundColor}}
       >
         {images?.map((val: any) => (
           <SwiperSlide key={Math.random()}>
@@ -215,6 +213,9 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
               srcSet={`${val.thumbnail.url} ${val.thumbnail.width}w, ${val.medium_large.url} ${val.medium_large.width}w, ${val.original.url} ${val.original.width}w`}
               className="swiper-lazy"
               alt={`Slide ${val.id}`}
+              style={{
+                background: key === 'cubeEffect' ? backgroundColor : '',
+              }}
             />
           </SwiperSlide>
         ))}
@@ -233,11 +234,11 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
             aria-label={isPlaying ? 'pause' : 'play'}
             size="large"
           >
-            {isPlaying ? (
+            {/* {isPlaying ? (
               <PauseIcon fontSize="inherit" />
             ) : (
               <PlayArrowIcon fontSize="inherit" />
-            )}
+            )} */}
           </IconButton>
         )}
       </Swiper>
