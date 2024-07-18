@@ -1,6 +1,5 @@
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import {CarouselSettings} from 'components/carousel-settings/CarouselSettings';
 import {CubeSettings} from 'components/cube-settings/CubeSettings';
 import {GeneralSettings} from 'components/general-settings';
 import {LightboxSettings} from 'components/light-box-settings';
@@ -30,13 +29,11 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     mosaicSettings,
     masonrySettings,
     slideshowSettings,
-    carouselSettings,
+    cubeSettings,
   } = useSettings();
   const [activeTab, setActiveTab] = useState<string>('gallery');
   const showOnlyGalleryOptions: boolean =
-    type === GalleryType.SLIDESHOW ||
-    type === GalleryType.CAROUSEL ||
-    type === GalleryType.CUBE;
+    type === GalleryType.SLIDESHOW || type === GalleryType.CUBE;
 
   const onActiveTabChange = (_: any, newActiveTab: string) => {
     setActiveTab(newActiveTab);
@@ -60,11 +57,8 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
       case GalleryType.SLIDESHOW:
         galleryOprions = renderSlideshowSettings();
         break;
-      case GalleryType.CAROUSEL:
-        galleryOprions = renderCarouselSettings();
-        break;
       case GalleryType.CUBE:
-        galleryOprions = renderCubeselSettings();
+        galleryOprions = renderCubeSettings();
         break;
     }
     return galleryOprions;
@@ -86,12 +80,8 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     return slideshowSettings && <SlideshowSettings isLoading={isLoading} />;
   };
 
-  const renderCarouselSettings = (): ReactNode => {
-    return carouselSettings && <CarouselSettings isLoading={isLoading} />;
-  };
-
-  const renderCubeselSettings = (): ReactNode => {
-    return carouselSettings && <CubeSettings isLoading={isLoading} />;
+  const renderCubeSettings = (): ReactNode => {
+    return cubeSettings && <CubeSettings isLoading={isLoading} />;
   };
 
   return (

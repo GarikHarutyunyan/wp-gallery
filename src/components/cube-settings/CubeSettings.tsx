@@ -3,18 +3,17 @@ import Paper from '@mui/material/Paper';
 import {ColorControl, NumberControl, SwitchControl} from 'components/controls';
 import {useSettings} from 'components/settings';
 import {Section} from 'core-components';
-import {ICarouselSettings} from 'data-structures';
+import {ICubeSettings} from 'data-structures';
 import React, {ReactNode} from 'react';
 import {Filter} from '../settings/Filter';
-interface ICarouselSettingsProps {
+interface ICubeSettingsProps {
   isLoading?: boolean;
 }
 
-const CubeSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
-  const {carouselSettings: value, changeCarouselSettings: onChange} =
-    useSettings();
+const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
+  const {cubeSettings: value, changeCubeSettings: onChange} = useSettings();
   const {width, height, backgroundColor, loop, autoplay, delay, shadow} =
-    value as ICarouselSettings;
+    value as ICubeSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     key && onChange({...value, [key]: inputValue});
@@ -46,7 +45,6 @@ const CubeSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 unit={'px'}
               />
             </Filter>
-
             <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'loop'}
@@ -55,7 +53,6 @@ const CubeSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 onChange={onInputValueChange}
               />
             </Filter>
-
             <Filter isLoading={isLoading}>
               <ColorControl
                 id={'backgroundColor'}
@@ -64,7 +61,6 @@ const CubeSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 onChange={onInputValueChange}
               />
             </Filter>
-
             <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'autoplay'}
@@ -73,7 +69,6 @@ const CubeSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 onChange={onInputValueChange}
               />
             </Filter>
-
             <Filter isLoading={isLoading}>
               <NumberControl
                 id={'delay'}
@@ -84,17 +79,14 @@ const CubeSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 unit={'ms'}
               />
             </Filter>
-
-            <>
-              <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id={'shadow'}
-                  name={'Slide shadow'}
-                  value={shadow}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-            </>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'shadow'}
+                name={'Slide shadow'}
+                value={shadow}
+                onChange={onInputValueChange}
+              />
+            </Filter>
           </Grid>
         }
       />

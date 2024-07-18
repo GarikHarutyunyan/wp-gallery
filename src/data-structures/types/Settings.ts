@@ -96,31 +96,14 @@ export interface IGeneralSettings {
   paginationTextColor: string;
 }
 
-export interface ICarouselSettings {
+export interface ICubeSettings {
   width: number;
   height: number;
-  gap: number;
   backgroundColor: string;
   loop: boolean;
-  pagination: boolean;
-  effects: string;
   autoplay: boolean;
   delay: number;
-  playAndPouseAllowed: boolean;
-  slidesDepth: number;
-  scale: number;
-  rotate: number;
-  modifier: number;
-  imagesCount: number;
-  spaceBetween: number;
-  centeredSlides: boolean;
-  stretch: number;
-  slideShadows: boolean;
   shadow: boolean;
-  shadowOffset: number;
-  shadowOpacity: number;
-  perSlideOffset: number;
-  rotateCard: boolean;
 }
 
 export interface ISettingsDTO {
@@ -131,5 +114,5 @@ export interface ISettingsDTO {
   masonry: IMasonrySettings;
   slideshow: ISlideshowSettings;
   lightbox: ILightboxSettings;
-  carousel: ICarouselSettings;
+  cube: ICubeSettings;
 }

@@ -1,51 +1,41 @@
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {SwiperGallery} from 'components/SwiperGallery';
-import {ICarouselSettings} from 'data-structures';
-import React from 'react';
+import {ICubeSettings} from 'data-structures';
+import React, {useEffect} from 'react';
 import {Autoplay, EffectCube} from 'swiper/modules';
-import '../carousel-gallery/CarouselGallery';
+import './cube-gallery.css';
 
-interface ITCarouselGalleryProps {
-  onClick?: (index: number) => void;
-}
+const effects = {
+  id: 2,
+  effect: 'cube',
+  cubeEffect: {
+    shadow: true,
+    slideShadows: true,
+    shadowOffset: 20,
+    shadowScale: 0.94,
+  },
+  modules: [EffectCube, Autoplay],
+};
 
-const CubeGallery: React.FC<ITCarouselGalleryProps> = ({onClick}) => {
+const CubeGallery: React.FC = () => {
   const {images} = useData();
-  const {carouselSettings: settings} = useSettings();
-  const {
-    backgroundColor,
+  const {cubeSettings: settings} = useSettings();
+  const {width, height, loop, backgroundColor, autoplay, delay, shadow} =
+    settings as ICubeSettings;
 
-    loop,
-    pagination,
-    autoplay,
-    delay,
-    playAndPouseAllowed,
-  } = settings as ICarouselSettings;
+  useEffect(() => {
+    const cubeShadow = document.querySelector(
+      '.swiper-cube .swiper-cube-shadow'
+    ) as HTMLElement;
 
-  const effects = {
-    id: 2,
-    effect: 'cube',
-    cubeEffect: {
-      shadow: true,
-      slideShadows: true,
-      shadowOffset: 20,
-      shadowScale: 0.94,
-    },
-    modules: [EffectCube, Autoplay],
-
-    // preloadImages: false,
-    // lazy: {
-    //   loadOnTransitionStart: false,
-    //   loadPrevNext: true,
-    // },
-
-    // watchSlidesProgress: true,
-    // watchSlidesVisibility: true,
-  };
+    cubeShadow.style.width = shadow ? '100%' : '0%';
+  }, [shadow]);
 
   return (
     <SwiperGallery
+      width={width}
+      height={height}
       key={'cube'}
       effects={effects}
       loop={loop}
@@ -53,7 +43,6 @@ const CubeGallery: React.FC<ITCarouselGalleryProps> = ({onClick}) => {
       images={images || []}
       autoplay={autoplay}
       delay={delay}
-      playAndPouseAllowed={playAndPouseAllowed}
     />
   );
 };

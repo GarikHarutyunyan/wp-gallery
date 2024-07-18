@@ -3,7 +3,7 @@ import {useAppInfo} from 'contexts/AppInfoContext';
 import {Section} from 'core-components';
 import {
   GalleryType,
-  ICarouselSettings,
+  ICubeSettings,
   IGeneralSettings,
   ILightboxSettings,
   IMasonrySettings,
@@ -15,7 +15,7 @@ import {
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useLayoutEffect, useRef, useState} from 'react';
 import {
-  carouselMockSettings,
+  cubeMockSettings,
   generalMockSettings,
   lightboxMockSettings,
   masonryMockSettings,
@@ -37,14 +37,14 @@ const SettingsContext = React.createContext<{
   masonrySettings?: IMasonrySettings;
   slideshowSettings?: ISlideshowSettings;
   lightboxSettings?: ILightboxSettings;
-  carouselSettings?: ICarouselSettings;
+  cubeSettings?: ICubeSettings;
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
   changeMasonrySettings?: any;
   changeSlideshowSettings?: any;
   changeLightboxSettings?: any;
-  changeCarouselSettings?: any;
+  changeCubeSettings?: any;
   wrapperRef?: any;
 }>({});
 
@@ -60,7 +60,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     useState<ISlideshowSettings>();
   const [generalSettings, setGeneralSettings] = useState<IGeneralSettings>();
   const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
-  const [carouselSettings, setCarouselSettings] = useState<ICarouselSettings>();
+  const [cubeSettings, setCubeSettings] = useState<ICubeSettings>();
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
@@ -92,7 +92,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setMasonrySettings(newSettings.masonry || mosaicMockSettings);
       setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
-      setCarouselSettings(newSettings.carousel || carouselMockSettings);
+      setCubeSettings(newSettings.cube || cubeMockSettings);
 
       setIsLoading(false);
     } else {
@@ -103,7 +103,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setMasonrySettings(masonryMockSettings);
       setSlideshowSettings(slideshowMockSettings);
       setLightboxSettings(lightboxMockSettings);
-      setCarouselSettings(carouselMockSettings);
+      setCubeSettings(cubeMockSettings);
     }
   };
 
@@ -170,7 +170,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setMasonrySettings(newSettings.masonry);
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
-        setCarouselSettings(newSettings.carousel);
+        setCubeSettings(newSettings.cube);
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -217,7 +217,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setMasonrySettings(newSettings.masonry);
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
-        setCarouselSettings(newSettings.carousel);
+        setCubeSettings(newSettings.cube);
         enqueueSnackbar(successMessage, {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -257,14 +257,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         slideshowSettings,
         generalSettings,
         lightboxSettings,
-        carouselSettings,
+        cubeSettings,
         changeGeneralSettings: setGeneralSettings,
         changeThumbnailSettings: setThumbnailSettings,
         changeMosaicSettings: setMosaicSettings,
         changeMasonrySettings: setMasonrySettings,
         changeSlideshowSettings: setSlideshowSettings,
         changeLightboxSettings: setLightboxSettings,
-        changeCarouselSettings: setCarouselSettings,
+        changeCubeSettings: setCubeSettings,
         wrapperRef,
       }}
     >

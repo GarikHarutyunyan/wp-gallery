@@ -1,7 +1,7 @@
 import {
   Direction,
   HoverEffect,
-  ICarouselSettings,
+  ICubeSettings,
   IGeneralSettings,
   ILightboxSettings,
   IMasonrySettings,
@@ -137,34 +137,18 @@ const lightboxMockSettings: ILightboxSettings = {
   imageAnimation: LightboxImageAnimation.BLUR,
 };
 
-const carouselMockSettings: ICarouselSettings = {
+const cubeMockSettings: ICubeSettings = {
   width: 300,
   height: 300,
-  gap: 20,
   backgroundColor: '',
   loop: false,
-  pagination: true,
-  effects: 'coverflow',
   autoplay: false,
   delay: 3000,
-  playAndPouseAllowed: false,
-  slidesDepth: -100,
-  scale: 1.2,
-  rotate: 80,
-  modifier: 0.2,
-  imagesCount: 4,
-  spaceBetween: 10,
-  centeredSlides: true,
-  stretch: 0,
-  slideShadows: true,
   shadow: true,
-  shadowOffset: 20,
-  shadowOpacity: 9,
-  perSlideOffset: 8,
-  rotateCard: false,
 };
+
 export {
-  carouselMockSettings,
+  cubeMockSettings,
   generalMockSettings,
   lightboxMockSettings,
   masonryMockSettings,
