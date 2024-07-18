@@ -60,7 +60,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   return (
     <Swiper
       ref={swiperRef}
-      autoplay={{delay: delay}}
+      autoplay={{delay}}
       grabCursor={true}
       loop={loop}
       loopedSlides={10}

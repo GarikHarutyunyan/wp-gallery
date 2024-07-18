@@ -12,8 +12,15 @@ interface ICubeSettingsProps {
 
 const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
   const {cubeSettings: value, changeCubeSettings: onChange} = useSettings();
-  const {width, height, backgroundColor, loop, autoplay, delay, shadow} =
-    value as ICubeSettings;
+  const {
+    width,
+    height,
+    backgroundColor,
+    loop,
+    autoplay,
+    slideDuration,
+    shadow,
+  } = value as ICubeSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     key && onChange({...value, [key]: inputValue});
@@ -71,9 +78,9 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
             </Filter>
             <Filter isLoading={isLoading}>
               <NumberControl
-                id={'delay'}
+                id={'slideDuration'}
                 name={'Play Delay'}
-                value={delay}
+                value={slideDuration}
                 onChange={onInputValueChange}
                 min={2000}
                 unit={'ms'}

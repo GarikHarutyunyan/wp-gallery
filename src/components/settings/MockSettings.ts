@@ -143,7 +143,7 @@ const cubeMockSettings: ICubeSettings = {
   backgroundColor: '',
   loop: false,
   autoplay: false,
-  delay: 3000,
+  slideDuration: 3000,
   shadow: true,
 };
 

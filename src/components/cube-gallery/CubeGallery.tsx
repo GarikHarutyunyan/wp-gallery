@@ -21,8 +21,15 @@ const effects = {
 const CubeGallery: React.FC = () => {
   const {images} = useData();
   const {cubeSettings: settings} = useSettings();
-  const {width, height, loop, backgroundColor, autoplay, delay, shadow} =
-    settings as ICubeSettings;
+  const {
+    width,
+    height,
+    loop,
+    backgroundColor,
+    autoplay,
+    slideDuration,
+    shadow,
+  } = settings as ICubeSettings;
 
   useEffect(() => {
     const cubeShadow = document.querySelector(
@@ -42,7 +49,7 @@ const CubeGallery: React.FC = () => {
       backgroundColor={backgroundColor}
       images={images || []}
       autoplay={autoplay}
-      delay={delay}
+      delay={slideDuration}
     />
   );
 };

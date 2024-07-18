@@ -102,7 +102,7 @@ export interface ICubeSettings {
   backgroundColor: string;
   loop: boolean;
   autoplay: boolean;
-  delay: number;
+  slideDuration: number;
   shadow: boolean;
 }
 
