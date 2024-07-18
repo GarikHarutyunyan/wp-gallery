@@ -154,3 +154,11 @@
     -o-object-fit: cover;
     object-fit: cover;
 }
+
+.reacg-lightbox button,
+.reacg-lightbox button:hover,
+.reacg-lightbox button:focus,
+.reacg-lightbox button:active,
+.reacg-lightbox button:visited {
+    background: none !important;
+}
