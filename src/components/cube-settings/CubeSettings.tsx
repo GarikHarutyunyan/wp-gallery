@@ -6,6 +6,7 @@ import {Section} from 'core-components';
 import {ICubeSettings} from 'data-structures';
 import React, {ReactNode} from 'react';
 import {Filter} from '../settings/Filter';
+
 interface ICubeSettingsProps {
   isLoading?: boolean;
 }
