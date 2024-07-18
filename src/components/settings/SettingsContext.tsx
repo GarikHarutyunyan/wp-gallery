@@ -112,29 +112,29 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   }, []);
 
   const onTypeChange = async (newType: GalleryType): Promise<void> => {
-    // const fetchUrl: string | undefined = baseUrl
-    //   ? baseUrl + 'options/' + galleryId
-    //   : undefined;
-    setType(newType);
-    // if (fetchUrl) {
-    //   setIsLoading(true);
-    //   const settings: ISettingsDTO = {
-    //     type: newType,
-    //   } as ISettingsDTO;
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'options/' + galleryId
+      : undefined;
 
-    //   try {
-    //     const response = await axios.post(fetchUrl, settings, {
-    //       headers: {'X-WP-Nonce': nonce},
-    //     });
-    //     const newType: GalleryType = response.data.type;
+    if (fetchUrl) {
+      setIsLoading(true);
+      const settings: ISettingsDTO = {
+        type: newType,
+      } as ISettingsDTO;
 
-    //     setType(newType);
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
+      try {
+        const response = await axios.post(fetchUrl, settings, {
+          headers: {'X-WP-Nonce': nonce},
+        });
+        const newType: GalleryType = response.data.type;
 
-    //   setIsLoading(false);
-    // }
+        setType(newType);
+      } catch (error) {
+        console.error(error);
+      }
+
+      setIsLoading(false);
+    }
   };
 
   const onSave = async (): Promise<void> => {
@@ -150,6 +150,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         lightbox: lightboxSettings,
         mosaic: mosaicSettings,
         masonry: masonrySettings,
+        cube: cubeSettings,
         slideshow: slideshowSettings,
       } as ISettingsDTO;
 
