@@ -29,6 +29,7 @@ import './settings-context.css';
 
 const SettingsContext = React.createContext<{
   type?: GalleryType;
+  changeType?: (type: GalleryType) => void;
   generalSettings?: IGeneralSettings;
   thumbnailSettings?: IThumbnailSettings;
   mosaicSettings?: IMosaicSettings;
@@ -242,6 +243,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     <SettingsContext.Provider
       value={{
         type,
+        changeType: onTypeChange,
         thumbnailSettings,
         mosaicSettings,
         masonrySettings,

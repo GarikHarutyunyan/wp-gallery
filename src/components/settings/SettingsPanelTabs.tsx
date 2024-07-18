@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import {Align, Aligner} from 'core-components';
 import {GalleryType} from 'data-structures';
 import React, {useState} from 'react';
+import {TemplatesSelect} from './TemplatesSelect';
 import {useSettings} from './useSettings';
 
 interface ISettingsPanelTabsProps {
@@ -54,6 +55,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         ) : null}
       </Tabs>
       <Aligner align={Align.END}>
+        <TemplatesSelect />
         <LoadingButton
           loading={isSaving}
           loadingPosition={'center'}

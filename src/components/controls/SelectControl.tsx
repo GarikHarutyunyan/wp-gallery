@@ -1,5 +1,5 @@
 import {MenuItem, TextField} from '@mui/material';
-import React from 'react';
+import React, {CSSProperties} from 'react';
 
 interface ISelectOption {
   title: string;
@@ -14,6 +14,7 @@ interface ISelectControlProps {
   options: ISelectOption[];
   onChange: any;
   isDisabled?: boolean;
+  style?: CSSProperties;
 }
 
 const SelectControl: React.FC<ISelectControlProps> = ({
@@ -23,6 +24,7 @@ const SelectControl: React.FC<ISelectControlProps> = ({
   options,
   onChange,
   isDisabled,
+  style,
 }) => {
   const onValueChange = (event: any) => {
     onChange(event.target.value, id);
@@ -38,6 +40,7 @@ const SelectControl: React.FC<ISelectControlProps> = ({
       value={value}
       onChange={onValueChange}
       disabled={isDisabled}
+      style={style}
     >
       {options.map(({value, title, isDisabled}) => (
         <MenuItem key={value} value={value} disabled={isDisabled}>
