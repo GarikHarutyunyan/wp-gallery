@@ -141,7 +141,7 @@ const cubeMockSettings: ICubeSettings = {
   width: 300,
   height: 300,
   backgroundColor: '',
-  loop: false,
+  isInfinite: false,
   autoplay: false,
   slideDuration: 3000,
   shadow: true,

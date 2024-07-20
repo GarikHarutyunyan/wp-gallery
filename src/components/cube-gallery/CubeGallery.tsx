@@ -24,7 +24,7 @@ const CubeGallery: React.FC = () => {
   const {
     width,
     height,
-    loop,
+    isInfinite,
     backgroundColor,
     autoplay,
     slideDuration,
@@ -45,7 +45,7 @@ const CubeGallery: React.FC = () => {
       height={height}
       key={'cube'}
       effects={effects}
-      loop={loop}
+      loop={isInfinite}
       backgroundColor={backgroundColor}
       images={images || []}
       autoplay={autoplay}

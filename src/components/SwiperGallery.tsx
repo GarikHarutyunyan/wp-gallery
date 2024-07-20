@@ -1,5 +1,5 @@
 import {IImageDTO} from 'data-structures';
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
@@ -33,7 +33,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   delay,
 }) => {
   const swiperRef = useRef<any>(null);
-
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
 
@@ -60,25 +60,25 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   return (
     <Swiper
       ref={swiperRef}
-      autoplay={{delay}}
+      autoplay={{delay, stopOnLastSlide: true}}
       grabCursor={true}
       loop={loop}
-      loopedSlides={10}
+      slidesPerView={1}
       {...effects}
       style={{
         width: `${width}px`,
         height: `${height}px`,
-        maxWidth: '100%',
+        maxWidth: '80%',
         maxHeight: '100vh',
       }}
     >
-      {images?.map((image: IImageDTO) => (
+      {images?.map((image: IImageDTO, index) => (
         <SwiperSlide>
           <img
             src={image.original.url}
             srcSet={`${image.thumbnail.url} ${image.thumbnail.width}w, ${image.medium_large.url} ${image.medium_large.width}w, ${image.original.url} ${image.original.width}w`}
             className={'swiper-lazy'}
-            alt={`Slide ${image.id}`}
+            alt={image.title}
             style={{
               background: backgroundColor,
             }}
