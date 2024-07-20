@@ -41,9 +41,9 @@ const CubeGallery: React.FC = () => {
 
   return (
     <SwiperGallery
+      key={+isInfinite}
       width={width}
       height={height}
-      key={'cube'}
       effects={effects}
       loop={isInfinite}
       backgroundColor={backgroundColor}
