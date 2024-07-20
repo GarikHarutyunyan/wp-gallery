@@ -1,5 +1,5 @@
 import {IImageDTO} from 'data-structures';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
@@ -33,7 +33,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   delay,
 }) => {
   const swiperRef = useRef<any>(null);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
+
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
 
@@ -72,8 +72,8 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         maxHeight: '100vh',
       }}
     >
-      {images?.map((image: IImageDTO, index) => (
-        <SwiperSlide>
+      {images?.map((image: IImageDTO) => (
+        <SwiperSlide key={image.id}>
           <img
             src={image.original.url}
             srcSet={`${image.thumbnail.url} ${image.thumbnail.width}w, ${image.medium_large.url} ${image.medium_large.width}w, ${image.original.url} ${image.original.width}w`}

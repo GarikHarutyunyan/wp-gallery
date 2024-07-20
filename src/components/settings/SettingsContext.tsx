@@ -279,7 +279,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
             outlined={false}
             className={'reacg-settings'}
           />
-
           <Section
             header={<OptionsPanelHeader />}
             body={
