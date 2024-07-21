@@ -1,8 +1,9 @@
+import {Box} from '@mui/material';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {SwiperGallery} from 'components/SwiperGallery';
 import {ICubeSettings} from 'data-structures';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Autoplay, EffectCube} from 'swiper/modules';
 import './cube-gallery.css';
 
@@ -20,7 +21,7 @@ const effects = {
 
 const CubeGallery: React.FC = () => {
   const {images} = useData();
-  const {cubeSettings: settings} = useSettings();
+  const {cubeSettings: settings, wrapperRef} = useSettings();
   const {
     width,
     height,
@@ -30,6 +31,22 @@ const CubeGallery: React.FC = () => {
     slideDuration,
     shadow,
   } = settings as ICubeSettings;
+  const wrapper = wrapperRef.current;
+  const [innerWidth, setInnerWidth] = useState<number>(
+    wrapper?.clientWidth * 0.8 || width
+  );
+  const ratio: number = width / height;
+  const containerWidth: number = Math.min(innerWidth, width);
+  const containerHeight: number = containerWidth / ratio;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setInnerWidth(wrapper?.clientWidth * 0.8 || width);
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [wrapper?.clientWidth]);
 
   useEffect(() => {
     const cubeShadow = document.querySelector(
@@ -40,17 +57,23 @@ const CubeGallery: React.FC = () => {
   }, [shadow]);
 
   return (
-    <SwiperGallery
-      key={+isInfinite}
-      width={width}
-      height={height}
-      effects={effects}
-      loop={isInfinite}
-      backgroundColor={backgroundColor}
-      images={images || []}
-      autoplay={autoplay}
-      delay={slideDuration}
-    />
+    <Box
+      sx={{
+        width: `${containerWidth}px`,
+        height: `${containerHeight}px`,
+        mx: 'auto',
+      }}
+    >
+      <SwiperGallery
+        key={+isInfinite}
+        effects={effects}
+        loop={isInfinite}
+        backgroundColor={backgroundColor}
+        images={images || []}
+        autoplay={autoplay}
+        delay={slideDuration}
+      />
+    </Box>
   );
 };
 

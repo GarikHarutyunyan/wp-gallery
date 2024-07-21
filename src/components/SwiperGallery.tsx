@@ -12,8 +12,6 @@ import 'swiper/css/pagination';
 import {Swiper, SwiperSlide} from 'swiper/react';
 
 interface ISwiperGalleryProps {
-  width: number;
-  height: number;
   images: IImageDTO[];
   backgroundColor: string;
   loop: boolean;
@@ -23,8 +21,6 @@ interface ISwiperGalleryProps {
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
-  width,
-  height,
   images,
   backgroundColor,
   loop,
@@ -65,12 +61,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       loop={loop}
       slidesPerView={1}
       {...effects}
-      style={{
-        width: `${width}px`,
-        height: `${height}px`,
-        maxWidth: '80%',
-        maxHeight: '100vh',
-      }}
     >
       {images?.map((image: IImageDTO) => (
         <SwiperSlide key={image.id}>
