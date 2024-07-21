@@ -29,6 +29,7 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
       {GalleryTypeOptions.map(({value, title}: ISelectOption) => {
         return (
           <TypeOption
+            key={title}
             title={title}
             value={value as GalleryType}
             isSelected={type === value}

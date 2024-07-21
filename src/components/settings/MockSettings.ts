@@ -1,6 +1,7 @@
 import {
   Direction,
   HoverEffect,
+  ICubeSettings,
   IGeneralSettings,
   ILightboxSettings,
   IMasonrySettings,
@@ -33,7 +34,7 @@ const thumbnailMockSettings: IThumbnailSettings = {
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
-  hoverEffect: HoverEffect.BLUR,
+  hoverEffect: HoverEffect.NONE,
   paginationType: PaginationType.SIMPLE,
 };
 
@@ -136,7 +137,18 @@ const lightboxMockSettings: ILightboxSettings = {
   imageAnimation: LightboxImageAnimation.BLUR,
 };
 
+const cubeMockSettings: ICubeSettings = {
+  width: 300,
+  height: 300,
+  backgroundColor: '',
+  isInfinite: false,
+  autoplay: false,
+  slideDuration: 3000,
+  shadow: true,
+};
+
 export {
+  cubeMockSettings,
   generalMockSettings,
   lightboxMockSettings,
   masonryMockSettings,

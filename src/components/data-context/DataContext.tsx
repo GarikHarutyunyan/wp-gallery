@@ -21,6 +21,11 @@ import {DataFetcher} from '../thumbnail-gallery/DataFetcher';
 
 const propsImages: IImageDTO[] = [
   // {
+  //   id: '1',
+  //   title: 'Hats',
+  //   type: ImageType.IMAGE,
+  //   caption: 'Hats',
+  //   description: 'description',
   //   original: {
   //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
   //     width: 1000,
@@ -36,11 +41,24 @@ const propsImages: IImageDTO[] = [
   //     width: 200,
   //     height: 200,
   //   },
-  //   title: 'Hats',
+  //   large: {
+  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+  //     width: 1000,
+  //     height: 1000,
+  //   },
   //   width: 500,
   //   height: 600,
   // },
   // {
+  //   id: '2',
+  //   caption: 'caption',
+  //   description: 'description',
+  //   large: {
+  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+  //     width: 1000,
+  //     height: 1000,
+  //   },
+  //   type: ImageType.IMAGE,
   //   original: {
   //     url: 'https://images.unsplash.com/photo-1612144431180-2d672779556c?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c21hbGwlMjBzaXplfGVufDB8fDB8fHww',
   //     width: 1000,
@@ -61,6 +79,15 @@ const propsImages: IImageDTO[] = [
   //   height: 600,
   // },
   // {
+  //   id: '3',
+  //   caption: 'caption',
+  //   description: 'description',
+  //   large: {
+  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+  //     width: 1000,
+  //     height: 1000,
+  //   },
+  //   type: ImageType.IMAGE,
   //   original: {
   //     url: 'https://www.shutterstock.com/image-vector/compact-size-icon-vector-illustration-260nw-489811306.jpg',
   //     width: 1000,
@@ -81,6 +108,15 @@ const propsImages: IImageDTO[] = [
   //   height: 600,
   // },
   // {
+  //   id: '4',
+  //   caption: 'caption',
+  //   description: 'description',
+  //   large: {
+  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+  //     width: 1000,
+  //     height: 1000,
+  //   },
+  //   type: ImageType.IMAGE,
   //   original: {
   //     url: 'https://www.shutterstock.com/image-vector/measuring-by-hands-width-size-260nw-1266046990.jpg',
   //     width: 1000,
@@ -101,6 +137,15 @@ const propsImages: IImageDTO[] = [
   //   height: 600,
   // },
   // {
+  //   id: '5',
+  //   caption: 'caption',
+  //   description: 'description',
+  //   large: {
+  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+  //     width: 1000,
+  //     height: 1000,
+  //   },
+  //   type: ImageType.IMAGE,
   //   original: {
   //     url: 'https://www.shutterstock.com/image-vector/compact-size-small-scale-fit-260nw-1590167689.jpg',
   //     width: 1000,
@@ -121,6 +166,15 @@ const propsImages: IImageDTO[] = [
   //   height: 600,
   // },
   // {
+  //   caption: 'caption',
+  //   description: 'description',
+  //   id: '6',
+  //   large: {
+  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+  //     width: 1000,
+  //     height: 1000,
+  //   },
+  //   type: ImageType.IMAGE,
   //   original: {
   //     url: 'https://cdn.shopify.com/s/files/1/0529/2670/9917/files/sizeguide_480x480.png?v=1652793667',
   //     width: 1000,
@@ -141,6 +195,15 @@ const propsImages: IImageDTO[] = [
   //   height: 600,
   // },
   // {
+  //   caption: 'caption',
+  //   description: 'description',
+  //   id: '2',
+  //   large: {
+  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+  //     width: 1000,
+  //     height: 1000,
+  //   },
+  //   type: ImageType.IMAGE,
   //   original: {
   //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
   //     width: 1000,
@@ -161,6 +224,15 @@ const propsImages: IImageDTO[] = [
   //   height: 600,
   // },
   // {
+  //   caption: 'caption',
+  //   description: 'description',
+  //   id: '7',
+  //   large: {
+  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+  //     width: 1000,
+  //     height: 1000,
+  //   },
+  //   type: ImageType.IMAGE,
   //   original: {
   //     url: 'https://cdn.shopify.com/s/files/1/0529/2670/9917/files/sizeguide_480x480.png?v=1652793667',
   //     width: 1000,
@@ -181,6 +253,15 @@ const propsImages: IImageDTO[] = [
   //   height: 600,
   // },
   // {
+  //   caption: 'caption',
+  //   description: 'description',
+  //   id: '8',
+  //   large: {
+  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+  //     width: 1000,
+  //     height: 1000,
+  //   },
+  //   type: ImageType.IMAGE,
   //   original: {
   //     url: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
   //     width: 1000,
@@ -201,6 +282,15 @@ const propsImages: IImageDTO[] = [
   //   height: 600,
   // },
   // {
+  //   caption: 'caption',
+  //   description: 'description',
+  //   id: '9',
+  //   large: {
+  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+  //     width: 1000,
+  //     height: 1000,
+  //   },
+  //   type: ImageType.IMAGE,
   //   original: {
   //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
   //     width: 1000,
@@ -221,6 +311,15 @@ const propsImages: IImageDTO[] = [
   //   height: 600,
   // },
   // {
+  //   caption: 'caption',
+  //   description: 'description',
+  //   id: '10',
+  //   large: {
+  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+  //     width: 1000,
+  //     height: 1000,
+  //   },
+  //   type: ImageType.IMAGE,
   //   original: {
   //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
   //     width: 1000,
@@ -381,6 +480,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setIsLoading(false);
     } else {
       setImages(propsImages);
+      setIsLoading(false);
     }
   };
 
