@@ -87,3 +87,7 @@ swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal {
   transition-duration: 100ms;
   transition-delay: 100ms;
 } */
+
+.swiper-slide-next {
+  visibility: hidden;
+}
