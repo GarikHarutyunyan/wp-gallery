@@ -89,5 +89,5 @@ swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal {
 } */
 
 .swiper-slide-next {
-  visibility: hidden;
+  visibility: hidden !important;
 }
