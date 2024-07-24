@@ -88,6 +88,6 @@ swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal {
   transition-delay: 100ms;
 } */
 
-.swiper-slide-next {
+.cube-gallery_autoplay .swiper-slide-next {
   visibility: hidden !important;
 }
