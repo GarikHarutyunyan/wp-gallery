@@ -3,6 +3,7 @@ import {useAppInfo} from 'contexts/AppInfoContext';
 import {Section} from 'core-components';
 import {
   GalleryType,
+  ICubeSettings,
   IGeneralSettings,
   ILightboxSettings,
   IMasonrySettings,
@@ -14,6 +15,7 @@ import {
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useLayoutEffect, useRef, useState} from 'react';
 import {
+  cubeMockSettings,
   generalMockSettings,
   lightboxMockSettings,
   masonryMockSettings,
@@ -36,12 +38,14 @@ const SettingsContext = React.createContext<{
   masonrySettings?: IMasonrySettings;
   slideshowSettings?: ISlideshowSettings;
   lightboxSettings?: ILightboxSettings;
+  cubeSettings?: ICubeSettings;
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
   changeMasonrySettings?: any;
   changeSlideshowSettings?: any;
   changeLightboxSettings?: any;
+  changeCubeSettings?: any;
   wrapperRef?: any;
 }>({});
 
@@ -57,6 +61,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     useState<ISlideshowSettings>();
   const [generalSettings, setGeneralSettings] = useState<IGeneralSettings>();
   const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
+  const [cubeSettings, setCubeSettings] = useState<ICubeSettings>();
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
@@ -88,6 +93,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setMasonrySettings(newSettings.masonry || mosaicMockSettings);
       setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
+      setCubeSettings(newSettings.cube || cubeMockSettings);
 
       setIsLoading(false);
     } else {
@@ -98,6 +104,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setMasonrySettings(masonryMockSettings);
       setSlideshowSettings(slideshowMockSettings);
       setLightboxSettings(lightboxMockSettings);
+      setCubeSettings(cubeMockSettings);
     }
   };
 
@@ -144,6 +151,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         lightbox: lightboxSettings,
         mosaic: mosaicSettings,
         masonry: masonrySettings,
+        cube: cubeSettings,
         slideshow: slideshowSettings,
       } as ISettingsDTO;
 
@@ -164,6 +172,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setMasonrySettings(newSettings.masonry);
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
+        setCubeSettings(newSettings.cube);
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -210,6 +219,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setMasonrySettings(newSettings.masonry);
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
+        setCubeSettings(newSettings.cube);
         enqueueSnackbar(successMessage, {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -250,12 +260,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         slideshowSettings,
         generalSettings,
         lightboxSettings,
+        cubeSettings,
         changeGeneralSettings: setGeneralSettings,
         changeThumbnailSettings: setThumbnailSettings,
         changeMosaicSettings: setMosaicSettings,
         changeMasonrySettings: setMasonrySettings,
         changeSlideshowSettings: setSlideshowSettings,
         changeLightboxSettings: setLightboxSettings,
+        changeCubeSettings: setCubeSettings,
         wrapperRef,
       }}
     >

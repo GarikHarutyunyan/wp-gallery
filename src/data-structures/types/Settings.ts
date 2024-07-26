@@ -96,6 +96,16 @@ export interface IGeneralSettings {
   paginationTextColor: string;
 }
 
+export interface ICubeSettings {
+  width: number;
+  height: number;
+  backgroundColor: string;
+  isInfinite: boolean;
+  autoplay: boolean;
+  slideDuration: number;
+  shadow: boolean;
+}
+
 export interface ISettingsDTO {
   type: GalleryType;
   general: IGeneralSettings;
@@ -104,4 +114,5 @@ export interface ISettingsDTO {
   masonry: IMasonrySettings;
   slideshow: ISlideshowSettings;
   lightbox: ILightboxSettings;
+  cube: ICubeSettings;
 }

@@ -115,7 +115,10 @@
     object-fit: cover;
 }
 
+.reacg-slideshow button,
 .reacg-slideshow button:hover,
-.reacg-slideshow button:focus {
-    background: none;
+.reacg-slideshow button:focus,
+.reacg-slideshow button:active,
+.reacg-slideshow button:visited {
+    background: none !important;
 }
