@@ -59,7 +59,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   }, [autoplay]);
 
   const onMouseDown = () => {
-    // (videoRef.current as HTMLVideoElement).draggable = false;
     isDragging.current = true;
   };
 
@@ -74,16 +73,16 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   }, []);
 
   const onMouseMove = () => {
-    // (videoRef.current as HTMLVideoElement).draggable = false;
-    if (isDragging.current) {
+    if (isDragging.current && videoRef.current) {
       (videoRef.current as HTMLVideoElement).controls = false;
     }
   };
 
   const onMouseUp = () => {
-    // (videoRef.current as HTMLVideoElement).draggable = false;
     isDragging.current = false;
-    (videoRef.current as HTMLVideoElement).controls = true;
+    if (videoRef.current) {
+      (videoRef.current as HTMLVideoElement).controls = true;
+    }
   };
 
   return (

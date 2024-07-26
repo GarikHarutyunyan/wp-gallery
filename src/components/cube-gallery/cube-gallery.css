@@ -82,12 +82,3 @@ swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal {
   background: black;
   filter: blur(50px);
 }
-
-/* .swiper-wrapper {
-  transition-duration: 100ms;
-  transition-delay: 100ms;
-} */
-
-.cube-gallery_autoplay .swiper-slide-next {
-  visibility: hidden !important;
-}
