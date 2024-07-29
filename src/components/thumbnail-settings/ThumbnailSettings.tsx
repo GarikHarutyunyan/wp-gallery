@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {useSettings} from 'components/settings';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {
   HoverEffectOptions,
@@ -27,6 +28,7 @@ interface IThumbnailSettingsProps {
 }
 
 const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
+  const {resetTemplate} = useTemplates();
   const {thumbnailSettings: value, changeThumbnailSettings: onChange} =
     useSettings();
   const {
@@ -50,6 +52,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
   const isThumbnailTitlePositionEditable: boolean = borderRadius <= 50;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
+    resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
 

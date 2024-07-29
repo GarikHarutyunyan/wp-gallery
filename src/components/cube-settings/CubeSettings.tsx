@@ -2,6 +2,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {ColorControl, NumberControl, SwitchControl} from 'components/controls';
 import {useSettings} from 'components/settings';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {ICubeSettings} from 'data-structures';
 import React, {ReactNode} from 'react';
@@ -12,6 +13,7 @@ interface ICubeSettingsProps {
 }
 
 const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
+  const {resetTemplate} = useTemplates();
   const {cubeSettings: value, changeCubeSettings: onChange} = useSettings();
   const {
     width,
@@ -24,6 +26,7 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
   } = value as ICubeSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
+    resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
 

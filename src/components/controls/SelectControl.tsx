@@ -7,13 +7,20 @@ interface ISelectOption {
   isDisabled?: boolean;
 }
 
+export enum ReSize {
+  SMALL = 'small',
+  MEDIUM = 'medium',
+}
+
 interface ISelectControlProps {
   id?: string;
-  name: string;
+  name?: string;
   value: string;
   options: ISelectOption[];
   onChange: any;
   isDisabled?: boolean;
+  hideLabel?: boolean;
+  size?: ReSize;
   style?: CSSProperties;
 }
 
@@ -24,6 +31,8 @@ const SelectControl: React.FC<ISelectControlProps> = ({
   options,
   onChange,
   isDisabled,
+  hideLabel,
+  size,
   style,
 }) => {
   const onValueChange = (event: any) => {
@@ -34,13 +43,15 @@ const SelectControl: React.FC<ISelectControlProps> = ({
     <TextField
       select
       fullWidth
-      label={name}
-      variant="standard"
-      margin="none"
+      label={!hideLabel ? name : undefined}
+      variant={'standard'}
+      margin={'none'}
       value={value}
       onChange={onValueChange}
       disabled={isDisabled}
       style={style}
+      size={size}
+      hiddenLabel={hideLabel}
     >
       {options.map(({value, title, isDisabled}) => (
         <MenuItem key={value} value={value} disabled={isDisabled}>

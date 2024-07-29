@@ -1,75 +1,117 @@
 import axios from 'axios';
-import {
-  GalleryType,
-  IGeneralSettings,
-  ILightboxSettings,
-  IMasonrySettings,
-  IMosaicSettings,
-  ISlideshowSettings,
-  IThumbnailSettings,
-} from 'data-structures';
+import {ISettingsDTO} from 'data-structures';
 import React, {useContext, useLayoutEffect, useState} from 'react';
-import {useAppInfo} from './AppInfoContext';
-import {
-  template1,
-  template2,
-  template3,
-  template4,
-  template5,
-} from './MockTemplates';
 
-export interface ITemplate {
-  id: string;
-  name: string;
-  type?: GalleryType;
-  thumbnails?: IThumbnailSettings;
-  mosaic?: IMosaicSettings;
-  masnory?: IMasonrySettings;
-  lightbox?: ILightboxSettings;
-  general?: IGeneralSettings;
-  slideshow?: ISlideshowSettings;
+export interface ITemplate extends Partial<ISettingsDTO> {
+  template_id: string;
+  title: string;
+  template: boolean;
 }
+
+export interface ITemplateReference {
+  id: string;
+  title: string;
+}
+
 const TemplatesContext = React.createContext<{
-  templates?: ITemplate[];
+  templates?: ITemplateReference[];
+  template?: ITemplate;
+  changeTemplate?: (id: string) => void;
+  resetTemplate?: () => void;
+  initTemplate?: (id: string, title: string) => void;
+  isLoading?: boolean;
 }>({});
 
+const noneOption: ITemplateReference = {id: 'none', title: 'None'};
+const emptyTemplate: ITemplate = {
+  title: 'None',
+  template_id: 'none',
+  template: true,
+};
+
 const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
-  const {baseUrl, nonce} = useAppInfo();
-  const [templates, setTemplates] = useState<ITemplate[]>([]);
+  const [templates, setTemplates] = useState<ITemplateReference[]>([]);
+  const [template, setTemplate] = useState<ITemplate>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   console.log('🚀 ~ templates:', templates);
 
-  const getData = async () => {
-    const fetchUrl: string | undefined = undefined; //baseUrl      ? baseUrl + 'templates'      : undefined;
+  const getTemplates = async () => {
+    const fetchUrl: string | undefined =
+      'https://regallery.team/core/wp-json/reacgcore/v1/templates'; //baseUrl      ? baseUrl + 'templates'      : undefined;
 
     if (fetchUrl) {
       try {
-        const response = await axios.get(fetchUrl, {
-          headers: {'X-WP-Nonce': nonce},
-        });
-        const templatesData: object = response.data;
-        const newTemplates: any[] = Object.values(templatesData).map(
-          (data: any) => ({
-            value: data,
-            title: data,
-          })
-        );
+        const response = await axios.get(fetchUrl);
+        const templatesData: ITemplateReference[] = response.data;
+        const withNoneOption: ITemplateReference[] = [
+          ...templatesData,
+          noneOption,
+        ];
 
-        setTemplates(newTemplates);
+        setTemplates(withNoneOption);
       } catch (error) {
         console.error(error);
         setTemplates([]);
       }
     } else {
-      setTemplates([template1, template2, template3, template4, template5]);
+      setTemplates([]);
     }
   };
 
+  const getTemplate = async (id: string): Promise<void> => {
+    const fetchUrl:
+      | string
+      | undefined = `https://regallery.team/core/wp-json/reacgcore/v1/template/${id}`;
+
+    if (fetchUrl) {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(fetchUrl);
+        const templateData: ITemplate = response.data;
+
+        setTemplate(templateData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+        // setTemplates([]);
+        setIsLoading(false);
+      }
+    } else {
+      // setTemplates([]);
+    }
+  };
+
+  const resetTemplate = (): void => {
+    setTemplate(emptyTemplate);
+  };
+
+  const changeTemplate = (id: string) => {
+    if (id === 'none') {
+      resetTemplate();
+    } else {
+      getTemplate(id);
+    }
+  };
+
+  const initTemplate = (id: string, title: string) => {
+    setTemplate({template_id: id, title: title, template: true});
+  };
+
   useLayoutEffect(() => {
-    getData();
+    getTemplates();
   }, []);
 
   return (
-    <TemplatesContext.Provider value={{templates}}>
+    <TemplatesContext.Provider
+      value={{
+        templates,
+        template,
+        changeTemplate,
+        resetTemplate,
+        initTemplate,
+        isLoading,
+      }}
+    >
       {children}
     </TemplatesContext.Provider>
   );

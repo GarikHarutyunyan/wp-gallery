@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {useSettings} from 'components/settings';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {
   HoverEffectOptions,
@@ -25,6 +26,7 @@ interface IMasonrySettingsProps {
 }
 
 const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
+  const {resetTemplate} = useTemplates();
   const {masonrySettings: value, changeMasonrySettings: onChange} =
     useSettings();
   const {
@@ -45,6 +47,7 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
   } = value as IMasonrySettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
+    resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
 

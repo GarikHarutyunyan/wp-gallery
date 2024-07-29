@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {useAppInfo} from 'contexts/AppInfoContext';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {
   GalleryType,
@@ -51,7 +52,7 @@ const SettingsContext = React.createContext<{
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
-
+  const {template, initTemplate, resetTemplate} = useTemplates();
   const {galleryId, baseUrl, nonce} = useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
@@ -94,7 +95,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
       setCubeSettings(newSettings.cube || cubeMockSettings);
-
+      initTemplate?.(
+        newSettings?.template_id as string,
+        newSettings?.title as string
+      );
       setIsLoading(false);
     } else {
       setType(GalleryType.THUMBNAILS);
@@ -129,6 +133,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         });
         const newType: GalleryType = response.data.type;
 
+        resetTemplate?.();
         setType(newType);
       } catch (error) {
         console.error(error);
@@ -153,6 +158,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         masonry: masonrySettings,
         cube: cubeSettings,
         slideshow: slideshowSettings,
+        template_id: template?.template_id,
       } as ISettingsDTO;
 
       const validSettings: ISettingsDTO = Object.entries(settings).reduce(
@@ -173,6 +179,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
+        initTemplate?.(
+          newSettings?.template_id as string,
+          newSettings?.title as string
+        );
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
