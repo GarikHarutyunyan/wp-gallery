@@ -1,5 +1,5 @@
 import {IImageDTO} from 'data-structures';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
@@ -12,8 +12,6 @@ import 'swiper/css/pagination';
 import {Swiper, SwiperSlide} from 'swiper/react';
 
 interface ISwiperGalleryProps {
-  width: number;
-  height: number;
   images: IImageDTO[];
   backgroundColor: string;
   loop: boolean;
@@ -23,8 +21,6 @@ interface ISwiperGalleryProps {
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
-  width,
-  height,
   images,
   backgroundColor,
   loop,
@@ -33,7 +29,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   delay,
 }) => {
   const swiperRef = useRef<any>(null);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
+
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
 
@@ -65,15 +61,9 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       loop={loop}
       slidesPerView={1}
       {...effects}
-      style={{
-        width: `${width}px`,
-        height: `${height}px`,
-        maxWidth: '80%',
-        maxHeight: '100vh',
-      }}
     >
-      {images?.map((image: IImageDTO, index) => (
-        <SwiperSlide>
+      {images?.map((image: IImageDTO) => (
+        <SwiperSlide key={image.id}>
           <img
             src={image.original.url}
             srcSet={`${image.thumbnail.url} ${image.thumbnail.width}w, ${image.medium_large.url} ${image.medium_large.width}w, ${image.original.url} ${image.original.width}w`}

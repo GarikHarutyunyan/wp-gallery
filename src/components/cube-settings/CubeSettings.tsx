@@ -79,7 +79,6 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                 onChange={onInputValueChange}
               />
             </Filter>
-
             <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'autoplay'}
