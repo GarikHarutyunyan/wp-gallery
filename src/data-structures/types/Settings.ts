@@ -106,6 +106,33 @@ export interface ICubeSettings {
   shadow: boolean;
 }
 
+export interface ICarouselSettings {
+  width: number;
+  height: number;
+  gap: number;
+  backgroundColor: string;
+  loop: boolean;
+  pagination: boolean;
+  effects: string;
+  autoplay: boolean;
+  delay: number;
+  playAndPouseAllowed: boolean;
+  slidesDepth: number;
+  scale: number;
+  rotate: number;
+  modifier: number;
+  imagesCount: number;
+  spaceBetween: number;
+  centeredSlides: boolean;
+  stretch: number;
+  slideShadows: boolean;
+  shadow: boolean;
+  shadowOffset: number;
+  shadowOpacity: number;
+  perSlideOffset: number;
+  rotateCard: boolean;
+}
+
 export interface ISettingsDTO {
   type: GalleryType;
   general: IGeneralSettings;
@@ -115,4 +142,5 @@ export interface ISettingsDTO {
   slideshow: ISlideshowSettings;
   lightbox: ILightboxSettings;
   cube: ICubeSettings;
+  carousel: ICarouselSettings;
 }

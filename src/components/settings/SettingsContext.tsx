@@ -3,6 +3,7 @@ import {useAppInfo} from 'contexts/AppInfoContext';
 import {Section} from 'core-components';
 import {
   GalleryType,
+  ICarouselSettings,
   ICubeSettings,
   IGeneralSettings,
   ILightboxSettings,
@@ -15,6 +16,7 @@ import {
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useLayoutEffect, useRef, useState} from 'react';
 import {
+  carouselMockSettings,
   cubeMockSettings,
   generalMockSettings,
   lightboxMockSettings,
@@ -38,6 +40,7 @@ const SettingsContext = React.createContext<{
   slideshowSettings?: ISlideshowSettings;
   lightboxSettings?: ILightboxSettings;
   cubeSettings?: ICubeSettings;
+  carouselSettings?: ICarouselSettings;
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
@@ -45,6 +48,7 @@ const SettingsContext = React.createContext<{
   changeSlideshowSettings?: any;
   changeLightboxSettings?: any;
   changeCubeSettings?: any;
+  changeCarouselSettings?: any;
   wrapperRef?: any;
 }>({});
 
@@ -61,6 +65,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [generalSettings, setGeneralSettings] = useState<IGeneralSettings>();
   const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
   const [cubeSettings, setCubeSettings] = useState<ICubeSettings>();
+  const [carouselSettings, setCarouselSettings] = useState<ICarouselSettings>();
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
@@ -93,6 +98,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
       setCubeSettings(newSettings.cube || cubeMockSettings);
+      setCarouselSettings(newSettings.carousel || carouselMockSettings);
 
       setIsLoading(false);
     } else {
@@ -104,6 +110,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setSlideshowSettings(slideshowMockSettings);
       setLightboxSettings(lightboxMockSettings);
       setCubeSettings(cubeMockSettings);
+      setCarouselSettings(carouselMockSettings);
     }
   };
 
@@ -112,29 +119,30 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   }, []);
 
   const onTypeChange = async (newType: GalleryType): Promise<void> => {
-    const fetchUrl: string | undefined = baseUrl
-      ? baseUrl + 'options/' + galleryId
-      : undefined;
+    setType(newType);
+    // const fetchUrl: string | undefined = baseUrl
+    //   ? baseUrl + 'options/' + galleryId
+    //   : undefined;
 
-    if (fetchUrl) {
-      setIsLoading(true);
-      const settings: ISettingsDTO = {
-        type: newType,
-      } as ISettingsDTO;
+    // if (fetchUrl) {
+    //   setIsLoading(true);
+    //   const settings: ISettingsDTO = {
+    //     type: newType,
+    //   } as ISettingsDTO;
 
-      try {
-        const response = await axios.post(fetchUrl, settings, {
-          headers: {'X-WP-Nonce': nonce},
-        });
-        const newType: GalleryType = response.data.type;
+    //   try {
+    //     const response = await axios.post(fetchUrl, settings, {
+    //       headers: {'X-WP-Nonce': nonce},
+    //     });
+    //     const newType: GalleryType = response.data.type;
 
-        setType(newType);
-      } catch (error) {
-        console.error(error);
-      }
+    //     setType(newType);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
 
-      setIsLoading(false);
-    }
+    //   setIsLoading(false);
+    // }
   };
 
   const onSave = async (): Promise<void> => {
@@ -151,6 +159,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         mosaic: mosaicSettings,
         masonry: masonrySettings,
         cube: cubeSettings,
+        carousel: carouselSettings,
         slideshow: slideshowSettings,
       } as ISettingsDTO;
 
@@ -172,6 +181,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
+        setCarouselSettings(newSettings.carousel);
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -219,6 +229,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
+        setCarouselSettings(newSettings.carousel);
         enqueueSnackbar(successMessage, {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -259,6 +270,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         generalSettings,
         lightboxSettings,
         cubeSettings,
+        carouselSettings,
         changeGeneralSettings: setGeneralSettings,
         changeThumbnailSettings: setThumbnailSettings,
         changeMosaicSettings: setMosaicSettings,
@@ -266,6 +278,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeSlideshowSettings: setSlideshowSettings,
         changeLightboxSettings: setLightboxSettings,
         changeCubeSettings: setCubeSettings,
+        changeCarouselSettings: setCarouselSettings,
         wrapperRef,
       }}
     >
