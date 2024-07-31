@@ -149,8 +149,8 @@ const cubeMockSettings: ICubeSettings = {
 };
 
 const carouselMockSettings: ICarouselSettings = {
-  width: 300,
-  height: 300,
+  width: 1200,
+  height: 400,
   gap: 20,
   backgroundColor: '',
   loop: false,

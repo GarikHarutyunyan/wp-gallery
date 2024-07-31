@@ -1,5 +1,5 @@
 import IconButton from '@mui/material/IconButton';
-import {IImageDTO} from 'data-structures';
+import {IImageDTO, ImageType} from 'data-structures';
 import useConfigureSwiper from 'hooks/useConfigureSwiper';
 import React, {useEffect, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
@@ -12,6 +12,7 @@ import 'swiper/css/effect-flip';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import {Swiper, SwiperSlide} from 'swiper/react';
+import './swiper-gallery.css';
 
 interface ISwiperGalleryProps {
   images: IImageDTO[];
@@ -22,6 +23,7 @@ interface ISwiperGalleryProps {
   autoplay: boolean;
   delay: number;
   playAndPouseAllowed?: boolean;
+  className?: string;
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
@@ -32,12 +34,15 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   effects,
   autoplay,
   delay,
+  className,
   playAndPouseAllowed,
 }) => {
   // const progressCircle = useRef<SVGSVGElement>(null);
   // const progressContent = useRef<HTMLSpanElement>(null);
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const isDragging = useRef<boolean>(false);
 
   const key = effects.effect + 'Effect';
   useConfigureSwiper(swiperRef, key);
@@ -190,30 +195,76 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
+  const onMouseDown = () => {
+    isDragging.current = true;
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+  }, []);
+
+  const onMouseMove = () => {
+    if (isDragging.current && videoRef.current) {
+      (videoRef.current as HTMLVideoElement).controls = false;
+    }
+  };
+
+  const onMouseUp = () => {
+    isDragging.current = false;
+    if (videoRef.current) {
+      (videoRef.current as HTMLVideoElement).controls = true;
+    }
+  };
+
   return (
     <Swiper
       ref={swiperRef}
-      autoplay={{delay, stopOnLastSlide: true}}
+      autoplay={{delay, stopOnLastSlide: true, pauseOnMouseEnter: true}}
       // onAutoplayTimeLeft={onAutoplayTimeLeft}
       grabCursor={true}
       loop={loop}
       pagination={pagination || false}
       slidesPerView={1}
+      className={className}
       {...effects}
     >
-      {images?.map((image: IImageDTO) => (
-        <SwiperSlide key={Math.random()}>
-          <img
-            src={image.original.url}
-            srcSet={`${image.thumbnail.url} ${image.thumbnail.width}w, ${image.medium_large.url} ${image.medium_large.width}w, ${image.original.url} ${image.original.width}w`}
-            className={'swiper-lazy'}
-            alt={image.title}
-            style={{
-              background: key === 'cubeEffect' ? backgroundColor : '',
-            }}
-          />
-        </SwiperSlide>
-      ))}
+      {images?.map((image: IImageDTO, index) => {
+        const isVideo: boolean = image.type === ImageType.VIDEO;
+
+        return (
+          <SwiperSlide key={Math.random()}>
+            {!isVideo ? (
+              <img
+                src={image.original.url}
+                srcSet={`${image.thumbnail.url} ${image.thumbnail.width}w, ${image.medium_large.url} ${image.medium_large.width}w, ${image.original.url} ${image.original.width}w`}
+                alt={image.title}
+                style={{
+                  background: key === 'cubeEffect' ? backgroundColor : '',
+                }}
+              />
+            ) : (
+              <video
+                ref={videoRef}
+                src={image.original.url}
+                poster={image.medium_large.url}
+                style={{
+                  background: backgroundColor,
+                }}
+                className={'swiper-gallery__video'}
+                controls
+                // draggable={true}
+                onMouseDown={onMouseDown}
+              />
+            )}
+          </SwiperSlide>
+        );
+      })}
       {/* {(autoplay || isPlaying) && (
           <div className="autoplay-progress" slot="container-end">
             <svg viewBox="0 0 48 48" ref={progressCircle}>

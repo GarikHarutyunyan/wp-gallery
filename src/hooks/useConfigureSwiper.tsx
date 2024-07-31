@@ -21,20 +21,10 @@ const useConfigureSwiper = (swiperRef: any, key: string): void => {
 
   const [upDate, setUpdate] = useState(0);
 
-  const updateSwiperDimensions = () => {
-    const cubeSwiper = document.querySelector('.swiper') as HTMLElement;
-    const parent = document.querySelector('.reacg-gallery') as HTMLElement;
-    if (cubeSwiper) {
-      cubeSwiper.style.width = `${width}px`;
-      cubeSwiper.style.height = `${height}px`;
-      cubeSwiper.style.maxWidth = `80%`;
-      cubeSwiper.style.maxHeight = `100vh`;
-    }
-  };
-
   useEffect(() => {
     let swiper = swiperRef.current?.swiper;
     if (key === 'coverflowEffect') {
+      console.log(111);
       swiper.params[key].depth = slidesDepth;
       swiper.params[key].modifier = modifier;
       swiper.params[key].rotate = rotate;
@@ -48,13 +38,8 @@ const useConfigureSwiper = (swiperRef: any, key: string): void => {
       const cubeShadow = document.querySelector(
         '.swiper-cube .swiper-cube-shadow'
       ) as HTMLElement;
-      updateSwiperDimensions();
-      cubeShadow.style.width = shadow ? '100%' : '0%';
 
-      window.addEventListener('resize', updateSwiperDimensions);
-      return () => {
-        window.removeEventListener('resize', updateSwiperDimensions);
-      };
+      cubeShadow.style.width = shadow ? '100%' : '0%';
     }
 
     if (swiper.params) console.log(swiper);
