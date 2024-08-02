@@ -10,6 +10,7 @@ interface INumberControlProps {
   min?: number;
   max?: number;
   unit?: string;
+  step?: number;
 }
 const numberInputOnWheelPreventChange = (e: any) => {
   e.target.blur();
@@ -28,6 +29,7 @@ const NumberControl: React.FC<INumberControlProps> = ({
   min,
   max,
   unit,
+  step,
 }) => {
   const onValueChange = (event: any) => {
     const value: number | undefined =
@@ -48,7 +50,7 @@ const NumberControl: React.FC<INumberControlProps> = ({
       fullWidth
       onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
       InputProps={{
-        inputProps: {min, max},
+        inputProps: {min, max, step: step},
         endAdornment: <InputAdornment position="end">{unit}</InputAdornment>,
         onWheel: numberInputOnWheelPreventChange,
       }}

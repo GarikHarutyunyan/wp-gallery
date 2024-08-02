@@ -8,26 +8,27 @@ import {
   EffectFlip,
   Navigation,
   Pagination,
+  Thumbs,
 } from 'swiper/modules';
 
 export const useSwiperEffects = () => {
   const {carouselSettings: settings} = useSettings();
-  const {spaceBetween, imagesCount, centeredSlides} =
-    settings as ICarouselSettings;
+  const {spaceBetween, imagesCount} = settings as ICarouselSettings;
 
   const coverflow = {
     id: 1,
     spaceBetween: spaceBetween,
     slidesPerView: imagesCount || 'auto',
-    centeredSlides: centeredSlides,
+    centeredSlides: true,
     effect: 'coverflow',
     loopedSlides: 8,
     coverflowEffect: {
-      rotate: 80,
-      depth: -100,
-      modifier: 0.2,
+      rotate: 0,
+      depth: 1,
+      modifier: 0.1,
       scale: 1.2,
       slideShadows: true,
+      stretch: 0,
     },
     navigation: true,
     // preloadImages: false,
@@ -39,13 +40,13 @@ export const useSwiperEffects = () => {
     // watchSlidesProgress: true,
     // watchSlidesVisibility: true,
 
-    modules: [EffectCoverflow, Pagination, Autoplay, Navigation],
+    modules: [EffectCoverflow, Pagination, Autoplay, Navigation, Thumbs],
   };
 
   const cards = {
     id: 2,
     effect: 'cards',
-    modules: [EffectCards, Autoplay, Navigation],
+    modules: [EffectCards, Autoplay, Navigation, Pagination],
     navigation: true,
     cardsEffect: {
       rotate: false,
@@ -59,7 +60,6 @@ export const useSwiperEffects = () => {
 
     // watchSlidesProgress: true,
     // watchSlidesVisibility: true,
-    style: {width: '400px', height: '400px', padding: '150px'},
   };
 
   const creative = {

@@ -18,7 +18,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const {carouselSettings: settings, wrapperRef} = useSettings();
   const {
     backgroundColor,
-
     loop,
     pagination,
     effects,
@@ -49,9 +48,17 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   return (
     <Box
       sx={{
-        width: `${containerWidth}px`,
-        height: `${containerHeight}px`,
+        width:
+          selectedEffect.effect === 'coverflow'
+            ? `${containerWidth}px`
+            : 'auto',
+        height:
+          selectedEffect.effect === 'coverflow'
+            ? `${containerHeight}px`
+            : 'auto',
         mx: 'auto',
+        background:
+          selectedEffect.effect === 'coverflow' ? backgroundColor : '',
       }}
     >
       <SwiperGallery
@@ -64,6 +71,8 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         autoplay={autoplay}
         delay={delay}
         playAndPouseAllowed={playAndPouseAllowed}
+        width={containerWidth}
+        height={containerHeight}
       />
     </Box>
   );

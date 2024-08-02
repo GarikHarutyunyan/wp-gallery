@@ -6,12 +6,6 @@
   padding: 14px;
 }
 
-.swiper {
-  width: 100%;
-  padding-top: 80px;
-  padding-bottom: 80px;
-}
-
 .swiper-slide {
   background-position: center;
   background-size: cover;

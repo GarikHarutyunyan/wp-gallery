@@ -1,62 +1,27 @@
 import {useSettings} from 'components/settings';
 import {ICarouselSettings} from 'data-structures';
 import {useEffect, useState} from 'react';
-
 const useConfigureSwiper = (swiperRef: any, key: string): void => {
   const {carouselSettings: settings} = useSettings();
-  const {
-    slidesDepth,
-    rotate,
-    modifier,
-    scale,
-    stretch,
-    shadow,
-    shadowOpacity,
-    rotateCard,
-    perSlideOffset,
-    shadowOffset,
-    width,
-    height,
-  } = settings as ICarouselSettings;
+  const {scale, rotateCard, perSlideOffset, width, height} =
+    settings as ICarouselSettings;
 
   const [upDate, setUpdate] = useState(0);
 
   useEffect(() => {
     let swiper = swiperRef.current?.swiper;
     if (key === 'coverflowEffect') {
-      console.log(111);
-      swiper.params[key].depth = slidesDepth;
-      swiper.params[key].modifier = modifier;
-      swiper.params[key].rotate = rotate;
       swiper.params[key].scale = scale;
-      swiper.params[key].stretch = stretch;
+      swiper.params[key].depth = scale > 1 ? -1 : 1;
+      const activerSwiper = document.querySelector('.swiper') as HTMLElement;
     } else if (key === 'cardsEffect') {
       swiper.params[key].rotate = rotateCard;
       swiper.params[key].perSlideOffset = perSlideOffset;
       setUpdate(upDate + 1);
-    } else if (key === 'cubeEffect') {
-      const cubeShadow = document.querySelector(
-        '.swiper-cube .swiper-cube-shadow'
-      ) as HTMLElement;
-
-      cubeShadow.style.width = shadow ? '100%' : '0%';
     }
-
+    swiper.update();
     if (swiper.params) console.log(swiper);
-  }, [
-    slidesDepth,
-    modifier,
-    rotate,
-    scale,
-    stretch,
-    rotateCard,
-    perSlideOffset,
-    shadowOpacity,
-    shadowOffset,
-    shadow,
-    width,
-    height,
-  ]);
+  }, [scale, rotateCard, perSlideOffset, width, height]);
 };
 
 export default useConfigureSwiper;

@@ -30,14 +30,9 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     autoplay,
     delay,
     playAndPouseAllowed,
-    slidesDepth,
-    rotate,
-    modifier,
     scale,
     imagesCount,
     spaceBetween,
-    centeredSlides,
-    stretch,
     rotateCard,
     perSlideOffset,
   } = value as ICarouselSettings;
@@ -142,50 +137,17 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
             {effects === 'coverflow' ? (
               <>
                 <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'slidesDepth'}
-                    name={'Slides Depth'}
-                    value={slidesDepth}
-                    onChange={onInputValueChange}
-                    min={-1000}
-                    unit={'px'}
-                  />
-                </Filter>
-
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'modifier'}
-                    name={'Slides modifier'}
-                    value={modifier}
-                    onChange={onInputValueChange}
-                    min={0.1}
-                    max={4}
-                    unit={'%'}
-                  />
-                </Filter>
-
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'rotate'}
-                    name={'Slides rotate'}
-                    value={rotate}
-                    onChange={onInputValueChange}
-                    min={1}
-                    unit={'%'}
-                  />
-                </Filter>
-
-                <Filter isLoading={isLoading}>
-                  <NumberControl
+                  <SliderControl
                     id={'scale'}
-                    name={'Slides scale'}
+                    name={'Slides scale %'}
                     value={scale}
                     onChange={onInputValueChange}
-                    min={0}
+                    min={0.1}
                     max={2}
-                    unit={'%'}
+                    step={0.1}
                   />
                 </Filter>
+
                 <Filter isLoading={isLoading}>
                   <NumberControl
                     id={'imagesCount'}
@@ -193,7 +155,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                     value={imagesCount}
                     onChange={onInputValueChange}
                     min={1}
-                    max={10}
+                    max={11}
                     unit={'things'}
                   />
                 </Filter>
@@ -204,26 +166,8 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                     name={'Space Between'}
                     value={spaceBetween}
                     onChange={onInputValueChange}
-                    min={0}
-                    unit={'px'}
-                  />
-                </Filter>
-
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'centeredSlides'}
-                    name={'Slides centered'}
-                    value={centeredSlides}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'stretch'}
-                    name={'Slides stretch'}
-                    value={stretch}
-                    onChange={onInputValueChange}
-                    min={0}
+                    min={-Infinity}
+                    max={Infinity}
                     unit={'px'}
                   />
                 </Filter>

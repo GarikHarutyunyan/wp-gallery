@@ -1,3 +1,5 @@
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import IconButton from '@mui/material/IconButton';
 import {IImageDTO, ImageType} from 'data-structures';
 import useConfigureSwiper from 'hooks/useConfigureSwiper';
@@ -13,7 +15,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import './swiper-gallery.css';
-
 interface ISwiperGalleryProps {
   images: IImageDTO[];
   backgroundColor: string;
@@ -24,6 +25,8 @@ interface ISwiperGalleryProps {
   delay: number;
   playAndPouseAllowed?: boolean;
   className?: string;
+  width?: number;
+  height?: number;
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
@@ -36,9 +39,11 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   delay,
   className,
   playAndPouseAllowed,
+  width,
+  height,
 }) => {
-  // const progressCircle = useRef<SVGSVGElement>(null);
-  // const progressContent = useRef<HTMLSpanElement>(null);
+  const progressCircle = useRef<SVGSVGElement>(null);
+  const progressContent = useRef<HTMLSpanElement>(null);
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -47,15 +52,15 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const key = effects.effect + 'Effect';
   useConfigureSwiper(swiperRef, key);
 
-  // const onAutoplayTimeLeft = (swiper: any, time: number, progress: number) => {
-  //   if (progressCircle.current && progressContent.current) {
-  //     progressCircle.current.style.setProperty(
-  //       '--progress',
-  //       (1 - progress).toString()
-  //     );
-  //     progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
-  //   }
-  // };
+  const onAutoplayTimeLeft = (swiper: any, time: number, progress: number) => {
+    if (progressCircle.current && progressContent.current) {
+      progressCircle.current.style.setProperty(
+        '--progress',
+        (1 - progress).toString()
+      );
+      progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
+    }
+  };
 
   // const imgs = [
   //   {
@@ -169,15 +174,17 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
     if (autoplay && swiper?.autoplay) {
       swiper.autoplay.start();
+      setIsPlaying(true);
     }
     if (!autoplay && swiper?.autoplay) {
       swiper.autoplay.stop();
+      setIsPlaying(false);
     }
 
     if (!autoplay) {
       swiper.autoplay.stop();
     }
-  }, [autoplay]);
+  }, [autoplay, playAndPouseAllowed]);
 
   const handlePlay = () => {
     const swiper = swiperRef.current?.swiper;
@@ -226,13 +233,25 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     <Swiper
       ref={swiperRef}
       autoplay={{delay, stopOnLastSlide: true, pauseOnMouseEnter: true}}
-      // onAutoplayTimeLeft={onAutoplayTimeLeft}
+      onAutoplayTimeLeft={onAutoplayTimeLeft}
       grabCursor={true}
       loop={loop}
       pagination={pagination || false}
       slidesPerView={1}
       className={className}
       {...effects}
+      style={
+        key === 'cardsEffect' || key === 'flipEffect' || key === 'cubeEffect'
+          ? {
+              width,
+              height,
+              overflow: 'visible',
+            }
+          : {
+              overflowX: 'clip',
+              overflowY: 'visible',
+            }
+      }
     >
       {images?.map((image: IImageDTO, index) => {
         const isVideo: boolean = image.type === ImageType.VIDEO;
@@ -245,7 +264,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
                 srcSet={`${image.thumbnail.url} ${image.thumbnail.width}w, ${image.medium_large.url} ${image.medium_large.width}w, ${image.original.url} ${image.original.width}w`}
                 alt={image.title}
                 style={{
-                  background: key === 'cubeEffect' ? backgroundColor : '',
+                  background: key !== 'coverflowEffect' ? backgroundColor : '',
                 }}
               />
             ) : (
@@ -265,25 +284,25 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           </SwiperSlide>
         );
       })}
-      {/* {(autoplay || isPlaying) && (
-          <div className="autoplay-progress" slot="container-end">
-            <svg viewBox="0 0 48 48" ref={progressCircle}>
-              <circle cx="24" cy="24" r="20"></circle>
-            </svg>
-            <span ref={progressContent}></span>
-          </div>
-        )} */}
+      {(autoplay || isPlaying) && playAndPouseAllowed && (
+        <div className="autoplay-progress" slot="container-end">
+          <svg viewBox="0 0 48 48" ref={progressCircle}>
+            <circle cx="24" cy="24" r="20"></circle>
+          </svg>
+          <span ref={progressContent}></span>
+        </div>
+      )}
       {playAndPouseAllowed && (
         <IconButton
           onClick={isPlaying ? handlePause : handlePlay}
           aria-label={isPlaying ? 'pause' : 'play'}
           size="large"
         >
-          {/* {isPlaying ? (
-              <PauseIcon fontSize="inherit" />
-            ) : (
-              <PlayArrowIcon fontSize="inherit" />
-            )} */}
+          {isPlaying ? (
+            <PauseIcon fontSize="inherit" />
+          ) : (
+            <PlayArrowIcon fontSize="inherit" />
+          )}
         </IconButton>
       )}
     </Swiper>
