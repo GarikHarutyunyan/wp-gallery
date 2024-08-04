@@ -116,7 +116,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     getData();
   }, []);
 
-  const onTypeChange = async (newType: GalleryType): Promise<void> => {
+  const changeType = async (newType: GalleryType) => {
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'options/' + galleryId
       : undefined;
@@ -133,7 +133,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         });
         const newType: GalleryType = response.data.type;
 
-        resetTemplate?.();
         setType(newType);
       } catch (error) {
         console.error(error);
@@ -141,6 +140,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
       setIsLoading(false);
     }
+  };
+
+  const onTypeChange = async (newType: GalleryType): Promise<void> => {
+    await changeType(newType);
+    resetTemplate?.();
   };
 
   const onSave = async (): Promise<void> => {
@@ -158,7 +162,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         masonry: masonrySettings,
         cube: cubeSettings,
         slideshow: slideshowSettings,
-        template_id: template?.template_id,
+        template_id:
+          template?.template_id == 'none' ? -1 : template?.template_id,
       } as ISettingsDTO;
 
       const validSettings: ISettingsDTO = Object.entries(settings).reduce(
@@ -180,7 +185,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
         initTemplate?.(
-          newSettings?.template_id as string,
+          (newSettings?.template_id || 'none') as string,
           newSettings?.title as string
         );
         enqueueSnackbar('Options are up to date!', {
@@ -263,7 +268,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     <SettingsContext.Provider
       value={{
         type,
-        changeType: onTypeChange,
+        changeType,
         thumbnailSettings,
         mosaicSettings,
         masonrySettings,

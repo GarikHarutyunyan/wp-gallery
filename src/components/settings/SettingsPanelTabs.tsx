@@ -55,7 +55,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
           <Tab label={'Lightbox'} value={'lightbox'} />
         ) : null}
       </Tabs>
-      <Aligner align={Align.END} style={{alignItems: 'center'}}>
+      <Aligner align={Align.END}>
         <TemplatesSelect />
         <LoadingButton
           loading={isSaving}

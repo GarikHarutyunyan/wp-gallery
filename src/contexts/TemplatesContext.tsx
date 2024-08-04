@@ -33,7 +33,6 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [templates, setTemplates] = useState<ITemplateReference[]>([]);
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  console.log('🚀 ~ templates:', templates);
 
   const getTemplates = async () => {
     const fetchUrl: string | undefined =

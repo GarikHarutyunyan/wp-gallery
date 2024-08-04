@@ -1,6 +1,6 @@
 import {Box, Skeleton} from '@mui/material';
-import {ISelectOption, ReSize, SelectControl} from 'components/controls';
-import {ITemplateReference, useTemplates} from 'contexts/TemplatesContext';
+import {ISelectOption, SelectControl} from 'components/controls';
+import {useTemplates} from 'contexts/TemplatesContext';
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {useSettings} from './useSettings';
 
@@ -44,7 +44,7 @@ const TemplatesSelect: React.FC = () => {
       mosaic && changeMosaicSettings(mosaic);
       slideshow && changeSlideshowSettings(slideshow);
       thumbnails && changeThumbnailSettings(thumbnails);
-      setValue(template_id + '');
+      setValue(template_id || 'none');
     }
   }, [template?.title]);
 
@@ -57,28 +57,19 @@ const TemplatesSelect: React.FC = () => {
     }) || [];
 
   const onChange = async (newValue: string) => {
-    if (newValue === 'none') {
-      setValue(newValue);
-      return;
-    }
-
-    const selectedTemplateReference: ITemplateReference | undefined =
-      templates?.find((t) => t.id === newValue);
-
-    changeTemplate?.(selectedTemplateReference?.id as string);
+    changeTemplate?.(newValue);
   };
 
   return value ? (
-    <Box style={{width: '200px', margin: '0 10px'}}>
+    <Box style={{width: '200px', margin: 'auto 10px'}}>
       {isLoading ? (
-        <Skeleton height={50} />
+        <Skeleton height={48} />
       ) : (
         <SelectControl
           onChange={onChange}
           options={templateOptions}
           value={value}
           hideLabel={true}
-          size={ReSize.SMALL}
         />
       )}
     </Box>

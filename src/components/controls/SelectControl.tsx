@@ -1,5 +1,6 @@
 import {MenuItem, TextField} from '@mui/material';
 import React, {CSSProperties} from 'react';
+import './select-control.css';
 
 interface ISelectOption {
   title: string;

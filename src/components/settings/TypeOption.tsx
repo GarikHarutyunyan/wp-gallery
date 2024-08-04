@@ -10,7 +10,7 @@ interface ITypeOptionProps {
   title: string;
   value: GalleryType;
   isSelected: boolean;
-  onClick: (value: GalleryType) => void;
+  onClick?: (value: GalleryType) => void;
 }
 
 const TypeOption: React.FC<ITypeOptionProps> = ({
@@ -22,7 +22,7 @@ const TypeOption: React.FC<ITypeOptionProps> = ({
   const {pluginUrl} = useAppInfo();
 
   const onOptionClick = () => {
-    onClick(value);
+    onClick?.(value);
   };
 
   return (
