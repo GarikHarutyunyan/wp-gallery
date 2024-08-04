@@ -15,6 +15,7 @@ import {
 } from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useLayoutEffect, useRef, useState} from 'react';
+import {TypeUtils} from 'utils';
 import {
   cubeMockSettings,
   generalMockSettings,
@@ -52,7 +53,8 @@ const SettingsContext = React.createContext<{
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
-  const {template, initTemplate, resetTemplate} = useTemplates();
+  const {template, initTemplate, changeTemplate, resetTemplate} =
+    useTemplates();
   const {galleryId, baseUrl, nonce} = useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
@@ -163,7 +165,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         cube: cubeSettings,
         slideshow: slideshowSettings,
         template_id:
-          template?.template_id == 'none' ? -1 : template?.template_id,
+          template?.template_id == 'none' ? '' : template?.template_id,
       } as ISettingsDTO;
 
       const validSettings: ISettingsDTO = Object.entries(settings).reduce(
@@ -185,7 +187,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
         initTemplate?.(
-          (newSettings?.template_id || 'none') as string,
+          (TypeUtils.isNumber(newSettings?.template_id)
+            ? newSettings?.template_id
+            : 'none') as string,
           newSettings?.title as string
         );
         enqueueSnackbar('Options are up to date!', {
@@ -235,6 +239,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
+        changeTemplate?.(newSettings.template_id as string);
         enqueueSnackbar(successMessage, {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},

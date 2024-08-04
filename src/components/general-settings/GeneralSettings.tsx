@@ -97,6 +97,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     if (type === GalleryType.MASONRY) {
       key && changeMasonrySettings({...masonrySettings, [key]: inputValue});
     }
+
+    resetTemplate?.();
   };
 
   const filteredPaginationTypeOptions = getPaginationTypeOptions(

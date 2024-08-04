@@ -72,11 +72,10 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setIsLoading(false);
       } catch (error) {
         console.error(error);
-        // setTemplates([]);
         setIsLoading(false);
       }
     } else {
-      // setTemplates([]);
+      resetTemplate();
     }
   };
 

@@ -1,12 +1,12 @@
 import {Box, Skeleton} from '@mui/material';
 import {ISelectOption, SelectControl} from 'components/controls';
 import {useTemplates} from 'contexts/TemplatesContext';
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useLayoutEffect} from 'react';
+import {TypeUtils} from 'utils';
 import {useSettings} from './useSettings';
 
 const TemplatesSelect: React.FC = () => {
   const {templates, template, changeTemplate, isLoading} = useTemplates();
-  const [value, setValue] = useState<string>('0');
   const {
     changeGeneralSettings,
     changeMasonrySettings,
@@ -17,25 +17,14 @@ const TemplatesSelect: React.FC = () => {
     type: activeType,
     changeType,
   } = useSettings();
-
-  useEffect(() => {
-    if (templates?.length && !value) {
-      setValue('none');
-    }
-  }, [templates?.length]);
+  const value = TypeUtils.isNumber(template?.template_id)
+    ? template!.template_id
+    : 'none';
 
   useLayoutEffect(() => {
     if (template) {
-      const {
-        type,
-        general,
-        lightbox,
-        masonry,
-        mosaic,
-        slideshow,
-        thumbnails,
-        template_id,
-      } = template;
+      const {type, general, lightbox, masonry, mosaic, slideshow, thumbnails} =
+        template;
 
       activeType !== type && type && changeType!(type);
       general && changeGeneralSettings(general);
@@ -44,9 +33,8 @@ const TemplatesSelect: React.FC = () => {
       mosaic && changeMosaicSettings(mosaic);
       slideshow && changeSlideshowSettings(slideshow);
       thumbnails && changeThumbnailSettings(thumbnails);
-      setValue(template_id || 'none');
     }
-  }, [template?.title]);
+  }, [template?.template_id]);
 
   const templateOptions: ISelectOption[] =
     templates?.map((template) => {
@@ -56,11 +44,11 @@ const TemplatesSelect: React.FC = () => {
       };
     }) || [];
 
-  const onChange = async (newValue: string) => {
+  const onChange = (newValue: string) => {
     changeTemplate?.(newValue);
   };
 
-  return value ? (
+  return TypeUtils.isNumber(value) || value ? (
     <Box style={{width: '200px', margin: 'auto 10px'}}>
       {isLoading ? (
         <Skeleton height={48} />
