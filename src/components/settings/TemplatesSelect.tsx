@@ -41,6 +41,7 @@ const TemplatesSelect: React.FC = () => {
       return {
         title: template.title,
         value: template.id,
+        isDisabled: template.id === 'none',
       };
     }) || [];
 
