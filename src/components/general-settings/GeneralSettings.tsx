@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {useSettings} from 'components/settings';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {
   GalleryType,
@@ -46,6 +47,7 @@ interface IGeneralSettingsProps {
 }
 
 const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
+  const {resetTemplate} = useTemplates();
   const {
     generalSettings: value,
     changeGeneralSettings: onChange,
@@ -81,6 +83,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   }, [type, mosaicSettings, thumbnailSettings, masonrySettings]);
 
   const onInputValueChange = (inputValue: any, key?: string) => {
+    resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
 
@@ -94,6 +97,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     if (type === GalleryType.MASONRY) {
       key && changeMasonrySettings({...masonrySettings, [key]: inputValue});
     }
+
+    resetTemplate?.();
   };
 
   const filteredPaginationTypeOptions = getPaginationTypeOptions(

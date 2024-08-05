@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {useSettings} from 'components/settings';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {
   Direction,
@@ -27,6 +28,7 @@ interface IMosaicSettingsProps {
 }
 
 const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
+  const {resetTemplate} = useTemplates();
   const {mosaicSettings: value, changeMosaicSettings: onChange} = useSettings();
   const {
     width,
@@ -48,6 +50,7 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
   } = value as IMosaicSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
+    resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
 

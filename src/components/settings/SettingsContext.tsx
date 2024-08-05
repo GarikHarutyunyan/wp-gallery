@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {useAppInfo} from 'contexts/AppInfoContext';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {
   GalleryType,
@@ -14,6 +15,7 @@ import {
 } from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useLayoutEffect, useRef, useState} from 'react';
+import {TypeUtils} from 'utils';
 import {
   cubeMockSettings,
   generalMockSettings,
@@ -31,6 +33,7 @@ import './settings-context.css';
 
 const SettingsContext = React.createContext<{
   type?: GalleryType;
+  changeType?: (type: GalleryType) => void;
   generalSettings?: IGeneralSettings;
   thumbnailSettings?: IThumbnailSettings;
   mosaicSettings?: IMosaicSettings;
@@ -50,7 +53,8 @@ const SettingsContext = React.createContext<{
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
-
+  const {template, initTemplate, changeTemplate, resetTemplate} =
+    useTemplates();
   const {galleryId, baseUrl, nonce} = useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
@@ -93,7 +97,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
       setCubeSettings(newSettings.cube || cubeMockSettings);
-
+      initTemplate?.(
+        newSettings?.template_id as string,
+        newSettings?.title as string
+      );
       setIsLoading(false);
     } else {
       setType(GalleryType.THUMBNAILS);
@@ -111,7 +118,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     getData();
   }, []);
 
-  const onTypeChange = async (newType: GalleryType): Promise<void> => {
+  const changeType = async (newType: GalleryType) => {
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'options/' + galleryId
       : undefined;
@@ -137,6 +144,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
+  const onTypeChange = async (newType: GalleryType): Promise<void> => {
+    await changeType(newType);
+    resetTemplate?.();
+  };
+
   const onSave = async (): Promise<void> => {
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'options/' + galleryId
@@ -152,6 +164,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         masonry: masonrySettings,
         cube: cubeSettings,
         slideshow: slideshowSettings,
+        template_id:
+          template?.template_id == 'none' ? '' : template?.template_id,
       } as ISettingsDTO;
 
       const validSettings: ISettingsDTO = Object.entries(settings).reduce(
@@ -172,6 +186,12 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
+        initTemplate?.(
+          (TypeUtils.isNumber(newSettings?.template_id)
+            ? newSettings?.template_id
+            : 'none') as string,
+          newSettings?.title as string
+        );
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -219,6 +239,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
+        changeTemplate?.(newSettings.template_id as string);
         enqueueSnackbar(successMessage, {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -252,6 +273,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     <SettingsContext.Provider
       value={{
         type,
+        changeType,
         thumbnailSettings,
         mosaicSettings,
         masonrySettings,

@@ -115,4 +115,6 @@ export interface ISettingsDTO {
   slideshow: ISlideshowSettings;
   lightbox: ILightboxSettings;
   cube: ICubeSettings;
+  template_id?: number | string;
+  title?: string;
 }

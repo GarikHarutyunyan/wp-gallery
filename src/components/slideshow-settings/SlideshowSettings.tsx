@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {useSettings} from 'components/settings';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {
   ISlideshowSettings,
@@ -27,6 +28,7 @@ interface ISlideshowSettingsProps {
 }
 
 const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
+  const {resetTemplate} = useTemplates();
   const {slideshowSettings: value, changeSlideshowSettings: onChange} =
     useSettings();
   const {
@@ -55,6 +57,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
   } = value as ISlideshowSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
+    resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
 
@@ -117,7 +120,9 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                 id={'imageAnimation'}
                 name={'Animation'}
                 value={imageAnimation}
-                options={LightboxImageAnimationOptions.filter(option => option.value !== LightboxImageAnimation.SLIDEV)}
+                options={LightboxImageAnimationOptions.filter(
+                  (option) => option.value !== LightboxImageAnimation.SLIDEV
+                )}
                 onChange={onInputValueChange}
               />
             </Filter>
