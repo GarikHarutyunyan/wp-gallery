@@ -168,13 +168,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           template?.template_id == 'none' ? '' : template?.template_id,
       } as ISettingsDTO;
 
-      const validSettings: ISettingsDTO = Object.entries(settings).reduce(
-        (accumulator, [key, value]) => ({...accumulator, [key]: value || ''}),
-        {}
-      ) as ISettingsDTO;
-
       try {
-        const response = await axios.post(fetchUrl, validSettings, {
+        const response = await axios.post(fetchUrl, settings, {
           headers: {'X-WP-Nonce': nonce},
         });
         const newSettings: ISettingsDTO = response.data;
