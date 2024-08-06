@@ -16,6 +16,10 @@
     z-index: 1000000;
 }
 
+.reacg-lightbox .yarl__toolbar {
+    z-index: 1;
+}
+
 .reacg-slideshow .yarl__toolbar {
     z-index: 1;
     top: auto;
