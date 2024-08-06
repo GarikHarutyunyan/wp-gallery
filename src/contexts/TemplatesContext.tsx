@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {ISettingsDTO} from 'data-structures';
+import {useSnackbar} from 'notistack';
 import React, {useContext, useLayoutEffect, useState} from 'react';
 
 export interface ITemplate extends Partial<ISettingsDTO> {
@@ -30,6 +31,7 @@ const emptyTemplate: ITemplate = {
 };
 
 const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
+  const {enqueueSnackbar} = useSnackbar();
   const [templates, setTemplates] = useState<ITemplateReference[]>([]);
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -80,7 +82,17 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const resetTemplate = (): void => {
-    setTemplate(emptyTemplate);
+    if (template?.template_id !== 'none') {
+      const warningMessage: string =
+        'Please note that when adjusting any parameter, the template will automatically changed to "None".';
+
+      setTemplate(emptyTemplate);
+      enqueueSnackbar(warningMessage, {
+        variant: 'warning',
+        anchorOrigin: {horizontal: 'right', vertical: 'top'},
+        style: {maxWidth: '288px'},
+      });
+    }
   };
 
   const changeTemplate = (id: string) => {
