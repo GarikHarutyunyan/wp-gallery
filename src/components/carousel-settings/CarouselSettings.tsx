@@ -25,7 +25,6 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     height,
     backgroundColor,
     loop,
-    pagination,
     effects,
     autoplay,
     delay,
@@ -69,28 +68,10 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
             </Filter>
 
             <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'loop'}
-                name={'Loop'}
-                value={loop}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-
-            <Filter isLoading={isLoading}>
               <ColorControl
                 id={'backgroundColor'}
                 name={'Background color'}
                 value={backgroundColor}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'pagination'}
-                name={'Pagination'}
-                value={pagination}
                 onChange={onInputValueChange}
               />
             </Filter>
@@ -114,16 +95,18 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
               />
             </Filter>
 
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'delay'}
-                name={'Play Delay'}
-                value={delay}
-                onChange={onInputValueChange}
-                min={2000}
-                unit={'ms'}
-              />
-            </Filter>
+            {autoplay && (
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'delay'}
+                  name={'Play Delay'}
+                  value={delay}
+                  onChange={onInputValueChange}
+                  min={2000}
+                  unit={'ms'}
+                />
+              </Filter>
+            )}
 
             <Filter isLoading={isLoading}>
               <SwitchControl

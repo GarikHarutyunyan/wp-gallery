@@ -20,8 +20,7 @@ const useConfigureSwiper = (swiperRef: any, key: string): void => {
       setUpdate(upDate + 1);
     }
     swiper.update();
-    if (swiper.params) console.log(swiper);
-  }, [scale, rotateCard, perSlideOffset, width, height]);
+  }, [scale, rotateCard, perSlideOffset]);
 };
 
 export default useConfigureSwiper;

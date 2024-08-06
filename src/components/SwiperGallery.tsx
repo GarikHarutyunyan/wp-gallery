@@ -19,7 +19,6 @@ interface ISwiperGalleryProps {
   images: IImageDTO[];
   backgroundColor: string;
   loop: boolean;
-  pagination?: boolean;
   effects: any;
   autoplay: boolean;
   delay: number;
@@ -33,7 +32,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   images,
   backgroundColor,
   loop,
-  pagination,
   effects,
   autoplay,
   delay,
@@ -229,6 +227,13 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
+  const handleThumbnailClick = (index: number) => {
+    const swiper = swiperRef.current?.swiper;
+    if (swiper) {
+      swiper.slideTo(index);
+    }
+  };
+
   return (
     <Swiper
       ref={swiperRef}
@@ -236,7 +241,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       onAutoplayTimeLeft={onAutoplayTimeLeft}
       grabCursor={true}
       loop={loop}
-      pagination={pagination || false}
+      pagination={false}
       slidesPerView={1}
       className={className}
       {...effects}
@@ -245,19 +250,18 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           ? {
               width,
               height,
-              overflow: 'visible',
             }
-          : {
-              overflowX: 'clip',
-              overflowY: 'visible',
-            }
+          : {}
       }
     >
       {images?.map((image: IImageDTO, index) => {
         const isVideo: boolean = image.type === ImageType.VIDEO;
 
         return (
-          <SwiperSlide key={Math.random()}>
+          <SwiperSlide
+            onClick={() => handleThumbnailClick(index)}
+            key={Math.random()}
+          >
             {!isVideo ? (
               <img
                 src={image.original.url}

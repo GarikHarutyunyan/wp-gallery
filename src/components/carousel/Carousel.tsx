@@ -19,7 +19,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const {
     backgroundColor,
     loop,
-    pagination,
     effects,
     autoplay,
     delay,
@@ -64,7 +63,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       <SwiperGallery
         key={selectedEffect.id}
         effects={selectedEffect}
-        pagination={pagination}
         loop={loop}
         backgroundColor={backgroundColor}
         images={images || []}

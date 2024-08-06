@@ -112,7 +112,6 @@ export interface ICarouselSettings {
   gap: number;
   backgroundColor: string;
   loop: boolean;
-  pagination: boolean;
   effects: string;
   autoplay: boolean;
   delay: number;

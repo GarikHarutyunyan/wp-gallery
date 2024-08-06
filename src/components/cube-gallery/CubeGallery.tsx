@@ -56,8 +56,6 @@ const CubeGallery: React.FC = () => {
     cubeShadow.style.width = shadow ? '100%' : '0%';
   }, [shadow]);
 
-  console.log(containerHeight, containerWidth);
-
   return (
     <Box
       sx={{
