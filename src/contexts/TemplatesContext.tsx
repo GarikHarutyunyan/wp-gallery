@@ -40,7 +40,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const fetchUrl: string | undefined =
       'https://regallery.team/core/wp-json/reacgcore/v1/templates'; //baseUrl      ? baseUrl + 'templates'      : undefined;
 
-    if (fetchUrl) {
+    if ( fetchUrl ) {
       try {
         const response = await axios.get(fetchUrl);
         const templatesData: ITemplateReference[] = response.data;
@@ -51,11 +51,12 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
         setTemplates(withNoneOption);
       } catch (error) {
-        console.error(error);
-        setTemplates([]);
+        console.log(error);
+        setTemplates([noneOption]);
       }
-    } else {
-      setTemplates([]);
+    }
+    else {
+      setTemplates([noneOption]);
     }
   };
 
@@ -64,7 +65,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       | string
       | undefined = `https://regallery.team/core/wp-json/reacgcore/v1/template/${id}`;
 
-    if (fetchUrl) {
+    if (fetchUrl && id !== "") {
       setIsLoading(true);
       try {
         const response = await axios.get(fetchUrl);
@@ -73,7 +74,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setTemplate(templateData);
         setIsLoading(false);
       } catch (error) {
-        console.error(error);
+        console.log(error);
         setIsLoading(false);
       }
     } else {
