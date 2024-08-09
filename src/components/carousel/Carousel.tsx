@@ -25,7 +25,9 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     playAndPouseAllowed,
     width,
     height,
+    imagesCount,
   } = settings as ICarouselSettings;
+
   const selectedEffect = useSwiperEffects()[effects as EffectTypes];
   const wrapper = wrapperRef.current;
   const [innerWidth, setInnerWidth] = useState<number>(
@@ -71,6 +73,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         playAndPouseAllowed={playAndPouseAllowed}
         width={containerWidth}
         height={containerHeight}
+        imagesCount={imagesCount}
       />
     </Box>
   );

@@ -26,6 +26,7 @@ interface ISwiperGalleryProps {
   className?: string;
   width?: number;
   height?: number;
+  imagesCount?: number;
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
@@ -39,6 +40,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   playAndPouseAllowed,
   width,
   height,
+  imagesCount,
 }) => {
   const progressCircle = useRef<SVGSVGElement>(null);
   const progressContent = useRef<HTMLSpanElement>(null);
@@ -46,10 +48,10 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isDragging = useRef<boolean>(false);
-
   const key = effects.effect + 'Effect';
-  useConfigureSwiper(swiperRef, key);
+  const previusIndex = useRef<number>(-1);
 
+  useConfigureSwiper(swiperRef, key);
   const onAutoplayTimeLeft = (swiper: any, time: number, progress: number) => {
     if (progressCircle.current && progressContent.current) {
       progressCircle.current.style.setProperty(
@@ -59,105 +61,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
     }
   };
-
-  // const imgs = [
-  //   {
-  //     id: '1',
-  //     title: 'Hats',
-
-  //     caption: 'Hats',
-  //     description: 'description',
-  //     original: {
-  //       url: 'https://thumbs.dreamstime.com/z/measuring-body-3219817.jpg',
-  //       width: 1064,
-  //       height: 1000,
-  //     },
-  //     medium_large: {
-  //       url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWUS5p_fhUO_gMfcVSgIzo7C_v3Ugh56l4-zqxk9VGsavr0J3kih55g1xsuLJ_vzhJKmw&usqp=CAU',
-  //       width: 626,
-  //       height: 500,
-  //     },
-  //     thumbnail: {
-  //       url: 'https://img.freepik.com/free-photo/top-view-blue-pink-arrows_23-2148488441.jpg?size=338&ext=jpg&ga=GA1.1.2113030492.1720310400&semt=ais_user',
-  //       width: 338,
-  //       height: 200,
-  //     },
-
-  //     width: 500,
-  //     height: 600,
-  //   },
-  //   {
-  //     id: '2',
-  //     caption: 'caption',
-  //     description: 'description',
-  //     original: {
-  //       url: 'https://thumbs.dreamstime.com/z/slim-woman-body-white-background-isolated-78974426.jpg',
-  //       width: 1067,
-  //       height: 1000,
-  //     },
-  //     medium_large: {
-  //       url: 'https://thumbs.dreamstime.com/b/female-became-skinny-wearing-old-jeans-9569097.jpg',
-  //       width: 800,
-  //       height: 500,
-  //     },
-  //     thumbnail: {
-  //       url: 'https://www.shutterstock.com/image-photo/beautiful-slim-woman-lingerie-female-260nw-496633807.jpg',
-  //       width: 173,
-  //       height: 200,
-  //     },
-  //     title: 'Sea star',
-  //     width: 500,
-  //     height: 600,
-  //   },
-  //   {
-  //     id: '3',
-  //     caption: 'caption',
-  //     description: 'description',
-
-  //     original: {
-  //       url: 'https://st3.depositphotos.com/1814366/12927/i/950/depositphotos_129277518-stock-photo-woman-body-in-white-swimwear.jpg',
-  //       width: 1024,
-  //       height: 1000,
-  //     },
-  //     medium_large: {
-  //       url: 'https://previews.123rf.com/images/deagreez/deagreez1703/deagreez170300347/74137122-close-up-photo-of-slim-woman-s-body-in-white-lingerie.jpg',
-  //       width: 867,
-  //       height: 500,
-  //     },
-  //     thumbnail: {
-  //       url: 'https://en.pimg.jp/070/028/979/1/70028979.jpg',
-  //       width: 450,
-  //       height: 200,
-  //     },
-  //     title: 'Basketball',
-  //     width: 500,
-  //     height: 600,
-  //   },
-  //   {
-  //     id: '4',
-  //     caption: 'caption',
-  //     description: 'description',
-
-  //     original: {
-  //       url: 'https://www.ama-assn.org/sites/ama-assn.org/files/styles/related_article_stub_image_1200x800_3_2/public/2023-03/a23-imgs-section-meeting.png?itok=Mpc66Zlm',
-  //       width: 1200,
-  //       height: 1000,
-  //     },
-  //     medium_large: {
-  //       url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvkaIXWNg0_d_Zvaae_aVyvB-C0sS96M2Ktj97lfraDPRvZpAykv7ggg_gaoeYGZdb8jM&usqp=CAU',
-  //       width: 630,
-  //       height: 500,
-  //     },
-  //     thumbnail: {
-  //       url: 'https://img.freepik.com/free-vector/nice-forest-animals_23-2147568045.jpg?size=338&ext=jpg&ga=GA1.1.44546679.1716595200&semt=ais_user',
-  //       width: 338,
-  //       height: 200,
-  //     },
-  //     title: 'Austro',
-  //     width: 500,
-  //     height: 600,
-  //   },
-  // ];
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
@@ -234,6 +137,56 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
+  const handleSlideChange = () => {
+    const swiper = swiperRef.current?.swiper;
+    const activeIndex = swiper.realIndex;
+
+    const backwardLoadStartIndex = activeIndex
+      ? Math.max(
+          activeIndex - (imagesCount !== undefined ? imagesCount : 0) - 4,
+          0
+        )
+      : 0;
+    const backwardLoadEndIndex = activeIndex;
+    if (activeIndex > previusIndex.current && previusIndex.current !== -1) {
+      const loadStartIndex = activeIndex;
+      const loadEndIndex = Math.min(
+        imagesCount + activeIndex + 4,
+        images.length
+      );
+
+      for (let i = loadStartIndex; i <= loadEndIndex; i++) {
+        const imgElement = document.querySelector(
+          `.lazy[data-index="${i}"]`
+        ) as HTMLImageElement;
+
+        if (imgElement && (!imgElement.src || imgElement.src === undefined)) {
+          imgElement.setAttribute('src', images[i].original.url);
+          imgElement.setAttribute(
+            'srcSet',
+            `${images[i].thumbnail.url} ${images[i].thumbnail.width}w, ${images[i].medium_large.url} ${images[i].medium_large.width}w, ${images[i].original.url} ${images[i].original.width}w`
+          );
+        }
+      }
+    } else if (previusIndex.current !== -1) {
+      for (let i = backwardLoadStartIndex; i <= backwardLoadEndIndex; i++) {
+        const imgElement = document.querySelector(
+          `.lazy[data-index="${i}"]`
+        ) as HTMLImageElement;
+
+        if (imgElement && (!imgElement.src || imgElement.src === undefined)) {
+          imgElement.setAttribute('src', images[i].original.url);
+          imgElement.setAttribute(
+            'srcSet',
+            `${images[i].thumbnail.url} ${images[i].thumbnail.width}w, ${images[i].medium_large.url} ${images[i].medium_large.width}w, ${images[i].original.url} ${images[i].original.width}w`
+          );
+        }
+      }
+    }
+
+    previusIndex.current = activeIndex;
+  };
+
   return (
     <Swiper
       ref={swiperRef}
@@ -244,6 +197,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       pagination={false}
       slidesPerView={1}
       className={className}
+      onSlideChange={key === 'coverflowEffect' && handleSlideChange}
       {...effects}
       style={
         key === 'cardsEffect' || key === 'flipEffect' || key === 'cubeEffect'
@@ -256,19 +210,23 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     >
       {images?.map((image: IImageDTO, index) => {
         const isVideo: boolean = image.type === ImageType.VIDEO;
+        const visible = document.querySelector('.swiper-slide-visible');
 
         return (
-          <SwiperSlide
-            onClick={() => handleThumbnailClick(index)}
-            key={Math.random()}
-          >
+          <SwiperSlide onClick={() => handleThumbnailClick(index)}>
+            {image.id}
             {!isVideo ? (
               <img
-                src={image.original.url}
-                srcSet={`${image.thumbnail.url} ${image.thumbnail.width}w, ${image.medium_large.url} ${image.medium_large.width}w, ${image.original.url} ${image.original.width}w`}
+                data-index={index}
+                src={
+                  index < 4 || index >= images.length - 5
+                    ? image.original.url
+                    : undefined
+                }
+                className="lazy"
                 alt={image.title}
                 style={{
-                  background: key !== 'coverflowEffect' ? backgroundColor : '',
+                  background: key !== 'coverflow' ? backgroundColor : '',
                 }}
               />
             ) : (
@@ -314,3 +272,42 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 };
 
 export {SwiperGallery};
+
+// const handleSlideChange = () => {
+//   const swiper = swiperRef.current?.swiper;
+//   const activeIndex = swiper.realIndex;
+//   const totalSlides = images.length;
+//   const imagesToLoad = 4; // Number of images to preload before/after the active index
+
+//   const loadImagesInRange = (startIndex: number, endIndex: number) => {
+//     for (let i = startIndex; i <= endIndex; i++) {
+//       const normalizedIndex = (i + totalSlides) % totalSlides;
+//       const imgElement = document.querySelector(
+//         `.lazy[data-index="${normalizedIndex}"]`
+//       ) as HTMLImageElement;
+
+//       if (imgElement && (!imgElement.src || imgElement.src === undefined)) {
+//         const image = images[normalizedIndex];
+//         imgElement.setAttribute('src', image.original.url);
+//         imgElement.setAttribute(
+//           'srcSet',
+//           `${image.thumbnail.url} ${image.thumbnail.width}w, ${image.medium_large.url} ${image.medium_large.width}w, ${image.original.url} ${image.original.width}w`
+//         );
+//       }
+//     }
+//   };
+
+//   if (activeIndex > previusIndex.current && previusIndex.current !== -1) {
+//     // Moving forward
+//     const loadStartIndex = activeIndex;
+//     const loadEndIndex = Math.min(activeIndex + imagesToLoad, totalSlides - 1);
+//     loadImagesInRange(loadStartIndex, loadEndIndex);
+//   } else if (previusIndex.current !== -1) {
+//     // Moving backward
+//     const loadStartIndex = Math.max(activeIndex - imagesToLoad, 0);
+//     const loadEndIndex = activeIndex;
+//     loadImagesInRange(loadStartIndex, loadEndIndex);
+//   }
+
+//   previusIndex.current = activeIndex;
+// };

@@ -18,7 +18,7 @@ export const useSwiperEffects = () => {
   const coverflow = {
     id: 1,
     spaceBetween: spaceBetween,
-    slidesPerView: imagesCount || 'auto',
+    slidesPerView: imagesCount,
     centeredSlides: true,
     effect: 'coverflow',
     loopedSlides: 8,
