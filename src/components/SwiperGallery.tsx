@@ -140,6 +140,44 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
+  const handleTransitionStart = () => {
+    widthChange.current = false;
+
+    // Attempt to find the elements
+    const coverFlowHeight = document.querySelector(
+      '.swiper-coverflow.swiper-3d'
+    ) as HTMLElement | null;
+    const preveSlider = document.querySelector(
+      '.swiper-slide-prev'
+    ) as HTMLElement | null;
+    const nextSlider = document.querySelector(
+      '.swiper-slide-next'
+    ) as HTMLElement | null;
+
+    // Check if coverFlowHeight element exists
+    if (coverFlowHeight) {
+      coverFlowHeight.style.height = `${ativelideHeightResponsive}px`;
+      console.log(coverFlowHeight.style.height);
+    } else {
+      console.warn(
+        'Element with selector .swiper-coverflow.swiper-3d not found'
+      );
+    }
+
+    // Check if activeSlider element exists
+    if (preveSlider) {
+      preveSlider.style.height = height + 'px';
+    } else {
+      console.warn('Element with selector .swiper-slide-prev not found');
+    }
+
+    if (nextSlider) {
+      nextSlider.style.height = height + 'px';
+    } else {
+      console.warn('Element with selector .swiper-slide-next not found');
+    }
+  };
+
   const handleSlideChangeTransition = () => {
     console.log('ooo NOOOO');
     const coverFlowHeight = document.querySelector(
@@ -178,7 +216,9 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const handleTransfromSlide = (p: number = 1) => {
     console.log('work');
     const wrapper = document.querySelector('.swiper-wrapper') as HTMLElement;
-
+    const nextSlide = document.querySelector(
+      '.swiper-slide-next'
+    ) as HTMLElement;
     const value = window
       .getComputedStyle(wrapper)
       .getPropertyValue('transform');
@@ -193,12 +233,18 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
     const additionalPixels = p * 0.5;
     const inSlideChange = widthChange.current;
+    const coefficient = activeSlideWidth
+      ? activeSlideWidth / 2 - nextSlide.offsetWidth / 2
+      : 0;
     console.log(inSlideChange);
+    console.log(coefficient, 'coeficent');
     const newTranslateX =
-      currentTranslateX + additionalPixels - (inSlideChange ? 0 : 150);
+      currentTranslateX + additionalPixels - (inSlideChange ? 0 : coefficient);
     console.log(newTranslateX, 'trrrr');
-    if (playActivSlideSizes)
+    if (playActivSlideSizes) {
       wrapper.style.transform = `translate3d(${newTranslateX}px, 0px, 0px)`;
+      console.log('yeah');
+    }
   };
 
   useLayoutEffect(() => {
@@ -245,10 +291,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           handleSlideChange(previusIndex, swiperRef);
         }
       }}
-      onTransitionStart={() => {
-        widthChange.current = false;
-        console.log('transitionStaarrrt');
-      }}
+      onTransitionStart={handleTransitionStart}
       onTransitionEnd={() => {
         if (key === 'coverflowEffect') {
           handleTransfromSlide();
