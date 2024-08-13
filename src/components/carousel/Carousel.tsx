@@ -25,6 +25,9 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     playAndPouseAllowed,
     width,
     height,
+    playActivSlideSizes,
+    activeSlideHeight,
+    activeSlideWidth,
     imagesCount,
   } = settings as ICarouselSettings;
 
@@ -36,7 +39,8 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const ratio: number = width / height;
   const containerWidth: number = Math.min(innerWidth, width);
   const containerHeight: number = containerWidth / ratio;
-
+  const activeSlideRatio: number = width / activeSlideHeight;
+  const ativelideHeightResponsive: number = containerWidth / activeSlideRatio;
   useEffect(() => {
     const handleResize = () => {
       setInnerWidth(wrapper?.clientWidth * 0.8 || width);
@@ -45,6 +49,61 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, [wrapper?.clientWidth]);
+
+  const handleSlideChange = (previusIndex: any, swiperRef: any) => {
+    const swiper = swiperRef.current?.swiper;
+    const activeIndex = swiper.realIndex;
+    const loadImagesInRange = (startIndex: number, endIndex: number) => {
+      for (let i = startIndex; i <= endIndex; i++) {
+        const imgElement = document.querySelector(
+          `.lazy[data-index="${i}"]`
+        ) as HTMLImageElement;
+
+        if (
+          imgElement &&
+          images &&
+          (!imgElement.src || imgElement.src === undefined)
+        ) {
+          imgElement.setAttribute('src', images[i].original.url);
+          imgElement.setAttribute(
+            'srcSet',
+            `${images[i].thumbnail.url} ${images[i].thumbnail.width}w, ${images[i].medium_large.url} ${images[i].medium_large.width}w, ${images[i].original.url} ${images[i].original.width}w`
+          );
+        }
+      }
+    };
+
+    if (
+      activeIndex > previusIndex.current &&
+      previusIndex.current !== -1 &&
+      images
+    ) {
+      const loadStartIndex = activeIndex;
+      const loadEndIndex = Math.min(
+        imagesCount + activeIndex + 4,
+        images.length
+      );
+      loadImagesInRange(loadStartIndex, loadEndIndex);
+    } else if (previusIndex.current !== -1) {
+      const loadStartIndex = activeIndex
+        ? Math.max(
+            activeIndex - (imagesCount !== undefined ? imagesCount : 0) - 4,
+            0
+          )
+        : 0;
+      const loadEndIndex = activeIndex;
+      loadImagesInRange(loadStartIndex, loadEndIndex);
+    }
+    previusIndex.current = activeIndex;
+  };
+
+  const handleThumbnailClick = (index: number, swiperRef: any) => {
+    const swiper = swiperRef.current?.swiper;
+
+    if (swiper) {
+      swiper.slideToLoop(index);
+    }
+  };
 
   return (
     <Box
@@ -73,7 +132,12 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         playAndPouseAllowed={playAndPouseAllowed}
         width={containerWidth}
         height={containerHeight}
+        playActivSlideSizes={playActivSlideSizes}
+        ativelideHeightResponsive={ativelideHeightResponsive}
+        activeSlideWidth={activeSlideWidth}
         imagesCount={imagesCount}
+        handleSlideChange={handleSlideChange}
+        handleThumbnailClick={handleThumbnailClick}
       />
     </Box>
   );

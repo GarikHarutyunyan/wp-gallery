@@ -9,3 +9,21 @@
 .swiper-button-prev {
   color: rgba(0, 0, 0, 0.54);
 }
+
+.swiper-container {
+  display: flex;
+  align-items: center; /* Center slides vertically */
+}
+
+.swiper-wrapper {
+  display: flex;
+  align-items: center; /* Center slides vertically */
+}
+
+.custom-width {
+  width: var(--custom-width) !important;
+}
+.default-slide {
+  width: auto; /* or any default width */
+  height: auto; /* or any default height */
+}

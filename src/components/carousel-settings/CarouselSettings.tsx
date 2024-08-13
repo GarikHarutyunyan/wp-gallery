@@ -23,6 +23,9 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
   const {
     width,
     height,
+    playActivSlideSizes,
+    activeSlideHeight,
+    activeSlideWidth,
     backgroundColor,
     loop,
     effects,
@@ -66,6 +69,40 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 unit={'px'}
               />
             </Filter>
+
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'playActivSlideSizes'}
+                name={'On ActivSlide Sizes / Off ActivSlide Sizes '}
+                value={playActivSlideSizes}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+
+            {playActivSlideSizes && (
+              <>
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'activeSlideHeight'}
+                    name={'Height active slide'}
+                    value={activeSlideHeight}
+                    onChange={onInputValueChange}
+                    min={0}
+                    unit={'px'}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'activeSlideWidth'}
+                    name={'Width active slide'}
+                    value={activeSlideWidth}
+                    onChange={onInputValueChange}
+                    min={0}
+                    unit={'px'}
+                  />
+                </Filter>
+              </>
+            )}
 
             <Filter isLoading={isLoading}>
               <ColorControl

@@ -3,7 +3,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import IconButton from '@mui/material/IconButton';
 import {IImageDTO, ImageType} from 'data-structures';
 import useConfigureSwiper from 'hooks/useConfigureSwiper';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
@@ -26,7 +26,12 @@ interface ISwiperGalleryProps {
   className?: string;
   width?: number;
   height?: number;
+  playActivSlideSizes?: boolean;
+  ativelideHeightResponsive?: number;
+  activeSlideWidth?: number;
   imagesCount?: number;
+  handleSlideChange?: any;
+  handleThumbnailClick?: any;
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
@@ -40,7 +45,11 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   playAndPouseAllowed,
   width,
   height,
-  imagesCount,
+  playActivSlideSizes,
+  ativelideHeightResponsive,
+  activeSlideWidth,
+  handleSlideChange,
+  handleThumbnailClick,
 }) => {
   const progressCircle = useRef<SVGSVGElement>(null);
   const progressContent = useRef<HTMLSpanElement>(null);
@@ -50,7 +59,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const isDragging = useRef<boolean>(false);
   const key = effects.effect + 'Effect';
   const previusIndex = useRef<number>(-1);
-
+  const widthChange = useRef<boolean>(false);
   useConfigureSwiper(swiperRef, key);
   const onAutoplayTimeLeft = (swiper: any, time: number, progress: number) => {
     if (progressCircle.current && progressContent.current) {
@@ -61,9 +70,10 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
     }
   };
-
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
+
+    // Select the container
 
     if (swiper?.autoplay) {
       swiper.autoplay.stop();
@@ -130,74 +140,124 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
-  const handleThumbnailClick = (index: number) => {
-    const swiper = swiperRef.current?.swiper;
-    if (swiper) {
-      swiper.slideTo(index);
-    }
-  };
+  const handleSlideChangeTransition = () => {
+    console.log('ooo NOOOO');
+    const coverFlowHeight = document.querySelector(
+      '.swiper-coverflow.swiper-3d'
+    ) as HTMLElement;
+    const activeSlider = document.querySelector(
+      '.swiper-slide-active'
+    ) as HTMLElement;
 
-  const handleSlideChange = () => {
-    const swiper = swiperRef.current?.swiper;
-    const activeIndex = swiper.realIndex;
+    const notActiveSlides = document.querySelectorAll(
+      '.swiper-slide:not(.swiper-slide-active)'
+    ) as NodeListOf<HTMLElement>;
 
-    const backwardLoadStartIndex = activeIndex
-      ? Math.max(
-          activeIndex - (imagesCount !== undefined ? imagesCount : 0) - 4,
-          0
-        )
-      : 0;
-    const backwardLoadEndIndex = activeIndex;
-    if (activeIndex > previusIndex.current && previusIndex.current !== -1) {
-      const loadStartIndex = activeIndex;
-      const loadEndIndex = Math.min(
-        imagesCount + activeIndex + 4,
-        images.length
+    if (key === 'coverflowEffect') {
+      coverFlowHeight.style.height = 'auto';
+      activeSlider.style.setProperty(
+        'height',
+        `${playActivSlideSizes ? ativelideHeightResponsive : height}px`,
+        'important'
+      );
+      if (playActivSlideSizes) {
+        activeSlider.classList.add('custom-width');
+      } else {
+      }
+      activeSlider.style.setProperty(
+        '--custom-width',
+        `${playActivSlideSizes ? activeSlideWidth : '292.5'}px`
       );
 
-      for (let i = loadStartIndex; i <= loadEndIndex; i++) {
-        const imgElement = document.querySelector(
-          `.lazy[data-index="${i}"]`
-        ) as HTMLImageElement;
+      notActiveSlides.forEach((slide) => {
+        slide.style.setProperty('height', `${height}px`, 'important');
+      });
+    }
+  };
 
-        if (imgElement && (!imgElement.src || imgElement.src === undefined)) {
-          imgElement.setAttribute('src', images[i].original.url);
-          imgElement.setAttribute(
-            'srcSet',
-            `${images[i].thumbnail.url} ${images[i].thumbnail.width}w, ${images[i].medium_large.url} ${images[i].medium_large.width}w, ${images[i].original.url} ${images[i].original.width}w`
-          );
-        }
-      }
-    } else if (previusIndex.current !== -1) {
-      for (let i = backwardLoadStartIndex; i <= backwardLoadEndIndex; i++) {
-        const imgElement = document.querySelector(
-          `.lazy[data-index="${i}"]`
-        ) as HTMLImageElement;
+  const handleTransfromSlide = (p: number = 1) => {
+    console.log('work');
+    const wrapper = document.querySelector('.swiper-wrapper') as HTMLElement;
 
-        if (imgElement && (!imgElement.src || imgElement.src === undefined)) {
-          imgElement.setAttribute('src', images[i].original.url);
-          imgElement.setAttribute(
-            'srcSet',
-            `${images[i].thumbnail.url} ${images[i].thumbnail.width}w, ${images[i].medium_large.url} ${images[i].medium_large.width}w, ${images[i].original.url} ${images[i].original.width}w`
-          );
-        }
-      }
+    const value = window
+      .getComputedStyle(wrapper)
+      .getPropertyValue('transform');
+    const matrixRegex =
+      /matrix\(([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*([^)]*)\)/;
+
+    let currentTranslateX = 0;
+    const match = value.match(matrixRegex);
+    if (match) {
+      currentTranslateX = parseFloat(match[5]) || 0;
     }
 
-    previusIndex.current = activeIndex;
+    const additionalPixels = p * 0.5;
+    const inSlideChange = widthChange.current;
+    console.log(inSlideChange);
+    const newTranslateX =
+      currentTranslateX + additionalPixels - (inSlideChange ? 0 : 150);
+    console.log(newTranslateX, 'trrrr');
+    if (playActivSlideSizes)
+      wrapper.style.transform = `translate3d(${newTranslateX}px, 0px, 0px)`;
   };
+
+  useLayoutEffect(() => {
+    widthChange.current = true;
+  }, [activeSlideWidth]);
+
+  useLayoutEffect(() => {
+    handleSlideChangeTransition();
+  }, [
+    height,
+    ativelideHeightResponsive,
+    playActivSlideSizes,
+    activeSlideWidth,
+  ]);
+
+  const prevActiveSlideWidth = useRef(0);
+
+  useLayoutEffect(() => {
+    let betta = Math.abs(
+      prevActiveSlideWidth.current - (activeSlideWidth || 0)
+    );
+
+    if (prevActiveSlideWidth.current < (activeSlideWidth || 0)) {
+      handleTransfromSlide(-betta);
+    } else {
+      handleTransfromSlide(betta);
+    }
+    prevActiveSlideWidth.current = activeSlideWidth || 0;
+  }, [playActivSlideSizes, activeSlideWidth]);
 
   return (
     <Swiper
       ref={swiperRef}
+      speed={4000}
       autoplay={{delay, stopOnLastSlide: true, pauseOnMouseEnter: true}}
       onAutoplayTimeLeft={onAutoplayTimeLeft}
       grabCursor={true}
       loop={loop}
       pagination={false}
-      slidesPerView={1}
+      slidesPerView={'auto'}
       className={className}
-      onSlideChange={key === 'coverflowEffect' && handleSlideChange}
+      onSlideChange={() => {
+        if (key === 'coverflowEffect' && handleSlideChange) {
+          handleSlideChange(previusIndex, swiperRef);
+        }
+      }}
+      onTransitionStart={() => {
+        widthChange.current = false;
+        console.log('transitionStaarrrt');
+      }}
+      onTransitionEnd={() => {
+        if (key === 'coverflowEffect') {
+          handleTransfromSlide();
+          handleSlideChangeTransition();
+        }
+      }}
+      onTouchEnd={
+        key === 'coverflowEffect' ? handleSlideChangeTransition : undefined
+      }
       {...effects}
       style={
         key === 'cardsEffect' || key === 'flipEffect' || key === 'cubeEffect'
@@ -213,14 +273,30 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         const visible = document.querySelector('.swiper-slide-visible');
 
         return (
-          <SwiperSlide onClick={() => handleThumbnailClick(index)}>
-            {image.id}
+          <SwiperSlide
+            onClick={() => {
+              if (key === 'coverflowEffect' && handleSlideChange) {
+                handleThumbnailClick(index, swiperRef);
+              }
+            }}
+          >
             {!isVideo ? (
               <img
                 data-index={index}
                 src={
-                  index < 4 || index >= images.length - 5
+                  (
+                    key !== 'coverflowEffect'
+                      ? image.original.url
+                      : index < 4 ||
+                        (index >= images.length - 5 &&
+                          key === 'coverflowEffect')
+                  )
                     ? image.original.url
+                    : undefined
+                }
+                srcSet={
+                  key !== 'coverflowEffect'
+                    ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
                     : undefined
                 }
                 className="lazy"
@@ -272,42 +348,3 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 };
 
 export {SwiperGallery};
-
-// const handleSlideChange = () => {
-//   const swiper = swiperRef.current?.swiper;
-//   const activeIndex = swiper.realIndex;
-//   const totalSlides = images.length;
-//   const imagesToLoad = 4; // Number of images to preload before/after the active index
-
-//   const loadImagesInRange = (startIndex: number, endIndex: number) => {
-//     for (let i = startIndex; i <= endIndex; i++) {
-//       const normalizedIndex = (i + totalSlides) % totalSlides;
-//       const imgElement = document.querySelector(
-//         `.lazy[data-index="${normalizedIndex}"]`
-//       ) as HTMLImageElement;
-
-//       if (imgElement && (!imgElement.src || imgElement.src === undefined)) {
-//         const image = images[normalizedIndex];
-//         imgElement.setAttribute('src', image.original.url);
-//         imgElement.setAttribute(
-//           'srcSet',
-//           `${image.thumbnail.url} ${image.thumbnail.width}w, ${image.medium_large.url} ${image.medium_large.width}w, ${image.original.url} ${image.original.width}w`
-//         );
-//       }
-//     }
-//   };
-
-//   if (activeIndex > previusIndex.current && previusIndex.current !== -1) {
-//     // Moving forward
-//     const loadStartIndex = activeIndex;
-//     const loadEndIndex = Math.min(activeIndex + imagesToLoad, totalSlides - 1);
-//     loadImagesInRange(loadStartIndex, loadEndIndex);
-//   } else if (previusIndex.current !== -1) {
-//     // Moving backward
-//     const loadStartIndex = Math.max(activeIndex - imagesToLoad, 0);
-//     const loadEndIndex = activeIndex;
-//     loadImagesInRange(loadStartIndex, loadEndIndex);
-//   }
-
-//   previusIndex.current = activeIndex;
-// };

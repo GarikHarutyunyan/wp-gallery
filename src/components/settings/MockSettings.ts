@@ -151,6 +151,9 @@ const cubeMockSettings: ICubeSettings = {
 const carouselMockSettings: ICarouselSettings = {
   width: 1200,
   height: 400,
+  playActivSlideSizes: false,
+  activeSlideHeight: 400,
+  activeSlideWidth: 292.5,
   gap: 20,
   backgroundColor: '',
   loop: true,

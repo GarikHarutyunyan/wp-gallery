@@ -109,6 +109,9 @@ export interface ICubeSettings {
 export interface ICarouselSettings {
   width: number;
   height: number;
+  playActivSlideSizes: boolean;
+  activeSlideHeight: number;
+  activeSlideWidth: number;
   gap: number;
   backgroundColor: string;
   loop: boolean;
