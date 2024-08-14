@@ -3,14 +3,12 @@ import Paper from '@mui/material/Paper';
 import {
   ColorControl,
   NumberControl,
-  SelectControl,
   SliderControl,
   SwitchControl,
 } from 'components/controls';
 import {useSettings} from 'components/settings';
 import {Section} from 'core-components';
 import {ICarouselSettings} from 'data-structures';
-import {CarouselEffectsOptions} from 'data-structures/enum/CarouselEffectType';
 import React, {ReactNode} from 'react';
 import {Filter} from '../settings/Filter';
 interface ICarouselSettingsProps {
@@ -24,10 +22,9 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     width,
     height,
     backgroundColor,
-    loop,
     effects,
     autoplay,
-    delay,
+    slideDuration,
     playAndPouseAllowed,
     scale,
     imagesCount,
@@ -77,16 +74,6 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
             </Filter>
 
             <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'effects'}
-                name={'CarouselEffects'}
-                value={effects}
-                options={CarouselEffectsOptions}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-
-            <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'autoplay'}
                 name={'Autoplay'}
@@ -100,7 +87,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 <NumberControl
                   id={'delay'}
                   name={'Play Delay'}
-                  value={delay}
+                  value={slideDuration}
                   onChange={onInputValueChange}
                   min={2000}
                   unit={'ms'}
@@ -139,14 +126,13 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                     onChange={onInputValueChange}
                     min={1}
                     max={11}
-                    unit={'things'}
                   />
                 </Filter>
 
                 <Filter isLoading={isLoading}>
                   <NumberControl
                     id={'spaceBetween'}
-                    name={'Space Between'}
+                    name={'Space between'}
                     value={spaceBetween}
                     onChange={onInputValueChange}
                     min={-Infinity}

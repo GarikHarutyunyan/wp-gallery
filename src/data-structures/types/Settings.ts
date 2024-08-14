@@ -111,10 +111,10 @@ export interface ICarouselSettings {
   height: number;
   gap: number;
   backgroundColor: string;
-  loop: boolean;
+  isInfinite: boolean;
   effects: string;
   autoplay: boolean;
-  delay: number;
+  slideDuration: number;
   playAndPouseAllowed: boolean;
   scale: number;
   imagesCount: number;

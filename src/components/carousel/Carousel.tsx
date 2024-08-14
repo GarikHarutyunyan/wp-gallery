@@ -18,10 +18,10 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const {carouselSettings: settings, wrapperRef} = useSettings();
   const {
     backgroundColor,
-    loop,
+    isInfinite,
     effects,
     autoplay,
-    delay,
+    slideDuration,
     playAndPouseAllowed,
     width,
     height,
@@ -120,11 +120,11 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       <SwiperGallery
         key={selectedEffect.id}
         effects={selectedEffect}
-        loop={loop}
+        loop={isInfinite}
         backgroundColor={backgroundColor}
         images={images || []}
         autoplay={autoplay}
-        delay={delay}
+        delay={slideDuration}
         playAndPouseAllowed={playAndPouseAllowed}
         width={containerWidth}
         height={containerHeight}
