@@ -25,9 +25,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     playAndPouseAllowed,
     width,
     height,
-    playActivSlideSizes,
-    activeSlideHeight,
-    activeSlideWidth,
     imagesCount,
   } = settings as ICarouselSettings;
 
@@ -39,8 +36,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const ratio: number = width / height;
   const containerWidth: number = Math.min(innerWidth, width);
   const containerHeight: number = containerWidth / ratio;
-  const activeSlideRatio: number = width / activeSlideHeight;
-  const ativelideHeightResponsive: number = containerWidth / activeSlideRatio;
+
   useEffect(() => {
     const handleResize = () => {
       setInnerWidth(wrapper?.clientWidth * 0.8 || width);
@@ -132,9 +128,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         playAndPouseAllowed={playAndPouseAllowed}
         width={containerWidth}
         height={containerHeight}
-        playActivSlideSizes={playActivSlideSizes}
-        ativelideHeightResponsive={ativelideHeightResponsive}
-        activeSlideWidth={activeSlideWidth}
         imagesCount={imagesCount}
         handleSlideChange={handleSlideChange}
         handleThumbnailClick={handleThumbnailClick}

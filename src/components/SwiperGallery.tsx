@@ -3,7 +3,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import IconButton from '@mui/material/IconButton';
 import {IImageDTO, ImageType} from 'data-structures';
 import useConfigureSwiper from 'hooks/useConfigureSwiper';
-import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
@@ -26,9 +26,6 @@ interface ISwiperGalleryProps {
   className?: string;
   width?: number;
   height?: number;
-  playActivSlideSizes?: boolean;
-  ativelideHeightResponsive?: number;
-  activeSlideWidth?: number;
   imagesCount?: number;
   handleSlideChange?: any;
   handleThumbnailClick?: any;
@@ -45,9 +42,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   playAndPouseAllowed,
   width,
   height,
-  playActivSlideSizes,
-  ativelideHeightResponsive,
-  activeSlideWidth,
   handleSlideChange,
   handleThumbnailClick,
 }) => {
@@ -60,6 +54,8 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const key = effects.effect + 'Effect';
   const previusIndex = useRef<number>(-1);
   const widthChange = useRef<boolean>(false);
+  const prevActiveSlideDimensions = useRef({width: 0, height: 0});
+
   useConfigureSwiper(swiperRef, key);
   const onAutoplayTimeLeft = (swiper: any, time: number, progress: number) => {
     if (progressCircle.current && progressContent.current) {
@@ -140,145 +136,9 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
-  const handleTransitionStart = () => {
-    widthChange.current = false;
-
-    // Attempt to find the elements
-    const coverFlowHeight = document.querySelector(
-      '.swiper-coverflow.swiper-3d'
-    ) as HTMLElement | null;
-    const preveSlider = document.querySelector(
-      '.swiper-slide-prev'
-    ) as HTMLElement | null;
-    const nextSlider = document.querySelector(
-      '.swiper-slide-next'
-    ) as HTMLElement | null;
-
-    // Check if coverFlowHeight element exists
-    if (coverFlowHeight) {
-      coverFlowHeight.style.height = `${ativelideHeightResponsive}px`;
-      console.log(coverFlowHeight.style.height);
-    } else {
-      console.warn(
-        'Element with selector .swiper-coverflow.swiper-3d not found'
-      );
-    }
-
-    // Check if activeSlider element exists
-    if (preveSlider) {
-      preveSlider.style.height = height + 'px';
-    } else {
-      console.warn('Element with selector .swiper-slide-prev not found');
-    }
-
-    if (nextSlider) {
-      nextSlider.style.height = height + 'px';
-    } else {
-      console.warn('Element with selector .swiper-slide-next not found');
-    }
-  };
-
-  const handleSlideChangeTransition = () => {
-    console.log('ooo NOOOO');
-    const coverFlowHeight = document.querySelector(
-      '.swiper-coverflow.swiper-3d'
-    ) as HTMLElement;
-    const activeSlider = document.querySelector(
-      '.swiper-slide-active'
-    ) as HTMLElement;
-
-    const notActiveSlides = document.querySelectorAll(
-      '.swiper-slide:not(.swiper-slide-active)'
-    ) as NodeListOf<HTMLElement>;
-
-    if (key === 'coverflowEffect') {
-      coverFlowHeight.style.height = 'auto';
-      activeSlider.style.setProperty(
-        'height',
-        `${playActivSlideSizes ? ativelideHeightResponsive : height}px`,
-        'important'
-      );
-      if (playActivSlideSizes) {
-        activeSlider.classList.add('custom-width');
-      } else {
-      }
-      activeSlider.style.setProperty(
-        '--custom-width',
-        `${playActivSlideSizes ? activeSlideWidth : '292.5'}px`
-      );
-
-      notActiveSlides.forEach((slide) => {
-        slide.style.setProperty('height', `${height}px`, 'important');
-      });
-    }
-  };
-
-  const handleTransfromSlide = (p: number = 1) => {
-    console.log('work');
-    const wrapper = document.querySelector('.swiper-wrapper') as HTMLElement;
-    const nextSlide = document.querySelector(
-      '.swiper-slide-next'
-    ) as HTMLElement;
-    const value = window
-      .getComputedStyle(wrapper)
-      .getPropertyValue('transform');
-    const matrixRegex =
-      /matrix\(([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*([^)]*)\)/;
-
-    let currentTranslateX = 0;
-    const match = value.match(matrixRegex);
-    if (match) {
-      currentTranslateX = parseFloat(match[5]) || 0;
-    }
-
-    const additionalPixels = p * 0.5;
-    const inSlideChange = widthChange.current;
-    const coefficient = activeSlideWidth
-      ? activeSlideWidth / 2 - nextSlide.offsetWidth / 2
-      : 0;
-    console.log(inSlideChange);
-    console.log(coefficient, 'coeficent');
-    const newTranslateX =
-      currentTranslateX + additionalPixels - (inSlideChange ? 0 : coefficient);
-    console.log(newTranslateX, 'trrrr');
-    if (playActivSlideSizes) {
-      wrapper.style.transform = `translate3d(${newTranslateX}px, 0px, 0px)`;
-      console.log('yeah');
-    }
-  };
-
-  useLayoutEffect(() => {
-    widthChange.current = true;
-  }, [activeSlideWidth]);
-
-  useLayoutEffect(() => {
-    handleSlideChangeTransition();
-  }, [
-    height,
-    ativelideHeightResponsive,
-    playActivSlideSizes,
-    activeSlideWidth,
-  ]);
-
-  const prevActiveSlideWidth = useRef(0);
-
-  useLayoutEffect(() => {
-    let betta = Math.abs(
-      prevActiveSlideWidth.current - (activeSlideWidth || 0)
-    );
-
-    if (prevActiveSlideWidth.current < (activeSlideWidth || 0)) {
-      handleTransfromSlide(-betta);
-    } else {
-      handleTransfromSlide(betta);
-    }
-    prevActiveSlideWidth.current = activeSlideWidth || 0;
-  }, [playActivSlideSizes, activeSlideWidth]);
-
   return (
     <Swiper
       ref={swiperRef}
-      speed={4000}
       autoplay={{delay, stopOnLastSlide: true, pauseOnMouseEnter: true}}
       onAutoplayTimeLeft={onAutoplayTimeLeft}
       grabCursor={true}
@@ -291,16 +151,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           handleSlideChange(previusIndex, swiperRef);
         }
       }}
-      onTransitionStart={handleTransitionStart}
-      onTransitionEnd={() => {
-        if (key === 'coverflowEffect') {
-          handleTransfromSlide();
-          handleSlideChangeTransition();
-        }
-      }}
-      onTouchEnd={
-        key === 'coverflowEffect' ? handleSlideChangeTransition : undefined
-      }
       {...effects}
       style={
         key === 'cardsEffect' || key === 'flipEffect' || key === 'cubeEffect'
