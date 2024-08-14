@@ -126,6 +126,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                     onChange={onInputValueChange}
                     min={1}
                     max={11}
+                    step={2}
                   />
                 </Filter>
 

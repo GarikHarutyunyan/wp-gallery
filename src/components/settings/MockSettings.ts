@@ -149,8 +149,8 @@ const cubeMockSettings: ICubeSettings = {
 };
 
 const carouselMockSettings: ICarouselSettings = {
-  width: 1200,
-  height: 400,
+  width: 200,
+  height: 250,
   gap: 20,
   backgroundColor: '',
   isInfinite: true,
@@ -158,9 +158,9 @@ const carouselMockSettings: ICarouselSettings = {
   autoplay: false,
   slideDuration: 3000,
   playAndPouseAllowed: false,
-  scale: 1.2,
-  imagesCount: 4,
-  spaceBetween: 10,
+  scale: 0.1,
+  imagesCount: 3,
+  spaceBetween: -10,
   slideShadows: true,
   shadow: true,
   shadowOffset: 20,

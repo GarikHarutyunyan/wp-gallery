@@ -1,11 +1,3 @@
-.reacg-gallery-wrapper {
-  margin: 0px auto;
-  margin-bottom: 32px;
-  max-width: 100%;
-  height: 100vh;
-  padding: 14px;
-}
-
 .swiper-slide {
   background-position: center;
   background-size: cover;
@@ -70,11 +62,3 @@ swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal {
   object-fit: cover;
 }
 
-/* .swiper-cube .swiper-cube-shadow::before {
-  content: none;
-} */
-
-.swiper-cube .swiper-cube-shadow {
-  background: black;
-  filter: blur(50px);
-}
