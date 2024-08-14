@@ -26,20 +26,23 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     width,
     height,
     imagesCount,
+    spaceBetween,
   } = settings as ICarouselSettings;
 
   const selectedEffect = useSwiperEffects()[effects as EffectTypes];
   const wrapper = wrapperRef.current;
+  // Count the container width depends on main image width, images count and space between images.
+  const contWidth = imagesCount * (width + ((imagesCount - 1) * spaceBetween / imagesCount));
   const [innerWidth, setInnerWidth] = useState<number>(
-    wrapper?.clientWidth * 0.8 || width
+    wrapper?.clientWidth || contWidth
   );
-  const ratio: number = width / height;
-  const containerWidth: number = Math.min(innerWidth, width);
+  const ratio: number = contWidth / height;
+  const containerWidth: number = Math.min(innerWidth, contWidth);
   const containerHeight: number = containerWidth / ratio;
 
   useEffect(() => {
     const handleResize = () => {
-      setInnerWidth(wrapper?.clientWidth * 0.8 || width);
+      setInnerWidth(wrapper?.clientWidth || contWidth);
     };
     window.addEventListener('resize', handleResize);
 
