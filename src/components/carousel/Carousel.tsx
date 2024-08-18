@@ -18,6 +18,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const {carouselSettings: settings, wrapperRef} = useSettings();
   const {
     backgroundColor,
+    padding,
     isInfinite,
     effects,
     autoplay,
@@ -32,7 +33,8 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const selectedEffect = useSwiperEffects()[effects as EffectTypes];
   const wrapper = wrapperRef.current;
   // Count the container width depends on main image width, images count and space between images.
-  const contWidth = imagesCount * (width + ((imagesCount - 1) * spaceBetween / imagesCount));
+  const contWidth =
+    imagesCount * (width + ((imagesCount - 1) * spaceBetween) / imagesCount);
   const [innerWidth, setInnerWidth] = useState<number>(
     wrapper?.clientWidth || contWidth
   );
@@ -118,6 +120,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         mx: 'auto',
         background:
           selectedEffect.effect === 'coverflow' ? backgroundColor : '',
+        padding: padding,
       }}
     >
       <SwiperGallery

@@ -153,6 +153,7 @@ const carouselMockSettings: ICarouselSettings = {
   height: 250,
   gap: 20,
   backgroundColor: '',
+  padding: 0,
   isInfinite: true,
   effects: 'coverflow',
   autoplay: false,

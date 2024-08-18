@@ -14,6 +14,7 @@ import 'swiper/css/effect-flip';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import {Swiper, SwiperSlide} from 'swiper/react';
+
 import './swiper-gallery.css';
 interface ISwiperGalleryProps {
   images: IImageDTO[];
@@ -225,6 +226,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       )}
       {playAndPouseAllowed && (
         <IconButton
+          className="playPouseButton"
           onClick={isPlaying ? handlePause : handlePlay}
           aria-label={isPlaying ? 'pause' : 'play'}
           size="large"

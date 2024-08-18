@@ -111,6 +111,7 @@ export interface ICarouselSettings {
   height: number;
   gap: number;
   backgroundColor: string;
+  padding: number;
   isInfinite: boolean;
   effects: string;
   autoplay: boolean;

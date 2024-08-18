@@ -22,6 +22,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     width,
     height,
     backgroundColor,
+    padding,
     effects,
     autoplay,
     slideDuration,
@@ -74,73 +75,83 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
             </Filter>
 
             <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'autoplay'}
-                name={'Autoplay'}
-                value={autoplay}
+              <NumberControl
+                id={'padding'}
+                name={'Padding'}
+                value={padding}
                 onChange={onInputValueChange}
+                min={0}
+                unit={'px'}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <NumberControl
+                id={'imagesCount'}
+                name={'Images count'}
+                value={imagesCount}
+                onChange={onInputValueChange}
+                min={1}
+                max={11}
+                step={2}
               />
             </Filter>
 
-            {autoplay && (
-              <Filter isLoading={isLoading}>
-                <NumberControl
-                  id={'delay'}
-                  name={'Play Delay'}
-                  value={slideDuration}
-                  onChange={onInputValueChange}
-                  min={2000}
-                  unit={'ms'}
-                />
-              </Filter>
-            )}
+            <Filter isLoading={isLoading}>
+              <SliderControl
+                id={'scale'}
+                name={'Slides scale %'}
+                value={scale}
+                onChange={onInputValueChange}
+                min={0.1}
+                max={2}
+                step={0.1}
+              />
+            </Filter>
 
             <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'playAndPouseAllowed'}
-                name={'Play / Pause'}
-                value={playAndPouseAllowed}
+              <NumberControl
+                id={'spaceBetween'}
+                name={'Space between'}
+                value={spaceBetween}
                 onChange={onInputValueChange}
+                min={-Infinity}
+                max={Infinity}
+                unit={'px'}
               />
             </Filter>
 
             {effects === 'coverflow' ? (
               <>
                 <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id={'scale'}
-                    name={'Slides scale %'}
-                    value={scale}
+                  <SwitchControl
+                    id={'playAndPouseAllowed'}
+                    name={'Play / Pause'}
+                    value={playAndPouseAllowed}
                     onChange={onInputValueChange}
-                    min={0.1}
-                    max={2}
-                    step={0.1}
                   />
                 </Filter>
 
                 <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'imagesCount'}
-                    name={'Images count'}
-                    value={imagesCount}
+                  <SwitchControl
+                    id={'autoplay'}
+                    name={'Autoplay'}
+                    value={autoplay}
                     onChange={onInputValueChange}
-                    min={1}
-                    max={11}
-                    step={2}
                   />
                 </Filter>
 
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'spaceBetween'}
-                    name={'Space between'}
-                    value={spaceBetween}
-                    onChange={onInputValueChange}
-                    min={-Infinity}
-                    max={Infinity}
-                    unit={'px'}
-                  />
-                </Filter>
+                {autoplay && (
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'delay'}
+                      name={'Time interval'}
+                      value={slideDuration}
+                      onChange={onInputValueChange}
+                      min={2000}
+                      unit={'ms'}
+                    />
+                  </Filter>
+                )}
               </>
             ) : effects === 'cards' ? (
               <>

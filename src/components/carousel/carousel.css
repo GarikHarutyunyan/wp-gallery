@@ -3,10 +3,6 @@
   background-size: cover;
 }
 
-.swiper-3d {
-  perspective: 2200px;
-}
-
 .autoplay-progress {
   position: absolute;
   bottom: 0;
@@ -62,3 +58,15 @@ swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal {
   object-fit: cover;
 }
 
+button.playPouseButton {
+  color: hsla(0, 0%, 100%, 0.8);
+}
+
+button.playPouseButton:hover {
+  color: #fff;
+}
+
+button.playPouseButton > * {
+  width: 50px;
+  height: 50px;
+}
