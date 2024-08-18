@@ -15,6 +15,7 @@ import './swiper-gallery.css';
 interface ISwiperGalleryProps {
   images: IImageDTO[];
   backgroundColor: string;
+  padding: number;
   loop: boolean;
   effects: any;
   autoplay: boolean;
@@ -25,6 +26,7 @@ interface ISwiperGalleryProps {
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   images,
   backgroundColor,
+  padding,
   loop,
   effects,
   autoplay,
@@ -107,6 +109,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
                 alt={image.title}
                 style={{
                   background: backgroundColor,
+                  padding: padding + "px",
                 }}
               />
             ) : (
@@ -116,6 +119,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
                 poster={image.medium_large.url}
                 style={{
                   background: backgroundColor,
+                  padding: padding + "px",
                 }}
                 className={'swiper-gallery__video'}
                 controls
