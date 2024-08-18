@@ -100,6 +100,7 @@ export interface ICubeSettings {
   width: number;
   height: number;
   backgroundColor: string;
+  padding: number;
   isInfinite: boolean;
   autoplay: boolean;
   slideDuration: number;

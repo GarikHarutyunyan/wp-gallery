@@ -13,6 +13,11 @@
   background-size: cover;
 }
 
+.reacg-gallery .swiper-cube .swiper-slide img,
+.reacg-gallery .swiper-cube .swiper-slide video {
+  box-sizing: border-box;
+}
+
 .reacg-gallery .swiper-3d {
   perspective: 2200px;
 }
