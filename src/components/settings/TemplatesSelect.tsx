@@ -22,10 +22,9 @@ const TemplatesSelect: React.FC = () => {
     : 'none';
 
   useLayoutEffect(() => {
-    if (template) {
+    if (template && template.template_id) {
       const {type, general, lightbox, masonry, mosaic, slideshow, thumbnails} =
         template;
-
       activeType !== type && type && changeType!(type);
       general && changeGeneralSettings(general);
       lightbox && changeLightboxSettings(lightbox);
