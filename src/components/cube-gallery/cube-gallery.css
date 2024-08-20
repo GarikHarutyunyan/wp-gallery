@@ -1,6 +1,5 @@
-.swiper-slide {
-  background-position: center;
-  background-size: cover;
+.swiper-cube {
+  overflow: visible;
 }
 
 .autoplay-progress {

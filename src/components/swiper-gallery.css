@@ -7,7 +7,14 @@
   height: 100%;
   width: 100%;
   overflow-x: clip;
+  overflow-y: visible;
 }
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+}
+
 .swiper-3d {
   perspective: 2200px;
 }
