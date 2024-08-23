@@ -14,12 +14,12 @@ import 'swiper/css/effect-flip';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import {Swiper, SwiperSlide} from 'swiper/react';
-
 import './swiper-gallery.css';
+
 interface ISwiperGalleryProps {
   images: IImageDTO[];
-  backgroundColor: string;
-  loop: boolean;
+  backgroundColor?: string;
+  loop?: boolean;
   effects: any;
   autoplay: boolean;
   delay: number;
@@ -136,7 +136,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       (videoRef.current as HTMLVideoElement).controls = true;
     }
   };
-
   return (
     <Swiper
       ref={swiperRef}

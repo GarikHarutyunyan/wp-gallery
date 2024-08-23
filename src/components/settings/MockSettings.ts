@@ -1,6 +1,7 @@
 import {
   Direction,
   HoverEffect,
+  ICardsSettings,
   ICarouselSettings,
   ICubeSettings,
   IGeneralSettings,
@@ -155,7 +156,6 @@ const carouselMockSettings: ICarouselSettings = {
   backgroundColor: '',
   padding: 0,
   isInfinite: true,
-  effects: 'coverflow',
   autoplay: false,
   slideDuration: 3000,
   playAndPouseAllowed: false,
@@ -166,11 +166,20 @@ const carouselMockSettings: ICarouselSettings = {
   shadow: true,
   shadowOffset: 20,
   shadowOpacity: 9,
-  perSlideOffset: 8,
-  rotateCard: false,
+};
+
+const cardsMockSettings: ICardsSettings = {
+  width: 600,
+  height: 600,
+  perSlideOffset: 30,
+  navigationButton: true,
+  playAndPouseAllowed: false,
+  autoplay: false,
+  slideDuration: 3000,
 };
 
 export {
+  cardsMockSettings,
   carouselMockSettings,
   cubeMockSettings,
   generalMockSettings,

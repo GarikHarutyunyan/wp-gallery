@@ -1,4 +1,4 @@
-.autoplay-progress {
+.reacg-gallery .autoplay-progress {
   --swiper-theme-color: hsla(0, 0%, 100%, 0.8);
   position: absolute;
   bottom: 0;
@@ -13,7 +13,7 @@
   color: var(--swiper-theme-color);
 }
 
-.autoplay-progress svg {
+.reacg-gallery .autoplay-progress svg {
   --progress: 0;
   position: absolute;
   left: 0;
@@ -29,8 +29,28 @@
   transform: rotate(-90deg);
 }
 
-.css-mf1cb5-MuiButtonBase-root-MuiIconButton-root {
-  position: absolute !important;
+.reacg-gallery
+  swiper-pagination
+  swiper-pagination-bullets
+  swiper-pagination-horizontal {
+  margin-top: 55px;
+}
+
+.reacg-gallery .lazy-load-image-background {
+  width: 100%;
+  height: 100%;
+}
+
+.reacg-gallery .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reacg-gallery button.playPouseButton {
+  color: hsla(0, 0%, 100%, 0.8);
+  position: absolute;
   height: 40px;
   width: 40px;
   top: 40%;
@@ -38,31 +58,11 @@
   z-index: 100;
 }
 
-swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal {
-  margin-top: 55px;
-}
-
-.lazy-load-image-background {
-  width: 100%;
-  height: 100%;
-}
-
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-button.playPouseButton {
-  color: hsla(0, 0%, 100%, 0.8);
-}
-
-button.playPouseButton:hover {
+.reacg-gallery button.playPouseButton:hover {
   color: #fff;
 }
 
-button.playPouseButton > * {
+.reacg-gallery button.playPouseButton > * {
   width: 50px;
   height: 50px;
 }

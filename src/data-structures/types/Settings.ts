@@ -113,7 +113,6 @@ export interface ICarouselSettings {
   backgroundColor: string;
   padding: number;
   isInfinite: boolean;
-  effects: string;
   autoplay: boolean;
   slideDuration: number;
   playAndPouseAllowed: boolean;
@@ -124,8 +123,15 @@ export interface ICarouselSettings {
   shadow: boolean;
   shadowOffset: number;
   shadowOpacity: number;
+}
+export interface ICardsSettings {
+  width: number;
+  height: number;
   perSlideOffset: number;
-  rotateCard: boolean;
+  navigationButton: boolean;
+  playAndPouseAllowed: boolean;
+  autoplay: boolean;
+  slideDuration: number;
 }
 
 export interface ISettingsDTO {
@@ -138,4 +144,5 @@ export interface ISettingsDTO {
   lightbox: ILightboxSettings;
   cube: ICubeSettings;
   carousel: ICarouselSettings;
+  cards: ICardsSettings;
 }

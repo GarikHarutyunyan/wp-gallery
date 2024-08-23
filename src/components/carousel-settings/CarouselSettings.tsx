@@ -23,15 +23,12 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     height,
     backgroundColor,
     padding,
-    effects,
     autoplay,
     slideDuration,
     playAndPouseAllowed,
     scale,
     imagesCount,
     spaceBetween,
-    rotateCard,
-    perSlideOffset,
   } = value as ICarouselSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -120,63 +117,38 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
               />
             </Filter>
 
-            {effects === 'coverflow' ? (
-              <>
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'playAndPouseAllowed'}
-                    name={'Play / Pause'}
-                    value={playAndPouseAllowed}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
+            <>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'playAndPouseAllowed'}
+                  name={'Play / Pause'}
+                  value={playAndPouseAllowed}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
 
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'autoplay'}
-                    name={'Autoplay'}
-                    value={autoplay}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'autoplay'}
+                  name={'Autoplay'}
+                  value={autoplay}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
 
-                {autoplay && (
-                  <Filter isLoading={isLoading}>
-                    <NumberControl
-                      id={'delay'}
-                      name={'Time interval'}
-                      value={slideDuration}
-                      onChange={onInputValueChange}
-                      min={2000}
-                      unit={'ms'}
-                    />
-                  </Filter>
-                )}
-              </>
-            ) : effects === 'cards' ? (
-              <>
+              {autoplay && (
                 <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'rotateCard'}
-                    name={'Rotate cards'}
-                    value={rotateCard}
+                  <NumberControl
+                    id={'delay'}
+                    name={'Time interval'}
+                    value={slideDuration}
                     onChange={onInputValueChange}
+                    min={2000}
+                    unit={'ms'}
                   />
                 </Filter>
-                <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id={'perSlideOffset'}
-                    name={'Per slide off set'}
-                    value={perSlideOffset}
-                    onChange={onInputValueChange}
-                    min={1}
-                    max={20}
-                  />
-                </Filter>
-              </>
-            ) : (
-              <div></div>
-            )}
+              )}
+            </>
           </Grid>
         }
       />

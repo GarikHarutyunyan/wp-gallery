@@ -1,62 +1,50 @@
 import {Box} from '@mui/material';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
-import {ICarouselSettings} from 'data-structures';
+import {ICardsSettings} from 'data-structures';
 import React, {useEffect, useState} from 'react';
+import {Autoplay, Navigation, Pagination} from 'swiper/modules';
 import {SwiperGallery} from '../SwiperGallery';
-import './carousel.css';
+type EffectTypes = 'coverflow' | 'cards' | 'creative';
 
-import {
-  Autoplay,
-  EffectCoverflow,
-  Navigation,
-  Pagination,
-  Thumbs,
-} from 'swiper/modules';
-
-interface ITCarouselProps {
+interface ITCardsProps {
   onClick?: (index: number) => void;
 }
 
-const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
+const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
   const {images} = useData();
-  const {carouselSettings: settings, wrapperRef} = useSettings();
+  const {cardsSettings: settings, wrapperRef} = useSettings();
   const {
-    backgroundColor,
-    padding,
-    isInfinite,
     autoplay,
     slideDuration,
     playAndPouseAllowed,
     width,
     height,
-    imagesCount,
-    spaceBetween,
-  } = settings as ICarouselSettings;
+    perSlideOffset,
+    navigationButton,
+  } = settings as ICardsSettings;
 
-  const effects = {
-    id: 1,
-    spaceBetween: spaceBetween,
-    slidesPerView: imagesCount,
-    centeredSlides: true,
-    effect: 'coverflow',
-    loopedSlides: 8,
-    coverflowEffect: {
-      rotate: 0,
-      depth: 1,
-      modifier: 0.1,
-      scale: 1.2,
-      slideShadows: true,
-      stretch: 0,
-    },
+  const selectedEffect = {
+    id: 2,
+    effect: 'cards',
+    modules: [Autoplay, Navigation, Pagination],
     navigation: true,
+    cardsEffect: {
+      rotate: true,
+      perSlideOffset: 81,
+      perSlideRotate: 21,
+    },
+    // lazy: {
+    //   loadOnTransitionStart: false,
+    //   loadPrevNext: true,
+    // },
 
-    modules: [EffectCoverflow, Pagination, Autoplay, Navigation, Thumbs],
+    // watchSlidesProgress: true,
+    // watchSlidesVisibility: true,
   };
-
+  const imagesCount = 1;
   const wrapper = wrapperRef.current;
-  const contWidth =
-    imagesCount * (width + ((imagesCount - 1) * spaceBetween) / imagesCount);
+  const contWidth = width;
   const [innerWidth, setInnerWidth] = useState<number>(
     wrapper?.clientWidth || contWidth
   );
@@ -72,6 +60,14 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, [wrapper?.clientWidth]);
+
+  const handleThumbnailClick = (index: number, swiperRef: any) => {
+    const swiper = swiperRef.current?.swiper;
+
+    if (swiper) {
+      swiper.slideToLoop(index);
+    }
+  };
 
   const handleSlideChange = (previusIndex: any, swiperRef: any) => {
     const swiper = swiperRef.current?.swiper;
@@ -120,30 +116,16 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     previusIndex.current = activeIndex;
   };
 
-  const handleThumbnailClick = (index: number, swiperRef: any) => {
-    const swiper = swiperRef.current?.swiper;
-
-    if (swiper) {
-      swiper.slideToLoop(index);
-    }
-  };
-  console.log(padding);
   return (
     <Box
       sx={{
-        width: `${containerWidth}px`,
-        height: `${containerHeight}px`,
+        width: 'auto',
+        height: 'auto',
         mx: 'auto',
-        background: backgroundColor,
-        boxSizing: 'border-box',
-        padding: `${padding}px`,
       }}
     >
       <SwiperGallery
-        key={effects.id}
-        effects={effects}
-        loop={isInfinite}
-        backgroundColor={backgroundColor}
+        effects={selectedEffect}
         images={images || []}
         autoplay={autoplay}
         delay={slideDuration}
@@ -151,11 +133,11 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         width={containerWidth}
         height={containerHeight}
         imagesCount={imagesCount}
-        handleSlideChange={handleSlideChange}
         handleThumbnailClick={handleThumbnailClick}
+        handleSlideChange={handleSlideChange}
       />
     </Box>
   );
 };
 
-export {Carousel};
+export {CardsGallery};
