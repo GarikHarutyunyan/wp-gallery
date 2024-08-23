@@ -225,7 +225,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       )}
       {playAndPouseAllowed && (
         <IconButton
-          className="playPouseButton"
+          className="playPauseButton"
           onClick={isPlaying ? handlePause : handlePlay}
           aria-label={isPlaying ? 'pause' : 'play'}
           size="large"
