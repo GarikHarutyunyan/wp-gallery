@@ -1,12 +1,9 @@
 import {
-  Direction,
+  GalleryType,
   HoverEffect,
-  ICarouselSettings,
-  ICubeSettings,
   IGeneralSettings,
   ILightboxSettings,
   IMasonrySettings,
-  IMosaicSettings,
   ISlideshowSettings,
   IThumbnailSettings,
   LightboxCaptionsPosition,
@@ -35,69 +32,26 @@ const thumbnailMockSettings: IThumbnailSettings = {
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
-  hoverEffect: HoverEffect.NONE,
+  hoverEffect: HoverEffect.BLUR,
   paginationType: PaginationType.SIMPLE,
 };
-
-const mosaicMockSettings: IMosaicSettings = {
-  width: 70,
-  direction: Direction.VERTICAL,
-  gap: 5,
-  backgroundColor: '',
-  padding: 5,
-  paddingColor: '',
-  rowHeight: 250,
-  columns: 5,
+const thumbnailMockSettings2: IThumbnailSettings = {
+  width: 200,
+  height: 250,
+  columns: 3,
+  gap: 10,
+  backgroundColor: 'White',
+  padding: 10,
+  paddingColor: 'Skyblue',
   borderRadius: 5,
-  titlePosition: TitlePosition.BOTTOM,
+  titlePosition: ThumbnailTitlePosition.BOTTOM,
   titleAlignment: TitleAlignment.LEFT,
   titleVisibility: TitleVisibility.NONE,
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
-  hoverEffect: HoverEffect.BLUR,
+  hoverEffect: HoverEffect.FLASH,
   paginationType: PaginationType.SIMPLE,
-};
-
-const masonryMockSettings: IMasonrySettings = {
-  width: 70,
-  gap: 5,
-  backgroundColor: '',
-  padding: 5,
-  paddingColor: '',
-  columns: 5,
-  borderRadius: 5,
-  titlePosition: TitlePosition.BOTTOM,
-  titleAlignment: TitleAlignment.LEFT,
-  titleVisibility: TitleVisibility.NONE,
-  titleFontFamily: 'Roboto',
-  titleColor: 'Black',
-  titleFontSize: 20,
-  hoverEffect: HoverEffect.BLUR,
-  paginationType: PaginationType.SIMPLE,
-};
-
-const slideshowMockSettings: ISlideshowSettings = {
-  width: 800,
-  height: 800,
-  isInfinite: false,
-  padding: 15,
-  autoplay: false,
-  slideDuration: 3000,
-  backgroundColor: '',
-  captionsPosition: LightboxCaptionsPosition.BOTTOM,
-  captionFontFamily: 'Roboto',
-  captionColor: 'White',
-  imageAnimation: LightboxImageAnimation.BLUR,
-  thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
-  thumbnailWidth: 80,
-  thumbnailHeight: 80,
-  thumbnailBorder: 2,
-  thumbnailBorderRadius: 20,
-  thumbnailBorderColor: 'white',
-  thumbnailPadding: 0,
-  thumbnailGap: 10,
-  isSlideshowAllowed: true,
 };
 
 const generalMockSettings: IGeneralSettings = {
@@ -138,43 +92,82 @@ const lightboxMockSettings: ILightboxSettings = {
   imageAnimation: LightboxImageAnimation.BLUR,
 };
 
-const cubeMockSettings: ICubeSettings = {
-  width: 300,
-  height: 300,
-  backgroundColor: '',
-  padding: 0,
+const slideshowMockSettings: ISlideshowSettings = {
+  width: 800,
+  height: 800,
   isInfinite: false,
+  padding: 15,
   autoplay: false,
   slideDuration: 3000,
-  shadow: true,
-};
-
-const carouselMockSettings: ICarouselSettings = {
-  width: 200,
-  height: 250,
-  gap: 20,
   backgroundColor: '',
-  padding: 0,
-  isInfinite: true,
-  autoplay: false,
-  slideDuration: 3000,
-  playAndPouseAllowed: false,
-  scale: 0.1,
-  imagesCount: 3,
-  spaceBetween: -10,
-  slideShadows: true,
-  shadow: true,
-  shadowOffset: 20,
-  shadowOpacity: 9,
+  captionsPosition: LightboxCaptionsPosition.BOTTOM,
+  captionFontFamily: 'Roboto',
+  captionColor: 'White',
+  imageAnimation: LightboxImageAnimation.BLUR,
+  thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
+  thumbnailWidth: 80,
+  thumbnailHeight: 80,
+  thumbnailBorder: 2,
+  thumbnailBorderRadius: 20,
+  thumbnailBorderColor: 'white',
+  thumbnailPadding: 0,
+  thumbnailGap: 10,
+  isSlideshowAllowed: true,
 };
 
-export {
-  carouselMockSettings,
-  cubeMockSettings,
-  generalMockSettings,
-  lightboxMockSettings,
-  masonryMockSettings,
-  mosaicMockSettings,
-  slideshowMockSettings,
-  thumbnailMockSettings,
+const masonryMockSettings: IMasonrySettings = {
+  width: 70,
+  gap: 5,
+  backgroundColor: '',
+  padding: 5,
+  paddingColor: '',
+  columns: 5,
+  borderRadius: 5,
+  titlePosition: TitlePosition.BOTTOM,
+  titleAlignment: TitleAlignment.LEFT,
+  titleVisibility: TitleVisibility.NONE,
+  titleFontFamily: 'Roboto',
+  titleColor: 'Black',
+  titleFontSize: 20,
+  hoverEffect: HoverEffect.BLUR,
+  paginationType: PaginationType.SIMPLE,
 };
+
+const template1 = {
+  id: '1',
+  name: 'Thumbnail Default',
+  type: GalleryType.THUMBNAILS,
+  thumbnails: thumbnailMockSettings,
+  general: generalMockSettings,
+  lightbox: lightboxMockSettings,
+};
+
+const template2 = {
+  id: '2',
+  name: 'Slideshow Default',
+  type: GalleryType.SLIDESHOW,
+  slideshow: slideshowMockSettings,
+};
+
+const template3 = {
+  id: '3',
+  name: 'Masonry Default',
+  type: GalleryType.MASONRY,
+  masonry: masonryMockSettings,
+};
+
+const template4 = {
+  id: '4',
+  name: 'Thumbnail Big Items',
+  type: GalleryType.THUMBNAILS,
+  thumbnails: thumbnailMockSettings2,
+  general: generalMockSettings,
+  lightbox: lightboxMockSettings,
+};
+
+const template5 = {
+  id: 'none',
+  name: 'None',
+};
+
+export {template1, template2, template3, template4, template5};

@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {useSettings} from 'components/settings';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {
   ILightboxSettings,
@@ -26,6 +27,8 @@ interface ILightboxSettingsProps {
 }
 
 const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
+  const {resetTemplate} = useTemplates();
+
   const {lightboxSettings: value, changeLightboxSettings: onChange} =
     useSettings();
   const {
@@ -58,6 +61,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
   } = value as ILightboxSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
+    resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
 

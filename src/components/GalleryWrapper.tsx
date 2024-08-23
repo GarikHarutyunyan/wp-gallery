@@ -1,3 +1,4 @@
+import {TemplatesProvider} from 'contexts/TemplatesContext';
 import React from 'react';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'yet-another-react-lightbox/styles.css';
@@ -12,9 +13,11 @@ const GalleryWrapper: React.FC = () => {
         margin: '0 auto',
       }}
     >
-      <SettingsProvider>
-        <GalleryWithSettings />
-      </SettingsProvider>
+      <TemplatesProvider>
+        <SettingsProvider>
+          <GalleryWithSettings />
+        </SettingsProvider>
+      </TemplatesProvider>
     </div>
   );
 };

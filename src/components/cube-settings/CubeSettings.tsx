@@ -1,7 +1,8 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {ColorControl, NumberControl, SwitchControl} from 'components/controls';
+import {ColorControl, NumberControl, SliderControl, SwitchControl} from 'components/controls';
 import {useSettings} from 'components/settings';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {ICubeSettings} from 'data-structures';
 import React, {ReactNode} from 'react';
@@ -12,11 +13,13 @@ interface ICubeSettingsProps {
 }
 
 const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
+  const {resetTemplate} = useTemplates();
   const {cubeSettings: value, changeCubeSettings: onChange} = useSettings();
   const {
     width,
     height,
     backgroundColor,
+    padding,
     isInfinite,
     autoplay,
     slideDuration,
@@ -24,6 +27,7 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
   } = value as ICubeSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
+    resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
 
@@ -69,6 +73,16 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                 name={'Background color'}
                 value={backgroundColor}
                 onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SliderControl
+                  id={'padding'}
+                  name="Padding (px)"
+                  min={0}
+                  max={50}
+                  value={padding}
+                  onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>

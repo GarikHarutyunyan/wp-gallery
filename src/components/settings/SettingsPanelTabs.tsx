@@ -3,7 +3,8 @@ import {Tab, Tabs, useMediaQuery, useTheme} from '@mui/material';
 import clsx from 'clsx';
 import {Align, Aligner} from 'core-components';
 import {GalleryType} from 'data-structures';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {TemplatesSelect} from './TemplatesSelect';
 import {useSettings} from './useSettings';
 
 interface ISettingsPanelTabsProps {
@@ -23,11 +24,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
   const [isReseting, setIsReseting] = useState(false);
   const {type} = useSettings();
   const showOnlyGalleryOptions: boolean =
-    type === GalleryType.SLIDESHOW ||
-    type === GalleryType.CUBE ||
-    type === GalleryType.CAROUSEL;
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    type === GalleryType.SLIDESHOW || type === GalleryType.CUBE || type === GalleryType.CAROUSEL;
 
   const save = async () => {
     setIsSaving(true);
@@ -40,6 +37,25 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
     await onReset();
     setIsReseting(false);
   };
+
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const updateIsMobile = () => {
+      const parentElement = document.querySelector('.reacg-preview');
+      if (parentElement) {
+        setIsMobile(parentElement && parentElement.getBoundingClientRect().width < 720);
+      }
+    };
+
+    // Initial check.
+    updateIsMobile();
+
+    // Add event listener to handle window resize.
+    window.addEventListener('resize', updateIsMobile);
+
+    // Cleanup event listener on component unmount.
+    return () => window.removeEventListener('resize', updateIsMobile);
+  }, []);
 
   return (
     <Aligner style={{flexDirection: isMobile ? 'column-reverse' : 'row'}}>
@@ -57,6 +73,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         ) : null}
       </Tabs>
       <Aligner align={Align.END}>
+        <TemplatesSelect />
         <LoadingButton
           loading={isSaving}
           loadingPosition={'center'}

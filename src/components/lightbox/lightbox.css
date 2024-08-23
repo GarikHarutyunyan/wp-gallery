@@ -16,6 +16,10 @@
     z-index: 1000000;
 }
 
+.reacg-lightbox .yarl__toolbar {
+    z-index: 1;
+}
+
 .reacg-slideshow .yarl__toolbar {
     z-index: 1;
     top: auto;
@@ -153,4 +157,12 @@
 .reacg-lightbox .yarl__thumbnails_thumbnail img {
     -o-object-fit: cover;
     object-fit: cover;
+}
+
+.reacg-lightbox button,
+.reacg-lightbox button:hover,
+.reacg-lightbox button:focus,
+.reacg-lightbox button:active,
+.reacg-lightbox button:visited {
+    background: none !important;
 }

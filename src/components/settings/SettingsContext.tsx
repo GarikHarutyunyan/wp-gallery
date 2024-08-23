@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {useAppInfo} from 'contexts/AppInfoContext';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {
   GalleryType,
@@ -15,6 +16,7 @@ import {
 } from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useLayoutEffect, useRef, useState} from 'react';
+import {TypeUtils} from 'utils';
 import {
   carouselMockSettings,
   cubeMockSettings,
@@ -33,6 +35,7 @@ import './settings-context.css';
 
 const SettingsContext = React.createContext<{
   type?: GalleryType;
+  changeType?: (type: GalleryType) => void;
   generalSettings?: IGeneralSettings;
   thumbnailSettings?: IThumbnailSettings;
   mosaicSettings?: IMosaicSettings;
@@ -54,7 +57,8 @@ const SettingsContext = React.createContext<{
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
-
+  const {template, initTemplate, changeTemplate, resetTemplate} =
+    useTemplates();
   const {galleryId, baseUrl, nonce} = useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
@@ -99,6 +103,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setLightboxSettings(newSettings.lightbox);
       setCubeSettings(newSettings.cube || cubeMockSettings);
       setCarouselSettings(newSettings.carousel || carouselMockSettings);
+      initTemplate?.(
+        newSettings?.template_id as string,
+        newSettings?.title as string
+      );
       setIsLoading(false);
     } else {
       setType(GalleryType.THUMBNAILS);
@@ -117,31 +125,35 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     getData();
   }, []);
 
+  const changeType = async (newType: GalleryType) => {
+    const fetchUrl: string | undefined = baseUrl
+      ? baseUrl + 'options/' + galleryId
+      : undefined;
+
+    if (fetchUrl) {
+      setIsLoading(true);
+      const settings: ISettingsDTO = {
+        type: newType,
+      } as ISettingsDTO;
+
+      try {
+        const response = await axios.post(fetchUrl, settings, {
+          headers: {'X-WP-Nonce': nonce},
+        });
+        const newType: GalleryType = response.data.type;
+
+        setType(newType);
+      } catch (error) {
+        console.error(error);
+      }
+
+      setIsLoading(false);
+    }
+  };
+
   const onTypeChange = async (newType: GalleryType): Promise<void> => {
-    setType(newType);
-    // const fetchUrl: string | undefined = baseUrl
-    //   ? baseUrl + 'options/' + galleryId
-    //   : undefined;
-
-    // if (fetchUrl) {
-    //   setIsLoading(true);
-    //   const settings: ISettingsDTO = {
-    //     type: newType,
-    //   } as ISettingsDTO;
-
-    //   try {
-    //     const response = await axios.post(fetchUrl, settings, {
-    //       headers: {'X-WP-Nonce': nonce},
-    //     });
-    //     const newType: GalleryType = response.data.type;
-
-    //     setType(newType);
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-
-    //   setIsLoading(false);
-    // }
+    await changeType(newType);
+    resetTemplate?.();
   };
 
   const onSave = async (): Promise<void> => {
@@ -160,15 +172,12 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         cube: cubeSettings,
         carousel: carouselSettings,
         slideshow: slideshowSettings,
+        template_id:
+          template?.template_id == 'none' ? '' : template?.template_id,
       } as ISettingsDTO;
 
-      const validSettings: ISettingsDTO = Object.entries(settings).reduce(
-        (accumulator, [key, value]) => ({...accumulator, [key]: value || ''}),
-        {}
-      ) as ISettingsDTO;
-
       try {
-        const response = await axios.post(fetchUrl, validSettings, {
+        const response = await axios.post(fetchUrl, settings, {
           headers: {'X-WP-Nonce': nonce},
         });
         const newSettings: ISettingsDTO = response.data;
@@ -181,6 +190,12 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
+        initTemplate?.(
+          (TypeUtils.isNumber(newSettings?.template_id)
+            ? newSettings?.template_id
+            : 'none') as string,
+          newSettings?.title as string
+        );
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -229,6 +244,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
+        changeTemplate?.(newSettings.template_id as string);
         enqueueSnackbar(successMessage, {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -262,6 +278,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     <SettingsContext.Provider
       value={{
         type,
+        changeType,
         thumbnailSettings,
         mosaicSettings,
         masonrySettings,

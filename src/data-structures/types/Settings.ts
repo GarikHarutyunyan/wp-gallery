@@ -100,6 +100,7 @@ export interface ICubeSettings {
   width: number;
   height: number;
   backgroundColor: string;
+  padding: number;
   isInfinite: boolean;
   autoplay: boolean;
   slideDuration: number;
@@ -136,4 +137,6 @@ export interface ISettingsDTO {
   lightbox: ILightboxSettings;
   cube: ICubeSettings;
   carousel: ICarouselSettings;
+  template_id?: number | string;
+  title?: string;
 }

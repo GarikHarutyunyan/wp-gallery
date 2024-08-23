@@ -1,7 +1,7 @@
 import {Box} from '@mui/material';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
-import {SwiperGallery} from 'components/SwiperGallery';
+import {SwiperGallery} from 'components/swiper-gallery/SwiperGallery';
 import {ICubeSettings} from 'data-structures';
 import React, {useEffect, useState} from 'react';
 import {Autoplay, EffectCube} from 'swiper/modules';
@@ -27,6 +27,7 @@ const CubeGallery: React.FC = () => {
     height,
     isInfinite,
     backgroundColor,
+    padding,
     autoplay,
     slideDuration,
     shadow,
@@ -68,7 +69,8 @@ const CubeGallery: React.FC = () => {
         key={+isInfinite}
         effects={effects}
         loop={isInfinite}
-        backgroundColor={backgroundColor}
+        backgroundColor={backgroundColor || 'White'}
+        padding={padding}
         images={images || []}
         autoplay={autoplay}
         delay={slideDuration}

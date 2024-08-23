@@ -33,7 +33,7 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
             title={title}
             value={value as GalleryType}
             isSelected={type === value}
-            onClick={onChange}
+            onClick={type !== value ? onChange : undefined}
           />
         );
       })}
