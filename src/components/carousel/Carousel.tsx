@@ -3,9 +3,6 @@ import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {ICarouselSettings} from 'data-structures';
 import React, {useEffect, useState} from 'react';
-import {SwiperGallery} from '../SwiperGallery';
-import './carousel.css';
-
 import {
   Autoplay,
   EffectCoverflow,
@@ -13,6 +10,8 @@ import {
   Pagination,
   Thumbs,
 } from 'swiper/modules';
+import {SwiperGallery} from '../SwiperGallery';
+import './carousel.css';
 
 interface ITCarouselProps {
   onClick?: (index: number) => void;
@@ -50,11 +49,19 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       stretch: 0,
     },
     navigation: true,
+    // preloadImages: false,
+    // lazy: {
+    //   loadOnTransitionStart: false,
+    //   loadPrevNext: true,
+    // },
+
+    // watchSlidesProgress: true,
+    // watchSlidesVisibility: true,
 
     modules: [EffectCoverflow, Pagination, Autoplay, Navigation, Thumbs],
   };
-
   const wrapper = wrapperRef.current;
+  // Count the container width depends on main image width, images count and space between images.
   const contWidth =
     imagesCount * (width + ((imagesCount - 1) * spaceBetween) / imagesCount);
   const [innerWidth, setInnerWidth] = useState<number>(
@@ -127,7 +134,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       swiper.slideToLoop(index);
     }
   };
-  console.log(padding);
+
   return (
     <Box
       sx={{
@@ -135,7 +142,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         height: `${containerHeight}px`,
         mx: 'auto',
         background: backgroundColor,
-        boxSizing: 'border-box',
         padding: `${padding}px`,
       }}
     >

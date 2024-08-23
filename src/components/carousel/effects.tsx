@@ -1,5 +1,4 @@
 import {useSettings} from 'components/settings';
-import {ICarouselSettings} from 'data-structures';
 import {
   Autoplay,
   EffectCreative,
@@ -10,7 +9,6 @@ import {
 
 export const useSwiperEffects = () => {
   const {carouselSettings: settings} = useSettings();
-  const {spaceBetween, imagesCount} = settings as ICarouselSettings;
 
   const creative = {
     id: 3,

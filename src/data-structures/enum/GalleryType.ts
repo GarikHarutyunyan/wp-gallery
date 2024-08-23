@@ -7,7 +7,6 @@ export enum GalleryType {
   SLIDESHOW = 'slideshow',
   CUBE = 'cube',
   CAROUSEL = 'carousel',
-  CARDS = 'cards',
 }
 
 export const GalleryTypeOptions: ISelectOption[] = [
@@ -17,5 +16,4 @@ export const GalleryTypeOptions: ISelectOption[] = [
   {value: GalleryType.SLIDESHOW, title: 'Slideshow'},
   {value: GalleryType.CUBE, title: 'Cube'},
   {value: GalleryType.CAROUSEL, title: 'Carousel'},
-  {value: GalleryType.CARDS, title: 'Cards'},
 ];

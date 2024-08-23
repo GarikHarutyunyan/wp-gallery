@@ -3,7 +3,6 @@ import {useAppInfo} from 'contexts/AppInfoContext';
 import {Section} from 'core-components';
 import {
   GalleryType,
-  ICardsSettings,
   ICarouselSettings,
   ICubeSettings,
   IGeneralSettings,
@@ -17,7 +16,6 @@ import {
 import {useSnackbar} from 'notistack';
 import React, {ReactNode, useLayoutEffect, useRef, useState} from 'react';
 import {
-  cardsMockSettings,
   carouselMockSettings,
   cubeMockSettings,
   generalMockSettings,
@@ -43,7 +41,6 @@ const SettingsContext = React.createContext<{
   lightboxSettings?: ILightboxSettings;
   cubeSettings?: ICubeSettings;
   carouselSettings?: ICarouselSettings;
-  cardsSettings?: ICardsSettings;
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
@@ -52,7 +49,6 @@ const SettingsContext = React.createContext<{
   changeLightboxSettings?: any;
   changeCubeSettings?: any;
   changeCarouselSettings?: any;
-  changeCardsSettings?: any;
   wrapperRef?: any;
 }>({});
 
@@ -70,7 +66,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
   const [cubeSettings, setCubeSettings] = useState<ICubeSettings>();
   const [carouselSettings, setCarouselSettings] = useState<ICarouselSettings>();
-  const [cardsSettings, setCardsSettings] = useState<ICardsSettings>();
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
@@ -104,7 +99,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setLightboxSettings(newSettings.lightbox);
       setCubeSettings(newSettings.cube || cubeMockSettings);
       setCarouselSettings(newSettings.carousel || carouselMockSettings);
-      setCardsSettings(newSettings.cards || cardsMockSettings);
       setIsLoading(false);
     } else {
       setType(GalleryType.THUMBNAILS);
@@ -116,7 +110,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setLightboxSettings(lightboxMockSettings);
       setCubeSettings(cubeMockSettings);
       setCarouselSettings(carouselMockSettings);
-      setCardsSettings(cardsMockSettings);
     }
   };
 
@@ -166,7 +159,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         masonry: masonrySettings,
         cube: cubeSettings,
         carousel: carouselSettings,
-        cards: cardsSettings,
         slideshow: slideshowSettings,
       } as ISettingsDTO;
 
@@ -189,7 +181,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
-        setCardsSettings(newSettings.cards);
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -238,7 +229,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
-        setCardsSettings(newSettings.cards);
         enqueueSnackbar(successMessage, {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -280,7 +270,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         lightboxSettings,
         cubeSettings,
         carouselSettings,
-        cardsSettings,
         changeGeneralSettings: setGeneralSettings,
         changeThumbnailSettings: setThumbnailSettings,
         changeMosaicSettings: setMosaicSettings,
@@ -289,7 +278,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeLightboxSettings: setLightboxSettings,
         changeCubeSettings: setCubeSettings,
         changeCarouselSettings: setCarouselSettings,
-        changeCardsSettings: setCardsSettings,
         wrapperRef,
       }}
     >
