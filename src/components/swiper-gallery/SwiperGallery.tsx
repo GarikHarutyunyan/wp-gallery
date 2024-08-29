@@ -2,7 +2,6 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import IconButton from '@mui/material/IconButton';
 import {IImageDTO, ImageType} from 'data-structures';
-import useConfigureSwiper from 'hooks/useConfigureSwiper';
 import React, {useEffect, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import 'swiper/css';
@@ -15,6 +14,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import './swiper-gallery.css';
+import useConfigureSwiper from './useConfigureSwiper';
 
 interface ISwiperGalleryProps {
   images: IImageDTO[];
@@ -45,32 +45,18 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   height,
   handleSlideChange,
   handleThumbnailClick,
+  imagesCount,
 }) => {
-  const progressCircle = useRef<SVGSVGElement>(null);
-  const progressContent = useRef<HTMLSpanElement>(null);
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isDragging = useRef<boolean>(false);
   const key = effects.effect + 'Effect';
   const previusIndex = useRef<number>(-1);
-  const widthChange = useRef<boolean>(false);
-  const prevActiveSlideDimensions = useRef({width: 0, height: 0});
-
   useConfigureSwiper(swiperRef, key);
-  const onAutoplayTimeLeft = (swiper: any, time: number, progress: number) => {
-    if (progressCircle.current && progressContent.current) {
-      progressCircle.current.style.setProperty(
-        '--progress',
-        (1 - progress).toString()
-      );
-      progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
-    }
-  };
+
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
-
-    // Select the container
 
     if (swiper?.autoplay) {
       swiper.autoplay.stop();
@@ -136,21 +122,21 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       (videoRef.current as HTMLVideoElement).controls = true;
     }
   };
+
   return (
     <Swiper
       ref={swiperRef}
       autoplay={{delay, stopOnLastSlide: true, pauseOnMouseEnter: true}}
-      onAutoplayTimeLeft={onAutoplayTimeLeft}
       grabCursor={true}
       loop={loop}
       pagination={false}
-      slidesPerView={'auto'}
       className={className}
       onSlideChange={() => {
         if (key === 'coverflowEffect' && handleSlideChange) {
           handleSlideChange(previusIndex, swiperRef);
         }
       }}
+      loopAdditionalSlides={imagesCount}
       {...effects}
       style={
         key === 'cardsEffect' || key === 'flipEffect' || key === 'cubeEffect'
@@ -163,7 +149,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     >
       {images?.map((image: IImageDTO, index) => {
         const isVideo: boolean = image.type === ImageType.VIDEO;
-        const visible = document.querySelector('.swiper-slide-visible');
 
         return (
           <SwiperSlide
@@ -180,8 +165,8 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
                   (
                     key !== 'coverflowEffect'
                       ? image.original.url
-                      : index < 4 ||
-                        (index >= images.length - 5 &&
+                      : index < (imagesCount || 0) ||
+                        (index >= images.length - (imagesCount || 0) &&
                           key === 'coverflowEffect')
                   )
                     ? image.original.url
@@ -215,14 +200,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           </SwiperSlide>
         );
       })}
-      {(autoplay || isPlaying) && playAndPouseAllowed && (
-        <div className="autoplay-progress" slot="container-end">
-          <svg viewBox="0 0 48 48" ref={progressCircle}>
-            <circle cx="24" cy="24" r="20"></circle>
-          </svg>
-          <span ref={progressContent}></span>
-        </div>
-      )}
+
       {playAndPouseAllowed && (
         <IconButton
           className="playPouseButton"

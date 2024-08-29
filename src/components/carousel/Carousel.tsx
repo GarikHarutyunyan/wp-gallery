@@ -10,7 +10,7 @@ import {
   Pagination,
   Thumbs,
 } from 'swiper/modules';
-import {SwiperGallery} from '../SwiperGallery';
+import {SwiperGallery} from '../swiper-gallery/SwiperGallery';
 import './carousel.css';
 
 interface ITCarouselProps {
@@ -23,7 +23,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const {
     backgroundColor,
     padding,
-    isInfinite,
     autoplay,
     slideDuration,
     playAndPouseAllowed,
@@ -49,19 +48,9 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       stretch: 0,
     },
     navigation: true,
-    // preloadImages: false,
-    // lazy: {
-    //   loadOnTransitionStart: false,
-    //   loadPrevNext: true,
-    // },
-
-    // watchSlidesProgress: true,
-    // watchSlidesVisibility: true,
-
     modules: [EffectCoverflow, Pagination, Autoplay, Navigation, Thumbs],
   };
   const wrapper = wrapperRef.current;
-  // Count the container width depends on main image width, images count and space between images.
   const contWidth =
     imagesCount * (width + ((imagesCount - 1) * spaceBetween) / imagesCount);
   const [innerWidth, setInnerWidth] = useState<number>(
@@ -70,7 +59,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const ratio: number = contWidth / height;
   const containerWidth: number = Math.min(innerWidth, contWidth);
   const containerHeight: number = containerWidth / ratio;
-
+  let boxMargin;
   useEffect(() => {
     const handleResize = () => {
       setInnerWidth(wrapper?.clientWidth || contWidth);
@@ -82,6 +71,10 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
 
   const handleSlideChange = (previusIndex: any, swiperRef: any) => {
     const swiper = swiperRef.current?.swiper;
+    const secondarySlide = document.querySelector(
+      '.swiper-slide-visible'
+    ) as HTMLElement;
+    console.log(secondarySlide);
     const activeIndex = swiper.realIndex;
     const loadImagesInRange = (startIndex: number, endIndex: number) => {
       for (let i = startIndex; i <= endIndex; i++) {
@@ -134,7 +127,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       swiper.slideToLoop(index);
     }
   };
-
+  console.log('changeSlide');
   return (
     <Box
       sx={{
@@ -148,7 +141,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       <SwiperGallery
         key={effects.id}
         effects={effects}
-        loop={isInfinite}
+        loop={true}
         backgroundColor={backgroundColor}
         images={images || []}
         autoplay={autoplay}

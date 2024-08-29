@@ -139,11 +139,11 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
               {autoplay && (
                 <Filter isLoading={isLoading}>
                   <NumberControl
-                    id={'delay'}
+                    id={'slideDuration'}
                     name={'Time interval'}
                     value={slideDuration}
                     onChange={onInputValueChange}
-                    min={2000}
+                    min={100}
                     unit={'ms'}
                   />
                 </Filter>
