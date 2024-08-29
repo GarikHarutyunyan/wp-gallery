@@ -110,21 +110,14 @@ export interface ICubeSettings {
 export interface ICarouselSettings {
   width: number;
   height: number;
-  gap: number;
-
   backgroundColor: string;
   padding: number;
-  isInfinite: boolean;
   autoplay: boolean;
   slideDuration: number;
   playAndPouseAllowed: boolean;
   scale: number;
   imagesCount: number;
   spaceBetween: number;
-  slideShadows: boolean;
-  shadow: boolean;
-  shadowOffset: number;
-  shadowOpacity: number;
 }
 
 export interface ISettingsDTO {

@@ -10,7 +10,7 @@ import {
   Pagination,
   Thumbs,
 } from 'swiper/modules';
-import {SwiperGallery} from '../SwiperGallery';
+import {SwiperGallery} from '../swiper-gallery/SwiperGallery';
 import './carousel.css';
 
 interface ITCarouselProps {
@@ -23,7 +23,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const {
     backgroundColor,
     padding,
-    isInfinite,
     autoplay,
     slideDuration,
     playAndPouseAllowed,
@@ -31,6 +30,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     height,
     imagesCount,
     spaceBetween,
+    scale,
   } = settings as ICarouselSettings;
 
   const effects = {
@@ -44,20 +44,11 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       rotate: 0,
       depth: 1,
       modifier: 0.1,
-      scale: 1.2,
+      scale: scale,
       slideShadows: true,
       stretch: 0,
     },
     navigation: true,
-    // preloadImages: false,
-    // lazy: {
-    //   loadOnTransitionStart: false,
-    //   loadPrevNext: true,
-    // },
-
-    // watchSlidesProgress: true,
-    // watchSlidesVisibility: true,
-
     modules: [EffectCoverflow, Pagination, Autoplay, Navigation, Thumbs],
   };
   const wrapper = wrapperRef.current;
@@ -82,6 +73,9 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
 
   const handleSlideChange = (previusIndex: any, swiperRef: any) => {
     const swiper = swiperRef.current?.swiper;
+    const secondarySlide = document.querySelector(
+      '.swiper-slide-visible'
+    ) as HTMLElement;
     const activeIndex = swiper.realIndex;
     const loadImagesInRange = (startIndex: number, endIndex: number) => {
       for (let i = startIndex; i <= endIndex; i++) {
@@ -148,7 +142,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       <SwiperGallery
         key={effects.id}
         effects={effects}
-        loop={isInfinite}
+        loop={true}
         backgroundColor={backgroundColor}
         images={images || []}
         autoplay={autoplay}

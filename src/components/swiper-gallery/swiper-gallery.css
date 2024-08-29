@@ -1,4 +1,78 @@
-.swiper-gallery__video {
+.reacg-gallery .swiper-gallery__video {
     width: 100%;
     height: 100%;
+}
+.reacg-gallery .reacg-gallery-wrapper {
+  margin: 0px auto;
+  margin-bottom: 32px !important;
+  max-width: 100%;
+}
+.reacg-gallery .swiper {
+  height: 100%;
+  width: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.reacg-gallery .swiper-slide {
+  background-position: center;
+  background-size: cover;
+}
+
+.reacg-gallery .swiper-3d {
+  perspective: 2200px;
+}
+
+.reacg-gallery .swiper-gallery__video {
+  width: 100%;
+  height: 100%;
+}
+.reacg-gallery .swiper-button-next {
+  color: hsla(0, 0%, 100%, 0.8);
+  width: 60px;
+  height: 60px;
+}
+
+.reacg-gallery .swiper-button-prev {
+  color: hsla(0, 0%, 100%, 0.8);
+  width: 60px;
+  height: 60px;
+}
+.reacg-gallery .swiper-button-next:after,
+.swiper-rtl .swiper-button-prev:after {
+  font-size: 26px;
+
+  font-weight: bolder;
+}
+.reacg-gallery .swiper-button-prev:after,
+.swiper-rtl .swiper-button-next:after {
+  font-size: 26px;
+
+  font-weight: bolder;
+}
+
+.reacg-gallery .swiper-button-next:hover {
+  color: #fff;
+}
+
+.reacg-gallery .swiper-button-prev:hover {
+  color: #fff;
+}
+
+.reacg-gallery .swiper-container {
+  display: flex;
+  align-items: center; /* Center slides vertically */
+}
+
+.reacg-gallery .swiper-wrapper {
+  display: flex;
+  align-items: center; /* Center slides vertically */
+}
+
+.reacg-gallery .custom-width {
+  width: var(--custom-width) !important;
+}
+.reacg-gallery .default-slide {
+  width: auto; /* or any default width */
+  height: auto; /* or any default height */
 }

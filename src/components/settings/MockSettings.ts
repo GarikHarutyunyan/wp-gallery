@@ -152,20 +152,14 @@ const cubeMockSettings: ICubeSettings = {
 const carouselMockSettings: ICarouselSettings = {
   width: 200,
   height: 250,
-  gap: 20,
   backgroundColor: '',
   padding: 0,
-  isInfinite: true,
   autoplay: false,
   slideDuration: 3000,
   playAndPouseAllowed: false,
   scale: 0.1,
   imagesCount: 3,
   spaceBetween: -10,
-  slideShadows: true,
-  shadow: true,
-  shadowOffset: 20,
-  shadowOpacity: 9,
 };
 
 export {
