@@ -14,11 +14,13 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import './swiper-gallery.css';
+
 import useConfigureSwiper from './useConfigureSwiper';
 
 interface ISwiperGalleryProps {
   images: IImageDTO[];
   backgroundColor?: string;
+  padding?: number;
   loop?: boolean;
   effects: any;
   autoplay: boolean;
@@ -30,11 +32,13 @@ interface ISwiperGalleryProps {
   imagesCount?: number;
   handleSlideChange?: any;
   handleThumbnailClick?: any;
+  scale?: any;
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   images,
   backgroundColor,
+  padding,
   loop,
   effects,
   autoplay,
@@ -46,13 +50,16 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   handleSlideChange,
   handleThumbnailClick,
   imagesCount,
+  scale,
 }) => {
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
+  const [paddingTop, setPaddingTop] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isDragging = useRef<boolean>(false);
   const key = effects.effect + 'Effect';
   const previusIndex = useRef<number>(-1);
+
   useConfigureSwiper(swiperRef, key);
 
   useEffect(() => {
@@ -62,6 +69,22 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       swiper.autoplay.stop();
     }
   }, []);
+
+  useEffect(() => {
+    const swiper = swiperRef.current?.swiper;
+    const scale_decimal = scale === 2 ? '10' : (scale + '').split('.')[1];
+
+    let paddingTop =
+      scale > 1
+        ? (((parseInt(scale_decimal) *
+            (swiper.slidesEl.childNodes[0].clientHeight || 0)) /
+            100) *
+            Math.ceil((imagesCount || 0) / 2)) /
+          2
+        : 0;
+    console.log(swiper.slidesEl.childNodes[0].clientHeight);
+    setPaddingTop(paddingTop);
+  }, [scale, height, width, imagesCount, padding]);
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
@@ -131,18 +154,25 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       loop={loop}
       pagination={false}
       className={className}
+      loopAdditionalSlides={
+        Math.floor((images.length - (imagesCount || 0)) / 2) - 1
+      }
       onSlideChange={() => {
         if (key === 'coverflowEffect' && handleSlideChange) {
           handleSlideChange(previusIndex, swiperRef);
         }
       }}
-      loopAdditionalSlides={imagesCount}
       {...effects}
       style={
-        key === 'cardsEffect' || key === 'flipEffect' || key === 'cubeEffect'
+        key === 'cardsEffect' || key === 'cubeEffect'
           ? {
               width,
               height,
+            }
+          : key === 'coverflowEffect'
+          ? {
+              paddingTop: `${paddingTop}px`,
+              paddingBottom: `${paddingTop}px`,
             }
           : {}
       }
@@ -152,6 +182,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
         return (
           <SwiperSlide
+            key={index}
             onClick={() => {
               if (key === 'coverflowEffect' && handleSlideChange) {
                 handleThumbnailClick(index, swiperRef);
@@ -180,7 +211,8 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
                 className="lazy"
                 alt={image.title}
                 style={{
-                  background: key !== 'coverflow' ? backgroundColor : '',
+                  background: key !== 'coverflowEffect' ? backgroundColor : '',
+                  padding: key !== 'coverflowEffect' ? padding + 'px' : 0,
                 }}
               />
             ) : (
@@ -189,7 +221,8 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
                 src={image.original.url}
                 poster={image.medium_large.url}
                 style={{
-                  background: backgroundColor,
+                  background: key !== 'coverflowEffect' ? backgroundColor : '',
+                  padding: key !== 'coverflowEffect' ? padding + 'px' : 0,
                 }}
                 className={'swiper-gallery__video'}
                 controls
@@ -203,7 +236,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
       {playAndPouseAllowed && (
         <IconButton
-          className="playPouseButton"
+          className="playPauseButton"
           onClick={isPlaying ? handlePause : handlePlay}
           aria-label={isPlaying ? 'pause' : 'play'}
           size="large"
@@ -220,3 +253,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 };
 
 export {SwiperGallery};
+function uselayouteffect(arg0: () => void, arg1: any[]) {
+  throw new Error('Function not implemented.');
+}
