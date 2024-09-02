@@ -230,7 +230,7 @@ module.exports = function (webpackEnv) {
     //       (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
     // },
     output: {
-      path: 'C:/wamp64/www/wordpress/wp-content/plugins/gallery/assets/js', //path.resolve(__dirname, 'build'),
+      path: 'C:/xampp/htdocs/wordpress/wp-content/plugins/regallery/assets/js', //path.resolve(__dirname, 'build'),
       filename: 'wp-gallery.js', // Change this to your desired filename
       publicPath: '/',
     },

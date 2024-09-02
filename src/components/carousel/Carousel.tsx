@@ -39,13 +39,12 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     slidesPerView: imagesCount,
     centeredSlides: true,
     effect: 'coverflow',
-    loopedSlides: 8,
     coverflowEffect: {
       rotate: 0,
       depth: 1,
       modifier: 0.1,
       scale: scale,
-      slideShadows: true,
+      slideShadows: false,
       stretch: 0,
     },
     navigation: true,
@@ -137,6 +136,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         mx: 'auto',
         background: backgroundColor,
         padding: `${padding}px`,
+        boxSizing: 'border-box',
       }}
     >
       <SwiperGallery
@@ -153,6 +153,8 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         imagesCount={imagesCount}
         handleSlideChange={handleSlideChange}
         handleThumbnailClick={handleThumbnailClick}
+        padding={padding}
+        scale={scale}
       />
     </Box>
   );

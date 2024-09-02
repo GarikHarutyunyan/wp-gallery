@@ -1,3 +1,6 @@
+.reacg-gallery .swiper-coverflow {
+  box-sizing: border-box;
+}
 .reacg-gallery .autoplay-progress {
   --swiper-theme-color: hsla(0, 0%, 100%, 0.8);
   position: absolute;
