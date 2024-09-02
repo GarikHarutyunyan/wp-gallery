@@ -63,14 +63,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
-
-    if (swiper?.autoplay) {
-      swiper.autoplay.stop();
-    }
-  }, []);
-
-  useEffect(() => {
-    const swiper = swiperRef.current?.swiper;
     const scale_decimal = scale === 2 ? '10' : (scale + '').split('.')[1];
 
     let paddingTop =
@@ -86,7 +78,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
-
     if (autoplay && swiper?.autoplay) {
       swiper.autoplay.start();
       setIsPlaying(true);
@@ -95,15 +86,11 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       swiper.autoplay.stop();
       setIsPlaying(false);
     }
-
-    if (!autoplay) {
-      swiper.autoplay.stop();
-    }
   }, [autoplay, playAndPouseAllowed]);
 
   const handlePlay = () => {
     const swiper = swiperRef.current?.swiper;
-    if (swiper?.autoplay) {
+    if (autoplay && swiper?.autoplay) {
       swiper.autoplay.start();
       setIsPlaying(true);
     }
@@ -111,7 +98,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
   const handlePause = () => {
     const swiper = swiperRef.current?.swiper;
-    if (swiper?.autoplay) {
+    if (!autoplay && swiper?.autoplay) {
       swiper.autoplay.stop();
       setIsPlaying(false);
     }
@@ -143,18 +130,18 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       (videoRef.current as HTMLVideoElement).controls = true;
     }
   };
-
+  // const loopAdditionalSlides = Math.floor((images.length - (imagesCount || 0)) / 2) > 1 ? Math.floor((images.length - (imagesCount || 0)) / 2) : 0;
+  // const loopAdditionalSlides = Math.floor(images.length / 4) > 1 ? Math.floor(images.length / 4) : 0;
   return (
     <Swiper
+        key={imagesCount}
       ref={swiperRef}
-      autoplay={{delay, stopOnLastSlide: true, pauseOnMouseEnter: true}}
+      autoplay={autoplay ? {delay, stopOnLastSlide: true, pauseOnMouseEnter: true} : false}
       grabCursor={true}
       loop={loop}
       pagination={false}
       className={className}
-      loopAdditionalSlides={
-        Math.floor((images.length - (imagesCount || 0)) / 2) - 1
-      }
+      loopAdditionalSlides={0}
       onSlideChange={() => {
         if (key === 'coverflowEffect' && handleSlideChange) {
           handleSlideChange(previusIndex, swiperRef);
