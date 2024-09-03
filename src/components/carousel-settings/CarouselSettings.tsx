@@ -25,7 +25,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     padding,
     autoplay,
     slideDuration,
-    playAndPouseAllowed,
+    playAndPauseAllowed,
     scale,
     imagesCount,
     spaceBetween,
@@ -120,9 +120,9 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
             <>
               <Filter isLoading={isLoading}>
                 <SwitchControl
-                  id={'playAndPouseAllowed'}
+                  id={'playAndPauseAllowed'}
                   name={'Play / Pause'}
-                  value={playAndPouseAllowed}
+                  value={playAndPauseAllowed}
                   onChange={onInputValueChange}
                 />
               </Filter>

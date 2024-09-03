@@ -25,7 +25,7 @@ interface ISwiperGalleryProps {
   effects: any;
   autoplay: boolean;
   delay: number;
-  playAndPouseAllowed?: boolean;
+  playAndPauseAllowed?: boolean;
   className?: string;
   width?: number;
   height?: number;
@@ -44,7 +44,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   autoplay,
   delay,
   className,
-  playAndPouseAllowed,
+  playAndPauseAllowed,
   width,
   height,
   handleSlideChange,
@@ -58,7 +58,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const isDragging = useRef<boolean>(false);
   const key = effects.effect + 'Effect';
-  const previusIndex = useRef<number>(-1);
+  const previousIndex = useRef<number>(-1);
   useConfigureSwiper(swiperRef, key);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     let paddingTop =
       scale > 1
         ? (((parseInt(scale_decimal) *
-            (swiper.slidesEl.childNodes[0].clientHeight || 0)) /
+            (swiper.slidesEl.clientHeight || 0)) /
             100) *
             Math.ceil((imagesCount || 0) / 2)) /
           2
@@ -78,19 +78,20 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
-    if (autoplay && swiper?.autoplay) {
-      swiper.autoplay.start();
-      setIsPlaying(true);
+    if (swiper?.autoplay) {
+      if (autoplay) {
+        swiper.autoplay.start();
+        setIsPlaying(true);
+      } else {
+        swiper.autoplay.stop();
+        setIsPlaying(false);
+      }
     }
-    if (!autoplay && swiper?.autoplay) {
-      swiper.autoplay.stop();
-      setIsPlaying(false);
-    }
-  }, [autoplay, playAndPouseAllowed]);
+  }, [autoplay, playAndPauseAllowed]);
 
   const handlePlay = () => {
     const swiper = swiperRef.current?.swiper;
-    if (autoplay && swiper?.autoplay) {
+    if (swiper?.autoplay) {
       swiper.autoplay.start();
       setIsPlaying(true);
     }
@@ -98,7 +99,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
   const handlePause = () => {
     const swiper = swiperRef.current?.swiper;
-    if (!autoplay && swiper?.autoplay) {
+    if (swiper?.autoplay) {
       swiper.autoplay.stop();
       setIsPlaying(false);
     }
@@ -130,13 +131,12 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       (videoRef.current as HTMLVideoElement).controls = true;
     }
   };
-  // const loopAdditionalSlides = Math.floor((images.length - (imagesCount || 0)) / 2) > 1 ? Math.floor((images.length - (imagesCount || 0)) / 2) : 0;
-  // const loopAdditionalSlides = Math.floor(images.length / 4) > 1 ? Math.floor(images.length / 4) : 0;
+
   return (
     <Swiper
-        key={imagesCount}
+      key={(imagesCount || 0) + Date.now()}
       ref={swiperRef}
-      autoplay={autoplay ? {delay, stopOnLastSlide: true, pauseOnMouseEnter: true} : false}
+      autoplay={autoplay ? {delay: delay, stopOnLastSlide: false, pauseOnMouseEnter: true} : false}
       grabCursor={true}
       loop={loop}
       pagination={false}
@@ -144,7 +144,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       loopAdditionalSlides={0}
       onSlideChange={() => {
         if (key === 'coverflowEffect' && handleSlideChange) {
-          handleSlideChange(previusIndex, swiperRef);
+          handleSlideChange(previousIndex, swiperRef);
         }
       }}
       {...effects}
@@ -178,18 +178,12 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
               <img
                 data-index={index}
                 src={
-                  (
-                    key !== 'coverflowEffect'
+                    key !== 'coverflowEffect' || index < (imagesCount || 0) + 1 || index > images.length - (imagesCount || 0) - 1
                       ? image.original.url
-                      : index < (imagesCount || 0) ||
-                        (index >= images.length - (imagesCount || 0) &&
-                          key === 'coverflowEffect')
-                  )
-                    ? image.original.url
-                    : undefined
+                      : undefined
                 }
                 srcSet={
-                  key !== 'coverflowEffect'
+                    key !== 'coverflowEffect' || index < (imagesCount || 0) + 1 || index > images.length - (imagesCount || 0) - 1
                     ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
                     : undefined
                 }
@@ -211,7 +205,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
                 }}
                 className={'swiper-gallery__video'}
                 controls
-                // draggable={true}
                 onMouseDown={onMouseDown}
               />
             )}
@@ -219,7 +212,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         );
       })}
 
-      {playAndPouseAllowed && (
+      {playAndPauseAllowed && (
         <IconButton
           className="playPauseButton"
           onClick={isPlaying ? handlePause : handlePlay}

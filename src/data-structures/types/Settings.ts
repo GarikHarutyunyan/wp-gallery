@@ -114,7 +114,7 @@ export interface ICarouselSettings {
   padding: number;
   autoplay: boolean;
   slideDuration: number;
-  playAndPouseAllowed: boolean;
+  playAndPauseAllowed: boolean;
   scale: number;
   imagesCount: number;
   spaceBetween: number;

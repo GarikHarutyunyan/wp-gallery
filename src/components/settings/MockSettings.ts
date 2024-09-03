@@ -156,7 +156,7 @@ const carouselMockSettings: ICarouselSettings = {
   padding: 0,
   autoplay: false,
   slideDuration: 3000,
-  playAndPouseAllowed: false,
+  playAndPauseAllowed: false,
   scale: 0.1,
   imagesCount: 3,
   spaceBetween: -10,

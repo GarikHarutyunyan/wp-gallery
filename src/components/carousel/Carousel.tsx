@@ -25,7 +25,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     padding,
     autoplay,
     slideDuration,
-    playAndPouseAllowed,
+    playAndPauseAllowed,
     width,
     height,
     imagesCount,
@@ -70,11 +70,8 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     return () => window.removeEventListener('resize', handleResize);
   }, [wrapper?.clientWidth]);
 
-  const handleSlideChange = (previusIndex: any, swiperRef: any) => {
+  const handleSlideChange = (previousIndex: any, swiperRef: any) => {
     const swiper = swiperRef.current?.swiper;
-    const secondarySlide = document.querySelector(
-      '.swiper-slide-visible'
-    ) as HTMLElement;
     const activeIndex = swiper.realIndex;
     const loadImagesInRange = (startIndex: number, endIndex: number) => {
       for (let i = startIndex; i <= endIndex; i++) {
@@ -97,8 +94,8 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     };
 
     if (
-      activeIndex > previusIndex.current &&
-      previusIndex.current !== -1 &&
+      activeIndex > previousIndex.current &&
+      previousIndex.current !== -1 &&
       images
     ) {
       const loadStartIndex = activeIndex;
@@ -107,7 +104,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         images.length
       );
       loadImagesInRange(loadStartIndex, loadEndIndex);
-    } else if (previusIndex.current !== -1) {
+    } else if (previousIndex.current !== -1) {
       const loadStartIndex = activeIndex
         ? Math.max(
             activeIndex - (imagesCount !== undefined ? imagesCount : 0) - 4,
@@ -117,7 +114,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       const loadEndIndex = activeIndex;
       loadImagesInRange(loadStartIndex, loadEndIndex);
     }
-    previusIndex.current = activeIndex;
+    previousIndex.current = activeIndex;
   };
 
   const handleThumbnailClick = (index: number, swiperRef: any) => {
@@ -147,7 +144,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         images={images || []}
         autoplay={autoplay}
         delay={slideDuration}
-        playAndPouseAllowed={playAndPouseAllowed}
+        playAndPauseAllowed={playAndPauseAllowed}
         width={containerWidth}
         height={containerHeight}
         imagesCount={imagesCount}
