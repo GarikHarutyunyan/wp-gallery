@@ -38,7 +38,9 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     spaceBetween: spaceBetween,
     slidesPerView: imagesCount,
     centeredSlides: true,
-
+    loopAdditionalSlides:
+      Math.floor((((images && images?.length) || 0) - (imagesCount || 0)) / 2) -
+      1,
     effect: 'coverflow',
     coverflowEffect: {
       rotate: 0,
@@ -74,7 +76,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     const secondarySlide = document.querySelector(
       '.swiper-slide-visible'
     ) as HTMLElement;
-    console.log(secondarySlide);
     const activeIndex = swiper.realIndex;
     const loadImagesInRange = (startIndex: number, endIndex: number) => {
       for (let i = startIndex; i <= endIndex; i++) {
@@ -140,7 +141,11 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       }}
     >
       <SwiperGallery
-        key={effects.id}
+        key={
+          Math.floor(
+            (((images && images?.length) || 0) - (imagesCount || 0)) / 2
+          ) - 1
+        }
         effects={effects}
         loop={true}
         backgroundColor={backgroundColor}
