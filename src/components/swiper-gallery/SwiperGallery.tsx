@@ -33,6 +33,7 @@ interface ISwiperGalleryProps {
   handleSlideChange?: any;
   handleThumbnailClick?: any;
   scale?: any;
+  allowTouchMove?: boolean;
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
@@ -51,6 +52,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   handleThumbnailClick,
   imagesCount,
   scale,
+  allowTouchMove,
 }) => {
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
@@ -73,7 +75,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
     const scale_decimal = scale === 2 ? '10' : (scale + '').split('.')[1];
-    console.log(swiper, 'swiper');
+
     let paddingTop =
       scale > 1
         ? (((parseInt(scale_decimal) *
@@ -159,26 +161,25 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           handleSlideChange(previusIndex, swiperRef);
         }
       }}
-      onTouchEnd={() => {
-        console.log('end');
-        const swiper = swiperRef.current?.swiper;
+      allowTouchMove={allowTouchMove}
+      // onTouchEnd={() => {
+      //   console.log('end');
+      //   const swiper = swiperRef.current?.swiper;
 
-        if (swiper && images.length <= (imagesCount || 0) * 2) {
-          const prevSlide = swiper.el.querySelector('.swiper-slide-prev');
-          const activeSlide = swiper.el.querySelector('.swiper-slide-active');
-          console.log(activeSlide.getAttribute('data-swiper-slide-index'));
-          setTimeout(() => {
-            prevSlide.click();
-            setTimeout(() => {
-              const index = Math.floor(imagesCount || 0) / 2;
-              console.log(index);
-              swiper.slideTo(8);
-            }, 100);
-          }, 50);
-        } else {
-          console.log('Swiper instance not found');
-        }
-      }}
+      //   if (swiper && images.length <= (imagesCount || 0) * 2) {
+      //     const prevSlide = swiper.el.querySelector('.swiper-slide-prev');
+      //     const activeSlide = swiper.el.querySelector('.swiper-slide-active');
+      //     console.log(activeSlide.getAttribute('data-swiper-slide-index'));
+
+      //     prevSlide.click();
+
+      //     const index = Math.floor(imagesCount || 0) / 2;
+      //     console.log(index);
+      //     swiper.slideTo(8);
+      //   } else {
+      //     console.log('Swiper instance not found');
+      //   }
+      // }}
       {...effects}
       style={
         key === 'cardsEffect' || key === 'cubeEffect'
@@ -253,7 +254,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
       {playAndPouseAllowed && (
         <IconButton
-          className="playPauseButton"
           onClick={isPlaying ? handlePause : handlePlay}
           aria-label={isPlaying ? 'pause' : 'play'}
           size="large"

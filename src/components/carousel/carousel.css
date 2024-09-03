@@ -51,14 +51,15 @@
   object-fit: cover;
 }
 
-.reacg-gallery button.playPouseButton {
+.reacg-gallery .swiper-coverflow button {
   color: hsla(0, 0%, 100%, 0.8);
   position: absolute;
   height: 40px;
   width: 40px;
   top: 40%;
-
   z-index: 100;
+  transform: translate(-50%, 0%);
+  left: 50%;
 }
 
 .reacg-gallery button.playPouseButton:hover {

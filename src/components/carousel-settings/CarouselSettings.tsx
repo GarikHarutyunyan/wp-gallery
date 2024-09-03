@@ -16,8 +16,12 @@ interface ICarouselSettingsProps {
 }
 
 const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
-  const {carouselSettings: value, changeCarouselSettings: onChange} =
-    useSettings();
+  const {
+    carouselSettings: value,
+    changeCarouselSettings: onChange,
+    imagesCount: allImagesCount,
+  } = useSettings();
+
   const {
     width,
     height,
@@ -88,7 +92,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 value={imagesCount}
                 onChange={onInputValueChange}
                 min={1}
-                max={11}
+                max={(allImagesCount as number) / 2}
                 step={2}
               />
             </Filter>

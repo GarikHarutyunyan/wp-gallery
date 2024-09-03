@@ -61,7 +61,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const ratio: number = contWidth / height;
   const containerWidth: number = Math.min(innerWidth, contWidth);
   const containerHeight: number = containerWidth / ratio;
-  let boxMargin;
+
   useEffect(() => {
     const handleResize = () => {
       setInnerWidth(wrapper?.clientWidth || contWidth);
@@ -128,7 +128,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       swiper.slideToLoop(index);
     }
   };
-  console.log('changeSlide');
+
   return (
     <Box
       sx={{
@@ -160,6 +160,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         handleThumbnailClick={handleThumbnailClick}
         padding={padding}
         scale={scale}
+        allowTouchMove={false}
       />
     </Box>
   );

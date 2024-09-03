@@ -50,6 +50,8 @@ const SettingsContext = React.createContext<{
   changeCubeSettings?: any;
   changeCarouselSettings?: any;
   wrapperRef?: any;
+  imagesCount?: number;
+  changeImagesCount?: (count: number) => void;
 }>({});
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
@@ -70,6 +72,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
   const wrapperRef = useRef(null);
+  const [imagesCount, setImagesCount] = useState<number>(0);
 
   const getData = async () => {
     const dataElement = document.getElementById('reacg-root' + galleryId);
@@ -279,6 +282,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeCubeSettings: setCubeSettings,
         changeCarouselSettings: setCarouselSettings,
         wrapperRef,
+        imagesCount,
+        changeImagesCount: setImagesCount,
       }}
     >
       {showControls && (

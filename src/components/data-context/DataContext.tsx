@@ -516,64 +516,64 @@ const propsImages: IImageDTO[] = [
     width: 500,
     height: 600,
   },
-  // {
-  //   caption: 'caption',
-  //   description: 'description',
-  //   id: '18',
-  //   large: {
-  //     url: 'https://images.pexels.com/photos/912364/pexels-photo-912364.jpeg?cs=srgb&dl=pexels-brett-sayles-912364.jpg&fm=jpg',
-  //     width: 1000,
-  //     height: 1000,
-  //   },
-  //   type: ImageType.IMAGE,
-  //   original: {
-  //     url: 'https://images.pexels.com/photos/912364/pexels-photo-912364.jpeg?cs=srgb&dl=pexels-brett-sayles-912364.jpg&fm=jpg',
-  //     width: 1000,
-  //     height: 1000,
-  //   },
-  //   medium_large: {
-  //     url: 'https://images.pexels.com/photos/912364/pexels-photo-912364.jpeg?cs=srgb&dl=pexels-brett-sayles-912364.jpg&fm=jpg',
-  //     width: 500,
-  //     height: 500,
-  //   },
-  //   thumbnail: {
-  //     url: 'https://images.pexels.com/photos/912364/pexels-photo-912364.jpeg?cs=srgb&dl=pexels-brett-sayles-912364.jpg&fm=jpg',
-  //     width: 200,
-  //     height: 200,
-  //   },
-  //   title: 'Tomato basil',
-  //   width: 500,
-  //   height: 600,
-  // },
-  // {
-  //   caption: 'caption',
-  //   description: 'description',
-  //   id: '19',
-  //   large: {
-  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
-  //     width: 1000,
-  //     height: 1000,
-  //   },
-  //   type: ImageType.IMAGE,
-  //   original: {
-  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
-  //     width: 1000,
-  //     height: 1000,
-  //   },
-  //   medium_large: {
-  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
-  //     width: 500,
-  //     height: 500,
-  //   },
-  //   thumbnail: {
-  //     url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
-  //     width: 200,
-  //     height: 200,
-  //   },
-  //   title: 'Burger',
-  //   width: 500,
-  //   height: 600,
-  // },
+  {
+    caption: 'caption',
+    description: 'description',
+    id: '18',
+    large: {
+      url: 'https://images.pexels.com/photos/912364/pexels-photo-912364.jpeg?cs=srgb&dl=pexels-brett-sayles-912364.jpg&fm=jpg',
+      width: 1000,
+      height: 1000,
+    },
+    type: ImageType.IMAGE,
+    original: {
+      url: 'https://images.pexels.com/photos/912364/pexels-photo-912364.jpeg?cs=srgb&dl=pexels-brett-sayles-912364.jpg&fm=jpg',
+      width: 1000,
+      height: 1000,
+    },
+    medium_large: {
+      url: 'https://images.pexels.com/photos/912364/pexels-photo-912364.jpeg?cs=srgb&dl=pexels-brett-sayles-912364.jpg&fm=jpg',
+      width: 500,
+      height: 500,
+    },
+    thumbnail: {
+      url: 'https://images.pexels.com/photos/912364/pexels-photo-912364.jpeg?cs=srgb&dl=pexels-brett-sayles-912364.jpg&fm=jpg',
+      width: 200,
+      height: 200,
+    },
+    title: 'Tomato basil',
+    width: 500,
+    height: 600,
+  },
+  {
+    caption: 'caption',
+    description: 'description',
+    id: '19',
+    large: {
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+      width: 1000,
+      height: 1000,
+    },
+    type: ImageType.IMAGE,
+    original: {
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+      width: 1000,
+      height: 1000,
+    },
+    medium_large: {
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+      width: 500,
+      height: 500,
+    },
+    thumbnail: {
+      url: 'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/05/Image-Files-Blog-Vector.jpg',
+      width: 200,
+      height: 200,
+    },
+    title: 'Burger',
+    width: 500,
+    height: 600,
+  },
   // {
   //   caption: 'caption',
   //   description: 'description',
@@ -913,6 +913,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     thumbnailSettings,
     mosaicSettings,
     masonrySettings,
+    changeImagesCount,
   } = useSettings();
 
   const paginationType: PaginationType = useMemo(() => {
@@ -1028,6 +1029,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
       if (paginationType === PaginationType.SIMPLE) {
         setImages(newImages);
+        changeImagesCount?.(newImages.length);
       } else {
         setImages((prevImages) => [...prevImages, ...newImages]);
       }
@@ -1035,6 +1037,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setIsLoading(false);
     } else {
       setImages(propsImages);
+      changeImagesCount?.(propsImages.length);
       setIsLoading(false);
     }
   };
@@ -1074,6 +1077,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const onReloadData = async () => {
     setIsLoading(true);
     setImages([]);
+    changeImagesCount?.(0);
     setLightboxImages([]);
     setCurrentPage(0);
     setImageCount(0);
