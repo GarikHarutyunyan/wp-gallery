@@ -38,6 +38,8 @@
   color: hsla(0, 0%, 100%, 0.8);
   width: 60px;
   height: 60px;
+  top: calc(50% - 30px);
+  margin-top: 0;
 }
 .reacg-gallery .swiper-button-next:after,
 .swiper-rtl .swiper-button-prev:after,

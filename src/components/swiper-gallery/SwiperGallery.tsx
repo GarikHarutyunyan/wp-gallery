@@ -7,11 +7,8 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
 import 'swiper/css/effect-coverflow';
-import 'swiper/css/effect-creative';
 import 'swiper/css/effect-cube';
-import 'swiper/css/effect-flip';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import './swiper-gallery.css';
 
