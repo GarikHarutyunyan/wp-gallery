@@ -913,6 +913,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     thumbnailSettings,
     mosaicSettings,
     masonrySettings,
+    changeImagesCount,
   } = useSettings();
 
   const paginationType: PaginationType = useMemo(() => {
@@ -1028,13 +1029,16 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
       if (paginationType === PaginationType.SIMPLE) {
         setImages(newImages);
+        changeImagesCount?.(newImages.length);
       } else {
         setImages((prevImages) => [...prevImages, ...newImages]);
+        changeImagesCount?.(newImages.length);
       }
       setCurrentPage(page);
       setIsLoading(false);
     } else {
       setImages(propsImages);
+      changeImagesCount?.(propsImages.length);
       setIsLoading(false);
     }
   };
@@ -1074,6 +1078,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const onReloadData = async () => {
     setIsLoading(true);
     setImages([]);
+    changeImagesCount?.(0);
     setLightboxImages([]);
     setCurrentPage(0);
     setImageCount(0);
