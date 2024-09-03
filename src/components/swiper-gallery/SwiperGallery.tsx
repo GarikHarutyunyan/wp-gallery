@@ -134,7 +134,8 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       key={(imagesCount || 0) + Date.now()}
       ref={swiperRef}
       autoplay={autoplay ? {delay: delay, stopOnLastSlide: false, pauseOnMouseEnter: true} : false}
-      grabCursor={true}
+      grabCursor={key !== 'coverflowEffect'}
+      allowTouchMove={key !== 'coverflowEffect'}
       loop={loop}
       pagination={false}
       className={className}
@@ -165,11 +166,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         return (
           <SwiperSlide
             key={index}
-            onClick={() => {
-              if (key === 'coverflowEffect' && handleSlideChange) {
-                handleThumbnailClick(index, swiperRef);
-              }
-            }}
           >
             {!isVideo ? (
               <img
