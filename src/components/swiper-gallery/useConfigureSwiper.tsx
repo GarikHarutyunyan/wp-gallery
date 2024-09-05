@@ -15,7 +15,7 @@ const useConfigureSwiper = (swiperRef: any, key: string): void => {
       swiper.params[key].depth = scale > 1 ? -1 : 1;
       const activerSwiper = document.querySelector('.swiper') as HTMLElement;
     } else if (key === 'cardsEffect') {
-      setUpdate(upDate + 1);
+      // setUpdate(upDate + 1);
     }
     swiper.update();
   }, [scale]);

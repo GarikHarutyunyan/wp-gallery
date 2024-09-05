@@ -1,6 +1,7 @@
 import {
   Direction,
   HoverEffect,
+  ICardsSettings,
   ICarouselSettings,
   ICubeSettings,
   IGeneralSettings,
@@ -162,7 +163,18 @@ const carouselMockSettings: ICarouselSettings = {
   spaceBetween: -10,
 };
 
+const cardsMockSettings: ICardsSettings = {
+  width: 600,
+  height: 600,
+  perSlideOffset: 30,
+  navigationButton: true,
+  playAndPouseAllowed: false,
+  autoplay: false,
+  slideDuration: 3000,
+};
+
 export {
+  cardsMockSettings,
   carouselMockSettings,
   cubeMockSettings,
   generalMockSettings,

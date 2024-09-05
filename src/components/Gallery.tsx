@@ -7,6 +7,7 @@ import {
   PaginationType,
 } from 'data-structures';
 import React, {ReactElement, ReactNode, useMemo, useState} from 'react';
+import {CardsGallery} from './cards-gallery/CardsGallery';
 import {Carousel} from './carousel/Carousel';
 import {CubeGallery} from './cube-gallery/CubeGallery';
 import {useData} from './data-context/useData';
@@ -91,6 +92,9 @@ const Gallery: React.FC = () => {
         break;
       case GalleryType.CAROUSEL:
         gallery = <Carousel />;
+        break;
+      case GalleryType.CARDS:
+        gallery = <CardsGallery />;
         break;
     }
 

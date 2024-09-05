@@ -64,8 +64,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
     let paddingTop =
       scale > 1
-        ? (((parseInt(scale_decimal) *
-            (swiper.slidesEl.clientHeight || 0)) /
+        ? (((parseInt(scale_decimal) * (swiper.slidesEl.clientHeight || 0)) /
             100) *
             Math.ceil((imagesCount || 0) / 2)) /
           2
@@ -133,7 +132,11 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     <Swiper
       key={(imagesCount || 0) + Date.now()}
       ref={swiperRef}
-      autoplay={autoplay ? {delay: delay, stopOnLastSlide: false, pauseOnMouseEnter: true} : false}
+      autoplay={
+        autoplay
+          ? {delay: delay, stopOnLastSlide: false, pauseOnMouseEnter: true}
+          : false
+      }
       grabCursor={key !== 'coverflowEffect'}
       allowTouchMove={key !== 'coverflowEffect'}
       loop={loop}
@@ -164,19 +167,21 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         const isVideo: boolean = image.type === ImageType.VIDEO;
 
         return (
-          <SwiperSlide
-            key={index}
-          >
+          <SwiperSlide key={index}>
             {!isVideo ? (
               <img
                 data-index={index}
                 src={
-                    key !== 'coverflowEffect' || index < (imagesCount || 0) + 1 || index > images.length - (imagesCount || 0) - 1
-                      ? image.original.url
-                      : undefined
+                  key !== 'coverflowEffect' ||
+                  index < (imagesCount || 0) + 1 ||
+                  index > images.length - (imagesCount || 0) - 1
+                    ? image.original.url
+                    : undefined
                 }
                 srcSet={
-                    key !== 'coverflowEffect' || index < (imagesCount || 0) + 1 || index > images.length - (imagesCount || 0) - 1
+                  key !== 'coverflowEffect' ||
+                  index < (imagesCount || 0) + 1 ||
+                  index > images.length - (imagesCount || 0) - 1
                     ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
                     : undefined
                 }
