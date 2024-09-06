@@ -164,11 +164,11 @@ const carouselMockSettings: ICarouselSettings = {
 };
 
 const cardsMockSettings: ICardsSettings = {
-  width: 600,
-  height: 600,
-  perSlideOffset: 30,
+  width: 300,
+  height: 300,
+  perSlideOffset: 2,
   navigationButton: true,
-  playAndPouseAllowed: false,
+  playAndPauseAllowed: false,
   autoplay: false,
   slideDuration: 3000,
 };

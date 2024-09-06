@@ -125,7 +125,7 @@ export interface ICardsSettings {
   height: number;
   perSlideOffset: number;
   navigationButton: boolean;
-  playAndPouseAllowed: boolean;
+  playAndPauseAllowed: boolean;
   autoplay: boolean;
   slideDuration: number;
 }

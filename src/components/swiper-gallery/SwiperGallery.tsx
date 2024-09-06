@@ -27,7 +27,8 @@ interface ISwiperGalleryProps {
   width?: number;
   height?: number;
   imagesCount?: number;
-  handleSlideChange?: any;
+  handleCarouselSlideChange?: any;
+  handleCardsSlideChange?: any;
   handleThumbnailClick?: any;
   scale?: any;
 }
@@ -44,7 +45,8 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   playAndPauseAllowed,
   width,
   height,
-  handleSlideChange,
+  handleCarouselSlideChange,
+  handleCardsSlideChange,
   handleThumbnailClick,
   imagesCount,
   scale,
@@ -55,9 +57,9 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const isDragging = useRef<boolean>(false);
   const key = effects.effect + 'Effect';
+
   const previousIndex = useRef<number>(-1);
   useConfigureSwiper(swiperRef, key);
-
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
     const scale_decimal = scale === 2 ? '10' : (scale + '').split('.')[1];
@@ -77,9 +79,11 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     if (swiper?.autoplay) {
       if (autoplay) {
         swiper.autoplay.start();
+
         setIsPlaying(true);
       } else {
         swiper.autoplay.stop();
+
         setIsPlaying(false);
       }
     }
@@ -89,6 +93,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     const swiper = swiperRef.current?.swiper;
     if (swiper?.autoplay) {
       swiper.autoplay.start();
+      console.log(swiper.autoplay);
       setIsPlaying(true);
     }
   };
@@ -127,14 +132,19 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       (videoRef.current as HTMLVideoElement).controls = true;
     }
   };
-
+  console.log(imagesCount);
   return (
     <Swiper
-      key={(imagesCount || 0) + Date.now()}
+      key={imagesCount || 0}
       ref={swiperRef}
       autoplay={
-        autoplay
-          ? {delay: delay, stopOnLastSlide: false, pauseOnMouseEnter: true}
+        autoplay || isPlaying
+          ? {
+              delay: delay,
+              stopOnLastSlide: false,
+              pauseOnMouseEnter: true,
+              disableOnInteraction: false,
+            }
           : false
       }
       grabCursor={key !== 'coverflowEffect'}
@@ -144,8 +154,10 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       className={className}
       loopAdditionalSlides={0}
       onSlideChange={() => {
-        if (key === 'coverflowEffect' && handleSlideChange) {
-          handleSlideChange(previousIndex, swiperRef);
+        if (key === 'coverflowEffect' && handleCarouselSlideChange) {
+          handleCarouselSlideChange(previousIndex, swiperRef);
+        } else if (key === 'cardsEffect' && handleCardsSlideChange) {
+          handleCardsSlideChange(swiperRef);
         }
       }}
       {...effects}
@@ -172,17 +184,25 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
               <img
                 data-index={index}
                 src={
-                  key !== 'coverflowEffect' ||
-                  index < (imagesCount || 0) + 1 ||
-                  index > images.length - (imagesCount || 0) - 1
+                  key === 'cubeEffect'
+                    ? image.original.url
+                    : (key === 'coverflowEffect' &&
+                        index < (imagesCount || 0) + 1) ||
+                      index > images.length - (imagesCount || 0) - 1
+                    ? image.original.url
+                    : key === 'cardsEffect' && index < 5
                     ? image.original.url
                     : undefined
                 }
                 srcSet={
-                  key !== 'coverflowEffect' ||
-                  index < (imagesCount || 0) + 1 ||
-                  index > images.length - (imagesCount || 0) - 1
+                  key === 'cubeEffect'
+                    ? image.original.url
+                    : (key === 'coverflowEffect' &&
+                        index < (imagesCount || 0) + 1) ||
+                      index > images.length - (imagesCount || 0) - 1
                     ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
+                    : key === 'cardsEffect' && index < 5
+                    ? image.original.url
                     : undefined
                 }
                 className="lazy"

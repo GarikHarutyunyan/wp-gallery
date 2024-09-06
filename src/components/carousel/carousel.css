@@ -1,3 +1,8 @@
 .reacg-gallery .swiper-coverflow {
   box-sizing: border-box;
 }
+
+.reacg-gallery .swiper-coverflow {
+  overflow-x: clip;
+  overflow-y: visible;
+}

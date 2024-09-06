@@ -1,11 +1,11 @@
 import {useSettings} from 'components/settings';
-import {ICarouselSettings} from 'data-structures';
+import {ICardsSettings, ICarouselSettings} from 'data-structures';
 import {useEffect, useState} from 'react';
 const useConfigureSwiper = (swiperRef: any, key: string): void => {
   const {carouselSettings: settings} = useSettings();
-
-  const {scale, width, height} = settings as ICarouselSettings;
-
+  const {cardsSettings: settingsCards} = useSettings();
+  const {scale} = settings as ICarouselSettings;
+  const {perSlideOffset} = settingsCards as ICardsSettings;
   const [upDate, setUpdate] = useState(0);
 
   useEffect(() => {
@@ -15,10 +15,11 @@ const useConfigureSwiper = (swiperRef: any, key: string): void => {
       swiper.params[key].depth = scale > 1 ? -1 : 1;
       const activerSwiper = document.querySelector('.swiper') as HTMLElement;
     } else if (key === 'cardsEffect') {
-      // setUpdate(upDate + 1);
+      swiper.params.cardsEffect.perSlideOffset = perSlideOffset;
+      swiper.update();
     }
     swiper.update();
-  }, [scale]);
+  }, [scale, perSlideOffset]);
 };
 
 export default useConfigureSwiper;

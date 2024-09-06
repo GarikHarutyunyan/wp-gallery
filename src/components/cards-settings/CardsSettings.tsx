@@ -1,6 +1,6 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {NumberControl, SwitchControl} from 'components/controls';
+import {NumberControl, SliderControl, SwitchControl} from 'components/controls';
 import {useSettings} from 'components/settings';
 import {Section} from 'core-components';
 import {ICardsSettings} from 'data-structures';
@@ -18,6 +18,7 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
     height,
     autoplay,
     slideDuration,
+    playAndPauseAllowed,
     perSlideOffset,
     navigationButton,
   } = value as ICardsSettings;
@@ -52,7 +53,24 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
                 unit={'px'}
               />
             </Filter>
-
+            <Filter isLoading={isLoading}>
+              <SliderControl
+                id={'perSlideOffset'}
+                name={'perSlideOffset %'}
+                value={perSlideOffset}
+                onChange={onInputValueChange}
+                min={2}
+                max={40}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'playAndPauseAllowed'}
+                name={'Play / Pause'}
+                value={playAndPauseAllowed}
+                onChange={onInputValueChange}
+              />
+            </Filter>
             <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'autoplay'}

@@ -70,7 +70,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     return () => window.removeEventListener('resize', handleResize);
   }, [wrapper?.clientWidth]);
 
-  const handleSlideChange = (previousIndex: any, swiperRef: any) => {
+  const handleCarouselSlideChange = (previousIndex: any, swiperRef: any) => {
     const swiper = swiperRef.current?.swiper;
     const activeIndex = swiper.realIndex;
     const loadImagesInRange = (startIndex: number, endIndex: number) => {
@@ -148,7 +148,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         width={containerWidth}
         height={containerHeight}
         imagesCount={imagesCount}
-        handleSlideChange={handleSlideChange}
+        handleCarouselSlideChange={handleCarouselSlideChange}
         handleThumbnailClick={handleThumbnailClick}
         padding={padding}
         scale={scale}
