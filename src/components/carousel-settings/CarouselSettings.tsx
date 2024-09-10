@@ -91,7 +91,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 value={imagesCount}
                 onChange={onInputValueChange}
                 min={1}
-                max={allImagesCount as number}
+                max={(allImagesCount || 1) - 1}
                 step={2}
               />
             </Filter>

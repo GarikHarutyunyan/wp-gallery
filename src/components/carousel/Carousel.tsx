@@ -124,7 +124,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       swiper.slideToLoop(index);
     }
   };
-
+  console.log('carousel');
   return (
     <Box
       sx={{
@@ -136,23 +136,25 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         boxSizing: 'border-box',
       }}
     >
-      <SwiperGallery
-        key={effects.id}
-        effects={effects}
-        loop={true}
-        backgroundColor={backgroundColor}
-        images={images || []}
-        autoplay={autoplay}
-        delay={slideDuration}
-        playAndPauseAllowed={playAndPauseAllowed}
-        width={containerWidth}
-        height={containerHeight}
-        imagesCount={imagesCount}
-        handleCarouselSlideChange={handleCarouselSlideChange}
-        handleThumbnailClick={handleThumbnailClick}
-        padding={padding}
-        scale={scale}
-      />
+      {(images || []).length > 0 && (
+        <SwiperGallery
+          key={effects.id}
+          effects={effects}
+          loop={true}
+          backgroundColor={backgroundColor}
+          images={images || []}
+          autoplay={autoplay}
+          delay={slideDuration}
+          playAndPauseAllowed={playAndPauseAllowed}
+          width={containerWidth}
+          height={containerHeight}
+          imagesCount={imagesCount}
+          handleCardsSlideChange={handleCarouselSlideChange}
+          handleThumbnailClick={handleThumbnailClick}
+          padding={padding}
+          scale={scale}
+        />
+      )}
     </Box>
   );
 };

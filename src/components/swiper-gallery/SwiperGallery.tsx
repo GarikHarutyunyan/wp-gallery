@@ -12,8 +12,6 @@ import 'swiper/css/navigation';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import './swiper-gallery.css';
 
-import useConfigureSwiper from './useConfigureSwiper';
-
 interface ISwiperGalleryProps {
   images: IImageDTO[];
   backgroundColor?: string;
@@ -54,14 +52,21 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const [paddingTop, setPaddingTop] = useState<number>(0);
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const isDragging = useRef<boolean>(false);
   const key = effects.effect + 'Effect';
 
   const previousIndex = useRef<number>(-1);
-  useConfigureSwiper(swiperRef, key);
+
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
+    if (key === 'coverflowEffect') {
+      swiper.params.coverflowEffect.scale = scale;
+      swiper.params.coverflowEffect.depth = scale > 1 ? -1 : 1;
+      swiper.update();
+    }
+
     const scale_decimal = scale === 2 ? '10' : (scale + '').split('.')[1];
 
     let paddingTop =
@@ -132,7 +137,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       (videoRef.current as HTMLVideoElement).controls = true;
     }
   };
-  console.log(imagesCount);
+
   return (
     <Swiper
       key={imagesCount || 0}

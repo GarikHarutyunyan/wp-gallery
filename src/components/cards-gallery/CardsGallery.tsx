@@ -53,7 +53,7 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
   const handleCardsSlideChange = (swiperRef: any) => {
     const swiper = swiperRef.current?.swiper;
     const activeIndex = swiper.realIndex;
-    console.log(activeIndex);
+
     const loadImagesInRange = (startIndex: number, endIndex: number) => {
       for (let i = startIndex; i <= endIndex; i++) {
         const imgElement = document.querySelector(
