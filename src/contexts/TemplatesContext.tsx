@@ -2,6 +2,7 @@ import axios from 'axios';
 import {ISettingsDTO} from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {useContext, useLayoutEffect, useState} from 'react';
+import {useAppInfo} from "./AppInfoContext";
 
 export interface ITemplate extends Partial<ISettingsDTO> {
   template_id: string;
@@ -35,8 +36,16 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [templates, setTemplates] = useState<ITemplateReference[]>([]);
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const {galleryId} = useAppInfo();
 
   const getTemplates = async () => {
+    const dataElement = document.getElementById('reacg-root' + galleryId);
+    const showControlsData: number = +(
+        dataElement?.getAttribute('data-options-section') || 0
+    );
+    if ( !showControlsData ) {
+      return;
+    }
     const fetchUrl: string | undefined =
       'https://regallery.team/core/wp-json/reacgcore/v1/templates'; //baseUrl      ? baseUrl + 'templates'      : undefined;
 
