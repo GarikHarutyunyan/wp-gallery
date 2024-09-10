@@ -131,7 +131,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
   return (
     <Swiper
-      key={(imagesCount || 0) + Date.now()}
+      key={(imagesCount || 0)}
       ref={swiperRef}
       autoplay={autoplay || isPlaying ? {
         delay: delay,
