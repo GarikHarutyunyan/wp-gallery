@@ -48,7 +48,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       stretch: 0,
     },
     navigation: true,
-    modules: [EffectCoverflow, Pagination, Autoplay, Navigation, Thumbs],
+    modules: [EffectCoverflow, Autoplay, Navigation],
   };
   const wrapper = wrapperRef.current;
   // Count the container width depends on main image width, images count and space between images.
@@ -136,7 +136,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         boxSizing: 'border-box',
       }}
     >
-      <SwiperGallery
+      {(images || []).length > 0 && (<SwiperGallery
         key={effects.id}
         effects={effects}
         loop={true}
@@ -152,7 +152,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         handleThumbnailClick={handleThumbnailClick}
         padding={padding}
         scale={scale}
-      />
+      />)}
     </Box>
   );
 };
