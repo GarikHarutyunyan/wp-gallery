@@ -133,7 +133,10 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     <Swiper
       key={(imagesCount || 0) + Date.now()}
       ref={swiperRef}
-      autoplay={autoplay ? {delay: delay, stopOnLastSlide: false, pauseOnMouseEnter: true} : false}
+      autoplay={autoplay || isPlaying ? {
+        delay: delay,
+        stopOnLastSlide: false,
+        pauseOnMouseEnter: key === 'cubeEffect'} : false}
       grabCursor={key !== 'coverflowEffect'}
       allowTouchMove={key !== 'coverflowEffect'}
       loop={loop}
