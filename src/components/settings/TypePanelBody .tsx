@@ -1,4 +1,3 @@
-import {useMediaQuery, useTheme} from '@mui/material';
 import {ISelectOption} from 'components/controls';
 import {Align, Aligner} from 'core-components';
 import {GalleryType, GalleryTypeOptions} from 'data-structures';
@@ -6,6 +5,7 @@ import React from 'react';
 import {TypeOption} from './TypeOption';
 import {TypePanelSelect} from './TypePanelSelect';
 import {useSettings} from './useSettings';
+import useIsMobile from "hooks/useIsMobile"
 
 interface ITypePanelBodyProps {
   isLoading: boolean;
@@ -17,8 +17,7 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
   onChange,
 }) => {
   const {type} = useSettings();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useIsMobile(720);
 
   if (!type) return null;
 
