@@ -7,8 +7,6 @@ import {
   Autoplay,
   EffectCoverflow,
   Navigation,
-  Pagination,
-  Thumbs,
 } from 'swiper/modules';
 import {SwiperGallery} from '../swiper-gallery/SwiperGallery';
 import './carousel.css';
@@ -48,7 +46,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       stretch: 0,
     },
     navigation: true,
-    modules: [EffectCoverflow, Pagination, Autoplay, Navigation, Thumbs],
+    modules: [EffectCoverflow, Autoplay, Navigation],
   };
   const wrapper = wrapperRef.current;
   // Count the container width depends on main image width, images count and space between images.
@@ -117,14 +115,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     previousIndex.current = activeIndex;
   };
 
-  const handleThumbnailClick = (index: number, swiperRef: any) => {
-    const swiper = swiperRef.current?.swiper;
-
-    if (swiper) {
-      swiper.slideToLoop(index);
-    }
-  };
-
   return (
     <Box
       sx={{
@@ -136,25 +126,22 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         boxSizing: 'border-box',
       }}
     >
-      {(images || []).length > 0 && (
-        <SwiperGallery
-          key={effects.id}
-          effects={effects}
-          loop={true}
-          backgroundColor={backgroundColor}
-          images={images || []}
-          autoplay={autoplay}
-          delay={slideDuration}
-          playAndPauseAllowed={playAndPauseAllowed}
-          width={containerWidth}
-          height={containerHeight}
-          imagesCount={imagesCount}
-          handleCardsSlideChange={handleCarouselSlideChange}
-          handleThumbnailClick={handleThumbnailClick}
-          padding={padding}
-          scale={scale}
-        />
-      )}
+      {(images || []).length > 0 && (<SwiperGallery
+        key={effects.id}
+        effects={effects}
+        loop={true}
+        backgroundColor={backgroundColor}
+        images={images || []}
+        autoplay={autoplay}
+        delay={slideDuration}
+        playAndPauseAllowed={playAndPauseAllowed}
+        width={containerWidth}
+        height={containerHeight}
+        imagesCount={imagesCount}
+        handleCarouselSlideChange={handleCarouselSlideChange}
+        padding={padding}
+        scale={scale}
+      />)}
     </Box>
   );
 };
