@@ -124,7 +124,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       swiper.slideToLoop(index);
     }
   };
-  console.log('carousel');
+
   return (
     <Box
       sx={{

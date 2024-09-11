@@ -29,6 +29,7 @@ interface ISwiperGalleryProps {
   handleCardsSlideChange?: any;
   handleThumbnailClick?: any;
   scale?: any;
+  perSlideOffset?: any;
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
@@ -48,6 +49,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   handleThumbnailClick,
   imagesCount,
   scale,
+  perSlideOffset,
 }) => {
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
@@ -65,6 +67,9 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       swiper.params.coverflowEffect.scale = scale;
       swiper.params.coverflowEffect.depth = scale > 1 ? -1 : 1;
       swiper.update();
+    } else if (key === 'cardsEffect') {
+      swiper.params.cardsEffect.perSlideOffset = perSlideOffset;
+      swiper.update();
     }
 
     const scale_decimal = scale === 2 ? '10' : (scale + '').split('.')[1];
@@ -77,7 +82,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           2
         : 0;
     setPaddingTop(paddingTop);
-  }, [scale, height, width, imagesCount, padding]);
+  }, [scale, height, width, imagesCount, padding, perSlideOffset]);
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;

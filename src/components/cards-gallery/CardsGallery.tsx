@@ -20,6 +20,7 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
     width,
     height,
     navigationButton,
+    perSlideOffset,
   } = settings as ICardsSettings;
 
   const effects = {
@@ -35,15 +36,16 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
 
   const wrapper = wrapperRef.current;
   const [innerWidth, setInnerWidth] = useState<number>(
-    wrapper?.clientWidth * 0.8 || width
+    wrapper?.clientWidth * 0.2 || width
   );
+
   const ratio: number = width / height;
   const containerWidth: number = Math.min(innerWidth, width);
   const containerHeight: number = containerWidth / ratio;
 
   useEffect(() => {
     const handleResize = () => {
-      setInnerWidth(wrapper?.clientWidth * 0.8 || width);
+      setInnerWidth(wrapper?.clientWidth * 0.2 || width);
     };
     window.addEventListener('resize', handleResize);
 
@@ -96,6 +98,7 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
         delay={slideDuration}
         playAndPauseAllowed={playAndPauseAllowed}
         handleCardsSlideChange={handleCardsSlideChange}
+        perSlideOffset={perSlideOffset}
       />
     </Box>
   );
