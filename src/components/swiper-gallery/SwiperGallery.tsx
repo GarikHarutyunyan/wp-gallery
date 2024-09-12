@@ -103,7 +103,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     const swiper = swiperRef.current?.swiper;
     if (swiper?.autoplay) {
       swiper.autoplay.start();
-      console.log(swiper.autoplay);
       setIsPlaying(true);
     }
   };

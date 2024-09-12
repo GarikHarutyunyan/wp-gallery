@@ -39,6 +39,7 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   const showOnlyGalleryOptions: boolean =
     type === GalleryType.SLIDESHOW ||
     type === GalleryType.CUBE ||
+    type === GalleryType.CAROUSEL ||
     type === GalleryType.CARDS;
 
   const onActiveTabChange = (_: any, newActiveTab: string) => {
