@@ -10,6 +10,9 @@ const addApplication = (rootElement: HTMLElement) => {
   const root = ReactDOM.createRoot(rootElement);
   const galleryId: string | undefined =
     rootElement.getAttribute('data-gallery-id') || undefined;
+  const showControls: boolean = !!+(
+      rootElement.getAttribute('data-options-section') || 0
+  );
   const baseUrl: string | undefined = (window as any).reacg_global?.rest_root;
   const nonce: string | undefined = (window as any).reacg_global?.rest_nonce;
   const pluginUrl: string | undefined = (window as any).reacg_global
@@ -19,6 +22,7 @@ const addApplication = (rootElement: HTMLElement) => {
     <React.StrictMode>
       <AppInfoProvider
         galleryId={galleryId}
+        showControls={showControls}
         baseUrl={baseUrl}
         nonce={nonce}
         pluginUrl={pluginUrl}

@@ -7,15 +7,11 @@ const GoogleFontsContext = React.createContext<{
 }>({});
 
 const GoogleFontsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
-  const {galleryId, baseUrl, nonce} = useAppInfo();
+  const {showControls, baseUrl, nonce} = useAppInfo();
   const [options, setOptions] = useState<any[]>([]);
 
   const getData = async () => {
-    const dataElement = document.getElementById('reacg-root' + galleryId);
-    const showControlsData: number = +(
-        dataElement?.getAttribute('data-options-section') || 0
-    );
-    if ( !showControlsData ) {
+    if ( !showControls ) {
       return;
     }
     const fetchUrl: string | undefined = baseUrl

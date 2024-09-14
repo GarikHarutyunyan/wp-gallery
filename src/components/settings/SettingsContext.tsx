@@ -61,7 +61,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
   const {template, initTemplate, changeTemplate, resetTemplate} =
     useTemplates();
-  const {galleryId, baseUrl, nonce} = useAppInfo();
+  const {galleryId, showControls, baseUrl, nonce} = useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
@@ -72,22 +72,15 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
   const [cubeSettings, setCubeSettings] = useState<ICubeSettings>();
   const [carouselSettings, setCarouselSettings] = useState<ICarouselSettings>();
-  const [showControls, setShowControls] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
   const wrapperRef = useRef(null);
   const [imagesCount, setImagesCount] = useState<number>(0);
 
   const getData = async () => {
-    const dataElement = document.getElementById('reacg-root' + galleryId);
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'options/' + galleryId
       : undefined;
-    const showControlsData: number = +(
-      dataElement?.getAttribute('data-options-section') || 1
-    );
-
-    setShowControls(!!showControlsData);
 
     if (fetchUrl) {
       setIsLoading(true);
