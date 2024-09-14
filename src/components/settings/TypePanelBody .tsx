@@ -24,7 +24,7 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
   return isMobile ? (
     <TypePanelSelect value={type} onChange={onChange} />
   ) : (
-    <Aligner align={Align.START} style={{margin: '10px 10px 0'}}>
+    <Aligner align={Align.START} style={{margin: '10px 0 0'}}>
       {GalleryTypeOptions.map(({value, title}: ISelectOption) => {
         return (
           <TypeOption
