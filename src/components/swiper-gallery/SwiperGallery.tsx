@@ -27,10 +27,10 @@ interface ISwiperGalleryProps {
   width?: number;
   size?: number;
   height?: number;
-  imagesCount?: number;
-  handleSlideChange?: any;
-  handleThumbnailClick?: any;
+  imagesCount: number;
+  preLoadCount: number;
   scale?: any;
+  allowTouchMove: boolean;
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
@@ -46,10 +46,10 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   width,
   size,
   height,
-  handleSlideChange,
-  handleThumbnailClick,
+  preLoadCount,
   imagesCount,
   scale,
+  allowTouchMove,
 }) => {
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
@@ -131,6 +131,55 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
+  const loadImagesInRange = (startIndex: number, endIndex: number) => {
+    for (let i = startIndex; i <= endIndex; i++) {
+      const imgElement = document.querySelector(
+          `.lazy[data-index="${i}"]`
+      ) as HTMLImageElement;
+
+      if (
+          imgElement &&
+          images &&
+          (!imgElement.src || imgElement.src === undefined)
+      ) {
+        imgElement.setAttribute('src', images[i].original.url);
+        imgElement.setAttribute(
+            'srcSet',
+            `${images[i].thumbnail.url} ${images[i].thumbnail.width}w, ${images[i].medium_large.url} ${images[i].medium_large.width}w, ${images[i].original.url} ${images[i].original.width}w`
+        );
+      }
+    }
+  };
+
+  const handleSlideChange = (previousIndex: any, swiperRef: any, imagesCount: number, preLoadCount: number) => {
+    const swiper = swiperRef.current?.swiper;
+    const activeIndex = parseInt(swiper.realIndex);
+
+    if (images && previousIndex.current !== -1) {
+      var loadStartIndex, loadEndIndex;
+      if (
+          activeIndex > previousIndex.current
+      ) {
+        loadStartIndex = activeIndex;
+        loadEndIndex = Math.min(
+            imagesCount + activeIndex + preLoadCount,
+            images.length
+        );
+
+      } else {
+        loadStartIndex = activeIndex
+            ? Math.max(
+                activeIndex - (imagesCount !== undefined ? imagesCount : 0) - preLoadCount,
+                0
+            )
+            : 0;
+        loadEndIndex = activeIndex;
+      }
+      loadImagesInRange(loadStartIndex, loadEndIndex);
+    }
+    previousIndex.current = activeIndex;
+  };
+
   return (
     <Swiper
       key={(imagesCount || 0)}
@@ -138,16 +187,16 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       autoplay={autoplay || isPlaying ? {
         delay: delay,
         stopOnLastSlide: false,
-        pauseOnMouseEnter: key === 'cubeEffect'} : false}
-      grabCursor={key !== 'coverflowEffect'}
-      allowTouchMove={key !== 'coverflowEffect'}
+        pauseOnMouseEnter: allowTouchMove} : false}
+      grabCursor={allowTouchMove}
+      allowTouchMove={allowTouchMove}
       loop={loop}
       pagination={false}
       className={className}
       loopAdditionalSlides={0}
       onSlideChange={() => {
-        if (key === 'coverflowEffect' && handleSlideChange) {
-          handleSlideChange(previousIndex, swiperRef);
+        if (handleSlideChange) {
+          handleSlideChange(previousIndex, swiperRef, imagesCount, preLoadCount);
         }
       }}
       {...effects}
@@ -176,13 +225,13 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
               <img
                 data-index={index}
                 src={
-                    key !== 'coverflowEffect' || index < (imagesCount || 0) + 1 || index > images.length - (imagesCount || 0) - 1
+                    index < (imagesCount || 0) + 1 || index > images.length - (imagesCount || 0) - 1
                       ? image.original.url
                       : undefined
                 }
                 sizes={`${size}px`}
                 srcSet={
-                    key !== 'coverflowEffect' || index < (imagesCount || 0) + 1 || index > images.length - (imagesCount || 0) - 1
+                    index < (imagesCount || 0) + 1 || index > images.length - (imagesCount || 0) - 1
                     ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
                     : undefined
                 }

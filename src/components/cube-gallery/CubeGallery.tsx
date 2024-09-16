@@ -75,6 +75,9 @@ const CubeGallery: React.FC = () => {
         autoplay={autoplay}
         delay={slideDuration}
         size={Math.max(containerWidth, containerHeight)}
+        imagesCount={1}
+        preLoadCount={1}
+        allowTouchMove={true}
       />
     </Box>
   );
