@@ -36,14 +36,10 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [templates, setTemplates] = useState<ITemplateReference[]>([]);
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const {galleryId} = useAppInfo();
+  const {showControls} = useAppInfo();
 
   const getTemplates = async () => {
-    const dataElement = document.getElementById('reacg-root' + galleryId);
-    const showControlsData: number = +(
-        dataElement?.getAttribute('data-options-section') || 0
-    );
-    if ( !showControlsData ) {
+    if ( !showControls ) {
       return;
     }
     const fetchUrl: string | undefined =
