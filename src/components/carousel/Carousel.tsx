@@ -147,6 +147,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         playAndPauseAllowed={playAndPauseAllowed}
         width={containerWidth}
         height={containerHeight}
+        size={Math.max(width, height)}
         imagesCount={imagesCount}
         handleSlideChange={handleSlideChange}
         handleThumbnailClick={handleThumbnailClick}
