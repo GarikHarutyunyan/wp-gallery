@@ -70,61 +70,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     return () => window.removeEventListener('resize', handleResize);
   }, [wrapper?.clientWidth]);
 
-  const handleSlideChange = (previousIndex: any, swiperRef: any) => {
-    const swiper = swiperRef.current?.swiper;
-    const activeIndex = swiper.realIndex;
-    const loadImagesInRange = (startIndex: number, endIndex: number) => {
-      for (let i = startIndex; i <= endIndex; i++) {
-        const imgElement = document.querySelector(
-          `.lazy[data-index="${i}"]`
-        ) as HTMLImageElement;
-
-        if (
-          imgElement &&
-          images &&
-          (!imgElement.src || imgElement.src === undefined)
-        ) {
-          imgElement.setAttribute('src', images[i].original.url);
-          imgElement.setAttribute(
-            'srcSet',
-            `${images[i].thumbnail.url} ${images[i].thumbnail.width}w, ${images[i].medium_large.url} ${images[i].medium_large.width}w, ${images[i].original.url} ${images[i].original.width}w`
-          );
-        }
-      }
-    };
-
-    if (
-      activeIndex > previousIndex.current &&
-      previousIndex.current !== -1 &&
-      images
-    ) {
-      const loadStartIndex = activeIndex;
-      const loadEndIndex = Math.min(
-        imagesCount + activeIndex + 4,
-        images.length
-      );
-      loadImagesInRange(loadStartIndex, loadEndIndex);
-    } else if (previousIndex.current !== -1) {
-      const loadStartIndex = activeIndex
-        ? Math.max(
-            activeIndex - (imagesCount !== undefined ? imagesCount : 0) - 4,
-            0
-          )
-        : 0;
-      const loadEndIndex = activeIndex;
-      loadImagesInRange(loadStartIndex, loadEndIndex);
-    }
-    previousIndex.current = activeIndex;
-  };
-
-  const handleThumbnailClick = (index: number, swiperRef: any) => {
-    const swiper = swiperRef.current?.swiper;
-
-    if (swiper) {
-      swiper.slideToLoop(index);
-    }
-  };
-
   return (
     <Box
       sx={{
@@ -149,10 +94,10 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         height={containerHeight}
         size={Math.max(width, height)}
         imagesCount={imagesCount}
-        handleSlideChange={handleSlideChange}
-        handleThumbnailClick={handleThumbnailClick}
+        preLoadCount={4}
         padding={padding}
         scale={scale}
+        allowTouchMove={false}
       />)}
     </Box>
   );
