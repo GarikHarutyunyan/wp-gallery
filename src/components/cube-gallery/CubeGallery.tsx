@@ -74,6 +74,7 @@ const CubeGallery: React.FC = () => {
         images={images || []}
         autoplay={autoplay}
         delay={slideDuration}
+        size={Math.max(containerWidth, containerHeight)}
       />
     </Box>
   );

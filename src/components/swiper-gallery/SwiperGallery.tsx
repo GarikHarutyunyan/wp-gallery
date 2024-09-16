@@ -25,6 +25,7 @@ interface ISwiperGalleryProps {
   playAndPauseAllowed?: boolean;
   className?: string;
   width?: number;
+  size?: number;
   height?: number;
   imagesCount?: number;
   handleSlideChange?: any;
@@ -43,6 +44,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   className,
   playAndPauseAllowed,
   width,
+  size,
   height,
   handleSlideChange,
   handleThumbnailClick,
@@ -178,6 +180,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
                       ? image.original.url
                       : undefined
                 }
+                sizes={`${size}px`}
                 srcSet={
                     key !== 'coverflowEffect' || index < (imagesCount || 0) + 1 || index > images.length - (imagesCount || 0) - 1
                     ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
