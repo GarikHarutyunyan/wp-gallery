@@ -14,6 +14,8 @@ const TemplatesSelect: React.FC = () => {
     changeMosaicSettings,
     changeSlideshowSettings,
     changeThumbnailSettings,
+    changeCubeSettings,
+    changeCarouselSettings,
     type: activeType,
     changeType,
   } = useSettings();
@@ -23,8 +25,17 @@ const TemplatesSelect: React.FC = () => {
 
   useLayoutEffect(() => {
     if (template && template.template_id) {
-      const {type, general, lightbox, masonry, mosaic, slideshow, thumbnails} =
-        template;
+      const {
+        type,
+        general,
+        lightbox,
+        masonry,
+        mosaic,
+        slideshow,
+        thumbnails,
+        cube,
+        carousel,
+      } = template;
       activeType !== type && type && changeType!(type);
       general && changeGeneralSettings(general);
       lightbox && changeLightboxSettings(lightbox);
@@ -32,6 +43,8 @@ const TemplatesSelect: React.FC = () => {
       mosaic && changeMosaicSettings(mosaic);
       slideshow && changeSlideshowSettings(slideshow);
       thumbnails && changeThumbnailSettings(thumbnails);
+      cube && changeCubeSettings(cube);
+      carousel && changeCarouselSettings(carousel);
     }
   }, [template?.template_id]);
 
