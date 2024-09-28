@@ -55,6 +55,8 @@ const thumbnailMockSettings2: IThumbnailSettings = {
 };
 
 const generalMockSettings: IGeneralSettings = {
+  orderBy: 'default',
+  orderDirection: 'asc',
   itemsPerPage: 8,
   activeButtonColor: 'blue',
   inactiveButtonColor: 'inherit',

@@ -35,7 +35,7 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   } = useSettings();
   const [activeTab, setActiveTab] = useState<string>('gallery');
   const showOnlyGalleryOptions: boolean =
-    type === GalleryType.SLIDESHOW || type === GalleryType.CUBE;
+      type === GalleryType.SLIDESHOW || type === GalleryType.CUBE || type === GalleryType.CAROUSEL;
 
   const onActiveTabChange = (_: any, newActiveTab: string) => {
     setActiveTab(newActiveTab);
@@ -104,11 +104,11 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
       <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
         {renderGalleryOptions()}
       </TabPanel>
-      {!showOnlyGalleryOptions ? (
-        <>
-          <TabPanel value={'general'} className={'reacg-tab-panel'}>
-            <GeneralSettings isLoading={isLoading} />
-          </TabPanel>
+        <TabPanel value={'general'} className={'reacg-tab-panel'}>
+          <GeneralSettings isLoading={isLoading} />
+        </TabPanel>
+        {!showOnlyGalleryOptions ? (
+          <>
           <TabPanel value={'lightbox'} className={'reacg-tab-panel'}>
             <LightboxSettings isLoading={isLoading} />
           </TabPanel>

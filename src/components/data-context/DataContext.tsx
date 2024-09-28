@@ -930,7 +930,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     return PaginationType.NONE;
   }, [type, mosaicSettings, thumbnailSettings, masonrySettings]);
 
-  const {itemsPerPage = 1} = generalSettings as IGeneralSettings;
+  const {itemsPerPage = 1, orderBy = 'default', orderDirection = 'asc'} = generalSettings as IGeneralSettings;
   const {galleryId, baseUrl, nonce} = useAppInfo();
   const {noDataText, setLoadMoreText, setNoDataText} =
     useContext(TranslationsContext);
@@ -952,7 +952,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }, 500);
 
     return () => clearTimeout(reloadData);
-  }, [itemsPerPage, paginationType]);
+  }, [itemsPerPage, paginationType, orderBy, orderDirection]);
 
   const loadAllLightboxImages = async (): Promise<void> => {
     const newLightboxImages: IImageDTO[] = await (getAllData as Function)();
@@ -1001,13 +1001,13 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (fetchUrl) {
       setIsLoading(true);
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
-      const perPageQueryString: string =
-        paginationType !== PaginationType.NONE
-          ? `&per_page=${itemsPerPage}`
-          : '';
-      const queryString: string = perPageQueryString
-        ? `${queryStringSeperator}page=${page}${perPageQueryString}`
-        : '';
+      let queryString = queryStringSeperator;
+      queryString += `order_by=${orderBy}`;
+      queryString += `&order=${orderDirection}`;
+      if ( paginationType !== PaginationType.NONE ) {
+        queryString += `&page=${page}`;
+        queryString += `&per_page=${itemsPerPage}`;
+      }
       const imgData: any[] = (
         await axios.get(`${fetchUrl}${queryString}`, {
           headers: {'X-WP-Nonce': nonce},

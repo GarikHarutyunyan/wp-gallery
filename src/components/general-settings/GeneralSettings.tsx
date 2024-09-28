@@ -7,10 +7,12 @@ import {
   GalleryType,
   IGeneralSettings,
   PaginationButtonShapeOptions,
+  OrderByOptions,
+  OrderDirectionOptions,
   PaginationType,
   PaginationTypeOptions,
 } from 'data-structures';
-import React, {ReactNode, useMemo} from 'react';
+import React, {ReactNode, useEffect, useMemo, useState} from 'react';
 import {
   ColorControl,
   ISelectOption,
@@ -18,6 +20,8 @@ import {
   SelectControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
+import TabPanel from "@mui/lab/TabPanel";
+import {LightboxSettings} from "../light-box-settings";
 
 const getPaginationTypeOptions = (type: GalleryType) => {
   let options = PaginationTypeOptions;
@@ -60,6 +64,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     changeMasonrySettings,
   } = useSettings();
   const {
+    orderBy,
+    orderDirection,
     itemsPerPage,
     activeButtonColor,
     inactiveButtonColor,
@@ -67,6 +73,9 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     loadMoreButtonColor,
     paginationTextColor,
   } = value as IGeneralSettings;
+
+  const showOnlyGalleryOptions: boolean =
+      type === GalleryType.SLIDESHOW || type === GalleryType.CUBE || type === GalleryType.CAROUSEL;
 
   const paginationType: PaginationType = useMemo(() => {
     if (type === GalleryType.MOSAIC) {
@@ -114,7 +123,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
             <Filter isLoading={isLoading}>
               <SelectControl
                 id={'paginationType'}
-                name={'Pagination Type'}
+                name={'Pagination type'}
                 value={paginationType}
                 options={filteredPaginationTypeOptions}
                 onChange={onPaginationTypeChange}
@@ -125,7 +134,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                 <Filter isLoading={isLoading}>
                   <NumberControl
                     id={'itemsPerPage'}
-                    name={'Items Per Page'}
+                    name={'Items per page'}
                     value={itemsPerPage}
                     onChange={onInputValueChange}
                     min={1}
@@ -194,9 +203,42 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const renderSortingSettings = (): ReactNode => {
+    return (
+        <Section
+            header={'Sorting'}
+            body={
+              <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                      id={'orderBy'}
+                      name={'Order by'}
+                      value={orderBy}
+                      options={OrderByOptions}
+                      onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                      id={'orderDirection'}
+                      name={'Order direction'}
+                      value={orderDirection}
+                      options={OrderDirectionOptions}
+                      onChange={onInputValueChange}
+                  />
+                </Filter>
+              </Grid>
+            }
+        />
+    );
+  };
+
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
-      {renderMainSettings()}
+      {renderSortingSettings()}
+      {!showOnlyGalleryOptions ? (
+          renderMainSettings()
+      ) : null}
     </Paper>
   );
 };
