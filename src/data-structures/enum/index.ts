@@ -5,6 +5,8 @@ export * from './LightboxCaptionsPosition';
 export * from './LightboxImageAnimation';
 export * from './LightboxThumbnailsPosition';
 export * from './PaginationButtonShape';
+export * from './OrderBy';
+export * from './OrderDirection';
 export * from './PaginationType';
 export * from './TitleAlignment';
 export * from './TitlePosition';

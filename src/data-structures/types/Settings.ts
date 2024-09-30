@@ -88,6 +88,8 @@ export interface ILightboxSettings extends ISlideshowSettings {
 }
 
 export interface IGeneralSettings {
+  orderBy: string;
+  orderDirection: string;
   itemsPerPage: number | undefined;
   activeButtonColor: string;
   inactiveButtonColor: string;

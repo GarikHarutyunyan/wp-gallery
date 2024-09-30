@@ -65,9 +65,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         style={{width: '100%'}}
       >
         <Tab label={'Gallery'} value={'gallery'} />
-        {!showOnlyGalleryOptions ? (
           <Tab label={'General'} value={'general'} />
-        ) : null}
         {!showOnlyGalleryOptions ? (
           <Tab label={'Lightbox'} value={'lightbox'} />
         ) : null}

@@ -101,6 +101,8 @@ const slideshowMockSettings: ISlideshowSettings = {
 };
 
 const generalMockSettings: IGeneralSettings = {
+  orderBy: 'default',
+  orderDirection: 'asc',
   itemsPerPage: 8,
   activeButtonColor: 'blue',
   inactiveButtonColor: 'inherit',
