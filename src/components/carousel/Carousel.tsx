@@ -3,11 +3,7 @@ import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {ICarouselSettings} from 'data-structures';
 import React, {useEffect, useState} from 'react';
-import {
-  Autoplay,
-  EffectCoverflow,
-  Navigation,
-} from 'swiper/modules';
+import {Autoplay, EffectCoverflow, Navigation} from 'swiper/modules';
 import {SwiperGallery} from '../swiper-gallery/SwiperGallery';
 import './carousel.css';
 
@@ -126,22 +122,24 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         boxSizing: 'border-box',
       }}
     >
-      {(images || []).length > 0 && (<SwiperGallery
-        key={effects.id}
-        effects={effects}
-        loop={true}
-        backgroundColor={backgroundColor}
-        images={images || []}
-        autoplay={autoplay}
-        delay={slideDuration}
-        playAndPauseAllowed={playAndPauseAllowed}
-        width={containerWidth}
-        height={containerHeight}
-        imagesCount={imagesCount}
-        handleCarouselSlideChange={handleCarouselSlideChange}
-        padding={padding}
-        scale={scale}
-      />)}
+      {(images || []).length > 0 && (
+        <SwiperGallery
+          key={effects.id}
+          effects={effects}
+          loop={true}
+          backgroundColor={backgroundColor}
+          images={images || []}
+          autoplay={autoplay}
+          delay={slideDuration}
+          playAndPauseAllowed={playAndPauseAllowed}
+          width={containerWidth}
+          height={containerHeight}
+          imagesCount={imagesCount}
+          handleCarouselSlideChange={handleCarouselSlideChange}
+          padding={padding}
+          scale={scale}
+        />
+      )}
     </Box>
   );
 };

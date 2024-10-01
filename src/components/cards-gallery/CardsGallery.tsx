@@ -6,6 +6,7 @@ import {ICardsSettings} from 'data-structures';
 import React, {useEffect, useState} from 'react';
 import {Autoplay, EffectCards, Navigation} from 'swiper/modules';
 import './cards-gallery.css';
+import {getWidthAllCards} from './getWidthAllCards';
 interface ITCardsProps {
   onClick?: (index: number) => void;
 }
@@ -27,30 +28,38 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
     id: 3,
     effect: 'cards',
     modules: [EffectCards, Autoplay, Navigation],
-    navigation: true,
+    navigation: navigationButton,
     cardsEffect: {
       rotate: true,
       perSlideRotate: 5,
     },
   };
 
+  let allCardswidth =
+    2 * (getWidthAllCards(width, height, perSlideOffset) - width / 2);
+
   const wrapper = wrapperRef.current;
   const [innerWidth, setInnerWidth] = useState<number>(
-    wrapper?.clientWidth * 0.2 || width
+    allCardswidth >= wrapper?.clientWidth ? width * 0.8 : width
   );
-
-  const ratio: number = width / height;
-  const containerWidth: number = Math.min(innerWidth, width);
+  const ratio: number = innerWidth / height;
+  const containerWidth: number = innerWidth;
   const containerHeight: number = containerWidth / ratio;
 
   useEffect(() => {
+    allCardswidth =
+      2 * (getWidthAllCards(innerWidth, height, perSlideOffset) - width / 2);
     const handleResize = () => {
-      setInnerWidth(wrapper?.clientWidth * 0.2 || width);
+      console.log(allCardswidth, wrapper.clientWidth);
+      setInnerWidth(
+        allCardswidth >= wrapper?.clientWidth ? width * 0.8 : width
+      );
     };
+    handleResize();
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
-  }, [wrapper?.clientWidth]);
+  }, [wrapper?.clientWidth, allCardswidth, width]);
 
   const handleCardsSlideChange = (swiperRef: any) => {
     const swiper = swiperRef.current?.swiper;
@@ -83,24 +92,27 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
   };
 
   return (
-    <Box
-      sx={{
-        width: `${containerWidth}px`,
-        height: `${containerHeight}px`,
-        mx: 'auto',
-      }}
-    >
-      <SwiperGallery
-        key={effects.id}
-        effects={effects}
-        images={images || []}
-        autoplay={autoplay}
-        delay={slideDuration}
-        playAndPauseAllowed={playAndPauseAllowed}
-        handleCardsSlideChange={handleCardsSlideChange}
-        perSlideOffset={perSlideOffset}
-      />
-    </Box>
+    <>
+      <Box
+        sx={{
+          width: `${containerWidth}px`,
+          height: `${containerHeight}px`,
+          mx: 'auto',
+        }}
+      >
+        <SwiperGallery
+          key={effects.id}
+          effects={effects}
+          images={images || []}
+          autoplay={autoplay}
+          delay={slideDuration}
+          playAndPauseAllowed={playAndPauseAllowed}
+          handleCardsSlideChange={handleCardsSlideChange}
+          perSlideOffset={perSlideOffset}
+        />
+      </Box>
+      <div></div>
+    </>
   );
 };
 

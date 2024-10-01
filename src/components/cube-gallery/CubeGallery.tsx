@@ -4,7 +4,8 @@ import {useSettings} from 'components/settings';
 import {SwiperGallery} from 'components/swiper-gallery/SwiperGallery';
 import {ICubeSettings} from 'data-structures';
 import React, {useEffect, useState} from 'react';
-import {Autoplay, EffectCube} from 'swiper/modules';
+import {Autoplay, EffectCube, Navigation} from 'swiper/modules';
+
 import './cube-gallery.css';
 
 const effects = {
@@ -16,7 +17,7 @@ const effects = {
     shadowOffset: 20,
     shadowScale: 0.94,
   },
-  modules: [EffectCube, Autoplay],
+  modules: [EffectCube, Autoplay, Navigation],
 };
 
 const CubeGallery: React.FC = () => {

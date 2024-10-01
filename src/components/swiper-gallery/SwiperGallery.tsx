@@ -144,12 +144,17 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
   return (
     <Swiper
-      key={(imagesCount || 0)}
+      key={imagesCount || 0}
       ref={swiperRef}
-      autoplay={autoplay || isPlaying ? {
-        delay: delay,
-        stopOnLastSlide: false,
-        pauseOnMouseEnter: key === 'cubeEffect'} : false}
+      autoplay={
+        autoplay || isPlaying
+          ? {
+              delay: delay,
+              stopOnLastSlide: false,
+              pauseOnMouseEnter: key === 'cubeEffect',
+            }
+          : false
+      }
       grabCursor={key !== 'coverflowEffect'}
       allowTouchMove={key !== 'coverflowEffect'}
       loop={loop}
@@ -165,7 +170,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       }}
       {...effects}
       style={
-        key === 'cardsEffect' || key === 'cubeEffect'
+        key === 'cubeEffect'
           ? {
               width,
               height,

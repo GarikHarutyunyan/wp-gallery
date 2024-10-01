@@ -56,11 +56,19 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
             <Filter isLoading={isLoading}>
               <SliderControl
                 id={'perSlideOffset'}
-                name={'perSlideOffset %'}
+                name={'Per slide offset %'}
                 value={perSlideOffset}
                 onChange={onInputValueChange}
                 min={2}
                 max={40}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'navigationButton'}
+                name={'Navigation'}
+                value={navigationButton}
+                onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>

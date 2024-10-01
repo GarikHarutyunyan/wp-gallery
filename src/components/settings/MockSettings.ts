@@ -167,7 +167,7 @@ const cardsMockSettings: ICardsSettings = {
   width: 300,
   height: 300,
   perSlideOffset: 2,
-  navigationButton: true,
+  navigationButton: false,
   playAndPauseAllowed: false,
   autoplay: false,
   slideDuration: 3000,
