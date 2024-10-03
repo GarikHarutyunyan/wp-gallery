@@ -6,7 +6,7 @@ import {ICardsSettings} from 'data-structures';
 import React, {useEffect, useState} from 'react';
 import {Autoplay, EffectCards, Navigation} from 'swiper/modules';
 import './cards-gallery.css';
-import {getWidthAllCards} from './getWidthAllCards';
+import {getWidthAllCards, getContainerWidth} from './getWidthAllCards';
 interface ITCardsProps {
   onClick?: (index: number) => void;
 }
@@ -35,31 +35,40 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
     },
   };
 
-  let allCardswidth =
-    2 * (getWidthAllCards(width, height, perSlideOffset) - width / 2);
-
   const wrapper = wrapperRef.current;
+
+  const ratio = width / height;
+  let initialWidth = width;
+  let initialHeight = height;
+
+  while ( getContainerWidth(initialWidth, initialHeight, perSlideOffset) >= wrapper?.clientWidth ) {
+    initialWidth = initialWidth - 1;
+    initialHeight = initialWidth / ratio;
+  }
+
   const [innerWidth, setInnerWidth] = useState<number>(
-    allCardswidth >= wrapper?.clientWidth ? width * 0.8 : width
+      initialWidth
   );
-  const ratio: number = innerWidth / height;
-  const containerWidth: number = innerWidth;
-  const containerHeight: number = containerWidth / ratio;
+  const [innerHeight, setInnerHeight] = useState<number>(
+      initialHeight
+  );
 
   useEffect(() => {
-    allCardswidth =
-      2 * (getWidthAllCards(innerWidth, height, perSlideOffset) - width / 2);
     const handleResize = () => {
-      console.log(allCardswidth, wrapper.clientWidth);
-      setInnerWidth(
-        allCardswidth >= wrapper?.clientWidth ? width * 0.8 : width
-      );
+      initialWidth = width;
+      initialHeight = height;
+      while ( getContainerWidth(initialWidth, initialHeight, perSlideOffset) >= wrapper?.clientWidth ) {
+        initialWidth = initialWidth - 1;
+        initialHeight = initialWidth / ratio;
+      }
+      setInnerWidth(initialWidth);
+      setInnerHeight(initialHeight);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
-  }, [wrapper?.clientWidth, allCardswidth, width]);
+  }, [innerWidth, innerHeight]);
 
   const handleCardsSlideChange = (swiperRef: any) => {
     const swiper = swiperRef.current?.swiper;
@@ -95,8 +104,8 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
     <>
       <Box
         sx={{
-          width: `${containerWidth}px`,
-          height: `${containerHeight}px`,
+          width: `${innerWidth}px`,
+          height: `${innerHeight}px`,
           mx: 'auto',
         }}
       >

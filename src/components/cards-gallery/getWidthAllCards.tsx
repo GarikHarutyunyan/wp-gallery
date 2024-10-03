@@ -30,7 +30,6 @@ const getWidthAllCards = (
   let angleDegree = 20;
   if (activeSlideHeight > activeSLideWidth) {
     angleDegree += (activeSlideHeight / activeSLideWidth) * 0.05;
-    console.log((activeSlideHeight / activeSLideWidth) * 0.05, angleDegree);
   } else if (activeSlideHeight < activeSLideWidth) {
     const ratio = activeSLideWidth / activeSlideHeight;
     if (ratio <= 2) {
@@ -54,4 +53,12 @@ const getWidthAllCards = (
   }
   return newConteinerWidht + Math.sin(angleDegree) * rotateDistance;
 };
-export {getWidthAllCards};
+
+const getContainerWidth = (
+    activeSLideWidth: number,
+    activeSlideHeight: number,
+    perSlideOffset: number
+): number => {
+  return 2 * (getWidthAllCards(activeSLideWidth, activeSlideHeight, perSlideOffset) - activeSLideWidth) + activeSLideWidth;
+};
+export {getWidthAllCards, getContainerWidth};
