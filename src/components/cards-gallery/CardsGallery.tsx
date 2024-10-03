@@ -68,7 +68,7 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
-  }, [innerWidth, innerHeight]);
+  }, [width, height, perSlideOffset]);
 
   const handleCardsSlideChange = (swiperRef: any) => {
     const swiper = swiperRef.current?.swiper;
