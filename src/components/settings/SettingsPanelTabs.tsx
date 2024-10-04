@@ -1,5 +1,5 @@
 import LoadingButton from '@mui/lab/LoadingButton';
-import {Tab, Tabs, useMediaQuery, useTheme} from '@mui/material';
+import {Tab, Tabs} from '@mui/material';
 import clsx from 'clsx';
 import {Align, Aligner} from 'core-components';
 import {GalleryType} from 'data-structures';
@@ -24,7 +24,10 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
   const [isReseting, setIsReseting] = useState(false);
   const {type} = useSettings();
   const showOnlyGalleryOptions: boolean =
-    type === GalleryType.SLIDESHOW || type === GalleryType.CUBE || type === GalleryType.CAROUSEL;
+    type === GalleryType.SLIDESHOW ||
+    type === GalleryType.CUBE ||
+    type === GalleryType.CAROUSEL ||
+    type === GalleryType.CARDS;
 
   const save = async () => {
     setIsSaving(true);
@@ -43,7 +46,9 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
     const updateIsMobile = () => {
       const parentElement = document.querySelector('.reacg-preview');
       if (parentElement) {
-        setIsMobile(parentElement && parentElement.getBoundingClientRect().width < 720);
+        setIsMobile(
+          parentElement && parentElement.getBoundingClientRect().width < 720
+        );
       }
     };
 

@@ -3,13 +3,7 @@ import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {ICarouselSettings} from 'data-structures';
 import React, {useEffect, useState} from 'react';
-import {
-  Autoplay,
-  EffectCoverflow,
-  Navigation,
-  Pagination,
-  Thumbs,
-} from 'swiper/modules';
+import {Autoplay, EffectCoverflow, Navigation} from 'swiper/modules';
 import {SwiperGallery} from '../swiper-gallery/SwiperGallery';
 import './carousel.css';
 

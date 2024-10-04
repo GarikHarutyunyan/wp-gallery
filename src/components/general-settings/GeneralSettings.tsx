@@ -75,7 +75,10 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   } = value as IGeneralSettings;
 
   const showOnlyGalleryOptions: boolean =
-      type === GalleryType.SLIDESHOW || type === GalleryType.CUBE || type === GalleryType.CAROUSEL;
+      type === GalleryType.SLIDESHOW ||
+      type === GalleryType.CUBE ||
+      type === GalleryType.CAROUSEL ||
+      type === GalleryType.CARDS;
 
   const paginationType: PaginationType = useMemo(() => {
     if (type === GalleryType.MOSAIC) {

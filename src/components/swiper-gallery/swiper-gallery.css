@@ -16,8 +16,6 @@
 .reacg-gallery .swiper {
   height: 100%;
   width: 100%;
-  overflow-x: clip;
-  overflow-y: visible;
 }
 
 .reacg-gallery .swiper-slide {

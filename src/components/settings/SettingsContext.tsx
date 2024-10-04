@@ -4,6 +4,7 @@ import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {
   GalleryType,
+  ICardsSettings,
   ICarouselSettings,
   ICubeSettings,
   IGeneralSettings,
@@ -18,6 +19,7 @@ import {useSnackbar} from 'notistack';
 import React, {ReactNode, useLayoutEffect, useRef, useState} from 'react';
 import {TypeUtils} from 'utils';
 import {
+  cardsMockSettings,
   carouselMockSettings,
   cubeMockSettings,
   generalMockSettings,
@@ -44,6 +46,7 @@ const SettingsContext = React.createContext<{
   lightboxSettings?: ILightboxSettings;
   cubeSettings?: ICubeSettings;
   carouselSettings?: ICarouselSettings;
+  cardsSettings?: ICardsSettings;
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
@@ -52,6 +55,7 @@ const SettingsContext = React.createContext<{
   changeLightboxSettings?: any;
   changeCubeSettings?: any;
   changeCarouselSettings?: any;
+  changeCardsSettings?: any;
   wrapperRef?: any;
   imagesCount?: number;
   changeImagesCount?: (count: number) => void;
@@ -72,6 +76,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
   const [cubeSettings, setCubeSettings] = useState<ICubeSettings>();
   const [carouselSettings, setCarouselSettings] = useState<ICarouselSettings>();
+  const [cardsSettings, setCardsSettings] = useState<ICardsSettings>();
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
   const wrapperRef = useRef(null);
@@ -99,6 +104,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setLightboxSettings(newSettings.lightbox);
       setCubeSettings(newSettings.cube || cubeMockSettings);
       setCarouselSettings(newSettings.carousel || carouselMockSettings);
+      setCardsSettings(newSettings.cards || cardsMockSettings);
       initTemplate?.(
         newSettings?.template_id as string,
         newSettings?.title as string
@@ -114,6 +120,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setLightboxSettings(lightboxMockSettings);
       setCubeSettings(cubeMockSettings);
       setCarouselSettings(carouselMockSettings);
+      setCardsSettings(cardsMockSettings);
     }
   };
 
@@ -167,6 +174,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         masonry: masonrySettings,
         cube: cubeSettings,
         carousel: carouselSettings,
+        cards: cardsSettings,
         slideshow: slideshowSettings,
         template_id:
           template?.template_id == 'none' ? '' : template?.template_id,
@@ -186,6 +194,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
+        setCardsSettings(newSettings.cards);
         initTemplate?.(
           (TypeUtils.isNumber(newSettings?.template_id)
             ? newSettings?.template_id
@@ -240,6 +249,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
+        setCardsSettings(newSettings.cards);
         changeTemplate?.(newSettings.template_id as string);
         enqueueSnackbar(successMessage, {
           variant: 'success',
@@ -283,6 +293,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         lightboxSettings,
         cubeSettings,
         carouselSettings,
+        cardsSettings,
         changeGeneralSettings: setGeneralSettings,
         changeThumbnailSettings: setThumbnailSettings,
         changeMosaicSettings: setMosaicSettings,
@@ -291,6 +302,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeLightboxSettings: setLightboxSettings,
         changeCubeSettings: setCubeSettings,
         changeCarouselSettings: setCarouselSettings,
+        changeCardsSettings: setCardsSettings,
         wrapperRef,
         imagesCount,
         changeImagesCount: setImagesCount,

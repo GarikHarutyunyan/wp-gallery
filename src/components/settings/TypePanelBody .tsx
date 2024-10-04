@@ -5,7 +5,7 @@ import React from 'react';
 import {TypeOption} from './TypeOption';
 import {TypePanelSelect} from './TypePanelSelect';
 import {useSettings} from './useSettings';
-import useIsMobile from "hooks/useIsMobile"
+import useIsMobile from "hooks/useIsMobile";
 
 interface ITypePanelBodyProps {
   isLoading: boolean;

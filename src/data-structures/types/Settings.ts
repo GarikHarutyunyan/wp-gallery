@@ -122,6 +122,16 @@ export interface ICarouselSettings {
   spaceBetween: number;
 }
 
+export interface ICardsSettings {
+  width: number;
+  height: number;
+  perSlideOffset: number;
+  navigationButton: boolean;
+  playAndPauseAllowed: boolean;
+  autoplay: boolean;
+  slideDuration: number;
+}
+
 export interface ISettingsDTO {
   type: GalleryType;
   general: IGeneralSettings;
@@ -132,6 +142,7 @@ export interface ISettingsDTO {
   lightbox: ILightboxSettings;
   cube: ICubeSettings;
   carousel: ICarouselSettings;
+  cards: ICardsSettings;
   template_id?: number | string;
   title?: string;
 }

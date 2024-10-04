@@ -12,8 +12,6 @@ import 'swiper/css/navigation';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import './swiper-gallery.css';
 
-import useConfigureSwiper from './useConfigureSwiper';
-
 interface ISwiperGalleryProps {
   images: IImageDTO[];
   backgroundColor?: string;
@@ -31,6 +29,7 @@ interface ISwiperGalleryProps {
   preLoadCount: number;
   scale?: any;
   allowTouchMove: boolean;
+  perSlideOffset?: any;
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
@@ -50,6 +49,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   imagesCount,
   scale,
   allowTouchMove,
+  perSlideOffset,
 }) => {
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
@@ -58,22 +58,28 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const isDragging = useRef<boolean>(false);
   const key = effects.effect + 'Effect';
   const previousIndex = useRef<number>(-1);
-  useConfigureSwiper(swiperRef, key);
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
+    if (key === 'coverflowEffect') {
+      swiper.params.coverflowEffect.scale = scale;
+      swiper.params.coverflowEffect.depth = scale > 1 ? -1 : 1;
+    } else if (key === 'cardsEffect') {
+      swiper.params.cardsEffect.perSlideOffset = perSlideOffset;
+    }
+    swiper.update();
+
     const scale_decimal = scale === 2 ? '10' : (scale + '').split('.')[1];
 
     let paddingTop =
       scale > 1
-        ? (((parseInt(scale_decimal) *
-            (swiper.slidesEl.clientHeight || 0)) /
+        ? (((parseInt(scale_decimal) * (swiper.slidesEl.clientHeight || 0)) /
             100) *
             Math.ceil((imagesCount || 0) / 2)) /
           2
         : 0;
     setPaddingTop(paddingTop);
-  }, [scale, height, width, imagesCount, padding]);
+  }, [scale, height, width, imagesCount, padding, perSlideOffset]);
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
@@ -182,7 +188,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
   return (
     <Swiper
-      key={(imagesCount || 0)}
+      key={imagesCount || 0}
       ref={swiperRef}
       autoplay={autoplay || isPlaying ? {
         delay: delay,
@@ -218,9 +224,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         const isVideo: boolean = image.type === ImageType.VIDEO;
 
         return (
-          <SwiperSlide
-            key={index}
-          >
+          <SwiperSlide key={index}>
             {!isVideo ? (
               <img
                 data-index={index}
