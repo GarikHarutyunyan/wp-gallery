@@ -7,6 +7,7 @@ import {
   SwitchControl,
 } from 'components/controls';
 import {useSettings} from 'components/settings';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {ICarouselSettings} from 'data-structures';
 import React, {ReactNode} from 'react';
@@ -16,6 +17,7 @@ interface ICarouselSettingsProps {
 }
 
 const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
+  const {resetTemplate} = useTemplates();
   const {
     carouselSettings: value,
     changeCarouselSettings: onChange,
@@ -35,6 +37,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
   } = value as ICarouselSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
+    resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
 

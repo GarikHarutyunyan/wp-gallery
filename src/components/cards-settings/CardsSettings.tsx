@@ -2,6 +2,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {NumberControl, SliderControl, SwitchControl} from 'components/controls';
 import {useSettings} from 'components/settings';
+import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {ICardsSettings} from 'data-structures';
 import React, {ReactNode} from 'react';
@@ -12,6 +13,7 @@ interface ICardsSettingProps {
 }
 
 const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
+  const {resetTemplate} = useTemplates();
   const {cardsSettings: value, changeCardsSettings: onChange} = useSettings();
   const {
     width,
@@ -24,6 +26,7 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
   } = value as ICardsSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
+    resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
 
