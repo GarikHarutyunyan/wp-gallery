@@ -3,8 +3,6 @@ import React from 'react';
 import ReactDOM2 from 'react-dom';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import './index.css';
-// import reportWebVitals from './reportWebVitals';
 
 const addApplication = (rootElement: HTMLElement) => {
   const root = ReactDOM.createRoot(rootElement);
