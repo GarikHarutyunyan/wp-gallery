@@ -12,7 +12,7 @@ interface IMosaicGalleryProps {
 const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
   const {mosaicSettings: settings} = useSettings();
   const {images} = useData();
-  const {direction, gap, backgroundColor, padding, rowHeight, width, columns} =
+  const {direction, gap, backgroundColor, containerPadding, padding, rowHeight, width, columns} =
     settings as IMosaicSettings;
   const layout: LayoutType =
     direction === Direction.VERTICAL ? 'columns' : 'rows';
@@ -27,6 +27,7 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
       gap={gap}
       padding={padding}
       backgroundColor={backgroundColor}
+      containerPadding={containerPadding}
       settings={settings as IMosaicSettings}
       onClick={onClick}
     />

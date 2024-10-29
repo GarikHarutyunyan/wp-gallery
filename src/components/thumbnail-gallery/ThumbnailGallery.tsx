@@ -37,6 +37,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     columns = 1,
     gap,
     backgroundColor,
+    containerPadding,
     padding,
     paddingColor,
     borderRadius,
@@ -95,13 +96,13 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     if (containerWidth) {
       const busyWidth =
         validColumnsCount * 2 * padding + (validColumnsCount - 1) * gap;
-      const freeWidth = containerWidth - busyWidth;
+      const freeWidth = containerWidth - 2 * containerPadding - busyWidth;
 
       return freeWidth / validColumnsCount;
     }
 
     return width;
-  }, [containerWidth, width, gap, columns, padding, validColumnsCount]);
+  }, [containerWidth, containerPadding, width, gap, columns, padding, validColumnsCount]);
 
   const getHeight = useMemo<number>(() => {
     return getWidth * (1 / ratio);
@@ -193,7 +194,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     <div
       style={{
         width:
-          width * columns + (columns - 1) * gap + columns * 2 * padding + 'px',
+            (width * columns + (columns - 1) * gap + columns * 2 * padding) + 'px',
         margin: '0 auto',
         overflow: 'hidden',
         maxWidth: '100%',
@@ -205,6 +206,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
           overflow: 'hidden',
           maxWidth: '100%',
           backgroundColor,
+          padding: containerPadding + 'px',
         }}
       >
         <ImageList

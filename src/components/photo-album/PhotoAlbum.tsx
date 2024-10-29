@@ -20,6 +20,7 @@ interface IPhotoAlbumProps extends WithStyleAndClassName {
   padding: number;
   rowHeight?: number;
   backgroundColor: string;
+  containerPadding: number;
   settings: IMasonrySettings;
   onClick?: (index: number) => void;
 }
@@ -33,6 +34,7 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
   padding,
   rowHeight,
   backgroundColor,
+  containerPadding,
   settings,
   onClick,
 }) => {
@@ -132,7 +134,7 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
         targetRowHeight={rowHeight}
         photos={photos}
         componentsProps={{
-          containerProps: {style: {background: backgroundColor}},
+          containerProps: {style: {background: backgroundColor, padding: containerPadding + 'px'}},
         }}
         renderPhoto={renderPhoto}
       />
