@@ -33,6 +33,7 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
     width,
     gap,
     backgroundColor,
+    containerPadding,
     padding,
     paddingColor,
     columns,
@@ -90,21 +91,21 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
-              <SliderControl
-                id={'gap'}
-                name={'Spacing (px)'}
-                value={gap}
-                min={0}
-                max={100}
-                onChange={onInputValueChange}
+              <ColorControl
+                  id={'backgroundColor'}
+                  name={'Background color'}
+                  value={backgroundColor}
+                  onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>
-              <ColorControl
-                id={'backgroundColor'}
-                name={'Background color'}
-                value={backgroundColor}
-                onChange={onInputValueChange}
+              <SliderControl
+                  id={'containerPadding'}
+                  name="Container padding (px)"
+                  min={0}
+                  max={100}
+                  value={containerPadding}
+                  onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>
@@ -123,6 +124,16 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
                 name="Padding color"
                 value={paddingColor}
                 onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SliderControl
+                  id={'gap'}
+                  name={'Spacing (px)'}
+                  value={gap}
+                  min={0}
+                  max={100}
+                  onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>

@@ -19,6 +19,7 @@ export interface IThumbnailSettings {
   columns?: number | undefined;
   gap: number;
   backgroundColor: string;
+  containerPadding: number;
   padding: number;
   paddingColor: string;
   borderRadius: number;
@@ -36,6 +37,7 @@ export interface IMasonrySettings {
   width: number;
   gap: number;
   backgroundColor: string;
+  containerPadding: number;
   padding: number;
   paddingColor: string;
   columns?: number | undefined;
