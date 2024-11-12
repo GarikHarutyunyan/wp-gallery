@@ -10,6 +10,11 @@
   display: none
 }
 
+.reacg-gallery-wrapper .MuiImageListItemBar-root,
+.reacg-gallery-wrapper .MuiButtonBase-root {
+  font-family: inherit !important;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
