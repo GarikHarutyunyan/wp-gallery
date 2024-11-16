@@ -1,19 +1,8 @@
 import axios from 'axios';
-import {ISettingsDTO} from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {useLayoutEffect, useState} from 'react';
 import {useAppInfo} from '../AppInfoContext';
-
-export interface ITemplate extends Partial<ISettingsDTO> {
-  template_id: string;
-  title: string;
-  template: boolean;
-}
-
-export interface ITemplateReference {
-  id: string;
-  title: string;
-}
+import {ITemplate, ITemplateReference} from './TemplatesContext.types';
 
 const TemplatesContext = React.createContext<{
   templates?: ITemplateReference[];
@@ -24,7 +13,12 @@ const TemplatesContext = React.createContext<{
   isLoading?: boolean;
 }>({});
 
-const noneOption: ITemplateReference = {id: 'none', title: 'None'};
+const noneOption: ITemplateReference = {
+  id: 'none',
+  title: 'None',
+  isPro: false,
+};
+
 const emptyTemplate: ITemplate = {
   title: 'None',
   template_id: 'none',

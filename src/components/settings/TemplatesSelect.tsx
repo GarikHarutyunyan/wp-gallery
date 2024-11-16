@@ -1,7 +1,9 @@
 import {Box, Skeleton} from '@mui/material';
 import {ISelectOption, SelectControl} from 'components/controls';
 import {useTemplates} from 'contexts';
-import React, {useLayoutEffect} from 'react';
+import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
+import {Aligner} from 'core-components';
+import React, {ReactNode, useLayoutEffect} from 'react';
 import {TypeUtils} from 'utils';
 import {useSettings} from './useSettings';
 
@@ -48,12 +50,28 @@ const TemplatesSelect: React.FC = () => {
     }
   }, [template?.template_id]);
 
-  const templateOptions: ISelectOption[] =
+  const getPropOptionRender =
+    (templateReference: ITemplateReference) => (): ReactNode => {
+      const title: string = templateReference?.title || '';
+      const proBadge: string = 'PRO';
+
+      return (
+        <Aligner>
+          <div>{title}</div>
+          <div style={{color: 'gold'}}>{proBadge}</div>
+        </Aligner>
+      );
+    };
+
+  const options: ISelectOption[] =
     templates?.map((template) => {
+      const {title, id, isPro} = template;
+
       return {
-        title: template.title,
-        value: template.id,
-        isDisabled: template.id === 'none',
+        title: title,
+        value: id,
+        render: isPro ? getPropOptionRender(template) : undefined,
+        isDisabled: id === 'none',
       };
     }) || [];
 
@@ -68,7 +86,7 @@ const TemplatesSelect: React.FC = () => {
       ) : (
         <SelectControl
           onChange={onChange}
-          options={templateOptions}
+          options={options}
           value={value}
           hideLabel={true}
         />
