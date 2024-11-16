@@ -1,18 +1,18 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {useSettings} from 'components/settings';
-import {useTemplates} from 'contexts/TemplatesContext';
+import {useTemplates} from 'contexts';
 import {Section} from 'core-components';
 import {
   GalleryType,
   IGeneralSettings,
-  PaginationButtonShapeOptions,
   OrderByOptions,
   OrderDirectionOptions,
+  PaginationButtonShapeOptions,
   PaginationType,
   PaginationTypeOptions,
 } from 'data-structures';
-import React, {ReactNode, useEffect, useMemo, useState} from 'react';
+import React, {ReactNode, useMemo} from 'react';
 import {
   ColorControl,
   ISelectOption,
@@ -20,8 +20,6 @@ import {
   SelectControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
-import TabPanel from "@mui/lab/TabPanel";
-import {LightboxSettings} from "../light-box-settings";
 
 const getPaginationTypeOptions = (type: GalleryType) => {
   let options = PaginationTypeOptions;
@@ -75,10 +73,10 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   } = value as IGeneralSettings;
 
   const showOnlyGalleryOptions: boolean =
-      type === GalleryType.SLIDESHOW ||
-      type === GalleryType.CUBE ||
-      type === GalleryType.CAROUSEL ||
-      type === GalleryType.CARDS;
+    type === GalleryType.SLIDESHOW ||
+    type === GalleryType.CUBE ||
+    type === GalleryType.CAROUSEL ||
+    type === GalleryType.CARDS;
 
   const paginationType: PaginationType = useMemo(() => {
     if (type === GalleryType.MOSAIC) {
@@ -208,40 +206,38 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
 
   const renderSortingSettings = (): ReactNode => {
     return (
-        <Section
-            header={'Sorting'}
-            body={
-              <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                      id={'orderBy'}
-                      name={'Order by'}
-                      value={orderBy}
-                      options={OrderByOptions}
-                      onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                      id={'orderDirection'}
-                      name={'Order direction'}
-                      value={orderDirection}
-                      options={OrderDirectionOptions}
-                      onChange={onInputValueChange}
-                  />
-                </Filter>
-              </Grid>
-            }
-        />
+      <Section
+        header={'Sorting'}
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'orderBy'}
+                name={'Order by'}
+                value={orderBy}
+                options={OrderByOptions}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'orderDirection'}
+                name={'Order direction'}
+                value={orderDirection}
+                options={OrderDirectionOptions}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+          </Grid>
+        }
+      />
     );
   };
 
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderSortingSettings()}
-      {!showOnlyGalleryOptions ? (
-          renderMainSettings()
-      ) : null}
+      {!showOnlyGalleryOptions ? renderMainSettings() : null}
     </Paper>
   );
 };

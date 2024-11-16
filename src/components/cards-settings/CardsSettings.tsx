@@ -2,7 +2,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {NumberControl, SliderControl, SwitchControl} from 'components/controls';
 import {useSettings} from 'components/settings';
-import {useTemplates} from 'contexts/TemplatesContext';
+import {useTemplates} from 'contexts';
 import {Section} from 'core-components';
 import {ICardsSettings} from 'data-structures';
 import React, {ReactNode} from 'react';

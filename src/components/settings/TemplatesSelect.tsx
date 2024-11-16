@@ -1,6 +1,6 @@
 import {Box, Skeleton} from '@mui/material';
 import {ISelectOption, SelectControl} from 'components/controls';
-import {useTemplates} from 'contexts/TemplatesContext';
+import {useTemplates} from 'contexts';
 import React, {useLayoutEffect} from 'react';
 import {TypeUtils} from 'utils';
 import {useSettings} from './useSettings';

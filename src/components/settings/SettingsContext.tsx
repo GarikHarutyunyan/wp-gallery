@@ -1,6 +1,6 @@
 import axios from 'axios';
+import {useTemplates} from 'contexts';
 import {useAppInfo} from 'contexts/AppInfoContext';
-import {useTemplates} from 'contexts/TemplatesContext';
 import {Section} from 'core-components';
 import {
   GalleryType,

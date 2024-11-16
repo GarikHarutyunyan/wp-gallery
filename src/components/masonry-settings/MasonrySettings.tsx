@@ -1,7 +1,7 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {useSettings} from 'components/settings';
-import {useTemplates} from 'contexts/TemplatesContext';
+import {useTemplates} from 'contexts';
 import {Section} from 'core-components';
 import {
   HoverEffectOptions,
@@ -92,20 +92,20 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
               <ColorControl
-                  id={'backgroundColor'}
-                  name={'Background color'}
-                  value={backgroundColor}
-                  onChange={onInputValueChange}
+                id={'backgroundColor'}
+                name={'Background color'}
+                value={backgroundColor}
+                onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>
               <SliderControl
-                  id={'containerPadding'}
-                  name="Container padding (px)"
-                  min={0}
-                  max={100}
-                  value={containerPadding}
-                  onChange={onInputValueChange}
+                id={'containerPadding'}
+                name="Container padding (px)"
+                min={0}
+                max={100}
+                value={containerPadding}
+                onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>
@@ -128,12 +128,12 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
             </Filter>
             <Filter isLoading={isLoading}>
               <SliderControl
-                  id={'gap'}
-                  name={'Spacing (px)'}
-                  value={gap}
-                  min={0}
-                  max={100}
-                  onChange={onInputValueChange}
+                id={'gap'}
+                name={'Spacing (px)'}
+                value={gap}
+                min={0}
+                max={100}
+                onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>

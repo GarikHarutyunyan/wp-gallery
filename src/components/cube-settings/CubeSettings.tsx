@@ -1,8 +1,13 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {ColorControl, NumberControl, SliderControl, SwitchControl} from 'components/controls';
+import {
+  ColorControl,
+  NumberControl,
+  SliderControl,
+  SwitchControl,
+} from 'components/controls';
 import {useSettings} from 'components/settings';
-import {useTemplates} from 'contexts/TemplatesContext';
+import {useTemplates} from 'contexts';
 import {Section} from 'core-components';
 import {ICubeSettings} from 'data-structures';
 import React, {ReactNode} from 'react';
@@ -77,12 +82,12 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
             </Filter>
             <Filter isLoading={isLoading}>
               <SliderControl
-                  id={'padding'}
-                  name="Padding (px)"
-                  min={0}
-                  max={50}
-                  value={padding}
-                  onChange={onInputValueChange}
+                id={'padding'}
+                name="Padding (px)"
+                min={0}
+                max={50}
+                value={padding}
+                onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {ISettingsDTO} from 'data-structures';
 import {useSnackbar} from 'notistack';
-import React, {useContext, useLayoutEffect, useState} from 'react';
-import {useAppInfo} from "./AppInfoContext";
+import React, {useLayoutEffect, useState} from 'react';
+import {useAppInfo} from '../AppInfoContext';
 
 export interface ITemplate extends Partial<ISettingsDTO> {
   template_id: string;
@@ -39,13 +39,13 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {showControls} = useAppInfo();
 
   const getTemplates = async () => {
-    if ( !showControls ) {
+    if (!showControls) {
       return;
     }
     const fetchUrl: string | undefined =
       'https://regallery.team/core/wp-json/reacgcore/v1/templates'; //baseUrl      ? baseUrl + 'templates'      : undefined;
 
-    if ( fetchUrl ) {
+    if (fetchUrl) {
       try {
         const response = await axios.get(fetchUrl);
         const templatesData: ITemplateReference[] = response.data;
@@ -59,8 +59,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         console.log(error);
         setTemplates([noneOption]);
       }
-    }
-    else {
+    } else {
       setTemplates([noneOption]);
     }
   };
@@ -70,7 +69,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       | string
       | undefined = `https://regallery.team/core/wp-json/reacgcore/v1/template/${id}`;
 
-    if (fetchUrl && id !== "") {
+    if (fetchUrl && id !== '') {
       setIsLoading(true);
       try {
         const response = await axios.get(fetchUrl);
@@ -133,12 +132,4 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   );
 };
 
-const useTemplates = () => {
-  const context = useContext(TemplatesContext);
-  if (!context)
-    throw new Error('useTemplates must be used within a TemplatesContext');
-
-  return context;
-};
-
-export {TemplatesContext, TemplatesProvider, useTemplates};
+export {TemplatesContext, TemplatesProvider};

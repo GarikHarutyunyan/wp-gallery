@@ -7,7 +7,7 @@ import {
   SwitchControl,
 } from 'components/controls';
 import {useSettings} from 'components/settings';
-import {useTemplates} from 'contexts/TemplatesContext';
+import {useTemplates} from 'contexts';
 import {Section} from 'core-components';
 import {ICarouselSettings} from 'data-structures';
 import React, {ReactNode} from 'react';
