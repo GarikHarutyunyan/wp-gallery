@@ -1,6 +1,6 @@
 import {Box, Skeleton} from '@mui/material';
 import {ISelectOption, SelectControl} from 'components/controls';
-import {useTemplates} from 'contexts';
+import {useTemplates, useValidation} from 'contexts';
 import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
 import {Aligner} from 'core-components';
 import React, {ReactNode, useLayoutEffect} from 'react';
@@ -8,6 +8,7 @@ import {TypeUtils} from 'utils';
 import {useSettings} from './useSettings';
 
 const TemplatesSelect: React.FC = () => {
+  const {isProUser} = useValidation();
   const {templates, template, changeTemplate, isLoading} = useTemplates();
   const {
     changeGeneralSettings,
@@ -66,12 +67,14 @@ const TemplatesSelect: React.FC = () => {
   const options: ISelectOption[] =
     templates?.map((template) => {
       const {title, id, isPro} = template;
+      const hasPermission: boolean = !isPro || !!isProUser;
+      const isDisabled: boolean = id === 'none' || !hasPermission;
 
       return {
         title: title,
         value: id,
         render: isPro ? getPropOptionRender(template) : undefined,
-        isDisabled: id === 'none',
+        isDisabled,
       };
     }) || [];
 
