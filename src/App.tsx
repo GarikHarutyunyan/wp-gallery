@@ -8,7 +8,7 @@ import {GalleryWrapper} from './components/GalleryWrapper';
 const App: React.FC = () => {
   return (
     <TranslationsProvider>
-      <SnackbarProvider>
+      <SnackbarProvider domRoot={document.body}>
         <GoogleFontsProvider>
           <GalleryWrapper />
         </GoogleFontsProvider>
