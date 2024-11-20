@@ -12,7 +12,7 @@ export class TypeUtils {
     return Array.isArray(value);
   }
 
-  static isNumber(value: any): boolean {
+  static isNumber(value: any): value is number {
     return typeof value === 'number';
   }
 

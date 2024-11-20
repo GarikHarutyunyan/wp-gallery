@@ -2,10 +2,11 @@ import axios from 'axios';
 import {ISettingsDTO} from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {useContext, useLayoutEffect, useState} from 'react';
-import {useAppInfo} from "./AppInfoContext";
+import {TypeUtils} from 'utils';
+import {useAppInfo} from './AppInfoContext';
 
 export interface ITemplate extends Partial<ISettingsDTO> {
-  template_id: string;
+  template_id: string | number;
   title: string;
   template: boolean;
 }
@@ -39,13 +40,13 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {showControls} = useAppInfo();
 
   const getTemplates = async () => {
-    if ( !showControls ) {
+    if (!showControls) {
       return;
     }
     const fetchUrl: string | undefined =
       'https://regallery.team/core/wp-json/reacgcore/v1/templates'; //baseUrl      ? baseUrl + 'templates'      : undefined;
 
-    if ( fetchUrl ) {
+    if (fetchUrl) {
       try {
         const response = await axios.get(fetchUrl);
         const templatesData: ITemplateReference[] = response.data;
@@ -59,8 +60,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         console.log(error);
         setTemplates([noneOption]);
       }
-    }
-    else {
+    } else {
       setTemplates([noneOption]);
     }
   };
@@ -70,7 +70,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       | string
       | undefined = `https://regallery.team/core/wp-json/reacgcore/v1/template/${id}`;
 
-    if (fetchUrl && id !== "") {
+    if (fetchUrl && id !== '') {
       setIsLoading(true);
       try {
         const response = await axios.get(fetchUrl);
@@ -88,16 +88,21 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const resetTemplate = (): void => {
-    if (template?.template_id !== 'none') {
-      const warningMessage: string =
-        'Please note that when adjusting any parameter, the template will automatically changed to "None".';
+    // The same as !== 'none', BE keeps '' instead of 'none'
+    if (TypeUtils.isNumber(template?.template_id)) {
+      // The Default Template's id is fixed 0, to not show warning message in case of changing default template
+      if (template?.template_id !== 0) {
+        const warningMessage: string =
+          'Please note that when adjusting any parameter, the template will automatically changed to "None".';
+
+        enqueueSnackbar(warningMessage, {
+          variant: 'warning',
+          anchorOrigin: {horizontal: 'right', vertical: 'top'},
+          style: {maxWidth: '288px'},
+        });
+      }
 
       setTemplate(emptyTemplate);
-      enqueueSnackbar(warningMessage, {
-        variant: 'warning',
-        anchorOrigin: {horizontal: 'right', vertical: 'top'},
-        style: {maxWidth: '288px'},
-      });
     }
   };
 
