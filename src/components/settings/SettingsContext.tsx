@@ -79,6 +79,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [cardsSettings, setCardsSettings] = useState<ICardsSettings>();
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
+  const [css, setCSS] = useState("");
   const wrapperRef = useRef(null);
   const [imagesCount, setImagesCount] = useState<number>(0);
 
@@ -96,6 +97,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       ).data;
 
       setType(newSettings.type);
+      setCSS(newSettings.css || "");
       setGeneralSettings(newSettings.general || generalMockSettings);
       setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
@@ -276,6 +278,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     return (
       <div ref={wrapperRef} className={'reacg-gallery-wrapper'}>
         {children}
+        {css !== '' && (
+            <style>
+              {"#reacg-root" + galleryId + "{" + css + "}"}
+            </style>
+        )}
       </div>
     );
   };
