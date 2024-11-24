@@ -18,6 +18,7 @@ const TemplatesSelect: React.FC = () => {
     changeCarouselSettings,
     type: activeType,
     changeType,
+    changeCss,
   } = useSettings();
   const value = TypeUtils.isNumber(template?.template_id)
     ? template!.template_id
@@ -35,6 +36,7 @@ const TemplatesSelect: React.FC = () => {
         thumbnails,
         cube,
         carousel,
+        css,
       } = template;
       activeType !== type && type && changeType!(type);
       general && changeGeneralSettings(general);
@@ -45,6 +47,7 @@ const TemplatesSelect: React.FC = () => {
       thumbnails && changeThumbnailSettings(thumbnails);
       cube && changeCubeSettings(cube);
       carousel && changeCarouselSettings(carousel);
+      css && changeCss(css);
     }
   }, [template?.template_id]);
 
