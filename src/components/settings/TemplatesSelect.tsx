@@ -70,7 +70,7 @@ const TemplatesSelect: React.FC = () => {
       const proBadge: string = 'PRO';
 
       return (
-        <Aligner style={{gap: '12px'}}>
+        <Aligner style={{alignItems: 'center', gap: '12px'}}>
           <div>{title}</div>
           <Aligner align={Align.END} style={{alignItems: 'center', gap: '4px'}}>
             {paid ? <div style={{color: 'gold'}}>{proBadge}</div> : null}
