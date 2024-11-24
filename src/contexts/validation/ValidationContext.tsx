@@ -23,7 +23,7 @@ const ValidationProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setIsProUser(false);
       }
     } else {
-      setIsProUser(false); // TODO: change to false after validation ednpoint usage
+      setIsProUser(false);
     }
   };
   useLayoutEffect(() => {
