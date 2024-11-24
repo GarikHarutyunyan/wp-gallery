@@ -1,11 +1,20 @@
-import {Box, Skeleton} from '@mui/material';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import {Box, IconButton, Skeleton} from '@mui/material';
 import {ISelectOption, SelectControl} from 'components/controls';
 import {useTemplates, useValidation} from 'contexts';
 import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
-import {Aligner} from 'core-components';
-import React, {ReactNode, useLayoutEffect} from 'react';
+import {Align, Aligner, ReDialog} from 'core-components';
+import React, {
+  ReactNode,
+  SyntheticEvent,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import {TypeUtils} from 'utils';
 import {useSettings} from './useSettings';
+
+const PRO_MESSAGE: string =
+  'The selected template is part of our premium offering. Upgrade to the Pro version to unlock this and other exclusive templates, along with advanced features that take your site to the next level!';
 
 const TemplatesSelect: React.FC = () => {
   const {isProUser} = useValidation();
@@ -23,6 +32,7 @@ const TemplatesSelect: React.FC = () => {
     changeType,
     changeCss,
   } = useSettings();
+  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
   const value = TypeUtils.isNumber(template?.template_id)
     ? template!.template_id
     : 'none';
@@ -56,48 +66,92 @@ const TemplatesSelect: React.FC = () => {
 
   const getPropOptionRender =
     (templateReference: ITemplateReference) => (): ReactNode => {
-      const title: string = templateReference?.title || '';
+      const {title, paid, preview_url} = templateReference;
       const proBadge: string = 'PRO';
 
       return (
-        <Aligner>
+        <Aligner style={{gap: '12px'}}>
           <div>{title}</div>
-          <div style={{color: 'gold'}}>{proBadge}</div>
+          <Aligner align={Align.END} style={{alignItems: 'center', gap: '4px'}}>
+            {paid ? <div style={{color: 'gold'}}>{proBadge}</div> : null}
+            {preview_url ? (
+              <IconButton
+                size={'small'}
+                aria-label={'Example'}
+                onClick={getOpenDemo(templateReference)}
+              >
+                <OpenInNewIcon fontSize={'small'} />
+              </IconButton>
+            ) : null}
+          </Aligner>
         </Aligner>
       );
     };
 
+  const getOpenDemo =
+    (template: ITemplateReference) =>
+    (e: SyntheticEvent): void => {
+      const {preview_url} = template;
+
+      e.stopPropagation();
+      window.open(preview_url, '_blank');
+    };
+
+  const openDialog = () => {
+    setIsDialogVisible(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogVisible(false);
+  };
+
   const options: ISelectOption[] =
     templates?.map((template) => {
-      const {title, id, isPro} = template;
-      const hasPermission: boolean = !isPro || !!isProUser;
-      const isDisabled: boolean = id === 'none' || !hasPermission;
+      const {title, id} = template;
+      const isDisabled: boolean = id === 'none';
 
       return {
         title: title,
         value: id,
-        render: isPro ? getPropOptionRender(template) : undefined,
+        render: getPropOptionRender(template),
         isDisabled,
       };
     }) || [];
 
   const onChange = (newValue: string) => {
-    changeTemplate?.(newValue);
+    const templateReference: ITemplateReference | undefined = templates?.find(
+      (t) => t.id === newValue
+    );
+    const isPaid: boolean = !!templateReference?.paid;
+
+    if (isPaid && !isProUser) {
+      openDialog();
+    } else {
+      changeTemplate?.(newValue);
+    }
   };
 
   return TypeUtils.isNumber(value) || value ? (
-    <Box style={{width: '200px', margin: 'auto 10px'}}>
-      {isLoading ? (
-        <Skeleton height={48} />
-      ) : (
-        <SelectControl
-          onChange={onChange}
-          options={options}
-          value={value}
-          hideLabel={true}
-        />
-      )}
-    </Box>
+    <>
+      <Box style={{width: '200px', margin: 'auto 10px'}}>
+        {isLoading ? (
+          <Skeleton height={48} />
+        ) : (
+          <SelectControl
+            onChange={onChange}
+            options={options}
+            value={value}
+            hideLabel={true}
+          />
+        )}
+      </Box>
+      <ReDialog
+        open={isDialogVisible}
+        onClose={closeDialog}
+        content={PRO_MESSAGE}
+        actions={[{label: 'Close', onClick: closeDialog}]}
+      />
+    </>
   ) : null;
 };
 

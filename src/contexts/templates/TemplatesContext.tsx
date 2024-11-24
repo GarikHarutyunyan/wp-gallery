@@ -17,7 +17,7 @@ const TemplatesContext = React.createContext<{
 const noneOption: ITemplateReference = {
   id: 'none',
   title: 'None',
-  isPro: false,
+  paid: false,
 };
 
 const emptyTemplate: ITemplate = {
@@ -38,7 +38,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       return;
     }
     const fetchUrl: string | undefined =
-      'https://regallery.team/core/wp-json/reacgcore/v1/templates'; //baseUrl      ? baseUrl + 'templates'      : undefined;
+      'https://regallery.team/core/wp-json/reacgcore/v2/templates'; //baseUrl      ? baseUrl + 'templates'      : undefined;
 
     if (fetchUrl) {
       try {

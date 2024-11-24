@@ -41,6 +41,14 @@ const SelectControl: React.FC<ISelectControlProps> = ({
     onChange(event.target.value, id);
   };
 
+  const renderValue = (selectedValue: any) => {
+    const selectedOption: ISelectOption | undefined = options.find(
+      (option) => option.value === selectedValue
+    );
+
+    return <>{selectedOption?.title || ''}</>;
+  };
+
   return (
     <TextField
       select
@@ -54,6 +62,7 @@ const SelectControl: React.FC<ISelectControlProps> = ({
       style={style}
       size={size}
       hiddenLabel={hideLabel}
+      inputProps={{renderValue}}
     >
       {options.map(({value, title, render, isDisabled}) => {
         return (

@@ -9,5 +9,6 @@ export interface ITemplate extends Partial<ISettingsDTO> {
 export interface ITemplateReference {
   id: string;
   title: string;
-  isPro: boolean;
+  paid: boolean;
+  preview_url?: string;
 }
