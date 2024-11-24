@@ -56,6 +56,7 @@ const SettingsContext = React.createContext<{
   changeCubeSettings?: any;
   changeCarouselSettings?: any;
   changeCardsSettings?: any;
+  changeCss?: any;
   wrapperRef?: any;
   imagesCount?: number;
   changeImagesCount?: (count: number) => void;
@@ -79,7 +80,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [cardsSettings, setCardsSettings] = useState<ICardsSettings>();
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
-  const [css, setCSS] = useState("");
+  const [css, setCss] = useState('');
   const wrapperRef = useRef(null);
   const [imagesCount, setImagesCount] = useState<number>(0);
 
@@ -97,7 +98,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       ).data;
 
       setType(newSettings.type);
-      setCSS(newSettings.css || "");
+      setCss(newSettings.css || '');
       setGeneralSettings(newSettings.general || generalMockSettings);
       setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
@@ -180,6 +181,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         slideshow: slideshowSettings,
         template_id:
           template?.template_id == 'none' ? '' : template?.template_id,
+        css: css || '',
       } as ISettingsDTO;
 
       try {
@@ -252,6 +254,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
         setCardsSettings(newSettings.cards);
+        setCss(newSettings.css || '');
         changeTemplate?.(newSettings.template_id as string);
         enqueueSnackbar(successMessage, {
           variant: 'success',
@@ -279,9 +282,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       <div ref={wrapperRef} className={'reacg-gallery-wrapper'}>
         {children}
         {css !== '' && (
-            <style>
-              {"#reacg-root" + galleryId + "{" + css + "}"}
-            </style>
+          <style>{'#reacg-root' + galleryId + '{' + css + '}'}</style>
         )}
       </div>
     );
@@ -310,6 +311,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeCubeSettings: setCubeSettings,
         changeCarouselSettings: setCarouselSettings,
         changeCardsSettings: setCardsSettings,
+        changeCss: setCss,
         wrapperRef,
         imagesCount,
         changeImagesCount: setImagesCount,
