@@ -1,6 +1,7 @@
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import StarIcon from '@mui/icons-material/Star';
-import {Box, IconButton, Skeleton} from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import {Box, Dialog, IconButton, Skeleton} from '@mui/material';
 import {ISelectOption, SelectControl} from 'components/controls';
 import {useTemplates, useValidation} from 'contexts';
 import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
@@ -34,6 +35,7 @@ const TemplatesSelect: React.FC = () => {
     changeCss,
   } = useSettings();
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
+  const [isPreviewVisible, setIsPreviewVisible] = useState<boolean>(false);
   const value = TypeUtils.isNumber(template?.template_id)
     ? template!.template_id
     : 'none';
@@ -80,9 +82,20 @@ const TemplatesSelect: React.FC = () => {
               <IconButton
                 size={'small'}
                 aria-label={'Example'}
-                onClick={getOpenDemo(templateReference)}
+                onClick={
+                  title === 'Photo Album'
+                    ? (e) => {
+                        e.stopPropagation();
+                        setIsPreviewVisible(true);
+                      }
+                    : getOpenDemo(templateReference)
+                }
               >
-                <OpenInNewIcon fontSize={'small'} />
+                {title === 'Photo Album' ? (
+                  <VisibilityIcon fontSize={'small'} />
+                ) : (
+                  <OpenInNewIcon fontSize={'small'} />
+                )}
               </IconButton>
             ) : null}
           </Aligner>
@@ -153,6 +166,21 @@ const TemplatesSelect: React.FC = () => {
         content={PRO_MESSAGE}
         actions={[{label: 'Close', onClick: closeDialog}]}
       />
+      <Dialog
+        open={isPreviewVisible}
+        onClose={() => setIsPreviewVisible(false)}
+      >
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/mmLZTbL-DtE?si=Mbt1_LR91SizO3QT"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+        />
+      </Dialog>
     </>
   ) : null;
 };
