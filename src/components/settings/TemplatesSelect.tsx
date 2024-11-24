@@ -1,4 +1,5 @@
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import StarIcon from '@mui/icons-material/Star';
 import {Box, IconButton, Skeleton} from '@mui/material';
 import {ISelectOption, SelectControl} from 'components/controls';
 import {useTemplates, useValidation} from 'contexts';
@@ -67,13 +68,14 @@ const TemplatesSelect: React.FC = () => {
   const getPropOptionRender =
     (templateReference: ITemplateReference) => (): ReactNode => {
       const {title, paid, preview_url} = templateReference;
-      const proBadge: string = 'PRO';
 
       return (
         <Aligner style={{alignItems: 'center', gap: '12px'}}>
           <div>{title}</div>
-          <Aligner align={Align.END} style={{alignItems: 'center', gap: '4px'}}>
-            {paid ? <div style={{color: 'gold'}}>{proBadge}</div> : null}
+          <Aligner align={Align.END} style={{alignItems: 'center', gap: '2px'}}>
+            {paid ? (
+              <StarIcon fontSize={'small'} style={{color: 'gold'}} />
+            ) : null}
             {preview_url ? (
               <IconButton
                 size={'small'}
