@@ -12,7 +12,7 @@ const App: React.FC = () => {
   return (
     <ValidationProvider>
       <TranslationsProvider>
-        <SnackbarProvider>
+        <SnackbarProvider domRoot={document.body}>
           <GoogleFontsProvider>
             <GalleryWrapper />
           </GoogleFontsProvider>

@@ -17,7 +17,7 @@ export enum ReSize {
 interface ISelectControlProps {
   id?: string;
   name?: string;
-  value: string;
+  value: string | number;
   options: ISelectOption[];
   onChange: any;
   isDisabled?: boolean;

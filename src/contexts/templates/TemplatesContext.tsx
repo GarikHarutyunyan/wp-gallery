@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {useSnackbar} from 'notistack';
 import React, {useLayoutEffect, useState} from 'react';
+import {TypeUtils} from 'utils';
 import {useAppInfo} from '../AppInfoContext';
 import {ITemplate, ITemplateReference} from './TemplatesContext.types';
 
@@ -81,16 +82,21 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const resetTemplate = (): void => {
-    if (template?.template_id !== 'none') {
-      const warningMessage: string =
-        'Please note that when adjusting any parameter, the template will automatically changed to "None".';
+    // The same as !== 'none', BE keeps '' instead of 'none'
+    if (TypeUtils.isNumber(template?.template_id)) {
+      // The Default Template's id is fixed 0, to not show warning message in case of changing default template
+      if (template?.template_id !== 0) {
+        const warningMessage: string =
+          'Please note that when adjusting any parameter, the template will automatically changed to "None".';
+
+        enqueueSnackbar(warningMessage, {
+          variant: 'warning',
+          anchorOrigin: {horizontal: 'right', vertical: 'top'},
+          style: {maxWidth: '288px'},
+        });
+      }
 
       setTemplate(emptyTemplate);
-      enqueueSnackbar(warningMessage, {
-        variant: 'warning',
-        anchorOrigin: {horizontal: 'right', vertical: 'top'},
-        style: {maxWidth: '288px'},
-      });
     }
   };
 

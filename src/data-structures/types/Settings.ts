@@ -147,4 +147,5 @@ export interface ISettingsDTO {
   cards: ICardsSettings;
   template_id?: number | string;
   title?: string;
+  css?: string;
 }
