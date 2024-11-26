@@ -10,7 +10,7 @@ const ValidationProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   const validate = async () => {
     const fetchUrl: string | undefined =
-      'https://regallery.team/core/wp-json/reacgcore/v1/paidUser/'; //baseUrl      ? baseUrl + 'templates'      : undefined;
+      'https://regallery.team/core/wp-json/reacgcore/v2/paidUser/'; //baseUrl      ? baseUrl + 'templates'      : undefined;
 
     if (fetchUrl) {
       try {

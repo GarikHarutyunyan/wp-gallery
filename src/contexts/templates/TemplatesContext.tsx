@@ -62,7 +62,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const getTemplate = async (id: string): Promise<void> => {
     const fetchUrl:
       | string
-      | undefined = `https://regallery.team/core/wp-json/reacgcore/v1/template/${id}`;
+      | undefined = `https://regallery.team/core/wp-json/reacgcore/v2/template/${id}`;
 
     if (fetchUrl && id !== '') {
       setIsLoading(true);
