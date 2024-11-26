@@ -13,10 +13,10 @@ import React, {
   useState,
 } from 'react';
 import {TypeUtils} from 'utils';
+import {PremiumOffer} from './PremiumOffer';
 import {useSettings} from './useSettings';
 
-const PRO_MESSAGE: string =
-  'The selected template is part of our premium offering. Upgrade to the Pro version to unlock this and other exclusive templates, along with advanced features that take your site to the next level!';
+const PRO_TITLE: string = '✨ Early Bird Offer! ✨';
 
 const TemplatesSelect: React.FC = () => {
   const {isProUser} = useValidation();
@@ -163,8 +163,8 @@ const TemplatesSelect: React.FC = () => {
       <ReDialog
         open={isDialogVisible}
         onClose={closeDialog}
-        content={PRO_MESSAGE}
-        actions={[{label: 'Close', onClick: closeDialog}]}
+        title={PRO_TITLE}
+        content={<PremiumOffer />}
       />
       <Dialog
         open={isPreviewVisible}

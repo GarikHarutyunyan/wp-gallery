@@ -1,10 +1,14 @@
+import CloseIcon from '@mui/icons-material/Close';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
+  IconButton,
 } from '@mui/material';
+import {ReactNode} from 'react';
+import './re-dialog.css';
 
 interface IReDialogAction {
   label: string;
@@ -14,21 +18,29 @@ interface IReDialogAction {
 interface IReDialogProps {
   open: boolean;
   onClose: () => void;
-  content: string;
+  title: string;
+  content: ReactNode;
   actions?: IReDialogAction[];
 }
 
 const ReDialog: React.FC<IReDialogProps> = ({
   open,
   onClose,
+  title,
   content,
   actions,
 }) => {
   return (
     <Dialog open={open} onClose={onClose}>
+      <Box className={'re-dialog__title'}>
+        <h1>{title}</h1>
+        <IconButton onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
       {content ? (
-        <DialogContent>
-          <DialogContentText>{content}</DialogContentText>
+        <DialogContent className={'re-dialog__content'}>
+          {content}
         </DialogContent>
       ) : null}
       {actions?.map(({label, onClick}) => {
