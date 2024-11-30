@@ -11,4 +11,5 @@ export interface ITemplateReference {
   title: string;
   paid: boolean;
   preview_url?: string;
+  youtube_link?: string;
 }

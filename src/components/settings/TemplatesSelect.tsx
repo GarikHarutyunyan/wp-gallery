@@ -14,6 +14,7 @@ import React, {
 } from 'react';
 import {TypeUtils} from 'utils';
 import {PremiumOffer} from './PremiumOffer';
+import './template-select.css';
 import {useSettings} from './useSettings';
 
 const PRO_TITLE: string = '✨ Early Bird Offer! ✨';
@@ -35,7 +36,13 @@ const TemplatesSelect: React.FC = () => {
     changeCss,
   } = useSettings();
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
-  const [isPreviewVisible, setIsPreviewVisible] = useState<boolean>(false);
+  const initialPreviewDialogInfo = {
+    isVisible: false,
+    url: '',
+  };
+  const [previewDialogInfo, setPreviewDialogInfo] = useState(
+    initialPreviewDialogInfo
+  );
   const value = TypeUtils.isNumber(template?.template_id)
     ? template!.template_id
     : 'none';
@@ -69,7 +76,7 @@ const TemplatesSelect: React.FC = () => {
 
   const getPropOptionRender =
     (templateReference: ITemplateReference) => (): ReactNode => {
-      const {title, paid, preview_url} = templateReference;
+      const {title, paid, preview_url, youtube_link} = templateReference;
 
       return (
         <Aligner style={{alignItems: 'center', gap: '12px'}}>
@@ -78,30 +85,32 @@ const TemplatesSelect: React.FC = () => {
             {paid ? (
               <StarIcon fontSize={'small'} style={{color: 'gold'}} />
             ) : null}
+            {youtube_link ? (
+              <IconButton
+                size={'small'}
+                onClick={getOpenYoutubePreview(youtube_link)}
+              >
+                <VisibilityIcon fontSize={'small'} />
+              </IconButton>
+            ) : null}
             {preview_url ? (
               <IconButton
                 size={'small'}
                 aria-label={'Example'}
-                onClick={
-                  title === 'Photo Album'
-                    ? (e) => {
-                        e.stopPropagation();
-                        setIsPreviewVisible(true);
-                      }
-                    : getOpenDemo(templateReference)
-                }
+                onClick={getOpenDemo(templateReference)}
               >
-                {title === 'Photo Album' ? (
-                  <VisibilityIcon fontSize={'small'} />
-                ) : (
-                  <OpenInNewIcon fontSize={'small'} />
-                )}
+                <OpenInNewIcon fontSize={'small'} />
               </IconButton>
             ) : null}
           </Aligner>
         </Aligner>
       );
     };
+
+  const getOpenYoutubePreview = (url: string) => (e: any) => {
+    e.stopPropagation();
+    setPreviewDialogInfo({isVisible: true, url});
+  };
 
   const getOpenDemo =
     (template: ITemplateReference) =>
@@ -146,6 +155,9 @@ const TemplatesSelect: React.FC = () => {
     }
   };
 
+  const resewPreviewDialogInfo = () =>
+    setPreviewDialogInfo(initialPreviewDialogInfo);
+
   return TypeUtils.isNumber(value) || value ? (
     <>
       <Box style={{width: '200px', margin: 'auto 10px'}}>
@@ -167,14 +179,15 @@ const TemplatesSelect: React.FC = () => {
         content={<PremiumOffer />}
       />
       <Dialog
-        open={isPreviewVisible}
-        onClose={() => setIsPreviewVisible(false)}
+        open={previewDialogInfo.isVisible}
+        onClose={resewPreviewDialogInfo}
+        className={'template-select__youtube-dialog'}
       >
         <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/mmLZTbL-DtE?si=Mbt1_LR91SizO3QT"
-          title="YouTube video player"
+          width={'560'}
+          height={'315'}
+          src={previewDialogInfo.url}
+          title={'YouTube video player'}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
