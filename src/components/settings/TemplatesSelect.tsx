@@ -1,5 +1,4 @@
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import StarIcon from '@mui/icons-material/Star';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import {Box, Dialog, IconButton, Skeleton} from '@mui/material';
 import {ISelectOption, SelectControl} from 'components/controls';
@@ -14,6 +13,7 @@ import React, {
 } from 'react';
 import {TypeUtils} from 'utils';
 import {PremiumOffer} from './PremiumOffer';
+import {ProIcon} from './ProIcon';
 import './template-select.css';
 import {useSettings} from './useSettings';
 
@@ -82,9 +82,7 @@ const TemplatesSelect: React.FC = () => {
         <Aligner style={{alignItems: 'center', gap: '12px'}}>
           <div>{title}</div>
           <Aligner align={Align.END} style={{alignItems: 'center', gap: '2px'}}>
-            {paid ? (
-              <StarIcon fontSize={'small'} style={{color: 'gold'}} />
-            ) : null}
+            {paid ? <ProIcon /> : null}
             {youtube_link ? (
               <IconButton
                 size={'small'}
