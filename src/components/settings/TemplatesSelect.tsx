@@ -4,7 +4,7 @@ import {Box, Dialog, IconButton, Skeleton} from '@mui/material';
 import {ISelectOption, SelectControl} from 'components/controls';
 import {useTemplates, useValidation} from 'contexts';
 import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
-import {Align, Aligner, ReDialog} from 'core-components';
+import {Align, Aligner} from 'core-components';
 import React, {
   ReactNode,
   SyntheticEvent,
@@ -79,7 +79,7 @@ const TemplatesSelect: React.FC = () => {
       const {title, paid, preview_url, youtube_link} = templateReference;
 
       return (
-        <Aligner style={{alignItems: 'center', gap: '12px'}}>
+        <Aligner style={{alignItems: 'center', gap: '16px'}}>
           <div>{title}</div>
           <Aligner align={Align.END} style={{alignItems: 'center', gap: '2px'}}>
             {paid ? <ProIcon /> : null}
@@ -170,12 +170,13 @@ const TemplatesSelect: React.FC = () => {
           />
         )}
       </Box>
-      <ReDialog
+      <Dialog
+        sx={{borderRadius: 6}}
         open={isDialogVisible}
         onClose={closeDialog}
-        title={PRO_TITLE}
-        content={<PremiumOffer />}
-      />
+      >
+        <PremiumOffer />
+      </Dialog>
       <Dialog
         open={previewDialogInfo.isVisible}
         onClose={resewPreviewDialogInfo}
