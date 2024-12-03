@@ -1,6 +1,7 @@
 import {Box, Link, Typography} from '@mui/material';
-import {useAppInfo} from 'contexts';
+import {EarlyBirdImage} from './EarlyBirdImage';
 import './premium-offer.css';
+import {StarImage} from './StarImage';
 
 const contentTextStyle = {
   fontWeight: '900',
@@ -8,11 +9,6 @@ const contentTextStyle = {
 };
 
 const PremiumOffer = () => {
-  const {pluginUrl} = useAppInfo();
-
-  const birdImageSource = `${pluginUrl}/assets/images/premium-offer-early-bird.png`;
-  const starImageSource = `${pluginUrl}/assets/images/premium-offer-star.png`;
-
   return (
     <Box className={'premium-offer'}>
       <Typography
@@ -29,17 +25,7 @@ const PremiumOffer = () => {
           mb: 1,
         }}
       >
-        <Box
-          component={'img'}
-          src={starImageSource}
-          alt={'Star Illustration'}
-          sx={{
-            width: 'auto',
-            height: '36px',
-            flexShrink: 0,
-            objectFit: 'contain',
-          }}
-        />
+        <StarImage />
         <span>{'Early Bird Offer!'}</span>
       </Typography>
       <Typography
@@ -111,12 +97,9 @@ const PremiumOffer = () => {
             to get started.
           </Typography>
         </Box>
-        <Box
-          component={'img'}
-          src={birdImageSource}
-          alt={'Bird Illustration'}
-          className={'premium-offer__image'}
-        />
+        <Box className={'premium-offer__image'}>
+          <EarlyBirdImage />
+        </Box>
       </Box>
     </Box>
   );
