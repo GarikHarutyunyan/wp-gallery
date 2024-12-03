@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import {Box, Dialog, IconButton, Skeleton} from '@mui/material';
@@ -176,6 +177,12 @@ const TemplatesSelect: React.FC = () => {
         onClose={closeDialog}
         PaperProps={{sx: {borderRadius: 3}}}
       >
+        <IconButton
+          onClick={closeDialog}
+          style={{position: 'absolute', right: 0, padding: '12px'}}
+        >
+          <CloseIcon />
+        </IconButton>
         <PremiumOffer />
       </Dialog>
       <Dialog
@@ -183,6 +190,12 @@ const TemplatesSelect: React.FC = () => {
         onClose={resetPreviewDialogInfo}
         className={'template-select__youtube-dialog'}
       >
+        <IconButton
+          onClick={resetPreviewDialogInfo}
+          style={{position: 'absolute', right: 0, padding: '12px'}}
+        >
+          <CloseIcon />
+        </IconButton>
         <iframe
           width={'560'}
           height={'315'}
