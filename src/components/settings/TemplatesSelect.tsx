@@ -70,7 +70,7 @@ const TemplatesSelect: React.FC = () => {
       thumbnails && changeThumbnailSettings(thumbnails);
       cube && changeCubeSettings(cube);
       carousel && changeCarouselSettings(carousel);
-      css && changeCss(css);
+      TypeUtils.isString(css) && changeCss(css);
     }
   }, [template?.template_id]);
 
