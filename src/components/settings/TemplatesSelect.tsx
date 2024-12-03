@@ -153,7 +153,7 @@ const TemplatesSelect: React.FC = () => {
     }
   };
 
-  const resewPreviewDialogInfo = () =>
+  const resetPreviewDialogInfo = () =>
     setPreviewDialogInfo(initialPreviewDialogInfo);
 
   return TypeUtils.isNumber(value) || value ? (
@@ -171,15 +171,16 @@ const TemplatesSelect: React.FC = () => {
         )}
       </Box>
       <Dialog
-        sx={{borderRadius: 6}}
+        sx={{borderRadius: 3}}
         open={isDialogVisible}
         onClose={closeDialog}
+        PaperProps={{sx: {borderRadius: 3}}}
       >
         <PremiumOffer />
       </Dialog>
       <Dialog
         open={previewDialogInfo.isVisible}
-        onClose={resewPreviewDialogInfo}
+        onClose={resetPreviewDialogInfo}
         className={'template-select__youtube-dialog'}
       >
         <iframe
