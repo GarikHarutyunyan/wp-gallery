@@ -1,0 +1,23 @@
+.premium-offer {
+    max-width: 900px;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 0 auto;
+    overflow: hidden;
+
+}
+
+.premium-offer__link {
+    text-shadow: 1px 0 #a5dce9 !important;
+    color: #a5dce9 !important;
+    text-decoration-color: #a5dce9 !important;
+}
+
+.premium-offer__image {
+    width: 40%;
+    height: auto;
+    flex-shrink: 0;
+    object-fit: contain;
+    max-height: 200px;
+    margin-right: -32px;
+}
