@@ -66,7 +66,7 @@ const PremiumOffer = () => {
             style={{textShadow: '1px 0 #737373'}}
             fontFamily={'Montserrat'}
           >
-            Access ALL current templates and enjoy free updates with new
+            Access ALL pre-built templates and enjoy free updates with new
             designs.
             <br />
             Hurry up! The offer ends soon!

@@ -1,7 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import {Box, Dialog, IconButton, Skeleton} from '@mui/material';
+import {Box, Dialog, IconButton, Tooltip, Skeleton} from '@mui/material';
 import {ISelectOption, SelectControl} from 'components/controls';
 import {useTemplates, useValidation} from 'contexts';
 import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
@@ -85,23 +85,24 @@ const TemplatesSelect: React.FC = () => {
           <Aligner align={Align.END} style={{alignItems: 'center', gap: '2px'}}>
             {paid ? <ProIcon /> : null}
             {youtube_link ? (
-              <IconButton
-                size={'small'}
-                title={'Preview video'}
-                onClick={getOpenYoutubePreview(youtube_link)}
-              >
-                <VisibilityIcon fontSize={'small'} />
-              </IconButton>
+              <Tooltip title="Preview Video" placement="top" arrow enterDelay={500}>
+                <IconButton
+                  size={'small'}
+                  onClick={getOpenYoutubePreview(youtube_link)}
+                >
+                  <VisibilityIcon fontSize={'small'} />
+                </IconButton>
+              </Tooltip>
             ) : null}
             {preview_url ? (
-              <IconButton
-                size={'small'}
-                title={'Preview demo'}
-                aria-label={'Example'}
-                onClick={getOpenDemo(templateReference)}
-              >
-                <OpenInNewIcon fontSize={'small'} />
-              </IconButton>
+              <Tooltip title="Preview Demo" placement="top" arrow enterDelay={500}>
+                <IconButton
+                  size={'small'}
+                  onClick={getOpenDemo(templateReference)}
+                >
+                  <OpenInNewIcon fontSize={'small'} />
+                </IconButton>
+              </Tooltip>
             ) : null}
           </Aligner>
         </Aligner>
@@ -181,7 +182,7 @@ const TemplatesSelect: React.FC = () => {
       >
         <IconButton
           onClick={closeDialog}
-          style={{position: 'absolute', right: 0, padding: '20px'}}
+          className={'modal-close'}
         >
           <CloseIcon />
         </IconButton>
@@ -194,7 +195,7 @@ const TemplatesSelect: React.FC = () => {
       >
         <IconButton
           onClick={resetPreviewDialogInfo}
-          style={{position: 'absolute', right: 0, padding: '12px', color: 'white'}}
+          className={'modal-close'}
         >
           <CloseIcon />
         </IconButton>
@@ -203,7 +204,6 @@ const TemplatesSelect: React.FC = () => {
           height={'315'}
           src={previewDialogInfo.url}
           title={'YouTube video player'}
-          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
