@@ -4,8 +4,9 @@ import './premium-offer.css';
 import {StarImage} from './StarImage';
 
 const contentTextStyle = {
-  fontWeight: '900',
+  fontWeight: '500',
   fontSize: '1.1rem',
+  letterSpacing: '1.5px',
 };
 
 const PremiumOffer = () => {
@@ -23,10 +24,11 @@ const PremiumOffer = () => {
           alignItems: 'center',
           justifyContent: 'center',
           mb: 1,
+          marginLeft: '-30px',
         }}
       >
         <StarImage />
-        <span>{'Early Bird Offer!'}</span>
+        <span className={'premium-offer-title'}>{'Early Bird Offer!'}</span>
       </Typography>
       <Typography
         variant={'h6'}
@@ -64,7 +66,7 @@ const PremiumOffer = () => {
             style={{textShadow: '1px 0 #737373'}}
             fontFamily={'Montserrat'}
           >
-            Access ALL current templates and enjoy free updates with new
+            Access ALL pre-built templates and enjoy free updates with new
             designs.
             <br />
             Hurry up! The offer ends soon!

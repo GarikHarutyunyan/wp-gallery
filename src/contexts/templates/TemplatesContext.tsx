@@ -24,6 +24,7 @@ const emptyTemplate: ITemplate = {
   title: 'None',
   template_id: 'none',
   template: true,
+  css: '',
 };
 
 const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
