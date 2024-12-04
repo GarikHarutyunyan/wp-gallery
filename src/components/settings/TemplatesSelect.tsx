@@ -87,6 +87,7 @@ const TemplatesSelect: React.FC = () => {
             {youtube_link ? (
               <IconButton
                 size={'small'}
+                title={'Preview video'}
                 onClick={getOpenYoutubePreview(youtube_link)}
               >
                 <VisibilityIcon fontSize={'small'} />
@@ -95,6 +96,7 @@ const TemplatesSelect: React.FC = () => {
             {preview_url ? (
               <IconButton
                 size={'small'}
+                title={'Preview demo'}
                 aria-label={'Example'}
                 onClick={getOpenDemo(templateReference)}
               >
@@ -172,14 +174,14 @@ const TemplatesSelect: React.FC = () => {
         )}
       </Box>
       <Dialog
-        sx={{borderRadius: 3}}
+        sx={{borderRadius: 2}}
         open={isDialogVisible}
         onClose={closeDialog}
         PaperProps={{sx: {borderRadius: 3}}}
       >
         <IconButton
           onClick={closeDialog}
-          style={{position: 'absolute', right: 0, padding: '12px'}}
+          style={{position: 'absolute', right: 0, padding: '20px'}}
         >
           <CloseIcon />
         </IconButton>
@@ -192,7 +194,7 @@ const TemplatesSelect: React.FC = () => {
       >
         <IconButton
           onClick={resetPreviewDialogInfo}
-          style={{position: 'absolute', right: 0, padding: '12px'}}
+          style={{position: 'absolute', right: 0, padding: '12px', color: 'white'}}
         >
           <CloseIcon />
         </IconButton>

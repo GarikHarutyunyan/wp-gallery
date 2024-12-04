@@ -4,8 +4,9 @@ import './premium-offer.css';
 import {StarImage} from './StarImage';
 
 const contentTextStyle = {
-  fontWeight: '900',
+  fontWeight: '500',
   fontSize: '1.1rem',
+  letterSpacing: '1.5px',
 };
 
 const PremiumOffer = () => {
@@ -23,10 +24,11 @@ const PremiumOffer = () => {
           alignItems: 'center',
           justifyContent: 'center',
           mb: 1,
+          marginLeft: '-30px',
         }}
       >
         <StarImage />
-        <span>{'Early Bird Offer!'}</span>
+        <span className={'premium-offer-title'}>{'Early Bird Offer!'}</span>
       </Typography>
       <Typography
         variant={'h6'}
