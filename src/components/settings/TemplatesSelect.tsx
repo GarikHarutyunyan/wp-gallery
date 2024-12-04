@@ -1,11 +1,27 @@
-import {Box, Skeleton} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import {Box, Dialog, IconButton, Skeleton} from '@mui/material';
 import {ISelectOption, SelectControl} from 'components/controls';
-import {useTemplates} from 'contexts/TemplatesContext';
-import React, {useLayoutEffect} from 'react';
+import {useTemplates, useValidation} from 'contexts';
+import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
+import {Align, Aligner} from 'core-components';
+import React, {
+  ReactNode,
+  SyntheticEvent,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import {TypeUtils} from 'utils';
+import {PremiumOffer} from './PremiumOffer';
+import {ProIcon} from './ProIcon';
+import './template-select.css';
 import {useSettings} from './useSettings';
 
+const PRO_TITLE: string = '✨ Early Bird Offer! ✨';
+
 const TemplatesSelect: React.FC = () => {
+  const {isProUser} = useValidation();
   const {templates, template, changeTemplate, isLoading} = useTemplates();
   const {
     changeGeneralSettings,
@@ -20,6 +36,14 @@ const TemplatesSelect: React.FC = () => {
     changeType,
     changeCss,
   } = useSettings();
+  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
+  const initialPreviewDialogInfo = {
+    isVisible: false,
+    url: '',
+  };
+  const [previewDialogInfo, setPreviewDialogInfo] = useState(
+    initialPreviewDialogInfo
+  );
   const value = TypeUtils.isNumber(template?.template_id)
     ? template!.template_id
     : 'none';
@@ -51,32 +75,139 @@ const TemplatesSelect: React.FC = () => {
     }
   }, [template?.template_id]);
 
-  const templateOptions: ISelectOption[] =
+  const getPropOptionRender =
+    (templateReference: ITemplateReference) => (): ReactNode => {
+      const {title, paid, preview_url, youtube_link} = templateReference;
+
+      return (
+        <Aligner style={{alignItems: 'center', gap: '16px'}}>
+          <div>{title}</div>
+          <Aligner align={Align.END} style={{alignItems: 'center', gap: '2px'}}>
+            {paid ? <ProIcon /> : null}
+            {youtube_link ? (
+              <IconButton
+                size={'small'}
+                onClick={getOpenYoutubePreview(youtube_link)}
+              >
+                <VisibilityIcon fontSize={'small'} />
+              </IconButton>
+            ) : null}
+            {preview_url ? (
+              <IconButton
+                size={'small'}
+                aria-label={'Example'}
+                onClick={getOpenDemo(templateReference)}
+              >
+                <OpenInNewIcon fontSize={'small'} />
+              </IconButton>
+            ) : null}
+          </Aligner>
+        </Aligner>
+      );
+    };
+
+  const getOpenYoutubePreview = (url: string) => (e: any) => {
+    e.stopPropagation();
+    setPreviewDialogInfo({isVisible: true, url});
+  };
+
+  const getOpenDemo =
+    (template: ITemplateReference) =>
+    (e: SyntheticEvent): void => {
+      const {preview_url} = template;
+
+      e.stopPropagation();
+      window.open(preview_url, '_blank');
+    };
+
+  const openDialog = () => {
+    setIsDialogVisible(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogVisible(false);
+  };
+
+  const options: ISelectOption[] =
     templates?.map((template) => {
+      const {title, id} = template;
+      const isDisabled: boolean = id === 'none';
+
       return {
-        title: template.title,
-        value: template.id,
-        isDisabled: template.id === 'none',
+        title: title,
+        value: id,
+        render: getPropOptionRender(template),
+        isDisabled,
       };
     }) || [];
 
   const onChange = (newValue: string) => {
-    changeTemplate?.(newValue);
+    const templateReference: ITemplateReference | undefined = templates?.find(
+      (t) => t.id === newValue
+    );
+    const isPaid: boolean = !!templateReference?.paid;
+
+    if (isPaid && !isProUser) {
+      openDialog();
+    } else {
+      changeTemplate?.(newValue);
+    }
   };
 
+  const resetPreviewDialogInfo = () =>
+    setPreviewDialogInfo(initialPreviewDialogInfo);
+
   return TypeUtils.isNumber(value) || value ? (
-    <Box style={{width: '200px', margin: 'auto 10px'}}>
-      {isLoading ? (
-        <Skeleton height={48} />
-      ) : (
-        <SelectControl
-          onChange={onChange}
-          options={templateOptions}
-          value={value}
-          hideLabel={true}
+    <>
+      <Box style={{width: '200px', margin: 'auto 10px'}}>
+        {isLoading ? (
+          <Skeleton height={48} />
+        ) : (
+          <SelectControl
+            onChange={onChange}
+            options={options}
+            value={value}
+            hideLabel={true}
+          />
+        )}
+      </Box>
+      <Dialog
+        sx={{borderRadius: 3}}
+        open={isDialogVisible}
+        onClose={closeDialog}
+        PaperProps={{sx: {borderRadius: 3}}}
+      >
+        <IconButton
+          onClick={closeDialog}
+          style={{position: 'absolute', right: 0, padding: '12px'}}
+        >
+          <CloseIcon />
+        </IconButton>
+        <PremiumOffer />
+      </Dialog>
+      <Dialog
+        open={previewDialogInfo.isVisible}
+        onClose={resetPreviewDialogInfo}
+        className={'template-select__youtube-dialog'}
+      >
+        <IconButton
+          onClick={resetPreviewDialogInfo}
+          style={{position: 'absolute', right: 0, padding: '12px'}}
+        >
+          <CloseIcon />
+        </IconButton>
+        <iframe
+          width={'560'}
+          height={'315'}
+          src={previewDialogInfo.url}
+          title={'YouTube video player'}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
         />
-      )}
-    </Box>
+      </Dialog>
+    </>
   ) : null;
 };
 

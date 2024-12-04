@@ -1,20 +1,9 @@
 import axios from 'axios';
-import {ISettingsDTO} from 'data-structures';
 import {useSnackbar} from 'notistack';
-import React, {useContext, useLayoutEffect, useState} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import {TypeUtils} from 'utils';
-import {useAppInfo} from './AppInfoContext';
-
-export interface ITemplate extends Partial<ISettingsDTO> {
-  template_id: string | number;
-  title: string;
-  template: boolean;
-}
-
-export interface ITemplateReference {
-  id: string;
-  title: string;
-}
+import {useAppInfo} from '../AppInfoContext';
+import {ITemplate, ITemplateReference} from './TemplatesContext.types';
 
 const TemplatesContext = React.createContext<{
   templates?: ITemplateReference[];
@@ -25,7 +14,12 @@ const TemplatesContext = React.createContext<{
   isLoading?: boolean;
 }>({});
 
-const noneOption: ITemplateReference = {id: 'none', title: 'None'};
+const noneOption: ITemplateReference = {
+  id: 'none',
+  title: 'None',
+  paid: false,
+};
+
 const emptyTemplate: ITemplate = {
   title: 'None',
   template_id: 'none',
@@ -44,7 +38,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       return;
     }
     const fetchUrl: string | undefined =
-      'https://regallery.team/core/wp-json/reacgcore/v1/templates'; //baseUrl      ? baseUrl + 'templates'      : undefined;
+      'https://regallery.team/core/wp-json/reacgcore/v2/templates'; //baseUrl      ? baseUrl + 'templates'      : undefined;
 
     if (fetchUrl) {
       try {
@@ -68,7 +62,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const getTemplate = async (id: string): Promise<void> => {
     const fetchUrl:
       | string
-      | undefined = `https://regallery.team/core/wp-json/reacgcore/v1/template/${id}`;
+      | undefined = `https://regallery.team/core/wp-json/reacgcore/v2/template/${id}`;
 
     if (fetchUrl && id !== '') {
       setIsLoading(true);
@@ -138,12 +132,4 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   );
 };
 
-const useTemplates = () => {
-  const context = useContext(TemplatesContext);
-  if (!context)
-    throw new Error('useTemplates must be used within a TemplatesContext');
-
-  return context;
-};
-
-export {TemplatesContext, TemplatesProvider, useTemplates};
+export {TemplatesContext, TemplatesProvider};

@@ -232,7 +232,7 @@ module.exports = function (webpackEnv) {
     output: {
       path: 'C:/xampp/htdocs/wordpress/wp-content/plugins/regallery/assets/js', //path.resolve(__dirname, 'build'),
       filename: 'wp-gallery.js', // Change this to your desired filename
-      publicPath: '/',
+      publicPath: '/wordpress/wp-content/plugins/gallery/assets/js/',
     },
     cache: {
       type: 'filesystem',

@@ -1,10 +1,11 @@
 import {MenuItem, TextField} from '@mui/material';
-import React, {CSSProperties} from 'react';
+import React, {CSSProperties, ReactNode} from 'react';
 import './select-control.css';
 
 interface ISelectOption {
   title: string;
   value: string;
+  render?: (value?: string) => ReactNode;
   isDisabled?: boolean;
 }
 
@@ -40,6 +41,14 @@ const SelectControl: React.FC<ISelectControlProps> = ({
     onChange(event.target.value, id);
   };
 
+  const renderValue = (selectedValue: any) => {
+    const selectedOption: ISelectOption | undefined = options.find(
+      (option) => option.value === selectedValue
+    );
+
+    return <>{selectedOption?.title || ''}</>;
+  };
+
   return (
     <TextField
       select
@@ -53,12 +62,15 @@ const SelectControl: React.FC<ISelectControlProps> = ({
       style={style}
       size={size}
       hiddenLabel={hideLabel}
+      inputProps={{renderValue}}
     >
-      {options.map(({value, title, isDisabled}) => (
-        <MenuItem key={value} value={value} disabled={isDisabled}>
-          {title}
-        </MenuItem>
-      ))}
+      {options.map(({value, title, render, isDisabled}) => {
+        return (
+          <MenuItem key={value} value={value} disabled={isDisabled}>
+            {render?.(value) || title}
+          </MenuItem>
+        );
+      })}
     </TextField>
   );
 };
