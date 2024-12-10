@@ -1,8 +1,11 @@
+import CloseIcon from '@mui/icons-material/Close';
+import {Dialog, IconButton} from '@mui/material';
 import axios from 'axios';
 import {useSnackbar} from 'notistack';
 import React, {useLayoutEffect, useState} from 'react';
 import {TypeUtils} from 'utils';
 import {useAppInfo} from '../AppInfoContext';
+import {PremiumOffer} from './PremiumOffer';
 import {ITemplate, ITemplateReference} from './TemplatesContext.types';
 
 const TemplatesContext = React.createContext<{
@@ -32,6 +35,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [templates, setTemplates] = useState<ITemplateReference[]>([]);
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
   const {showControls} = useAppInfo();
 
   const getTemplates = async () => {
@@ -69,12 +73,16 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setIsLoading(true);
       try {
         const response = await axios.get(fetchUrl);
-        const templateData: ITemplate = response.data;
+        if (response.status === 204) {
+          openDialog();
+        } else {
+          const templateData: ITemplate = response.data;
 
-        setTemplate(templateData);
+          setTemplate(templateData);
+        }
         setIsLoading(false);
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        console.error(error);
         setIsLoading(false);
       }
     } else {
@@ -113,6 +121,14 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setTemplate({template_id: id, title: title, template: true});
   };
 
+  const openDialog = () => {
+    setIsDialogVisible(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogVisible(false);
+  };
+
   useLayoutEffect(() => {
     getTemplates();
   }, []);
@@ -129,6 +145,17 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }}
     >
       {children}
+      <Dialog
+        sx={{borderRadius: 2}}
+        open={isDialogVisible}
+        onClose={closeDialog}
+        PaperProps={{sx: {borderRadius: 3}}}
+      >
+        <IconButton onClick={closeDialog} className={'modal-close'}>
+          <CloseIcon />
+        </IconButton>
+        <PremiumOffer />
+      </Dialog>
     </TemplatesContext.Provider>
   );
 };

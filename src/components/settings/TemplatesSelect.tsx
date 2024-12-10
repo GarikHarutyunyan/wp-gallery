@@ -1,9 +1,9 @@
 import CloseIcon from '@mui/icons-material/Close';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import {Box, Dialog, IconButton, Tooltip, Skeleton} from '@mui/material';
+import {Box, Dialog, IconButton, Skeleton, Tooltip} from '@mui/material';
 import {ISelectOption, SelectControl} from 'components/controls';
-import {useTemplates, useValidation} from 'contexts';
+import {useTemplates} from 'contexts';
 import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
 import {Align, Aligner} from 'core-components';
 import React, {
@@ -13,15 +13,11 @@ import React, {
   useState,
 } from 'react';
 import {TypeUtils} from 'utils';
-import {PremiumOffer} from './PremiumOffer';
 import {ProIcon} from './ProIcon';
 import './template-select.css';
 import {useSettings} from './useSettings';
 
-const PRO_TITLE: string = '✨ Early Bird Offer! ✨';
-
 const TemplatesSelect: React.FC = () => {
-  const {isProUser} = useValidation();
   const {templates, template, changeTemplate, isLoading} = useTemplates();
   const {
     changeGeneralSettings,
@@ -36,7 +32,6 @@ const TemplatesSelect: React.FC = () => {
     changeType,
     changeCss,
   } = useSettings();
-  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
   const initialPreviewDialogInfo = {
     isVisible: false,
     url: '',
@@ -85,7 +80,12 @@ const TemplatesSelect: React.FC = () => {
           <Aligner align={Align.END} style={{alignItems: 'center', gap: '2px'}}>
             {paid ? <ProIcon /> : null}
             {youtube_link ? (
-              <Tooltip title="Preview Video" placement="top" arrow enterDelay={500}>
+              <Tooltip
+                title="Preview Video"
+                placement="top"
+                arrow
+                enterDelay={500}
+              >
                 <IconButton
                   size={'small'}
                   onClick={getOpenYoutubePreview(youtube_link)}
@@ -95,7 +95,12 @@ const TemplatesSelect: React.FC = () => {
               </Tooltip>
             ) : null}
             {preview_url ? (
-              <Tooltip title="Preview Demo" placement="top" arrow enterDelay={500}>
+              <Tooltip
+                title="Preview Demo"
+                placement="top"
+                arrow
+                enterDelay={500}
+              >
                 <IconButton
                   size={'small'}
                   onClick={getOpenDemo(templateReference)}
@@ -123,14 +128,6 @@ const TemplatesSelect: React.FC = () => {
       window.open(preview_url, '_blank');
     };
 
-  const openDialog = () => {
-    setIsDialogVisible(true);
-  };
-
-  const closeDialog = () => {
-    setIsDialogVisible(false);
-  };
-
   const options: ISelectOption[] =
     templates?.map((template) => {
       const {title, id} = template;
@@ -145,16 +142,7 @@ const TemplatesSelect: React.FC = () => {
     }) || [];
 
   const onChange = (newValue: string) => {
-    const templateReference: ITemplateReference | undefined = templates?.find(
-      (t) => t.id === newValue
-    );
-    const isPaid: boolean = !!templateReference?.paid;
-
-    if (isPaid && !isProUser) {
-      openDialog();
-    } else {
-      changeTemplate?.(newValue);
-    }
+    changeTemplate?.(newValue);
   };
 
   const resetPreviewDialogInfo = () =>
@@ -174,29 +162,13 @@ const TemplatesSelect: React.FC = () => {
           />
         )}
       </Box>
-      <Dialog
-        sx={{borderRadius: 2}}
-        open={isDialogVisible}
-        onClose={closeDialog}
-        PaperProps={{sx: {borderRadius: 3}}}
-      >
-        <IconButton
-          onClick={closeDialog}
-          className={'modal-close'}
-        >
-          <CloseIcon />
-        </IconButton>
-        <PremiumOffer />
-      </Dialog>
+
       <Dialog
         open={previewDialogInfo.isVisible}
         onClose={resetPreviewDialogInfo}
         className={'template-select__youtube-dialog'}
       >
-        <IconButton
-          onClick={resetPreviewDialogInfo}
-          className={'modal-close'}
-        >
+        <IconButton onClick={resetPreviewDialogInfo} className={'modal-close'}>
           <CloseIcon />
         </IconButton>
         <iframe
