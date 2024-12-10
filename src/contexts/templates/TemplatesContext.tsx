@@ -73,16 +73,16 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setIsLoading(true);
       try {
         const response = await axios.get(fetchUrl);
-        const templateData: ITemplate = response.data;
-
-        setTemplate(templateData);
-        setIsLoading(false);
-      } catch (error: any) {
-        if (error?.response?.status === 401) {
+        if (response.status === 204) {
           openDialog();
         } else {
-          console.error(error);
+          const templateData: ITemplate = response.data;
+
+          setTemplate(templateData);
         }
+        setIsLoading(false);
+      } catch (error: any) {
+        console.error(error);
         setIsLoading(false);
       }
     } else {
