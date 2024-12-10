@@ -1,4 +1,5 @@
 import axios from 'axios';
+import clsx from 'clsx';
 import {useTemplates} from 'contexts';
 import {useAppInfo} from 'contexts/AppInfoContext';
 import {Section} from 'core-components';
@@ -31,9 +32,9 @@ import {
 } from './MockSettings';
 import {OptionsPanelBody} from './OptionsPanelBody';
 import {OptionsPanelHeader} from './OptionsPanelHeader';
+import './settings-context.css';
 import {TypePanelBody} from './TypePanelBody ';
 import {TypePanelHeader} from './TypePanelHeader';
-import './settings-context.css';
 
 const SettingsContext = React.createContext<{
   type?: GalleryType;
@@ -279,7 +280,12 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   const renderChildren = (): ReactNode => {
     return (
-      <div ref={wrapperRef} className={'reacg-gallery-wrapper'}>
+      <div
+        ref={wrapperRef}
+        className={clsx('reacg-gallery-wrapper', {
+          'reacg-gallery-wrapper__margin-bottom': type === GalleryType.CUBE,
+        })}
+      >
         {children}
         {css !== '' && (
           <style>{'#reacg-root' + galleryId + '{' + css + '}'}</style>
