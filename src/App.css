@@ -15,6 +15,10 @@
   font-family: inherit !important;
 }
 
+.reacg-gallery-wrapper .MuiGrid-container:has(> div:empty) {
+  margin: 0 !important;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
