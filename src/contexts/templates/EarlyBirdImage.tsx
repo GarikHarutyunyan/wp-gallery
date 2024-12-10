@@ -1,5 +1,3 @@
-import './pro-icon.css';
-
 const EarlyBirdImage = () => {
   return (
     <svg
