@@ -210,14 +210,14 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
         }}
       >
         <ImageList
-          className={'thumbnail-gallery__wrapper_' + validColumnsCount}
+          className={'reacg-thumbnails-wrapper-' + validColumnsCount}
           cols={validColumnsCount}
           gap={+gap}
           style={{margin: '0 auto'}}
         >
           {images!.map((image, index) => (
             <div
-              className={'thumbnail-gallery__item'}
+              className={'reacg-thumbnails-item'}
               onClick={() => onClick?.(index)}
               style={{
                 overflow:
