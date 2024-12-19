@@ -161,6 +161,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const onTypeChange = async (newType: GalleryType): Promise<void> => {
     await changeType(newType);
     resetTemplate?.();
+    setCss('');
   };
 
   const onSave = async (): Promise<void> => {

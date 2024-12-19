@@ -44,7 +44,7 @@ const TemplatesSelect: React.FC = () => {
     : 'none';
 
   useLayoutEffect(() => {
-    if (template && template.template_id) {
+    if (template && TypeUtils.isNumber(template.template_id)) {
       const {
         type,
         general,
