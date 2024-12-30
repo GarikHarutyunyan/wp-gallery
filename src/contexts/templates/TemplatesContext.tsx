@@ -145,10 +145,10 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     >
       {children}
       <Dialog
-        sx={{borderRadius: 2}}
+        sx={{borderRadius: 4}}
         open={isDialogVisible}
         onClose={closeDialog}
-        PaperProps={{sx: {borderRadius: 3}}}
+        PaperProps={{sx: {borderRadius: 6}}}
       >
         <IconButton onClick={closeDialog} className={'modal-close'}>
           <CloseIcon />

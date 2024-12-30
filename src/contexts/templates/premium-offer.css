@@ -1,5 +1,5 @@
 .premium-offer {
-    max-width: 900px;
+    max-width: 382px;
     padding: 24px;
     border-radius: 12px;
     margin: 0 auto;
@@ -14,9 +14,9 @@
 .MuiDialog-container .MuiPaper-root .modal-close {
     position: absolute;
     right: 0px;
-    padding: 10px;
+    padding: 15px;
     top: 0;
-    color: grey;
+    color: black;
 }
 
 .MuiDialog-container .MuiPaper-root .modal-close:hover {
@@ -41,12 +41,15 @@
     .premium-offer-title {
         font-size: 2rem;
     }
+
     .premium-offer__image {
         display: none;
     }
+
     .template-select__youtube-dialog iframe {
         width: 100% !important;
     }
+
     .MuiDialog-container .MuiPaper-root {
         width: 100%;
         border-radius: 0;

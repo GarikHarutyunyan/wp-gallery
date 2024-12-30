@@ -1,7 +1,7 @@
-import {Box, Link, Typography} from '@mui/material';
-import {EarlyBirdImage} from './EarlyBirdImage';
+import {Box, Typography} from '@mui/material';
+import {ProIcon} from 'components/settings/ProIcon';
+import {Button} from 'core-components';
 import './premium-offer.css';
-import {StarImage} from './StarImage';
 
 const contentTextStyle = {
   fontWeight: '500',
@@ -9,99 +9,50 @@ const contentTextStyle = {
   letterSpacing: '1.5px',
 };
 
+// fontFamily: 'Lilita One',
 const PremiumOffer = () => {
   return (
     <Box className={'premium-offer'}>
+      <Box sx={{display: 'flex', justifyContent: 'center'}}>
+        <ProIcon
+          width={100}
+          height={100}
+          style={{background: '#d1dae8', borderRadius: '50%', padding: '12px'}}
+        />
+      </Box>
       <Typography
-        variant={'h3'}
+        variant={'h5'}
         component={'div'}
         sx={{
-          color: '#a5dce9',
-          fontWeight: '500',
-          fontFamily: 'Lilita One',
+          color: 'black',
+          fontWeight: '700',
           display: 'flex',
           gap: 1,
           alignItems: 'center',
           justifyContent: 'center',
-          mb: 1,
-          marginLeft: '-30px',
+          textAlign: 'center',
+          padding: '30px',
+          fontFamily: 'Montserrat',
         }}
       >
-        <StarImage />
-        <span className={'premium-offer-title'}>{'Early Bird Offer!'}</span>
-      </Typography>
-      <Typography
-        variant={'h6'}
-        sx={contentTextStyle}
-        mb={1}
-        color={'#737373'}
-        style={{textShadow: '1px 0 #737373'}}
-        fontFamily={'Montserrat'}
-      >
-        Unlock our{' '}
-        <span
-          style={{
-            ...contentTextStyle,
-            textShadow: '1px 0 #f9b7ab',
-            color: '#f9b7ab',
-          }}
-        >
-          {'premium templates'}
-        </span>{' '}
-        for just $15/year!
+        {'This pre-built template is part of our Pro plan.'}
       </Typography>
       <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-        }}
+        sx={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}
       >
-        <Box sx={{flex: 1}}>
-          <Typography
-            variant={'h6'}
-            sx={contentTextStyle}
-            mb={1}
-            color={'#737373'}
-            style={{textShadow: '1px 0 #737373'}}
-            fontFamily={'Montserrat'}
-          >
-            Access ALL pre-built templates and enjoy free updates with new
-            designs.
-            <br />
-            Hurry up! The offer ends soon!
-          </Typography>
-          <Typography
-            variant={'h6'}
-            sx={contentTextStyle}
-            color={'#737373'}
-            style={{textShadow: '1px 0 #737373'}}
-            fontFamily={'Montserrat'}
-          >
-            Email us at{' '}
-            <Link
-              href={'mailto:regalleryteam@gmail.com'}
-              sx={contentTextStyle}
-              className={'premium-offer__link'}
-            >
-              {'regalleryteam@gmail.com'}
-            </Link>{' '}
-            with the subject{' '}
-            <span
-              style={{
-                color: '#f9b7ab',
-                textShadow: '1px 0 #f9b7ab',
-                ...contentTextStyle,
-              }}
-            >
-              {'Early Bird ReGallery'}
-            </span>{' '}
-            to get started.
-          </Typography>
-        </Box>
-        <Box className={'premium-offer__image'}>
-          <EarlyBirdImage />
-        </Box>
+        <Button
+          href={'https://regallery.team/#pricing'}
+          target={'_blank'}
+          style={{
+            background: '#a7c957',
+            color: 'white',
+            padding: '6px 40px',
+            fontSize: 'large',
+            boxShadow: 'unset',
+          }}
+        >
+          {'GET STARTED'}
+        </Button>
       </Box>
     </Box>
   );
