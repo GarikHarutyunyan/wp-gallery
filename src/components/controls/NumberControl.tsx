@@ -5,6 +5,7 @@ import React from 'react';
 interface INumberControlProps {
   id?: string;
   name: string;
+  defaultValue?: number;
   value?: number;
   onChange: (value: number | undefined, id?: string) => void;
   min?: number;
@@ -24,6 +25,7 @@ const numberInputOnWheelPreventChange = (e: any) => {
 const NumberControl: React.FC<INumberControlProps> = ({
   id,
   name,
+  defaultValue,
   value,
   onChange,
   min,
@@ -42,9 +44,10 @@ const NumberControl: React.FC<INumberControlProps> = ({
   return (
     <TextField
       label={name}
-      variant="standard"
-      margin="none"
-      type="number"
+      variant={'standard'}
+      margin={'none'}
+      type={'number'}
+      defaultValue={defaultValue}
       value={value}
       onChange={onValueChange}
       fullWidth

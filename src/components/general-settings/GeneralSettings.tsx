@@ -13,6 +13,7 @@ import {
   PaginationTypeOptions,
 } from 'data-structures';
 import React, {ReactNode, useMemo} from 'react';
+import {Utils} from 'utils';
 import {
   ColorControl,
   ISelectOption,
@@ -136,8 +137,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                   <NumberControl
                     id={'itemsPerPage'}
                     name={'Items per page'}
-                    value={itemsPerPage}
-                    onChange={onInputValueChange}
+                    defaultValue={itemsPerPage}
+                    onChange={Utils.debounce(onInputValueChange)}
                     min={1}
                   />
                 </Filter>
