@@ -9,7 +9,6 @@ const contentTextStyle = {
   letterSpacing: '1.5px',
 };
 
-// fontFamily: 'Lilita One',
 const PremiumOffer = () => {
   return (
     <Box className={'premium-offer'}>
@@ -25,17 +24,17 @@ const PremiumOffer = () => {
         component={'div'}
         sx={{
           color: 'black',
-          fontWeight: '700',
+          fontWeight: 600,
           display: 'flex',
           gap: 1,
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
           padding: '30px',
-          fontFamily: 'Montserrat',
+          fontFamily: 'lexend',
         }}
       >
-        {'This pre-built template is part of our Pro plan.'}
+        {'This pre-built template is part of our Pro plan'}
       </Typography>
       <Box
         sx={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}
@@ -49,6 +48,8 @@ const PremiumOffer = () => {
             padding: '6px 40px',
             fontSize: 'large',
             boxShadow: 'unset',
+            fontWeight: 400,
+            fontFamily: 'lexend',
           }}
         >
           {'GET STARTED'}
