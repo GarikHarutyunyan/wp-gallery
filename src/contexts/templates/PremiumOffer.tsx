@@ -34,7 +34,7 @@ const PremiumOffer = () => {
           fontFamily: 'lexend',
         }}
       >
-        {'This pre-built template is part of our Pro plan.'}
+        {'This pre-built template is part of our Pro plan'}
       </Typography>
       <Box
         sx={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}
@@ -49,6 +49,7 @@ const PremiumOffer = () => {
             fontSize: 'large',
             boxShadow: 'unset',
             fontWeight: 400,
+            fontFamily: 'lexend',
           }}
         >
           {'GET STARTED'}
