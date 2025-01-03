@@ -12,7 +12,7 @@ import {
   ReactElement,
   createContext,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
 } from 'react';
@@ -80,7 +80,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
   const isFullyLoaded: boolean = currentPage >= pagesCount;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     itemsPerPage > 0 && onReloadData();
   }, [itemsPerPage, paginationType, orderBy, orderDirection]);
 
@@ -130,6 +130,11 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
+
+      if (page === 1) {
+        setImages([]);
+      }
+
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
       queryString += `order_by=${orderBy}`;
@@ -174,6 +179,10 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const getItemsCount = async () => {
+    if (isLoading) {
+      return;
+    }
+
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'gallery/' + galleryId
       : undefined;
@@ -206,8 +215,6 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const onReloadData = async () => {
-    setIsLoading(true);
-    setImages([]);
     changeImagesCount?.(0);
     setLightboxImages([]);
     setCurrentPage(0);
