@@ -138,7 +138,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       : undefined;
 
     if (fetchUrl) {
-      setIsLoading(true);
+      setType(newType);
       const settings: ISettingsDTO = {
         type: newType,
       } as ISettingsDTO;
@@ -147,14 +147,15 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         const response = await axios.post(fetchUrl, settings, {
           headers: {'X-WP-Nonce': nonce},
         });
-        const newType: GalleryType = response.data.type;
+        const responseType: GalleryType = response.data.type;
 
-        setType(newType);
+        if (responseType !== newType) {
+          setType(responseType);
+        }
       } catch (error) {
+        setType(type);
         console.error(error);
       }
-
-      setIsLoading(false);
     }
   };
 

@@ -12,7 +12,7 @@ import {
   ReactElement,
   createContext,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
 } from 'react';
@@ -80,7 +80,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
   const isFullyLoaded: boolean = currentPage >= pagesCount;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     itemsPerPage > 0 && onReloadData();
   }, [itemsPerPage, paginationType, orderBy, orderDirection]);
 
