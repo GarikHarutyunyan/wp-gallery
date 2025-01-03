@@ -65,8 +65,13 @@ const SettingsContext = React.createContext<{
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {enqueueSnackbar} = useSnackbar();
-  const {template, initTemplate, changeTemplate, resetTemplate} =
-    useTemplates();
+  const {
+    template,
+    initTemplate,
+    changeTemplate,
+    resetTemplate,
+    isLoading: areTemplatesLoading,
+  } = useTemplates();
   const {galleryId, showControls, baseUrl, nonce} = useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
@@ -329,9 +334,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         <>
           <Section
             header={<TypePanelHeader />}
-            body={
-              <TypePanelBody isLoading={isLoading} onChange={onTypeChange} />
-            }
+            body={<TypePanelBody onChange={onTypeChange} />}
             outlined={false}
             className={'reacg-settings'}
           />
@@ -339,7 +342,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
             header={<OptionsPanelHeader />}
             body={
               <OptionsPanelBody
-                isLoading={isLoading}
+                isLoading={isLoading || !!areTemplatesLoading}
                 onSave={onSave}
                 onReset={onReset}
               />
