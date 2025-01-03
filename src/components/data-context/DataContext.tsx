@@ -130,6 +130,11 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
+
+      if (page === 1) {
+        setImages([]);
+      }
+
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
       queryString += `order_by=${orderBy}`;
@@ -174,6 +179,10 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const getItemsCount = async () => {
+    if (isLoading) {
+      return;
+    }
+
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'gallery/' + galleryId
       : undefined;
@@ -206,8 +215,6 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const onReloadData = async () => {
-    setIsLoading(true);
-    setImages([]);
     changeImagesCount?.(0);
     setLightboxImages([]);
     setCurrentPage(0);

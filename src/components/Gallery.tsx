@@ -61,7 +61,8 @@ const Gallery: React.FC = () => {
 
   const renderGallery = (): ReactNode => {
     const hideGallery: boolean =
-      !!isLoading && paginationType === PaginationType.SIMPLE;
+      !!isLoading &&
+      [PaginationType.SIMPLE, PaginationType.NONE].includes(paginationType);
 
     if (hideGallery) {
       return null;
