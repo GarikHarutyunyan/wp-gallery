@@ -1,21 +1,17 @@
 import {ISelectOption} from 'components/controls';
 import {Align, Aligner} from 'core-components';
 import {GalleryType, GalleryTypeOptions} from 'data-structures';
+import useIsMobile from 'hooks/useIsMobile';
 import React from 'react';
 import {TypeOption} from './TypeOption';
 import {TypePanelSelect} from './TypePanelSelect';
 import {useSettings} from './useSettings';
-import useIsMobile from "hooks/useIsMobile";
 
 interface ITypePanelBodyProps {
-  isLoading: boolean;
   onChange: (type: GalleryType) => void;
 }
 
-const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
-  isLoading,
-  onChange,
-}) => {
+const TypePanelBody: React.FC<ITypePanelBodyProps> = ({onChange}) => {
   const {type} = useSettings();
   const isMobile = useIsMobile(720);
 
