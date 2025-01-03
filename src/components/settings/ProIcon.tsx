@@ -1,14 +1,22 @@
+import React, {CSSProperties} from 'react';
 import './pro-icon.css';
 
-const ProIcon = () => {
+interface IProIconProps {
+  width?: number;
+  height?: number;
+  style?: CSSProperties;
+}
+
+const ProIcon: React.FC<IProIconProps> = ({width = 30, height = 30, style}) => {
   return (
     <svg
-      width="30px"
-      height="30px"
+      width={`${width}px`}
+      height={`${height}px`}
       viewBox="0 0 120 120"
       id="Layer_1"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
+      style={style}
     >
       <g>
         <polygon
