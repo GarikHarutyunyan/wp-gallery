@@ -50,27 +50,29 @@ const bootstrap = () => {
       document.getElementsByClassName('reacg-gallery') as any
     );
 
-    galleryContainers?.forEach((galleryContainer: any) => {
-      addApplication(galleryContainer);
-    });
-    ReactDOM2.createPortal(
-      <button id={'reacg-loadApp'} onClick={addApplicationById}></button>,
-      document.querySelector('body') as Element
-    );
+    if (galleryContainers?.length) {
+      galleryContainers?.forEach((galleryContainer: any) => {
+        addApplication(galleryContainer);
+      });
+      ReactDOM2.createPortal(
+        <button id={'reacg-loadApp'} onClick={addApplicationById}></button>,
+        document.querySelector('body') as Element
+      );
 
-    const div = document.createElement('div');
-    div.setAttribute('id', 'reacg-loadAppContainer');
-    const body = document.querySelector('body') as any;
-    body.append(div);
-    const rootElement = ReactDOM.createRoot(div);
-    rootElement.render(
-      <input
-        type={'button'}
-        id={'reacg-loadApp'}
-        onClick={addApplicationById}
-      ></input>
-    );
-    isBootsrapped = true;
+      const div = document.createElement('div');
+      div.setAttribute('id', 'reacg-loadAppContainer');
+      const body = document.querySelector('body') as any;
+      body.append(div);
+      const rootElement = ReactDOM.createRoot(div);
+      rootElement.render(
+        <input
+          type={'button'}
+          id={'reacg-loadApp'}
+          onClick={addApplicationById}
+        ></input>
+      );
+      isBootsrapped = true;
+    }
   }
 };
 
