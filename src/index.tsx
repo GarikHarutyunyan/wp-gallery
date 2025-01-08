@@ -9,7 +9,7 @@ const addApplication = (rootElement: HTMLElement) => {
   const galleryId: string | undefined =
     rootElement.getAttribute('data-gallery-id') || undefined;
   const showControls: boolean = !!+(
-      rootElement.getAttribute('data-options-section') || 0
+    rootElement.getAttribute('data-options-section') || 0
   );
   const baseUrl: string | undefined = (window as any).reacg_global?.rest_root;
   const nonce: string | undefined = (window as any).reacg_global?.rest_nonce;
@@ -42,34 +42,51 @@ const addApplicationById = () => {
   rootElement && addApplication(rootElement);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  const galleryContainers: any[] = Array.from(
-    document.getElementsByClassName('reacg-gallery') as any
-  );
+let isBootsrapped: boolean = false;
 
-  galleryContainers?.forEach((galleryContainer: any) => {
-    addApplication(galleryContainer);
-  });
-  ReactDOM2.createPortal(
-    <button id={'reacg-loadApp'} onClick={addApplicationById}></button>,
-    document.querySelector('body') as Element
-  );
+const bootstrap = () => {
+  if (!isBootsrapped) {
+    const galleryContainers: any[] = Array.from(
+      document.getElementsByClassName('reacg-gallery') as any
+    );
 
-  const div = document.createElement('div');
-  div.setAttribute('id', 'reacg-loadAppContainer');
-  const body = document.querySelector('body') as any;
-  body.append(div);
-  const rootElement = ReactDOM.createRoot(div);
-  rootElement.render(
-    <input
-      type={'button'}
-      id={'reacg-loadApp'}
-      onClick={addApplicationById}
-    ></input>
-  );
-});
+    if (galleryContainers?.length) {
+      galleryContainers?.forEach((galleryContainer: any) => {
+        addApplication(galleryContainer);
+      });
+      ReactDOM2.createPortal(
+        <button id={'reacg-loadApp'} onClick={addApplicationById}></button>,
+        document.querySelector('body') as Element
+      );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// reportWebVitals();
+      const div = document.createElement('div');
+      div.setAttribute('id', 'reacg-loadAppContainer');
+      const body = document.querySelector('body') as any;
+      body.append(div);
+      const rootElement = ReactDOM.createRoot(div);
+      rootElement.render(
+        <input
+          type={'button'}
+          id={'reacg-loadApp'}
+          onClick={addApplicationById}
+        ></input>
+      );
+      isBootsrapped = true;
+    }
+  }
+};
+
+document.addEventListener('DOMContentLoaded', bootstrap);
+
+let recheckCount: number = 0;
+
+const recheck = () => {
+  recheckCount++;
+  bootstrap();
+  if (recheckCount > 20 || isBootsrapped) {
+    clearInterval(recheckAfterInterval);
+  }
+};
+
+// recheck per second to avoid cases when DOMContentLoaded is not triggered because of some load issues
+const recheckAfterInterval = setInterval(recheck, 1000);
