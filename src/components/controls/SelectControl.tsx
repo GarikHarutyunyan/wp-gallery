@@ -1,5 +1,5 @@
 import {MenuItem, TextField} from '@mui/material';
-import React, {CSSProperties, ReactNode} from 'react';
+import React, {CSSProperties, forwardRef, ReactNode} from 'react';
 import './select-control.css';
 
 interface ISelectOption {
@@ -26,53 +26,49 @@ interface ISelectControlProps {
   style?: CSSProperties;
 }
 
-const SelectControl: React.FC<ISelectControlProps> = ({
-  id,
-  name,
-  value,
-  options,
-  onChange,
-  isDisabled,
-  hideLabel,
-  size,
-  style,
-}) => {
-  const onValueChange = (event: any) => {
-    onChange(event.target.value, id);
-  };
+const SelectControl: React.FC<ISelectControlProps> = forwardRef(
+  (
+    {id, name, value, options, onChange, isDisabled, hideLabel, size, style},
+    ref
+  ) => {
+    const onValueChange = (event: any) => {
+      onChange(event.target.value, id);
+    };
 
-  const renderValue = (selectedValue: any) => {
-    const selectedOption: ISelectOption | undefined = options.find(
-      (option) => option.value === selectedValue
+    const renderValue = (selectedValue: any) => {
+      const selectedOption: ISelectOption | undefined = options.find(
+        (option) => option.value === selectedValue
+      );
+
+      return <>{selectedOption?.title || ''}</>;
+    };
+
+    return (
+      <TextField
+        ref={ref as any}
+        select
+        fullWidth
+        label={!hideLabel ? name : undefined}
+        variant={'standard'}
+        margin={'none'}
+        value={value}
+        onChange={onValueChange}
+        disabled={isDisabled}
+        style={style}
+        size={size}
+        hiddenLabel={hideLabel}
+        inputProps={{renderValue}}
+      >
+        {options.map(({value, title, render, isDisabled}) => {
+          return (
+            <MenuItem key={value} value={value} disabled={isDisabled}>
+              {render?.(value) || title}
+            </MenuItem>
+          );
+        })}
+      </TextField>
     );
-
-    return <>{selectedOption?.title || ''}</>;
-  };
-
-  return (
-    <TextField
-      select
-      fullWidth
-      label={!hideLabel ? name : undefined}
-      variant={'standard'}
-      margin={'none'}
-      value={value}
-      onChange={onValueChange}
-      disabled={isDisabled}
-      style={style}
-      size={size}
-      hiddenLabel={hideLabel}
-      inputProps={{renderValue}}
-    >
-      {options.map(({value, title, render, isDisabled}) => {
-        return (
-          <MenuItem key={value} value={value} disabled={isDisabled}>
-            {render?.(value) || title}
-          </MenuItem>
-        );
-      })}
-    </TextField>
-  );
-};
+  }
+);
 
 export {SelectControl, type ISelectOption};
