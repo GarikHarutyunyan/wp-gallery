@@ -56,7 +56,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   const changeContainerWidth = () => {
     const divElement = elementRef?.current;
 
-    setContainerWidth((divElement as any)?.clientWidth);
+    setContainerWidth((divElement as any)?.getBoundingClientRect().width);
   };
 
   useEffect(() => {
