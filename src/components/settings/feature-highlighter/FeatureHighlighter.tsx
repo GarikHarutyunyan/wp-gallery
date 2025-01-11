@@ -83,7 +83,7 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
                 content: '""',
                 display: 'block',
                 position: 'absolute',
-                top: 8,
+                top: 'calc(50% - 8px)',
                 right: -4,
                 width: 10,
                 height: 10,
