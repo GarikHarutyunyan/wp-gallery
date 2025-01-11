@@ -6,7 +6,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {useSettings} from '../useSettings';
 import './feature-highlighter.css';
 
 interface IFeatureHighlighterProps extends PropsWithChildren {
@@ -17,31 +16,39 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
   text,
   children,
 }) => {
-  const {imagesCount} = useSettings();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const elementRef = useRef<HTMLElement>(null);
   const skipChecking = useRef<boolean>(false);
 
   useEffect(() => {
-    if (!!imagesCount && !skipChecking.current) {
-      const handleScrollend = (evt: any) => setIsOpen(true);
+    const highlightFeature = (e: any) => {
+      if (!skipChecking.current) {
+        const handleScrollend = (evt: any) => setIsOpen(true);
 
-      window.addEventListener('scrollend', handleScrollend, {
-        once: true,
-      });
-      (elementRef?.current as any)?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-      if (document.activeElement) {
-        // blur active element if exist to avoid scrolling to focused element after backdrop cancelation
-        (document.activeElement as any).blur?.();
+        window.addEventListener('scrollend', handleScrollend, {
+          once: true,
+        });
+        (elementRef?.current as any)?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+        if (document.activeElement) {
+          // blur active element if exist to avoid scrolling to focused element after backdrop cancelation
+          (document.activeElement as any).blur?.();
+        }
+        skipChecking.current = true;
       }
-      skipChecking.current = true;
+    };
 
-      return () => window.removeEventListener('scrollend', handleScrollend);
-    }
-  }, [imagesCount]);
+    window.addEventListener(
+      'highlight-template-select',
+      highlightFeature,
+      false
+    );
+
+    return () =>
+      window.removeEventListener('highlight-template-select', highlightFeature);
+  }, []);
 
   const renderChildren = () => {
     return React.cloneElement(children as ReactElement, {
