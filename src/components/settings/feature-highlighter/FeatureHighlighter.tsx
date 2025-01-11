@@ -63,7 +63,7 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
         anchorEl={elementRef?.current as any}
         anchorReference={'anchorEl'}
         anchorOrigin={{
-          vertical: 'bottom',
+          vertical: 'center',
           horizontal: 'left',
         }}
         transformOrigin={{
