@@ -73,13 +73,12 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
   };
 
   return (
-    <ClickAwayListener onClickAway={handleClose}>
+    <ClickAwayListener onClickAway={isOpen ? handleClose : () => {}}>
       <Tooltip
         ref={elementRef}
         title={renderTitle()}
         open={isOpen}
         placement={'left'}
-        onClose={handleClose}
         arrow
         slotProps={{
           tooltip: {
