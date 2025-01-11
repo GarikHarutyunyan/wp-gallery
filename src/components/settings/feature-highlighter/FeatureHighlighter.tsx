@@ -92,7 +92,6 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
               },
             },
           },
-          root: {slotProps: {backdrop: {open: isOpen}}},
         }}
         className={'feature-highlighter'}
       >
