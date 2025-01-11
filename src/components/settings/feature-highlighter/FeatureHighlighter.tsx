@@ -100,6 +100,8 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
           arrow: {
             sx: {
               color: ' #1A76D2',
+              width: '15px !important',
+              height: '15px !important',
             },
           },
         }}
