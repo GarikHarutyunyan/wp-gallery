@@ -91,7 +91,7 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
               fontSize: '0.875rem',
               lineHeight: '1.43',
               letterSpacing: '0.01071em',
-              width: '274px',
+              width: '272px',
               color: '#FFF',
               borderRadius: '12px',
               fontFamily: 'lexend',
