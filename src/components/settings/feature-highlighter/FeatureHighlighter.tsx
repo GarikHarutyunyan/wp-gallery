@@ -1,4 +1,5 @@
-import {Popover} from '@mui/material';
+import {ClickAwayListener, Tooltip} from '@mui/material';
+import {Aligner} from 'core-components';
 import React, {
   PropsWithChildren,
   ReactElement,
@@ -6,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import {BulbIcon} from './BulbIcon';
 import './feature-highlighter.css';
 
 interface IFeatureHighlighterProps extends PropsWithChildren {
@@ -51,10 +53,7 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
   }, []);
 
   const renderChildren = () => {
-    return React.cloneElement(children as ReactElement, {
-      ref: elementRef,
-      autoFocus: true,
-    });
+    return React.cloneElement(children as ReactElement);
   };
 
   const handleClose = (): void => {
@@ -62,49 +61,52 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
     localStorage.setItem('reacg-highlight-templates-select', 'false');
   };
 
+  const renderTitle = (): ReactElement => {
+    return (
+      <Aligner gap={8}>
+        <span style={{display: 'flex', alignItems: 'center'}}>
+          <BulbIcon />
+        </span>
+        {text}
+      </Aligner>
+    );
+  };
+
   return (
-    <>
-      {renderChildren()}
-      <Popover
+    <ClickAwayListener onClickAway={handleClose}>
+      <Tooltip
+        ref={elementRef}
+        title={renderTitle()}
         open={isOpen}
-        anchorEl={elementRef?.current as any}
-        anchorReference={'anchorEl'}
-        anchorOrigin={{
-          vertical: 'center',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'center',
-          horizontal: 'right',
-        }}
+        placement={'left'}
         onClose={handleClose}
+        arrow
         slotProps={{
-          paper: {
+          tooltip: {
             sx: {
-              'marginLeft': '-10px',
-              'padding': '10px',
-              'overflow': 'visible',
-              'backgroundColor': ' #FEF9AE',
-              'width': '200px',
-              '&:before': {
-                content: '""',
-                display: 'block',
-                position: 'absolute',
-                top: 'calc(50% - 8px)',
-                right: -4,
-                width: 10,
-                height: 10,
-                backgroundColor: 'inherit',
-                transform: 'rotate(45deg)',
-              },
+              marginLeft: '-10px',
+              padding: '16px',
+              overflow: 'visible',
+              backgroundColor: ' #1A76D2',
+              fontSize: '0.875rem',
+              lineHeight: '1.43',
+              letterSpacing: '0.01071em',
+              width: '274px',
+              color: '#FFF',
+              borderRadius: '12px',
+              fontFamily: 'lexend',
+            },
+          },
+          arrow: {
+            sx: {
+              color: ' #1A76D2',
             },
           },
         }}
-        className={'feature-highlighter'}
       >
-        {text}
-      </Popover>
-    </>
+        {renderChildren()}
+      </Tooltip>
+    </ClickAwayListener>
   );
 };
 
