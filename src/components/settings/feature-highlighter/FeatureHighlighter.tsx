@@ -100,7 +100,8 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
             sx: {
               color: ' #1A76D2',
               width: '15px !important',
-              height: '15px !important',
+              height: '24px !important',
+              marginRight: '-15px !important',
             },
           },
         }}
