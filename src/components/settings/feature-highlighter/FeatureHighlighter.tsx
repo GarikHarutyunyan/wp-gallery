@@ -106,6 +106,9 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
               marginRight: '-15px !important',
             },
           },
+          popper: {
+            disablePortal: true,
+          },
         }}
       >
         {renderChildren()}
