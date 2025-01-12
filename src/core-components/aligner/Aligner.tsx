@@ -12,11 +12,13 @@ interface IAlignerProps
     HTMLDivElement
   > {
   align?: Align;
+  gap?: number;
 }
 
 const Aligner = ({
   style,
   align,
+  gap,
   ...restProps
 }: React.PropsWithChildren<IAlignerProps>) => {
   return (
@@ -25,6 +27,7 @@ const Aligner = ({
         width: '100%',
         display: 'flex',
         justifyContent: align || Align.SPACE_BETWEEN,
+        gap: gap + 'px',
         ...style,
       }}
       {...restProps}

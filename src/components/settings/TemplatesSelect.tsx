@@ -7,15 +7,24 @@ import {useTemplates} from 'contexts';
 import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
 import {Align, Aligner} from 'core-components';
 import React, {
+  ReactElement,
   ReactNode,
   SyntheticEvent,
   useLayoutEffect,
   useState,
 } from 'react';
 import {TypeUtils} from 'utils';
+import {FeatureHighlighter} from './feature-highlighter/FeatureHighlighter';
 import {ProIcon} from './ProIcon';
 import './template-select.css';
 import {useSettings} from './useSettings';
+
+const storageValue: string | null = localStorage.getItem(
+  'reacg-highlight-templates-select'
+);
+const showHighlighter: boolean = !!storageValue
+  ? JSON.parse(storageValue as string)
+  : true;
 
 const TemplatesSelect: React.FC = () => {
   const {templates, template, changeTemplate, isLoading} = useTemplates();
@@ -148,9 +157,9 @@ const TemplatesSelect: React.FC = () => {
   const resetPreviewDialogInfo = () =>
     setPreviewDialogInfo(initialPreviewDialogInfo);
 
-  return TypeUtils.isNumber(value) || value ? (
-    <>
-      <Box style={{width: '200px', margin: 'auto 10px'}}>
+  const renderSelect = (): ReactElement => {
+    return (
+      <Box style={{width: '200px', margin: 'auto 10px', scrollMargin: '50px'}}>
         {isLoading ? (
           <Skeleton height={48} />
         ) : (
@@ -162,7 +171,22 @@ const TemplatesSelect: React.FC = () => {
           />
         )}
       </Box>
+    );
+  };
 
+  return TypeUtils.isNumber(value) || value ? (
+    <>
+      {showHighlighter ? (
+        <FeatureHighlighter
+          text={
+            'Look for a quick way to transform your gallery in seconds with our pre-built templates!'
+          }
+        >
+          {renderSelect()}
+        </FeatureHighlighter>
+      ) : (
+        renderSelect()
+      )}
       <Dialog
         open={previewDialogInfo.isVisible}
         onClose={resetPreviewDialogInfo}
