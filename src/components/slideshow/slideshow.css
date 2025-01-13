@@ -115,5 +115,7 @@
 .reacg-slideshow button:focus,
 .reacg-slideshow button:active,
 .reacg-slideshow button:visited {
+    box-shadow: none !important;
     background: none !important;
+    width: unset;
 }
