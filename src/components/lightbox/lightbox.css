@@ -166,6 +166,7 @@
 .reacg-lightbox button:visited {
     background: none !important;
     box-shadow: none !important;
+    outline: none !important;
 }
 
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail),

@@ -117,5 +117,13 @@
 .reacg-slideshow button:visited {
     box-shadow: none !important;
     background: none !important;
+    outline: none !important;
+}
+
+.reacg-slideshow button:not(.yarl__thumbnails_thumbnail),
+.reacg-slideshow button:not(.yarl__thumbnails_thumbnail):hover,
+.reacg-slideshow button:not(.yarl__thumbnails_thumbnail):focus,
+.reacg-slideshow button:not(.yarl__thumbnails_thumbnail):active,
+.reacg-slideshow button:not(.yarl__thumbnails_thumbnail):visited {
     width: unset;
 }
