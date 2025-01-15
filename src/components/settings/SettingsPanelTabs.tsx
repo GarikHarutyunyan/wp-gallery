@@ -41,13 +41,17 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
     setIsReseting(false);
   };
 
+  const [isTablet, setIsTablet] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const updateIsMobile = () => {
       const parentElement = document.querySelector('.reacg-preview');
       if (parentElement) {
-        setIsMobile(
+        setIsTablet(
           parentElement && parentElement.getBoundingClientRect().width < 720
+        );
+        setIsMobile(
+            parentElement && parentElement.getBoundingClientRect().width < 480
         );
       }
     };
@@ -63,7 +67,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
   }, []);
 
   return (
-    <Aligner style={{flexDirection: isMobile ? 'column-reverse' : 'row'}}>
+    <Aligner style={{flexDirection: isTablet ? 'column-reverse' : 'row'}}>
       <Tabs
         value={activeTab}
         onChange={onActiveTabChange}
@@ -75,7 +79,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
           <Tab label={'Lightbox'} value={'lightbox'} />
         ) : null}
       </Tabs>
-      <Aligner align={Align.END}>
+      <Aligner style={{flexDirection: isMobile ? 'column' : 'row'}} align={Align.END}>
         <TemplatesSelect />
         <LoadingButton
           loading={isSaving}
