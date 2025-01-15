@@ -1,3 +1,9 @@
-.feature-highlighter {
-    padding: 10px;
+.reacg-gallery .reacg-feature-highlighter {
+    z-index: 99998;
+}
+
+@media screen and (max-width: 775px) {
+    .reacg-gallery .reacg-feature-highlighter {
+        display: none;
+    }
 }

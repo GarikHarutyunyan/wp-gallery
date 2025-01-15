@@ -75,6 +75,7 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
   return (
     <ClickAwayListener onClickAway={isOpen ? handleClose : () => {}}>
       <Tooltip
+        classes={{ popper: 'reacg-feature-highlighter' }}
         ref={elementRef}
         title={renderTitle()}
         open={isOpen}
@@ -103,7 +104,7 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
               color: ' #1A76D2',
               width: '15px !important',
               height: '24px !important',
-              marginRight: '-15px !important',
+              marginRight: '-12px !important',
             },
           },
           popper: {
