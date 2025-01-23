@@ -1,7 +1,11 @@
 import CloseIcon from '@mui/icons-material/Close';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import {Box, Dialog, IconButton, Skeleton, Tooltip} from '@mui/material';
+import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import Skeleton from '@mui/material/Skeleton';
+import Tooltip from '@mui/material/Tooltip';
 import {ISelectOption, SelectControl} from 'components/controls';
 import {useTemplates} from 'contexts';
 import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
@@ -53,7 +57,11 @@ const TemplatesSelect: React.FC = () => {
     : 'none';
 
   useLayoutEffect(() => {
-    if (template && TypeUtils.isNumber(template.template_id)) {
+    if (
+      template &&
+      TypeUtils.isNumber(template.template_id) &&
+      !!template.template_id
+    ) {
       const {
         type,
         general,
