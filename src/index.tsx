@@ -11,6 +11,11 @@ const addApplication = (rootElement: HTMLElement) => {
   const showControls: boolean = !!+(
     rootElement.getAttribute('data-options-section') || 0
   );
+  const getGalleryTimestamp = () =>
+    rootElement.getAttribute('data-gallery-timestamp') || '';
+  const getOptionsTimestamp = () =>
+    rootElement.getAttribute('data-options-timestamp') || '';
+
   const baseUrl: string | undefined = (window as any).reacg_global?.rest_root;
   const nonce: string | undefined = (window as any).reacg_global?.rest_nonce;
   const pluginUrl: string | undefined = (window as any).reacg_global
@@ -24,6 +29,8 @@ const addApplication = (rootElement: HTMLElement) => {
         baseUrl={baseUrl}
         nonce={nonce}
         pluginUrl={pluginUrl}
+        getGalleryTimestamp={getGalleryTimestamp}
+        getOptionsTimestamp={getOptionsTimestamp}
       >
         <App />
       </AppInfoProvider>

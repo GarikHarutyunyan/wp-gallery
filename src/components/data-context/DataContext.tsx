@@ -65,7 +65,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     orderBy = 'default',
     orderDirection = 'asc',
   } = generalSettings as IGeneralSettings;
-  const {galleryId, baseUrl, nonce} = useAppInfo();
+  const {galleryId, baseUrl, nonce, getGalleryTimestamp} = useAppInfo();
   const {noDataText, setLoadMoreText, setNoDataText} =
     useContext(TranslationsContext);
   const [images, setImages] = useState<IImageDTO[]>([]);
@@ -96,8 +96,11 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       : undefined;
 
     if (fetchUrl) {
+      const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
+      let queryString = queryStringSeperator;
+      queryString += `timestamp=${getGalleryTimestamp?.()}`;
       const imgData: any[] = (
-        await axios.get(fetchUrl, {
+        await axios.get(`${fetchUrl}${queryString}`, {
           headers: {'X-WP-Nonce': nonce},
         })
       ).data;
@@ -139,6 +142,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       let queryString = queryStringSeperator;
       queryString += `order_by=${orderBy}`;
       queryString += `&order=${orderDirection}`;
+      queryString += `&timestamp=${getGalleryTimestamp?.()}`;
       if (paginationType !== PaginationType.NONE) {
         queryString += `&page=${page}`;
         queryString += `&per_page=${itemsPerPage}`;
@@ -188,8 +192,11 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       : undefined;
 
     if (fetchUrl) {
+      const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
+      let queryString = queryStringSeperator;
+      queryString += `timestamp=${getGalleryTimestamp?.()}`;
       const imgData: any = (
-        await axios.get(fetchUrl, {
+        await axios.get(`${fetchUrl}${queryString}`, {
           headers: {'X-WP-Nonce': nonce},
         })
       ).data;

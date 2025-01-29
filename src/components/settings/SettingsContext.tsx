@@ -72,7 +72,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     resetTemplate,
     isLoading: areTemplatesLoading,
   } = useTemplates();
-  const {galleryId, showControls, baseUrl, nonce} = useAppInfo();
+  const {galleryId, showControls, baseUrl, nonce, getOptionsTimestamp} =
+    useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
@@ -97,8 +98,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
+      const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
+      let queryString = queryStringSeperator;
+      queryString += `timestamp=${getOptionsTimestamp?.()}`;
       const newSettings: ISettingsDTO = (
-        await axios.get(fetchUrl, {
+        await axios.get(`${fetchUrl}${queryString}`, {
           headers: {'X-WP-Nonce': nonce},
         })
       ).data;
@@ -248,7 +252,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
             headers: {'X-WP-Nonce': nonce},
           })
         ).data as string;
-        const response = await axios.get(fetchUrl, {
+        const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
+        let queryString = queryStringSeperator;
+        queryString += `timestamp=${getOptionsTimestamp?.()}`;
+        const response = await axios.get(`${fetchUrl}${queryString}`, {
           headers: {'X-WP-Nonce': nonce},
         });
         const newSettings: ISettingsDTO = response.data;

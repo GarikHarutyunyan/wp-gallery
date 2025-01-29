@@ -6,6 +6,8 @@ const AppInfoContext = React.createContext<{
   baseUrl?: string;
   nonce?: string;
   pluginUrl?: string;
+  getGalleryTimestamp?: () => string;
+  getOptionsTimestamp?: () => string;
 }>({});
 
 interface IAppInfoProviderProps extends React.PropsWithChildren {
@@ -14,6 +16,8 @@ interface IAppInfoProviderProps extends React.PropsWithChildren {
   baseUrl?: string;
   nonce?: string;
   pluginUrl?: string;
+  getGalleryTimestamp?: () => string;
+  getOptionsTimestamp?: () => string;
 }
 
 const AppInfoProvider: React.FC<IAppInfoProviderProps> = ({
@@ -23,9 +27,21 @@ const AppInfoProvider: React.FC<IAppInfoProviderProps> = ({
   nonce,
   pluginUrl,
   children,
+  getGalleryTimestamp,
+  getOptionsTimestamp,
 }) => {
   return (
-    <AppInfoContext.Provider value={{galleryId, showControls, baseUrl, nonce, pluginUrl}}>
+    <AppInfoContext.Provider
+      value={{
+        galleryId,
+        showControls,
+        baseUrl,
+        nonce,
+        pluginUrl,
+        getGalleryTimestamp,
+        getOptionsTimestamp,
+      }}
+    >
       {children}
     </AppInfoContext.Provider>
   );
