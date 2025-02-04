@@ -6,7 +6,7 @@ import {ICardsSettings} from 'data-structures';
 import React, {useEffect, useState} from 'react';
 import {Autoplay, EffectCards, Navigation} from 'swiper/modules';
 import './cards-gallery.css';
-import {getWidthAllCards, getContainerWidth} from './getWidthAllCards';
+import {getContainerWidth, getMargin} from './getWidthAllCards';
 interface ITCardsProps {
   onClick?: (index: number) => void;
 }
@@ -53,6 +53,8 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
       initialHeight
   );
 
+  const { marginTop, marginBottom } = getMargin(initialWidth, initialHeight);
+
   useEffect(() => {
     const handleResize = () => {
       initialWidth = width;
@@ -75,6 +77,8 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
         sx={{
           width: `${innerWidth}px`,
           height: `${innerHeight}px`,
+          marginTop: `${marginTop}px`,
+          marginBottom: `${marginBottom}px`,
           mx: 'auto',
         }}
       >
@@ -89,7 +93,7 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
           imagesCount={5}
           preLoadCount={1}
           allowTouchMove={true}
-	  perSlideOffset={perSlideOffset}
+	      perSlideOffset={perSlideOffset}
         />
       </Box>
   );

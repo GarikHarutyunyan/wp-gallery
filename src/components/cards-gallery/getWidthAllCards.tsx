@@ -61,4 +61,51 @@ const getContainerWidth = (
 ): number => {
   return 2 * (getWidthAllCards(activeSLideWidth, activeSlideHeight, perSlideOffset) - activeSLideWidth) + activeSLideWidth;
 };
-export {getWidthAllCards, getContainerWidth};
+
+interface marginValues {
+  marginTop: number;
+  marginBottom: number;
+}
+const getMargin = (
+    activeSLideWidth: number,
+    activeSlideHeight: number,
+): marginValues => {
+  const perspective = 1000;
+
+  const perspectiveFactor = perspective / (perspective + 400);
+  const lastSlideWidth = activeSLideWidth * perspectiveFactor;
+  const lastSlideHeight = activeSlideHeight * perspectiveFactor;
+  const baseMultiplier = 0.34;
+  const aspectRatio = activeSLideWidth / activeSlideHeight;
+  const aspectRatioThresholds: [number, number][] = [
+    [2, 1.76],
+    [3, 1.79],
+    [4, 1.83],
+    [5, 1.86],
+    [6, 1.89],
+    [7, 1.91],
+    [9, 1.93],
+    [11, 1.96],
+  ];
+
+  let rotatedLastSlideAndInitialLastSlideDistanceTop;
+  let rotatedLastSlideAndInitialLastSlideDistanceBottom =
+      (lastSlideWidth / 2) * baseMultiplier;
+
+  for (const [threshold, divisor] of aspectRatioThresholds) {
+    if (aspectRatio >= threshold) {
+      rotatedLastSlideAndInitialLastSlideDistanceTop =
+          (lastSlideWidth - lastSlideWidth / divisor) * baseMultiplier;
+    }
+  }
+  let marginBottom = Math.max(0,
+      (rotatedLastSlideAndInitialLastSlideDistanceBottom || 0) -
+      (activeSlideHeight - lastSlideHeight) / 2);
+  let marginTop = Math.max(0,
+      (rotatedLastSlideAndInitialLastSlideDistanceTop || 0) -
+      (activeSlideHeight - lastSlideHeight) / 2);
+
+  return {marginTop, marginBottom};
+};
+
+export {getContainerWidth, getMargin};
