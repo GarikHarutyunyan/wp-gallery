@@ -1,5 +1,5 @@
-import React from 'react';
 import {MakedColorPicker} from 'core-components/color-picker/ColorPicker';
+import React from 'react';
 
 interface IColorControlProps {
   id?: string;
@@ -17,7 +17,8 @@ const ColorControl: React.FC<IColorControlProps> = ({
   const onValueChange = (value: any) => {
     onChange(value, id);
   };
-  return (
+
+  return value ? (
     <MakedColorPicker
       label={name}
       variant="standard"
@@ -29,7 +30,7 @@ const ColorControl: React.FC<IColorControlProps> = ({
       onChange={onValueChange}
       fullWidth
     />
-  );
+  ) : null;
 };
 
 export {ColorControl};

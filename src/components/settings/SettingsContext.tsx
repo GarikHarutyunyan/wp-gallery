@@ -2,7 +2,6 @@ import axios from 'axios';
 import clsx from 'clsx';
 import {useTemplates} from 'contexts';
 import {useAppInfo} from 'contexts/AppInfoContext';
-import {Section} from 'core-components';
 import {
   GalleryType,
   ICardsSettings,
@@ -17,7 +16,14 @@ import {
   IThumbnailSettings,
 } from 'data-structures';
 import {useSnackbar} from 'notistack';
-import React, {ReactNode, useLayoutEffect, useRef, useState} from 'react';
+import React, {
+  lazy,
+  ReactNode,
+  Suspense,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {TypeUtils} from 'utils';
 import {
   cardsMockSettings,
@@ -30,11 +36,9 @@ import {
   slideshowMockSettings,
   thumbnailMockSettings,
 } from './MockSettings';
-import {OptionsPanelBody} from './OptionsPanelBody';
-import {OptionsPanelHeader} from './OptionsPanelHeader';
 import './settings-context.css';
-import {TypePanelBody} from './TypePanelBody ';
-import {TypePanelHeader} from './TypePanelHeader';
+
+const SettingsSections = lazy(() => import('./SettingsSections'));
 
 const SettingsContext = React.createContext<{
   type?: GalleryType;
@@ -338,26 +342,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }}
     >
       {showControls && (
-        <>
-          <Section
-            header={<TypePanelHeader />}
-            body={<TypePanelBody onChange={onTypeChange} />}
-            outlined={false}
-            className={'reacg-settings'}
+        <Suspense>
+          <SettingsSections
+            isLoading={isLoading || !!areTemplatesLoading}
+            onTypeChange={onTypeChange}
+            onSave={onSave}
+            onReset={onReset}
           />
-          <Section
-            header={<OptionsPanelHeader />}
-            body={
-              <OptionsPanelBody
-                isLoading={isLoading || !!areTemplatesLoading}
-                onSave={onSave}
-                onReset={onReset}
-              />
-            }
-            outlined={false}
-            className={'reacg-settings'}
-          />
-        </>
+        </Suspense>
       )}
       {renderChildren()}
     </SettingsContext.Provider>

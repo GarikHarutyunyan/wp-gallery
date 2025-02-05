@@ -1,6 +1,7 @@
 import {Collapse, Divider, Paper, Typography} from '@mui/material';
 import clsx from 'clsx';
-import {Aligner, ExpandMore} from 'core-components';
+import {Aligner} from 'core-components/aligner';
+import {ExpandMore} from 'core-components/expand-more';
 import React, {ReactNode, useState} from 'react';
 import {TypeUtils} from 'utils';
 import './section.css';

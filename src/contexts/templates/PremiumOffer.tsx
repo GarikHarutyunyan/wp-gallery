@@ -1,6 +1,6 @@
 import {Box, Typography} from '@mui/material';
 import {ProIcon} from 'components/settings/ProIcon';
-import {Button} from 'core-components';
+import {Button} from 'core-components/button';
 import './premium-offer.css';
 
 const contentTextStyle = {

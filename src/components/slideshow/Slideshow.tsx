@@ -1,4 +1,4 @@
-import {Box} from '@mui/material';
+import Box from '@mui/material/Box';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {Captions} from 'components/lightbox/CustomCaptions/Captions';
@@ -241,3 +241,4 @@ const Slideshow: React.FC = () => {
 };
 
 export {Slideshow};
+export default Slideshow;

@@ -1,22 +1,34 @@
-import {CircularProgress} from '@mui/material';
-import {VLightbox as Lightbox} from 'components/lightbox/Lightbox';
+import CircularProgress from '@mui/material/CircularProgress';
 import {
   GalleryType,
   IGeneralSettings,
   ILightboxSettings,
   PaginationType,
 } from 'data-structures';
-import React, {ReactElement, ReactNode, useMemo, useState} from 'react';
-import {CardsGallery} from './cards-gallery/CardsGallery';
-import {Carousel} from './carousel/Carousel';
-import {CubeGallery} from './cube-gallery/CubeGallery';
+import React, {
+  lazy,
+  ReactElement,
+  ReactNode,
+  Suspense,
+  useMemo,
+  useState,
+} from 'react';
 import {useData} from './data-context/useData';
-import {MasonryGallery} from './masonry-gallery/MasonryGallery';
-import {MosaicGallery} from './mosaic-gallery/MosaicGallery';
 import {useSettings} from './settings';
-import {Slideshow} from './slideshow';
-import {PaginationProvider} from './thumbnail-gallery/PaginationProvider';
-import {ThumbnailGallery} from './thumbnail-gallery/ThumbnailGallery';
+
+const ThumbnailGallery = lazy(
+  () => import('./thumbnail-gallery/ThumbnailGallery')
+);
+const MosaicGallery = lazy(() => import('./mosaic-gallery/MosaicGallery'));
+const MasonryGallery = lazy(() => import('./masonry-gallery/MasonryGallery'));
+const CubeGallery = lazy(() => import('./cube-gallery/CubeGallery'));
+const CardsGallery = lazy(() => import('./cards-gallery/CardsGallery'));
+const Carousel = lazy(() => import('./carousel/Carousel'));
+const Lightbox = lazy(() => import('components/lightbox/Lightbox'));
+const Slideshow = lazy(() => import('components/slideshow/Slideshow'));
+const PaginationProvider = lazy(
+  () => import('./thumbnail-gallery/PaginationProvider')
+);
 
 const Gallery: React.FC = () => {
   const {
@@ -99,7 +111,7 @@ const Gallery: React.FC = () => {
         break;
     }
 
-    return gallery;
+    return <Suspense>{gallery}</Suspense>;
   };
 
   const openLightbox = async (index: number): Promise<void> => {
@@ -121,18 +133,24 @@ const Gallery: React.FC = () => {
 
   const renderPaginationProvider = () => {
     return (
-      <PaginationProvider
-        type={paginationType}
-        pagesCount={pagesCount || 1}
-        onLoad={onPageChange as any}
-        isFullyLoaded={isFullyLoaded}
-        settings={generalSettings as IGeneralSettings}
-      />
+      <Suspense>
+        <PaginationProvider
+          type={paginationType}
+          pagesCount={pagesCount || 1}
+          onLoad={onPageChange as any}
+          isFullyLoaded={isFullyLoaded}
+          settings={generalSettings as IGeneralSettings}
+        />
+      </Suspense>
     );
   };
 
   const renderLightbox = (): ReactNode => {
-    return <Lightbox activeIndex={activeImageIndex} onClose={closeLightbox} />;
+    return (
+      <Suspense>
+        <Lightbox activeIndex={activeImageIndex} onClose={closeLightbox} />
+      </Suspense>
+    );
   };
 
   const closeLightbox = (): void => {
@@ -143,7 +161,7 @@ const Gallery: React.FC = () => {
     <>
       {renderGallery()}
       {renderLoader()}
-      {renderPaginationProvider()}
+      {paginationType !== PaginationType.NONE && renderPaginationProvider()}
       {renderLightbox()}
     </>
   );

@@ -288,3 +288,4 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
 };
 
 export {VLightbox};
+export default VLightbox;
