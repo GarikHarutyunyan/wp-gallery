@@ -41,25 +41,27 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
   let initialWidth = width;
   let initialHeight = height;
 
-  while ( getContainerWidth(initialWidth, initialHeight, perSlideOffset) >= wrapper?.clientWidth ) {
+  while (
+    getContainerWidth(initialWidth, initialHeight, perSlideOffset) >=
+    wrapper?.clientWidth
+  ) {
     initialWidth = initialWidth - 1;
     initialHeight = initialWidth / ratio;
   }
 
-  const [innerWidth, setInnerWidth] = useState<number>(
-      initialWidth
-  );
-  const [innerHeight, setInnerHeight] = useState<number>(
-      initialHeight
-  );
+  const [innerWidth, setInnerWidth] = useState<number>(initialWidth);
+  const [innerHeight, setInnerHeight] = useState<number>(initialHeight);
 
-  const { marginTop, marginBottom } = getMargin(initialWidth, initialHeight);
+  const {marginTop, marginBottom} = getMargin(initialWidth, initialHeight);
 
   useEffect(() => {
     const handleResize = () => {
       initialWidth = width;
       initialHeight = height;
-      while ( getContainerWidth(initialWidth, initialHeight, perSlideOffset) >= wrapper?.clientWidth ) {
+      while (
+        getContainerWidth(initialWidth, initialHeight, perSlideOffset) >=
+        wrapper?.clientWidth
+      ) {
         initialWidth = initialWidth - 1;
         initialHeight = initialWidth / ratio;
       }
@@ -73,29 +75,29 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
   }, [width, height, perSlideOffset]);
 
   return (
-      <Box
-        sx={{
-          width: `${innerWidth}px`,
-          height: `${innerHeight}px`,
-          marginTop: `${marginTop}px`,
-          marginBottom: `${marginBottom}px`,
-          mx: 'auto',
-        }}
-      >
-        <SwiperGallery
-          key={effects.id}
-          effects={effects}
-          images={images || []}
-          autoplay={autoplay}
-          delay={slideDuration}
-          playAndPauseAllowed={playAndPauseAllowed}
-          size={Math.max(innerWidth, innerHeight)}
-          imagesCount={5}
-          preLoadCount={1}
-          allowTouchMove={true}
-	      perSlideOffset={perSlideOffset}
-        />
-      </Box>
+    <Box
+      sx={{
+        width: `${innerWidth}px`,
+        height: `${innerHeight}px`,
+        marginTop: `${marginTop}px`,
+        marginBottom: `${marginBottom}px`,
+        mx: 'auto',
+      }}
+    >
+      <SwiperGallery
+        key={effects.id}
+        effects={effects}
+        images={images || []}
+        autoplay={autoplay}
+        delay={slideDuration}
+        playAndPauseAllowed={playAndPauseAllowed}
+        size={Math.max(innerWidth, innerHeight)}
+        imagesCount={5}
+        preLoadCount={1}
+        allowTouchMove={true}
+        perSlideOffset={perSlideOffset}
+      />
+    </Box>
   );
 };
 
