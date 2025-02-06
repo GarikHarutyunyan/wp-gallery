@@ -36,7 +36,6 @@ import {
   slideshowMockSettings,
   thumbnailMockSettings,
 } from './MockSettings';
-import './settings-context.css';
 
 const SettingsSections = lazy(() => import('./SettingsSections'));
 

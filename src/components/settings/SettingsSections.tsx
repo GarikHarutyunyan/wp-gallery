@@ -4,6 +4,7 @@ import {OptionsPanelBody} from './OptionsPanelBody';
 import {OptionsPanelHeader} from './OptionsPanelHeader';
 import {TypePanelBody} from './TypePanelBody';
 import {TypePanelHeader} from './TypePanelHeader';
+import './settings-context.css';
 
 interface ISettingsSectionsProps {
   isLoading: boolean;

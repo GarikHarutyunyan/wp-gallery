@@ -25,8 +25,8 @@ const MasonryGallery = lazy(() => import('./masonry-gallery/MasonryGallery'));
 const CubeGallery = lazy(() => import('./cube-gallery/CubeGallery'));
 const CardsGallery = lazy(() => import('./cards-gallery/CardsGallery'));
 const Carousel = lazy(() => import('./carousel/Carousel'));
-const Lightbox = lazy(() => import('components/lightbox/Lightbox'));
-const Slideshow = lazy(() => import('components/slideshow/Slideshow'));
+const Lightbox = lazy(() => import('./lightbox/Lightbox'));
+const Slideshow = lazy(() => import('./slideshow/Slideshow'));
 const PaginationProvider = lazy(
   () => import('./thumbnail-gallery/PaginationProvider')
 );
@@ -147,6 +147,16 @@ const Gallery: React.FC = () => {
   };
 
   const renderLightbox = (): ReactNode => {
+    if (
+      !showLightbox ||
+      ![
+        GalleryType.THUMBNAILS,
+        GalleryType.MOSAIC,
+        GalleryType.MASONRY,
+      ].includes(type as GalleryType)
+    ) {
+      return null;
+    }
     return (
       <Suspense>
         <Lightbox activeIndex={activeImageIndex} onClose={closeLightbox} />
@@ -163,7 +173,7 @@ const Gallery: React.FC = () => {
       {renderGallery()}
       {renderLoader()}
       {paginationType !== PaginationType.NONE && renderPaginationProvider()}
-      {renderLightbox()}
+      {showLightbox && renderLightbox()}
     </>
   );
 };
