@@ -14,6 +14,7 @@ import React, {
   useState,
 } from 'react';
 import {useData} from './data-context/useData';
+import './gallery.css';
 import {useSettings} from './settings';
 
 const ThumbnailGallery = lazy(
@@ -122,7 +123,7 @@ const Gallery: React.FC = () => {
   const renderLoader = (): ReactNode => {
     if (isLoading) {
       return (
-        <div className={'pagination-privider__loader-container'}>
+        <div className={'gallery__loader'}>
           <CircularProgress color="primary" size={60} />
         </div>
       );
