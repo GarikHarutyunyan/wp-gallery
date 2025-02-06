@@ -18,7 +18,7 @@ const ColorControl: React.FC<IColorControlProps> = ({
     onChange(value, id);
   };
 
-  return value ? (
+  return (
     <MakedColorPicker
       label={name}
       variant="standard"
@@ -30,7 +30,7 @@ const ColorControl: React.FC<IColorControlProps> = ({
       onChange={onValueChange}
       fullWidth
     />
-  ) : null;
+  );
 };
 
 export {ColorControl};
