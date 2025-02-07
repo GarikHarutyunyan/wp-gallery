@@ -1,12 +1,11 @@
-import CloseIcon from '@mui/icons-material/Close';
-import {Dialog, IconButton} from '@mui/material';
 import axios from 'axios';
 import {useSnackbar} from 'notistack';
-import React, {useLayoutEffect, useState} from 'react';
+import React, {lazy, Suspense, useLayoutEffect, useState} from 'react';
 import {TypeUtils} from 'utils';
 import {useAppInfo} from '../AppInfoContext';
-import {PremiumOffer} from './PremiumOffer';
 import {ITemplate, ITemplateReference} from './TemplatesContext.types';
+
+const PremiumOfferDialog = lazy(() => import('./PremiumOfferDialog'));
 
 const TemplatesContext = React.createContext<{
   templates?: ITemplateReference[];
@@ -144,17 +143,14 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }}
     >
       {children}
-      <Dialog
-        sx={{borderRadius: 4}}
-        open={isDialogVisible}
-        onClose={closeDialog}
-        PaperProps={{sx: {borderRadius: 6}}}
-      >
-        <IconButton onClick={closeDialog} className={'modal-close'}>
-          <CloseIcon />
-        </IconButton>
-        <PremiumOffer />
-      </Dialog>
+      {showControls && (
+        <Suspense>
+          <PremiumOfferDialog
+            isVisible={isDialogVisible}
+            onClose={closeDialog}
+          />
+        </Suspense>
+      )}
     </TemplatesContext.Provider>
   );
 };

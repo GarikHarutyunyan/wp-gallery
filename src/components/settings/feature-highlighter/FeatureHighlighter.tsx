@@ -1,5 +1,5 @@
 import {ClickAwayListener, Tooltip} from '@mui/material';
-import {Aligner} from 'core-components';
+import {Aligner} from 'core-components/aligner';
 import React, {
   PropsWithChildren,
   ReactElement,
@@ -75,7 +75,7 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
   return (
     <ClickAwayListener onClickAway={isOpen ? handleClose : () => {}}>
       <Tooltip
-        classes={{ popper: 'reacg-feature-highlighter' }}
+        classes={{popper: 'reacg-feature-highlighter'}}
         ref={elementRef}
         title={renderTitle()}
         open={isOpen}

@@ -1,5 +1,5 @@
 import {ISelectOption} from 'components/controls';
-import {Align, Aligner} from 'core-components';
+import {Align, Aligner} from 'core-components/aligner';
 import {GalleryType, GalleryTypeOptions} from 'data-structures';
 import useIsMobile from 'hooks/useIsMobile';
 import React from 'react';

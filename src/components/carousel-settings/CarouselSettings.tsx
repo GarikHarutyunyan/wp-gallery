@@ -8,7 +8,7 @@ import {
 } from 'components/controls';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
-import {Section} from 'core-components';
+import {Section} from 'core-components/section';
 import {ICarouselSettings} from 'data-structures';
 import React, {ReactNode} from 'react';
 import {Filter} from '../settings/Filter';
@@ -169,3 +169,4 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
 };
 
 export {CarouselSettings};
+export default CarouselSettings;

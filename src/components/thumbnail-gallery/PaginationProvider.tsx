@@ -1,6 +1,6 @@
 import {Grid, Pagination, PaginationItem} from '@mui/material';
 import {TranslationsContext} from 'contexts/TranslationsContext';
-import {Button} from 'core-components';
+import {Button} from 'core-components/button';
 import {IGeneralSettings, PaginationType} from 'data-structures';
 import React, {ReactNode, useContext, useEffect} from 'react';
 import {useInView} from 'react-intersection-observer';
@@ -120,3 +120,4 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
 };
 
 export {PaginationProvider};
+export default PaginationProvider;

@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {DEFAULT_CONVERTER, converters} from './transformers';
-import PickerDialog from './PickerDialog';
 import {TextField} from '@mui/material';
+import React, {useState} from 'react';
+import PickerDialog from './PickerDialog';
+import {DEFAULT_CONVERTER, converters} from './transformers';
 
 interface IColorPickerProps {
   value: string;

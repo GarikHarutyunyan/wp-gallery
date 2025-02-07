@@ -1,7 +1,5 @@
 import {TemplatesProvider} from 'contexts';
 import React from 'react';
-import 'yet-another-react-lightbox/plugins/thumbnails.css';
-import 'yet-another-react-lightbox/styles.css';
 import {GalleryWithSettings} from './GalleryWithSettings';
 import {SettingsProvider} from './settings/SettingsContext';
 

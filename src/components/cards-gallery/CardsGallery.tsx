@@ -1,4 +1,4 @@
-import {Box} from '@mui/material';
+import Box from '@mui/material/Box';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {SwiperGallery} from 'components/swiper-gallery/SwiperGallery';
@@ -51,7 +51,6 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
 
   const [innerWidth, setInnerWidth] = useState<number>(initialWidth);
   const [innerHeight, setInnerHeight] = useState<number>(initialHeight);
-
   const {marginTop, marginBottom} = getMargin(initialWidth, initialHeight);
 
   useEffect(() => {
@@ -102,3 +101,4 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
 };
 
 export {CardsGallery};
+export default CardsGallery;

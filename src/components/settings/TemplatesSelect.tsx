@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import {ISelectOption, SelectControl} from 'components/controls';
 import {useTemplates} from 'contexts';
 import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
-import {Align, Aligner} from 'core-components';
+import {Align, Aligner} from 'core-components/aligner';
 import React, {
   ReactElement,
   ReactNode,

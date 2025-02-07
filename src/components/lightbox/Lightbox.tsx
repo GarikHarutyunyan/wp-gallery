@@ -1,6 +1,4 @@
 import clsx from 'clsx';
-import {useData} from 'components/data-context/useData';
-import {useSettings} from 'components/settings';
 import {
   IImageDTO,
   ILightboxSettings,
@@ -16,8 +14,12 @@ import Download from 'yet-another-react-lightbox/plugins/download';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
 import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Video from 'yet-another-react-lightbox/plugins/video';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import 'yet-another-react-lightbox/styles.css';
+import {useData} from '../data-context/useData';
+import {useSettings} from '../settings/useSettings';
 import {Captions} from './CustomCaptions/Captions';
 import './lightbox.css';
 
@@ -48,7 +50,7 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
       <div
         id={`reacg-lightbox__background-helper${id}`}
         onClick={(e) => e.stopPropagation()}
-      ></div>
+      />
     </div>,
     element
   );
@@ -288,3 +290,4 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
 };
 
 export {VLightbox};
+export default VLightbox;

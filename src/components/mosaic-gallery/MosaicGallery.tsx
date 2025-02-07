@@ -12,8 +12,16 @@ interface IMosaicGalleryProps {
 const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
   const {mosaicSettings: settings} = useSettings();
   const {images} = useData();
-  const {direction, gap, backgroundColor, containerPadding, padding, rowHeight, width, columns} =
-    settings as IMosaicSettings;
+  const {
+    direction,
+    gap,
+    backgroundColor,
+    containerPadding,
+    padding,
+    rowHeight,
+    width,
+    columns,
+  } = settings as IMosaicSettings;
   const layout: LayoutType =
     direction === Direction.VERTICAL ? 'columns' : 'rows';
 
@@ -35,3 +43,4 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
 };
 
 export {MosaicGallery};
+export default MosaicGallery;
