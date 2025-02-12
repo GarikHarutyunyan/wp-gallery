@@ -1,15 +1,13 @@
 import {Box, Typography} from '@mui/material';
 import {ProIcon} from 'components/settings/ProIcon';
-import {Button} from 'core-components';
+import {Button} from 'core-components/button';
 import './premium-offer.css';
 
-const contentTextStyle = {
-  fontWeight: '500',
-  fontSize: '1.1rem',
-  letterSpacing: '1.5px',
-};
-
 const PremiumOffer = () => {
+  const onClick = () => {
+    window.open('https://regallery.team/#pricing', '_blank');
+  };
+
   return (
     <Box className={'premium-offer'}>
       <Box sx={{display: 'flex', justifyContent: 'center'}}>
@@ -40,8 +38,7 @@ const PremiumOffer = () => {
         sx={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}
       >
         <Button
-          href={'https://regallery.team/#pricing'}
-          target={'_blank'}
+          onClick={onClick}
           style={{
             background: '#a7c957',
             color: 'white',
