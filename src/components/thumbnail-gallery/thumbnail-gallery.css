@@ -21,6 +21,13 @@
     height: 100%;
 }
 
+.reacg-gallery .content-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+}
+
 .reacg-gallery .thumbnail-gallery__image-wrapper {
     position: relative;
 }
