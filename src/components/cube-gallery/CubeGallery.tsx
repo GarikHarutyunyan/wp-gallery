@@ -1,4 +1,4 @@
-import {Box} from '@mui/material';
+import Box from '@mui/material/Box';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {SwiperGallery} from 'components/swiper-gallery/SwiperGallery';
@@ -84,3 +84,4 @@ const CubeGallery: React.FC = () => {
 };
 
 export {CubeGallery};
+export default CubeGallery;

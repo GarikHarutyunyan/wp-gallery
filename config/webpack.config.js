@@ -4,14 +4,15 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const resolve = require('resolve');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
+// const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const {WebpackManifestPlugin} = require('webpack-manifest-plugin');
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+// const {WebpackManifestPlugin} = require('webpack-manifest-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+// const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
@@ -29,7 +30,7 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const createEnvironmentHash = require('./webpack/persistentCache/createEnvironmentHash');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
-const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
+const shouldUseSourceMap = false; //process.env.GENERATE_SOURCEMAP !== 'false';
 
 const reactRefreshRuntimeEntry = require.resolve('react-refresh/runtime');
 const reactRefreshWebpackPluginRuntimeEntry = require.resolve(
@@ -46,7 +47,7 @@ const babelRuntimeRegenerator = require.resolve('@babel/runtime/regenerator', {
 
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
 // makes for a smoother build process.
-const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
+// const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
 
 const emitErrorsAsWarnings = process.env.ESLINT_NO_DEV_ERRORS === 'true';
 const disableESLintPlugin = process.env.DISABLE_ESLINT_PLUGIN === 'true';
@@ -201,39 +202,43 @@ module.exports = function (webpackEnv) {
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: paths.appIndexJs,
-    // output: {
-    //   // The build folder.
-    //   path: paths.appBuild,
-    //   // Add /* filename */ comments to generated require()s in the output.
-    //   pathinfo: isEnvDevelopment,
-    //   // There will be one main bundle, and one file per asynchronous chunk.
-    //   // In development, it does not produce real files.
-    //   filename: isEnvProduction
-    //     ? 'static/js/[name].[contenthash:8].js'
-    //     : isEnvDevelopment && 'static/js/bundle.js',
-    //   // There are also additional JS chunk files if you use code splitting.
-    //   chunkFilename: isEnvProduction
-    //     ? 'static/js/[name].[contenthash:8].chunk.js'
-    //     : isEnvDevelopment && 'static/js/[name].chunk.js',
-    //   assetModuleFilename: 'static/media/[name].[hash][ext]',
-    //   // webpack uses `publicPath` to determine where the app is being served from.
-    //   // It requires a trailing slash, or the file assets will get an incorrect path.
-    //   // We inferred the "public path" (such as / or /my-project) from homepage.
-    //   publicPath: paths.publicUrlOrPath,
-    //   // Point sourcemap entries to original disk location (format as URL on Windows)
-    //   devtoolModuleFilenameTemplate: isEnvProduction
-    //     ? info =>
-    //         path
-    //           .relative(paths.appSrc, info.absoluteResourcePath)
-    //           .replace(/\\/g, '/')
-    //     : isEnvDevelopment &&
-    //       (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
-    // },
     output: {
-      path: 'C:/xampp/htdocs/wordpress/wp-content/plugins/regallery/assets/js', //path.resolve(__dirname, 'build'),
+      // The build folder.
+      // path: paths.appBuild,
+      path: 'C:/wamp64/www/wordpress/wp-content/plugins/regallery/assets/js', //path.resolve(__dirname, 'build'),
+      // Add /* filename */ comments to generated require()s in the output.
+      pathinfo: isEnvDevelopment,
+      // There will be one main bundle, and one file per asynchronous chunk.
+      // In development, it does not produce real files.
+      // filename: isEnvProduction
+      //   ? 'static/js/[name].[contenthash:8].js'
+      //   : isEnvDevelopment && 'static/js/bundle.js',
       filename: 'wp-gallery.js', // Change this to your desired filename
-      publicPath: '/wordpress/wp-content/plugins/gallery/assets/js/',
+      // There are also additional JS chunk files if you use code splitting.
+      chunkFilename: isEnvProduction
+        ? 'wp-gallery/wp-gallery.[name].[contenthash:8].chunk.js'
+        : isEnvDevelopment && 'wp-gallery/wp-gallery.[name].chunk.js',
+      // assetModuleFilename: 'static/media/[name].[hash][ext]',
+      // webpack uses `publicPath` to determine where the app is being served from.
+      // It requires a trailing slash, or the file assets will get an incorrect path.
+      // We inferred the "public path" (such as / or /my-project) from homepage.
+      // publicPath: paths.publicUrlOrPath,
+      // publicPath: paths.appPath,
+      // Point sourcemap entries to original disk location (format as URL on Windows)
+      // devtoolModuleFilenameTemplate: isEnvProduction
+      //   ? (info) =>
+      //       path
+      //         .relative(paths.appSrc, info.absoluteResourcePath)
+      //         .replace(/\\/g, '/')
+      //   : isEnvDevelopment &&
+      //     ((info) =>
+      //       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
     },
+    // output: {
+    //   path: 'C:/wamp64/www/wordpress/wp-content/plugins/regallery/assets/js', //path.resolve(__dirname, 'build'),
+    //   filename: 'wp-gallery.js', // Change this to your desired filename
+    //   publicPath: '/wordpress/wp-content/plugins/regallery/assets/js/',
+    // },
     cache: {
       type: 'filesystem',
       version: createEnvironmentHash(env.raw),
@@ -255,6 +260,7 @@ module.exports = function (webpackEnv) {
       minimizer: [
         // This is only used in production mode
         new TerserPlugin({
+          extractComments: false, // Prevents generating .LICENSE.txt files
           terserOptions: {
             parse: {
               // We want terser to parse ecma 8 code. However, we don't want it
@@ -573,43 +579,43 @@ module.exports = function (webpackEnv) {
     },
     plugins: [
       // Generates an `index.html` file with the <script> injected.
-      new HtmlWebpackPlugin(
-        Object.assign(
-          {},
-          {
-            inject: true,
-            template: paths.appHtml,
-          },
-          isEnvProduction
-            ? {
-                minify: {
-                  removeComments: true,
-                  collapseWhitespace: true,
-                  removeRedundantAttributes: true,
-                  useShortDoctype: true,
-                  removeEmptyAttributes: true,
-                  removeStyleLinkTypeAttributes: true,
-                  keepClosingSlash: true,
-                  minifyJS: true,
-                  minifyCSS: true,
-                  minifyURLs: true,
-                },
-              }
-            : undefined
-        )
-      ),
+      // new HtmlWebpackPlugin(
+      //   Object.assign(
+      //     {},
+      //     {
+      //       inject: true,
+      //       template: paths.appHtml,
+      //     },
+      //     isEnvProduction
+      //       ? {
+      //           minify: {
+      //             removeComments: true,
+      //             collapseWhitespace: true,
+      //             removeRedundantAttributes: true,
+      //             useShortDoctype: true,
+      //             removeEmptyAttributes: true,
+      //             removeStyleLinkTypeAttributes: true,
+      //             keepClosingSlash: true,
+      //             minifyJS: true,
+      //             minifyCSS: true,
+      //             minifyURLs: true,
+      //           },
+      //         }
+      //       : undefined
+      //   )
+      // ),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       // https://github.com/facebook/create-react-app/issues/5358
-      isEnvProduction &&
-        shouldInlineRuntimeChunk &&
-        new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
+      // isEnvProduction &&
+      //   shouldInlineRuntimeChunk &&
+      //   new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
       // Makes some environment variables available in index.html.
       // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
       // <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
       // It will be an empty string unless you specify "homepage"
       // in `package.json`, in which case it will be the pathname of that URL.
-      new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
+      // new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
       // This gives some necessary context to module not found errors, such as
       // the requesting resource.
       new ModuleNotFoundPlugin(paths.appPath),
@@ -643,24 +649,28 @@ module.exports = function (webpackEnv) {
       //   `index.html`
       // - "entrypoints" key: Array of files which are included in `index.html`,
       //   can be used to reconstruct the HTML if necessary
-      new WebpackManifestPlugin({
-        fileName: 'asset-manifest.json',
-        publicPath: paths.publicUrlOrPath,
-        generate: (seed, files, entrypoints) => {
-          const manifestFiles = files.reduce((manifest, file) => {
-            manifest[file.name] = file.path;
-            return manifest;
-          }, seed);
-          const entrypointFiles = entrypoints.main.filter(
-            (fileName) => !fileName.endsWith('.map')
-          );
-
-          return {
-            files: manifestFiles,
-            entrypoints: entrypointFiles,
-          };
-        },
+      new CleanWebpackPlugin({
+        cleanOnceBeforeBuildPatterns: ['wp-gallery/'], // Clean only /wp-gallery directory
+        protectWebpackAssets: false, // Prevents Webpack from deleting files it generates
       }),
+      // new WebpackManifestPlugin({
+      //   fileName: 'asset-manifest.json',
+      //   publicPath: paths.publicUrlOrPath,
+      //   generate: (seed, files, entrypoints) => {
+      //     const manifestFiles = files.reduce((manifest, file) => {
+      //       manifest[file.name] = file.path;
+      //       return manifest;
+      //     }, seed);
+      //     const entrypointFiles = entrypoints.main.filter(
+      //       (fileName) => !fileName.endsWith('.map')
+      //     );
+
+      //     return {
+      //       files: manifestFiles,
+      //       entrypoints: entrypointFiles,
+      //     };
+      //   },
+      // }),
       // Moment.js is an extremely popular library that bundles large locale files
       // by default due to how webpack interprets its code. This is a practical
       // solution that requires the user to opt into importing specific locales.

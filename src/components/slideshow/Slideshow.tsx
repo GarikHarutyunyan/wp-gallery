@@ -1,4 +1,4 @@
-import {Box} from '@mui/material';
+import Box from '@mui/material/Box';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {Captions} from 'components/lightbox/CustomCaptions/Captions';
@@ -16,7 +16,9 @@ import 'yet-another-react-lightbox/plugins/captions.css';
 import Inline from 'yet-another-react-lightbox/plugins/inline';
 import YARLSlideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Video from 'yet-another-react-lightbox/plugins/video';
+import 'yet-another-react-lightbox/styles.css';
 import './slideshow.css';
 
 const Slideshow: React.FC = () => {
@@ -241,3 +243,4 @@ const Slideshow: React.FC = () => {
 };
 
 export {Slideshow};
+export default Slideshow;

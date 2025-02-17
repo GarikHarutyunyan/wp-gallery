@@ -31,3 +31,4 @@ const MasonryGallery: React.FC<IMasonryGalleryProps> = ({onClick}) => {
 };
 
 export {MasonryGallery};
+export default MasonryGallery;
