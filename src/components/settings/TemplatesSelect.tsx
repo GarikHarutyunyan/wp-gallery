@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import {ISelectOption, SelectControl} from 'components/controls';
 import {useTemplates} from 'contexts';
 import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
-import {Align, Aligner} from 'core-components';
+import {Align, Aligner} from 'core-components/aligner';
 import React, {
   ReactElement,
   ReactNode,
@@ -95,7 +95,18 @@ const TemplatesSelect: React.FC = () => {
         <Aligner style={{alignItems: 'center', gap: '16px'}}>
           <div>{title}</div>
           <Aligner align={Align.END} style={{alignItems: 'center', gap: '2px'}}>
-            {paid ? <ProIcon /> : null}
+            {paid ? (
+              <Tooltip
+                title={'Pro Template'}
+                placement={'top'}
+                arrow
+                enterDelay={500}
+              >
+                <div>
+                  <ProIcon />
+                </div>
+              </Tooltip>
+            ) : null}
             {youtube_link ? (
               <Tooltip
                 title="Preview Video"

@@ -1,8 +1,3 @@
-:root {
-    --yarl__thumbnails_thumbnail_icon_color: #707070;
-    --yarl__thumbnails_thumbnail_icon_filter: none
-}
-
 .reacg-gallery .thumbnail-gallery__image-wrapper:hover .thumbnail-gallery__title_on-hover {
     display: block;
     pointer-events: none;
@@ -30,7 +25,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
     height: 300px;
 }
 

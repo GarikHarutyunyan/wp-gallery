@@ -1,4 +1,6 @@
-import {ImageList, ImageListItem, ImageListItemBar} from '@mui/material';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
@@ -102,7 +104,15 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     }
 
     return width;
-  }, [containerWidth, containerPadding, width, gap, columns, padding, validColumnsCount]);
+  }, [
+    containerWidth,
+    containerPadding,
+    width,
+    gap,
+    columns,
+    padding,
+    validColumnsCount,
+  ]);
 
   const getHeight = useMemo<number>(() => {
     return getWidth * (1 / ratio);
@@ -194,7 +204,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     <div
       style={{
         width:
-            (width * columns + (columns - 1) * gap + columns * 2 * padding) + 'px',
+          width * columns + (columns - 1) * gap + columns * 2 * padding + 'px',
         margin: '0 auto',
         overflow: 'hidden',
         maxWidth: '100%',
@@ -290,3 +300,4 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
 };
 
 export {ThumbnailGallery, type IThumbnailGalleryProps};
+export default ThumbnailGallery;

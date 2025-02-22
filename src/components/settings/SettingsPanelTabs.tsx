@@ -1,7 +1,7 @@
 import LoadingButton from '@mui/lab/LoadingButton';
 import {Tab, Tabs} from '@mui/material';
 import clsx from 'clsx';
-import {Align, Aligner} from 'core-components';
+import {Align, Aligner} from 'core-components/aligner';
 import {GalleryType} from 'data-structures';
 import React, {useEffect, useState} from 'react';
 import {TemplatesSelect} from './TemplatesSelect';
@@ -51,7 +51,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
           parentElement && parentElement.getBoundingClientRect().width < 720
         );
         setIsMobile(
-            parentElement && parentElement.getBoundingClientRect().width < 480
+          parentElement && parentElement.getBoundingClientRect().width < 480
         );
       }
     };
@@ -74,12 +74,15 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         style={{width: '100%'}}
       >
         <Tab label={'Gallery'} value={'gallery'} />
-          <Tab label={'General'} value={'general'} />
+        <Tab label={'General'} value={'general'} />
         {!showOnlyGalleryOptions ? (
           <Tab label={'Lightbox'} value={'lightbox'} />
         ) : null}
       </Tabs>
-      <Aligner style={{flexDirection: isMobile ? 'column' : 'row'}} align={Align.END}>
+      <Aligner
+        style={{flexDirection: isMobile ? 'column' : 'row'}}
+        align={Align.END}
+      >
         <TemplatesSelect />
         <LoadingButton
           loading={isSaving}

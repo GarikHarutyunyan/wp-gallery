@@ -1,4 +1,4 @@
-import {Box} from '@mui/material';
+import Box from '@mui/material/Box';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {ICarouselSettings} from 'data-structures';
@@ -75,26 +75,29 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         boxSizing: 'border-box',
       }}
     >
-      {(images || []).length > 0 && (<SwiperGallery
-        key={effects.id}
-        effects={effects}
-        loop={true}
-        backgroundColor={backgroundColor}
-        images={images || []}
-        autoplay={autoplay}
-        delay={slideDuration}
-        playAndPauseAllowed={playAndPauseAllowed}
-        width={containerWidth}
-        height={containerHeight}
-        size={Math.max(width, height)}
-        imagesCount={imagesCount}
-        preLoadCount={4}
-        padding={padding}
-        scale={scale}
-        allowTouchMove={false}
-      />)}
+      {(images || []).length > 0 && (
+        <SwiperGallery
+          key={effects.id}
+          effects={effects}
+          loop={true}
+          backgroundColor={backgroundColor}
+          images={images || []}
+          autoplay={autoplay}
+          delay={slideDuration}
+          playAndPauseAllowed={playAndPauseAllowed}
+          width={containerWidth}
+          height={containerHeight}
+          size={Math.max(width, height)}
+          imagesCount={imagesCount}
+          preLoadCount={4}
+          padding={padding}
+          scale={scale}
+          allowTouchMove={false}
+        />
+      )}
     </Box>
   );
 };
 
 export {Carousel};
+export default Carousel;
