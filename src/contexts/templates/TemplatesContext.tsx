@@ -34,7 +34,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
-  const {showControls} = useAppInfo();
+  const {showControls, pluginVersion} = useAppInfo();
 
   const getTemplates = async () => {
     if (!showControls) {
@@ -45,7 +45,10 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       try {
-        const response = await axios.get(fetchUrl);
+        const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
+        let queryString = queryStringSeperator;
+        queryString += `version=${pluginVersion}`;
+        const response = await axios.get(`${fetchUrl}${queryString}`);
         const templatesData: ITemplateReference[] = response.data;
         const withNoneOption: ITemplateReference[] = [
           ...templatesData,
@@ -70,7 +73,10 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (fetchUrl && id !== '') {
       setIsLoading(true);
       try {
-        const response = await axios.get(fetchUrl);
+        const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
+        let queryString = queryStringSeperator;
+        queryString += `version=${pluginVersion}`;
+        const response = await axios.get(`${fetchUrl}${queryString}`);
         if (response.status === 204) {
           openDialog();
         } else {
