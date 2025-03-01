@@ -34,43 +34,43 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
-  const {showControls} = useAppInfo();
+  const {showControls, pluginVersion} = useAppInfo();
 
   const getTemplates = async () => {
     if (!showControls) {
       return;
     }
-    const fetchUrl: string | undefined =
+    const fetchUrl: string =
       'https://regallery.team/core/wp-json/reacgcore/v2/templates'; //baseUrl      ? baseUrl + 'templates'      : undefined;
 
-    if (fetchUrl) {
-      try {
-        const response = await axios.get(fetchUrl);
-        const templatesData: ITemplateReference[] = response.data;
-        const withNoneOption: ITemplateReference[] = [
-          ...templatesData,
-          noneOption,
-        ];
+    try {
+      const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
+      let queryString = queryStringSeperator;
+      queryString += `version=${pluginVersion}`;
+      const response = await axios.get(`${fetchUrl}${queryString}`);
+      const templatesData: ITemplateReference[] = response.data;
+      const withNoneOption: ITemplateReference[] = [
+        ...templatesData,
+        noneOption,
+      ];
 
-        setTemplates(withNoneOption);
-      } catch (error) {
-        console.log(error);
-        setTemplates([noneOption]);
-      }
-    } else {
+      setTemplates(withNoneOption);
+    } catch (error) {
+      console.log(error);
       setTemplates([noneOption]);
     }
   };
 
   const getTemplate = async (id: string): Promise<void> => {
-    const fetchUrl:
-      | string
-      | undefined = `https://regallery.team/core/wp-json/reacgcore/v2/template/${id}`;
+    const fetchUrl: string = `https://regallery.team/core/wp-json/reacgcore/v2/template/${id}`;
 
-    if (fetchUrl && id !== '') {
+    if (id !== '') {
       setIsLoading(true);
       try {
-        const response = await axios.get(fetchUrl);
+        const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
+        let queryString = queryStringSeperator;
+        queryString += `version=${pluginVersion}`;
+        const response = await axios.get(`${fetchUrl}${queryString}`);
         if (response.status === 204) {
           openDialog();
         } else {
