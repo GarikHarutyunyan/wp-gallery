@@ -137,10 +137,12 @@ const Gallery: React.FC = () => {
   const onCustomActionToggle = (index: number) => {
     const url: string = images?.[index]?.action_url || '';
 
-    if (openUrlInNewTab) {
-      window?.open(url, '_blank')?.focus();
-    } else {
-      window?.open(url, '_self');
+    if (!!url) {
+      if (openUrlInNewTab) {
+        window?.open(url, '_blank')?.focus();
+      } else {
+        window?.open(url, '_self');
+      }
     }
   };
 
