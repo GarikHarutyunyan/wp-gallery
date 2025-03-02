@@ -10,7 +10,7 @@ import {MosaicSettings} from 'components/mosaic-settings';
 import {SlideshowSettings} from 'components/slideshow-settings';
 import {ThumbnailSettings} from 'components/thumbnail-settings';
 import {GalleryType, ImageClickAction} from 'data-structures';
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {ReactNode, useState} from 'react';
 import {SettingsPanelTabs} from './SettingsPanelTabs';
 import {useSettings} from './useSettings';
 
@@ -44,12 +44,6 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   const onActiveTabChange = (_: any, newActiveTab: string) => {
     setActiveTab(newActiveTab);
   };
-
-  useEffect(() => {
-    if (hideLightboxOptions) {
-      onActiveTabChange(null, 'gallery');
-    }
-  }, [hideLightboxOptions]);
 
   const renderGalleryOptions = (): ReactNode => {
     let galleryOprions = renderThumbnailSettings();
