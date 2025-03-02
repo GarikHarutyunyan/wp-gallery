@@ -21,7 +21,7 @@ interface ISwiperGalleryProps {
   autoplay: boolean;
   delay: number;
   playAndPauseAllowed?: boolean;
-  slideCalssname?: string;
+  slideClassName?: string;
   className?: string;
   width?: number;
   size?: number;
@@ -42,7 +42,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   effects,
   autoplay,
   delay,
-  slideCalssname,
+  slideClassName,
   className,
   playAndPauseAllowed,
   width,
@@ -245,7 +245,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           <SwiperSlide
             key={index}
             onClick={() => onClick?.(index)}
-            className={slideCalssname}
+            className={slideClassName}
           >
             {!isVideo ? (
               <img
