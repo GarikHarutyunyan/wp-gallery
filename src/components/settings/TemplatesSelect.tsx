@@ -41,6 +41,7 @@ const TemplatesSelect: React.FC = () => {
     changeThumbnailSettings,
     changeCubeSettings,
     changeCarouselSettings,
+    changeCardsSettings,
     type: activeType,
     changeType,
     changeCss,
@@ -57,11 +58,7 @@ const TemplatesSelect: React.FC = () => {
     : 'none';
 
   useLayoutEffect(() => {
-    if (
-      template &&
-      TypeUtils.isNumber(template.template_id) &&
-      !!template.template_id
-    ) {
+    if (template && TypeUtils.isNumber(template.template_id)) {
       const {
         type,
         general,
@@ -72,9 +69,13 @@ const TemplatesSelect: React.FC = () => {
         thumbnails,
         cube,
         carousel,
+        cards,
         css,
       } = template;
-      activeType !== type && type && changeType!(type);
+      // !!template.template_id, as default demplate id is 0 we avoid changing gallery type on reseting options
+      if (activeType !== type && !!template.template_id) {
+        type && changeType!(type);
+      }
       general && changeGeneralSettings(general);
       lightbox && changeLightboxSettings(lightbox);
       masonry && changeMasonrySettings(masonry);
@@ -83,6 +84,7 @@ const TemplatesSelect: React.FC = () => {
       thumbnails && changeThumbnailSettings(thumbnails);
       cube && changeCubeSettings(cube);
       carousel && changeCarouselSettings(carousel);
+      cards && changeCardsSettings(cards);
       TypeUtils.isString(css) && changeCss(css);
     }
   }, [template?.template_id]);
