@@ -2,6 +2,7 @@ import {
   Direction,
   GalleryType,
   HoverEffect,
+  ImageClickAction,
   LightboxCaptionsPosition,
   LightboxImageAnimation,
   LightboxThumbnailsPosition,
@@ -81,7 +82,6 @@ export interface ISlideshowSettings {
 }
 
 export interface ILightboxSettings extends ISlideshowSettings {
-  showLightbox: boolean;
   isFullscreen: boolean;
   areControlButtonsShown: boolean;
   canDownload: boolean;
@@ -98,6 +98,8 @@ export interface IGeneralSettings {
   paginationButtonShape: PaginationButtonShape;
   loadMoreButtonColor: string;
   paginationTextColor: string;
+  clickAction: ImageClickAction;
+  openUrlInNewTab: boolean;
 }
 
 export interface ICubeSettings {

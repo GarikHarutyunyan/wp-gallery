@@ -116,6 +116,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         title: data.title,
         description: data.description,
         caption: data.caption,
+        action_url: data.action_url,
       }));
 
       return newImages;
@@ -164,6 +165,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         title: data.title,
         caption: data.caption,
         description: data.description,
+        action_url: data.action_url,
       }));
 
       if (paginationType === PaginationType.SIMPLE) {

@@ -5,8 +5,8 @@ const OptionsPanelHeader: React.FC = () => {
   return (
     <Typography
       gutterBottom
-      variant="h5"
-      component="div"
+      variant={'h5'}
+      component={'div'}
       className={'options-panel_header'}
     >
       {'Options'}

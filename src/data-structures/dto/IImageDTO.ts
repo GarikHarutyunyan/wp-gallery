@@ -20,4 +20,5 @@ export interface IImageDTO {
   large: IImageUrl;
   medium_large: IImageUrl;
   thumbnail: IImageUrl;
+  action_url: string;
 }

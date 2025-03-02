@@ -10,7 +10,7 @@ import {
   LightboxImageAnimation,
   LightboxThumbnailsPosition,
 } from 'data-structures';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {ReactElement, useEffect, useMemo, useState} from 'react';
 import Lightbox, {SlideshowRef} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Inline from 'yet-another-react-lightbox/plugins/inline';
@@ -21,7 +21,11 @@ import Video from 'yet-another-react-lightbox/plugins/video';
 import 'yet-another-react-lightbox/styles.css';
 import './slideshow.css';
 
-const Slideshow: React.FC = () => {
+interface ISlideshowProps {
+  onClick?: (index: number) => void;
+}
+
+const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   const {slideshowSettings: settings, wrapperRef} = useSettings();
   const {images} = useData();
   const {
@@ -227,6 +231,9 @@ const Slideshow: React.FC = () => {
           container: {
             backgroundColor: `${backgroundColor}`,
           },
+          slide: {
+            cursor: onClick ? 'pointer' : undefined,
+          },
         }}
         on={{
           slideshowStart: () => {
@@ -236,6 +243,7 @@ const Slideshow: React.FC = () => {
             if (videoAutoplay) setVideoAutoplay(false);
           },
           view: ({index: currentIndex}) => setIndex(currentIndex),
+          click: ({index: currentIndex}) => onClick?.(currentIndex),
         }}
       />
     </Box>

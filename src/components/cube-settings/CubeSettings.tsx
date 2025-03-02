@@ -1,5 +1,6 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
 import {
   ColorControl,
   NumberControl,
@@ -62,7 +63,6 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                 unit={'px'}
               />
             </Filter>
-
             <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'shadow'}
@@ -71,7 +71,6 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                 onChange={onInputValueChange}
               />
             </Filter>
-
             <Filter isLoading={isLoading}>
               <ColorControl
                 id={'backgroundColor'}
@@ -118,6 +117,7 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                 />
               </Filter>
             )}
+            <ClickActionSettings isLoading={isLoading} />
           </Grid>
         }
       />

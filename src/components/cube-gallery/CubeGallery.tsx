@@ -3,7 +3,7 @@ import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {SwiperGallery} from 'components/swiper-gallery/SwiperGallery';
 import {ICubeSettings} from 'data-structures';
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Autoplay, EffectCube} from 'swiper/modules';
 import './cube-gallery.css';
 
@@ -19,7 +19,11 @@ const effects = {
   modules: [EffectCube, Autoplay],
 };
 
-const CubeGallery: React.FC = () => {
+interface ICubeGalleryProps {
+  onClick?: (index: number) => void;
+}
+
+const CubeGallery = ({onClick}: ICubeGalleryProps) => {
   const {images} = useData();
   const {cubeSettings: settings, wrapperRef} = useSettings();
   const {
@@ -78,6 +82,7 @@ const CubeGallery: React.FC = () => {
         imagesCount={1}
         preLoadCount={1}
         allowTouchMove={true}
+        onClick={onClick}
       />
     </Box>
   );

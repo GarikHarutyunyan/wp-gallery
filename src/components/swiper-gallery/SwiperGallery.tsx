@@ -21,6 +21,7 @@ interface ISwiperGalleryProps {
   autoplay: boolean;
   delay: number;
   playAndPauseAllowed?: boolean;
+  slideCalssname?: string;
   className?: string;
   width?: number;
   size?: number;
@@ -30,6 +31,7 @@ interface ISwiperGalleryProps {
   scale?: any;
   allowTouchMove: boolean;
   perSlideOffset?: any;
+  onClick?: (index: number) => void;
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
@@ -40,6 +42,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   effects,
   autoplay,
   delay,
+  slideCalssname,
   className,
   playAndPauseAllowed,
   width,
@@ -50,6 +53,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   scale,
   allowTouchMove,
   perSlideOffset,
+  onClick,
 }) => {
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
@@ -140,45 +144,49 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const loadImagesInRange = (startIndex: number, endIndex: number) => {
     for (let i = startIndex; i <= endIndex; i++) {
       const imgElement = document.querySelector(
-          `.lazy[data-index="${i}"]`
+        `.lazy[data-index="${i}"]`
       ) as HTMLImageElement;
 
       if (
-          imgElement &&
-          images &&
-          (!imgElement.src || imgElement.src === undefined)
+        imgElement &&
+        images &&
+        (!imgElement.src || imgElement.src === undefined)
       ) {
         imgElement.setAttribute('src', images[i].original.url);
         imgElement.setAttribute(
-            'srcSet',
-            `${images[i].thumbnail.url} ${images[i].thumbnail.width}w, ${images[i].medium_large.url} ${images[i].medium_large.width}w, ${images[i].original.url} ${images[i].original.width}w`
+          'srcSet',
+          `${images[i].thumbnail.url} ${images[i].thumbnail.width}w, ${images[i].medium_large.url} ${images[i].medium_large.width}w, ${images[i].original.url} ${images[i].original.width}w`
         );
       }
     }
   };
 
-  const handleSlideChange = (previousIndex: any, swiperRef: any, imagesCount: number, preLoadCount: number) => {
+  const handleSlideChange = (
+    previousIndex: any,
+    swiperRef: any,
+    imagesCount: number,
+    preLoadCount: number
+  ) => {
     const swiper = swiperRef.current?.swiper;
     const activeIndex = parseInt(swiper.realIndex);
 
     if (images && previousIndex.current !== -1) {
       var loadStartIndex, loadEndIndex;
-      if (
-          activeIndex > previousIndex.current
-      ) {
+      if (activeIndex > previousIndex.current) {
         loadStartIndex = activeIndex;
         loadEndIndex = Math.min(
-            imagesCount + activeIndex + preLoadCount,
-            images.length
+          imagesCount + activeIndex + preLoadCount,
+          images.length
         );
-
       } else {
         loadStartIndex = activeIndex
-            ? Math.max(
-                activeIndex - (imagesCount !== undefined ? imagesCount : 0) - preLoadCount,
-                0
+          ? Math.max(
+              activeIndex -
+                (imagesCount !== undefined ? imagesCount : 0) -
+                preLoadCount,
+              0
             )
-            : 0;
+          : 0;
         loadEndIndex = activeIndex;
       }
       loadImagesInRange(loadStartIndex, loadEndIndex);
@@ -190,10 +198,15 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     <Swiper
       key={imagesCount || 0}
       ref={swiperRef}
-      autoplay={autoplay || isPlaying ? {
-        delay: delay,
-        stopOnLastSlide: false,
-        pauseOnMouseEnter: allowTouchMove} : false}
+      autoplay={
+        autoplay || isPlaying
+          ? {
+              delay: delay,
+              stopOnLastSlide: false,
+              pauseOnMouseEnter: allowTouchMove,
+            }
+          : false
+      }
       grabCursor={allowTouchMove}
       allowTouchMove={allowTouchMove}
       loop={loop}
@@ -202,7 +215,12 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       loopAdditionalSlides={0}
       onSlideChange={() => {
         if (handleSlideChange) {
-          handleSlideChange(previousIndex, swiperRef, imagesCount, preLoadCount);
+          handleSlideChange(
+            previousIndex,
+            swiperRef,
+            imagesCount,
+            preLoadCount
+          );
         }
       }}
       {...effects}
@@ -224,18 +242,24 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         const isVideo: boolean = image.type === ImageType.VIDEO;
 
         return (
-          <SwiperSlide key={index}>
+          <SwiperSlide
+            key={index}
+            onClick={() => onClick?.(index)}
+            className={slideCalssname}
+          >
             {!isVideo ? (
               <img
                 data-index={index}
                 src={
-                    index < (imagesCount || 0) + 1 || index > images.length - (imagesCount || 0) - 1
-                      ? image.original.url
-                      : undefined
+                  index < (imagesCount || 0) + 1 ||
+                  index > images.length - (imagesCount || 0) - 1
+                    ? image.original.url
+                    : undefined
                 }
                 sizes={`${size}px`}
                 srcSet={
-                    index < (imagesCount || 0) + 1 || index > images.length - (imagesCount || 0) - 1
+                  index < (imagesCount || 0) + 1 ||
+                  index > images.length - (imagesCount || 0) - 1
                     ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
                     : undefined
                 }
