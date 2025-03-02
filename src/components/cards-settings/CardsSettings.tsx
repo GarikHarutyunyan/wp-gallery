@@ -1,5 +1,6 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
 import {NumberControl, SliderControl, SwitchControl} from 'components/controls';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
@@ -102,6 +103,7 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
                 />
               </Filter>
             )}
+            <ClickActionSettings isLoading={isLoading} />
           </Grid>
         }
       />

@@ -9,8 +9,8 @@ import {MasonrySettings} from 'components/masonry-settings';
 import {MosaicSettings} from 'components/mosaic-settings';
 import {SlideshowSettings} from 'components/slideshow-settings';
 import {ThumbnailSettings} from 'components/thumbnail-settings';
-import {GalleryType} from 'data-structures';
-import React, {ReactNode, useEffect, useState} from 'react';
+import {GalleryType, ImageClickAction} from 'data-structures';
+import React, {ReactNode, useState} from 'react';
 import {SettingsPanelTabs} from './SettingsPanelTabs';
 import {useSettings} from './useSettings';
 
@@ -34,23 +34,16 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     cubeSettings,
     carouselSettings,
     cardsSettings,
+    generalSettings,
   } = useSettings();
+  const clickAction = generalSettings?.clickAction;
   const [activeTab, setActiveTab] = useState<string>('gallery');
-  const showOnlyGalleryOptions: boolean =
-    type === GalleryType.SLIDESHOW ||
-    type === GalleryType.CUBE ||
-    type === GalleryType.CAROUSEL ||
-    type === GalleryType.CARDS;
+  const showLightbox: boolean = clickAction === ImageClickAction.LIGHTBOX;
+  const hideLightboxOptions: boolean = !showLightbox;
 
   const onActiveTabChange = (_: any, newActiveTab: string) => {
     setActiveTab(newActiveTab);
   };
-
-  useEffect(() => {
-    if (showOnlyGalleryOptions) {
-      onActiveTabChange(null, 'gallery');
-    }
-  }, [showOnlyGalleryOptions]);
 
   const renderGalleryOptions = (): ReactNode => {
     let galleryOprions = renderThumbnailSettings();
@@ -111,19 +104,18 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
         onActiveTabChange={onActiveTabChange}
         onSave={onSave}
         onReset={onReset}
+        hideLightboxOptions={hideLightboxOptions}
       />
       <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
         {renderGalleryOptions()}
       </TabPanel>
-        <TabPanel value={'general'} className={'reacg-tab-panel'}>
-          <GeneralSettings isLoading={isLoading} />
+      <TabPanel value={'general'} className={'reacg-tab-panel'}>
+        <GeneralSettings isLoading={isLoading} />
+      </TabPanel>
+      {!hideLightboxOptions ? (
+        <TabPanel value={'lightbox'} className={'reacg-tab-panel'}>
+          <LightboxSettings isLoading={isLoading} />
         </TabPanel>
-        {!showOnlyGalleryOptions ? (
-          <>
-          <TabPanel value={'lightbox'} className={'reacg-tab-panel'}>
-            <LightboxSettings isLoading={isLoading} />
-          </TabPanel>
-        </>
       ) : null}
     </TabContext>
   );

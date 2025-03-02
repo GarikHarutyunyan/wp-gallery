@@ -42,6 +42,7 @@ const SettingsSections = lazy(() => import('./SettingsSections'));
 const SettingsContext = React.createContext<{
   type?: GalleryType;
   changeType?: (type: GalleryType) => void;
+  hasChanges?: boolean;
   generalSettings?: IGeneralSettings;
   thumbnailSettings?: IThumbnailSettings;
   mosaicSettings?: IMosaicSettings;
@@ -91,6 +92,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
   const [css, setCss] = useState('');
+  const [hasChanges, setHasChanges] = useState(false);
   const wrapperRef = useRef(null);
   const [imagesCount, setImagesCount] = useState<number>(0);
 
@@ -178,6 +180,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const onSave = async (): Promise<void> => {
+    setHasChanges(false);
+
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'options/' + galleryId
       : undefined;
@@ -287,6 +291,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }
 
       setIsLoading(false);
+      setHasChanges(false);
     } else {
       enqueueSnackbar('Cannot reset options!', {
         variant: 'error',
@@ -311,11 +316,19 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     );
   };
 
+  const createOnChange =
+    (callback: any) =>
+    (...params: any[]) => {
+      setHasChanges(true);
+      callback?.(...params);
+    };
+
   return (
     <SettingsContext.Provider
       value={{
         type,
         changeType,
+        hasChanges,
         thumbnailSettings,
         mosaicSettings,
         masonrySettings,
@@ -325,16 +338,16 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         cubeSettings,
         carouselSettings,
         cardsSettings,
-        changeGeneralSettings: setGeneralSettings,
-        changeThumbnailSettings: setThumbnailSettings,
-        changeMosaicSettings: setMosaicSettings,
-        changeMasonrySettings: setMasonrySettings,
-        changeSlideshowSettings: setSlideshowSettings,
-        changeLightboxSettings: setLightboxSettings,
-        changeCubeSettings: setCubeSettings,
-        changeCarouselSettings: setCarouselSettings,
-        changeCardsSettings: setCardsSettings,
-        changeCss: setCss,
+        changeGeneralSettings: createOnChange(setGeneralSettings),
+        changeThumbnailSettings: createOnChange(setThumbnailSettings),
+        changeMosaicSettings: createOnChange(setMosaicSettings),
+        changeMasonrySettings: createOnChange(setMasonrySettings),
+        changeSlideshowSettings: createOnChange(setSlideshowSettings),
+        changeLightboxSettings: createOnChange(setLightboxSettings),
+        changeCubeSettings: createOnChange(setCubeSettings),
+        changeCarouselSettings: createOnChange(setCarouselSettings),
+        changeCardsSettings: createOnChange(setCardsSettings),
+        changeCss: createOnChange(setCss),
         wrapperRef,
         imagesCount,
         changeImagesCount: setImagesCount,

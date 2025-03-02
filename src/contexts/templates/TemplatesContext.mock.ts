@@ -3,6 +3,7 @@ import {
   HoverEffect,
   IGeneralSettings,
   ILightboxSettings,
+  ImageClickAction,
   IMasonrySettings,
   ISlideshowSettings,
   IThumbnailSettings,
@@ -65,10 +66,11 @@ const generalMockSettings: IGeneralSettings = {
   paginationButtonShape: PaginationButtonShape.CIRCULAR,
   loadMoreButtonColor: 'blue',
   paginationTextColor: 'green',
+  clickAction: ImageClickAction.LIGHTBOX,
+  openUrlInNewTab: false,
 };
 
 const lightboxMockSettings: ILightboxSettings = {
-  showLightbox: true,
   isFullscreen: false,
   width: 800,
   height: 800,

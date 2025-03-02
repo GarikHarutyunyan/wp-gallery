@@ -1,10 +1,11 @@
 import {Section} from 'core-components/section';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {OptionsPanelBody} from './OptionsPanelBody';
 import {OptionsPanelHeader} from './OptionsPanelHeader';
 import {TypePanelBody} from './TypePanelBody';
 import {TypePanelHeader} from './TypePanelHeader';
 import './settings-context.css';
+import {useSettings} from './useSettings';
 
 interface ISettingsSectionsProps {
   isLoading: boolean;
@@ -19,6 +20,21 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   onSave,
   onReset,
 }) => {
+  const {hasChanges} = useSettings();
+
+  useEffect(() => {
+    const beforeUnloadCallback = (event: any) => {
+      if (hasChanges) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('beforeunload', beforeUnloadCallback);
+
+    return () =>
+      window.removeEventListener('beforeunload', beforeUnloadCallback);
+  }, [hasChanges]);
+
   return (
     <>
       <Section

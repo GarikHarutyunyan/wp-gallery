@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {ICarouselSettings} from 'data-structures';
@@ -93,6 +94,8 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
           padding={padding}
           scale={scale}
           allowTouchMove={false}
+          onClick={onClick}
+          slideClassName={clsx({carousel__slide_clickable: !!onClick})}
         />
       )}
     </Box>

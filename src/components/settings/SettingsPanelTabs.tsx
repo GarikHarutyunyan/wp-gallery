@@ -2,16 +2,15 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import {Tab, Tabs} from '@mui/material';
 import clsx from 'clsx';
 import {Align, Aligner} from 'core-components/aligner';
-import {GalleryType} from 'data-structures';
 import React, {useEffect, useState} from 'react';
 import {TemplatesSelect} from './TemplatesSelect';
-import {useSettings} from './useSettings';
 
 interface ISettingsPanelTabsProps {
   activeTab: string;
   onActiveTabChange: (_: any, newActiveTab: string) => void;
   onSave: () => void;
   onReset: () => void;
+  hideLightboxOptions: boolean;
 }
 
 const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
@@ -19,15 +18,10 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
   onActiveTabChange,
   onSave,
   onReset,
+  hideLightboxOptions,
 }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isReseting, setIsReseting] = useState(false);
-  const {type} = useSettings();
-  const showOnlyGalleryOptions: boolean =
-    type === GalleryType.SLIDESHOW ||
-    type === GalleryType.CUBE ||
-    type === GalleryType.CAROUSEL ||
-    type === GalleryType.CARDS;
 
   const save = async () => {
     setIsSaving(true);
@@ -75,7 +69,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
       >
         <Tab label={'Gallery'} value={'gallery'} />
         <Tab label={'General'} value={'general'} />
-        {!showOnlyGalleryOptions ? (
+        {!hideLightboxOptions ? (
           <Tab label={'Lightbox'} value={'lightbox'} />
         ) : null}
       </Tabs>

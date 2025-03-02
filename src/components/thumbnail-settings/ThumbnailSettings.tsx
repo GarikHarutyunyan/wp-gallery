@@ -1,5 +1,6 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
@@ -115,6 +116,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                 min={1}
               />
             </Filter>
+            <ClickActionSettings isLoading={isLoading} />
           </Grid>
         }
       />

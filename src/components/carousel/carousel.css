@@ -3,3 +3,7 @@
   overflow-x: clip;
   overflow-y: visible;
 }
+
+.carousel__slide_clickable {
+  cursor: pointer;
+}

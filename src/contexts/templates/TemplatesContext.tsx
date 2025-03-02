@@ -56,7 +56,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
       setTemplates(withNoneOption);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setTemplates([noneOption]);
     }
   };

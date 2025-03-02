@@ -2,7 +2,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import {
   GalleryType,
   IGeneralSettings,
-  ILightboxSettings,
+  ImageClickAction,
   PaginationType,
 } from 'data-structures';
 import React, {
@@ -35,7 +35,6 @@ const Gallery: React.FC = () => {
   const {
     type,
     generalSettings,
-    lightboxSettings,
     mosaicSettings,
     thumbnailSettings,
     masonrySettings,
@@ -68,7 +67,10 @@ const Gallery: React.FC = () => {
     masonrySettings?.paginationType,
   ]);
 
-  const {showLightbox} = lightboxSettings as ILightboxSettings;
+  const {clickAction, openUrlInNewTab} = generalSettings as IGeneralSettings;
+  const showLightbox: boolean = clickAction === ImageClickAction.LIGHTBOX;
+  const shouldOpenUrl: boolean = clickAction === ImageClickAction.URL;
+  const isClickable: boolean = showLightbox || shouldOpenUrl;
 
   const [activeImageIndex, setActiveImageIndex] = useState<number>(-1);
 
@@ -85,34 +87,63 @@ const Gallery: React.FC = () => {
     switch (type) {
       case GalleryType.MOSAIC:
         gallery = (
-          <MosaicGallery onClick={showLightbox ? openLightbox : undefined} />
+          <MosaicGallery onClick={isClickable ? onImageClick : undefined} />
         );
         break;
       case GalleryType.MASONRY:
         gallery = (
-          <MasonryGallery onClick={showLightbox ? openLightbox : undefined} />
+          <MasonryGallery onClick={isClickable ? onImageClick : undefined} />
         );
         break;
       case GalleryType.SLIDESHOW:
-        gallery = <Slideshow key={images?.length} />;
+        gallery = (
+          <Slideshow
+            key={images?.length}
+            onClick={isClickable ? onImageClick : undefined}
+          />
+        );
         break;
       case GalleryType.THUMBNAILS:
         gallery = (
-          <ThumbnailGallery onClick={showLightbox ? openLightbox : undefined} />
+          <ThumbnailGallery onClick={isClickable ? onImageClick : undefined} />
         );
         break;
       case GalleryType.CUBE:
-        gallery = <CubeGallery />;
+        gallery = (
+          <CubeGallery onClick={isClickable ? onImageClick : undefined} />
+        );
         break;
       case GalleryType.CAROUSEL:
-        gallery = <Carousel />;
+        gallery = <Carousel onClick={isClickable ? onImageClick : undefined} />;
         break;
       case GalleryType.CARDS:
-        gallery = <CardsGallery />;
+        gallery = (
+          <CardsGallery onClick={isClickable ? onImageClick : undefined} />
+        );
         break;
     }
 
     return <Suspense>{gallery}</Suspense>;
+  };
+
+  const onImageClick = (index: number) => {
+    if (showLightbox) {
+      openLightbox(index);
+    } else if (shouldOpenUrl) {
+      onCustomActionToggle(index);
+    }
+  };
+
+  const onCustomActionToggle = (index: number) => {
+    const url: string = images?.[index]?.action_url || '';
+
+    if (!!url) {
+      if (openUrlInNewTab) {
+        window?.open(url, '_blank')?.focus();
+      } else {
+        window?.open(url, '_self');
+      }
+    }
   };
 
   const openLightbox = async (index: number): Promise<void> => {
@@ -147,14 +178,7 @@ const Gallery: React.FC = () => {
   };
 
   const renderLightbox = (): ReactNode => {
-    if (
-      !showLightbox ||
-      ![
-        GalleryType.THUMBNAILS,
-        GalleryType.MOSAIC,
-        GalleryType.MASONRY,
-      ].includes(type as GalleryType)
-    ) {
+    if (!showLightbox) {
       return null;
     }
     return (

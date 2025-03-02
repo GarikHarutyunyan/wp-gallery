@@ -1,5 +1,6 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
 import {
   ColorControl,
   NumberControl,
@@ -122,7 +123,6 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 unit={'px'}
               />
             </Filter>
-
             <>
               <Filter isLoading={isLoading}>
                 <SwitchControl
@@ -132,7 +132,6 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   onChange={onInputValueChange}
                 />
               </Filter>
-
               <Filter isLoading={isLoading}>
                 <SwitchControl
                   id={'autoplay'}
@@ -141,7 +140,6 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   onChange={onInputValueChange}
                 />
               </Filter>
-
               {autoplay && (
                 <Filter isLoading={isLoading}>
                   <NumberControl
@@ -155,6 +153,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 </Filter>
               )}
             </>
+            <ClickActionSettings isLoading={isLoading} />
           </Grid>
         }
       />
