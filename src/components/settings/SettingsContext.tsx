@@ -180,6 +180,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const onSave = async (): Promise<void> => {
+    setHasChanges(false);
+
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'options/' + galleryId
       : undefined;
@@ -226,7 +228,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
-        setHasChanges(false);
       } catch (error) {
         enqueueSnackbar('Cannot update options!', {
           variant: 'error',
