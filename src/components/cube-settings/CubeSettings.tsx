@@ -42,83 +42,85 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
       <Section
         header={'Basic'}
         body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'width'}
-                name={'Width'}
-                value={width}
-                onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'height'}
-                name={'Height'}
-                value={height}
-                onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'shadow'}
-                name={'Shadow'}
-                value={shadow}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <ColorControl
-                id={'backgroundColor'}
-                name={'Background color'}
-                value={backgroundColor}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SliderControl
-                id={'padding'}
-                name="Padding (px)"
-                min={0}
-                max={50}
-                value={padding}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'isInfinite'}
-                name={'Loop'}
-                value={isInfinite}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'autoplay'}
-                name={'Autoplay'}
-                value={autoplay}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            {autoplay && (
+          <>
+            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
               <Filter isLoading={isLoading}>
                 <NumberControl
-                  id={'slideDuration'}
-                  name={'Time interval'}
-                  value={slideDuration}
+                  id={'width'}
+                  name={'Width'}
+                  value={width}
                   onChange={onInputValueChange}
-                  min={2000}
-                  unit={'ms'}
+                  min={0}
+                  unit={'px'}
                 />
               </Filter>
-            )}
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'height'}
+                  name={'Height'}
+                  value={height}
+                  onChange={onInputValueChange}
+                  min={0}
+                  unit={'px'}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'shadow'}
+                  name={'Shadow'}
+                  value={shadow}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <ColorControl
+                  id={'backgroundColor'}
+                  name={'Background color'}
+                  value={backgroundColor}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SliderControl
+                  id={'padding'}
+                  name="Padding (px)"
+                  min={0}
+                  max={50}
+                  value={padding}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'isInfinite'}
+                  name={'Loop'}
+                  value={isInfinite}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'autoplay'}
+                  name={'Autoplay'}
+                  value={autoplay}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              {autoplay && (
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'slideDuration'}
+                    name={'Time interval'}
+                    value={slideDuration}
+                    onChange={onInputValueChange}
+                    min={2000}
+                    unit={'ms'}
+                  />
+                </Filter>
+              )}
+            </Grid>
             <ClickActionSettings isLoading={isLoading} />
-          </Grid>
+          </>
         }
       />
     );

@@ -1,3 +1,4 @@
+import Grid from '@mui/material/Grid';
 import {SelectControl, SwitchControl} from 'components/controls';
 import {useSettings} from 'components/settings';
 import {Filter} from 'components/settings/Filter';
@@ -7,6 +8,7 @@ import {
   ImageClickAction,
   ImageClickActionOptions,
 } from 'data-structures';
+import {ReactElement} from 'react';
 
 interface IClickActionSettingsProps {
   isLoading?: boolean;
@@ -25,12 +27,32 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
     key && onActionChange({...generalSettings, [key]: inputValue});
   };
 
+  const renderClickActionInfo = (): ReactElement => {
+    return (
+      <>
+        <p>
+          <b>{'Open Lightbox:'}</b>
+          {
+            ' Clicking an image opens a lightbox. You can adjust settings in the "Lightbox" tab.'
+          }
+        </p>
+        <p>
+          <b>{'Action URL:'}</b>
+          {
+            ' Clicking an image redirects to a specified URL. The URL must be set by editing each image from "Images" section.'
+          }
+        </p>
+      </>
+    );
+  };
+
   return (
-    <>
+    <Grid container columns={24} columnSpacing={4} marginTop={2}>
       <Filter isLoading={isLoading}>
         <SelectControl
           id={'clickAction'}
           name={'Image click'}
+          info={renderClickActionInfo()}
           value={clickAction}
           options={ImageClickActionOptions}
           onChange={onActionValueChange}
@@ -46,7 +68,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
           />
         </Filter>
       ) : null}
-    </>
+    </Grid>
   );
 };
 

@@ -86,38 +86,40 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
       <Section
         header={'Basic'}
         body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'width'}
-                name={'Width'}
-                value={width}
-                onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'height'}
-                name={'Height'}
-                value={height}
-                onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'columns'}
-                name={'Columns'}
-                value={columns}
-                onChange={onInputValueChange}
-                min={1}
-              />
-            </Filter>
+          <>
+            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'width'}
+                  name={'Width'}
+                  value={width}
+                  onChange={onInputValueChange}
+                  min={0}
+                  unit={'px'}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'height'}
+                  name={'Height'}
+                  value={height}
+                  onChange={onInputValueChange}
+                  min={0}
+                  unit={'px'}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'columns'}
+                  name={'Columns'}
+                  value={columns}
+                  onChange={onInputValueChange}
+                  min={1}
+                />
+              </Filter>
+            </Grid>
             <ClickActionSettings isLoading={isLoading} />
-          </Grid>
+          </>
         }
       />
     );
