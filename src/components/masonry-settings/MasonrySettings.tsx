@@ -58,28 +58,30 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
       <Section
         header={'Basic'}
         body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <SliderControl
-                id={'width'}
-                name="Width (%)"
-                min={10}
-                max={100}
-                value={width}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'columns'}
-                name={'Columns'}
-                value={columns}
-                onChange={onInputValueChange}
-                min={1}
-              />
-            </Filter>
+          <>
+            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+              <Filter isLoading={isLoading}>
+                <SliderControl
+                  id={'width'}
+                  name="Width (%)"
+                  min={10}
+                  max={100}
+                  value={width}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'columns'}
+                  name={'Columns'}
+                  value={columns}
+                  onChange={onInputValueChange}
+                  min={1}
+                />
+              </Filter>
+            </Grid>
             <ClickActionSettings isLoading={isLoading} />
-          </Grid>
+          </>
         }
       />
     );

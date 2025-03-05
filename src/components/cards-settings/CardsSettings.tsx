@@ -36,75 +36,77 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
       <Section
         header={'Basic'}
         body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'width'}
-                name={'Width'}
-                value={width}
-                onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'height'}
-                name={'Height'}
-                value={height}
-                onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SliderControl
-                id={'perSlideOffset'}
-                name={'Per slide offset %'}
-                value={perSlideOffset}
-                onChange={onInputValueChange}
-                min={2}
-                max={40}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'navigationButton'}
-                name={'Navigation'}
-                value={navigationButton}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'playAndPauseAllowed'}
-                name={'Play / Pause'}
-                value={playAndPauseAllowed}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'autoplay'}
-                name={'Autoplay'}
-                value={autoplay}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            {autoplay && (
+          <>
+            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
               <Filter isLoading={isLoading}>
                 <NumberControl
-                  id={'slideDuration'}
-                  name={'Time interval'}
-                  value={slideDuration}
+                  id={'width'}
+                  name={'Width'}
+                  value={width}
                   onChange={onInputValueChange}
-                  min={2000}
-                  unit={'ms'}
+                  min={0}
+                  unit={'px'}
                 />
               </Filter>
-            )}
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'height'}
+                  name={'Height'}
+                  value={height}
+                  onChange={onInputValueChange}
+                  min={0}
+                  unit={'px'}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SliderControl
+                  id={'perSlideOffset'}
+                  name={'Per slide offset %'}
+                  value={perSlideOffset}
+                  onChange={onInputValueChange}
+                  min={2}
+                  max={40}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'navigationButton'}
+                  name={'Navigation'}
+                  value={navigationButton}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'playAndPauseAllowed'}
+                  name={'Play / Pause'}
+                  value={playAndPauseAllowed}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'autoplay'}
+                  name={'Autoplay'}
+                  value={autoplay}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              {autoplay && (
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'slideDuration'}
+                    name={'Time interval'}
+                    value={slideDuration}
+                    onChange={onInputValueChange}
+                    min={2000}
+                    unit={'ms'}
+                  />
+                </Filter>
+              )}
+            </Grid>
             <ClickActionSettings isLoading={isLoading} />
-          </Grid>
+          </>
         }
       />
     );

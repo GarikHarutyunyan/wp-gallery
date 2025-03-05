@@ -67,8 +67,9 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
       <Section
         header={'Basic'}
         body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            {/* <Filter isLoading={isLoading}>
+          <>
+            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+              {/* <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'isFullscreen'}
                     name={'Full width'}
@@ -76,122 +77,123 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                     onChange={onInputValueChange}
                   />
                 </Filter> */}
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'width'}
-                name={'Width'}
-                value={width}
-                onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'height'}
-                name={'Height'}
-                value={height}
-                onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'autoplay'}
-                name={'Autoplay'}
-                value={autoplay}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            {autoplay || isSlideshowAllowed ? (
               <Filter isLoading={isLoading}>
                 <NumberControl
-                  id={'slideDuration'}
-                  name={'Time interval'}
-                  value={slideDuration}
+                  id={'width'}
+                  name={'Width'}
+                  value={width}
                   onChange={onInputValueChange}
-                  min={700}
-                  unit={'ms'}
+                  min={0}
+                  unit={'px'}
                 />
               </Filter>
-            ) : null}
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'imageAnimation'}
-                name={'Animation'}
-                value={imageAnimation}
-                options={LightboxImageAnimationOptions.filter(
-                  (option) => option.value !== LightboxImageAnimation.SLIDEV
-                )}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'isSlideshowAllowed'}
-                name={'Play / Pause'}
-                value={isSlideshowAllowed}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'isInfinite'}
-                name={'Loop'}
-                value={isInfinite}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SliderControl
-                id={'padding'}
-                name="Padding (px)"
-                min={0}
-                max={300}
-                value={padding}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <ColorControl
-                id={'backgroundColor'}
-                name="Background color"
-                value={backgroundColor}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'captionsPosition'}
-                name={'Caption position'}
-                value={captionsPosition}
-                options={LightboxCaptionsPositionOptions}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            {captionsPosition !== LightboxCaptionsPosition.NONE && (
-              <>
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'height'}
+                  name={'Height'}
+                  value={height}
+                  onChange={onInputValueChange}
+                  min={0}
+                  unit={'px'}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'autoplay'}
+                  name={'Autoplay'}
+                  value={autoplay}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              {autoplay || isSlideshowAllowed ? (
                 <Filter isLoading={isLoading}>
-                  <FontControl
-                    id={'captionFontFamily'}
-                    name={'Caption font family'}
-                    value={captionFontFamily}
+                  <NumberControl
+                    id={'slideDuration'}
+                    name={'Time interval'}
+                    value={slideDuration}
                     onChange={onInputValueChange}
+                    min={700}
+                    unit={'ms'}
                   />
                 </Filter>
-                <Filter isLoading={isLoading}>
-                  <ColorControl
-                    id={'captionColor'}
-                    name="Caption color"
-                    value={captionColor}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-              </>
-            )}
+              ) : null}
+              <Filter isLoading={isLoading}>
+                <SelectControl
+                  id={'imageAnimation'}
+                  name={'Animation'}
+                  value={imageAnimation}
+                  options={LightboxImageAnimationOptions.filter(
+                    (option) => option.value !== LightboxImageAnimation.SLIDEV
+                  )}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'isSlideshowAllowed'}
+                  name={'Play / Pause'}
+                  value={isSlideshowAllowed}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'isInfinite'}
+                  name={'Loop'}
+                  value={isInfinite}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SliderControl
+                  id={'padding'}
+                  name="Padding (px)"
+                  min={0}
+                  max={300}
+                  value={padding}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <ColorControl
+                  id={'backgroundColor'}
+                  name="Background color"
+                  value={backgroundColor}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SelectControl
+                  id={'captionsPosition'}
+                  name={'Caption position'}
+                  value={captionsPosition}
+                  options={LightboxCaptionsPositionOptions}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              {captionsPosition !== LightboxCaptionsPosition.NONE && (
+                <>
+                  <Filter isLoading={isLoading}>
+                    <FontControl
+                      id={'captionFontFamily'}
+                      name={'Caption font family'}
+                      value={captionFontFamily}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'captionColor'}
+                      name="Caption color"
+                      value={captionColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </>
+              )}
+            </Grid>
             <ClickActionSettings isLoading={isLoading} />
-          </Grid>
+          </>
         }
       />
     );

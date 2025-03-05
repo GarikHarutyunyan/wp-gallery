@@ -61,50 +61,52 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
       <Section
         header={'Basic'}
         body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <SliderControl
-                id={'width'}
-                name="Width (%)"
-                min={10}
-                max={100}
-                value={width}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'direction'}
-                name={'Direction'}
-                value={direction}
-                options={DirectionOptions}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            {direction === Direction.HORIZONTAL ? (
+          <>
+            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
               <Filter isLoading={isLoading}>
-                <NumberControl
-                  id={'rowHeight'}
-                  name={'Row height'}
-                  value={rowHeight}
+                <SliderControl
+                  id={'width'}
+                  name="Width (%)"
+                  min={10}
+                  max={100}
+                  value={width}
                   onChange={onInputValueChange}
-                  min={0}
-                  unit={'px'}
                 />
               </Filter>
-            ) : (
               <Filter isLoading={isLoading}>
-                <NumberControl
-                  id={'columns'}
-                  name={'Columns'}
-                  value={columns}
+                <SelectControl
+                  id={'direction'}
+                  name={'Direction'}
+                  value={direction}
+                  options={DirectionOptions}
                   onChange={onInputValueChange}
-                  min={1}
                 />
               </Filter>
-            )}
+              {direction === Direction.HORIZONTAL ? (
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'rowHeight'}
+                    name={'Row height'}
+                    value={rowHeight}
+                    onChange={onInputValueChange}
+                    min={0}
+                    unit={'px'}
+                  />
+                </Filter>
+              ) : (
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'columns'}
+                    name={'Columns'}
+                    value={columns}
+                    onChange={onInputValueChange}
+                    min={1}
+                  />
+                </Filter>
+              )}
+            </Grid>
             <ClickActionSettings isLoading={isLoading} />
-          </Grid>
+          </>
         }
       />
     );
