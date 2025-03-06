@@ -1,8 +1,9 @@
 import {Box, MenuItem, Select, Typography} from '@mui/material';
 import {ISelectOption} from 'components/controls';
 import {useAppInfo} from 'contexts/AppInfoContext';
-import {GalleryType, GalleryTypeOptions} from 'data-structures';
+import {GalleryType} from 'data-structures';
 import React from 'react';
+import {GalleryTypeOptions} from './TypePanel.utils';
 
 const activeColor: string = '#135C92';
 const inactiveColor: string = '#86A3B8';

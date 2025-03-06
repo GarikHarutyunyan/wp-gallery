@@ -4,6 +4,7 @@ export enum Align {
   START = 'start',
   END = 'end',
   SPACE_BETWEEN = 'space-between',
+  SPACE_AROUND = 'space-around',
 }
 
 interface IAlignerProps

@@ -1,24 +1,40 @@
 .reacg-settings {
     box-shadow: unset !important;
 
+    .type-option__wrapper {
+        max-width: 860px;
+        margin-top: 10px;
+    }
+
     .type-option {
         cursor: pointer;
+        width: 10%;
     }
 
     .type-option__title {
-        margin: 2px 0 0;
+        margin-bottom: 10px;
         font-weight: bold;
+        color: #85A3B8;
     }
 
-    .type-option__image {
-        width: 140px;
-        height: auto;
-        border-radius: 2px;
-        max-width: 100%;
+    .type-option__active .type-option__title {
+        color: #155C92;
+    }
+    
+    .type-option__image-container svg {
+        width: 100%;
+        height: 100%;
     }
 
-    .type-option__image-container {
-        margin: 5px;
+    .type-option__wrapper-mobile .type-option__title {
+        font-size: 0.6rem;
+    }
+
+    .type-option__active .type-option__image-container svg path {
+        fill: #155C92;
+    }
+    .type-option__image-container svg path {
+        fill: #85A3B8;
     }
 }
 
