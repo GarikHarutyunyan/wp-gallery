@@ -10,6 +10,7 @@ interface ISelectOption {
   value: string;
   render?: (value?: string) => ReactNode;
   isDisabled?: boolean;
+  svg?: string
 }
 
 export enum ReSize {
