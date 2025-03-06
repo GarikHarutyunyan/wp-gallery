@@ -1,12 +1,11 @@
-import {ISelectOption} from 'components/controls';
+import clsx from 'clsx';
 import {Align, Aligner} from 'core-components/aligner';
-import {GalleryType, GalleryTypeOptions} from 'data-structures';
+import {GalleryType} from 'data-structures';
 import useIsMobile from 'hooks/useIsMobile';
 import React from 'react';
+import {useSettings} from '../useSettings';
 import {TypeOption} from './TypeOption';
-import {TypePanelSelect} from './TypePanelSelect';
-import {useSettings} from './useSettings';
-import clsx from "clsx";
+import {GalleryTypeOptions} from './TypePanel.utils';
 
 interface ITypePanelBodyProps {
   onChange: (type: GalleryType) => void;
@@ -19,12 +18,17 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({onChange}) => {
   if (!type) return null;
 
   return (
-    <Aligner className={clsx('type-option__wrapper', {'type-option__wrapper-mobile' : isMobile})} align={Align.SPACE_AROUND}>
-      {GalleryTypeOptions.map(({value, title, svg}: ISelectOption) => {
+    <Aligner
+      className={clsx('type-option__wrapper', {
+        'type-option__wrapper-mobile': isMobile,
+      })}
+      align={Align.SPACE_AROUND}
+    >
+      {GalleryTypeOptions.map(({value, title, image}) => {
         return (
           <TypeOption
             key={title}
-            svg={svg||""}
+            image={image}
             title={title}
             value={value as GalleryType}
             isSelected={type === value}

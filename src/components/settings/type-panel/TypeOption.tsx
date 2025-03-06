@@ -1,15 +1,11 @@
 import {Typography} from '@mui/material';
-import {useAppInfo} from 'contexts/AppInfoContext';
+import clsx from 'clsx';
 import {GalleryType} from 'data-structures';
-import React from 'react';
-import clsx from "clsx";
-
-const activeColor: string = '#135C92';
-const inactiveColor: string = '#86A3B8';
+import React, {ReactElement} from 'react';
 
 interface ITypeOptionProps {
   title: string;
-  svg: string;
+  image: ReactElement;
   value: GalleryType;
   isSelected: boolean;
   onClick?: (value: GalleryType) => void;
@@ -17,19 +13,20 @@ interface ITypeOptionProps {
 
 const TypeOption: React.FC<ITypeOptionProps> = ({
   title,
-  svg,
+  image,
   value,
   isSelected,
   onClick,
 }) => {
-  const {pluginUrl} = useAppInfo();
-
   const onOptionClick = () => {
     onClick?.(value);
   };
 
   return (
-    <div onClick={onOptionClick} className={clsx('type-option', {'type-option__active' : isSelected })}>
+    <div
+      onClick={onOptionClick}
+      className={clsx('type-option', {'type-option__active': isSelected})}
+    >
       <Typography
         variant={'subtitle1'}
         component={'div'}
@@ -38,7 +35,7 @@ const TypeOption: React.FC<ITypeOptionProps> = ({
       >
         {title}
       </Typography>
-      <div className={'type-option__image-container'} dangerouslySetInnerHTML={{ __html: svg }}></div>
+      <div className={'type-option__image-container'}>{image}</div>
     </div>
   );
 };

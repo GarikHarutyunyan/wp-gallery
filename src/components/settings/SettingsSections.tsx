@@ -2,9 +2,8 @@ import {Section} from 'core-components/section';
 import React, {useEffect} from 'react';
 import {OptionsPanelBody} from './OptionsPanelBody';
 import {OptionsPanelHeader} from './OptionsPanelHeader';
-import {TypePanelBody} from './TypePanelBody';
-import {TypePanelHeader} from './TypePanelHeader';
 import './settings-context.css';
+import {TypePanel} from './type-panel/TypePanel';
 import {useSettings} from './useSettings';
 
 interface ISettingsSectionsProps {
@@ -37,12 +36,7 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
 
   return (
     <>
-      <Section
-        header={<TypePanelHeader />}
-        body={<TypePanelBody onChange={onTypeChange} />}
-        outlined={false}
-        className={'reacg-settings'}
-      />
+      <TypePanel onTypeChange={onTypeChange} />
       <Section
         header={<OptionsPanelHeader />}
         body={
