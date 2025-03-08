@@ -7,11 +7,11 @@ const GoogleFontsContext = React.createContext<{
 }>({});
 
 const GoogleFontsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
-  const {showControls, baseUrl, nonce} = useAppInfo();
+  const {showControls, baseUrl} = useAppInfo();
   const [options, setOptions] = useState<any[]>([]);
 
   const getData = async () => {
-    if ( !showControls ) {
+    if (!showControls) {
       return;
     }
     const fetchUrl: string | undefined = baseUrl
@@ -20,9 +20,7 @@ const GoogleFontsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       try {
-        const response = await axios.get(fetchUrl, {
-          headers: {'X-WP-Nonce': nonce},
-        });
+        const response = await axios.get(fetchUrl);
         const fontData: object = response.data;
         const newOptions: any[] = Object.values(fontData).map((data: any) => ({
           value: data,

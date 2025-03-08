@@ -65,7 +65,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     orderBy = 'default',
     orderDirection = 'asc',
   } = generalSettings as IGeneralSettings;
-  const {galleryId, baseUrl, nonce, getGalleryTimestamp} = useAppInfo();
+  const {galleryId, baseUrl, getGalleryTimestamp} = useAppInfo();
   const {noDataText, setLoadMoreText, setNoDataText} =
     useContext(TranslationsContext);
   const [images, setImages] = useState<IImageDTO[]>([]);
@@ -99,11 +99,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
       queryString += `timestamp=${getGalleryTimestamp?.()}`;
-      const imgData: any[] = (
-        await axios.get(`${fetchUrl}${queryString}`, {
-          headers: {'X-WP-Nonce': nonce},
-        })
-      ).data;
+      const imgData: any[] = (await axios.get(`${fetchUrl}${queryString}`))
+        .data;
       const newImages: IImageDTO[] = imgData.map((data: any) => ({
         id: data.id,
         type: data.type,
@@ -148,11 +145,9 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         queryString += `&page=${page}`;
         queryString += `&per_page=${itemsPerPage}`;
       }
-      const imgData: any[] = (
-        await axios.get(`${fetchUrl}${queryString}`, {
-          headers: {'X-WP-Nonce': nonce},
-        })
-      ).data;
+      const response: any = await axios.get(`${fetchUrl}${queryString}`);
+      const imgData: any[] = response.data;
+      const headers: any = response.headers;
       const newImages: IImageDTO[] = imgData.map((data: any) => ({
         id: data.id,
         type: data.type,
@@ -167,6 +162,15 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         description: data.description,
         action_url: data.action_url,
       }));
+      const newImageCount: number = headers?.['x-images-count'];
+      const loadMoreText: string | undefined =
+        (window as any).reacg_global?.text?.load_more || undefined;
+      const noDataText: string | undefined =
+        (window as any).reacg_global?.text?.no_data || undefined;
+
+      loadMoreText && setLoadMoreText?.(loadMoreText);
+      noDataText && setNoDataText?.(noDataText);
+      setImageCount(newImageCount);
 
       if (paginationType === PaginationType.SIMPLE) {
         setImages(newImages);
@@ -184,38 +188,6 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
-  const getItemsCount = async () => {
-    if (isLoading) {
-      return;
-    }
-
-    const fetchUrl: string | undefined = baseUrl
-      ? baseUrl + 'gallery/' + galleryId
-      : undefined;
-
-    if (fetchUrl) {
-      const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
-      let queryString = queryStringSeperator;
-      queryString += `timestamp=${getGalleryTimestamp?.()}`;
-      const imgData: any = (
-        await axios.get(`${fetchUrl}${queryString}`, {
-          headers: {'X-WP-Nonce': nonce},
-        })
-      ).data;
-      const newImageCount: number = imgData?.images_count;
-      const loadMoreText: string | undefined =
-        (window as any).reacg_global?.text?.load_more || undefined;
-      const noDataText: string | undefined =
-        (window as any).reacg_global?.text?.no_data || undefined;
-
-      loadMoreText && setLoadMoreText?.(loadMoreText);
-      noDataText && setNoDataText?.(noDataText);
-      setImageCount(newImageCount);
-    } else {
-      setImageCount(0);
-    }
-  };
-
   const onPageChange = async (
     _event?: any,
     newPage: number = currentPage + 1
@@ -229,7 +201,6 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCurrentPage(0);
     setImageCount(0);
     getData(1);
-    getItemsCount();
   };
 
   const renderContentPlaceholder = (): ReactElement => {
