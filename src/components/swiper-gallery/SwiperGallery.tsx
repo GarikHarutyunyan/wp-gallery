@@ -143,8 +143,9 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
   const loadImagesInRange = (startIndex: number, endIndex: number) => {
     for (let i = startIndex; i <= endIndex; i++) {
-      const imgElement = document.querySelector(
-        `.lazy[data-index="${i}"]`
+      const swiper = swiperRef?.current?.swiper;
+      const imgElement = swiper?.slides[i]?.querySelector(
+        'img'
       ) as HTMLImageElement;
 
       if (
