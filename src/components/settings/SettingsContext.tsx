@@ -107,9 +107,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       let queryString = queryStringSeperator;
       queryString += `timestamp=${getOptionsTimestamp?.()}`;
       const newSettings: ISettingsDTO = (
-        await axios.get(`${fetchUrl}${queryString}`, {
-          headers: {'X-WP-Nonce': nonce},
-        })
+        await axios.get(`${fetchUrl}${queryString}`)
       ).data;
 
       setType(newSettings.type);
@@ -262,9 +260,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
         let queryString = queryStringSeperator;
         queryString += `timestamp=${getOptionsTimestamp?.()}`;
-        const response = await axios.get(`${fetchUrl}${queryString}`, {
-          headers: {'X-WP-Nonce': nonce},
-        });
+        const response = await axios.get(`${fetchUrl}${queryString}`);
         const newSettings: ISettingsDTO = response.data;
 
         setGeneralSettings(newSettings.general);

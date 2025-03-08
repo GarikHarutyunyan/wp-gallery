@@ -19,7 +19,7 @@ const addApplication = (rootElement: HTMLElement) => {
     rootElement.getAttribute('data-options-timestamp') || '';
 
   const baseUrl: string | undefined = (window as any).reacg_global?.rest_root;
-  const nonce: string | undefined = (window as any).reacg_global?.rest_nonce;
+  const nonce: string | undefined = (window as any).reacg?.rest_nonce;
   const pluginUrl: string | undefined = (window as any).reacg_global
     ?.plugin_url;
 
