@@ -141,6 +141,27 @@
     outline: none !important;
 }
 
+.reacg-slideshow .yarl__button.yarl__navigation_next,
+.reacg-slideshow .yarl__button.yarl__navigation_prev {
+    padding: 24px 16px !important;
+}
+.reacg-slideshow .yarl__button {
+    border: none !important;
+    color: hsla(0, 0%, 100%, .8) !important;
+    padding: 8px !important;
+}
+.reacg-slideshow .yarl__button:focus-visible:hover,
+.reacg-slideshow .yarl__button:focus:hover,
+.reacg-slideshow .yarl__button:hover {
+    color: #fff !important;
+}
+.reacg-slideshow .yarl__button:disabled {
+    color: hsla(0, 0%, 100%, .4) !important;
+}
+.reacg-slideshow .yarl__thumbnails_thumbnail {
+    padding: 0 !important;
+}
+
 .reacg-slideshow button:not(.yarl__thumbnails_thumbnail),
 .reacg-slideshow button:not(.yarl__thumbnails_thumbnail):hover,
 .reacg-slideshow button:not(.yarl__thumbnails_thumbnail):focus,

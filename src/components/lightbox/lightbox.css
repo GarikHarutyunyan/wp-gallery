@@ -169,6 +169,27 @@
     outline: none !important;
 }
 
+.reacg-lightbox .yarl__button.yarl__navigation_next,
+.reacg-lightbox .yarl__button.yarl__navigation_prev {
+    padding: 24px 16px !important;
+}
+.reacg-lightbox .yarl__button {
+    border: none !important;
+    color: hsla(0, 0%, 100%, .8) !important;
+    padding: 8px !important;
+}
+.reacg-lightbox .yarl__button:focus-visible:hover,
+.reacg-lightbox .yarl__button:focus:hover,
+.reacg-lightbox .yarl__button:hover {
+    color: #fff !important;
+}
+.reacg-lightbox .yarl__button:disabled {
+    color: hsla(0, 0%, 100%, .4) !important;
+}
+.reacg-lightbox .yarl__thumbnails_thumbnail {
+    padding: 0 !important;
+}
+
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail),
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail):hover,
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail):focus,
