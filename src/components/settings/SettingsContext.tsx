@@ -96,6 +96,30 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const wrapperRef = useRef(null);
   const [imagesCount, setImagesCount] = useState<number>(0);
 
+  const getDataFromWindow = () => {
+    const reacg_global = (window as any).reacg_global;
+    const allData = reacg_global?.data;
+    const currentData = allData?.[galleryId as string];
+    const optionsData: any = currentData?.options;
+    const newSettings: ISettingsDTO = optionsData;
+
+    setType(newSettings.type);
+    setCss(newSettings.css || '');
+    setGeneralSettings(newSettings.general || generalMockSettings);
+    setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
+    setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
+    setMasonrySettings(newSettings.masonry || mosaicMockSettings);
+    setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
+    setLightboxSettings(newSettings.lightbox);
+    setCubeSettings(newSettings.cube || cubeMockSettings);
+    setCarouselSettings(newSettings.carousel || carouselMockSettings);
+    setCardsSettings(newSettings.cards || cardsMockSettings);
+    initTemplate?.(
+      newSettings?.template_id as string,
+      newSettings?.title as string
+    );
+  };
+
   const getData = async () => {
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'options/' + galleryId
@@ -141,7 +165,15 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   useLayoutEffect(() => {
-    getData();
+    const reacg_global = (window as any).reacg_global;
+    const allData = reacg_global?.data;
+    const currentData = allData?.[galleryId as string];
+    const hasFirstChunk: boolean = currentData?.options;
+    if (!hasFirstChunk) {
+      getData();
+    } else {
+      getDataFromWindow();
+    }
   }, []);
 
   const changeType = async (newType: GalleryType) => {
