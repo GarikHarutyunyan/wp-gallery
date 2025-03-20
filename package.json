@@ -77,6 +77,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "build:watch": "nodemon --watch src --ext js,jsx,ts,tsx --exec node scripts/build.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
@@ -102,6 +103,7 @@
     "@types/react-lazy-load-image-component": "^1.6.4",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.8.1",
+    "nodemon": "^3.1.9",
     "prettier": "^3.0.3",
     "style-loader": "^3.3.3",
     "webpack": "^5.89.0",
