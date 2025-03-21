@@ -8,11 +8,12 @@ import {
   IImageDTO,
   PaginationType,
 } from 'data-structures';
+import useUpdateEffect from 'hooks/useUpdateEffect';
 import {
   ReactElement,
   createContext,
   useContext,
-  useLayoutEffect,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -80,7 +81,23 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
   const isFullyLoaded: boolean = currentPage >= pagesCount;
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    changeImagesCount?.(0);
+    setLightboxImages([]);
+    setCurrentPage(0);
+    setImageCount(0);
+    const allData = (window as any).reacg_data;
+    const currentData = allData?.[galleryId as string];
+    const hasFirstChunk: boolean = currentData?.images?.length;
+
+    if (!hasFirstChunk) {
+      getData(1);
+    } else {
+      getDataFromWindow(1);
+    }
+  }, []);
+
+  useUpdateEffect(() => {
     itemsPerPage > 0 && onReloadData();
   }, [itemsPerPage, paginationType, orderBy, orderDirection]);
 
@@ -122,28 +139,25 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const getDataFromWindow = (page: number) => {
-    setImages([]); //?
+    setImages([]);
 
-    const imgData: any[] = (window as any).reacg_global!.data![
-      galleryId as string
-    ].images;
-    const newImages: IImageDTO[] = imgData
-      .slice(0, itemsPerPage)
-      .map((data: any) => ({
-        id: data.id,
-        type: data.type,
-        original: data.original,
-        width: data.width,
-        height: data.height,
-        large: data.large,
-        medium_large: data.medium_large,
-        thumbnail: data.thumbnail,
-        title: data.title,
-        caption: data.caption,
-        description: data.description,
-        action_url: data.action_url,
-      }));
-    const newImageCount: number = imgData.length;
+    const data = (window as any).reacg_data[galleryId as string];
+    const imgData: any[] = data.images;
+    const newImageCount: number = data.imagesCount;
+    const newImages: IImageDTO[] = imgData.map((data: any) => ({
+      id: data.id,
+      type: data.type,
+      original: data.original,
+      width: data.width,
+      height: data.height,
+      large: data.large,
+      medium_large: data.medium_large,
+      thumbnail: data.thumbnail,
+      title: data.title,
+      caption: data.caption,
+      description: data.description,
+      action_url: data.action_url,
+    }));
 
     const loadMoreText: string | undefined =
       (window as any).reacg_global?.text?.load_more || undefined;
@@ -238,15 +252,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setLightboxImages([]);
     setCurrentPage(0);
     setImageCount(0);
-    const reacg_global = (window as any).reacg_global;
-    const allData = reacg_global?.data;
-    const currentData = allData?.[galleryId as string];
-    const hasFirstChunk: boolean = currentData?.images?.length;
-    if (!hasFirstChunk) {
-      getData(1);
-    } else {
-      getDataFromWindow(1);
-    }
+    getData(1);
   };
 
   const renderContentPlaceholder = (): ReactElement => {

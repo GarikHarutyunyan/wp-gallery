@@ -97,8 +97,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [imagesCount, setImagesCount] = useState<number>(0);
 
   const getDataFromWindow = () => {
-    const reacg_global = (window as any).reacg_global;
-    const allData = reacg_global?.data;
+    const allData = (window as any).reacg_data;
     const currentData = allData?.[galleryId as string];
     const optionsData: any = currentData?.options;
     const newSettings: ISettingsDTO = optionsData;
@@ -165,8 +164,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   useLayoutEffect(() => {
-    const reacg_global = (window as any).reacg_global;
-    const allData = reacg_global?.data;
+    const allData = (window as any).reacg_data;
     const currentData = allData?.[galleryId as string];
     const hasFirstChunk: boolean = currentData?.options;
     if (!hasFirstChunk) {
