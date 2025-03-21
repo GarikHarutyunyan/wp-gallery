@@ -9,6 +9,7 @@ export * from './OrderBy';
 export * from './OrderDirection';
 export * from './PaginationButtonShape';
 export * from './PaginationType';
+export * from './SizeType';
 export * from './TitleAlignment';
 export * from './TitlePosition';
 export * from './TitleVisibility';
