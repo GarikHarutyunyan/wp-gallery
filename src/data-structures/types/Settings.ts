@@ -8,6 +8,7 @@ import {
   LightboxThumbnailsPosition,
   PaginationButtonShape,
   PaginationType,
+  SizeType,
   ThumbnailTitlePosition,
   TitleAlignment,
   TitlePosition,
@@ -136,6 +137,30 @@ export interface ICardsSettings {
   slideDuration: number;
 }
 
+export interface IStaggeredSettings {
+  width?: number | undefined;
+  height?: number | undefined;
+  columns?: number | undefined;
+  gap: number;
+  backgroundColor: string;
+  containerPadding: number;
+  padding: number;
+  paddingColor: string;
+  borderRadius: number;
+  titlePosition: ThumbnailTitlePosition;
+  titleAlignment: TitleAlignment;
+  titleVisibility: TitleVisibility;
+  titleFontFamily: string;
+  titleColor: string;
+  descriptionColor: string;
+  titleFontSize?: number | undefined;
+  descriptionFontSize?: number | undefined;
+  buttonColor: string;
+  buttonTextColor: string;
+  sizeType: SizeType;
+  paginationType: PaginationType;
+}
+
 export interface ISettingsDTO {
   type: GalleryType;
   general: IGeneralSettings;
@@ -147,6 +172,7 @@ export interface ISettingsDTO {
   cube: ICubeSettings;
   carousel: ICarouselSettings;
   cards: ICardsSettings;
+  staggered: IStaggeredSettings;
   template_id?: number | string;
   title?: string;
   css?: string;

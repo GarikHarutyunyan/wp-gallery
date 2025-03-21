@@ -13,6 +13,7 @@ import {
   IMosaicSettings,
   ISettingsDTO,
   ISlideshowSettings,
+  IStaggeredSettings,
   IThumbnailSettings,
 } from 'data-structures';
 import {useSnackbar} from 'notistack';
@@ -34,6 +35,7 @@ import {
   masonryMockSettings,
   mosaicMockSettings,
   slideshowMockSettings,
+  staggeredMockSettings,
   thumbnailMockSettings,
 } from './MockSettings';
 
@@ -52,6 +54,7 @@ const SettingsContext = React.createContext<{
   cubeSettings?: ICubeSettings;
   carouselSettings?: ICarouselSettings;
   cardsSettings?: ICardsSettings;
+  staggeredSettings?: IStaggeredSettings;
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
@@ -61,6 +64,7 @@ const SettingsContext = React.createContext<{
   changeCubeSettings?: any;
   changeCarouselSettings?: any;
   changeCardsSettings?: any;
+  changeStaggeredSettings?: any;
   changeCss?: any;
   wrapperRef?: any;
   imagesCount?: number;
@@ -89,6 +93,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [cubeSettings, setCubeSettings] = useState<ICubeSettings>();
   const [carouselSettings, setCarouselSettings] = useState<ICarouselSettings>();
   const [cardsSettings, setCardsSettings] = useState<ICardsSettings>();
+  const [staggeredSettings, setStaggeredSettings] =
+    useState<IStaggeredSettings>();
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
   const [css, setCss] = useState('');
@@ -121,6 +127,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCubeSettings(newSettings.cube || cubeMockSettings);
       setCarouselSettings(newSettings.carousel || carouselMockSettings);
       setCardsSettings(newSettings.cards || cardsMockSettings);
+      setStaggeredSettings(newSettings.staggered || staggeredMockSettings);
       initTemplate?.(
         newSettings?.template_id as string,
         newSettings?.title as string
@@ -137,6 +144,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCubeSettings(cubeMockSettings);
       setCarouselSettings(carouselMockSettings);
       setCardsSettings(cardsMockSettings);
+      setStaggeredSettings(staggeredMockSettings);
     }
   };
 
@@ -151,23 +159,23 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setType(newType);
-      const settings: ISettingsDTO = {
-        type: newType,
-      } as ISettingsDTO;
+      // const settings: ISettingsDTO = {
+      //   type: newType,
+      // } as ISettingsDTO;
 
-      try {
-        const response = await axios.post(fetchUrl, settings, {
-          headers: {'X-WP-Nonce': nonce},
-        });
-        const responseType: GalleryType = response.data.type;
+      // try {
+      //   const response = await axios.post(fetchUrl, settings, {
+      //     headers: {'X-WP-Nonce': nonce},
+      //   });
+      //   const responseType: GalleryType = response.data.type;
 
-        if (responseType !== newType) {
-          setType(responseType);
-        }
-      } catch (error) {
-        setType(type);
-        console.error(error);
-      }
+      //   if (responseType !== newType) {
+      //     setType(responseType);
+      //   }
+      // } catch (error) {
+      //   setType(type);
+      //   console.error(error);
+      // }
     }
   };
 
@@ -196,6 +204,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         carousel: carouselSettings,
         cards: cardsSettings,
         slideshow: slideshowSettings,
+        staggered: staggeredSettings,
         template_id:
           template?.template_id == 'none' ? '' : template?.template_id,
         css: css || '',
@@ -216,6 +225,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
         setCardsSettings(newSettings.cards);
+        setStaggeredSettings(newSettings.staggered);
         initTemplate?.(
           (TypeUtils.isNumber(newSettings?.template_id)
             ? newSettings?.template_id
@@ -272,6 +282,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
         setCardsSettings(newSettings.cards);
+        setStaggeredSettings(newSettings.staggered);
         setCss(newSettings.css || '');
         changeTemplate?.(newSettings.template_id as string);
         enqueueSnackbar(successMessage, {
@@ -334,6 +345,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         cubeSettings,
         carouselSettings,
         cardsSettings,
+        staggeredSettings,
         changeGeneralSettings: createOnChange(setGeneralSettings),
         changeThumbnailSettings: createOnChange(setThumbnailSettings),
         changeMosaicSettings: createOnChange(setMosaicSettings),
@@ -343,6 +355,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeCubeSettings: createOnChange(setCubeSettings),
         changeCarouselSettings: createOnChange(setCarouselSettings),
         changeCardsSettings: createOnChange(setCardsSettings),
+        changeStaggeredSettings: createOnChange(setStaggeredSettings),
         changeCss: createOnChange(setCss),
         wrapperRef,
         imagesCount,

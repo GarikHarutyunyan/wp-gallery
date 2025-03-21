@@ -10,12 +10,14 @@ import {
   IMasonrySettings,
   IMosaicSettings,
   ISlideshowSettings,
+  IStaggeredSettings,
   IThumbnailSettings,
   LightboxCaptionsPosition,
   LightboxImageAnimation,
   LightboxThumbnailsPosition,
   PaginationButtonShape,
   PaginationType,
+  SizeType,
   ThumbnailTitlePosition,
   TitleAlignment,
   TitlePosition,
@@ -180,6 +182,30 @@ const cardsMockSettings: ICardsSettings = {
   slideDuration: 3000,
 };
 
+const staggeredMockSettings: IStaggeredSettings = {
+  width: 50,
+  height: 100,
+  columns: 5,
+  gap: 10,
+  backgroundColor: 'White',
+  containerPadding: 0,
+  padding: 10,
+  paddingColor: 'Skyblue',
+  borderRadius: 5,
+  titlePosition: ThumbnailTitlePosition.BOTTOM,
+  titleAlignment: TitleAlignment.LEFT,
+  titleVisibility: TitleVisibility.NONE,
+  titleFontFamily: 'Roboto',
+  titleColor: 'black',
+  descriptionColor: 'black',
+  titleFontSize: 20,
+  descriptionFontSize: 16,
+  buttonColor: '#22eaaa',
+  buttonTextColor: '#fff',
+  sizeType: SizeType.VH,
+  paginationType: PaginationType.SIMPLE,
+};
+
 export {
   cardsMockSettings,
   carouselMockSettings,
@@ -189,5 +215,6 @@ export {
   masonryMockSettings,
   mosaicMockSettings,
   slideshowMockSettings,
+  staggeredMockSettings,
   thumbnailMockSettings,
 };
