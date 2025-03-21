@@ -24,6 +24,9 @@ const MosaicGallery = lazy(() => import('./mosaic-gallery/MosaicGallery'));
 const MasonryGallery = lazy(() => import('./masonry-gallery/MasonryGallery'));
 const CubeGallery = lazy(() => import('./cube-gallery/CubeGallery'));
 const CardsGallery = lazy(() => import('./cards-gallery/CardsGallery'));
+const StaggeredGallery = lazy(
+  () => import('./staggered-gallery/StaggeredGallery')
+);
 const Carousel = lazy(() => import('./carousel/Carousel'));
 const Lightbox = lazy(() => import('./lightbox/Lightbox'));
 const Slideshow = lazy(() => import('./slideshow/Slideshow'));
@@ -119,6 +122,11 @@ const Gallery: React.FC = () => {
       case GalleryType.CARDS:
         gallery = (
           <CardsGallery onClick={isClickable ? onImageClick : undefined} />
+        );
+        break;
+      case GalleryType.STAGGERED:
+        gallery = (
+          <StaggeredGallery onClick={isClickable ? onImageClick : undefined} />
         );
         break;
     }
