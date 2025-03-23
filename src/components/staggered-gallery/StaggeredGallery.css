@@ -18,6 +18,9 @@
 .straggered-img-conteiner {
   width: 50%;
 }
+.straggered-image_clickable {
+  cursor: pointer;
+}
 .staggered-text-conteiner {
   flex: 1;
   display: flex;
