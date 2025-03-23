@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {Box} from '@mui/material';
 import {useData} from 'components/data-context/useData';
@@ -10,7 +10,8 @@ interface IStaggeredGalleryProps {
   onClick?: (index: number) => void;
 }
 const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
-  const {staggeredSettings: settings, generalSettings} = useSettings();
+  const [containerInnerWidth, setContainerInnerWidth] = useState<number>(0);
+  const {staggeredSettings: settings, wrapperRef} = useSettings();
   const {images} = useData();
   const {
     titleColor,
@@ -38,6 +39,31 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
     }
   };
 
+  const updateContainerWidth = useCallback(() => {
+    if (wrapperRef.current) {
+      setContainerInnerWidth(wrapperRef.current.clientWidth);
+    }
+  }, []);
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => updateContainerWidth());
+
+    if (wrapperRef.current) {
+      observer.observe(wrapperRef.current);
+      updateContainerWidth();
+    }
+
+    return () => observer.disconnect();
+  }, [updateContainerWidth]);
+
+  const galleryRowClass = useMemo(
+    () =>
+      `staggered-gallery-row ${
+        containerInnerWidth ? 'staggered-gallery-row--mobile' : ''
+      }`,
+    [containerInnerWidth]
+  );
+
   return (
     <Box>
       <div
@@ -46,13 +72,16 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
       >
         {images!.map((image, index) => {
           return (
-            <div className="staggered-gallery-row">
+            <div className={galleryRowClass}>
               <div
                 onClick={() => onClick?.(index)}
                 className={`straggered-img-conteiner ${
                   !!onClick ? 'straggered-image_clickable' : ''
                 }`}
-                style={{width: `${width}%`, height: `${height}${sizeType}`}}
+                style={{
+                  width: `${containerInnerWidth <= 720 ? 100 : width}%`,
+                  height: `${height}${sizeType}`,
+                }}
               >
                 <img src={image.thumbnail.url} alt={image.title} />
               </div>
