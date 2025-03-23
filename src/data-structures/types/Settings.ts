@@ -147,6 +147,8 @@ export interface IStaggeredSettings {
   padding: number;
   paddingColor: string;
   borderRadius: number;
+
+  hoverEffect: HoverEffect;
   titlePosition: ThumbnailTitlePosition;
   titleAlignment: TitleAlignment;
   titleVisibility: TitleVisibility;
@@ -158,6 +160,8 @@ export interface IStaggeredSettings {
   buttonColor: string;
   buttonTextColor: string;
   sizeType: SizeType;
+  showButton: boolean;
+  openButtonUrlInNewTab: boolean;
   paginationType: PaginationType;
 }
 

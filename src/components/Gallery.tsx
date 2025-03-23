@@ -41,6 +41,7 @@ const Gallery: React.FC = () => {
     mosaicSettings,
     thumbnailSettings,
     masonrySettings,
+    staggeredSettings,
   } = useSettings();
   const {
     isLoading,
@@ -61,6 +62,9 @@ const Gallery: React.FC = () => {
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.paginationType;
     }
+    if (type === GalleryType.STAGGERED) {
+      return masonrySettings!.paginationType;
+    }
 
     return PaginationType.NONE;
   }, [
@@ -68,6 +72,7 @@ const Gallery: React.FC = () => {
     mosaicSettings?.paginationType,
     thumbnailSettings?.paginationType,
     masonrySettings?.paginationType,
+    staggeredSettings?.paginationType,
   ]);
 
   const {clickAction, openUrlInNewTab} = generalSettings as IGeneralSettings;

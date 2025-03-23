@@ -10,7 +10,7 @@ interface IStaggeredGalleryProps {
   onClick?: (index: number) => void;
 }
 const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
-  const {staggeredSettings: settings} = useSettings();
+  const {staggeredSettings: settings, generalSettings} = useSettings();
   const {images} = useData();
   const {
     titleColor,
@@ -24,7 +24,19 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
     sizeType,
     width,
     height,
+    showButton,
+    openButtonUrlInNewTab,
   } = settings as IStaggeredSettings;
+
+  const onCustomActionToggle = (url: string) => {
+    if (!!url) {
+      if (openButtonUrlInNewTab) {
+        window?.open(url, '_blank')?.focus();
+      } else {
+        window?.open(url, '_self');
+      }
+    }
+  };
 
   return (
     <Box>
@@ -32,11 +44,14 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
         style={{fontFamily: titleFontFamily, backgroundColor: backgroundColor}}
         className="staggered-gallery"
       >
-        {images!.map((image) => {
+        {images!.map((image, index) => {
           return (
             <div className="staggered-gallery-row">
               <div
-                className="straggered-img-conteiner"
+                onClick={() => onClick?.(index)}
+                className={`straggered-img-conteiner ${
+                  !!onClick ? 'straggered-image_clickable' : ''
+                }`}
                 style={{width: `${width}%`, height: `${height}${sizeType}`}}
               >
                 <img src={image.thumbnail.url} alt={image.title} />
@@ -44,7 +59,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
               <div className="staggered-text-conteiner">
                 <div className="staggered-text-conteiner-content">
                   <h1 style={{fontSize: titleFontSize, color: titleColor}}>
-                    Helloo Woorkd
+                    {image.title}
                   </h1>
                   <p
                     style={{
@@ -52,21 +67,22 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                       color: descriptionColor,
                     }}
                   >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Explicabo quis inventore, perferendis repellat sint
-                    excepturi tenetur doloribus, eligendi magnam expedita quam.
-                    Minus ex, unde impedit minima reprehenderit rem fugiat
-                    beatae.
+                    {image.description}
                   </p>
-                  <Button
-                    className={'pagination-provider__load-more-button'}
-                    style={{
-                      backgroundColor: buttonColor,
-                      color: buttonTextColor,
-                    }}
-                  >
-                    {`see more`}
-                  </Button>
+                  {showButton && (
+                    <Button
+                      onClick={() =>
+                        onCustomActionToggle(image.action_url || '')
+                      }
+                      className={'pagination-provider__load-more-button'}
+                      style={{
+                        backgroundColor: buttonColor,
+                        color: buttonTextColor,
+                      }}
+                    >
+                      {`see more`}
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>

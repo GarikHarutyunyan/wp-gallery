@@ -5,6 +5,7 @@ import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {
+  HoverEffectOptions,
   IStaggeredSettings,
   SizeTypeOptions,
   ThumbnailTitlePosition,
@@ -22,6 +23,7 @@ import {
   NumberControl,
   SelectControl,
   SliderControl,
+  SwitchControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
 
@@ -36,13 +38,13 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
   const {
     width,
     height,
-    columns,
     gap,
     backgroundColor,
     containerPadding,
     padding,
     paddingColor,
     borderRadius,
+    hoverEffect,
     titlePosition,
     titleAlignment,
     titleVisibility,
@@ -54,6 +56,8 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
     sizeType,
     buttonColor,
     buttonTextColor,
+    showButton,
+    openButtonUrlInNewTab,
   } = value as IStaggeredSettings;
 
   const isThumbnailTitlePositionEditable: boolean = borderRadius <= 50;
@@ -85,7 +89,6 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
 
     return ThumbnailTitlePositionOptions;
   }, [titleVisibility]);
-
   const renderBasicSettings = (): ReactNode => {
     return (
       <Section
@@ -124,14 +127,23 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
                 />
               </Filter>
               <Filter isLoading={isLoading}>
-                <NumberControl
-                  id={'columns'}
-                  name={'Columns'}
-                  value={columns}
+                <SwitchControl
+                  id={'showButton'}
+                  name={'Show Button'}
+                  value={showButton}
                   onChange={onInputValueChange}
-                  min={1}
                 />
               </Filter>
+              {showButton ? (
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'openButtonUrlInNewTab'}
+                    name={'Open Button Url In New Tab'}
+                    value={openButtonUrlInNewTab}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+              ) : null}
             </Grid>
             <ClickActionSettings isLoading={isLoading} />
           </>
@@ -202,7 +214,15 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
                 onChange={onInputValueChange}
               />
             </Filter>
-
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'hoverEffect'}
+                name={'Hover effect'}
+                value={hoverEffect}
+                options={HoverEffectOptions}
+                onChange={onInputValueChange}
+              />
+            </Filter>
             <Filter isLoading={isLoading}>
               <SelectControl
                 id={'titleVisibility'}

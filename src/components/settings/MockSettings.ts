@@ -192,9 +192,10 @@ const staggeredMockSettings: IStaggeredSettings = {
   padding: 10,
   paddingColor: 'Skyblue',
   borderRadius: 5,
+  hoverEffect: HoverEffect.BLUR,
   titlePosition: ThumbnailTitlePosition.BOTTOM,
   titleAlignment: TitleAlignment.LEFT,
-  titleVisibility: TitleVisibility.NONE,
+  titleVisibility: TitleVisibility.ALWAYS_SHOWN,
   titleFontFamily: 'Roboto',
   titleColor: 'black',
   descriptionColor: 'black',
@@ -203,6 +204,8 @@ const staggeredMockSettings: IStaggeredSettings = {
   buttonColor: '#22eaaa',
   buttonTextColor: '#fff',
   sizeType: SizeType.VH,
+  showButton: true,
+  openButtonUrlInNewTab: false,
   paginationType: PaginationType.SIMPLE,
 };
 
