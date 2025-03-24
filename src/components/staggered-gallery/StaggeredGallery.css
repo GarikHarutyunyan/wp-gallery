@@ -17,24 +17,27 @@
 .staggered-gallery-row.staggered-gallery-row--mobile {
   flex-direction: column;
 }
-.staggered-gallery-row.staggered-gallery-row--mobile .straggered-img-conteiner {
-  width: 100%;
+.straggered-img-conteiner {
+  overflow: hidden;
+  transition: 0.3s ease-in-out;
 }
+
 .straggered-image_clickable {
   cursor: pointer;
 }
 .staggered-text-conteiner {
   flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.staggered-text-conteiner-content {
-  max-width: 400px;
-  padding: 30px;
 }
 .straggered-img-conteiner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.staggered-button {
+  padding: 8px 25px;
+  transition: all 0.5s ease;
+}
+.staggered-button:hover {
+  filter: brightness(1.1);
 }
