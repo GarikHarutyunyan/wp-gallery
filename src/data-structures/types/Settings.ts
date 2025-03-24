@@ -9,6 +9,7 @@ import {
   PaginationButtonShape,
   PaginationType,
   SizeType,
+  TextsAlignment,
   ThumbnailTitlePosition,
   TitleAlignment,
   TitlePosition,
@@ -147,9 +148,9 @@ export interface IStaggeredSettings {
   padding: number;
   paddingColor: string;
   borderRadius: number;
-
   hoverEffect: HoverEffect;
   titlePosition: ThumbnailTitlePosition;
+  textsAlignment: TextsAlignment;
   titleAlignment: TitleAlignment;
   titleVisibility: TitleVisibility;
   titleFontFamily: string;
@@ -157,11 +158,16 @@ export interface IStaggeredSettings {
   descriptionColor: string;
   titleFontSize?: number | undefined;
   descriptionFontSize?: number | undefined;
+  buttonAlignment: TitleAlignment;
   buttonColor: string;
   buttonTextColor: string;
   sizeType: SizeType;
   showButton: boolean;
   openButtonUrlInNewTab: boolean;
+  showTitle: boolean;
+  showDescription: boolean;
+  paddingLeftRight: number;
+  paddingTopBottom: number;
   paginationType: PaginationType;
 }
 
