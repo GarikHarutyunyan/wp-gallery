@@ -8,18 +8,14 @@ import {
   HoverEffectOptions,
   IStaggeredSettings,
   SizeTypeOptions,
-  ThumbnailTitlePosition,
-  ThumbnailTitlePositionOptions,
+  TextsAlignmentOptions,
   TitleAlignmentOptions,
-  TitleVisibility,
-  TitleVisibilityOptions,
 } from 'data-structures';
 
-import React, {ReactNode, useMemo} from 'react';
+import React, {ReactNode} from 'react';
 import {
   ColorControl,
   FontControl,
-  ISelectOption,
   NumberControl,
   SelectControl,
   SliderControl,
@@ -41,23 +37,25 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
     gap,
     backgroundColor,
     containerPadding,
-    padding,
-    paddingColor,
     borderRadius,
     hoverEffect,
-    titlePosition,
-    titleAlignment,
-    titleVisibility,
+    textsAlignment,
     titleFontFamily,
     titleColor,
     descriptionColor,
     titleFontSize,
     descriptionFontSize,
     sizeType,
+    buttonAlignment,
     buttonColor,
     buttonTextColor,
+    showTitle,
+    titleAlignment,
+    showDescription,
     showButton,
     openButtonUrlInNewTab,
+    paddingLeftRight,
+    paddingTopBottom,
   } = value as IStaggeredSettings;
 
   const isThumbnailTitlePositionEditable: boolean = borderRadius <= 50;
@@ -67,28 +65,6 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
     key && onChange({...value, [key]: inputValue});
   };
 
-  const titlePositionOptions: ISelectOption[] = useMemo(() => {
-    const belowOption: ISelectOption = ThumbnailTitlePositionOptions.find(
-      (option) => option.value === ThumbnailTitlePosition.BELOW
-    ) as ISelectOption;
-
-    if (titleVisibility === TitleVisibility.ON_HOVER) {
-      if (belowOption) {
-        belowOption.isDisabled = true;
-      }
-
-      if (titlePosition === ThumbnailTitlePosition.BELOW) {
-        onChange({
-          ...value,
-          titlePosition: ThumbnailTitlePosition.BOTTOM,
-        });
-      }
-    } else {
-      belowOption.isDisabled = false;
-    }
-
-    return ThumbnailTitlePositionOptions;
-  }, [titleVisibility]);
   const renderBasicSettings = (): ReactNode => {
     return (
       <Section
@@ -123,6 +99,22 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
                   name={'Size Type'}
                   value={sizeType}
                   options={SizeTypeOptions}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'showTitle'}
+                  name={'Show Title'}
+                  value={showTitle}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'showDescription'}
+                  name={'Show Description'}
+                  value={showDescription}
                   onChange={onInputValueChange}
                 />
               </Filter>
@@ -178,24 +170,6 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
             </Filter>
             <Filter isLoading={isLoading}>
               <SliderControl
-                id={'padding'}
-                name="Padding (px)"
-                min={0}
-                max={100}
-                value={padding}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <ColorControl
-                id={'paddingColor'}
-                name="Padding color"
-                value={paddingColor}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SliderControl
                 id={'gap'}
                 name={'Spacing (px)'}
                 value={gap}
@@ -207,7 +181,7 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
             <Filter isLoading={isLoading}>
               <SliderControl
                 id={'borderRadius'}
-                name="Radius (%)"
+                name="Image Radius (%)"
                 min={0}
                 value={borderRadius}
                 max={50}
@@ -223,17 +197,8 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
                 onChange={onInputValueChange}
               />
             </Filter>
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'titleVisibility'}
-                name={'Title visibility'}
-                value={titleVisibility}
-                options={TitleVisibilityOptions}
-                onChange={onInputValueChange}
-                isDisabled={!isThumbnailTitlePositionEditable}
-              />
-            </Filter>
-            {titleVisibility !== TitleVisibility.NONE && renderTitleSettings()}
+
+            {renderTextsSettings()}
           </Grid>
         }
         defaultExpanded={false}
@@ -241,19 +206,40 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
     );
   };
 
-  const renderTitleSettings = (): ReactNode => {
+  const renderTextsSettings = (): ReactNode => {
     return (
       <>
         <Filter isLoading={isLoading}>
           <SelectControl
-            id={'titlePosition'}
-            name={'Title position'}
-            value={titlePosition}
-            options={titlePositionOptions}
+            id={'textsAlignment'}
+            name={'Texts alignement'}
+            value={textsAlignment}
+            options={TextsAlignmentOptions}
             onChange={onInputValueChange}
             isDisabled={!isThumbnailTitlePositionEditable}
           />
         </Filter>
+        <Filter isLoading={isLoading}>
+          <NumberControl
+            id={'paddingLeftRight'}
+            name={'Padding(Left/Right)'}
+            value={paddingLeftRight}
+            onChange={onInputValueChange}
+            min={0}
+            unit={'px'}
+          />
+        </Filter>
+        <Filter isLoading={isLoading}>
+          <NumberControl
+            id={'paddingTopBottom'}
+            name={'Padding(Top/Bottom)'}
+            value={paddingTopBottom}
+            onChange={onInputValueChange}
+            min={0}
+            unit={'px'}
+          />
+        </Filter>
+
         <Filter isLoading={isLoading}>
           <SelectControl
             id={'titleAlignment'}
@@ -274,6 +260,15 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
           />
         </Filter>
         <Filter isLoading={isLoading}>
+          <NumberControl
+            id={'titleFontSize'}
+            name={'Title font size'}
+            value={titleFontSize}
+            onChange={onInputValueChange}
+            unit={'px'}
+          />
+        </Filter>
+        <Filter isLoading={isLoading}>
           <ColorControl
             id={'titleColor'}
             name="Title color"
@@ -289,15 +284,7 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
             onChange={onInputValueChange}
           />
         </Filter>
-        <Filter isLoading={isLoading}>
-          <NumberControl
-            id={'titleFontSize'}
-            name={'Title font size'}
-            value={titleFontSize}
-            onChange={onInputValueChange}
-            unit={'px'}
-          />
-        </Filter>
+
         <Filter isLoading={isLoading}>
           <NumberControl
             id={'descriptionFontSize'}
@@ -305,6 +292,16 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
             value={descriptionFontSize}
             onChange={onInputValueChange}
             unit={'px'}
+          />
+        </Filter>
+        <Filter isLoading={isLoading}>
+          <SelectControl
+            id={'buttonAlignment'}
+            name={'Button Alignment'}
+            value={buttonAlignment}
+            options={TitleAlignmentOptions}
+            onChange={onInputValueChange}
+            isDisabled={!isThumbnailTitlePositionEditable}
           />
         </Filter>
         <Filter isLoading={isLoading}>
