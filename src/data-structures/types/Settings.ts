@@ -8,7 +8,8 @@ import {
   LightboxThumbnailsPosition,
   PaginationButtonShape,
   PaginationType,
-  SizeType,
+  SizeTypeHeight,
+  SizeTypeWidth,
   TextsAlignment,
   ThumbnailTitlePosition,
   TitleAlignment,
@@ -161,7 +162,8 @@ export interface IStaggeredSettings {
   buttonAlignment: TitleAlignment;
   buttonColor: string;
   buttonTextColor: string;
-  sizeType: SizeType;
+  sizeTypeHeight: SizeTypeHeight;
+  sizeTypeWidth: SizeTypeWidth;
   showButton: boolean;
   openButtonUrlInNewTab: boolean;
   showTitle: boolean;
