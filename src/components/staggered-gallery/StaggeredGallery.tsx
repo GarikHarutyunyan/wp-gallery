@@ -17,7 +17,8 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
   const {
     width,
     height,
-    sizeType,
+    sizeTypeHeight,
+    sizeTypeWidth,
     showTitle,
     showDescription,
     showButton,
@@ -67,7 +68,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
 
     return () => observer.disconnect();
   }, [updateContainerWidth]);
-
+  console.log(containerInnerWidth);
   const galleryRowClass = useMemo(
     () =>
       `staggered-gallery-row ${
@@ -75,7 +76,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
       }`,
     [containerInnerWidth]
   );
-
+  console.log(images);
   return (
     <Box>
       <div
@@ -89,9 +90,14 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
         {images!.map((image, index) => {
           return (
             <div
+              key={image.original.url}
               className={galleryRowClass}
               style={{
-                height: `${height}${sizeType}`,
+                height: `${
+                  containerInnerWidth >= 721
+                    ? `${height}${sizeTypeHeight}`
+                    : 'auto'
+                }`,
                 padding: containerPadding,
               }}
             >
@@ -99,13 +105,39 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                 onClick={() => onClick?.(index)}
                 className={`straggered-img-conteiner ${
                   !!onClick ? 'straggered-image_clickable' : ''
-                }photo-album-item__image-wrapper_${hoverEffect}`}
+                } photo-album-item__image-wrapper_${hoverEffect}`}
                 style={{
-                  width: `${containerInnerWidth <= 720 ? 100 : width}%`,
+                  width: `${
+                    containerInnerWidth <= 720
+                      ? '100%'
+                      : `${width}${sizeTypeWidth}`
+                  }`,
                   borderRadius: `${borderRadius}%`,
+                  height: `${
+                    containerInnerWidth <= 720
+                      ? `${height}${sizeTypeHeight}`
+                      : 'auto'
+                  }`,
                 }}
               >
-                <img src={image.thumbnail.url} alt={image.title} />
+                {image.type === 'video' ? (
+                  <video autoPlay muted loop>
+                    <source src={image.thumbnail.url} type="video/mp4" />
+                    <source src={image.medium_large.url} type="video/mp4" />
+                    <source src={image.large.url} type="video/mp4" />
+                    <source src={image.original.url} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img
+                    src={image.thumbnail.url}
+                    srcSet={`${image.thumbnail.url} ${image.thumbnail.width}w, 
+                  ${image.medium_large.url} ${image.medium_large.width}w, 
+                  ${image.large.url} ${image.large.width}w, 
+                  ${image.original.url} ${image.original.width}w`}
+                    sizes={`${containerInnerWidth}px`}
+                    alt={image.title}
+                  />
+                )}
               </div>
               <div
                 className="staggered-text-conteiner"

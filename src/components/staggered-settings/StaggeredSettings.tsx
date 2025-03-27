@@ -7,7 +7,8 @@ import {Section} from 'core-components/section';
 import {
   HoverEffectOptions,
   IStaggeredSettings,
-  SizeTypeOptions,
+  SizeTypeHeightOptions,
+  SizeTypeWidthOptions,
   TextsAlignmentOptions,
   TitleAlignmentOptions,
 } from 'data-structures';
@@ -45,7 +46,8 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
     descriptionColor,
     titleFontSize,
     descriptionFontSize,
-    sizeType,
+    sizeTypeHeight,
+    sizeTypeWidth,
     buttonAlignment,
     buttonColor,
     buttonTextColor,
@@ -73,34 +75,46 @@ const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
           <>
             <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
               <Filter isLoading={isLoading}>
-                <NumberControl
-                  id={'width'}
-                  name={'Width'}
-                  value={width}
-                  onChange={onInputValueChange}
-                  min={0}
-                  max={100}
-                  unit={'%'}
-                />
+                <div className="mixed-fields">
+                  <div style={{flexBasis: '80%'}}>
+                    <NumberControl
+                      id={'width'}
+                      name={'Width'}
+                      value={width}
+                      onChange={onInputValueChange}
+                      min={0}
+                    />
+                  </div>
+                  <div style={{flexBasis: '20%'}}>
+                    <SelectControl
+                      id="sizeTypeWidth"
+                      value={sizeTypeWidth}
+                      options={SizeTypeWidthOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </div>
+                </div>
               </Filter>
               <Filter isLoading={isLoading}>
-                <NumberControl
-                  id={'height'}
-                  name={'Height'}
-                  value={height}
-                  onChange={onInputValueChange}
-                  min={0}
-                  unit={sizeType}
-                />
-              </Filter>
-              <Filter isLoading={isLoading}>
-                <SelectControl
-                  id={'sizeType'}
-                  name={'Size Type'}
-                  value={sizeType}
-                  options={SizeTypeOptions}
-                  onChange={onInputValueChange}
-                />
+                <div className="mixed-fields">
+                  <div style={{flexBasis: '80%'}}>
+                    <NumberControl
+                      id="height"
+                      name="Height"
+                      value={height}
+                      onChange={onInputValueChange}
+                      min={0}
+                    />
+                  </div>
+                  <div style={{flexBasis: '20%'}}>
+                    <SelectControl
+                      id="sizeTypeHeight"
+                      value={sizeTypeHeight}
+                      options={SizeTypeHeightOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </div>
+                </div>
               </Filter>
               <Filter isLoading={isLoading}>
                 <SwitchControl
