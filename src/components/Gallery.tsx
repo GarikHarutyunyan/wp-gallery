@@ -63,7 +63,7 @@ const Gallery: React.FC = () => {
       return masonrySettings!.paginationType;
     }
     if (type === GalleryType.STAGGERED) {
-      return masonrySettings!.paginationType;
+      return staggeredSettings!.paginationType;
     }
 
     return PaginationType.NONE;
