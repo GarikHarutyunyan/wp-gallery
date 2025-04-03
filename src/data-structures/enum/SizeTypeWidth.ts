@@ -1,18 +1,16 @@
 import {ISelectOption} from 'components/controls/SelectControl';
 
 export enum SizeTypeWidth {
-  PC = '%',
-  PX = 'px',
-  VH = 'vh',
+  PERCENT = '%',
+  PIXEL = 'px',
   VW = 'vw',
   REM = 'rem',
   EM = 'em',
 }
 
 export const SizeTypeWidthOptions: ISelectOption[] = [
-  {value: SizeTypeWidth.PC, title: '%'},
-  {value: SizeTypeWidth.PX, title: 'px'},
-  {value: SizeTypeWidth.VH, title: 'vh'},
+  {value: SizeTypeWidth.PERCENT, title: '%'},
+  {value: SizeTypeWidth.PIXEL, title: 'px'},
   {value: SizeTypeWidth.VW, title: 'vw'},
   {value: SizeTypeWidth.REM, title: 'rem'},
   {value: SizeTypeWidth.EM, title: 'em'},

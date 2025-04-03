@@ -207,7 +207,7 @@ const staggeredMockSettings: IStaggeredSettings = {
   buttonColor: '#22eaaa',
   buttonTextColor: '#fff',
   sizeTypeHeight: SizeTypeHeight.VH,
-  sizeTypeWidth: SizeTypeWidth.PC,
+  sizeTypeWidth: SizeTypeWidth.PERCENT,
   showButton: true,
   openButtonUrlInNewTab: false,
   showTitle: true,
