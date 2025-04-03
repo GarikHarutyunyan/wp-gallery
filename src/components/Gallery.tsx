@@ -43,6 +43,8 @@ const Gallery: React.FC = () => {
     isLoading,
     pagesCount,
     onPageChange,
+    currentPage = 1,
+    itemsPerPage = 1,
     isFullyLoaded,
     loadAllLightboxImages,
     images,
@@ -127,10 +129,15 @@ const Gallery: React.FC = () => {
   };
 
   const onImageClick = (index: number) => {
+    const imageIndex: number =
+      paginationType === PaginationType.SIMPLE
+        ? (currentPage - 1) * itemsPerPage + index
+        : index;
+
     if (showLightbox) {
-      openLightbox(index);
+      openLightbox(imageIndex);
     } else if (shouldOpenUrl) {
-      onCustomActionToggle(index);
+      onCustomActionToggle(imageIndex);
     }
   };
 
