@@ -5,7 +5,7 @@ import {CubeImage} from './images/CubeImage';
 import {MasonryImage} from './images/MasonryImage';
 import {MosaicImage} from './images/MosaicImage';
 import {SlideshowImage} from './images/SlideshowImage';
-import {StaggeredImageImage} from './images/StaggeredImage';
+import {StaggeredImage} from './images/StaggeredImage';
 import {ThumbnailsImage} from './images/ThumbnailsImage';
 export const GalleryTypeOptions = [
   {
@@ -46,6 +46,6 @@ export const GalleryTypeOptions = [
   {
     value: GalleryType.STAGGERED,
     title: 'Staggered',
-    image: <StaggeredImageImage />,
+    image: <StaggeredImage />,
   },
 ];

@@ -1,6 +1,6 @@
 import {ReactElement} from 'react';
 
-const StaggeredImageImage = (): ReactElement => {
+const StaggeredImage = (): ReactElement => {
   return (
     <svg height="70" width="70" viewBox="0 0 24 24">
       <path
@@ -11,4 +11,4 @@ const StaggeredImageImage = (): ReactElement => {
   );
 };
 
-export {StaggeredImageImage};
+export {StaggeredImage};
