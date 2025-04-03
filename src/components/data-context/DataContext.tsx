@@ -102,9 +102,16 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   }, [itemsPerPage, paginationType, orderBy, orderDirection]);
 
   const loadAllLightboxImages = async (): Promise<void> => {
-    const newLightboxImages: IImageDTO[] = await (getAllData as Function)();
+    if (
+      (!lightboxImages || lightboxImages.length < imageCount) &&
+      images.length < imageCount
+    ) {
+      const newLightboxImages: IImageDTO[] = await (getAllData as Function)();
 
-    setLightboxImages(newLightboxImages);
+      setLightboxImages(newLightboxImages);
+    } else if (images.length == imageCount) {
+      setLightboxImages(images);
+    }
   };
 
   const getAllData = async (): Promise<IImageDTO[]> => {
