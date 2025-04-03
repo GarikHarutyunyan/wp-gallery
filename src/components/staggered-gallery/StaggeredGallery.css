@@ -3,18 +3,18 @@
   flex-direction: column;
 }
 
-.staggered-gallery-row {
+.staggered-gallery__row {
   display: flex;
 }
 
-.staggered-gallery-row:nth-child(odd) {
+.staggered-gallery__row:nth-child(odd) {
   flex-direction: row;
 }
 
-.staggered-gallery-row:nth-child(even) {
+.staggered-gallery__row:nth-child(even) {
   flex-direction: row-reverse;
 }
-.staggered-gallery-row.staggered-gallery-row--mobile {
+.staggered-gallery__row.staggered-gallery__row_mobile {
   flex-direction: column;
 }
 .straggered-img-conteiner {
