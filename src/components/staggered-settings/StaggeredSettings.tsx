@@ -24,11 +24,11 @@ import {
 } from '../controls';
 import {Filter} from '../settings/Filter';
 
-interface ITStaggeredSettingsProps {
+interface IStaggeredSettingsProps {
   isLoading?: boolean;
 }
 
-const StaggeredSettings: React.FC<ITStaggeredSettingsProps> = ({isLoading}) => {
+const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
   const {resetTemplate} = useTemplates();
   const {staggeredSettings: value, changeStaggeredSettings: onChange} =
     useSettings();
