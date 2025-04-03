@@ -68,15 +68,14 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
 
     return () => observer.disconnect();
   }, [updateContainerWidth]);
-  console.log(containerInnerWidth);
   const galleryRowClass = useMemo(
     () =>
-      `staggered-gallery-row ${
-        containerInnerWidth <= 720 ? 'staggered-gallery-row--mobile' : ''
+      `staggered-gallery__row ${
+        containerInnerWidth <= 720 ? 'staggered-gallery__row_mobile' : ''
       }`,
     [containerInnerWidth]
   );
-  console.log(images);
+
   return (
     <Box>
       <div
@@ -147,7 +146,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                   padding: `${paddingTopBottom}px ${paddingLeftRight}px`,
                 }}
               >
-                <div className="staggered-text-conteiner-content">
+                <div className="staggered-text-conteiner__content">
                   {showTitle && (
                     <h1
                       style={{
