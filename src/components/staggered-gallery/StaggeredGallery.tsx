@@ -107,7 +107,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                 } photo-album-item__image-wrapper_${hoverEffect}`}
                 style={{
                   width: `${
-                    containerInnerWidth <= 720
+                    containerInnerWidth >= 1 && containerInnerWidth <= 720
                       ? '100%'
                       : `${width}${sizeTypeWidth}`
                   }`,
@@ -158,7 +158,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                       {image.title}
                     </h1>
                   )}
-                  {showDescription && (
+                  {showDescription && image.description && (
                     <p
                       style={{
                         fontSize: descriptionFontSize,
