@@ -18,8 +18,8 @@
   flex-direction: column;
 }
 .straggered-img-conteiner {
+  width: 50%;
   overflow: hidden;
-  transition: 0.3s ease-in-out;
 }
 
 .straggered-image_clickable {
