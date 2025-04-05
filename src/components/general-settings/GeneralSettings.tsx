@@ -60,6 +60,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     mosaicSettings,
     changeMosaicSettings,
     masonrySettings,
+    staggeredSettings,
+    changeStaggeredSettings,
     changeMasonrySettings,
   } = useSettings();
   const {
@@ -89,9 +91,17 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.paginationType;
     }
-
+    if (type === GalleryType.STAGGERED) {
+      return staggeredSettings!.paginationType;
+    }
     return PaginationType.NONE;
-  }, [type, mosaicSettings, thumbnailSettings, masonrySettings]);
+  }, [
+    type,
+    mosaicSettings,
+    thumbnailSettings,
+    masonrySettings,
+    staggeredSettings,
+  ]);
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
@@ -107,6 +117,9 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     }
     if (type === GalleryType.MASONRY) {
       key && changeMasonrySettings({...masonrySettings, [key]: inputValue});
+    }
+    if (type === GalleryType.STAGGERED) {
+      key && changeStaggeredSettings({...staggeredSettings, [key]: inputValue});
     }
 
     resetTemplate?.();
