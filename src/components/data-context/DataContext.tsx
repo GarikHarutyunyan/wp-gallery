@@ -28,6 +28,8 @@ const DataContext = createContext<{
   isLoading?: boolean;
   pagesCount?: number;
   onPageChange?: (_: any, page: number) => void;
+  currentPage?: number;
+  itemsPerPage?: number;
   isFullyLoaded?: boolean;
   loadAllLightboxImages?: () => Promise<void>;
 }>({});
@@ -273,6 +275,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         isLoading,
         pagesCount,
         onPageChange,
+        currentPage,
+        itemsPerPage,
         isFullyLoaded,
         loadAllLightboxImages,
       }}
