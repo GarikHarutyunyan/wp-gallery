@@ -20,6 +20,7 @@
 .straggered-img-conteiner {
   width: 50%;
   overflow: hidden;
+  align-self: center;
 }
 
 .straggered-image_clickable {
@@ -50,4 +51,10 @@
 .mixed-fields {
   display: flex;
   align-items: flex-end;
+}
+.staggered-text-conteiner__content__description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
