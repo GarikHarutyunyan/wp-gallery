@@ -5,7 +5,7 @@ import {
   ImageType,
   WithStyleAndClassName,
 } from 'data-structures';
-import React, {ReactNode, useCallback, useMemo} from 'react';
+import React, {ReactNode, useCallback, useMemo, useState} from 'react';
 import PhotoAlbum, {LayoutType} from 'react-photo-album';
 import {PhotoAlbumItem} from './PhotoAlbumItem';
 
@@ -38,6 +38,7 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
   settings,
   onClick,
 }) => {
+  const [galleryWidth, setGalleryWidth] = useState(initialContainerWidth);
   const initialColumnsCount = columns || 4;
 
   const photos = useMemo(() => {
@@ -114,29 +115,44 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
     [images, onImageClick]
   );
 
+  const getColumnsCount = useCallback(
+    (containerWidth: number): number => {
+      setGalleryWidth(containerWidth);
+      for (let column = 1; column <= initialColumnsCount; column++) {
+        if (
+          containerWidth <=
+          (column * initialContainerWidth) / initialColumnsCount
+        ) {
+          return column;
+        }
+      }
+      return initialColumnsCount;
+    },
+    [initialColumnsCount]
+  );
+
   return (
     <Box sx={{width: `${width}%`, mx: 'auto'}}>
       <PhotoAlbum
         layout={layout}
-        columns={(containerWidth) => {
-          for (let column = 1; column <= initialColumnsCount; column++) {
-            if (
-              containerWidth <=
-              (column * initialContainerWidth) / initialColumnsCount
-            ) {
-              return column;
-            }
-          }
-          return initialColumnsCount;
-        }}
+        columns={getColumnsCount}
         spacing={gap}
         padding={padding}
         targetRowHeight={rowHeight}
         photos={photos}
-        componentsProps={{
-          containerProps: {style: {background: backgroundColor, padding: containerPadding + 'px'}},
-        }}
+        componentsProps={(containerWidth) => ({
+          containerProps: {
+            style: {
+              background: backgroundColor,
+              padding: containerPadding + 'px',
+            },
+          },
+          imageProps: {loading: (containerWidth || 0) > 500 ? 'eager' : 'lazy'},
+        })}
         renderPhoto={renderPhoto}
+        sizes={{
+          size: galleryWidth + 'px',
+        }}
       />
     </Box>
   );
