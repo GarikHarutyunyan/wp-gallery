@@ -142,19 +142,13 @@ export interface ICardsSettings {
 export interface IStaggeredSettings {
   width?: number | undefined;
   height?: number | undefined;
-  columns?: number | undefined;
   gap: number;
   backgroundColor: string;
   containerPadding: number;
-  padding: number;
-  paddingColor: string;
   borderRadius: number;
   hoverEffect: HoverEffect;
-  titlePosition: ThumbnailTitlePosition;
   textsAlignment: TextsAlignment;
   titleAlignment: TitleAlignment;
-  titleVisibility: TitleVisibility;
-  titleFontFamily: string;
   titleColor: string;
   descriptionColor: string;
   titleFontSize?: number | undefined;
@@ -162,6 +156,7 @@ export interface IStaggeredSettings {
   buttonAlignment: TitleAlignment;
   buttonColor: string;
   buttonTextColor: string;
+  textsFontFamily: string;
   sizeTypeHeight: SizeTypeHeight;
   sizeTypeWidth: SizeTypeWidth;
   showButton: boolean;
@@ -171,6 +166,7 @@ export interface IStaggeredSettings {
   paddingLeftRight: number;
   paddingTopBottom: number;
   paginationType: PaginationType;
+  descriptionMaxRows: number | undefined;
 }
 
 export interface ISettingsDTO {

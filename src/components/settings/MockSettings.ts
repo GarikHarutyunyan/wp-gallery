@@ -187,18 +187,13 @@ const cardsMockSettings: ICardsSettings = {
 const staggeredMockSettings: IStaggeredSettings = {
   width: 50,
   height: 100,
-  columns: 5,
   gap: 0,
   backgroundColor: 'White',
   containerPadding: 0,
-  padding: 10,
-  paddingColor: 'Skyblue',
   borderRadius: 0,
   hoverEffect: HoverEffect.NONE,
-  titlePosition: ThumbnailTitlePosition.BOTTOM,
   textsAlignment: TextsAlignment.CENTER,
-  titleVisibility: TitleVisibility.ALWAYS_SHOWN,
-  titleFontFamily: 'Roboto',
+  textsFontFamily: 'Roboto',
   titleColor: 'black',
   descriptionColor: 'black',
   titleFontSize: 20,
@@ -216,6 +211,7 @@ const staggeredMockSettings: IStaggeredSettings = {
   paddingTopBottom: 30,
   paginationType: PaginationType.SIMPLE,
   titleAlignment: TitleAlignment.LEFT,
+  descriptionMaxRows: 5,
 };
 
 export {
