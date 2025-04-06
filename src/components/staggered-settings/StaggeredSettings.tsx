@@ -41,7 +41,7 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
     borderRadius,
     hoverEffect,
     textsAlignment,
-    titleFontFamily,
+    textsFontFamily,
     titleColor,
     descriptionColor,
     titleFontSize,
@@ -58,9 +58,8 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
     openButtonUrlInNewTab,
     paddingLeftRight,
     paddingTopBottom,
+    descriptionMaxRows,
   } = value as IStaggeredSettings;
-
-  const isThumbnailTitlePositionEditable: boolean = borderRadius <= 50;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
@@ -124,6 +123,37 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
                   onChange={onInputValueChange}
                 />
               </Filter>
+              {showTitle && (
+                <>
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'titleAlignment'}
+                      name={'Title alignement'}
+                      value={titleAlignment}
+                      options={TitleAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'titleFontSize'}
+                      name={'Title font size'}
+                      value={titleFontSize}
+                      onChange={onInputValueChange}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'titleColor'}
+                      name="Title color"
+                      value={titleColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </>
+              )}
               <Filter isLoading={isLoading}>
                 <SwitchControl
                   id={'showDescription'}
@@ -132,6 +162,36 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
                   onChange={onInputValueChange}
                 />
               </Filter>
+              {showDescription && (
+                <>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'descriptionColor'}
+                      name="Description color"
+                      value={descriptionColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'descriptionFontSize'}
+                      name={'Description font size'}
+                      value={descriptionFontSize}
+                      onChange={onInputValueChange}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'descriptionMaxRows'}
+                      name={'Description Max Rows'}
+                      value={descriptionMaxRows}
+                      onChange={onInputValueChange}
+                      min={1}
+                    />
+                  </Filter>
+                </>
+              )}
               <Filter isLoading={isLoading}>
                 <SwitchControl
                   id={'showButton'}
@@ -140,16 +200,53 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
                   onChange={onInputValueChange}
                 />
               </Filter>
-              {showButton ? (
+              {showButton && (
+                <>
+                  <Filter isLoading={isLoading}>
+                    <SwitchControl
+                      id={'openButtonUrlInNewTab'}
+                      name={'Open Button Url In New Tab'}
+                      value={openButtonUrlInNewTab}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'buttonAlignment'}
+                      name={'Button Alignment'}
+                      value={buttonAlignment}
+                      options={TitleAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonColor'}
+                      name="Button color"
+                      value={buttonColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonTextColor'}
+                      name="Button text color"
+                      value={buttonTextColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </>
+              )}
+              {(showTitle || showButton || showDescription) && (
                 <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'openButtonUrlInNewTab'}
-                    name={'Open Button Url In New Tab'}
-                    value={openButtonUrlInNewTab}
+                  <FontControl
+                    id={'textsFontFamily'}
+                    name={'Texts font family'}
+                    value={textsFontFamily}
                     onChange={onInputValueChange}
                   />
                 </Filter>
-              ) : null}
+              )}
             </Grid>
             <ClickActionSettings isLoading={isLoading} />
           </>
@@ -230,7 +327,6 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
             value={textsAlignment}
             options={TextsAlignmentOptions}
             onChange={onInputValueChange}
-            isDisabled={!isThumbnailTitlePositionEditable}
           />
         </Filter>
         <Filter isLoading={isLoading}>
@@ -251,87 +347,6 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
             onChange={onInputValueChange}
             min={0}
             unit={'px'}
-          />
-        </Filter>
-
-        <Filter isLoading={isLoading}>
-          <SelectControl
-            id={'titleAlignment'}
-            name={'Title alignement'}
-            value={titleAlignment}
-            options={TitleAlignmentOptions}
-            onChange={onInputValueChange}
-            isDisabled={!isThumbnailTitlePositionEditable}
-          />
-        </Filter>
-        <Filter isLoading={isLoading}>
-          <FontControl
-            id={'titleFontFamily'}
-            name={'Title font family'}
-            value={titleFontFamily}
-            onChange={onInputValueChange}
-            isDisabled={!isThumbnailTitlePositionEditable}
-          />
-        </Filter>
-        <Filter isLoading={isLoading}>
-          <NumberControl
-            id={'titleFontSize'}
-            name={'Title font size'}
-            value={titleFontSize}
-            onChange={onInputValueChange}
-            unit={'px'}
-          />
-        </Filter>
-        <Filter isLoading={isLoading}>
-          <ColorControl
-            id={'titleColor'}
-            name="Title color"
-            value={titleColor}
-            onChange={onInputValueChange}
-          />
-        </Filter>
-        <Filter isLoading={isLoading}>
-          <ColorControl
-            id={'descriptionColor'}
-            name="Description color"
-            value={descriptionColor}
-            onChange={onInputValueChange}
-          />
-        </Filter>
-
-        <Filter isLoading={isLoading}>
-          <NumberControl
-            id={'descriptionFontSize'}
-            name={'Description font size'}
-            value={descriptionFontSize}
-            onChange={onInputValueChange}
-            unit={'px'}
-          />
-        </Filter>
-        <Filter isLoading={isLoading}>
-          <SelectControl
-            id={'buttonAlignment'}
-            name={'Button Alignment'}
-            value={buttonAlignment}
-            options={TitleAlignmentOptions}
-            onChange={onInputValueChange}
-            isDisabled={!isThumbnailTitlePositionEditable}
-          />
-        </Filter>
-        <Filter isLoading={isLoading}>
-          <ColorControl
-            id={'buttonColor'}
-            name="Button color"
-            value={buttonColor}
-            onChange={onInputValueChange}
-          />
-        </Filter>
-        <Filter isLoading={isLoading}>
-          <ColorControl
-            id={'buttonTextColor'}
-            name="Button text color"
-            value={buttonTextColor}
-            onChange={onInputValueChange}
           />
         </Filter>
       </>
