@@ -37,12 +37,12 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
     buttonText,
     buttonAlignment,
     buttonColor,
+    buttonFontSize,
     buttonTextColor,
     textsFontFamily,
     hoverEffect,
     openButtonUrlInNewTab,
     descriptionMaxRows,
-    buttonFontSize,
   } = settings as IStaggeredSettings;
 
   const onCustomActionToggle = (url: string) => {

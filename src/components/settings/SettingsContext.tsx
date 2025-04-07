@@ -127,8 +127,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCubeSettings(newSettings.cube || cubeMockSettings);
       setCarouselSettings(newSettings.carousel || carouselMockSettings);
       setCardsSettings(newSettings.cards || cardsMockSettings);
-      // setStaggeredSettings(newSettings.staggered || staggeredMockSettings);
-      setStaggeredSettings(staggeredMockSettings);
+      setStaggeredSettings(newSettings.staggered || staggeredMockSettings);
+      // setStaggeredSettings(staggeredMockSettings);
       initTemplate?.(
         newSettings?.template_id as string,
         newSettings?.title as string
