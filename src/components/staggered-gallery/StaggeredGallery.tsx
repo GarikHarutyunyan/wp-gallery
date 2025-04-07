@@ -71,6 +71,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
 
     return () => observer.disconnect();
   }, [updateContainerWidth]);
+
   const galleryRowClass = useMemo(
     () =>
       `staggered-gallery__row ${
@@ -110,7 +111,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                       : `${imageWidth}${imageWidthType}`
                   }`,
                   borderRadius: `${imageRadius}%`,
-                  height: `${imageHeight}${imageHeight}`,
+                  height: `${imageHeight}${imageHeightType}`,
                 }}
               >
                 {image.type === 'video' ? (
@@ -147,7 +148,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                         fontSize: titleFontSize,
                         color: titleColor,
                         textAlign: titleAlignment,
-                        padding: 0,
+                        padding: '0px 0px 15px',
                       }}
                     >
                       {image.title}

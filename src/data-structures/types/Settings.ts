@@ -140,8 +140,8 @@ export interface ICardsSettings {
 }
 
 export interface IStaggeredSettings {
-  imageWidth?: number | undefined;
-  imageHeight?: number | undefined;
+  imageWidth: number;
+  imageHeight: number;
   spacing: number;
   backgroundColor: string;
   containerPadding: number;
@@ -151,8 +151,8 @@ export interface IStaggeredSettings {
   titleAlignment: TitleAlignment;
   titleColor: string;
   descriptionColor: string;
-  titleFontSize?: number | undefined;
-  descriptionFontSize?: number | undefined;
+  titleFontSize: number;
+  descriptionFontSize: number;
   buttonText: string;
   buttonAlignment: TitleAlignment;
   buttonColor: string;
