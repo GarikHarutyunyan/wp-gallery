@@ -5,7 +5,7 @@ export enum TextsAlignment {
 }
 
 export const TextsAlignmentOptions = [
-  {value: TextsAlignment.TOP, title: 'Start'},
+  {value: TextsAlignment.TOP, title: 'Top'},
   {value: TextsAlignment.CENTER, title: 'Center'},
-  {value: TextsAlignment.BOTTOM, title: 'End'},
+  {value: TextsAlignment.BOTTOM, title: 'Bottom'},
 ];
