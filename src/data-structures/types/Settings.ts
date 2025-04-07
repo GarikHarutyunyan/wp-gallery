@@ -153,9 +153,11 @@ export interface IStaggeredSettings {
   descriptionColor: string;
   titleFontSize?: number | undefined;
   descriptionFontSize?: number | undefined;
+  buttonText: string;
   buttonAlignment: TitleAlignment;
   buttonColor: string;
   buttonTextColor: string;
+  buttonFontSize: number;
   textsFontFamily: string;
   sizeTypeHeight: SizeTypeHeight;
   sizeTypeWidth: SizeTypeWidth;
