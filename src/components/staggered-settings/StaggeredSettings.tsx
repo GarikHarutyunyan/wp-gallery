@@ -42,7 +42,7 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
     imageRadius,
     hoverEffect,
     textVerticalAlignment,
-    textsFontFamily,
+    textFontFamily,
     titleColor,
     descriptionColor,
     titleFontSize,
@@ -286,9 +286,9 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
                 <>
                   <Filter isLoading={isLoading}>
                     <FontControl
-                      id={'textsFontFamily'}
+                      id={'textFontFamily'}
                       name={'Text font family'}
-                      value={textsFontFamily}
+                      value={textFontFamily}
                       onChange={onInputValueChange}
                     />
                   </Filter>
