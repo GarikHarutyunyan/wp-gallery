@@ -193,7 +193,7 @@ const staggeredMockSettings: IStaggeredSettings = {
   imageRadius: 0,
   hoverEffect: HoverEffect.NONE,
   textVerticalAlignment: TextsAlignment.CENTER,
-  textsFontFamily: 'Roboto',
+  textFontFamily: 'Roboto',
   titleColor: 'black',
   descriptionColor: 'black',
   titleFontSize: 20,

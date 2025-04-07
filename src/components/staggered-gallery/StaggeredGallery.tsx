@@ -39,7 +39,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
     buttonColor,
     buttonFontSize,
     buttonTextColor,
-    textsFontFamily,
+    textFontFamily,
     hoverEffect,
     openInNewTab,
     descriptionMaxRowsCount,
@@ -83,7 +83,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
     <Box>
       <div
         style={{
-          fontFamily: textsFontFamily,
+          fontFamily: textFontFamily,
           backgroundColor: backgroundColor,
           gap: spacing,
         }}
