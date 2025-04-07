@@ -21,6 +21,7 @@ import {
   SelectControl,
   SliderControl,
   SwitchControl,
+  TextControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
 
@@ -48,9 +49,11 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
     descriptionFontSize,
     sizeTypeHeight,
     sizeTypeWidth,
+    buttonText,
     buttonAlignment,
     buttonColor,
     buttonTextColor,
+    buttonFontSize,
     showTitle,
     titleAlignment,
     showDescription,
@@ -78,7 +81,7 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
                   <div style={{flexBasis: '80%'}}>
                     <NumberControl
                       id={'width'}
-                      name={'Width'}
+                      name={'Image width'}
                       value={width}
                       onChange={onInputValueChange}
                       min={0}
@@ -99,7 +102,7 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
                   <div style={{flexBasis: '80%'}}>
                     <NumberControl
                       id="height"
-                      name="Height"
+                      name="Image height"
                       value={height}
                       onChange={onInputValueChange}
                       min={0}
@@ -115,137 +118,182 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
                   </div>
                 </div>
               </Filter>
-              <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id={'showTitle'}
-                  name={'Show Title'}
-                  value={showTitle}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-              {showTitle && (
-                <>
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'titleAlignment'}
-                      name={'Title alignement'}
-                      value={titleAlignment}
-                      options={TitleAlignmentOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-
-                  <Filter isLoading={isLoading}>
-                    <NumberControl
-                      id={'titleFontSize'}
-                      name={'Title font size'}
-                      value={titleFontSize}
-                      onChange={onInputValueChange}
-                      unit={'px'}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'titleColor'}
-                      name="Title color"
-                      value={titleColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                </>
-              )}
-              <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id={'showDescription'}
-                  name={'Show Description'}
-                  value={showDescription}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-              {showDescription && (
-                <>
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'descriptionColor'}
-                      name="Description color"
-                      value={descriptionColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <NumberControl
-                      id={'descriptionFontSize'}
-                      name={'Description font size'}
-                      value={descriptionFontSize}
-                      onChange={onInputValueChange}
-                      unit={'px'}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <NumberControl
-                      id={'descriptionMaxRows'}
-                      name={'Description Max Rows'}
-                      value={descriptionMaxRows}
-                      onChange={onInputValueChange}
-                      min={1}
-                    />
-                  </Filter>
-                </>
-              )}
-              <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id={'showButton'}
-                  name={'Show Button'}
-                  value={showButton}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-              {showButton && (
-                <>
-                  <Filter isLoading={isLoading}>
-                    <SwitchControl
-                      id={'openButtonUrlInNewTab'}
-                      name={'Open Button Url In New Tab'}
-                      value={openButtonUrlInNewTab}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'buttonAlignment'}
-                      name={'Button Alignment'}
-                      value={buttonAlignment}
-                      options={TitleAlignmentOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'buttonColor'}
-                      name="Button color"
-                      value={buttonColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'buttonTextColor'}
-                      name="Button text color"
-                      value={buttonTextColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                </>
-              )}
-              {(showTitle || showButton || showDescription) && (
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
                 <Filter isLoading={isLoading}>
-                  <FontControl
-                    id={'textsFontFamily'}
-                    name={'Texts font family'}
-                    value={textsFontFamily}
+                  <SwitchControl
+                    id={'showTitle'}
+                    name={'Show title'}
+                    value={showTitle}
                     onChange={onInputValueChange}
                   />
                 </Filter>
+                {showTitle && (
+                  <>
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                        id={'titleFontSize'}
+                        name={'Title font size'}
+                        value={titleFontSize}
+                        onChange={onInputValueChange}
+                        unit={'px'}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id={'titleColor'}
+                        name="Title color"
+                        value={titleColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SelectControl
+                        id={'titleAlignment'}
+                        name={'Title alignement'}
+                        value={titleAlignment}
+                        options={TitleAlignmentOptions}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </>
+                )}
+              </Grid>
+
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showDescription'}
+                    name={'Show description'}
+                    value={showDescription}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {showDescription && (
+                  <>
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                        id={'descriptionFontSize'}
+                        name={'Description font size'}
+                        value={descriptionFontSize}
+                        onChange={onInputValueChange}
+                        unit={'px'}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id={'descriptionColor'}
+                        name="Description color"
+                        value={descriptionColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                        id={'descriptionMaxRows'}
+                        name={'Description max rows count'}
+                        value={descriptionMaxRows}
+                        onChange={onInputValueChange}
+                        min={1}
+                      />
+                    </Filter>
+                  </>
+                )}
+              </Grid>
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showButton'}
+                    name={'Show button'}
+                    value={showButton}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {showButton && (
+                  <>
+                    <Filter isLoading={isLoading}>
+                      <SwitchControl
+                        id={'openButtonUrlInNewTab'}
+                        name={'Open in new tab'}
+                        value={openButtonUrlInNewTab}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <TextControl
+                        id={'buttonText'}
+                        name="Button text"
+                        value={buttonText}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SelectControl
+                        id={'buttonAlignment'}
+                        name={'Button alignment'}
+                        value={buttonAlignment}
+                        options={TitleAlignmentOptions}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                        id={'buttonFontSize'}
+                        name={'Button font size'}
+                        value={buttonFontSize}
+                        onChange={onInputValueChange}
+                        unit={'px'}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id={'buttonColor'}
+                        name="Button color"
+                        value={buttonColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id={'buttonTextColor'}
+                        name="Button text color"
+                        value={buttonTextColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </>
+                )}
+              </Grid>
+              {(showTitle || showButton || showDescription) && (
+                <>
+                  <Filter isLoading={isLoading}>
+                    <FontControl
+                      id={'textsFontFamily'}
+                      name={'Text font family'}
+                      value={textsFontFamily}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  {renderTextsSettings()}
+                </>
               )}
             </Grid>
             <ClickActionSettings isLoading={isLoading} />
@@ -292,7 +340,7 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
             <Filter isLoading={isLoading}>
               <SliderControl
                 id={'borderRadius'}
-                name="Image Radius (%)"
+                name="Image radius (%)"
                 min={0}
                 value={borderRadius}
                 max={50}
@@ -308,8 +356,6 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
                 onChange={onInputValueChange}
               />
             </Filter>
-
-            {renderTextsSettings()}
           </Grid>
         }
         defaultExpanded={false}
@@ -323,7 +369,7 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
         <Filter isLoading={isLoading}>
           <SelectControl
             id={'textsAlignment'}
-            name={'Texts alignement'}
+            name={'Text vertical alignment (Top, Center, Bottom)'}
             value={textsAlignment}
             options={TextsAlignmentOptions}
             onChange={onInputValueChange}
@@ -332,7 +378,7 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
         <Filter isLoading={isLoading}>
           <NumberControl
             id={'paddingLeftRight'}
-            name={'Padding(Left/Right)'}
+            name={'Text horizontal spacing'}
             value={paddingLeftRight}
             onChange={onInputValueChange}
             min={0}
@@ -342,7 +388,7 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
         <Filter isLoading={isLoading}>
           <NumberControl
             id={'paddingTopBottom'}
-            name={'Padding(Top/Bottom)'}
+            name={'Text vertical spacing'}
             value={paddingTopBottom}
             onChange={onInputValueChange}
             min={0}
