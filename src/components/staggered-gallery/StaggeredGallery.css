@@ -47,11 +47,6 @@
 .staggered-button:hover {
   filter: brightness(1.1);
 }
-
-.mixed-fields {
-  display: flex;
-  align-items: flex-end;
-}
 .staggered-text-conteiner__content__description {
   display: -webkit-box;
   -webkit-box-orient: vertical;
