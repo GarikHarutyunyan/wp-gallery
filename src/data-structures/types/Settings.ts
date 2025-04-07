@@ -140,14 +140,14 @@ export interface ICardsSettings {
 }
 
 export interface IStaggeredSettings {
-  width?: number | undefined;
-  height?: number | undefined;
-  gap: number;
+  imageWidth?: number | undefined;
+  imageHeight?: number | undefined;
+  spacing: number;
   backgroundColor: string;
   containerPadding: number;
-  borderRadius: number;
+  imageRadius: number;
   hoverEffect: HoverEffect;
-  textsAlignment: TextsAlignment;
+  textVerticalAlignment: TextsAlignment;
   titleAlignment: TitleAlignment;
   titleColor: string;
   descriptionColor: string;
@@ -162,13 +162,13 @@ export interface IStaggeredSettings {
   sizeTypeHeight: SizeTypeHeight;
   sizeTypeWidth: SizeTypeWidth;
   showButton: boolean;
-  openButtonUrlInNewTab: boolean;
+  openInNewTab: boolean;
   showTitle: boolean;
   showDescription: boolean;
-  paddingLeftRight: number;
-  paddingTopBottom: number;
+  textHorizontalSpacing: number;
+  textVerticalSpacing: number;
   paginationType: PaginationType;
-  descriptionMaxRows: number | undefined;
+  descriptionMaxRowsCount: number | undefined;
 }
 
 export interface ISettingsDTO {

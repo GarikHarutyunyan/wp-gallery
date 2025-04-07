@@ -185,14 +185,14 @@ const cardsMockSettings: ICardsSettings = {
 };
 
 const staggeredMockSettings: IStaggeredSettings = {
-  width: 50,
-  height: 100,
-  gap: 0,
+  imageWidth: 50,
+  imageHeight: 100,
+  spacing: 0,
   backgroundColor: 'White',
   containerPadding: 0,
-  borderRadius: 0,
+  imageRadius: 0,
   hoverEffect: HoverEffect.NONE,
-  textsAlignment: TextsAlignment.CENTER,
+  textVerticalAlignment: TextsAlignment.CENTER,
   textsFontFamily: 'Roboto',
   titleColor: 'black',
   descriptionColor: 'black',
@@ -206,14 +206,14 @@ const staggeredMockSettings: IStaggeredSettings = {
   sizeTypeHeight: SizeTypeHeight.VH,
   sizeTypeWidth: SizeTypeWidth.PERCENT,
   showButton: true,
-  openButtonUrlInNewTab: false,
+  openInNewTab: false,
   showTitle: true,
   showDescription: true,
-  paddingLeftRight: 30,
-  paddingTopBottom: 30,
+  textHorizontalSpacing: 30,
+  textVerticalSpacing: 30,
   paginationType: PaginationType.SIMPLE,
   titleAlignment: TitleAlignment.LEFT,
-  descriptionMaxRows: 5,
+  descriptionMaxRowsCount: 5,
 };
 
 export {
