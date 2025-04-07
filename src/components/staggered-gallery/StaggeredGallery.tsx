@@ -34,6 +34,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
     titleColor,
     descriptionColor,
     descriptionFontSize,
+    buttonText,
     buttonAlignment,
     buttonColor,
     buttonTextColor,
@@ -41,6 +42,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
     hoverEffect,
     openButtonUrlInNewTab,
     descriptionMaxRows,
+    buttonFontSize,
   } = settings as IStaggeredSettings;
 
   const onCustomActionToggle = (url: string) => {
@@ -172,6 +174,8 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                         display: 'block',
                         backgroundColor: buttonColor,
                         color: buttonTextColor,
+                        fontSize: buttonFontSize,
+                        textTransform: 'none',
                         marginLeft:
                           buttonAlignment === 'center'
                             ? 'auto'
@@ -186,7 +190,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                             : '0',
                       }}
                     >
-                      {`see more`}
+                      {buttonText}
                     </Button>
                   )}
                 </div>
