@@ -15,20 +15,20 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
   const {staggeredSettings: settings, wrapperRef} = useSettings();
   const {images} = useData();
   const {
-    width,
-    height,
-    gap,
-    sizeTypeHeight,
-    sizeTypeWidth,
+    imageWidth,
+    imageHeight,
+    spacing,
+    imageHeightType,
+    imageWidthType,
     showTitle,
     showDescription,
     showButton,
     backgroundColor,
     containerPadding,
-    borderRadius,
-    textsAlignment,
-    paddingLeftRight,
-    paddingTopBottom,
+    imageRadius,
+    textVerticalAlignment,
+    textHorizontalSpacing,
+    textVerticalSpacing,
     titleAlignment,
     titleFontSize,
     titleColor,
@@ -41,13 +41,13 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
     buttonTextColor,
     textsFontFamily,
     hoverEffect,
-    openButtonUrlInNewTab,
-    descriptionMaxRows,
+    openInNewTab,
+    descriptionMaxRowsCount,
   } = settings as IStaggeredSettings;
 
   const onCustomActionToggle = (url: string) => {
     if (!!url) {
-      if (openButtonUrlInNewTab) {
+      if (openInNewTab) {
         window?.open(url, '_blank')?.focus();
       } else {
         window?.open(url, '_self');
@@ -85,7 +85,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
         style={{
           fontFamily: textsFontFamily,
           backgroundColor: backgroundColor,
-          gap: gap,
+          gap: spacing,
         }}
         className="staggered-gallery"
       >
@@ -107,10 +107,10 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                   width: `${
                     containerInnerWidth >= 1 && containerInnerWidth <= 720
                       ? '100%'
-                      : `${width}${sizeTypeWidth}`
+                      : `${imageWidth}${imageWidthType}`
                   }`,
-                  borderRadius: `${borderRadius}%`,
-                  height: `${height}${sizeTypeHeight}`,
+                  borderRadius: `${imageRadius}%`,
+                  height: `${imageHeight}${imageHeight}`,
                 }}
               >
                 {image.type === 'video' ? (
@@ -136,8 +136,8 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                 className="staggered-text-conteiner"
                 style={{
                   display: 'flex',
-                  alignItems: textsAlignment,
-                  padding: `${paddingTopBottom}px ${paddingLeftRight}px`,
+                  alignItems: textVerticalAlignment,
+                  padding: `${textVerticalSpacing}px ${textHorizontalSpacing}px`,
                 }}
               >
                 <div className="staggered-text-conteiner__content">
@@ -156,7 +156,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                     <p
                       className="staggered-text-conteiner__content__description"
                       style={{
-                        WebkitLineClamp: descriptionMaxRows,
+                        WebkitLineClamp: descriptionMaxRowsCount,
                         fontSize: descriptionFontSize,
                         color: descriptionColor,
                       }}

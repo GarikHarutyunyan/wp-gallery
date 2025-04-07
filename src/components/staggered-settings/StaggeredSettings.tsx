@@ -34,21 +34,21 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
   const {staggeredSettings: value, changeStaggeredSettings: onChange} =
     useSettings();
   const {
-    width,
-    height,
-    gap,
+    imageWidth,
+    imageHeight,
+    spacing,
     backgroundColor,
     containerPadding,
-    borderRadius,
+    imageRadius,
     hoverEffect,
-    textsAlignment,
+    textVerticalAlignment,
     textsFontFamily,
     titleColor,
     descriptionColor,
     titleFontSize,
     descriptionFontSize,
-    sizeTypeHeight,
-    sizeTypeWidth,
+    imageHeightType,
+    imageWidthType,
     buttonText,
     buttonAlignment,
     buttonColor,
@@ -58,10 +58,10 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
     titleAlignment,
     showDescription,
     showButton,
-    openButtonUrlInNewTab,
-    paddingLeftRight,
-    paddingTopBottom,
-    descriptionMaxRows,
+    openInNewTab,
+    textHorizontalSpacing,
+    textVerticalSpacing,
+    descriptionMaxRowsCount,
   } = value as IStaggeredSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -80,17 +80,17 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
                 <div className="mixed-fields">
                   <div style={{flexBasis: '80%'}}>
                     <NumberControl
-                      id={'width'}
+                      id={'imageWidth'}
                       name={'Image width'}
-                      value={width}
+                      value={imageWidth}
                       onChange={onInputValueChange}
                       min={0}
                     />
                   </div>
                   <div style={{flexBasis: '20%'}}>
                     <SelectControl
-                      id="sizeTypeWidth"
-                      value={sizeTypeWidth}
+                      id="imageWidthType"
+                      value={imageWidthType}
                       options={SizeTypeWidthOptions}
                       onChange={onInputValueChange}
                     />
@@ -101,17 +101,17 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
                 <div className="mixed-fields">
                   <div style={{flexBasis: '80%'}}>
                     <NumberControl
-                      id="height"
+                      id="imageHeight"
                       name="Image height"
-                      value={height}
+                      value={imageHeight}
                       onChange={onInputValueChange}
                       min={0}
                     />
                   </div>
                   <div style={{flexBasis: '20%'}}>
                     <SelectControl
-                      id="sizeTypeHeight"
-                      value={sizeTypeHeight}
+                      id="imageHeightType"
+                      value={imageHeightType}
                       options={SizeTypeHeightOptions}
                       onChange={onInputValueChange}
                     />
@@ -202,9 +202,9 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
 
                     <Filter isLoading={isLoading}>
                       <NumberControl
-                        id={'descriptionMaxRows'}
+                        id={'descriptionMaxRowsCount'}
                         name={'Description max rows count'}
-                        value={descriptionMaxRows}
+                        value={descriptionMaxRowsCount}
                         onChange={onInputValueChange}
                         min={1}
                       />
@@ -231,9 +231,9 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
                   <>
                     <Filter isLoading={isLoading}>
                       <SwitchControl
-                        id={'openButtonUrlInNewTab'}
+                        id={'openInNewTab'}
                         name={'Open in new tab'}
-                        value={openButtonUrlInNewTab}
+                        value={openInNewTab}
                         onChange={onInputValueChange}
                       />
                     </Filter>
@@ -329,9 +329,9 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
             </Filter>
             <Filter isLoading={isLoading}>
               <SliderControl
-                id={'gap'}
+                id={'spacing'}
                 name={'Spacing (px)'}
-                value={gap}
+                value={spacing}
                 min={0}
                 max={100}
                 onChange={onInputValueChange}
@@ -339,10 +339,10 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
             </Filter>
             <Filter isLoading={isLoading}>
               <SliderControl
-                id={'borderRadius'}
+                id={'imageRadius'}
                 name="Image radius (%)"
                 min={0}
-                value={borderRadius}
+                value={imageRadius}
                 max={50}
                 onChange={onInputValueChange}
               />
@@ -368,18 +368,18 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
       <>
         <Filter isLoading={isLoading}>
           <SelectControl
-            id={'textsAlignment'}
-            name={'Text vertical alignment (Top, Center, Bottom)'}
-            value={textsAlignment}
+            id={'textVerticalAlignment'}
+            name={'Text vertical alignment'}
+            value={textVerticalAlignment}
             options={TextsAlignmentOptions}
             onChange={onInputValueChange}
           />
         </Filter>
         <Filter isLoading={isLoading}>
           <NumberControl
-            id={'paddingLeftRight'}
+            id={'textHorizontalSpacing'}
             name={'Text horizontal spacing'}
-            value={paddingLeftRight}
+            value={textHorizontalSpacing}
             onChange={onInputValueChange}
             min={0}
             unit={'px'}
@@ -387,9 +387,9 @@ const StaggeredSettings: React.FC<IStaggeredSettingsProps> = ({isLoading}) => {
         </Filter>
         <Filter isLoading={isLoading}>
           <NumberControl
-            id={'paddingTopBottom'}
+            id={'textVerticalSpacing'}
             name={'Text vertical spacing'}
-            value={paddingTopBottom}
+            value={textVerticalSpacing}
             onChange={onInputValueChange}
             min={0}
             unit={'px'}
