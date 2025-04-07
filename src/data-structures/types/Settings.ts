@@ -158,7 +158,7 @@ export interface IStaggeredSettings {
   buttonColor: string;
   buttonTextColor: string;
   buttonFontSize: number;
-  textsFontFamily: string;
+  textFontFamily: string;
   imageHeightType: SizeTypeHeight;
   imageWidthType: SizeTypeWidth;
   showButton: boolean;
