@@ -147,6 +147,7 @@ const StaggeredGallery: React.FC<IStaggeredGalleryProps> = ({onClick}) => {
                         fontSize: titleFontSize,
                         color: titleColor,
                         textAlign: titleAlignment,
+                        padding: 0,
                       }}
                     >
                       {image.title}
