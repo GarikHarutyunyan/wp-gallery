@@ -152,7 +152,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                 }}
               >
                 <div className="blog-text-conteiner__content">
-                  {showTitle && (
+                  {showTitle && image.title && (
                     <h1
                       style={{
                         fontSize: titleFontSize,
