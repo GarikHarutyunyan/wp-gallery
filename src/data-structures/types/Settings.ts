@@ -1,4 +1,5 @@
 import {
+  BlogViewImagePosition,
   Direction,
   GalleryType,
   HoverEffect,
@@ -139,7 +140,7 @@ export interface ICardsSettings {
   slideDuration: number;
 }
 
-export interface IStaggeredSettings {
+export interface IBlogSettings {
   imageWidth: number;
   imageHeight: number;
   spacing: number;
@@ -169,6 +170,7 @@ export interface IStaggeredSettings {
   textVerticalSpacing: number;
   paginationType: PaginationType;
   descriptionMaxRowsCount: number | undefined;
+  imagePosition: BlogViewImagePosition;
 }
 
 export interface ISettingsDTO {
@@ -182,7 +184,7 @@ export interface ISettingsDTO {
   cube: ICubeSettings;
   carousel: ICarouselSettings;
   cards: ICardsSettings;
-  staggered: IStaggeredSettings;
+  blog: IBlogSettings;
   template_id?: number | string;
   title?: string;
   css?: string;

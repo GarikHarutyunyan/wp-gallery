@@ -1,6 +1,8 @@
 import {
+  BlogViewImagePosition,
   Direction,
   HoverEffect,
+  IBlogSettings,
   ICardsSettings,
   ICarouselSettings,
   ICubeSettings,
@@ -10,7 +12,6 @@ import {
   IMasonrySettings,
   IMosaicSettings,
   ISlideshowSettings,
-  IStaggeredSettings,
   IThumbnailSettings,
   LightboxCaptionsPosition,
   LightboxImageAnimation,
@@ -184,7 +185,7 @@ const cardsMockSettings: ICardsSettings = {
   slideDuration: 3000,
 };
 
-const staggeredMockSettings: IStaggeredSettings = {
+const blogMockSettings: IBlogSettings = {
   imageWidth: 50,
   imageHeight: 100,
   spacing: 0,
@@ -214,9 +215,11 @@ const staggeredMockSettings: IStaggeredSettings = {
   paginationType: PaginationType.SIMPLE,
   titleAlignment: TitleAlignment.LEFT,
   descriptionMaxRowsCount: 5,
+  imagePosition: BlogViewImagePosition.STAGGERED,
 };
 
 export {
+  blogMockSettings,
   cardsMockSettings,
   carouselMockSettings,
   cubeMockSettings,
@@ -225,6 +228,5 @@ export {
   masonryMockSettings,
   mosaicMockSettings,
   slideshowMockSettings,
-  staggeredMockSettings,
   thumbnailMockSettings,
 };
