@@ -1,5 +1,5 @@
 export enum BlogViewImagePosition {
-  STAGGERED = 'blog',
+  STAGGERED = 'staggered',
   LEFT = 'left',
   RIGHT = 'right',
 }
