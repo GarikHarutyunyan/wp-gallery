@@ -1,5 +1,6 @@
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
+import {BlogSettings} from 'components/blog-settings';
 import {CardsSettings} from 'components/cards-settings/CardsSettings';
 import {CarouselSettings} from 'components/carousel-settings';
 import {CubeSettings} from 'components/cube-settings/CubeSettings';
@@ -8,7 +9,6 @@ import {LightboxSettings} from 'components/light-box-settings';
 import {MasonrySettings} from 'components/masonry-settings';
 import {MosaicSettings} from 'components/mosaic-settings';
 import {SlideshowSettings} from 'components/slideshow-settings';
-import {StaggeredSettings} from 'components/staggered-settings';
 import {ThumbnailSettings} from 'components/thumbnail-settings';
 import {GalleryType, ImageClickAction} from 'data-structures';
 import React, {ReactNode, useState} from 'react';
@@ -36,7 +36,7 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     carouselSettings,
     cardsSettings,
     generalSettings,
-    staggeredSettings,
+    blogSettings,
   } = useSettings();
   const clickAction = generalSettings?.clickAction;
   const [activeTab, setActiveTab] = useState<string>('gallery');
@@ -68,8 +68,8 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
       case GalleryType.CARDS:
         galleryOprions = renderCardsSettings();
         break;
-      case GalleryType.STAGGERED:
-        galleryOprions = renderStaggeredSettings();
+      case GalleryType.BLOG:
+        galleryOprions = renderBlogSettings();
         break;
     }
     return galleryOprions;
@@ -101,8 +101,8 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   const renderCardsSettings = (): ReactNode => {
     return cardsSettings && <CardsSettings isLoading={isLoading} />;
   };
-  const renderStaggeredSettings = (): ReactNode => {
-    return cardsSettings && <StaggeredSettings isLoading={isLoading} />;
+  const renderBlogSettings = (): ReactNode => {
+    return cardsSettings && <BlogSettings isLoading={isLoading} />;
   };
 
   return (

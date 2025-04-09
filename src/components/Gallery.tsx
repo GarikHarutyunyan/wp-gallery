@@ -24,9 +24,7 @@ const MosaicGallery = lazy(() => import('./mosaic-gallery/MosaicGallery'));
 const MasonryGallery = lazy(() => import('./masonry-gallery/MasonryGallery'));
 const CubeGallery = lazy(() => import('./cube-gallery/CubeGallery'));
 const CardsGallery = lazy(() => import('./cards-gallery/CardsGallery'));
-const StaggeredGallery = lazy(
-  () => import('./staggered-gallery/StaggeredGallery')
-);
+const BlogGallery = lazy(() => import('./blog-gallery/BlogGallery'));
 const Carousel = lazy(() => import('./carousel/Carousel'));
 const Lightbox = lazy(() => import('./lightbox/Lightbox'));
 const Slideshow = lazy(() => import('./slideshow/Slideshow'));
@@ -41,7 +39,7 @@ const Gallery: React.FC = () => {
     mosaicSettings,
     thumbnailSettings,
     masonrySettings,
-    staggeredSettings,
+    blogSettings,
   } = useSettings();
   const {
     isLoading,
@@ -62,8 +60,8 @@ const Gallery: React.FC = () => {
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.paginationType;
     }
-    if (type === GalleryType.STAGGERED) {
-      return staggeredSettings!.paginationType;
+    if (type === GalleryType.BLOG) {
+      return blogSettings!.paginationType;
     }
 
     return PaginationType.NONE;
@@ -72,7 +70,7 @@ const Gallery: React.FC = () => {
     mosaicSettings?.paginationType,
     thumbnailSettings?.paginationType,
     masonrySettings?.paginationType,
-    staggeredSettings?.paginationType,
+    blogSettings?.paginationType,
   ]);
 
   const {clickAction, openUrlInNewTab} = generalSettings as IGeneralSettings;
@@ -129,9 +127,9 @@ const Gallery: React.FC = () => {
           <CardsGallery onClick={isClickable ? onImageClick : undefined} />
         );
         break;
-      case GalleryType.STAGGERED:
+      case GalleryType.BLOG:
         gallery = (
-          <StaggeredGallery onClick={isClickable ? onImageClick : undefined} />
+          <BlogGallery onClick={isClickable ? onImageClick : undefined} />
         );
         break;
     }
