@@ -118,6 +118,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCubeSettings(newSettings.cube || cubeMockSettings);
     setCarouselSettings(newSettings.carousel || carouselMockSettings);
     setCardsSettings(newSettings.cards || cardsMockSettings);
+    setBlogSettings(newSettings.blog || blogMockSettings);
     initTemplate?.(
       newSettings?.template_id as string,
       newSettings?.title as string
@@ -175,6 +176,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const allData = (window as any).reacg_data;
     const currentData = allData?.[galleryId as string];
     const hasFirstChunk: boolean = currentData?.options;
+
     if (!hasFirstChunk) {
       getData();
     } else {
