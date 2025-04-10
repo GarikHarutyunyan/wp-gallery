@@ -17,13 +17,17 @@
 .blog-gallery__row.blog-gallery__row_mobile {
   flex-direction: column;
 }
-.blog-gallery__row_left-hand:nth-child(even) {
+.blog-gallery__row.blog-gallery__row_left {
   flex-direction: row;
 }
 
-.blog-gallery__row_right-hand:nth-child(odd) {
+.blog-gallery__row.blog-gallery__row_right {
   flex-direction: row-reverse;
 }
+.blog-gallery__row.blog-gallery__row_listed {
+  flex-direction: column;
+}
+
 .blog-img-conteiner {
   width: 50%;
   overflow: hidden;

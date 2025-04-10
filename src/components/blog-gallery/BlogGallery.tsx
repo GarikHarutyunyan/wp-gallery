@@ -100,9 +100,11 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                 galleryRowClass,
                 containerInnerWidth > 720 &&
                   (imagePosition === 'right'
-                    ? `${galleryRowClass}_right-hand`
+                    ? `${galleryRowClass}_right`
                     : imagePosition === 'left'
-                    ? `${galleryRowClass}_left-hand`
+                    ? `${galleryRowClass}_left`
+                    : imagePosition === 'listed'
+                    ? `${galleryRowClass}_listed`
                     : '')
               )}
               style={{
