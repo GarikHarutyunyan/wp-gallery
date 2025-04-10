@@ -4,6 +4,7 @@ import {useTemplates} from 'contexts';
 import {useAppInfo} from 'contexts/AppInfoContext';
 import {
   GalleryType,
+  IBlogSettings,
   ICardsSettings,
   ICarouselSettings,
   ICubeSettings,
@@ -26,6 +27,7 @@ import React, {
 } from 'react';
 import {TypeUtils} from 'utils';
 import {
+  blogMockSettings,
   cardsMockSettings,
   carouselMockSettings,
   cubeMockSettings,
@@ -52,6 +54,7 @@ const SettingsContext = React.createContext<{
   cubeSettings?: ICubeSettings;
   carouselSettings?: ICarouselSettings;
   cardsSettings?: ICardsSettings;
+  blogSettings?: IBlogSettings;
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
@@ -61,6 +64,7 @@ const SettingsContext = React.createContext<{
   changeCubeSettings?: any;
   changeCarouselSettings?: any;
   changeCardsSettings?: any;
+  changeBlogSettings?: any;
   changeCss?: any;
   wrapperRef?: any;
   imagesCount?: number;
@@ -89,6 +93,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [cubeSettings, setCubeSettings] = useState<ICubeSettings>();
   const [carouselSettings, setCarouselSettings] = useState<ICarouselSettings>();
   const [cardsSettings, setCardsSettings] = useState<ICardsSettings>();
+  const [blogSettings, setBlogSettings] = useState<IBlogSettings>();
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
   const [css, setCss] = useState('');
@@ -113,6 +118,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCubeSettings(newSettings.cube || cubeMockSettings);
     setCarouselSettings(newSettings.carousel || carouselMockSettings);
     setCardsSettings(newSettings.cards || cardsMockSettings);
+    setBlogSettings(newSettings.blog || blogMockSettings);
+
     initTemplate?.(
       newSettings?.template_id as string,
       newSettings?.title as string
@@ -144,6 +151,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCubeSettings(newSettings.cube || cubeMockSettings);
       setCarouselSettings(newSettings.carousel || carouselMockSettings);
       setCardsSettings(newSettings.cards || cardsMockSettings);
+      setBlogSettings(newSettings.blog || blogMockSettings);
+      // setBlogSettings(blogMockSettings);
       initTemplate?.(
         newSettings?.template_id as string,
         newSettings?.title as string
@@ -160,6 +169,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCubeSettings(cubeMockSettings);
       setCarouselSettings(carouselMockSettings);
       setCardsSettings(cardsMockSettings);
+      setBlogSettings(blogMockSettings);
     }
   };
 
@@ -167,6 +177,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const allData = (window as any).reacg_data;
     const currentData = allData?.[galleryId as string];
     const hasFirstChunk: boolean = currentData?.options;
+
     if (!hasFirstChunk) {
       getData();
     } else {
@@ -190,7 +201,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           headers: {'X-WP-Nonce': nonce},
         });
         const responseType: GalleryType = response.data.type;
-
         if (responseType !== newType) {
           setType(responseType);
         }
@@ -226,6 +236,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         carousel: carouselSettings,
         cards: cardsSettings,
         slideshow: slideshowSettings,
+        blog: blogSettings,
         template_id:
           template?.template_id == 'none' ? '' : template?.template_id,
         css: css || '',
@@ -246,6 +257,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
         setCardsSettings(newSettings.cards);
+        setBlogSettings(newSettings.blog);
         initTemplate?.(
           (TypeUtils.isNumber(newSettings?.template_id)
             ? newSettings?.template_id
@@ -302,6 +314,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
         setCardsSettings(newSettings.cards);
+        setBlogSettings(newSettings.blog);
         setCss(newSettings.css || '');
         changeTemplate?.(newSettings.template_id as string);
         enqueueSnackbar(successMessage, {
@@ -364,6 +377,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         cubeSettings,
         carouselSettings,
         cardsSettings,
+        blogSettings,
         changeGeneralSettings: createOnChange(setGeneralSettings),
         changeThumbnailSettings: createOnChange(setThumbnailSettings),
         changeMosaicSettings: createOnChange(setMosaicSettings),
@@ -373,6 +387,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeCubeSettings: createOnChange(setCubeSettings),
         changeCarouselSettings: createOnChange(setCarouselSettings),
         changeCardsSettings: createOnChange(setCardsSettings),
+        changeBlogSettings: createOnChange(setBlogSettings),
         changeCss: createOnChange(setCss),
         wrapperRef,
         imagesCount,

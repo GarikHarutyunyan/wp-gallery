@@ -1,3 +1,4 @@
+export * from './BlogViewImagePosition';
 export * from './Direction';
 export * from './GalleryType';
 export * from './HoverEffect';
@@ -9,6 +10,9 @@ export * from './OrderBy';
 export * from './OrderDirection';
 export * from './PaginationButtonShape';
 export * from './PaginationType';
+export * from './SizeTypeHeight';
+export * from './SizeTypeWidth';
+export * from './TextsAlignments';
 export * from './TitleAlignment';
 export * from './TitlePosition';
 export * from './TitleVisibility';

@@ -1,5 +1,6 @@
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
+import {BlogSettings} from 'components/blog-settings';
 import {CardsSettings} from 'components/cards-settings/CardsSettings';
 import {CarouselSettings} from 'components/carousel-settings';
 import {CubeSettings} from 'components/cube-settings/CubeSettings';
@@ -35,6 +36,7 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     carouselSettings,
     cardsSettings,
     generalSettings,
+    blogSettings,
   } = useSettings();
   const clickAction = generalSettings?.clickAction;
   const [activeTab, setActiveTab] = useState<string>('gallery');
@@ -66,6 +68,9 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
       case GalleryType.CARDS:
         galleryOprions = renderCardsSettings();
         break;
+      case GalleryType.BLOG:
+        galleryOprions = renderBlogSettings();
+        break;
     }
     return galleryOprions;
   };
@@ -95,6 +100,9 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   };
   const renderCardsSettings = (): ReactNode => {
     return cardsSettings && <CardsSettings isLoading={isLoading} />;
+  };
+  const renderBlogSettings = (): ReactNode => {
+    return cardsSettings && <BlogSettings isLoading={isLoading} />;
   };
 
   return (

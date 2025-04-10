@@ -1,4 +1,5 @@
 import {
+  BlogViewImagePosition,
   Direction,
   GalleryType,
   HoverEffect,
@@ -8,6 +9,9 @@ import {
   LightboxThumbnailsPosition,
   PaginationButtonShape,
   PaginationType,
+  SizeTypeHeight,
+  SizeTypeWidth,
+  TextsAlignment,
   ThumbnailTitlePosition,
   TitleAlignment,
   TitlePosition,
@@ -136,6 +140,39 @@ export interface ICardsSettings {
   slideDuration: number;
 }
 
+export interface IBlogSettings {
+  imageWidth: number;
+  imageHeight: number;
+  spacing: number;
+  backgroundColor: string;
+  containerPadding: number;
+  imageRadius: number;
+  hoverEffect: HoverEffect;
+  textVerticalAlignment: TextsAlignment;
+  titleAlignment: TitleAlignment;
+  titleColor: string;
+  descriptionColor: string;
+  titleFontSize: number;
+  descriptionFontSize: number;
+  buttonText: string;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  textFontFamily: string;
+  imageHeightType: SizeTypeHeight;
+  imageWidthType: SizeTypeWidth;
+  showButton: boolean;
+  openInNewTab: boolean;
+  showTitle: boolean;
+  showDescription: boolean;
+  textHorizontalSpacing: number;
+  textVerticalSpacing: number;
+  paginationType: PaginationType;
+  descriptionMaxRowsCount: number | undefined;
+  imagePosition: BlogViewImagePosition;
+}
+
 export interface ISettingsDTO {
   type: GalleryType;
   general: IGeneralSettings;
@@ -147,6 +184,7 @@ export interface ISettingsDTO {
   cube: ICubeSettings;
   carousel: ICarouselSettings;
   cards: ICardsSettings;
+  blog: IBlogSettings;
   template_id?: number | string;
   title?: string;
   css?: string;

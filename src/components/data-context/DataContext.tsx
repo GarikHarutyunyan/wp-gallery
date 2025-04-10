@@ -41,6 +41,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     thumbnailSettings,
     mosaicSettings,
     masonrySettings,
+    blogSettings,
     changeImagesCount,
   } = useSettings();
 
@@ -54,6 +55,9 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.paginationType;
     }
+    if (type === GalleryType.BLOG) {
+      return blogSettings!.paginationType;
+    }
 
     return PaginationType.NONE;
   }, [
@@ -61,6 +65,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     mosaicSettings?.paginationType,
     thumbnailSettings?.paginationType,
     masonrySettings?.paginationType,
+    blogSettings?.paginationType,
   ]);
 
   const {

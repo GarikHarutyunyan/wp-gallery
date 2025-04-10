@@ -60,6 +60,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     mosaicSettings,
     changeMosaicSettings,
     masonrySettings,
+    blogSettings,
+    changeBlogSettings,
     changeMasonrySettings,
   } = useSettings();
   const {
@@ -89,9 +91,11 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.paginationType;
     }
-
+    if (type === GalleryType.BLOG) {
+      return blogSettings!.paginationType;
+    }
     return PaginationType.NONE;
-  }, [type, mosaicSettings, thumbnailSettings, masonrySettings]);
+  }, [type, mosaicSettings, thumbnailSettings, masonrySettings, blogSettings]);
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
@@ -107,6 +111,9 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     }
     if (type === GalleryType.MASONRY) {
       key && changeMasonrySettings({...masonrySettings, [key]: inputValue});
+    }
+    if (type === GalleryType.BLOG) {
+      key && changeBlogSettings({...blogSettings, [key]: inputValue});
     }
 
     resetTemplate?.();

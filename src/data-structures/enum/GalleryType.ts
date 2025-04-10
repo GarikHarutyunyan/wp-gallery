@@ -6,4 +6,5 @@ export enum GalleryType {
   CUBE = 'cube',
   CAROUSEL = 'carousel',
   CARDS = 'cards',
+  BLOG = 'blog',
 }
