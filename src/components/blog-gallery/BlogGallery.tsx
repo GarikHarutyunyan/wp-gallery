@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import {Box} from '@mui/material';
 import clsx from 'clsx';
@@ -46,6 +46,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     descriptionMaxRowsCount,
     imagePosition,
   } = settings as IBlogSettings;
+  const isMobile: boolean = containerInnerWidth <= 720;
 
   const onCustomActionToggle = (url: string) => {
     if (!!url) {
@@ -74,14 +75,6 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     return () => observer.disconnect();
   }, [updateContainerWidth]);
 
-  const galleryRowClass = useMemo(
-    () =>
-      `blog-gallery__row${
-        containerInnerWidth <= 720 ? ' blog-gallery__row_mobile' : ''
-      }`,
-    [containerInnerWidth]
-  );
-
   return (
     <Box>
       <div
@@ -96,17 +89,14 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
           return (
             <div
               key={image.original.url}
-              className={clsx(
-                galleryRowClass,
-                containerInnerWidth > 720 &&
-                  (imagePosition === 'right'
-                    ? `${galleryRowClass}_right`
-                    : imagePosition === 'left'
-                    ? `${galleryRowClass}_left`
-                    : imagePosition === 'listed'
-                    ? `${galleryRowClass}_listed`
-                    : '')
-              )}
+              className={clsx('blog-gallery__row', {
+                'blog-gallery__row_mobile': isMobile,
+                'blog-gallery__row_right':
+                  !isMobile && imagePosition === 'right',
+                'blog-gallery__row_left': !isMobile && imagePosition === 'left',
+                'blog-gallery__row_listed':
+                  !isMobile && imagePosition === 'listed',
+              })}
               style={{
                 padding: containerPadding,
               }}
