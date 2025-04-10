@@ -103,8 +103,8 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
             >
               <div
                 onClick={() => onClick?.(index)}
-                className={`blog-img-conteiner ${
-                  !!onClick ? 'blog-image_clickable' : ''
+                className={`blog-gallery__image-container ${
+                  !!onClick ? 'blog-gallery__image_clickable' : ''
                 } photo-album-item__image-wrapper_${hoverEffect}`}
                 style={{
                   width: `${
@@ -136,14 +136,14 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                 )}
               </div>
               <div
-                className="blog-text-conteiner"
+                className="blog-gallery__text-container"
                 style={{
                   display: 'flex',
                   alignItems: textVerticalAlignment,
                   padding: `${textVerticalSpacing}px ${textHorizontalSpacing}px`,
                 }}
               >
-                <div className="blog-text-conteiner__content">
+                <div className="blog-gallery__text-container-content">
                   {showTitle && image.title && (
                     <h1
                       style={{
@@ -162,7 +162,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                   )}
                   {showDescription && image.description && (
                     <p
-                      className="blog-text-conteiner__content__description"
+                      className="blog-gallery__text-container-content-description"
                       style={{
                         WebkitLineClamp: descriptionMaxRowsCount,
                         fontSize: descriptionFontSize,
@@ -177,7 +177,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                       onClick={() =>
                         onCustomActionToggle(image.action_url || '')
                       }
-                      className={'blog-button'}
+                      className={'blog-gallery__button'}
                       style={{
                         display: 'block',
                         backgroundColor: buttonColor,
