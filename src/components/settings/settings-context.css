@@ -2,7 +2,7 @@
     box-shadow: unset !important;
 
     .type-option__wrapper {
-        max-width: 780px;
+        max-width: 860px;
         margin-top: 10px;
     }
 
@@ -19,6 +19,10 @@
 
     .type-option__active .type-option__title {
         color: #155C92;
+    }
+
+    .type-option__image-container {
+        margin: 0 5px;
     }
 
     .type-option__image-container svg {
