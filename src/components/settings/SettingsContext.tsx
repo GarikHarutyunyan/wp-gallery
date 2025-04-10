@@ -119,6 +119,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCarouselSettings(newSettings.carousel || carouselMockSettings);
     setCardsSettings(newSettings.cards || cardsMockSettings);
     setBlogSettings(newSettings.blog || blogMockSettings);
+
     initTemplate?.(
       newSettings?.template_id as string,
       newSettings?.title as string
@@ -200,7 +201,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           headers: {'X-WP-Nonce': nonce},
         });
         const responseType: GalleryType = response.data.type;
-        console.log(responseType, newType);
         if (responseType !== newType) {
           setType(responseType);
         }
