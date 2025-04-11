@@ -82,6 +82,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
           fontFamily: textFontFamily,
           backgroundColor: backgroundColor,
           gap: spacing,
+          padding: containerPadding,
         }}
         className="blog-gallery"
       >
@@ -97,9 +98,6 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                 'blog-gallery__row_listed':
                   !isMobile && imagePosition === 'listed',
               })}
-              style={{
-                padding: containerPadding,
-              }}
             >
               <div
                 onClick={() => onClick?.(index)}
