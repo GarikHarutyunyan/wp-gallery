@@ -102,7 +102,7 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     return cardsSettings && <CardsSettings isLoading={isLoading} />;
   };
   const renderBlogSettings = (): ReactNode => {
-    return cardsSettings && <BlogSettings isLoading={isLoading} />;
+    return blogSettings && <BlogSettings isLoading={isLoading} />;
   };
 
   return (
