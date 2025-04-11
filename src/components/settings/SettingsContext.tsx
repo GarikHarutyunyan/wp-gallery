@@ -152,7 +152,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCarouselSettings(newSettings.carousel || carouselMockSettings);
       setCardsSettings(newSettings.cards || cardsMockSettings);
       setBlogSettings(newSettings.blog || blogMockSettings);
-      // setBlogSettings(blogMockSettings);
       initTemplate?.(
         newSettings?.template_id as string,
         newSettings?.title as string
