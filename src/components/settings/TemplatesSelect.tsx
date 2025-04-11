@@ -42,6 +42,7 @@ const TemplatesSelect: React.FC = () => {
     changeCubeSettings,
     changeCarouselSettings,
     changeCardsSettings,
+    changeBlogSettings,
     type: activeType,
     changeType,
     changeCss,
@@ -70,6 +71,7 @@ const TemplatesSelect: React.FC = () => {
         cube,
         carousel,
         cards,
+        blog,
         css,
       } = template;
       // !!template.template_id, as default demplate id is 0 we avoid changing gallery type on reseting options
@@ -85,6 +87,7 @@ const TemplatesSelect: React.FC = () => {
       cube && changeCubeSettings(cube);
       carousel && changeCarouselSettings(carousel);
       cards && changeCardsSettings(cards);
+      blog && changeBlogSettings(blog);
       TypeUtils.isString(css) && changeCss(css);
     }
   }, [template?.template_id]);
