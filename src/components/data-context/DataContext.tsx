@@ -129,7 +129,10 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (fetchUrl) {
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
-      queryString += `timestamp=${getGalleryTimestamp?.()}`;
+
+      queryString += `order_by=${orderBy}`;
+      queryString += `&order=${orderDirection}`;
+      queryString += `&timestamp=${getGalleryTimestamp?.()}`;
       const imgData: any[] = (await axios.get(`${fetchUrl}${queryString}`))
         .data;
       const newImages: IImageDTO[] = imgData.map((data: any) => ({
