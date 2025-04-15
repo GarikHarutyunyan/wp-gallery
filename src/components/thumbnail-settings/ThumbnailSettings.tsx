@@ -5,6 +5,7 @@ import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {
+  HoverEffect,
   HoverEffectOptions,
   IThumbnailSettings,
   ThumbnailTitlePosition,
@@ -13,7 +14,7 @@ import {
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
-import React, {ReactNode, useMemo} from 'react';
+import React, {ReactNode, useEffect, useMemo} from 'react';
 import {
   ColorControl,
   FontControl,
@@ -55,6 +56,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
+
     key && onChange({...value, [key]: inputValue});
   };
 
@@ -80,6 +82,49 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
 
     return ThumbnailTitlePositionOptions;
   }, [titleVisibility]);
+
+  const titleVisibilityOptions = TitleVisibilityOptions.map((option) =>
+    hoverEffect === HoverEffect.OVERLAY_ICON &&
+    option.value === TitleVisibility.ON_HOVER
+      ? {...option, isDisabled: true}
+      : option
+  );
+
+  const allTitlePositionOptions = titlePositionOptions.map((option) =>
+    hoverEffect === HoverEffect.OVERLAY_ICON &&
+    titleVisibility === TitleVisibility.ALWAYS_SHOWN &&
+    option.value !== ThumbnailTitlePosition.BELOW
+      ? {...option, isDisabled: true}
+      : option
+  );
+
+  const hoverEffectOptions = HoverEffectOptions.map((option) => {
+    const isOverlayIcon = option.value === HoverEffect.OVERLAY_ICON;
+
+    const titleVisibilityOnHover = titleVisibility === TitleVisibility.ON_HOVER;
+
+    const isTitleNotBelow =
+      titleVisibility === TitleVisibility.ALWAYS_SHOWN &&
+      titlePosition !== ThumbnailTitlePosition.BELOW;
+
+    return isOverlayIcon
+      ? {
+          ...option,
+          isDisabled:
+            (titleVisibilityOnHover && true) || isTitleNotBelow ? true : false,
+        }
+      : option;
+  });
+
+  useEffect(() => {
+    if (
+      titleVisibility === TitleVisibility.ALWAYS_SHOWN &&
+      titlePosition !== ThumbnailTitlePosition.BELOW &&
+      hoverEffect === HoverEffect.OVERLAY_ICON
+    ) {
+      onInputValueChange(ThumbnailTitlePosition.BELOW, 'titlePosition');
+    }
+  }, [titlePosition, titleVisibility, hoverEffect]);
 
   const renderBasicSettings = (): ReactNode => {
     return (
@@ -192,7 +237,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                 id={'hoverEffect'}
                 name={'Hover effect'}
                 value={hoverEffect}
-                options={HoverEffectOptions}
+                options={hoverEffectOptions}
                 onChange={onInputValueChange}
               />
             </Filter>
@@ -201,7 +246,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                 id={'titleVisibility'}
                 name={'Title visibility'}
                 value={titleVisibility}
-                options={TitleVisibilityOptions}
+                options={titleVisibilityOptions}
                 onChange={onInputValueChange}
                 isDisabled={!isThumbnailTitlePositionEditable}
               />
@@ -222,7 +267,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
             id={'titlePosition'}
             name={'Title position'}
             value={titlePosition}
-            options={titlePositionOptions}
+            options={allTitlePositionOptions}
             onChange={onInputValueChange}
             isDisabled={!isThumbnailTitlePositionEditable}
           />
