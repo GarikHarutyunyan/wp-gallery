@@ -5,6 +5,7 @@ import './App.css';
 import {GalleryWrapper} from './components/GalleryWrapper';
 
 const App: React.FC = () => {
+  console.log('121212');
   return (
     <TranslationsProvider>
       <SnackbarProvider domRoot={document.body}>

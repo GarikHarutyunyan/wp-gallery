@@ -107,6 +107,7 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
           key={image.original.url}
           onClick={onImageClick(index)}
           settings={settings}
+          index={index}
         >
           {renderDefaultPhoto({wrapped: true})}
         </PhotoAlbumItem>

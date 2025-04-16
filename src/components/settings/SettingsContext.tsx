@@ -140,18 +140,28 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         await axios.get(`${fetchUrl}${queryString}`)
       ).data;
 
-      setType(newSettings.type);
-      setCss(newSettings.css || '');
-      setGeneralSettings(newSettings.general || generalMockSettings);
-      setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
-      setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
-      setMasonrySettings(newSettings.masonry || mosaicMockSettings);
-      setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
-      setLightboxSettings(newSettings.lightbox);
-      setCubeSettings(newSettings.cube || cubeMockSettings);
-      setCarouselSettings(newSettings.carousel || carouselMockSettings);
-      setCardsSettings(newSettings.cards || cardsMockSettings);
-      setBlogSettings(newSettings.blog || blogMockSettings);
+      // setType(newSettings.type);
+      // setCss(newSettings.css || '');
+      // setGeneralSettings(newSettings.general || generalMockSettings);
+      // setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
+      // setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
+      // setMasonrySettings(newSettings.masonry || mosaicMockSettings);
+      // setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
+      // setLightboxSettings(newSettings.lightbox);
+      // setCubeSettings(newSettings.cube || cubeMockSettings);
+      // setCarouselSettings(newSettings.carousel || carouselMockSettings);
+      // setCardsSettings(newSettings.cards || cardsMockSettings);
+      // setBlogSettings(newSettings.blog || blogMockSettings);
+      setGeneralSettings(generalMockSettings);
+      setThumbnailSettings(thumbnailMockSettings);
+      setMosaicSettings(mosaicMockSettings);
+      setMasonrySettings(masonryMockSettings);
+      setSlideshowSettings(slideshowMockSettings);
+      setLightboxSettings(lightboxMockSettings);
+      setCubeSettings(cubeMockSettings);
+      setCarouselSettings(carouselMockSettings);
+      setCardsSettings(cardsMockSettings);
+      setBlogSettings(blogMockSettings);
       initTemplate?.(
         newSettings?.template_id as string,
         newSettings?.title as string
@@ -191,22 +201,22 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setType(newType);
-      const settings: ISettingsDTO = {
-        type: newType,
-      } as ISettingsDTO;
+      // const settings: ISettingsDTO = {
+      //   type: newType,
+      // } as ISettingsDTO;
 
-      try {
-        const response = await axios.post(fetchUrl, settings, {
-          headers: {'X-WP-Nonce': nonce},
-        });
-        const responseType: GalleryType = response.data.type;
-        if (responseType !== newType) {
-          setType(responseType);
-        }
-      } catch (error) {
-        setType(type);
-        console.error(error);
-      }
+      // try {
+      //   const response = await axios.post(fetchUrl, settings, {
+      //     headers: {'X-WP-Nonce': nonce},
+      //   });
+      //   const responseType: GalleryType = response.data.type;
+      //   if (responseType !== newType) {
+      //     setType(responseType);
+      //   }
+      // } catch (error) {
+      //   setType(type);
+      //   console.error(error);
+      // }
     }
   };
 
