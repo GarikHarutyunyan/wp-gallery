@@ -7,7 +7,6 @@ import {Section} from 'core-components/section';
 import {
   Direction,
   DirectionOptions,
-  HoverEffect,
   HoverEffectOptions,
   IMosaicSettings,
   TitleAlignmentOptions,
@@ -55,24 +54,6 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
-  };
-
-  const hoverEffectOptions = () => {
-    return HoverEffectOptions.map((option) => {
-      return option.value === HoverEffect.OVERLAY_ICON &&
-        titleVisibility !== TitleVisibility.NONE
-        ? {...option, isDisabled: true}
-        : option;
-    });
-  };
-
-  const titleVisibilityOptions = () => {
-    return TitleVisibilityOptions.map((option) => {
-      return option.value !== TitleVisibility.NONE &&
-        hoverEffect === HoverEffect.OVERLAY_ICON
-        ? {...option, isDisabled: true}
-        : option;
-    });
   };
 
   const renderBasicSettings = (): ReactNode => {
@@ -198,7 +179,7 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
                 id={'hoverEffect'}
                 name={'Hover effect'}
                 value={hoverEffect}
-                options={hoverEffectOptions()}
+                options={HoverEffectOptions}
                 onChange={onInputValueChange}
               />
             </Filter>
@@ -207,7 +188,7 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
                 id={'titleVisibility'}
                 name={'Title visibility'}
                 value={titleVisibility}
-                options={titleVisibilityOptions()}
+                options={TitleVisibilityOptions}
                 onChange={onInputValueChange}
               />
             </Filter>

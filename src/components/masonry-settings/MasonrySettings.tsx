@@ -5,7 +5,6 @@ import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {
-  HoverEffect,
   HoverEffectOptions,
   IMasonrySettings,
   TitleAlignmentOptions,
@@ -53,23 +52,7 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
     resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
-  const hoverEffectOptions = () => {
-    return HoverEffectOptions.map((option) => {
-      return option.value === HoverEffect.OVERLAY_ICON &&
-        titleVisibility !== TitleVisibility.NONE
-        ? {...option, isDisabled: true}
-        : option;
-    });
-  };
 
-  const titleVisibilityOptions = () => {
-    return TitleVisibilityOptions.map((option) => {
-      return option.value !== TitleVisibility.NONE &&
-        hoverEffect === HoverEffect.OVERLAY_ICON
-        ? {...option, isDisabled: true}
-        : option;
-    });
-  };
   const renderBasicSettings = (): ReactNode => {
     return (
       <Section
@@ -171,7 +154,7 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
                 id={'hoverEffect'}
                 name={'Hover effect'}
                 value={hoverEffect}
-                options={hoverEffectOptions()}
+                options={HoverEffectOptions}
                 onChange={onInputValueChange}
               />
             </Filter>
@@ -180,7 +163,7 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
                 id={'titleVisibility'}
                 name={'Title visibility'}
                 value={titleVisibility}
-                options={titleVisibilityOptions()}
+                options={TitleVisibilityOptions}
                 onChange={onInputValueChange}
               />
             </Filter>
