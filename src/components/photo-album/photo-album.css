@@ -228,10 +228,9 @@
 .reacg-gallery
   .photo-album-item__image-wrapper_overlay-icon:hover
   .photo-album-item__title_on-hover
-  .photo-album-item__title-content_center {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -30%);
+  .photo-album-item__title-content_center
+  > div {
+  margin-top: 80px;
 }
 
 /* Flashing */

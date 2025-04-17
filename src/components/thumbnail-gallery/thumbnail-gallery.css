@@ -209,10 +209,9 @@
 .reacg-gallery
   .thumbnail-gallery__image-wrapper_overlay-icon:hover
   .thumbnail-gallery__title_on-hover
-  .thumbnail-gallery__title-content_center {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -30%);
+  .thumbnail-gallery__title-content_center
+  > div {
+  margin-top: 80px;
 }
 
 /* Flashing */
