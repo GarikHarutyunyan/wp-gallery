@@ -200,6 +200,27 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     );
   };
 
+  useEffect(() => {
+    if (!listRef.current) return;
+    const imgElements = listRef.current.querySelectorAll('img');
+
+    const loadNext = (index = 0) => {
+      if (index >= imgElements.length) return;
+      const img = imgElements[index];
+      const dataSrc = img.getAttribute('data-src');
+      if (dataSrc) {
+        img.src = dataSrc;
+        img.onload = () => loadNext(index + 1);
+      } else {
+        loadNext(index + 1);
+      }
+    };
+
+    loadNext();
+  }, []);
+
+  const listRef = useRef<HTMLUListElement | null>(null);
+
   return (
     <div
       style={{
@@ -224,6 +245,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
           cols={validColumnsCount}
           gap={+gap}
           style={{margin: '0 auto'}}
+          ref={listRef}
         >
           {images!.map((image, index) => (
             <div
@@ -263,7 +285,8 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
                         'thumbnail-gallery__image',
                         'MuiImageListItem-img'
                       )}
-                      src={getImageSource(image)}
+                      // src={getImageSource(image)}
+                      data-src={getImageSource(image)}
                       alt={image.title}
                       loading="lazy"
                       style={{
