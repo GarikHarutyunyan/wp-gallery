@@ -286,6 +286,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
                         'MuiImageListItem-img'
                       )}
                       // src={getImageSource(image)}
+                      src={
+                        'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='
+                      }
                       data-src={getImageSource(image)}
                       alt={image.title}
                       loading="lazy"
