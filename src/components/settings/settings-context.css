@@ -8,13 +8,14 @@
 
     .type-option {
         cursor: pointer;
-        width: 10%;
+        width: 12%;
     }
 
     .type-option__title {
         margin-bottom: 10px;
         font-weight: bold;
         color: #85A3B8;
+        overflow-wrap: normal;
     }
 
     .type-option__active .type-option__title {
@@ -22,7 +23,7 @@
     }
 
     .type-option__image-container {
-        margin: 0 5px;
+        margin: 0 12px;
     }
 
     .type-option__image-container svg {
