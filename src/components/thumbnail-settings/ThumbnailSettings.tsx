@@ -55,6 +55,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
+
     key && onChange({...value, [key]: inputValue});
   };
 
