@@ -49,6 +49,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     captionsPosition,
     captionFontFamily,
     captionColor,
+    IsFullCoverImage,
   } = settings as ISlideshowSettings;
   const wrapper = wrapperRef.current;
   const [innerWidth, setInnerWidth] = useState<number>(
@@ -212,6 +213,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
               captionsPosition === LightboxCaptionsPosition.BELOW,
             'reacg-slideshow-captions_above':
               captionsPosition === LightboxCaptionsPosition.ABOVE,
+            'reacg-slideshow-is-full-cover-image': IsFullCoverImage,
           }
         )}
         styles={{
