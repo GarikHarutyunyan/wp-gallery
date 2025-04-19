@@ -83,6 +83,7 @@ export interface ISlideshowSettings {
   thumbnailPadding: number;
   thumbnailGap: number;
   isSlideshowAllowed: boolean;
+  IsFullCoverImage: boolean;
 }
 
 export interface ILightboxSettings extends ISlideshowSettings {

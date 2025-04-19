@@ -96,6 +96,7 @@ const lightboxMockSettings: ILightboxSettings = {
   captionFontFamily: 'Roboto',
   captionColor: 'White',
   imageAnimation: LightboxImageAnimation.BLUR,
+  IsFullCoverImage: false,
 };
 
 const slideshowMockSettings: ISlideshowSettings = {
@@ -119,6 +120,7 @@ const slideshowMockSettings: ISlideshowSettings = {
   thumbnailPadding: 0,
   thumbnailGap: 10,
   isSlideshowAllowed: true,
+  IsFullCoverImage: false,
 };
 
 const masonryMockSettings: IMasonrySettings = {
