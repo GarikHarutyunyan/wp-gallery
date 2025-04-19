@@ -113,10 +113,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
     setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
     setMasonrySettings(newSettings.masonry || mosaicMockSettings);
-    // setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
-    setSlideshowSettings(slideshowMockSettings);
-    // setLightboxSettings(newSettings.lightbox);
-    setLightboxSettings(lightboxMockSettings);
+    setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
+    setLightboxSettings(newSettings.lightbox);
     setCubeSettings(newSettings.cube || cubeMockSettings);
     setCarouselSettings(newSettings.carousel || carouselMockSettings);
     setCardsSettings(newSettings.cards || cardsMockSettings);
@@ -148,8 +146,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
       setMasonrySettings(newSettings.masonry || mosaicMockSettings);
-      // setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
-      setSlideshowSettings(slideshowMockSettings);
+      setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
       setCubeSettings(newSettings.cube || cubeMockSettings);
       setCarouselSettings(newSettings.carousel || carouselMockSettings);
