@@ -46,9 +46,15 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     thumbnailPadding,
     thumbnailGap,
     backgroundColor,
-    captionsPosition,
-    captionFontFamily,
-    captionColor,
+    textPosition,
+    textFontFamily,
+    textColor,
+    showTitle,
+    titleFontSize,
+    titleAlignment,
+    showDescription,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
   } = settings as ISlideshowSettings;
   const wrapper = wrapperRef.current;
   const [innerWidth, setInnerWidth] = useState<number>(
@@ -64,6 +70,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   const containerHeight: number = Math.max(minHeight, containerWidth / ratio);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const [index, setIndex] = useState(0);
+
   const slideshowRef = React.useRef<SlideshowRef>(null);
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Inline, Video];
@@ -73,12 +80,12 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (captionsPosition !== LightboxCaptionsPosition.NONE) {
+    if (textPosition !== LightboxCaptionsPosition.NONE) {
       newPlugins.push(Captions as any);
     }
 
     return newPlugins;
-  }, [isSlideshowAllowed, autoplay, thumbnailsPosition, captionsPosition]);
+  }, [isSlideshowAllowed, autoplay, thumbnailsPosition, textPosition]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -101,18 +108,34 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     return images!.map((image: IImageDTO) => ({
       description: (
         <>
-          <p
-            className={'reacg-slideshow-captions__title'}
-            style={{color: captionColor, fontFamily: captionFontFamily}}
-          >
-            {image.title}
-          </p>
-          <p
-            className={'reacg-slideshow-captions__description'}
-            style={{color: captionColor, fontFamily: captionFontFamily}}
-          >
-            {image.description}
-          </p>
+          {showTitle && image.title && (
+            <p
+              className={'reacg-slideshow-captions__title'}
+              style={{
+                color: textColor,
+                fontFamily: textFontFamily,
+                fontSize: titleFontSize,
+                textAlign: titleAlignment,
+              }}
+            >
+              {image.title}
+            </p>
+          )}
+          {showDescription && image.description && (
+            <p
+              className={'reacg-slideshow-captions__description'}
+              style={{
+                color: textColor,
+                fontFamily: textFontFamily,
+                fontSize: descriptionFontSize,
+                WebkitLineClamp: descriptionMaxRowsCount,
+                WebkitBoxOrient: 'vertical',
+                display: '-webkit-box',
+              }}
+            >
+              {image.description}
+            </p>
+          )}
         </>
       ),
       type: image.type,
@@ -148,7 +171,47 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
       ],
       metadata: image.thumbnail.url,
     }));
-  }, [images, captionColor, captionFontFamily]);
+  }, [
+    images,
+    textColor,
+    textFontFamily,
+    showTitle,
+    titleFontSize,
+    titleAlignment,
+    showDescription,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
+  ]);
+
+  const slideMargins = useMemo(() => {
+    const hasCaptions = showTitle || showDescription;
+    const titleSpace =
+      showTitle && images![index].title ? titleFontSize * 1.5 : 0;
+    const descriptionSpace =
+      showDescription && images![index].description
+        ? descriptionFontSize * 1.5 * (descriptionMaxRowsCount || 1)
+        : 0;
+    const extraSpace = 10;
+
+    return {
+      marginTop:
+        textPosition === LightboxCaptionsPosition.ABOVE && hasCaptions
+          ? titleSpace + descriptionSpace + extraSpace
+          : 0,
+      marginBottom:
+        textPosition === LightboxCaptionsPosition.BELOW && hasCaptions
+          ? titleSpace + descriptionSpace + extraSpace
+          : 0,
+    };
+  }, [
+    textPosition,
+    showTitle,
+    showDescription,
+    titleFontSize,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
+    index,
+  ]);
 
   useEffect(() => {
     setIndex(0);
@@ -203,15 +266,15 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           {
             // 'reacg-slideshow-control-buttons_hidden': !areControlButtonsShown,
             'reacg-slideshow-captions':
-              captionsPosition !== LightboxCaptionsPosition.NONE,
+              textPosition !== LightboxCaptionsPosition.NONE,
             'reacg-slideshow-captions_top': [
               LightboxCaptionsPosition.TOP,
               LightboxCaptionsPosition.ABOVE,
-            ].includes(captionsPosition),
+            ].includes(textPosition),
             'reacg-slideshow-captions_below':
-              captionsPosition === LightboxCaptionsPosition.BELOW,
+              textPosition === LightboxCaptionsPosition.BELOW,
             'reacg-slideshow-captions_above':
-              captionsPosition === LightboxCaptionsPosition.ABOVE,
+              textPosition === LightboxCaptionsPosition.ABOVE,
           }
         )}
         styles={{
@@ -233,6 +296,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           },
           slide: {
             cursor: onClick ? 'pointer' : undefined,
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
           },
         }}
         on={{

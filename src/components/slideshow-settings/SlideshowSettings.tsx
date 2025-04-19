@@ -12,6 +12,7 @@ import {
   LightboxImageAnimationOptions,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
+  TitleAlignmentOptions,
 } from 'data-structures';
 import React, {ReactNode} from 'react';
 import {
@@ -52,9 +53,15 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
     thumbnailPadding,
     thumbnailGap,
     backgroundColor,
-    captionsPosition,
-    captionFontFamily,
-    captionColor,
+    textPosition,
+    textFontFamily,
+    textColor,
+    showTitle,
+    titleFontSize,
+    titleAlignment,
+    showDescription,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
   } = value as ISlideshowSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -162,34 +169,126 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                   onChange={onInputValueChange}
                 />
               </Filter>
-              <Filter isLoading={isLoading}>
-                <SelectControl
-                  id={'captionsPosition'}
-                  name={'Caption position'}
-                  value={captionsPosition}
-                  options={LightboxCaptionsPositionOptions}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-              {captionsPosition !== LightboxCaptionsPosition.NONE && (
-                <>
+
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                    id={'textPosition'}
+                    name={'Text position'}
+                    value={textPosition}
+                    options={LightboxCaptionsPositionOptions}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {textPosition !== LightboxCaptionsPosition.NONE && (
+                  <>
+                    <Filter isLoading={isLoading}>
+                      <FontControl
+                        id={'textFontFamily'}
+                        name={'Text font family'}
+                        value={textFontFamily}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id={'textColor'}
+                        name="Text color"
+                        value={textColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </>
+                )}
+              </Grid>
+
+              {textPosition !== LightboxCaptionsPosition.NONE && (
+                <Grid
+                  sx={{marginLeft: 0, paddingTop: 2}}
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                >
                   <Filter isLoading={isLoading}>
-                    <FontControl
-                      id={'captionFontFamily'}
-                      name={'Caption font family'}
-                      value={captionFontFamily}
+                    <SwitchControl
+                      id={'showTitle'}
+                      name={'Show title'}
+                      value={showTitle}
                       onChange={onInputValueChange}
                     />
                   </Filter>
+                  {showTitle && (
+                    <>
+                      <Filter isLoading={isLoading}>
+                        <NumberControl
+                          id={'titleFontSize'}
+                          name={'Title font size'}
+                          value={titleFontSize}
+                          onChange={onInputValueChange}
+                          unit={'px'}
+                        />
+                      </Filter>
+
+                      <Filter isLoading={isLoading}>
+                        <SelectControl
+                          id={'titleAlignment'}
+                          name={'Title alignement'}
+                          value={titleAlignment}
+                          options={TitleAlignmentOptions}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                    </>
+                  )}
+                </Grid>
+              )}
+              {textPosition !== LightboxCaptionsPosition.NONE && (
+                <Grid
+                  sx={{marginLeft: 0, paddingTop: 2}}
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                >
                   <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'captionColor'}
-                      name="Caption color"
-                      value={captionColor}
+                    <SwitchControl
+                      id={'showDescription'}
+                      name={'Show description'}
+                      value={showDescription}
                       onChange={onInputValueChange}
                     />
                   </Filter>
-                </>
+                  {showDescription && (
+                    <>
+                      <Filter isLoading={isLoading}>
+                        <NumberControl
+                          id={'descriptionFontSize'}
+                          name={'Description font size'}
+                          value={descriptionFontSize}
+                          onChange={onInputValueChange}
+                          unit={'px'}
+                        />
+                      </Filter>
+
+                      <Filter isLoading={isLoading}>
+                        <NumberControl
+                          id={'descriptionMaxRowsCount'}
+                          name={'Description max rows count'}
+                          value={descriptionMaxRowsCount}
+                          onChange={onInputValueChange}
+                          min={1}
+                        />
+                      </Filter>
+                    </>
+                  )}
+                </Grid>
               )}
             </Grid>
             <ClickActionSettings isLoading={isLoading} />

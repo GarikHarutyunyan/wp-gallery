@@ -205,7 +205,7 @@ module.exports = function (webpackEnv) {
     output: {
       // The build folder.
       // path: paths.appBuild,
-      path: 'C:/xampp/htdocs/wordpress/wp-content/plugins/regallery/assets/js', //path.resolve(__dirname, 'build'),
+      path: 'C:/xampp/htdocs/wp/wp-content/plugins/regallery/assets/js', //path.resolve(__dirname, 'build'),
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
