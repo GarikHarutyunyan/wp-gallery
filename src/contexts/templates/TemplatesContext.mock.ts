@@ -92,10 +92,16 @@ const lightboxMockSettings: ILightboxSettings = {
   thumbnailPadding: 0,
   thumbnailGap: 10,
   backgroundColor: '',
-  captionsPosition: LightboxCaptionsPosition.BOTTOM,
-  captionFontFamily: 'Roboto',
-  captionColor: 'White',
+  textPosition: LightboxCaptionsPosition.BOTTOM,
+  textFontFamily: 'Roboto',
+  textColor: 'White',
   imageAnimation: LightboxImageAnimation.BLUR,
+  showTitle: true,
+  titleFontSize: 20,
+  titleAlignment: TitleAlignment.LEFT,
+  showDescription: true,
+  descriptionFontSize: 16,
+  descriptionMaxRowsCount: 5,
 };
 
 const slideshowMockSettings: ISlideshowSettings = {
@@ -106,9 +112,9 @@ const slideshowMockSettings: ISlideshowSettings = {
   autoplay: false,
   slideDuration: 3000,
   backgroundColor: '',
-  captionsPosition: LightboxCaptionsPosition.BOTTOM,
-  captionFontFamily: 'Roboto',
-  captionColor: 'White',
+  textPosition: LightboxCaptionsPosition.BOTTOM,
+  textFontFamily: 'Roboto',
+  textColor: 'White',
   imageAnimation: LightboxImageAnimation.BLUR,
   thumbnailsPosition: LightboxThumbnailsPosition.BOTTOM,
   thumbnailWidth: 80,
@@ -119,6 +125,12 @@ const slideshowMockSettings: ISlideshowSettings = {
   thumbnailPadding: 0,
   thumbnailGap: 10,
   isSlideshowAllowed: true,
+  showTitle: true,
+  titleFontSize: 20,
+  titleAlignment: TitleAlignment.LEFT,
+  showDescription: true,
+  descriptionFontSize: 16,
+  descriptionMaxRowsCount: 5,
 };
 
 const masonryMockSettings: IMasonrySettings = {
