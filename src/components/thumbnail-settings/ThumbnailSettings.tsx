@@ -13,7 +13,7 @@ import {
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
-import React, {ReactNode, useMemo} from 'react';
+import React, {ReactNode, useEffect, useMemo} from 'react';
 import {
   ColorControl,
   FontControl,
@@ -50,6 +50,13 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
     titleFontSize,
     hoverEffect,
   } = value as IThumbnailSettings;
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      '--reacg-thumbnails-gap',
+      `${gap}`
+    );
+  }, [gap]);
 
   const isThumbnailTitlePositionEditable: boolean = borderRadius <= 50;
 
