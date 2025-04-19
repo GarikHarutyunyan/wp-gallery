@@ -54,7 +54,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
   useEffect(() => {
     document.documentElement.style.setProperty(
       '--reacg-thumbnails-gap',
-      `${gap}`
+      `${gap}px`
     );
   }, [gap]);
 
