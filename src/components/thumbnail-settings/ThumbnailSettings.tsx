@@ -2,7 +2,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
 import {useSettings} from 'components/settings';
-import {useTemplates} from 'contexts';
+import {useAppInfo, useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {
   HoverEffectOptions,
@@ -13,7 +13,7 @@ import {
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
-import React, {ReactNode, useMemo} from 'react';
+import React, {ReactNode, useEffect, useMemo} from 'react';
 import {
   ColorControl,
   FontControl,
@@ -29,6 +29,7 @@ interface IThumbnailSettingsProps {
 }
 
 const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
+  const {galleryId} = useAppInfo();
   const {resetTemplate} = useTemplates();
   const {thumbnailSettings: value, changeThumbnailSettings: onChange} =
     useSettings();
@@ -50,6 +51,12 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
     titleFontSize,
     hoverEffect,
   } = value as IThumbnailSettings;
+
+  useEffect(() => {
+    document
+      .getElementById('reacg-root' + galleryId)
+      ?.style.setProperty('--reacg-thumbnails-gap', `${gap}px`);
+  }, [gap, galleryId]);
 
   const isThumbnailTitlePositionEditable: boolean = borderRadius <= 50;
 
