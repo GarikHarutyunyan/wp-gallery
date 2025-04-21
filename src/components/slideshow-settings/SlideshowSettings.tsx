@@ -55,7 +55,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
     captionsPosition,
     captionFontFamily,
     captionColor,
-    IsFullCoverImage,
+    isFullCoverImage,
   } = value as ISlideshowSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -101,9 +101,9 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
 
               <Filter isLoading={isLoading}>
                 <SwitchControl
-                  id={'IsFullCoverImage'}
+                  id={'isFullCoverImage'}
                   name={'Full cover image'}
-                  value={IsFullCoverImage}
+                  value={isFullCoverImage}
                   onChange={onInputValueChange}
                 />
               </Filter>
