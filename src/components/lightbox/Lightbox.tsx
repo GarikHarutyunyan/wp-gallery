@@ -197,6 +197,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         close={onClose}
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
+        controller={{closeOnBackdropClick: true}}
         animation={{
           swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
           easing: {swipe: 'ease-out', navigation: 'ease-in-out'},
@@ -210,16 +211,17 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           padding,
         }}
         // #TODO add generic validation mechanism to avoid this kind of checkings
-        thumbnails={{
-          position: thumbnailsPosition as any,
-          width: thumbnailWidth > 0 ? thumbnailWidth : 10,
-          height: thumbnailHeight > 0 ? thumbnailHeight : 10,
-          border: thumbnailBorder,
-          padding: 0,
-          gap: thumbnailGap,
-          imageFit: 'cover',
-          vignette: false,
-        }}
+        // thumbnails={{
+        //   position: thumbnailsPosition as any,
+        //   width: thumbnailWidth > 0 ? thumbnailWidth : 10,
+        //   height: thumbnailHeight > 0 ? thumbnailHeight : 10,
+        //   border: thumbnailBorder,
+        //   padding: 0,
+        //   gap: thumbnailGap,
+        //   imageFit: 'cover',
+        //   vignette: false,
+
+        // }}
         video={{
           autoPlay: videoAutoplay,
         }}
