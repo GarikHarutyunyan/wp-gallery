@@ -146,7 +146,7 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                         "Images" section.{' '}
                         <a
                           className="seetings__see-more-link"
-                          href="https://www.youtube.com/watch?v=u_AAWKQuaTA"
+                          href="https://youtu.be/ziAG16MADbY"
                           target="_blank"
                         >
                           See more
@@ -206,7 +206,7 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                         "Images" section.{' '}
                         <a
                           className="seetings__see-more-link"
-                          href="https://www.youtube.com/watch?v=u_AAWKQuaTA"
+                          href="https://youtu.be/ziAG16MADbY"
                           target="_blank"
                         >
                           See more
