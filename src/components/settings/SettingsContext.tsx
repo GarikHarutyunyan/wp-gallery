@@ -114,7 +114,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
     setMasonrySettings(newSettings.masonry || mosaicMockSettings);
     setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
-
     setLightboxSettings(newSettings.lightbox);
     setCubeSettings(newSettings.cube || cubeMockSettings);
     setCarouselSettings(newSettings.carousel || carouselMockSettings);
