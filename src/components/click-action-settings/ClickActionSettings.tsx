@@ -39,8 +39,16 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
         <p>
           <b>{'Action URL:'}</b>
           {
-            ' Clicking an image redirects to a specified URL. The URL must be set by editing each image from "Images" section.'
+            ' Clicking an image redirects to a specified URL. The URL must be set by editing each image from "Images" section. '
           }
+          <a
+            className="seetings__see-more-link"
+            href="https://www.youtube.com/watch?v=u_AAWKQuaTA"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            See more
+          </a>
         </p>
       </>
     );
