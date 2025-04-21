@@ -116,9 +116,6 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
               >
                 {image.type === 'video' ? (
                   <video autoPlay muted loop playsInline>
-                    <source src={image.thumbnail.url} type="video/mp4" />
-                    <source src={image.medium_large.url} type="video/mp4" />
-                    <source src={image.large.url} type="video/mp4" />
                     <source src={image.original.url} type="video/mp4" />
                   </video>
                 ) : (
