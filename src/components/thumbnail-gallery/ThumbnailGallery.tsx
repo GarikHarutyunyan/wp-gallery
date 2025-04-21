@@ -4,6 +4,7 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
+import {useAppInfo} from 'contexts';
 import {
   IImageDTO,
   IThumbnailSettings,
@@ -31,6 +32,7 @@ const VideoThumbnailIcon = createIcon(
 );
 
 const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
+  const {galleryId} = useAppInfo();
   const {thumbnailSettings: settings} = useSettings();
   const {images} = useData();
   const {
@@ -65,6 +67,12 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     changeContainerWidth();
     window.addEventListener('resize', () => changeContainerWidth());
   }, []);
+
+  useEffect(() => {
+    document
+      .getElementById('reacg-root' + galleryId)
+      ?.style.setProperty('--reacg-thumbnails-gap', `${gap}px`);
+  }, [gap, galleryId]);
 
   const getValidColumnsCount = (): number => {
     const containerBox: number = +width + 2 * padding;
