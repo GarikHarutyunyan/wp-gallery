@@ -211,17 +211,16 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           padding,
         }}
         // #TODO add generic validation mechanism to avoid this kind of checkings
-        // thumbnails={{
-        //   position: thumbnailsPosition as any,
-        //   width: thumbnailWidth > 0 ? thumbnailWidth : 10,
-        //   height: thumbnailHeight > 0 ? thumbnailHeight : 10,
-        //   border: thumbnailBorder,
-        //   padding: 0,
-        //   gap: thumbnailGap,
-        //   imageFit: 'cover',
-        //   vignette: false,
-
-        // }}
+        thumbnails={{
+          position: thumbnailsPosition as any,
+          width: thumbnailWidth > 0 ? thumbnailWidth : 10,
+          height: thumbnailHeight > 0 ? thumbnailHeight : 10,
+          border: thumbnailBorder,
+          padding: 0,
+          gap: thumbnailGap,
+          imageFit: 'cover',
+          vignette: false,
+        }}
         video={{
           autoPlay: videoAutoplay,
         }}
