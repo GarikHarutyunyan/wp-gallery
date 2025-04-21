@@ -143,7 +143,14 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                     info={
                       <p>
                         The Title must be set by editing each image from
-                        "Images" section.
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://www.youtube.com/watch?v=u_AAWKQuaTA"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
                       </p>
                     }
                     onChange={onInputValueChange}
@@ -196,7 +203,14 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                     info={
                       <p>
                         The Description must be set by editing each image from
-                        "Images" section.
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://www.youtube.com/watch?v=u_AAWKQuaTA"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
                       </p>
                     }
                     onChange={onInputValueChange}
