@@ -55,6 +55,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
+
     key && onChange({...value, [key]: inputValue});
   };
 
@@ -230,7 +231,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
         <Filter isLoading={isLoading}>
           <SelectControl
             id={'titleAlignment'}
-            name={'Title alignement'}
+            name={'Title alignment'}
             value={titleAlignment}
             options={TitleAlignmentOptions}
             onChange={onInputValueChange}

@@ -27,6 +27,7 @@
   width: 50%;
   overflow: hidden;
   align-self: center;
+  position: relative;
 }
 .blog-gallery__image_clickable {
   cursor: pointer;
