@@ -68,6 +68,7 @@ const SettingsContext = React.createContext<{
   changeCss?: any;
   wrapperRef?: any;
   imagesCount?: number;
+  onReset?: any;
   changeImagesCount?: (count: number) => void;
 }>({});
 
@@ -315,7 +316,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
         setCss(newSettings.css || '');
-        changeTemplate?.(newSettings.template_id as string);
+        initTemplate?.(
+          newSettings?.template_id as string,
+          newSettings?.title as string
+        );
         enqueueSnackbar(successMessage, {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -391,6 +395,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         wrapperRef,
         imagesCount,
         changeImagesCount: setImagesCount,
+        onReset,
       }}
     >
       {showControls && (
