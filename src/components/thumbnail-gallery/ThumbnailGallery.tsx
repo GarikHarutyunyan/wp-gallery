@@ -208,24 +208,16 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     );
   };
 
-  useEffect(() => {
+  const onLoad = (index = 0) => {
     if (!listRef.current) return;
     const imgElements = listRef.current.querySelectorAll('img');
-
-    const loadNext = (index = 0) => {
-      if (index >= imgElements.length) return;
-      const img = imgElements[index];
-      const dataSrc = img.getAttribute('data-src');
-      if (dataSrc) {
-        img.src = dataSrc;
-        img.onload = () => loadNext(index + 1);
-      } else {
-        loadNext(index + 1);
-      }
-    };
-
-    loadNext();
-  }, []);
+    const img = imgElements[index];
+    const wrapper = img.closest('.image-wrapper');
+    const placeholder = wrapper?.querySelector('.placeholder');
+    const dataSrc = img.getAttribute('data-src');
+    img.classList.add('loaded');
+    placeholder?.remove();
+  };
 
   const listRef = useRef<HTMLUListElement | null>(null);
 
@@ -276,6 +268,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
                 >
                   <div
                     className={clsx(
+                      'image-wrapper',
                       'thumbnail-gallery__image-wrapper',
                       'thumbnail-gallery__image-wrapper_overflow',
                       'thumbnail-gallery__image-wrapper_' + hoverEffect,
@@ -286,24 +279,24 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
                       height: getHeight + 'px',
                       margin: padding + 'px',
                       borderRadius: borderRadius + '%',
+                      backgroundColor: 'grey',
                     }}
                   >
+                    <div className="placeholder" />
                     <img
                       className={clsx(
                         'thumbnail-gallery__image',
                         'MuiImageListItem-img'
                       )}
-                      // src={getImageSource(image)}
-                      src={
-                        'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='
-                      }
-                      data-src={getImageSource(image)}
+                      src={getImageSource(image)}
+                      // data-src={getImageSource(image)}
                       alt={image.title}
-                      loading="lazy"
+                      loading="eager"
                       style={{
                         width: getWidth + 'px',
                         height: getHeight + 'px',
                       }}
+                      onLoad={() => onLoad(index)}
                     />
                     {image.type === ImageType.VIDEO && (
                       <VideoThumbnailIcon
