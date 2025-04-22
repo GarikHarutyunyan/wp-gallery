@@ -6,7 +6,7 @@ import {
   LightboxImageAnimation,
   LightboxThumbnailsPosition,
 } from 'data-structures';
-import React, {useEffect, useId, useMemo, useState} from 'react';
+import React, {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
@@ -32,20 +32,55 @@ interface ILightboxBackgroundProps {
   id: string;
   isVisible: boolean;
   onClick: () => void;
+  setDrag: (value: boolean) => void;
 }
 
 const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   id,
   isVisible,
   onClick,
+  setDrag,
 }) => {
   const element = document.getElementById('wpwrap') || document.body;
+  const startPos = useRef({x: 0, y: 0});
+  const dragged = useRef(false);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+
+  const dragThreshold = 5; // px
+
+  const handleMouseDown = (e: any) => {
+    startPos.current = {x: e.clientX, y: e.clientY};
+    dragged.current = false;
+    setIsMouseDown(true); // Mark mouse down
+  };
+
+  const handleMouseUp = (e: any) => {
+    if (!dragged.current) {
+      setDrag(false);
+    } else {
+      setDrag(true);
+    }
+    setIsMouseDown(false); // Reset mouse down flag
+  };
+
+  const handleMouseMove = (e: any) => {
+    if (isMouseDown) {
+      const dx = Math.abs(e.clientX - startPos.current.x);
+      const dy = Math.abs(e.clientY - startPos.current.y);
+      if (dx > dragThreshold || dy > dragThreshold) {
+        dragged.current = true;
+      }
+    }
+  };
 
   return createPortal(
     <div
       onClick={onClick}
       className={'react-lightbox__background'}
       style={{display: isVisible ? 'block' : 'none'}}
+      onMouseDown={handleMouseDown}
+      onMouseMove={isMouseDown ? handleMouseMove : undefined}
+      onMouseUp={handleMouseUp}
     >
       <div
         id={`reacg-lightbox__background-helper${id}`}
@@ -62,6 +97,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
 }) => {
   const {lightboxSettings: settings} = useSettings();
   const {lightboxImages: images} = useData();
+  const [drag, setDrag] = useState(false);
   const {
     isFullscreen,
     width,
@@ -197,7 +233,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         close={onClose}
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
-        controller={{closeOnBackdropClick: true}}
+        controller={{closeOnBackdropClick: !drag}}
         animation={{
           swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
           easing: {swipe: 'ease-out', navigation: 'ease-in-out'},
@@ -285,6 +321,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         isVisible={activeIndex >= 0}
         onClick={onClose}
         id={lightboxId}
+        setDrag={setDrag}
       />
     </>
   );
