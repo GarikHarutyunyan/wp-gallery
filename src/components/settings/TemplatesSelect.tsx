@@ -46,7 +46,6 @@ const TemplatesSelect: React.FC = () => {
     type: activeType,
     changeType,
     changeCss,
-    onReset,
   } = useSettings();
   const initialPreviewDialogInfo = {
     isVisible: false,
@@ -176,11 +175,7 @@ const TemplatesSelect: React.FC = () => {
     }) || [];
 
   const onChange = (newValue: string | number) => {
-    if (newValue === 0) {
-      onReset();
-    } else {
-      changeTemplate?.(newValue as string);
-    }
+    changeTemplate?.(newValue as string);
   };
 
   const resetPreviewDialogInfo = () =>

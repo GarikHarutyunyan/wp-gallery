@@ -68,7 +68,6 @@ const SettingsContext = React.createContext<{
   changeCss?: any;
   wrapperRef?: any;
   imagesCount?: number;
-  onReset?: any;
   changeImagesCount?: (count: number) => void;
 }>({});
 
@@ -77,7 +76,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {
     template,
     initTemplate,
-    changeTemplate,
     resetTemplate,
     isLoading: areTemplatesLoading,
   } = useTemplates();
@@ -395,7 +393,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         wrapperRef,
         imagesCount,
         changeImagesCount: setImagesCount,
-        onReset,
       }}
     >
       {showControls && (

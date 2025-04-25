@@ -29,12 +29,13 @@ const emptyTemplate: ITemplate = {
 };
 
 const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
+  const {pluginVersion, showControls, baseUrl, getOptionsTimestamp} =
+    useAppInfo();
   const {enqueueSnackbar} = useSnackbar();
   const [templates, setTemplates] = useState<ITemplateReference[]>([]);
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
-  const {showControls, pluginVersion} = useAppInfo();
 
   const getTemplates = async () => {
     if (!showControls) {
@@ -61,16 +62,30 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
-  const getTemplate = async (id: string): Promise<void> => {
-    const fetchUrl: string = `https://regallery.team/core/wp-json/reacgcore/v2/template/${id}`;
+  const getTemplate = async (id: string | number): Promise<void> => {
+    const coreUrl: string = `https://regallery.team/core/wp-json/reacgcore/v2/template/${id}`;
+    const coreUrlQueryStringSeperator: string = coreUrl.includes('?')
+      ? '&'
+      : '?';
+    let coreUrlQueryString = coreUrlQueryStringSeperator;
+    coreUrlQueryString += `version=${pluginVersion}`;
+    // baseUrl/options/0 endpoint returns default options
+    const optionsUrl: string = baseUrl ? baseUrl + 'options/' + id : '';
+    const optionsUrlQueryStringSeperator: string = optionsUrl.includes('?')
+      ? '&'
+      : '?';
+    let optionsUrlQueryString = optionsUrlQueryStringSeperator;
+    optionsUrlQueryString += `timestamp=${getOptionsTimestamp?.()}`;
 
-    if (id !== '') {
+    const fetchUrl: string =
+      id === 0
+        ? `${optionsUrl}${optionsUrlQueryString}`
+        : `${coreUrl}${coreUrlQueryString}`;
+
+    if (fetchUrl && id !== '') {
       setIsLoading(true);
       try {
-        const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
-        let queryString = queryStringSeperator;
-        queryString += `version=${pluginVersion}`;
-        const response = await axios.get(`${fetchUrl}${queryString}`);
+        const response = await axios.get(fetchUrl);
         if (response.status === 204) {
           openDialog();
         } else {
