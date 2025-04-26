@@ -152,7 +152,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               style={{
                 color: textColor,
                 fontFamily: textFontFamily,
-                fontSize: titleFontSize,
+                fontSize: `${titleFontSize * (innerWidth / 100)}px`,
                 textAlign: titleAlignment,
               }}
             >
@@ -165,7 +165,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               style={{
                 color: textColor,
                 fontFamily: textFontFamily,
-                fontSize: descriptionFontSize,
+                fontSize: `${descriptionFontSize * (innerWidth / 100)}px`,
                 WebkitLineClamp: descriptionMaxRowsCount,
                 WebkitBoxOrient: 'vertical',
                 display: '-webkit-box',
@@ -219,25 +219,32 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     showDescription,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    innerWidth,
   ]);
+
   const slideMargins = useMemo(() => {
     const hasCaptions = showTitle || showDescription;
     const titleSpace =
-      showTitle && images![index]?.title ? titleFontSize * 1.5 : 0;
-    const descriptionSpace =
-      showDescription && images![index]?.description
-        ? descriptionFontSize * 1.5 * (descriptionMaxRowsCount || 1)
+      showTitle && images![index].title
+        ? titleFontSize * (innerWidth / 100) * 1.5 + 8
         : 0;
-    const extraSpace = 10;
+    const descriptionSpace =
+      showDescription && images![index].description
+        ? descriptionFontSize *
+          (innerWidth / 100) *
+          1.5 *
+          (descriptionMaxRowsCount || 1)
+        : 0;
+    const parentPadding = 20;
 
     return {
       marginTop:
         textPosition === LightboxCaptionsPosition.ABOVE && hasCaptions
-          ? titleSpace + descriptionSpace + extraSpace
+          ? titleSpace + descriptionSpace + parentPadding
           : 0,
       marginBottom:
         textPosition === LightboxCaptionsPosition.BELOW && hasCaptions
-          ? titleSpace + descriptionSpace + extraSpace
+          ? titleSpace + descriptionSpace + parentPadding
           : 0,
     };
   }, [
@@ -248,8 +255,10 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     descriptionFontSize,
     descriptionMaxRowsCount,
     index,
-    images,
+    padding,
+    innerWidth,
   ]);
+
   const renderLighbox = () => {
     return (
       <Lightbox
@@ -311,7 +320,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             'margin': 'auto',
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
-            '--yarl__slide_captions_container_background': `${backgroundColor}80`,
+            '--yarl__slide_captions_container_background':
+              showTitle || showDescription ? `${backgroundColor}80` : `none`,
           },
           thumbnail: {
             '--yarl__thumbnails_thumbnail_active_border_color':

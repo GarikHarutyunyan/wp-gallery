@@ -114,20 +114,21 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
               style={{
                 color: textColor,
                 fontFamily: textFontFamily,
-                fontSize: titleFontSize,
+                fontSize: `${titleFontSize * (innerWidth / 100)}px`,
                 textAlign: titleAlignment,
               }}
             >
               {image.title}
             </p>
           )}
+
           {showDescription && image.description && (
             <p
               className={'reacg-slideshow-captions__description'}
               style={{
                 color: textColor,
                 fontFamily: textFontFamily,
-                fontSize: descriptionFontSize,
+                fontSize: `${descriptionFontSize * (innerWidth / 100)}px`,
                 WebkitLineClamp: descriptionMaxRowsCount,
                 WebkitBoxOrient: 'vertical',
                 display: '-webkit-box',
@@ -181,26 +182,32 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     showDescription,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    innerWidth,
   ]);
 
   const slideMargins = useMemo(() => {
     const hasCaptions = showTitle || showDescription;
     const titleSpace =
-      showTitle && images![index].title ? titleFontSize * 1.5 : 0;
+      showTitle && images![index].title
+        ? titleFontSize * (innerWidth / 100) * 1.5 + 8
+        : 0;
     const descriptionSpace =
       showDescription && images![index].description
-        ? descriptionFontSize * 1.5 * (descriptionMaxRowsCount || 1)
+        ? descriptionFontSize *
+          (innerWidth / 100) *
+          1.5 *
+          (descriptionMaxRowsCount || 1)
         : 0;
-    const extraSpace = 10;
+    const parentPadding = 20;
 
     return {
       marginTop:
         textPosition === LightboxCaptionsPosition.ABOVE && hasCaptions
-          ? titleSpace + descriptionSpace + extraSpace
+          ? titleSpace + descriptionSpace + parentPadding
           : 0,
       marginBottom:
         textPosition === LightboxCaptionsPosition.BELOW && hasCaptions
-          ? titleSpace + descriptionSpace + extraSpace
+          ? titleSpace + descriptionSpace + parentPadding
           : 0,
     };
   }, [
@@ -211,6 +218,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     descriptionFontSize,
     descriptionMaxRowsCount,
     index,
+    padding,
+    innerWidth,
   ]);
 
   useEffect(() => {
@@ -282,7 +291,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
             'margin': 'auto',
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
-            '--yarl__slide_captions_container_background': `${backgroundColor}80`,
+            '--yarl__slide_captions_container_background':
+              showTitle || showDescription ? `${backgroundColor}80` : `none`,
           },
           thumbnail: {
             '--yarl__thumbnails_thumbnail_active_border_color':

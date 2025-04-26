@@ -113,13 +113,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
     setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
     setMasonrySettings(newSettings.masonry || mosaicMockSettings);
-    setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
+    // setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
+    // setLightboxSettings(newSettings.lightbox);
+    setSlideshowSettings(slideshowMockSettings);
     setLightboxSettings(newSettings.lightbox);
     setCubeSettings(newSettings.cube || cubeMockSettings);
     setCarouselSettings(newSettings.carousel || carouselMockSettings);
     setCardsSettings(newSettings.cards || cardsMockSettings);
     setBlogSettings(newSettings.blog || blogMockSettings);
-
     initTemplate?.(
       newSettings?.template_id as string,
       newSettings?.title as string
@@ -146,7 +147,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
       setMasonrySettings(newSettings.masonry || mosaicMockSettings);
-      setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
+      // setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
+      // setLightboxSettings(newSettings.lightbox);
+      setSlideshowSettings(slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
       setCubeSettings(newSettings.cube || cubeMockSettings);
       setCarouselSettings(newSettings.carousel || carouselMockSettings);

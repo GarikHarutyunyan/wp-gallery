@@ -232,7 +232,9 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                           name={'Title font size'}
                           value={titleFontSize}
                           onChange={onInputValueChange}
-                          unit={'px'}
+                          unit={'vw'}
+                          max={5}
+                          step={0.1}
                         />
                       </Filter>
 
@@ -273,7 +275,9 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                           name={'Description font size'}
                           value={descriptionFontSize}
                           onChange={onInputValueChange}
-                          unit={'px'}
+                          unit={'vw'}
+                          max={5}
+                          step={0.1}
                         />
                       </Filter>
 

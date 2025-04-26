@@ -272,7 +272,9 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                         name={'Title font size'}
                         value={titleFontSize}
                         onChange={onInputValueChange}
-                        unit={'px'}
+                        unit={'vw'}
+                        max={5}
+                        step={0.1}
                       />
                     </Filter>
 
@@ -313,7 +315,9 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                         name={'Description font size'}
                         value={descriptionFontSize}
                         onChange={onInputValueChange}
-                        unit={'px'}
+                        unit={'vw'}
+                        max={5}
+                        step={0.1}
                       />
                     </Filter>
 
