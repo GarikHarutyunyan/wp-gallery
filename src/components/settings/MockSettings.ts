@@ -150,7 +150,6 @@ const lightboxMockSettings: ILightboxSettings = {
   captionFontFamily: 'Roboto',
   captionColor: 'White',
   imageAnimation: LightboxImageAnimation.BLUR,
-  isFullCoverImage: false,
 };
 
 const cubeMockSettings: ICubeSettings = {

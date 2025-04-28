@@ -103,7 +103,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                 <SwitchControl
                   id={'isFullCoverImage'}
                   name={'Full cover image'}
-                  value={isFullCoverImage}
+                  value={isFullCoverImage ?? false}
                   onChange={onInputValueChange}
                 />
               </Filter>
