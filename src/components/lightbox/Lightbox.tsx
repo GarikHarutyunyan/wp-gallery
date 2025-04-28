@@ -95,11 +95,14 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     descriptionFontSize,
     descriptionMaxRowsCount,
   } = settings as ILightboxSettings;
+  const lightboxId: string = useId();
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
-  const lightboxId: string = useId();
   const [index, setIndex] = useState(0);
+
+  const minFactor = 1.45;
+  const maxFactor = 1.25;
 
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Video];
@@ -152,7 +155,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               style={{
                 color: textColor,
                 fontFamily: textFontFamily,
-                fontSize: `${titleFontSize * (innerWidth / 100)}px`,
+                fontSize: `clamp(${titleFontSize / minFactor}rem, ${
+                  titleFontSize * (innerWidth / 100)
+                }px, ${titleFontSize * maxFactor}rem)`,
                 textAlign: titleAlignment,
               }}
             >
@@ -165,7 +170,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               style={{
                 color: textColor,
                 fontFamily: textFontFamily,
-                fontSize: `${descriptionFontSize * (innerWidth / 100)}px`,
+                fontSize: `clamp(${descriptionFontSize / minFactor}rem, ${
+                  descriptionFontSize * (innerWidth / 100)
+                }px, ${descriptionFontSize * maxFactor}rem)`,
                 WebkitLineClamp: descriptionMaxRowsCount,
                 WebkitBoxOrient: 'vertical',
                 display: '-webkit-box',
@@ -223,31 +230,53 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   ]);
 
   const slideMargins = useMemo(() => {
-    const hasCaptions = showTitle || showDescription;
-    const titleSpace =
-      showTitle && images![index].title
-        ? titleFontSize * (innerWidth / 100) * 1.5 + 8
-        : 0;
-    const descriptionSpace =
-      showDescription && images![index].description
-        ? descriptionFontSize *
-          (innerWidth / 100) *
-          1.5 *
-          (descriptionMaxRowsCount || 1)
-        : 0;
-    const parentPadding = 20;
+    const titleMarginPx = 8;
+    const verticalPaddingAroundText = 20;
+
+    const titleSpace = !!(showTitle && images?.[index]?.title);
+    const descriptionSpace = !!(
+      showDescription && images?.[index]?.description
+    );
+    const hasCaptions = titleSpace || descriptionSpace;
+
+    const getClampedSize = (fontSize: number) =>
+      `clamp(${fontSize / minFactor}rem, ${(fontSize * innerWidth) / 100}px, ${
+        fontSize * maxFactor
+      }rem)`;
+
+    const buildCalcPart = () => {
+      const parts: string[] = [];
+
+      if (titleSpace) {
+        parts.push(
+          `(${getClampedSize(titleFontSize)} * 1.5 + ${titleMarginPx}px)`
+        );
+      }
+
+      if (descriptionSpace) {
+        parts.push(
+          `(${getClampedSize(descriptionFontSize)} * 1.5 * ${
+            descriptionMaxRowsCount || 1
+          })`
+        );
+      }
+
+      if (parts.length > 0) {
+        parts.push(`${verticalPaddingAroundText}px`);
+      }
+
+      return parts.length > 0 ? `calc(${parts.join(' + ')})` : '0';
+    };
+
+    const margin = hasCaptions ? buildCalcPart() : 0;
 
     return {
-      marginTop:
-        textPosition === LightboxCaptionsPosition.ABOVE && hasCaptions
-          ? titleSpace + descriptionSpace + parentPadding
-          : 0,
+      marginTop: textPosition === LightboxCaptionsPosition.ABOVE ? margin : 0,
       marginBottom:
-        textPosition === LightboxCaptionsPosition.BELOW && hasCaptions
-          ? titleSpace + descriptionSpace + parentPadding
-          : 0,
+        textPosition === LightboxCaptionsPosition.BELOW ? margin : 0,
     };
   }, [
+    images,
     textPosition,
     showTitle,
     showDescription,
@@ -321,7 +350,10 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
             '--yarl__slide_captions_container_background':
-              showTitle || showDescription ? `${backgroundColor}80` : `none`,
+              (showTitle && images![index]?.title) ||
+              (showDescription && images![index]?.description)
+                ? `${backgroundColor}80`
+                : `none`,
           },
           thumbnail: {
             '--yarl__thumbnails_thumbnail_active_border_color':
