@@ -188,4 +188,5 @@ export interface ISettingsDTO {
   template_id?: number | string;
   title?: string;
   css?: string;
+  custom_css?: string;
 }
