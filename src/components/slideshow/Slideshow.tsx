@@ -334,8 +334,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
             '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
           },
           toolbar: {
-            marginTop: `${slideMargins.marginTop}`,
-            marginBottom: `${slideMargins.marginBottom}`,
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
           },
           navigationPrev: {
             marginTop: slideMargins.marginTop,
