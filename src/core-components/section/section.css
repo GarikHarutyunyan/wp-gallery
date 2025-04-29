@@ -40,3 +40,7 @@
   display: flex;
   align-items: flex-end;
 }
+
+.seetings__see-more-link {
+  color: #42abff;
+}

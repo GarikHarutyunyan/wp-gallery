@@ -76,7 +76,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {
     template,
     initTemplate,
-    changeTemplate,
     resetTemplate,
     isLoading: areTemplatesLoading,
   } = useTemplates();
@@ -320,7 +319,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
         setCss(newSettings.css || '');
-        changeTemplate?.(newSettings.template_id as string);
+        initTemplate?.(
+          newSettings?.template_id as string,
+          newSettings?.title as string
+        );
         enqueueSnackbar(successMessage, {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},

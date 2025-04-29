@@ -140,6 +140,19 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                     id={'showTitle'}
                     name={'Show title'}
                     value={showTitle}
+                    info={
+                      <p>
+                        The Title must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
                     onChange={onInputValueChange}
                   />
                 </Filter>
@@ -165,7 +178,7 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                     <Filter isLoading={isLoading}>
                       <SelectControl
                         id={'titleAlignment'}
-                        name={'Title alignement'}
+                        name={'Title alignment'}
                         value={titleAlignment}
                         options={TitleAlignmentOptions}
                         onChange={onInputValueChange}
@@ -187,6 +200,19 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                     id={'showDescription'}
                     name={'Show description'}
                     value={showDescription}
+                    info={
+                      <p>
+                        The Description must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
                     onChange={onInputValueChange}
                   />
                 </Filter>

@@ -7,7 +7,7 @@ const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebook/create-react-app/issues/637
 const appDirectory = fs.realpathSync(process.cwd());
-const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
+const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 
 // We use `PUBLIC_URL` environment variable or "homepage" field to infer
 // "public path" at which the app is served.
@@ -21,7 +21,8 @@ const publicUrlOrPath = getPublicUrlOrPath(
   process.env.PUBLIC_URL
 );
 
-const buildPath = process.env.BUILD_PATH || 'build';
+const buildPath =
+  process.env.WP_BUILD_PATH || process.env.BUILD_PATH || 'build';
 
 const moduleFileExtensions = [
   'web.mjs',
@@ -39,7 +40,7 @@ const moduleFileExtensions = [
 
 // Resolve file paths in the same order as webpack
 const resolveModule = (resolveFn, filePath) => {
-  const extension = moduleFileExtensions.find(extension =>
+  const extension = moduleFileExtensions.find((extension) =>
     fs.existsSync(resolveFn(`${filePath}.${extension}`))
   );
 
@@ -71,7 +72,5 @@ module.exports = {
   swSrc: resolveModule(resolveApp, 'src/service-worker'),
   publicUrlOrPath,
 };
-
-
 
 module.exports.moduleFileExtensions = moduleFileExtensions;
