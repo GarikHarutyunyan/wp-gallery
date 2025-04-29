@@ -85,14 +85,24 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     thumbnailPadding,
     thumbnailGap,
     backgroundColor,
-    captionsPosition,
-    captionFontFamily,
-    captionColor,
+    textPosition,
+    textFontFamily,
+    textColor,
+    showTitle,
+    titleFontSize,
+    titleAlignment,
+    showDescription,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
   } = settings as ILightboxSettings;
+  const lightboxId: string = useId();
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
-  const lightboxId: string = useId();
+  const [index, setIndex] = useState(0);
+
+  const minFactor = 1.45;
+  const maxFactor = 1.25;
 
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Video];
@@ -111,7 +121,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (captionsPosition !== LightboxCaptionsPosition.NONE) {
+    if (textPosition !== LightboxCaptionsPosition.NONE) {
       newPlugins.push(Captions as any);
     }
 
@@ -123,7 +133,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     autoplay,
     isFullscreenAllowed,
     thumbnailsPosition,
-    captionsPosition,
+    textPosition,
   ]);
 
   useEffect(() => {
@@ -139,18 +149,38 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     return images!.map((image: IImageDTO) => ({
       description: (
         <>
-          <p
-            className={'reacg-lightbox-captions__title'}
-            style={{color: captionColor, fontFamily: captionFontFamily}}
-          >
-            {image.title}
-          </p>
-          <p
-            className={'reacg-lightbox-captions__description'}
-            style={{color: captionColor, fontFamily: captionFontFamily}}
-          >
-            {image.description}
-          </p>
+          {showTitle && image.title && (
+            <p
+              className={'reacg-lightbox-captions__title'}
+              style={{
+                color: textColor,
+                fontFamily: textFontFamily,
+                fontSize: `clamp(${titleFontSize / minFactor}rem, ${
+                  titleFontSize * (innerWidth / 100)
+                }px, ${titleFontSize * maxFactor}rem)`,
+                textAlign: titleAlignment,
+              }}
+            >
+              {image.title}
+            </p>
+          )}
+          {showDescription && image.description && (
+            <p
+              className={'reacg-lightbox-captions__description'}
+              style={{
+                color: textColor,
+                fontFamily: textFontFamily,
+                fontSize: `clamp(${descriptionFontSize / minFactor}rem, ${
+                  descriptionFontSize * (innerWidth / 100)
+                }px, ${descriptionFontSize * maxFactor}rem)`,
+                WebkitLineClamp: descriptionMaxRowsCount,
+                WebkitBoxOrient: 'vertical',
+                display: '-webkit-box',
+              }}
+            >
+              {image.description}
+            </p>
+          )}
         </>
       ),
       type: image.type,
@@ -186,7 +216,77 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       ],
       metadata: image.thumbnail.url,
     }));
-  }, [images, captionColor, captionFontFamily]);
+  }, [
+    images,
+    textColor,
+    textFontFamily,
+    showTitle,
+    titleFontSize,
+    titleAlignment,
+    showDescription,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
+    innerWidth,
+  ]);
+
+  const slideMargins = useMemo(() => {
+    const titleMarginPx = 8;
+    const verticalPaddingAroundText = 20;
+
+    const titleSpace = !!(showTitle && images?.[index]?.title);
+    const descriptionSpace = !!(
+      showDescription && images?.[index]?.description
+    );
+    const hasCaptions = titleSpace || descriptionSpace;
+
+    const getClampedSize = (fontSize: number) =>
+      `clamp(${fontSize / minFactor}rem, ${(fontSize * innerWidth) / 100}px, ${
+        fontSize * maxFactor
+      }rem)`;
+
+    const buildCalcPart = () => {
+      const parts: string[] = [];
+
+      if (titleSpace) {
+        parts.push(
+          `(${getClampedSize(titleFontSize)} * 1.5 + ${titleMarginPx}px)`
+        );
+      }
+
+      if (descriptionSpace) {
+        parts.push(
+          `(${getClampedSize(descriptionFontSize)} * 1.5 * ${
+            descriptionMaxRowsCount || 1
+          })`
+        );
+      }
+
+      if (parts.length > 0) {
+        parts.push(`${verticalPaddingAroundText}px`);
+      }
+
+      return parts.length > 0 ? `calc(${parts.join(' + ')})` : '0';
+    };
+
+    const margin = hasCaptions ? buildCalcPart() : 0;
+
+    return {
+      marginTop: textPosition === LightboxCaptionsPosition.ABOVE ? margin : 0,
+      marginBottom:
+        textPosition === LightboxCaptionsPosition.BELOW ? margin : 0,
+    };
+  }, [
+    images,
+    textPosition,
+    showTitle,
+    showDescription,
+    titleFontSize,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
+    index,
+    padding,
+    innerWidth,
+  ]);
 
   const renderLighbox = () => {
     return (
@@ -229,15 +329,15 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           {
             'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
             'reacg-lightbox-captions':
-              captionsPosition !== LightboxCaptionsPosition.NONE,
+              textPosition !== LightboxCaptionsPosition.NONE,
             'reacg-lightbox-captions_top': [
               LightboxCaptionsPosition.TOP,
               LightboxCaptionsPosition.ABOVE,
-            ].includes(captionsPosition),
+            ].includes(textPosition),
             'reacg-lightbox-captions_below':
-              captionsPosition === LightboxCaptionsPosition.BELOW,
+              textPosition === LightboxCaptionsPosition.BELOW,
             'reacg-lightbox-captions_above':
-              captionsPosition === LightboxCaptionsPosition.ABOVE,
+              textPosition === LightboxCaptionsPosition.ABOVE,
           }
         )}
         styles={{
@@ -249,7 +349,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             'margin': 'auto',
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
-            '--yarl__slide_captions_container_background': `${backgroundColor}80`,
+            '--yarl__slide_captions_container_background':
+              (showTitle && images![index]?.title) ||
+              (showDescription && images![index]?.description)
+                ? `${backgroundColor}80`
+                : `none`,
           },
           thumbnail: {
             '--yarl__thumbnails_thumbnail_active_border_color':
@@ -258,7 +362,29 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               thumbnailBorderColor || 'transparent',
             '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
           },
+          toolbar: {
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
+          },
+          navigationPrev: {
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
+            ...(slideMargins.marginTop || slideMargins.marginBottom
+              ? {transform: 'translateY(0%)', top: 'auto'}
+              : {}),
+          },
+          navigationNext: {
+            marginTop: `${slideMargins.marginTop}`,
+            marginBottom: `${slideMargins.marginBottom}`,
+            ...(slideMargins.marginTop || slideMargins.marginBottom
+              ? {transform: 'translateY(0%)', top: 'auto'}
+              : {}),
+          },
           container: {backgroundColor: `${backgroundColor}`},
+          slide: {
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
+          },
         }}
         portal={{
           root: document.getElementById(
@@ -272,6 +398,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           slideshowStop: () => {
             if (videoAutoplay) setVideoAutoplay(false);
           },
+          view: ({index: currentIndex}) => setIndex(currentIndex),
         }}
       />
     );

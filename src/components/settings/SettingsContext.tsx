@@ -112,13 +112,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
     setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
     setMasonrySettings(newSettings.masonry || mosaicMockSettings);
-    setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
+    // setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
+    // setLightboxSettings(newSettings.lightbox);
+    setSlideshowSettings(slideshowMockSettings);
     setLightboxSettings(newSettings.lightbox);
     setCubeSettings(newSettings.cube || cubeMockSettings);
     setCarouselSettings(newSettings.carousel || carouselMockSettings);
     setCardsSettings(newSettings.cards || cardsMockSettings);
     setBlogSettings(newSettings.blog || blogMockSettings);
-
     initTemplate?.(
       newSettings?.template_id as string,
       newSettings?.title as string
@@ -145,7 +146,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
       setMasonrySettings(newSettings.masonry || mosaicMockSettings);
-      setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
+      // setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
+      // setLightboxSettings(newSettings.lightbox);
+      setSlideshowSettings(slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
       setCubeSettings(newSettings.cube || cubeMockSettings);
       setCarouselSettings(newSettings.carousel || carouselMockSettings);
@@ -250,8 +253,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setThumbnailSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
         setMasonrySettings(newSettings.masonry);
-        setSlideshowSettings(newSettings.slideshow);
-        setLightboxSettings(newSettings.lightbox);
+        // setSlideshowSettings(newSettings.slideshow);
+        setSlideshowSettings(slideshowMockSettings);
+        // setLightboxSettings(newSettings.lightbox);
+        setLightboxSettings(lightboxMockSettings);
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
         setCardsSettings(newSettings.cards);
