@@ -1,6 +1,12 @@
 import axios from 'axios';
 import {useSnackbar} from 'notistack';
-import React, {lazy, Suspense, useLayoutEffect, useState} from 'react';
+import React, {
+  lazy,
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import {TypeUtils} from 'utils';
 import {useAppInfo} from '../AppInfoContext';
 import {ITemplate, ITemplateReference} from './TemplatesContext.types';
@@ -36,6 +42,10 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    (window as any).reacg_open_premium_offer_dialog = openDialog;
+  }, []);
 
   const getTemplates = async () => {
     if (!showControls) {
