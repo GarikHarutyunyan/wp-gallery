@@ -362,6 +362,24 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               thumbnailBorderColor || 'transparent',
             '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
           },
+          toolbar: {
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
+          },
+          navigationPrev: {
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
+            ...(slideMargins.marginTop || slideMargins.marginBottom
+              ? {transform: 'translateY(0%)', top: 'auto'}
+              : {}),
+          },
+          navigationNext: {
+            marginTop: `${slideMargins.marginTop}`,
+            marginBottom: `${slideMargins.marginBottom}`,
+            ...(slideMargins.marginTop || slideMargins.marginBottom
+              ? {transform: 'translateY(0%)', top: 'auto'}
+              : {}),
+          },
           container: {backgroundColor: `${backgroundColor}`},
           slide: {
             marginTop: slideMargins.marginTop,
