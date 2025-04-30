@@ -32,7 +32,7 @@ const PremiumOffer = () => {
           fontFamily: 'lexend',
         }}
       >
-        {'This feature is available as part of the Pro plan'}
+        {'This feature is available in the Pro plan'}
       </Typography>
       <Box
         sx={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}
