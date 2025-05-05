@@ -82,6 +82,7 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
         src,
         srcSet,
         id: image.id,
+        alt: image.alt,
       };
     });
   }, [images]);

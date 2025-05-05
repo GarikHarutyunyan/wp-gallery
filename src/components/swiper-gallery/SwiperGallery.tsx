@@ -265,7 +265,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
                     : undefined
                 }
                 className="lazy"
-                alt={image.title}
+                alt={image.alt}
                 style={{
                   background: key !== 'coverflowEffect' ? backgroundColor : '',
                   padding: key !== 'coverflowEffect' ? padding + 'px' : 0,

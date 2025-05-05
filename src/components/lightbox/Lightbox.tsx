@@ -162,6 +162,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       ],
       poster: image.medium_large.url,
       src: image.original.url,
+      alt: image.alt,
       srcSet: [
         {
           src: image.original.url,

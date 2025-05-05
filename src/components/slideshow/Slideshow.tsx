@@ -125,6 +125,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
       ],
       poster: image.medium_large.url,
       src: image.original.url,
+      alt: image.alt,
       srcSet: [
         {
           src: image.original.url,
