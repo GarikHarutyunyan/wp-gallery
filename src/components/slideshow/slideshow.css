@@ -5,7 +5,8 @@
   visibility: hidden;
 }
 
-.reacg-slideshow-is-full-cover-image .yarl__slide_image {
+.reacg-slideshow-is-full-cover-image .yarl__slide_image,
+.reacg-slideshow-is-full-cover-image video {
   object-fit: cover;
   width: 100%;
   height: 100%;
