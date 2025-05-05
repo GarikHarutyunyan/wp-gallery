@@ -285,7 +285,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
                           height: videoThumbnailIconSize,
                           width: videoThumbnailIconSize,
                         }}
-                        className={clsx('yarl__thumbnails_thumbnail_icon', {
+                        className={clsx({
                           'thumbnail-gallery__video-icon': !!onClick,
                         })}
                       />

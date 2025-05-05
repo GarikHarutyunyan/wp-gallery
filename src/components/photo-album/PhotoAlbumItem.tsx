@@ -121,7 +121,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
               height: getThumbnailIconSize(width, height),
               width: getThumbnailIconSize(width, height),
             }}
-            className={clsx('yarl__thumbnails_thumbnail_icon', {
+            className={clsx({
               'photo-album-item__video-icon': !!onClick,
             })}
           />
