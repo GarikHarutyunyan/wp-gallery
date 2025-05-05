@@ -28,8 +28,7 @@
   object-fit: cover;
 }
 
-.reacg-gallery .photo-album-item__image-wrapper_clickable,
-.reacg-gallery .photo-album-item__video-icon {
+.reacg-gallery .photo-album-item__image-wrapper_clickable {
   cursor: pointer;
 }
 

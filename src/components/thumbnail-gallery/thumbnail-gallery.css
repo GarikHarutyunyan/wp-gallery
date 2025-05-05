@@ -5,8 +5,7 @@
   pointer-events: none;
 }
 
-.reacg-gallery .thumbnail-gallery__image-wrapper_clickable,
-.reacg-gallery .thumbnail-gallery__video-icon {
+.reacg-gallery .thumbnail-gallery__image-wrapper_clickable {
   cursor: pointer;
 }
 
