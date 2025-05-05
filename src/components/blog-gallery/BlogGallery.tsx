@@ -122,11 +122,11 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                   <img
                     src={image.thumbnail.url}
                     srcSet={`${image.thumbnail.url} ${image.thumbnail.width}w, 
-                  ${image.medium_large.url} ${image.medium_large.width}w, 
-                  ${image.large.url} ${image.large.width}w, 
-                  ${image.original.url} ${image.original.width}w`}
+                    ${image.medium_large.url} ${image.medium_large.width}w, 
+                    ${image.large.url} ${image.large.width}w, 
+                    ${image.original.url} ${image.original.width}w`}
                     sizes={`${containerInnerWidth}px`}
-                    alt={image.title}
+                    alt={image.alt}
                   />
                 )}
               </div>

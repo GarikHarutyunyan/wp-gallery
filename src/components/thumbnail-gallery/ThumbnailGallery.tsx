@@ -272,7 +272,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
                         'MuiImageListItem-img'
                       )}
                       src={getImageSource(image)}
-                      alt={image.title}
+                      alt={image.alt}
                       loading="lazy"
                       style={{
                         width: getWidth + 'px',
