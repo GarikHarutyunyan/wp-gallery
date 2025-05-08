@@ -83,6 +83,7 @@ export interface ISlideshowSettings {
   thumbnailPadding: number;
   thumbnailGap: number;
   isSlideshowAllowed: boolean;
+  isFullCoverImage?: boolean;
 }
 
 export interface ILightboxSettings extends ISlideshowSettings {
@@ -188,4 +189,5 @@ export interface ISettingsDTO {
   template_id?: number | string;
   title?: string;
   css?: string;
+  custom_css?: string;
 }

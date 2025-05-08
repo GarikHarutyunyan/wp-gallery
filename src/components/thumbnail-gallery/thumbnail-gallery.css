@@ -3,9 +3,16 @@
   pointer-events: none;
 }
 
-.reacg-gallery .thumbnail-gallery__image-wrapper_clickable,
-.reacg-gallery .thumbnail-gallery__video-icon {
+.reacg-gallery .thumbnail-gallery__image-wrapper_clickable {
   cursor: pointer;
+}
+
+.reacg-gallery .thumbnail-gallery__video-icon {
+  color: #707070;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
 }
 
 .reacg-gallery .thumbnail-gallery__title_on-hover {

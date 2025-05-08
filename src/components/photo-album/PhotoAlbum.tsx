@@ -82,6 +82,7 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
         src,
         srcSet,
         id: image.id,
+        alt: image.alt,
       };
     });
   }, [images]);
@@ -111,7 +112,7 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
         />
       ) : null;
     },
-    [images, onImageClick]
+    [images, onImageClick, settings]
   );
 
   const getColumnsCount = useCallback(

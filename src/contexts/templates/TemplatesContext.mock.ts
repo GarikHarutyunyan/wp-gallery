@@ -119,6 +119,7 @@ const slideshowMockSettings: ISlideshowSettings = {
   thumbnailPadding: 0,
   thumbnailGap: 10,
   isSlideshowAllowed: true,
+  isFullCoverImage: false,
 };
 
 const masonryMockSettings: IMasonrySettings = {

@@ -54,7 +54,7 @@ const SwiperImage = forwardRef(
                 : undefined
             }
             className="lazy"
-            alt={image.title}
+            alt={image.alt}
             style={{
               background: key !== 'coverflowEffect' ? backgroundColor : '',
               padding: key !== 'coverflowEffect' ? padding + 'px' : 0,

@@ -45,7 +45,7 @@ const BlogImage = ({
                   ${image.large.url} ${image.large.width}w, 
                   ${image.original.url} ${image.original.width}w`}
           sizes={`${containerInnerWidth}px`}
-          alt={image.title}
+          alt={image.alt}
         />
       )}
     </div>

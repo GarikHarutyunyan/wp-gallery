@@ -26,9 +26,16 @@
   object-fit: cover;
 }
 
-.reacg-gallery .photo-album-item__image-wrapper_clickable,
-.reacg-gallery .photo-album-item__video-icon {
+.reacg-gallery .photo-album-item__image-wrapper_clickable {
   cursor: pointer;
+}
+
+.reacg-gallery .photo-album-item__video-icon {
+  color: #707070;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
 }
 
 .reacg-gallery .photo-album-item__image-wrapper {

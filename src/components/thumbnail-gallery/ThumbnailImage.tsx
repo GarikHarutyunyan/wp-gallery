@@ -150,7 +150,7 @@ const ThumbnailImage = ({
                 'MuiImageListItem-img'
               )}
               src={getImageSource(image)}
-              alt={image.title}
+              alt={image.alt}
               loading="eager"
               style={{
                 width: width + 'px',

@@ -174,8 +174,8 @@ const TemplatesSelect: React.FC = () => {
       };
     }) || [];
 
-  const onChange = (newValue: string) => {
-    changeTemplate?.(newValue);
+  const onChange = (newValue: string | number) => {
+    changeTemplate?.(newValue as string);
   };
 
   const resetPreviewDialogInfo = () =>
