@@ -92,7 +92,7 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
   );
 
   const renderPhoto = useCallback(
-    ({photo, layout, wrapperStyle, renderDefaultPhoto}: any): ReactNode => {
+    ({photo, layout, wrapperStyle, imageProps}: any): ReactNode => {
       const image = images?.find((image) => image.id === photo.id) as IImageDTO;
       const index = images?.findIndex(
         (image) => image.id === photo.id
@@ -101,15 +101,14 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
       return image ? (
         <PhotoAlbumItem
           image={image}
+          imageProps={imageProps}
           width={layout.width}
           height={layout.height}
           style={wrapperStyle}
           key={image.original.url}
           onClick={onImageClick(index)}
           settings={settings}
-        >
-          {renderDefaultPhoto({wrapped: true})}
-        </PhotoAlbumItem>
+        />
       ) : null;
     },
     [images, onImageClick]
