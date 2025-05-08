@@ -1,6 +1,7 @@
 import {ImageListItem} from '@mui/material';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
+import ReImage from 'core-components/re-image/ReImage';
 import {
   IImageDTO,
   ImageType,
@@ -10,7 +11,6 @@ import {
 } from 'data-structures';
 import {useMemo, useRef} from 'react';
 import {createIcon} from 'yet-another-react-lightbox';
-import ReImage from './ReImage';
 
 const VideoThumbnailIcon = createIcon(
   'VideoThumbnail',
