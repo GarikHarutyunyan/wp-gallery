@@ -53,7 +53,6 @@ const SwiperImage = forwardRef(
                 ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
                 : undefined
             }
-            className="lazy"
             alt={image.alt}
             style={{
               background: key !== 'coverflowEffect' ? backgroundColor : '',
