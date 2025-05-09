@@ -177,6 +177,8 @@ const Gallery: React.FC = () => {
         </div>
       );
     }
+
+    return null;
   };
 
   const renderPaginationProvider = () => {
