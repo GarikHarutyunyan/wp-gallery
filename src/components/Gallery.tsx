@@ -170,7 +170,7 @@ const Gallery: React.FC = () => {
   };
 
   const renderLoader = (): ReactNode => {
-    if (isLoading || true) {
+    if (isLoading) {
       return (
         <div className={'gallery__loader'}>
           <CircularProgress sx={{color: 'black'}} size={60} />
