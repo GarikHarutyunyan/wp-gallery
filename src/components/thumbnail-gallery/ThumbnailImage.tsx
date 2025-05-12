@@ -140,7 +140,6 @@ const ThumbnailImage = ({
               height: height + 'px',
               margin: margin + 'px',
               borderRadius: borderRadius + '%',
-              backgroundColor: 'grey',
             }}
           >
             <ReImage
