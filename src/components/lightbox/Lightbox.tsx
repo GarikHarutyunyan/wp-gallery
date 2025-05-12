@@ -96,7 +96,6 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   const {lightboxSettings: settings} = useSettings();
   const {lightboxImages: images} = useData();
   const [drag, setDrag] = useState(false);
-  console.log(drag);
   const {
     isFullscreen,
     width,
