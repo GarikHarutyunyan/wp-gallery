@@ -173,7 +173,7 @@ const Gallery: React.FC = () => {
     if (isLoading) {
       return (
         <div className={'gallery__loader'}>
-          <CircularProgress color="primary" size={60} />
+          <CircularProgress sx={{color: 'black'}} size={60} />
         </div>
       );
     }

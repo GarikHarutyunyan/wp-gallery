@@ -89,6 +89,7 @@ export interface ISlideshowSettings {
   showDescription: boolean;
   descriptionFontSize: number;
   descriptionMaxRowsCount: number | undefined;
+  isFullCoverImage?: boolean;
 }
 
 export interface ILightboxSettings extends ISlideshowSettings {
@@ -194,4 +195,5 @@ export interface ISettingsDTO {
   template_id?: number | string;
   title?: string;
   css?: string;
+  custom_css?: string;
 }

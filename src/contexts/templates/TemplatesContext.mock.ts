@@ -131,6 +131,7 @@ const slideshowMockSettings: ISlideshowSettings = {
   showDescription: true,
   descriptionFontSize: 16,
   descriptionMaxRowsCount: 5,
+  isFullCoverImage: false,
 };
 
 const masonryMockSettings: IMasonrySettings = {
