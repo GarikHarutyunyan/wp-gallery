@@ -49,7 +49,6 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   const dragThreshold = 5;
 
   const handleMouseDown = (e: any) => {
-    console.log('down');
     startPos.current = {x: e.clientX, y: e.clientY};
     dragged.current = false;
     setIsMouseDown(true);
@@ -57,7 +56,7 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
 
   const handleMouseMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isMouseDown) return;
-    console.log('move');
+
     const dx = Math.abs(e.clientX - startPos.current.x);
     const dy = Math.abs(e.clientY - startPos.current.y);
     if (dx > dragThreshold || dy > dragThreshold) {
@@ -66,7 +65,6 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   };
 
   const handleMouseUp = () => {
-    console.log('up');
     setDrag(dragged.current);
     setIsMouseDown(false);
   };
