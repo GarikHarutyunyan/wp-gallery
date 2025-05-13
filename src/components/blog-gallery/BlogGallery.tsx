@@ -137,6 +137,18 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                       {image.title}
                     </h1>
                   )}
+                  {image.caption && (
+                    <p
+                      className="blog-gallery__text-container-content-caption"
+                      style={{
+                        textAlign: titleAlignment,
+                        fontSize: titleFontSize,
+                        color: titleColor,
+                      }}
+                    >
+                      {image.description}
+                    </p>
+                  )}
                   {showDescription && image.description && (
                     <p
                       className="blog-gallery__text-container-content-description"
