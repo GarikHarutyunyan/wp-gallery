@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import {
   IImageDTO,
   ILightboxSettings,
-  LightboxCaptionsPosition,
   LightboxImageAnimation,
+  LightboxTextsPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
 import React, {useEffect, useId, useMemo, useState} from 'react';
@@ -20,6 +20,7 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
 import {useData} from '../data-context/useData';
 import {useSettings} from '../settings/useSettings';
+import {getSlideMargins} from './CommonFunctions/getSlideMargins';
 import {Captions} from './CustomCaptions/Captions';
 import './lightbox.css';
 
@@ -121,7 +122,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (textPosition !== LightboxCaptionsPosition.NONE) {
+    if (textPosition !== LightboxTextsPosition.NONE) {
       newPlugins.push(Captions as any);
     }
 
@@ -151,13 +152,13 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         <>
           {showTitle && image.title && (
             <p
-              className={'reacg-lightbox-captions__title'}
+              className={'reacg-lightbox-texts__title'}
               style={{
                 color: textColor,
                 fontFamily: textFontFamily,
-                fontSize: `clamp(${titleFontSize / minFactor}rem, ${
-                  titleFontSize * (innerWidth / 100)
-                }px, ${titleFontSize * maxFactor}rem)`,
+                fontSize: `clamp(${
+                  titleFontSize / minFactor
+                }rem, ${titleFontSize}vw, ${titleFontSize * maxFactor}rem)`,
                 textAlign: titleAlignment,
               }}
             >
@@ -166,13 +167,15 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           )}
           {showDescription && image.description && (
             <p
-              className={'reacg-lightbox-captions__description'}
+              className={'reacg-lightbox-texts__description'}
               style={{
                 color: textColor,
                 fontFamily: textFontFamily,
-                fontSize: `clamp(${descriptionFontSize / minFactor}rem, ${
-                  descriptionFontSize * (innerWidth / 100)
-                }px, ${descriptionFontSize * maxFactor}rem)`,
+                fontSize: `clamp(${
+                  descriptionFontSize / minFactor
+                }rem, ${descriptionFontSize}vw, ${
+                  descriptionFontSize * maxFactor
+                }rem)`,
                 WebkitLineClamp: descriptionMaxRowsCount,
                 WebkitBoxOrient: 'vertical',
                 display: '-webkit-box',
@@ -227,66 +230,30 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     showDescription,
     descriptionFontSize,
     descriptionMaxRowsCount,
-    innerWidth,
   ]);
 
   const slideMargins = useMemo(() => {
-    const titleMarginPx = 8;
-    const verticalPaddingAroundText = 20;
-
-    const titleSpace = !!(showTitle && images?.[index]?.title);
-    const descriptionSpace = !!(
-      showDescription && images?.[index]?.description
-    );
-    const hasCaptions = titleSpace || descriptionSpace;
-
-    const getClampedSize = (fontSize: number) =>
-      `clamp(${fontSize / minFactor}rem, ${(fontSize * innerWidth) / 100}px, ${
-        fontSize * maxFactor
-      }rem)`;
-
-    const buildCalcPart = () => {
-      const parts: string[] = [];
-
-      if (titleSpace) {
-        parts.push(
-          `(${getClampedSize(titleFontSize)} * 1.5 + ${titleMarginPx}px)`
-        );
-      }
-
-      if (descriptionSpace) {
-        parts.push(
-          `(${getClampedSize(descriptionFontSize)} * 1.5 * ${
-            descriptionMaxRowsCount || 1
-          })`
-        );
-      }
-
-      if (parts.length > 0) {
-        parts.push(`${verticalPaddingAroundText}px`);
-      }
-
-      return parts.length > 0 ? `calc(${parts.join(' + ')})` : '0';
-    };
-
-    const margin = hasCaptions ? buildCalcPart() : 0;
-
-    return {
-      marginTop: textPosition === LightboxCaptionsPosition.ABOVE ? margin : 0,
-      marginBottom:
-        textPosition === LightboxCaptionsPosition.BELOW ? margin : 0,
-    };
+    return getSlideMargins({
+      images,
+      index,
+      showTitle,
+      showDescription,
+      textPosition,
+      titleFontSize,
+      descriptionFontSize,
+      descriptionMaxRowsCount,
+      minFactor,
+      maxFactor,
+    });
   }, [
     images,
-    textPosition,
+    index,
     showTitle,
     showDescription,
+    textPosition,
     titleFontSize,
     descriptionFontSize,
     descriptionMaxRowsCount,
-    index,
-    padding,
-    innerWidth,
   ]);
 
   const renderLighbox = () => {
@@ -329,16 +296,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           'reacg-lightbox-animation-' + imageAnimation,
           {
             'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
-            'reacg-lightbox-captions':
-              textPosition !== LightboxCaptionsPosition.NONE,
-            'reacg-lightbox-captions_top': [
-              LightboxCaptionsPosition.TOP,
-              LightboxCaptionsPosition.ABOVE,
+            'reacg-lightbox-texts': textPosition !== LightboxTextsPosition.NONE,
+            'reacg-lightbox-texts_top': [
+              LightboxTextsPosition.TOP,
+              LightboxTextsPosition.ABOVE,
             ].includes(textPosition),
-            'reacg-lightbox-captions_below':
-              textPosition === LightboxCaptionsPosition.BELOW,
-            'reacg-lightbox-captions_above':
-              textPosition === LightboxCaptionsPosition.ABOVE,
           }
         )}
         styles={{

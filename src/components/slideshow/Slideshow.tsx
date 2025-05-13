@@ -1,13 +1,14 @@
 import Box from '@mui/material/Box';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
+import {getSlideMargins} from 'components/lightbox/CommonFunctions/getSlideMargins';
 import {Captions} from 'components/lightbox/CustomCaptions/Captions';
 import {useSettings} from 'components/settings';
 import {
   IImageDTO,
   ISlideshowSettings,
-  LightboxCaptionsPosition,
   LightboxImageAnimation,
+  LightboxTextsPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
 import React, {ReactElement, useEffect, useMemo, useState} from 'react';
@@ -16,6 +17,7 @@ import 'yet-another-react-lightbox/plugins/captions.css';
 import Inline from 'yet-another-react-lightbox/plugins/inline';
 import YARLSlideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Video from 'yet-another-react-lightbox/plugins/video';
 import 'yet-another-react-lightbox/styles.css';
@@ -85,7 +87,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (textPosition !== LightboxCaptionsPosition.NONE) {
+    if (textPosition !== LightboxTextsPosition.NONE) {
       newPlugins.push(Captions as any);
     }
 
@@ -115,13 +117,13 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
         <>
           {showTitle && image.title && (
             <p
-              className={'reacg-slideshow-captions__title'}
+              className={'reacg-slideshow-texts__title'}
               style={{
                 color: textColor,
                 fontFamily: textFontFamily,
-                fontSize: `clamp(${titleFontSize / minFactor}rem, ${
-                  titleFontSize * (innerWidth / 100)
-                }px, ${titleFontSize * maxFactor}rem)`,
+                fontSize: `clamp(${
+                  titleFontSize / minFactor
+                }rem, ${titleFontSize}vw, ${titleFontSize * maxFactor}rem)`,
                 textAlign: titleAlignment,
               }}
             >
@@ -131,13 +133,15 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
 
           {showDescription && image.description && (
             <p
-              className={'reacg-slideshow-captions__description'}
+              className={'reacg-slideshow-texts__description'}
               style={{
                 color: textColor,
                 fontFamily: textFontFamily,
-                fontSize: `clamp(${descriptionFontSize / minFactor}rem,${
-                  descriptionFontSize * (innerWidth / 100)
-                }px ,${descriptionFontSize * maxFactor}rem)`,
+                fontSize: `clamp(${
+                  descriptionFontSize / minFactor
+                }rem,${descriptionFontSize}vw ,${
+                  descriptionFontSize * maxFactor
+                }rem)`,
                 WebkitLineClamp: descriptionMaxRowsCount,
                 WebkitBoxOrient: 'vertical',
                 display: '-webkit-box',
@@ -192,66 +196,30 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     showDescription,
     descriptionFontSize,
     descriptionMaxRowsCount,
-    innerWidth,
   ]);
 
   const slideMargins = useMemo(() => {
-    const titleMarginPx = 8;
-    const verticalPaddingAroundText = 20;
-
-    const titleSpace = !!(showTitle && images?.[index]?.title);
-    const descriptionSpace = !!(
-      showDescription && images?.[index]?.description
-    );
-    const hasCaptions = titleSpace || descriptionSpace;
-
-    const getClampedSize = (fontSize: number) =>
-      `clamp(${fontSize / minFactor}rem, ${(fontSize * innerWidth) / 100}px, ${
-        fontSize * maxFactor
-      }rem)`;
-
-    const buildCalcPart = () => {
-      const parts: string[] = [];
-
-      if (titleSpace) {
-        parts.push(
-          `(${getClampedSize(titleFontSize)} * 1.5 + ${titleMarginPx}px)`
-        );
-      }
-
-      if (descriptionSpace) {
-        parts.push(
-          `(${getClampedSize(
-            descriptionFontSize
-          )} * 1.5 * ${descriptionMaxRowsCount})`
-        );
-      }
-
-      if (parts.length > 0) {
-        parts.push(`${verticalPaddingAroundText}px`);
-      }
-
-      return parts.length > 0 ? `calc(${parts.join(' + ')})` : '0';
-    };
-
-    const margin = hasCaptions ? buildCalcPart() : 0;
-
-    return {
-      marginTop: textPosition === LightboxCaptionsPosition.ABOVE ? margin : 0,
-      marginBottom:
-        textPosition === LightboxCaptionsPosition.BELOW ? margin : 0,
-    };
+    return getSlideMargins({
+      images,
+      index,
+      showTitle,
+      showDescription,
+      textPosition,
+      titleFontSize,
+      descriptionFontSize,
+      descriptionMaxRowsCount,
+      minFactor,
+      maxFactor,
+    });
   }, [
     images,
-    textPosition,
+    index,
     showTitle,
     showDescription,
+    textPosition,
     titleFontSize,
     descriptionFontSize,
     descriptionMaxRowsCount,
-    index,
-    padding,
-    innerWidth,
   ]);
 
   useEffect(() => {
@@ -305,16 +273,12 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           'reacg-slideshow-animation-' + imageAnimation,
           {
             // 'reacg-slideshow-control-buttons_hidden': !areControlButtonsShown,
-            'reacg-slideshow-captions':
-              textPosition !== LightboxCaptionsPosition.NONE,
-            'reacg-slideshow-captions_top': [
-              LightboxCaptionsPosition.TOP,
-              LightboxCaptionsPosition.ABOVE,
+            'reacg-slideshow-texts':
+              textPosition !== LightboxTextsPosition.NONE,
+            'reacg-slideshow-texts_top': [
+              LightboxTextsPosition.TOP,
+              LightboxTextsPosition.ABOVE,
             ].includes(textPosition),
-            'reacg-slideshow-captions_below':
-              textPosition === LightboxCaptionsPosition.BELOW,
-            'reacg-slideshow-captions_above':
-              textPosition === LightboxCaptionsPosition.ABOVE,
             'reacg-slideshow-is-full-cover-image': isFullCoverImage,
           }
         )}

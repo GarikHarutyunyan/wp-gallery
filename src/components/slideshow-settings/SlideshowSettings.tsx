@@ -6,10 +6,10 @@ import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {
   ISlideshowSettings,
-  LightboxCaptionsPosition,
-  LightboxCaptionsPositionOptions,
   LightboxImageAnimation,
   LightboxImageAnimationOptions,
+  LightboxTextsPosition,
+  LightboxTextsPositionOptions,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
   TitleAlignmentOptions,
@@ -192,11 +192,11 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                     id={'textPosition'}
                     name={'Text position'}
                     value={textPosition}
-                    options={LightboxCaptionsPositionOptions}
+                    options={LightboxTextsPositionOptions}
                     onChange={onInputValueChange}
                   />
                 </Filter>
-                {textPosition !== LightboxCaptionsPosition.NONE && (
+                {textPosition !== LightboxTextsPosition.NONE && (
                   <>
                     <Filter isLoading={isLoading}>
                       <FontControl
@@ -218,7 +218,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                 )}
               </Grid>
 
-              {textPosition !== LightboxCaptionsPosition.NONE && (
+              {textPosition !== LightboxTextsPosition.NONE && (
                 <Grid
                   sx={{marginLeft: 0, paddingTop: 2}}
                   container
@@ -261,7 +261,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                   )}
                 </Grid>
               )}
-              {textPosition !== LightboxCaptionsPosition.NONE && (
+              {textPosition !== LightboxTextsPosition.NONE && (
                 <Grid
                   sx={{marginLeft: 0, paddingTop: 2}}
                   container

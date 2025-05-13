@@ -41,14 +41,14 @@
   display: none;
 }
 
-.reacg-slideshow-captions_top {
+.reacg-slideshow-texts_top {
   .yarl__slide_captions_container {
     top: 0;
     bottom: unset;
   }
 }
 
-.reacg-slideshow-captions__title {
+.reacg-slideshow-texts__title {
   margin: 4px 0;
   white-space: nowrap;
   overflow: hidden;
@@ -56,7 +56,7 @@
   font-weight: 600;
 }
 
-.reacg-slideshow-captions__description {
+.reacg-slideshow-texts__description {
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;

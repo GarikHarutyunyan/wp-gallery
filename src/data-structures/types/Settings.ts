@@ -4,8 +4,8 @@ import {
   GalleryType,
   HoverEffect,
   ImageClickAction,
-  LightboxCaptionsPosition,
   LightboxImageAnimation,
+  LightboxTextsPosition,
   LightboxThumbnailsPosition,
   PaginationButtonShape,
   PaginationType,
@@ -71,7 +71,7 @@ export interface ISlideshowSettings {
   slideDuration: number;
   imageAnimation: LightboxImageAnimation;
   backgroundColor: string;
-  textPosition: LightboxCaptionsPosition;
+  textPosition: LightboxTextsPosition;
   textFontFamily: string;
   textColor: string;
   thumbnailsPosition: LightboxThumbnailsPosition;
