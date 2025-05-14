@@ -102,6 +102,7 @@ const ThumbnailImage = ({
           subtitle={
             image.caption && (
               <span
+                className="thumbnail-image__caption"
                 style={{
                   color: titleColor,
                   fontFamily: titleFontFamily,

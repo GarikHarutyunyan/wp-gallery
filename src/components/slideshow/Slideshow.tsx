@@ -107,7 +107,11 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
             style={{color: captionColor, fontFamily: captionFontFamily}}
           >
             {image.title}
-            {image.caption && '\u00A0' + image.caption}
+            {image.caption && (
+              <span className={'reacg-slideshow__caption'}>
+                &nbsp;{image.caption}
+              </span>
+            )}
           </p>
           <p
             className={'reacg-slideshow-captions__description'}

@@ -92,6 +92,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           subtitle={
             image.caption && (
               <span
+                className="photo-album-item__caption"
                 style={{
                   color: titleColor,
                   fontFamily: titleFontFamily,
