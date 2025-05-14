@@ -143,7 +143,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             className={'reacg-lightbox-captions__title'}
             style={{color: captionColor, fontFamily: captionFontFamily}}
           >
-            {image.title}
+            {image.title}&nbsp;{image.caption}
           </p>
           <p
             className={'reacg-lightbox-captions__description'}
