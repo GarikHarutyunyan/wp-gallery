@@ -166,6 +166,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               }}
             >
               {image.title}
+	      {image.caption && (
+              <span className={'reacg-lightbox__caption'}>
+                &nbsp;{image.caption}
+              </span>
+            )}
             </p>
           )}
           {showDescription && image.description && (

@@ -131,9 +131,13 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
               }}
             >
               {image.title}
+            {image.caption && (
+              <span className={'reacg-slideshow__caption'}>
+                &nbsp;{image.caption}
+              </span>
+            )}
             </p>
           )}
-
           {showDescription && image.description && (
             <p
               className={'reacg-slideshow-texts__description'}
