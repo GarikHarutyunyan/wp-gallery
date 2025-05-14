@@ -4,8 +4,8 @@ import {
   GalleryType,
   HoverEffect,
   ImageClickAction,
-  LightboxCaptionsPosition,
   LightboxImageAnimation,
+  LightboxTextPosition,
   LightboxThumbnailsPosition,
   PaginationButtonShape,
   PaginationType,
@@ -71,9 +71,9 @@ export interface ISlideshowSettings {
   slideDuration: number;
   imageAnimation: LightboxImageAnimation;
   backgroundColor: string;
-  captionsPosition: LightboxCaptionsPosition;
-  captionFontFamily: string;
-  captionColor: string;
+  textPosition: LightboxTextPosition;
+  textFontFamily: string;
+  textColor: string;
   thumbnailsPosition: LightboxThumbnailsPosition;
   thumbnailWidth: number;
   thumbnailHeight: number;
@@ -83,6 +83,12 @@ export interface ISlideshowSettings {
   thumbnailPadding: number;
   thumbnailGap: number;
   isSlideshowAllowed: boolean;
+  showTitle: boolean;
+  titleFontSize: number;
+  titleAlignment: TitleAlignment;
+  showDescription: boolean;
+  descriptionFontSize: number;
+  descriptionMaxRowsCount: number | undefined;
   isFullCoverImage?: boolean;
 }
 
