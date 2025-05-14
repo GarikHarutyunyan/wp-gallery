@@ -146,7 +146,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         color: titleColor,
                       }}
                     >
-                      {image.description}
+                      {image.caption}
                     </p>
                   )}
                   {showDescription && image.description && (
