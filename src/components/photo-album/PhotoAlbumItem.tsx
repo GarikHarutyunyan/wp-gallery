@@ -90,15 +90,17 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             </span>
           }
           subtitle={
-            <span
-              style={{
-                color: titleColor,
-                fontFamily: titleFontFamily,
-                fontSize: `${titleFontSize}px`,
-              }}
-            >
-              {image.caption || <br />}
-            </span>
+            image.caption && (
+              <span
+                style={{
+                  color: titleColor,
+                  fontFamily: titleFontFamily,
+                  fontSize: `${titleFontSize}px`,
+                }}
+              >
+                {image.caption}
+              </span>
+            )
           }
           position={
             titlePosition !== TitlePosition.CENTER ? titlePosition : 'bottom'

@@ -100,15 +100,17 @@ const ThumbnailImage = ({
             </span>
           }
           subtitle={
-            <span
-              style={{
-                color: titleColor,
-                fontFamily: titleFontFamily,
-                fontSize: titleFontSize + 'px',
-              }}
-            >
-              {image.caption || <br />}
-            </span>
+            image.caption && (
+              <span
+                style={{
+                  color: titleColor,
+                  fontFamily: titleFontFamily,
+                  fontSize: titleFontSize + 'px',
+                }}
+              >
+                {image.caption || <br />}
+              </span>
+            )
           }
           position={
             titlePosition !== ThumbnailTitlePosition.CENTER
