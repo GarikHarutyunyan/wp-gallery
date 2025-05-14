@@ -83,7 +83,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isFetched, setIsFetched] = useState(false); // <-- Track if fetch has completed
+  const [isFetched, setIsFetched] = useState(false);
 
   const pagesCount: number =
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
@@ -104,7 +104,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       getDataFromWindow(1);
     }
 
-    setIsFetched(true); // <-- Set fetched to true after initial fetch
+    setIsFetched(true);
   }, []);
 
   useUpdateEffect(() => {
