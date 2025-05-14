@@ -83,6 +83,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isFetched, setIsFetched] = useState(false);
 
   const pagesCount: number =
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
@@ -102,6 +103,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     } else {
       getDataFromWindow(1);
     }
+
+    setIsFetched(true);
   }, []);
 
   useUpdateEffect(() => {
@@ -299,7 +302,9 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         loadAllLightboxImages,
       }}
     >
-      {images.length || isLoading ? children : renderContentPlaceholder()}
+      {images.length || isLoading || !isFetched
+        ? children
+        : renderContentPlaceholder()}
       <DataFetcher onClick={onReloadData} />
     </DataContext.Provider>
   );

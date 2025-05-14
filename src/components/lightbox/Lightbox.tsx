@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import {
   IImageDTO,
   ILightboxSettings,
-  LightboxCaptionsPosition,
   LightboxImageAnimation,
+  LightboxTextPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
 import React, {useEffect, useId, useMemo, useState} from 'react';
@@ -20,6 +20,7 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
 import {useData} from '../data-context/useData';
 import {useSettings} from '../settings/useSettings';
+import {getSlideMargins} from './CommonFunctions/getSlideMargins';
 import {Captions} from './CustomCaptions/Captions';
 import './lightbox.css';
 
@@ -85,14 +86,26 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     thumbnailPadding,
     thumbnailGap,
     backgroundColor,
-    captionsPosition,
-    captionFontFamily,
-    captionColor,
+    textPosition,
+    textFontFamily,
+    textColor,
+    showTitle,
+    titleFontSize,
+    titleAlignment,
+    showDescription,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
   } = settings as ILightboxSettings;
+  const lightboxId: string = useId();
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
-  const lightboxId: string = useId();
+  const [index, setIndex] = useState(0);
+
+  const minFactor = 1.45;
+  const maxFactor = 1.25;
+  const paddingAroundText = 10;
+  const titleMargin = 4;
 
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Video];
@@ -111,7 +124,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (captionsPosition !== LightboxCaptionsPosition.NONE) {
+    if (textPosition !== LightboxTextPosition.NONE) {
       newPlugins.push(Captions as any);
     }
 
@@ -123,7 +136,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     autoplay,
     isFullscreenAllowed,
     thumbnailsPosition,
-    captionsPosition,
+    textPosition,
   ]);
 
   useEffect(() => {
@@ -139,18 +152,41 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     return images!.map((image: IImageDTO) => ({
       description: (
         <>
-          <p
-            className={'reacg-lightbox-captions__title'}
-            style={{color: captionColor, fontFamily: captionFontFamily}}
-          >
-            {image.title}
-          </p>
-          <p
-            className={'reacg-lightbox-captions__description'}
-            style={{color: captionColor, fontFamily: captionFontFamily}}
-          >
-            {image.description}
-          </p>
+          {showTitle && image.title && (
+            <p
+              className={'reacg-lightbox-texts__title'}
+              style={{
+                margin: `${titleMargin}px 0`,
+                color: textColor,
+                fontFamily: textFontFamily,
+                fontSize: `clamp(${
+                  titleFontSize / minFactor
+                }rem, ${titleFontSize}vw, ${titleFontSize * maxFactor}rem)`,
+                textAlign: titleAlignment,
+              }}
+            >
+              {image.title}
+            </p>
+          )}
+          {showDescription && image.description && (
+            <p
+              className={'reacg-lightbox-texts__description'}
+              style={{
+                color: textColor,
+                fontFamily: textFontFamily,
+                fontSize: `clamp(${
+                  descriptionFontSize / minFactor
+                }rem, ${descriptionFontSize}vw, ${
+                  descriptionFontSize * maxFactor
+                }rem)`,
+                WebkitLineClamp: descriptionMaxRowsCount,
+                WebkitBoxOrient: 'vertical',
+                display: '-webkit-box',
+              }}
+            >
+              {image.description}
+            </p>
+          )}
         </>
       ),
       type: image.type,
@@ -187,7 +223,43 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       ],
       metadata: image.thumbnail.url,
     }));
-  }, [images, captionColor, captionFontFamily]);
+  }, [
+    images,
+    textColor,
+    textFontFamily,
+    showTitle,
+    titleFontSize,
+    titleAlignment,
+    showDescription,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
+  ]);
+
+  const slideMargins = useMemo(() => {
+    return getSlideMargins({
+      images,
+      index,
+      showTitle,
+      showDescription,
+      textPosition,
+      titleFontSize,
+      descriptionFontSize,
+      descriptionMaxRowsCount,
+      minFactor,
+      maxFactor,
+      paddingAroundText,
+      titleMargin,
+    });
+  }, [
+    images,
+    index,
+    showTitle,
+    showDescription,
+    textPosition,
+    titleFontSize,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
+  ]);
 
   const renderLighbox = () => {
     return (
@@ -229,16 +301,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           'reacg-lightbox-animation-' + imageAnimation,
           {
             'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
-            'reacg-lightbox-captions':
-              captionsPosition !== LightboxCaptionsPosition.NONE,
-            'reacg-lightbox-captions_top': [
-              LightboxCaptionsPosition.TOP,
-              LightboxCaptionsPosition.ABOVE,
-            ].includes(captionsPosition),
-            'reacg-lightbox-captions_below':
-              captionsPosition === LightboxCaptionsPosition.BELOW,
-            'reacg-lightbox-captions_above':
-              captionsPosition === LightboxCaptionsPosition.ABOVE,
+            'reacg-lightbox-texts': textPosition !== LightboxTextPosition.NONE,
+            'reacg-lightbox-texts_top': [
+              LightboxTextPosition.TOP,
+              LightboxTextPosition.ABOVE,
+            ].includes(textPosition),
           }
         )}
         styles={{
@@ -250,7 +317,12 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             'margin': 'auto',
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
-            '--yarl__slide_captions_container_background': `${backgroundColor}80`,
+            '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
+            '--yarl__slide_captions_container_background':
+              (showTitle && images![index]?.title) ||
+              (showDescription && images![index]?.description)
+                ? `${backgroundColor}80`
+                : `none`,
           },
           thumbnail: {
             '--yarl__thumbnails_thumbnail_active_border_color':
@@ -259,7 +331,29 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               thumbnailBorderColor || 'transparent',
             '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
           },
+          toolbar: {
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
+          },
+          navigationPrev: {
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
+            ...(slideMargins.marginTop || slideMargins.marginBottom
+              ? {transform: 'translateY(0%)', top: 'auto'}
+              : {}),
+          },
+          navigationNext: {
+            marginTop: `${slideMargins.marginTop}`,
+            marginBottom: `${slideMargins.marginBottom}`,
+            ...(slideMargins.marginTop || slideMargins.marginBottom
+              ? {transform: 'translateY(0%)', top: 'auto'}
+              : {}),
+          },
           container: {backgroundColor: `${backgroundColor}`},
+          slide: {
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
+          },
         }}
         portal={{
           root: document.getElementById(
@@ -273,6 +367,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           slideshowStop: () => {
             if (videoAutoplay) setVideoAutoplay(false);
           },
+          view: ({index: currentIndex}) => setIndex(currentIndex),
         }}
       />
     );

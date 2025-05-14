@@ -7,7 +7,7 @@
 }
 
 #reacg-loadAppContainer {
-  display: none
+  display: none;
 }
 
 .reacg-gallery-wrapper .MuiImageListItemBar-root,
@@ -28,5 +28,5 @@
 
 :root {
   --yarl__thumbnails_thumbnail_icon_color: #707070;
-  --yarl__thumbnails_thumbnail_icon_filter: none
+  --yarl__thumbnails_thumbnail_icon_filter: none;
 }
