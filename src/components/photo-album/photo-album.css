@@ -178,32 +178,32 @@
 
 /* Black overlay with zoom icon */
 .reacg-gallery
-  [class^='photo-album-item__image-wrapper_overlay-icon']:hover
+  [class*='photo-album-item__image-wrapper_overlay-icon']:hover
   .photo-album-item__title
   > div {
   background: none;
 }
 
-.reacg-gallery [class^='photo-album-item__image-wrapper_overlay-icon'] {
+.reacg-gallery [class*='photo-album-item__image-wrapper_overlay-icon'] {
   background: #000000;
 }
 
-.reacg-gallery [class^='photo-album-item__image-wrapper_overlay-icon'] img,
-.reacg-gallery [class^='photo-album-item__image-wrapper_overlay-icon'] video {
+.reacg-gallery [class*='photo-album-item__image-wrapper_overlay-icon'] img,
+.reacg-gallery [class*='photo-album-item__image-wrapper_overlay-icon'] video {
   -webkit-transition: opacity 0.3s ease-in-out;
   transition: opacity 0.3s ease-in-out;
 }
 
 .reacg-gallery
-  [class^='photo-album-item__image-wrapper_overlay-icon']:hover
+  [class*='photo-album-item__image-wrapper_overlay-icon']:hover
   img,
 .reacg-gallery
-  [class^='photo-album-item__image-wrapper_overlay-icon']:hover
+  [class*='photo-album-item__image-wrapper_overlay-icon']:hover
   video {
   opacity: 0.3;
 }
 
-.reacg-gallery [class^='photo-album-item__image-wrapper_overlay-icon']::after {
+.reacg-gallery [class*='photo-album-item__image-wrapper_overlay-icon']::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -219,31 +219,31 @@
 }
 
 .reacg-gallery
-  [class^='photo-album-item__image-wrapper_overlay-icon']:hover::after {
+  [class*='photo-album-item__image-wrapper_overlay-icon']:hover::after {
   opacity: 1;
   transform: translate(-50%, -50%);
 }
 
 .reacg-gallery
-  [class^='photo-album-item__image-wrapper_overlay-icon']:hover
+  [class*='photo-album-item__image-wrapper_overlay-icon']:hover
   svg {
   display: none;
 }
 
 .reacg-gallery
-  [class^='photo-album-item__image-wrapper_overlay-icon']:hover
+  [class*='photo-album-item__image-wrapper_overlay-icon']:hover
   .photo-album-item__title {
   display: none;
 }
 
 .reacg-gallery
-  [class^='photo-album-item__image-wrapper_overlay-icon']:hover
+  [class*='photo-album-item__image-wrapper_overlay-icon']:hover
   .photo-album-item__title_on-hover {
   display: unset;
 }
 
 .reacg-gallery
-  [class^='photo-album-item__image-wrapper_overlay-icon']:hover
+  [class*='photo-album-item__image-wrapper_overlay-icon']:hover
   .photo-album-item__title_on-hover
   .photo-album-item__title-content_center
   > div {
