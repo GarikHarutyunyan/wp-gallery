@@ -4,7 +4,7 @@ export * from './GalleryType';
 export * from './HoverEffect';
 export * from './ImageClickAction';
 export * from './LightboxImageAnimation';
-export * from './LightboxTextsPosition';
+export * from './LightboxTextPosition';
 export * from './LightboxThumbnailsPosition';
 export * from './OrderBy';
 export * from './OrderDirection';

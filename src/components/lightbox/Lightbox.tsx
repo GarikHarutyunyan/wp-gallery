@@ -3,7 +3,7 @@ import {
   IImageDTO,
   ILightboxSettings,
   LightboxImageAnimation,
-  LightboxTextsPosition,
+  LightboxTextPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
 import React, {useEffect, useId, useMemo, useState} from 'react';
@@ -124,7 +124,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (textPosition !== LightboxTextsPosition.NONE) {
+    if (textPosition !== LightboxTextPosition.NONE) {
       newPlugins.push(Captions as any);
     }
 
@@ -301,10 +301,10 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           'reacg-lightbox-animation-' + imageAnimation,
           {
             'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
-            'reacg-lightbox-texts': textPosition !== LightboxTextsPosition.NONE,
+            'reacg-lightbox-texts': textPosition !== LightboxTextPosition.NONE,
             'reacg-lightbox-texts_top': [
-              LightboxTextsPosition.TOP,
-              LightboxTextsPosition.ABOVE,
+              LightboxTextPosition.TOP,
+              LightboxTextPosition.ABOVE,
             ].includes(textPosition),
           }
         )}

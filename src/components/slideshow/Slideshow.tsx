@@ -8,7 +8,7 @@ import {
   IImageDTO,
   ISlideshowSettings,
   LightboxImageAnimation,
-  LightboxTextsPosition,
+  LightboxTextPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
 import React, {ReactElement, useEffect, useMemo, useState} from 'react';
@@ -89,7 +89,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (textPosition !== LightboxTextsPosition.NONE) {
+    if (textPosition !== LightboxTextPosition.NONE) {
       newPlugins.push(Captions as any);
     }
 
@@ -278,11 +278,10 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           'reacg-slideshow-animation-' + imageAnimation,
           {
             // 'reacg-slideshow-control-buttons_hidden': !areControlButtonsShown,
-            'reacg-slideshow-texts':
-              textPosition !== LightboxTextsPosition.NONE,
+            'reacg-slideshow-texts': textPosition !== LightboxTextPosition.NONE,
             'reacg-slideshow-texts_top': [
-              LightboxTextsPosition.TOP,
-              LightboxTextsPosition.ABOVE,
+              LightboxTextPosition.TOP,
+              LightboxTextPosition.ABOVE,
             ].includes(textPosition),
             'reacg-slideshow-is-full-cover-image': isFullCoverImage,
           }

@@ -8,8 +8,8 @@ import {
   ISlideshowSettings,
   LightboxImageAnimation,
   LightboxImageAnimationOptions,
-  LightboxTextsPosition,
-  LightboxTextsPositionOptions,
+  LightboxTextPosition,
+  LightboxTextPositionOptions,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
   TitleAlignmentOptions,
@@ -192,11 +192,11 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                     id={'textPosition'}
                     name={'Text position'}
                     value={textPosition}
-                    options={LightboxTextsPositionOptions}
+                    options={LightboxTextPositionOptions}
                     onChange={onInputValueChange}
                   />
                 </Filter>
-                {textPosition !== LightboxTextsPosition.NONE && (
+                {textPosition !== LightboxTextPosition.NONE && (
                   <>
                     <Filter isLoading={isLoading}>
                       <FontControl
@@ -218,7 +218,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                 )}
               </Grid>
 
-              {textPosition !== LightboxTextsPosition.NONE && (
+              {textPosition !== LightboxTextPosition.NONE && (
                 <Grid
                   sx={{marginLeft: 0, paddingTop: 2}}
                   container
@@ -261,7 +261,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                   )}
                 </Grid>
               )}
-              {textPosition !== LightboxTextsPosition.NONE && (
+              {textPosition !== LightboxTextPosition.NONE && (
                 <Grid
                   sx={{marginLeft: 0, paddingTop: 2}}
                   container
