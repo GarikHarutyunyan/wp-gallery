@@ -39,6 +39,11 @@
   display: none;
 }
 
+.yarl__slide_captions_container {
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
 .reacg-lightbox-texts_top {
   .yarl__slide_captions_container {
     top: 0;
