@@ -28,13 +28,6 @@
   visibility: unset;
 }
 
-.reacg-slideshow {
-  .yarl__slide_captions_container {
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-}
-
 .reacg-slideshow-control-buttons_hidden
   .yarl__toolbar
   .yarl__button:not(:last-child) {
@@ -49,7 +42,6 @@
 }
 
 .reacg-slideshow-texts__title {
-  margin: 4px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

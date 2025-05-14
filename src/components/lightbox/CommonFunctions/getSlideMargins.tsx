@@ -11,6 +11,8 @@ type GetSlideMarginsParams = {
   descriptionMaxRowsCount?: number;
   minFactor: number;
   maxFactor: number;
+  paddingAroundText: number;
+  titleMargin: number;
 };
 
 export const getSlideMargins = ({
@@ -24,9 +26,11 @@ export const getSlideMargins = ({
   descriptionMaxRowsCount,
   minFactor,
   maxFactor,
+  paddingAroundText,
+  titleMargin,
 }: GetSlideMarginsParams) => {
-  const titleMarginPx = 8;
-  const verticalPaddingAroundText = 20;
+  const titleMarginPx = 2 * titleMargin;
+  const verticalPaddingAroundText = 2 * paddingAroundText;
 
   const titleSpace = !!(showTitle && images?.[index]?.title);
   const descriptionSpace = !!(showDescription && images?.[index]?.description);

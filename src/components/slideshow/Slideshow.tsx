@@ -78,6 +78,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   const containerHeight: number = Math.max(minHeight, containerWidth / ratio);
   const minFactor = 1.45;
   const maxFactor = 1.25;
+  const paddingAroundText = 10;
+  const titleMargin = 4;
 
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Inline, Video];
@@ -119,6 +121,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
             <p
               className={'reacg-slideshow-texts__title'}
               style={{
+                margin: `${titleMargin}px 0`,
                 color: textColor,
                 fontFamily: textFontFamily,
                 fontSize: `clamp(${
@@ -210,6 +213,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
       descriptionMaxRowsCount,
       minFactor,
       maxFactor,
+      paddingAroundText,
+      titleMargin,
     });
   }, [
     images,
@@ -287,6 +292,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
             'margin': 'auto',
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
+            '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
             '--yarl__slide_captions_container_background':
               (showTitle && images![index]?.title) ||
               (showDescription && images![index]?.description)

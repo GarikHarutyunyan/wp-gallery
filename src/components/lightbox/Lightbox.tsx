@@ -104,6 +104,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
 
   const minFactor = 1.45;
   const maxFactor = 1.25;
+  const paddingAroundText = 10;
+  const titleMargin = 4;
 
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Video];
@@ -154,6 +156,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             <p
               className={'reacg-lightbox-texts__title'}
               style={{
+                margin: `${titleMargin}px 0`,
                 color: textColor,
                 fontFamily: textFontFamily,
                 fontSize: `clamp(${
@@ -244,6 +247,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       descriptionMaxRowsCount,
       minFactor,
       maxFactor,
+      paddingAroundText,
+      titleMargin,
     });
   }, [
     images,
@@ -312,6 +317,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             'margin': 'auto',
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
+            '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
             '--yarl__slide_captions_container_background':
               (showTitle && images![index]?.title) ||
               (showDescription && images![index]?.description)
