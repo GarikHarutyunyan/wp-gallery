@@ -28,6 +28,7 @@ const DataContext = createContext<{
   isLoading?: boolean;
   pagesCount?: number;
   onPageChange?: (_: any, page: number) => void;
+  onSearchSubmit?: (_: any, newSearchTerm: string) => void;
   currentPage?: number;
   itemsPerPage?: number;
   isFullyLoaded?: boolean;
@@ -83,8 +84,6 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [isFetched, setIsFetched] = useState(false);
-
   const pagesCount: number =
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
   const isFullyLoaded: boolean = currentPage >= pagesCount;
@@ -195,7 +194,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCurrentPage(page);
   };
 
-  const getData = async (page: number) => {
+  const getData = async (page: number, search?: string) => {
+    console.log(search, 'asdasdas');
     if (isLoading) {
       return;
     }
@@ -214,7 +214,9 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       let queryString = queryStringSeperator;
       queryString += `order_by=${orderBy}`;
       queryString += `&order=${orderDirection}`;
+      queryString += `&filter=${search}`;
       queryString += `&timestamp=${getGalleryTimestamp?.()}`;
+
       if (paginationType !== PaginationType.NONE) {
         queryString += `&page=${page}`;
         queryString += `&per_page=${itemsPerPage}`;
@@ -269,7 +271,13 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   ): Promise<void> => {
     getData(newPage);
   };
-
+  const onSearchSubmit = async (
+    _event?: any,
+    newSearchTerm: string = ''
+  ): Promise<void> => {
+    setCurrentPage(0);
+    getData(1, newSearchTerm);
+  };
   const onReloadData = async () => {
     changeImagesCount?.(0);
     setLightboxImages([]);
@@ -296,6 +304,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         isLoading,
         pagesCount,
         onPageChange,
+        onSearchSubmit,
+
         currentPage,
         itemsPerPage,
         isFullyLoaded,

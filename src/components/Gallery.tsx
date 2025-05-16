@@ -1,4 +1,6 @@
+import {Grid} from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
 import {
   GalleryType,
   IGeneralSettings,
@@ -16,7 +18,6 @@ import React, {
 import {useData} from './data-context/useData';
 import './gallery.css';
 import {useSettings} from './settings';
-
 const ThumbnailGallery = lazy(
   () => import('./thumbnail-gallery/ThumbnailGallery')
 );
@@ -45,6 +46,7 @@ const Gallery: React.FC = () => {
     isLoading,
     pagesCount,
     onPageChange,
+    onSearchSubmit,
     currentPage = 1,
     itemsPerPage = 1,
     isFullyLoaded,
@@ -205,13 +207,39 @@ const Gallery: React.FC = () => {
       </Suspense>
     );
   };
-
+  const renderTextField = (): ReactNode => {
+    return (
+      <Grid container spacing={0} style={{margin: '15px 0'}}>
+        <Grid item xs={3} style={{height: '100%'}}>
+          <TextField
+            className={'reacg-gallery-wrapper__top-layout-text-field'}
+            id="outlined-basic"
+            label="Outlined"
+            variant="outlined"
+            onChange={(e) => onSearchSubmit?.(null, e.target.value)}
+            InputProps={{
+              sx: {
+                'padding': 0,
+                '& input': {
+                  padding: '16.5px 14px',
+                  minHeight: 0,
+                  border: 0,
+                  boxShadow: 'none',
+                },
+              },
+            }}
+          />
+        </Grid>
+      </Grid>
+    );
+  };
   const closeLightbox = (): void => {
     setActiveImageIndex(-1);
   };
 
   return (
     <>
+      {renderTextField()}
       {renderGallery()}
       {renderLoader()}
       {paginationType !== PaginationType.NONE && renderPaginationProvider()}
