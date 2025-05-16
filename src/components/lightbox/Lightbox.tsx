@@ -140,6 +140,20 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   ]);
 
   useEffect(() => {
+    const html = document.documentElement;
+
+    if (activeIndex >= 0) {
+      html.classList.add("yarl__no_scroll");
+    } else {
+      html.classList.remove("yarl__no_scroll");
+    }
+
+    return () => {
+      html.classList.remove("yarl__no_scroll"); // Cleanup
+    };
+  }, [activeIndex]);
+
+  useEffect(() => {
     const handleResize = () => {
       setInnerWidth(window.innerWidth);
       setInnerHeight(window.innerHeight);
