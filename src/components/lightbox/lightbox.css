@@ -180,6 +180,7 @@
 .reacg-lightbox .yarl__thumbnails_thumbnail {
   padding: 0 !important;
 }
+
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail),
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail):hover,
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail):focus,
