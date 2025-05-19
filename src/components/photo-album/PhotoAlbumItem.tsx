@@ -1,5 +1,6 @@
 import {ImageListItemBar} from '@mui/material';
 import clsx from 'clsx';
+import ReImage from 'core-components/re-image/ReImage';
 import {
   IImageDTO,
   IMasonrySettings,
@@ -7,7 +8,7 @@ import {
   TitlePosition,
   TitleVisibility,
 } from 'data-structures';
-import React, {CSSProperties, ReactNode} from 'react';
+import React, {CSSProperties, ReactNode, useRef} from 'react';
 import {createIcon} from 'yet-another-react-lightbox';
 import './photo-album.css';
 
@@ -24,6 +25,7 @@ const getThumbnailIconSize = (width: number, height: number) => {
 
 interface IPhotoAlbumItemProps extends React.PropsWithChildren {
   image: IImageDTO;
+  imageProps: any;
   width: number;
   height: number;
   onClick?: () => void;
@@ -33,6 +35,7 @@ interface IPhotoAlbumItemProps extends React.PropsWithChildren {
 
 const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
   image,
+  imageProps,
   width,
   height,
   onClick,
@@ -86,6 +89,20 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
               {image.title || <br />}
             </span>
           }
+          subtitle={
+            image.caption && (
+              <span
+                className="photo-album-item__caption"
+                style={{
+                  color: titleColor,
+                  fontFamily: titleFontFamily,
+                  fontSize: `${titleFontSize}px`,
+                }}
+              >
+                {image.caption}
+              </span>
+            )
+          }
           position={
             titlePosition !== TitlePosition.CENTER ? titlePosition : 'bottom'
           }
@@ -93,6 +110,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
       </div>
     ) : null;
   };
+
+  const wrapperRef = useRef(null);
 
   return (
     <div
@@ -104,6 +123,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
       onClick={onClick}
     >
       <div
+        ref={wrapperRef}
         className={clsx(
           'photo-album-item__image-wrapper',
           'photo-album-item__image-wrapper_overflow',
@@ -114,15 +134,23 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           borderRadius: `${imageBorderRadius}px`,
         }}
       >
-        {children}
+        <ReImage
+          wrapperRef={wrapperRef}
+          {...imageProps}
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'block',
+          }}
+        />
         {image.type === ImageType.VIDEO && (
           <VideoThumbnailIcon
             style={{
               height: getThumbnailIconSize(width, height),
               width: getThumbnailIconSize(width, height),
             }}
-            className={clsx('yarl__thumbnails_thumbnail_icon', {
-              'photo-album-item__video-icon': !!onClick,
+            className={clsx('photo-album-item__video-icon', {
+              'photo-album-item__image-wrapper_clickable': !!onClick,
             })}
           />
         )}

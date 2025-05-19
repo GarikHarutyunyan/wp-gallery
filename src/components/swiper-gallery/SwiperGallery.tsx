@@ -11,6 +11,7 @@ import 'swiper/css/effect-cube';
 import 'swiper/css/navigation';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import './swiper-gallery.css';
+import SwiperImage from './SwiperImage';
 
 interface ISwiperGalleryProps {
   images: IImageDTO[];
@@ -248,47 +249,22 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
             onClick={() => onClick?.(index)}
             className={slideClassName}
           >
-            {!isVideo ? (
-              <img
-                data-index={index}
-                src={
-                  index < (imagesCount || 0) + 1 ||
-                  index > images.length - (imagesCount || 0) - 1
-                    ? image.original.url
-                    : undefined
-                }
-                sizes={`${size}px`}
-                srcSet={
-                  index < (imagesCount || 0) + 1 ||
-                  index > images.length - (imagesCount || 0) - 1
-                    ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
-                    : undefined
-                }
-                className="lazy"
-                alt={image.title}
-                style={{
-                  background: key !== 'coverflowEffect' ? backgroundColor : '',
-                  padding: key !== 'coverflowEffect' ? padding + 'px' : 0,
-                }}
-              />
-            ) : (
-              <video
-                ref={videoRef}
-                src={image.original.url}
-                poster={image.medium_large.url}
-                style={{
-                  background: key !== 'coverflowEffect' ? backgroundColor : '',
-                  padding: key !== 'coverflowEffect' ? padding + 'px' : 0,
-                }}
-                className={'swiper-gallery__video'}
-                controls
-                onMouseDown={onMouseDown}
-              />
-            )}
+            <SwiperImage
+              key={index}
+              image={image}
+              images={images}
+              index={index}
+              imagesCount={imagesCount}
+              backgroundColor={backgroundColor}
+              padding={padding}
+              size={size}
+              videoRef={videoRef}
+              onMouseDown={onMouseDown}
+              galleryKey={key}
+            />
           </SwiperSlide>
         );
       })}
-
       {playAndPauseAllowed && (
         <IconButton
           className="playPauseButton"

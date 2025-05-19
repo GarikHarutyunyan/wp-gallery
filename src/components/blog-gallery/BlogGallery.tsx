@@ -8,6 +8,7 @@ import {Button} from 'core-components/button';
 import {IBlogSettings} from 'data-structures';
 import '../photo-album/photo-album.css';
 import './BlogGallery.css';
+import BlogImage from './BlogImage';
 interface IBlogGalleryProps {
   onClick?: (index: number) => void;
 }
@@ -99,37 +100,18 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                   !isMobile && imagePosition === 'listed',
               })}
             >
-              <div
-                onClick={() => onClick?.(index)}
-                className={`blog-gallery__image-container ${
-                  !!onClick ? 'blog-gallery__image_clickable' : ''
-                } photo-album-item__image-wrapper_${hoverEffect}`}
-                style={{
-                  width: `${
-                    containerInnerWidth >= 1 && containerInnerWidth <= 720
-                      ? '100%'
-                      : `${imageWidth}${imageWidthType}`
-                  }`,
-                  borderRadius: `${imageRadius}%`,
-                  height: `${imageHeight}${imageHeightType}`,
-                }}
-              >
-                {image.type === 'video' ? (
-                  <video autoPlay muted loop playsInline>
-                    <source src={image.original.url} type="video/mp4" />
-                  </video>
-                ) : (
-                  <img
-                    src={image.thumbnail.url}
-                    srcSet={`${image.thumbnail.url} ${image.thumbnail.width}w, 
-                  ${image.medium_large.url} ${image.medium_large.width}w, 
-                  ${image.large.url} ${image.large.width}w, 
-                  ${image.original.url} ${image.original.width}w`}
-                    sizes={`${containerInnerWidth}px`}
-                    alt={image.title}
-                  />
-                )}
-              </div>
+              <BlogImage
+                image={image}
+                index={index}
+                containerInnerWidth={containerInnerWidth}
+                imageWidth={imageWidth}
+                imageWidthType={imageWidthType}
+                imageHeight={imageHeight}
+                imageHeightType={imageHeightType}
+                imageRadius={imageRadius}
+                hoverEffect={hoverEffect}
+                onClick={onClick}
+              />
               <div
                 className="blog-gallery__text-container"
                 style={{
@@ -147,13 +129,30 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         textAlign: titleAlignment,
                         margin: 0,
                         padding:
-                          showButton && (!showDescription || !image.description)
+                          showButton && !image.caption && (!showDescription || !image.description)
                             ? '0px 0px 15px'
                             : 0,
                       }}
                     >
                       {image.title}
                     </h1>
+                  )}
+                  {showTitle && image.caption && (
+                    <p
+                      className="blog-gallery__text-container-content-caption"
+                      style={{
+                        textAlign: titleAlignment,
+                        fontSize: titleFontSize,
+                        color: titleColor,
+                        margin: 0,
+                        padding:
+                            showButton && (!showDescription || !image.description)
+                                ? '0px 0px 15px'
+                                : 0,
+                      }}
+                    >
+                      {image.caption}
+                    </p>
                   )}
                   {showDescription && image.description && (
                     <p

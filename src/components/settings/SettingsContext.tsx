@@ -76,7 +76,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {
     template,
     initTemplate,
-    changeTemplate,
     resetTemplate,
     isLoading: areTemplatesLoading,
   } = useTemplates();
@@ -97,6 +96,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
   const [css, setCss] = useState('');
+  const [customCss, setCustomCss] = useState('');
   const [hasChanges, setHasChanges] = useState(false);
   const wrapperRef = useRef(null);
   const [imagesCount, setImagesCount] = useState<number>(0);
@@ -109,6 +109,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     setType(newSettings.type);
     setCss(newSettings.css || '');
+    setCustomCss(newSettings.custom_css || '');
     setGeneralSettings(newSettings.general || generalMockSettings);
     setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
     setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
@@ -119,7 +120,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCarouselSettings(newSettings.carousel || carouselMockSettings);
     setCardsSettings(newSettings.cards || cardsMockSettings);
     setBlogSettings(newSettings.blog || blogMockSettings);
-
     initTemplate?.(
       newSettings?.template_id as string,
       newSettings?.title as string
@@ -142,6 +142,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
       setType(newSettings.type);
       setCss(newSettings.css || '');
+      setCustomCss(newSettings.custom_css || '');
       setGeneralSettings(newSettings.general || generalMockSettings);
       setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
@@ -315,7 +316,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
         setCss(newSettings.css || '');
-        changeTemplate?.(newSettings.template_id as string);
+        initTemplate?.(
+          newSettings?.template_id as string,
+          newSettings?.title as string
+        );
         enqueueSnackbar(successMessage, {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -349,6 +353,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         {children}
         {css !== '' && (
           <style>{'#reacg-root' + galleryId + '{' + css + '}'}</style>
+        )}
+        {customCss !== '' && (
+          <style>{'#reacg-root' + galleryId + '{' + customCss + '}'}</style>
         )}
       </div>
     );

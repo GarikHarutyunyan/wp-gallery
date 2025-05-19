@@ -83,6 +83,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [isFetched, setIsFetched] = useState(false);
 
   const pagesCount: number =
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
@@ -102,6 +103,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     } else {
       getDataFromWindow(1);
     }
+
+    // setIsFetched(true);
   }, []);
 
   useUpdateEffect(() => {
@@ -147,6 +150,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         title: data.title,
         description: data.description,
         caption: data.caption,
+        alt: data.alt,
         action_url: data.action_url,
       }));
 
@@ -172,6 +176,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       thumbnail: data.thumbnail,
       title: data.title,
       caption: data.caption,
+      alt: data.alt,
       description: data.description,
       action_url: data.action_url,
     }));
@@ -228,6 +233,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         thumbnail: data.thumbnail,
         title: data.title,
         caption: data.caption,
+        alt: data.alt,
         description: data.description,
         action_url: data.action_url,
       }));
