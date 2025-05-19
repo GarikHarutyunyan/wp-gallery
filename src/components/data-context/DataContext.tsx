@@ -97,7 +97,6 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const allData = (window as any).reacg_data;
     const currentData = allData?.[galleryId as string];
     const hasFirstChunk: boolean = currentData?.images?.length;
-
     if (!hasFirstChunk) {
       getData(1);
     } else {
@@ -110,7 +109,6 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   useUpdateEffect(() => {
     itemsPerPage > 0 && onReloadData();
   }, [itemsPerPage, paginationType, orderBy, orderDirection]);
-
   const loadAllLightboxImages = async (): Promise<void> => {
     if (
       (!lightboxImages || lightboxImages.length < imageCount) &&
@@ -214,7 +212,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       let queryString = queryStringSeperator;
       queryString += `order_by=${orderBy}`;
       queryString += `&order=${orderDirection}`;
-      queryString += `&filter=${search}`;
+      queryString += `&s=${search}`;
       queryString += `&timestamp=${getGalleryTimestamp?.()}`;
 
       if (paginationType !== PaginationType.NONE) {
@@ -269,7 +267,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     _event?: any,
     newPage: number = currentPage + 1
   ): Promise<void> => {
-    getData(newPage);
+    getData(newPage, searchTerm);
   };
   const onSearchSubmit = async (newSearchTerm: string = ''): Promise<void> => {
     setCurrentPage(0);
@@ -309,7 +307,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         loadAllLightboxImages,
       }}
     >
-      {images.length || isLoading ? children : renderContentPlaceholder()}
+      {children}
+      {!images.length && !isLoading && renderContentPlaceholder()}
       <DataFetcher onClick={onReloadData} />
     </DataContext.Provider>
   );
