@@ -13,6 +13,7 @@ import React, {
   ReactNode,
   Suspense,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import {useData} from './data-context/useData';
@@ -53,7 +54,21 @@ const Gallery: React.FC = () => {
     loadAllLightboxImages,
     images,
   } = useData();
+  const searchDebounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchTerm = e.target.value;
+
+    if (searchDebounceTimeoutRef.current) {
+      clearTimeout(searchDebounceTimeoutRef.current);
+    }
+
+    searchDebounceTimeoutRef.current = setTimeout(() => {
+      if (onSearchSubmit) {
+        onSearchSubmit(searchTerm);
+      }
+    }, 500);
+  };
   const paginationType: PaginationType = useMemo(() => {
     if (type === GalleryType.MOSAIC) {
       return mosaicSettings!.paginationType;
@@ -207,7 +222,7 @@ const Gallery: React.FC = () => {
       </Suspense>
     );
   };
-  const renderTextField = (): ReactNode => {
+  const renderSearchTextField = (): ReactNode => {
     return (
       <Grid container spacing={0} style={{margin: '15px 0'}}>
         <Grid item xs={3} style={{height: '100%'}}>
@@ -216,7 +231,7 @@ const Gallery: React.FC = () => {
             id="outlined-basic"
             label="Outlined"
             variant="outlined"
-            onChange={(e) => onSearchSubmit?.(null, e.target.value)}
+            onChange={handleSearchInputChange}
             InputProps={{
               sx: {
                 'padding': 0,
@@ -239,7 +254,7 @@ const Gallery: React.FC = () => {
 
   return (
     <>
-      {renderTextField()}
+      {renderSearchTextField()}
       {renderGallery()}
       {renderLoader()}
       {paginationType !== PaginationType.NONE && renderPaginationProvider()}

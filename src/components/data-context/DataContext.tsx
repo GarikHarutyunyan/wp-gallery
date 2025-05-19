@@ -28,7 +28,7 @@ const DataContext = createContext<{
   isLoading?: boolean;
   pagesCount?: number;
   onPageChange?: (_: any, page: number) => void;
-  onSearchSubmit?: (_: any, newSearchTerm: string) => void;
+  onSearchSubmit?: (newSearchTerm: string) => void;
   currentPage?: number;
   itemsPerPage?: number;
   isFullyLoaded?: boolean;
@@ -83,6 +83,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   >();
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const pagesCount: number =
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
@@ -194,8 +195,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCurrentPage(page);
   };
 
-  const getData = async (page: number, search?: string) => {
-    console.log(search, 'asdasdas');
+  const getData = async (page: number, search: string = '') => {
     if (isLoading) {
       return;
     }
@@ -271,11 +271,9 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   ): Promise<void> => {
     getData(newPage);
   };
-  const onSearchSubmit = async (
-    _event?: any,
-    newSearchTerm: string = ''
-  ): Promise<void> => {
+  const onSearchSubmit = async (newSearchTerm: string = ''): Promise<void> => {
     setCurrentPage(0);
+    setSearchTerm(newSearchTerm);
     getData(1, newSearchTerm);
   };
   const onReloadData = async () => {
@@ -283,7 +281,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setLightboxImages([]);
     setCurrentPage(0);
     setImageCount(0);
-    getData(1);
+    getData(1, searchTerm);
   };
 
   const renderContentPlaceholder = (): ReactElement => {
@@ -305,7 +303,6 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         pagesCount,
         onPageChange,
         onSearchSubmit,
-
         currentPage,
         itemsPerPage,
         isFullyLoaded,
