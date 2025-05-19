@@ -210,10 +210,7 @@
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail):visited {
   width: unset;
 }
-.yarl__slide_wrapper {
-  cursor: zoom-out;
-}
 
 .yarl__slide_wrapper img {
-  cursor: auto; /* or whatever cursor you prefer for images */
+  cursor: auto;
 }
