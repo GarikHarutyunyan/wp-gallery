@@ -6,7 +6,7 @@ import {
   LightboxTextPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
-import React, {useEffect, useId, useMemo, useState} from 'react';
+import React, {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
@@ -33,20 +33,51 @@ interface ILightboxBackgroundProps {
   id: string;
   isVisible: boolean;
   onClick: () => void;
+  setDrag: (value: boolean) => void;
 }
 
 const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   id,
   isVisible,
   onClick,
+  setDrag,
 }) => {
   const element = document.getElementById('wpwrap') || document.body;
+  const startPos = useRef<{x: number; y: number}>({x: 0, y: 0});
+  const dragged = useRef(false);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+
+  const dragThreshold = 5;
+
+  const handleMouseDown = (e: any) => {
+    startPos.current = {x: e.clientX, y: e.clientY};
+    dragged.current = false;
+    setIsMouseDown(true);
+  };
+
+  const handleMouseMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isMouseDown) return;
+
+    const dx = Math.abs(e.clientX - startPos.current.x);
+    const dy = Math.abs(e.clientY - startPos.current.y);
+    if (dx > dragThreshold || dy > dragThreshold) {
+      dragged.current = true;
+    }
+  };
+
+  const handleMouseUp = () => {
+    setDrag(dragged.current);
+    setIsMouseDown(false);
+  };
 
   return createPortal(
     <div
       onClick={onClick}
       className={'react-lightbox__background'}
       style={{display: isVisible ? 'block' : 'none'}}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
     >
       <div
         id={`reacg-lightbox__background-helper${id}`}
@@ -63,6 +94,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
 }) => {
   const {lightboxSettings: settings} = useSettings();
   const {lightboxImages: images} = useData();
+  const [drag, setDrag] = useState(false);
   const {
     isFullscreen,
     width,
@@ -146,6 +178,29 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const thumbnail = document.querySelector('.yarl__thumbnails_track');
+      if (thumbnail) {
+        const handleEvent = (e: MouseEvent) => {
+          e.stopPropagation();
+        };
+
+        thumbnail.addEventListener('mousedown', handleEvent as EventListener);
+        thumbnail.addEventListener('mouseup', handleEvent as EventListener);
+
+        // Once found and attached, stop observing
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document.body, {childList: true, subtree: true});
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   const slides = useMemo(() => {
@@ -275,6 +330,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         close={onClose}
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
+        controller={{closeOnBackdropClick: !drag}}
         animation={{
           swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
           easing: {swipe: 'ease-out', navigation: 'ease-in-out'},
@@ -385,6 +441,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         isVisible={activeIndex >= 0}
         onClick={onClose}
         id={lightboxId}
+        setDrag={setDrag}
       />
     </>
   );
