@@ -171,19 +171,16 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     textPosition,
   ]);
 
-  useEffect(() => {
+  const togglePageScroll = (open:boolean) => {
+    // Scroll is toggled on <body> by default; <html> should be handled as well.
     const html = document.documentElement;
 
-    if (activeIndex >= 0) {
+    if (open) {
       html.classList.add("yarl__no_scroll");
     } else {
       html.classList.remove("yarl__no_scroll");
     }
-
-    return () => {
-      html.classList.remove("yarl__no_scroll"); // Cleanup
-    };
-  }, [activeIndex]);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -341,7 +338,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         plugins={plugins}
         open={activeIndex >= 0}
         index={activeIndex}
-        close={onClose}
+        close={ () => {onClose(); togglePageScroll(false); } }
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
         controller={{closeOnBackdropClick: !drag}}
@@ -443,6 +440,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             if (videoAutoplay) setVideoAutoplay(false);
           },
           view: ({index: currentIndex}) => setIndex(currentIndex),
+          entering: () => {togglePageScroll(true)},
         }}
       />
     );
@@ -453,7 +451,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       {renderLighbox()}
       <LightboxBackground
         isVisible={activeIndex >= 0}
-        onClick={onClose}
+        onClick={ () => {onClose(); togglePageScroll(false); } }
         id={lightboxId}
         setDrag={setDrag}
       />
