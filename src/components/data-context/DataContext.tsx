@@ -133,6 +133,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
       queryString += `order_by=${orderBy}`;
       queryString += `&order=${orderDirection}`;
+      queryString += `&s=${searchTerm}`;
       queryString += `&timestamp=${getGalleryTimestamp?.()}`;
       const imgData: any[] = (await axios.get(`${fetchUrl}${queryString}`))
         .data;
@@ -256,6 +257,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }
       setCurrentPage(page);
       setIsLoading(false);
+      setLightboxImages(newImages);
     } else {
       setImages(propsImages);
       changeImagesCount?.(propsImages.length);

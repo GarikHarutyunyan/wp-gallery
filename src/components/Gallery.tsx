@@ -207,6 +207,7 @@ const Gallery: React.FC = () => {
           onLoad={onPageChange as any}
           isFullyLoaded={isFullyLoaded}
           settings={generalSettings as IGeneralSettings}
+          page={currentPage}
         />
       </Suspense>
     );
@@ -255,7 +256,7 @@ const Gallery: React.FC = () => {
   return (
     <>
       {renderSearchTextField()}
-      {renderGallery()}
+      {!!images?.length && renderGallery()}
       {renderLoader()}
       {paginationType !== PaginationType.NONE && renderPaginationProvider()}
       {showLightbox && renderLightbox()}
