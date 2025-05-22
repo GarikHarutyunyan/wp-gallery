@@ -70,6 +70,12 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
         key={image.id}
       >
         <ImageListItemBar
+          sx={{
+            '& .MuiImageListItemBar-title': {
+              fontSize: `${titleFontSize}px`,
+              lineHeight: 1.5,
+            },
+          }}
           style={{
             textAlign: titleAlignment,
             color: titleColor,

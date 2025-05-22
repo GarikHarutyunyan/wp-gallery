@@ -78,6 +78,12 @@ const ThumbnailImage = ({
         })}
       >
         <ImageListItemBar
+          sx={{
+            '& .MuiImageListItemBar-title': {
+              fontSize: `${titleFontSize}px`,
+              lineHeight: 1.5,
+            },
+          }}
           style={{
             textAlign: titleAlignment,
             paddingLeft: paddingTitle,
