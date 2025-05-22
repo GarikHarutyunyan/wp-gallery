@@ -111,6 +111,8 @@ export interface IGeneralSettings {
   paginationTextColor: string;
   clickAction: ImageClickAction;
   openUrlInNewTab: boolean;
+  showSearchField: boolean;
+  searchFieldText: string;
 }
 
 export interface ICubeSettings {

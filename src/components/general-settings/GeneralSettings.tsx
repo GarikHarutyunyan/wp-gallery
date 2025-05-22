@@ -1,8 +1,8 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {useSettings} from 'components/settings';
-import {useTemplates} from 'contexts';
-import {Section} from 'core-components/section';
+import { useSettings } from 'components/settings';
+import { useTemplates } from 'contexts';
+import { Section } from 'core-components/section';
 import {
   GalleryType,
   IGeneralSettings,
@@ -12,15 +12,17 @@ import {
   PaginationType,
   PaginationTypeOptions,
 } from 'data-structures';
-import React, {ReactNode, useMemo} from 'react';
-import {Utils} from 'utils';
+import React, { ReactNode, useMemo } from 'react';
+import { Utils } from 'utils';
 import {
   ColorControl,
   ISelectOption,
   NumberControl,
   SelectControl,
+  SwitchControl,
+  TextControl,
 } from '../controls';
-import {Filter} from '../settings/Filter';
+import { Filter } from '../settings/Filter';
 
 const getPaginationTypeOptions = (type: GalleryType) => {
   let options = PaginationTypeOptions;
@@ -73,6 +75,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     paginationButtonShape,
     loadMoreButtonColor,
     paginationTextColor,
+    showSearchField,
+    searchFieldText,
   } = value as IGeneralSettings;
 
   const showOnlyGalleryOptions: boolean =
@@ -242,12 +246,54 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const renderSearchSettings = (): ReactNode => {
+    return (
+      <Section
+        header={'Searching'}
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'showSearchField'}
+                  name={'Show search field'}
+                  value={showSearchField}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              {showSearchField && (
+                <>
+                  <Filter isLoading={isLoading}>
+                    <TextControl
+                      id={'searchFieldText'}
+                      name="Search field text"
+                      value={searchFieldText}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </>
+              )}
+            </Grid>
+          </Grid>
+        }
+      />
+    );
+  };
+
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderSortingSettings()}
       {!showOnlyGalleryOptions ? renderMainSettings() : null}
+      {renderSearchSettings()}
     </Paper>
   );
 };
 
-export {GeneralSettings};
+export { GeneralSettings };
+

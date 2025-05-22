@@ -92,7 +92,8 @@ const Gallery: React.FC = () => {
     blogSettings?.paginationType,
   ]);
 
-  const {clickAction, openUrlInNewTab} = generalSettings as IGeneralSettings;
+  const {clickAction, openUrlInNewTab, showSearchField, searchFieldText} =
+    generalSettings as IGeneralSettings;
   const showLightbox: boolean = clickAction === ImageClickAction.LIGHTBOX;
   const shouldOpenUrl: boolean = clickAction === ImageClickAction.URL;
   const isClickable: boolean = showLightbox || shouldOpenUrl;
@@ -225,22 +226,33 @@ const Gallery: React.FC = () => {
   };
   const renderSearchTextField = (): ReactNode => {
     return (
-      <Grid container spacing={0} style={{margin: '15px 0'}}>
-        <Grid item xs={3} style={{height: '100%'}}>
+      <Grid
+        container
+        spacing={0}
+        style={{
+          margin: '15px 0',
+        }}
+      >
+        <Grid item style={{height: '100%'}}>
           <TextField
-            className={'reacg-gallery-wrapper__top-layout-text-field'}
-            id="outlined-basic"
-            label="Outlined"
+            id="filled-basic"
+            label={searchFieldText}
             variant="outlined"
             onChange={handleSearchInputChange}
+            sx={{width: '100%'}}
             InputProps={{
               sx: {
-                'padding': 0,
                 '& input': {
-                  padding: '16.5px 14px',
-                  minHeight: 0,
-                  border: 0,
-                  boxShadow: 'none',
+                  'padding': '16.5px 14px',
+                  'minHeight': 0,
+                  'margin': '0',
+                  'border': '0px',
+                  'outline': 'none',
+                  'backgroundColor': 'transparent',
+                  '&:focus': {
+                    boxShadow: 'none',
+                    outline: 'none',
+                  },
                 },
               },
             }}
@@ -255,7 +267,7 @@ const Gallery: React.FC = () => {
 
   return (
     <>
-      {renderSearchTextField()}
+      {showSearchField && renderSearchTextField()}
       {!!images?.length && renderGallery()}
       {renderLoader()}
       {paginationType !== PaginationType.NONE && renderPaginationProvider()}
