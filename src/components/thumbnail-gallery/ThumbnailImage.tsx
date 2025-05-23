@@ -98,9 +98,7 @@ const ThumbnailImage = ({
           title={<span>{image.title || <br />}</span>}
           subtitle={
             image.caption && (
-              <span className="thumbnail-image__caption">
-                {image.caption || <br />}
-              </span>
+              <span className="thumbnail-image__caption">{image.caption}</span>
             )
           }
           position={
