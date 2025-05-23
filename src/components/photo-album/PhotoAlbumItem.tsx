@@ -70,6 +70,13 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
         key={image.id}
       >
         <ImageListItemBar
+          sx={{
+            '& .MuiImageListItemBar-title,.MuiImageListItemBar-subtitle': {
+              fontSize: `${titleFontSize}px`,
+              fontFamily: titleFontFamily,
+              lineHeight: 'normal',
+            },
+          }}
           style={{
             textAlign: titleAlignment,
             color: titleColor,
@@ -78,29 +85,10 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             'photo-album-item__title-content_center':
               titlePosition === TitlePosition.CENTER,
           })}
-          title={
-            <span
-              style={{
-                color: titleColor,
-                fontFamily: titleFontFamily,
-                fontSize: `${titleFontSize}px`,
-              }}
-            >
-              {image.title || <br />}
-            </span>
-          }
+          title={<span>{image.title || <br />}</span>}
           subtitle={
             image.caption && (
-              <span
-                className="photo-album-item__caption"
-                style={{
-                  color: titleColor,
-                  fontFamily: titleFontFamily,
-                  fontSize: `${titleFontSize}px`,
-                }}
-              >
-                {image.caption}
-              </span>
+              <span className="photo-album-item__caption">{image.caption}</span>
             )
           }
           position={

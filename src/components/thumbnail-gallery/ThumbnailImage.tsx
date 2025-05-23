@@ -78,6 +78,13 @@ const ThumbnailImage = ({
         })}
       >
         <ImageListItemBar
+          sx={{
+            '& .MuiImageListItemBar-title,.MuiImageListItemBar-subtitle': {
+              fontSize: `${titleFontSize}px`,
+              fontFamily: titleFontFamily,
+              lineHeight: 'normal',
+            },
+          }}
           style={{
             textAlign: titleAlignment,
             paddingLeft: paddingTitle,
@@ -88,29 +95,10 @@ const ThumbnailImage = ({
             'thumbnail-gallery__title-content_center':
               titlePosition === ThumbnailTitlePosition.CENTER,
           })}
-          title={
-            <span
-              style={{
-                color: titleColor,
-                fontFamily: titleFontFamily,
-                fontSize: titleFontSize + 'px',
-              }}
-            >
-              {image.title || <br />}
-            </span>
-          }
+          title={<span>{image.title || <br />}</span>}
           subtitle={
             image.caption && (
-              <span
-                className="thumbnail-image__caption"
-                style={{
-                  color: titleColor,
-                  fontFamily: titleFontFamily,
-                  fontSize: titleFontSize + 'px',
-                }}
-              >
-                {image.caption || <br />}
-              </span>
+              <span className="thumbnail-image__caption">{image.caption}</span>
             )
           }
           position={
