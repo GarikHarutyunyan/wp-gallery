@@ -71,11 +71,10 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
       >
         <ImageListItemBar
           sx={{
-            '& .MuiImageListItemBar-title': {
+            '& .MuiImageListItemBar-title,.MuiImageListItemBar-subtitle': {
               fontSize: `${titleFontSize}px`,
               fontFamily: titleFontFamily,
               lineHeight: 'normal',
-              color: titleColor,
             },
           }}
           style={{
@@ -89,16 +88,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           title={<span>{image.title || <br />}</span>}
           subtitle={
             image.caption && (
-              <span
-                className="photo-album-item__caption"
-                style={{
-                  color: titleColor,
-                  fontFamily: titleFontFamily,
-                  fontSize: `${titleFontSize}px`,
-                }}
-              >
-                {image.caption}
-              </span>
+              <span className="photo-album-item__caption">{image.caption}</span>
             )
           }
           position={

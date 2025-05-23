@@ -79,17 +79,17 @@ const ThumbnailImage = ({
       >
         <ImageListItemBar
           sx={{
-            '& .MuiImageListItemBar-title': {
+            '& .MuiImageListItemBar-title,.MuiImageListItemBar-subtitle': {
               fontSize: `${titleFontSize}px`,
               fontFamily: titleFontFamily,
               lineHeight: 'normal',
-              color: titleColor,
             },
           }}
           style={{
             textAlign: titleAlignment,
             paddingLeft: paddingTitle,
             paddingRight: paddingTitle,
+            color: titleColor,
           }}
           className={clsx({
             'thumbnail-gallery__title-content_center':
@@ -98,14 +98,7 @@ const ThumbnailImage = ({
           title={<span>{image.title || <br />}</span>}
           subtitle={
             image.caption && (
-              <span
-                className="thumbnail-image__caption"
-                style={{
-                  color: titleColor,
-                  fontFamily: titleFontFamily,
-                  fontSize: titleFontSize + 'px',
-                }}
-              >
+              <span className="thumbnail-image__caption">
                 {image.caption || <br />}
               </span>
             )
