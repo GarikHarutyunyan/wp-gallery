@@ -112,7 +112,7 @@ export interface IGeneralSettings {
   clickAction: ImageClickAction;
   openUrlInNewTab: boolean;
   showSearchField: boolean;
-  searchFieldText: string;
+  searchFieldPlaceholder: string;
 }
 
 export interface ICubeSettings {

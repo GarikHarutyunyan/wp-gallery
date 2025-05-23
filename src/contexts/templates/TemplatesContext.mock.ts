@@ -69,7 +69,7 @@ const generalMockSettings: IGeneralSettings = {
   clickAction: ImageClickAction.LIGHTBOX,
   openUrlInNewTab: false,
   showSearchField: true,
-  searchFieldText: 'SEARCH',
+  searchFieldPlaceholder: 'SEARCH',
 };
 
 const lightboxMockSettings: ILightboxSettings = {
