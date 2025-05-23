@@ -92,8 +92,12 @@ const Gallery: React.FC = () => {
     blogSettings?.paginationType,
   ]);
 
-  const {clickAction, openUrlInNewTab, showSearchField, searchFieldText} =
-    generalSettings as IGeneralSettings;
+  const {
+    clickAction,
+    openUrlInNewTab,
+    showSearchField,
+    searchFieldPlaceholder,
+  } = generalSettings as IGeneralSettings;
   const showLightbox: boolean = clickAction === ImageClickAction.LIGHTBOX;
   const shouldOpenUrl: boolean = clickAction === ImageClickAction.URL;
   const isClickable: boolean = showLightbox || shouldOpenUrl;
@@ -233,22 +237,19 @@ const Gallery: React.FC = () => {
           margin: '15px 0',
         }}
       >
-        <Grid item style={{height: '100%'}}>
+        <Grid item style={{height: '100%', width: '270px'}}>
           <TextField
-            id="filled-basic"
-            label={searchFieldText}
+            id="outlined-basic"
+            placeholder={searchFieldPlaceholder}
             variant="outlined"
             onChange={handleSearchInputChange}
-            sx={{width: '100%'}}
+            fullWidth
             InputProps={{
               sx: {
                 '& input': {
-                  'padding': '16.5px 14px',
+                  'padding': '11px 20px',
                   'minHeight': 0,
                   'margin': '0',
-                  'border': '0px',
-                  'outline': 'none',
-                  'backgroundColor': 'transparent',
                   '&:focus': {
                     boxShadow: 'none',
                     outline: 'none',
