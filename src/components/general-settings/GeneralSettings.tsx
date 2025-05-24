@@ -34,6 +34,14 @@ const getPaginationTypeOptions = (type: GalleryType) => {
           )
       );
       break;
+    case GalleryType.JUSTIFIED:
+      options = PaginationTypeOptions.filter(
+        (option: ISelectOption) =>
+          ![PaginationType.SCROLL, PaginationType.LOAD_MORE].includes(
+            option.value as PaginationType
+          )
+      );
+      break;
     case GalleryType.MASONRY:
       options = PaginationTypeOptions.filter(
         (option: ISelectOption) =>
@@ -59,6 +67,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     changeThumbnailSettings,
     mosaicSettings,
     changeMosaicSettings,
+    justifiedSettings,
+    changeJustifiedSettings,
     masonrySettings,
     blogSettings,
     changeBlogSettings,
@@ -85,6 +95,9 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     if (type === GalleryType.MOSAIC) {
       return mosaicSettings!.paginationType;
     }
+    if (type === GalleryType.JUSTIFIED) {
+      return justifiedSettings!.paginationType;
+    }
     if (type === GalleryType.THUMBNAILS) {
       return thumbnailSettings!.paginationType;
     }
@@ -95,7 +108,14 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
       return blogSettings!.paginationType;
     }
     return PaginationType.NONE;
-  }, [type, mosaicSettings, thumbnailSettings, masonrySettings, blogSettings]);
+  }, [
+    type,
+    mosaicSettings,
+    justifiedSettings,
+    thumbnailSettings,
+    masonrySettings,
+    blogSettings,
+  ]);
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
@@ -105,6 +125,9 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   const onPaginationTypeChange = (inputValue: any, key?: string) => {
     if (type === GalleryType.MOSAIC) {
       key && changeMosaicSettings({...mosaicSettings, [key]: inputValue});
+    }
+    if (type === GalleryType.JUSTIFIED) {
+      key && changeJustifiedSettings({...justifiedSettings, [key]: inputValue});
     }
     if (type === GalleryType.THUMBNAILS) {
       key && changeThumbnailSettings({...thumbnailSettings, [key]: inputValue});

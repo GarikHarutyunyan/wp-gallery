@@ -40,6 +40,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     generalSettings,
     thumbnailSettings,
     mosaicSettings,
+    justifiedSettings,
     masonrySettings,
     blogSettings,
     changeImagesCount,
@@ -48,6 +49,9 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const paginationType: PaginationType = useMemo(() => {
     if (type === GalleryType.MOSAIC) {
       return mosaicSettings!.paginationType;
+    }
+    if (type === GalleryType.JUSTIFIED) {
+      return justifiedSettings!.paginationType;
     }
     if (type === GalleryType.THUMBNAILS) {
       return thumbnailSettings!.paginationType;
@@ -63,6 +67,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   }, [
     type,
     mosaicSettings?.paginationType,
+    justifiedSettings?.paginationType,
     thumbnailSettings?.paginationType,
     masonrySettings?.paginationType,
     blogSettings?.paginationType,
