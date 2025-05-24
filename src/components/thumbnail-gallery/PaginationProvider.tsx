@@ -12,6 +12,7 @@ interface IPaginationProviderProps {
   pagesCount: number;
   isFullyLoaded?: boolean;
   settings: IGeneralSettings;
+  page: number;
 }
 
 const PaginationProvider: React.FC<IPaginationProviderProps> = ({
@@ -20,6 +21,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   pagesCount,
   isFullyLoaded,
   settings,
+  page,
 }) => {
   const {ref, inView} = useInView();
   const {
@@ -65,6 +67,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
         style={{display: 'flex', margin: '10px 0'}}
         onChange={onLoadData}
         boundaryCount={2}
+        page={page}
         renderItem={(item) => (
           <PaginationItem
             {...item}
