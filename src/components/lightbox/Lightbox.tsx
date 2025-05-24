@@ -448,7 +448,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             if (videoAutoplay) setVideoAutoplay(false);
           },
           view: ({index: currentIndex}) => setIndex(currentIndex),
-          entering: {handleOpen},
+          entering: handleOpen,
         }}
       />
     );
