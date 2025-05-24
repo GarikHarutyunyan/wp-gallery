@@ -201,21 +201,21 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setType(newType);
-      // const settings: ISettingsDTO = {
-      //   type: newType,
-      // } as ISettingsDTO;
-      // try {
-      //   const response = await axios.post(fetchUrl, settings, {
-      //     headers: {'X-WP-Nonce': nonce},
-      //   });
-      //   const responseType: GalleryType = response.data.type;
-      //   if (responseType !== newType) {
-      //     setType(responseType);
-      //   }
-      // } catch (error) {
-      //   setType(type);
-      //   console.error(error);
-      // }
+      const settings: ISettingsDTO = {
+        type: newType,
+      } as ISettingsDTO;
+      try {
+        const response = await axios.post(fetchUrl, settings, {
+          headers: {'X-WP-Nonce': nonce},
+        });
+        const responseType: GalleryType = response.data.type;
+        if (responseType !== newType) {
+          setType(responseType);
+        }
+      } catch (error) {
+        setType(type);
+        console.error(error);
+      }
     }
   };
 
