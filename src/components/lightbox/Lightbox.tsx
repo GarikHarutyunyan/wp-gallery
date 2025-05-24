@@ -182,6 +182,14 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     }
   };
 
+  const handleClose = () => {
+    onClose();
+    togglePageScroll(false);
+  }
+  const handleOpen = () => {
+    togglePageScroll(true);
+  }
+
   useEffect(() => {
     const handleResize = () => {
       setInnerWidth(window.innerWidth);
@@ -338,7 +346,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         plugins={plugins}
         open={activeIndex >= 0}
         index={activeIndex}
-        close={ () => {onClose(); togglePageScroll(false); } }
+        close={handleClose}
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
         controller={{closeOnBackdropClick: !drag}}
@@ -440,7 +448,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             if (videoAutoplay) setVideoAutoplay(false);
           },
           view: ({index: currentIndex}) => setIndex(currentIndex),
-          entering: () => {togglePageScroll(true)},
+          entering: {handleOpen},
         }}
       />
     );
@@ -451,7 +459,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       {renderLighbox()}
       <LightboxBackground
         isVisible={activeIndex >= 0}
-        onClick={ () => {onClose(); togglePageScroll(false); } }
+        onClick={handleClose}
         id={lightboxId}
         setDrag={setDrag}
       />
