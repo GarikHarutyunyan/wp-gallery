@@ -14,7 +14,6 @@ interface ITypePanelBodyProps {
 const TypePanelBody: React.FC<ITypePanelBodyProps> = ({onChange}) => {
   const {type} = useSettings();
   const isMobile = useIsMobile(720);
-
   if (!type) return null;
 
   return (
