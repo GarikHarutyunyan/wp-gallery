@@ -1,6 +1,4 @@
-import {Grid} from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-import TextField from '@mui/material/TextField';
 import {
   GalleryType,
   IGeneralSettings,
@@ -13,7 +11,6 @@ import React, {
   ReactNode,
   Suspense,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import {useData} from './data-context/useData';
@@ -33,6 +30,7 @@ const Slideshow = lazy(() => import('./slideshow/Slideshow'));
 const PaginationProvider = lazy(
   () => import('./thumbnail-gallery/PaginationProvider')
 );
+const FilterProvider = lazy(() => import('./filter-provider/FilterProvider'));
 
 const Gallery: React.FC = () => {
   const {
@@ -47,28 +45,14 @@ const Gallery: React.FC = () => {
     isLoading,
     pagesCount,
     onPageChange,
-    onSearchSubmit,
+    onSearch,
     currentPage = 1,
     itemsPerPage = 1,
     isFullyLoaded,
     loadAllLightboxImages,
     images,
   } = useData();
-  const searchDebounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value;
-
-    if (searchDebounceTimeoutRef.current) {
-      clearTimeout(searchDebounceTimeoutRef.current);
-    }
-
-    searchDebounceTimeoutRef.current = setTimeout(() => {
-      if (onSearchSubmit) {
-        onSearchSubmit(searchTerm);
-      }
-    }, 500);
-  };
   const paginationType: PaginationType = useMemo(() => {
     if (type === GalleryType.MOSAIC) {
       return mosaicSettings!.paginationType;
@@ -228,38 +212,15 @@ const Gallery: React.FC = () => {
       </Suspense>
     );
   };
-  const renderSearchTextField = (): ReactNode => {
+
+  const renderFilterProvider = () => {
     return (
-      <Grid
-        container
-        spacing={0}
-        style={{
-          margin: '15px 0',
-        }}
-      >
-        <Grid item style={{height: '100%', width: '270px'}}>
-          <TextField
-            id="outlined-basic"
-            placeholder={searchFieldPlaceholder}
-            variant="outlined"
-            onChange={handleSearchInputChange}
-            fullWidth
-            InputProps={{
-              sx: {
-                '& input': {
-                  'padding': '11px 20px',
-                  'minHeight': 0,
-                  'margin': '0',
-                  '&:focus': {
-                    boxShadow: 'none',
-                    outline: 'none',
-                  },
-                },
-              },
-            }}
-          />
-        </Grid>
-      </Grid>
+      <Suspense>
+        <FilterProvider
+          onSearch={onSearch as any}
+          placeholder={searchFieldPlaceholder}
+        />
+      </Suspense>
     );
   };
   const closeLightbox = (): void => {
@@ -268,7 +229,7 @@ const Gallery: React.FC = () => {
 
   return (
     <>
-      {showSearchField && renderSearchTextField()}
+      {showSearchField && renderFilterProvider()}
       {!!images?.length && renderGallery()}
       {renderLoader()}
       {paginationType !== PaginationType.NONE && renderPaginationProvider()}

@@ -29,7 +29,7 @@ const DataContext = createContext<{
   isLoading?: boolean;
   pagesCount?: number;
   onPageChange?: (_: any, page: number) => void;
-  onSearchSubmit?: (newSearchTerm: string) => void;
+  onSearch?: (newSearchTerm: string) => void;
   currentPage?: number;
   itemsPerPage?: number;
   isFullyLoaded?: boolean;
@@ -273,7 +273,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   ): Promise<void> => {
     getData(newPage, searchTerm);
   };
-  const onSearchSubmit = async (newSearchTerm: string = ''): Promise<void> => {
+  const onSearch = async (newSearchTerm: string = ''): Promise<void> => {
     setCurrentPage(0);
     setSearchTerm(newSearchTerm);
     getData(1, newSearchTerm);
@@ -304,7 +304,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         isLoading,
         pagesCount,
         onPageChange,
-        onSearchSubmit,
+        onSearch,
         currentPage,
         itemsPerPage,
         isFullyLoaded,
