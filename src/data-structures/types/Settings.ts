@@ -1,6 +1,5 @@
 import {
   BlogViewImagePosition,
-  Direction,
   GalleryType,
   HoverEffect,
   ImageClickAction,
@@ -57,8 +56,9 @@ export interface IMasonrySettings {
   paginationType: PaginationType;
 }
 
-export interface IMosaicSettings extends IMasonrySettings {
-  direction: Direction;
+export interface IMosaicSettings extends IMasonrySettings {}
+
+export interface IJustifiedSettings extends Omit<IMasonrySettings, 'columns'> {
   rowHeight: number;
 }
 
@@ -185,6 +185,7 @@ export interface ISettingsDTO {
   general: IGeneralSettings;
   thumbnails: IThumbnailSettings;
   mosaic: IMosaicSettings;
+  justified: IJustifiedSettings;
   masonry: IMasonrySettings;
   slideshow: ISlideshowSettings;
   lightbox: ILightboxSettings;

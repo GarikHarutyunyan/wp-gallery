@@ -6,7 +6,7 @@ import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {
   HoverEffectOptions,
-  IMosaicSettings,
+  IJustifiedSettings,
   TitleAlignmentOptions,
   TitlePositionOptions,
   TitleVisibility,
@@ -22,13 +22,14 @@ import {
 } from '../controls';
 import {Filter} from '../settings/Filter';
 
-interface IMosaicSettingsProps {
+interface IJustifiedSettingsProps {
   isLoading?: boolean;
 }
 
-const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
+const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
   const {resetTemplate} = useTemplates();
-  const {mosaicSettings: value, changeMosaicSettings: onChange} = useSettings();
+  const {justifiedSettings: value, changeJustifiedSettings: onChange} =
+    useSettings();
   const {
     width,
     gap,
@@ -36,7 +37,7 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
     containerPadding,
     padding,
     paddingColor,
-    columns,
+    rowHeight,
     borderRadius,
     titlePosition,
     titleAlignment,
@@ -45,7 +46,7 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
     titleColor,
     titleFontSize,
     hoverEffect,
-  } = value as IMosaicSettings;
+  } = value as IJustifiedSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
@@ -69,13 +70,15 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
                   onChange={onInputValueChange}
                 />
               </Filter>
+
               <Filter isLoading={isLoading}>
                 <NumberControl
-                  id={'columns'}
-                  name={'Columns'}
-                  value={columns}
+                  id={'rowHeight'}
+                  name={'Row height'}
+                  value={rowHeight}
                   onChange={onInputValueChange}
-                  min={1}
+                  min={0}
+                  unit={'px'}
                 />
               </Filter>
             </Grid>
@@ -232,4 +235,4 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
   );
 };
 
-export {MosaicSettings};
+export {JustifiedSettings};

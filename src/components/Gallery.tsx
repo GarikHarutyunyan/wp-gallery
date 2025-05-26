@@ -21,6 +21,9 @@ const ThumbnailGallery = lazy(
   () => import('./thumbnail-gallery/ThumbnailGallery')
 );
 const MosaicGallery = lazy(() => import('./mosaic-gallery/MosaicGallery'));
+const JustifiedGallery = lazy(
+  () => import('./justified-gallery/JustifiedGallery')
+);
 const MasonryGallery = lazy(() => import('./masonry-gallery/MasonryGallery'));
 const CubeGallery = lazy(() => import('./cube-gallery/CubeGallery'));
 const CardsGallery = lazy(() => import('./cards-gallery/CardsGallery'));
@@ -37,6 +40,7 @@ const Gallery: React.FC = () => {
     type,
     generalSettings,
     mosaicSettings,
+    justifiedSettings,
     thumbnailSettings,
     masonrySettings,
     blogSettings,
@@ -56,6 +60,9 @@ const Gallery: React.FC = () => {
     if (type === GalleryType.MOSAIC) {
       return mosaicSettings!.paginationType;
     }
+    if (type === GalleryType.JUSTIFIED) {
+      return justifiedSettings!.paginationType;
+    }
     if (type === GalleryType.THUMBNAILS) {
       return thumbnailSettings!.paginationType;
     }
@@ -70,6 +77,7 @@ const Gallery: React.FC = () => {
   }, [
     type,
     mosaicSettings?.paginationType,
+    justifiedSettings?.paginationType,
     thumbnailSettings?.paginationType,
     masonrySettings?.paginationType,
     blogSettings?.paginationType,
@@ -96,6 +104,11 @@ const Gallery: React.FC = () => {
       case GalleryType.MOSAIC:
         gallery = (
           <MosaicGallery onClick={isClickable ? onImageClick : undefined} />
+        );
+        break;
+      case GalleryType.JUSTIFIED:
+        gallery = (
+          <JustifiedGallery onClick={isClickable ? onImageClick : undefined} />
         );
         break;
       case GalleryType.MASONRY:
