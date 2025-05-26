@@ -58,7 +58,7 @@ export interface IMasonrySettings {
 
 export interface IMosaicSettings extends IMasonrySettings {}
 
-export interface IJustifiedSettings extends IMasonrySettings {
+export interface IJustifiedSettings extends Omit<IMasonrySettings, 'columns'> {
   rowHeight: number;
 }
 

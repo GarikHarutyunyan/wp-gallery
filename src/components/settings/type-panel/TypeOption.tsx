@@ -21,6 +21,7 @@ const TypeOption: React.FC<ITypeOptionProps> = ({
   const onOptionClick = () => {
     onClick?.(value);
   };
+
   return (
     <div
       onClick={onOptionClick}

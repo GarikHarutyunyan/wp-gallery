@@ -1,5 +1,4 @@
 export * from './BlogViewImagePosition';
-export * from './Direction';
 export * from './GalleryType';
 export * from './HoverEffect';
 export * from './ImageClickAction';

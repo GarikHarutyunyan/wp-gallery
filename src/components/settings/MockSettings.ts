@@ -73,7 +73,6 @@ const justifiedMockSettings: IJustifiedSettings = {
   padding: 5,
   paddingColor: '',
   rowHeight: 250,
-  columns: 5,
   borderRadius: 5,
   titlePosition: TitlePosition.BOTTOM,
   titleAlignment: TitleAlignment.LEFT,
