@@ -1,7 +1,7 @@
 import {Grid} from '@mui/material';
 import TextField from '@mui/material/TextField';
-import React, {ChangeEvent, useRef} from 'react';
-
+import React from 'react';
+import {Utils} from 'utils';
 interface IFilterProviderProps {
   onSearch: (newSearchTerm?: string) => void;
   placeholder: string;
@@ -11,19 +11,11 @@ const FilterProvider: React.FC<IFilterProviderProps> = ({
   onSearch,
   placeholder,
 }) => {
-  const searchDebounceTimeoutRef = useRef<number | null>(null);
-  const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (e: any) => {
     const searchTerm = e.target.value;
-
-    if (searchDebounceTimeoutRef.current) {
-      clearTimeout(searchDebounceTimeoutRef.current);
+    if (onSearch) {
+      onSearch(searchTerm as string);
     }
-
-    searchDebounceTimeoutRef.current = setTimeout(() => {
-      if (onSearch) {
-        onSearch(searchTerm);
-      }
-    }, 500) as any;
   };
 
   const renderFilter = () => {
@@ -32,7 +24,7 @@ const FilterProvider: React.FC<IFilterProviderProps> = ({
         id="outlined-basic"
         placeholder={placeholder}
         variant="outlined"
-        onChange={handleSearchInputChange}
+        onChange={Utils.debounce(handleSearch, 500)}
         fullWidth
         InputProps={{
           sx: {
