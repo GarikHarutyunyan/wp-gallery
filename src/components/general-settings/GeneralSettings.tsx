@@ -20,7 +20,6 @@ import {
   NumberControl,
   SelectControl,
   SwitchControl,
-  TextControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
 
@@ -267,7 +266,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                   onChange={onInputValueChange}
                 />
               </Filter>
-              {showSearchField && (
+              {/* {showSearchField && (
                 <>
                   <Filter isLoading={isLoading}>
                     <TextControl
@@ -278,7 +277,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                     />
                   </Filter>
                 </>
-              )}
+              )} */}
             </Grid>
           </Grid>
         }
