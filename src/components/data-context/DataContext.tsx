@@ -76,7 +76,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     orderDirection = 'asc',
   } = generalSettings as IGeneralSettings;
   const {galleryId, baseUrl, getGalleryTimestamp} = useAppInfo();
-  const {noDataText, setLoadMoreText, setNoDataText} =
+  const {noDataText, setLoadMoreText, setNoDataText, setSearchPlaceholder} =
     useContext(TranslationsContext);
   const [images, setImages] = useState<IImageDTO[]>([]);
   const [lightboxImages, setLightboxImages] = useState<
@@ -185,9 +185,12 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       (window as any).reacg_global?.text?.load_more || undefined;
     const noDataText: string | undefined =
       (window as any).reacg_global?.text?.no_data || undefined;
+    const searchPlaceHolder: string | undefined =
+      (window as any).reacg_global?.text?.search || undefined;
 
     loadMoreText && setLoadMoreText?.(loadMoreText);
     noDataText && setNoDataText?.(noDataText);
+    searchPlaceHolder && setSearchPlaceholder?.(searchPlaceHolder);
     setImageCount(newImageCount);
 
     setImages(newImages);
@@ -244,9 +247,11 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         (window as any).reacg_global?.text?.load_more || undefined;
       const noDataText: string | undefined =
         (window as any).reacg_global?.text?.no_data || undefined;
-
+      const searchPlaceHolder: string | undefined =
+        (window as any).reacg_global?.text?.search || undefined;
       loadMoreText && setLoadMoreText?.(loadMoreText);
       noDataText && setNoDataText?.(noDataText);
+      searchPlaceHolder && setSearchPlaceholder?.(searchPlaceHolder);
       setImageCount(newImageCount);
 
       if (paginationType === PaginationType.SIMPLE) {

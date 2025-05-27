@@ -216,10 +216,7 @@ const Gallery: React.FC = () => {
   const renderFilterProvider = () => {
     return (
       <Suspense>
-        <FilterProvider
-          onSearch={onSearch as any}
-          placeholder={searchFieldPlaceholder}
-        />
+        <FilterProvider onSearch={onSearch as any} />
       </Suspense>
     );
   };

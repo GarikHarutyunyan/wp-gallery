@@ -264,6 +264,13 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                   name={'Show search field'}
                   value={showSearchField}
                   onChange={onInputValueChange}
+                  info={
+                    <p>
+                      Activate a search field that allows to find gallery items
+                      by matching keywords in the title, description, alt text,
+                      or caption․
+                    </p>
+                  }
                 />
               </Filter>
               {/* {showSearchField && (

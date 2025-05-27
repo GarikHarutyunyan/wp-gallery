@@ -1,16 +1,15 @@
 import {Grid} from '@mui/material';
 import TextField from '@mui/material/TextField';
-import React from 'react';
+import {TranslationsContext} from 'contexts/TranslationsContext';
+import React, {useContext} from 'react';
 import {Utils} from 'utils';
 interface IFilterProviderProps {
   onSearch: (newSearchTerm?: string) => void;
-  placeholder: string;
 }
 
-const FilterProvider: React.FC<IFilterProviderProps> = ({
-  onSearch,
-  placeholder,
-}) => {
+const FilterProvider: React.FC<IFilterProviderProps> = ({onSearch}) => {
+  const {searchPlaceholder} = useContext(TranslationsContext);
+
   const handleSearch = (e: any) => {
     const searchTerm = e.target.value;
     if (onSearch) {
@@ -22,7 +21,7 @@ const FilterProvider: React.FC<IFilterProviderProps> = ({
     return (
       <TextField
         id="outlined-basic"
-        placeholder={placeholder}
+        placeholder={searchPlaceholder}
         variant="outlined"
         onChange={Utils.debounce(handleSearch, 500)}
         fullWidth
