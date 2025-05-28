@@ -16,7 +16,6 @@ import React, {
 import {useData} from './data-context/useData';
 import './gallery.css';
 import {useSettings} from './settings';
-
 const ThumbnailGallery = lazy(
   () => import('./thumbnail-gallery/ThumbnailGallery')
 );
@@ -34,6 +33,7 @@ const Slideshow = lazy(() => import('./slideshow/Slideshow'));
 const PaginationProvider = lazy(
   () => import('./thumbnail-gallery/PaginationProvider')
 );
+const FilterProvider = lazy(() => import('./filter-provider/FilterProvider'));
 
 const Gallery: React.FC = () => {
   const {
@@ -49,6 +49,7 @@ const Gallery: React.FC = () => {
     isLoading,
     pagesCount,
     onPageChange,
+    onSearch,
     currentPage = 1,
     itemsPerPage = 1,
     isFullyLoaded,
@@ -83,7 +84,12 @@ const Gallery: React.FC = () => {
     blogSettings?.paginationType,
   ]);
 
-  const {clickAction, openUrlInNewTab} = generalSettings as IGeneralSettings;
+  const {
+    clickAction,
+    openUrlInNewTab,
+    showSearchField,
+    searchFieldPlaceholder,
+  } = generalSettings as IGeneralSettings;
   const showLightbox: boolean = clickAction === ImageClickAction.LIGHTBOX;
   const shouldOpenUrl: boolean = clickAction === ImageClickAction.URL;
   const isClickable: boolean = showLightbox || shouldOpenUrl;
@@ -203,6 +209,7 @@ const Gallery: React.FC = () => {
           onLoad={onPageChange as any}
           isFullyLoaded={isFullyLoaded}
           settings={generalSettings as IGeneralSettings}
+          page={currentPage}
         />
       </Suspense>
     );
@@ -219,13 +226,21 @@ const Gallery: React.FC = () => {
     );
   };
 
+  const renderFilterProvider = () => {
+    return (
+      <Suspense>
+        <FilterProvider onSearch={onSearch as any} />
+      </Suspense>
+    );
+  };
   const closeLightbox = (): void => {
     setActiveImageIndex(-1);
   };
 
   return (
     <>
-      {renderGallery()}
+      {showSearchField && renderFilterProvider()}
+      {!!images?.length && renderGallery()}
       {renderLoader()}
       {paginationType !== PaginationType.NONE && renderPaginationProvider()}
       {showLightbox && renderLightbox()}

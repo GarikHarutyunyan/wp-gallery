@@ -144,6 +144,8 @@ const generalMockSettings: IGeneralSettings = {
   paginationTextColor: 'green',
   clickAction: ImageClickAction.LIGHTBOX,
   openUrlInNewTab: false,
+  showSearchField: true,
+  searchFieldPlaceholder: 'SEARCH',
 };
 
 const lightboxMockSettings: ILightboxSettings = {
