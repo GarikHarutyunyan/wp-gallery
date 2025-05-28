@@ -274,6 +274,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           variant: 'error',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
+        (window as any).reacg_open_error_dialog?.({
+          errorMessage: 'Cannot update options',
+        });
         console.error(error);
       }
 
@@ -282,6 +285,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       enqueueSnackbar('Cannot update options!', {
         variant: 'error',
         anchorOrigin: {horizontal: 'right', vertical: 'top'},
+      });
+      (window as any).reacg_open_error_dialog?.({
+        errorMessage: 'Cannot update options',
       });
     }
   };
@@ -330,6 +336,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           variant: 'error',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
+        (window as any).reacg_open_error_dialog?.({
+          errorMessage: 'Cannot reset options',
+        });
         console.error(error);
       }
 
@@ -339,6 +348,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       enqueueSnackbar('Cannot reset options!', {
         variant: 'error',
         anchorOrigin: {horizontal: 'right', vertical: 'top'},
+      });
+      (window as any).reacg_open_error_dialog?.({
+        errorMessage: 'Cannot reset options',
       });
     }
   };

@@ -1,15 +1,17 @@
-import {useAppInfo} from 'contexts';
-import {ReactElement} from 'react';
-import {useErrorBoundary} from 'react-error-boundary';
+import {ReactElement, useEffect} from 'react';
 
 const ErrorFallback = ({error}: any): ReactElement | null => {
-  const {resetBoundary} = useErrorBoundary();
-  const {showControls} = useAppInfo();
+  useEffect(() => {
+    console.error('ErrorBoundary caught an error:', error);
+    (window as any).reacg_open_error_dialog?.({
+      errorMessage: error.message,
+    });
+  }, [error.message]);
 
-  return showControls ? (
-    <div role="alert">
+  return (
+    <div role={'alert'}>
       <h2>
-        {"We're here to help, 24/7! Reach out to us anytime on the "}
+        {'Something went wrong?\n No worries , we’re here 24/7 to help. '}
         <a
           href="https://wordpress.org/support/plugin/regallery/"
           target="_blank"
@@ -17,14 +19,10 @@ const ErrorFallback = ({error}: any): ReactElement | null => {
         >
           {'WordPress support forum'}
         </a>
-        {". Let's make your gallery shine, just the way you need it."}
       </h2>
-      <pre
-        style={{color: 'red'}}
-      >{`Something went wrong: ${error.message}`}</pre>
-      <button onClick={resetBoundary}>Try again</button>
+      <pre style={{color: 'red'}}>{`Error: ${error.message}`}</pre>
     </div>
-  ) : null;
+  );
 };
 
 export default ErrorFallback;
