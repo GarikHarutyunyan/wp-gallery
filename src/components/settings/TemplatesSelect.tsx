@@ -18,8 +18,8 @@ import React, {
   useState,
 } from 'react';
 import {TypeUtils} from 'utils';
+import {ProIcon} from '../alert-dialog/icons/ProIcon';
 import {FeatureHighlighter} from './feature-highlighter/FeatureHighlighter';
-import {ProIcon} from './ProIcon';
 import './template-select.css';
 import {useSettings} from './useSettings';
 
