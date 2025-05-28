@@ -19,6 +19,7 @@ import {
   ISelectOption,
   NumberControl,
   SelectControl,
+  SwitchControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
 
@@ -27,6 +28,14 @@ const getPaginationTypeOptions = (type: GalleryType) => {
 
   switch (type) {
     case GalleryType.MOSAIC:
+      options = PaginationTypeOptions.filter(
+        (option: ISelectOption) =>
+          ![PaginationType.SCROLL, PaginationType.LOAD_MORE].includes(
+            option.value as PaginationType
+          )
+      );
+      break;
+    case GalleryType.JUSTIFIED:
       options = PaginationTypeOptions.filter(
         (option: ISelectOption) =>
           ![PaginationType.SCROLL, PaginationType.LOAD_MORE].includes(
@@ -59,6 +68,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     changeThumbnailSettings,
     mosaicSettings,
     changeMosaicSettings,
+    justifiedSettings,
+    changeJustifiedSettings,
     masonrySettings,
     blogSettings,
     changeBlogSettings,
@@ -73,6 +84,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     paginationButtonShape,
     loadMoreButtonColor,
     paginationTextColor,
+    showSearchField,
+    searchFieldPlaceholder,
   } = value as IGeneralSettings;
 
   const showOnlyGalleryOptions: boolean =
@@ -85,6 +98,9 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     if (type === GalleryType.MOSAIC) {
       return mosaicSettings!.paginationType;
     }
+    if (type === GalleryType.JUSTIFIED) {
+      return justifiedSettings!.paginationType;
+    }
     if (type === GalleryType.THUMBNAILS) {
       return thumbnailSettings!.paginationType;
     }
@@ -95,7 +111,14 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
       return blogSettings!.paginationType;
     }
     return PaginationType.NONE;
-  }, [type, mosaicSettings, thumbnailSettings, masonrySettings, blogSettings]);
+  }, [
+    type,
+    mosaicSettings,
+    justifiedSettings,
+    thumbnailSettings,
+    masonrySettings,
+    blogSettings,
+  ]);
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
@@ -105,6 +128,9 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   const onPaginationTypeChange = (inputValue: any, key?: string) => {
     if (type === GalleryType.MOSAIC) {
       key && changeMosaicSettings({...mosaicSettings, [key]: inputValue});
+    }
+    if (type === GalleryType.JUSTIFIED) {
+      key && changeJustifiedSettings({...justifiedSettings, [key]: inputValue});
     }
     if (type === GalleryType.THUMBNAILS) {
       key && changeThumbnailSettings({...thumbnailSettings, [key]: inputValue});
@@ -242,10 +268,58 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const renderSearchSettings = (): ReactNode => {
+    return (
+      <Section
+        header={'Filter'}
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'showSearchField'}
+                  name={'Show search field'}
+                  value={showSearchField}
+                  onChange={onInputValueChange}
+                  info={
+                    <p>
+                      Activate a search field that allows to find gallery items
+                      by matching keywords in the title, description, alt text,
+                      or caption․
+                    </p>
+                  }
+                />
+              </Filter>
+              {/* {showSearchField && (
+                <>
+                  <Filter isLoading={isLoading}>
+                    <TextControl
+                      id={'searchFieldPlaceholder'}
+                      name="Search field placeholder"
+                      value={searchFieldPlaceholder}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </>
+              )} */}
+            </Grid>
+          </Grid>
+        }
+      />
+    );
+  };
+
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderSortingSettings()}
       {!showOnlyGalleryOptions ? renderMainSettings() : null}
+      {renderSearchSettings()}
     </Paper>
   );
 };

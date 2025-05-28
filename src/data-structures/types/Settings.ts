@@ -1,11 +1,10 @@
 import {
   BlogViewImagePosition,
-  Direction,
   GalleryType,
   HoverEffect,
   ImageClickAction,
-  LightboxCaptionsPosition,
   LightboxImageAnimation,
+  LightboxTextPosition,
   LightboxThumbnailsPosition,
   PaginationButtonShape,
   PaginationType,
@@ -57,8 +56,9 @@ export interface IMasonrySettings {
   paginationType: PaginationType;
 }
 
-export interface IMosaicSettings extends IMasonrySettings {
-  direction: Direction;
+export interface IMosaicSettings extends IMasonrySettings {}
+
+export interface IJustifiedSettings extends Omit<IMasonrySettings, 'columns'> {
   rowHeight: number;
 }
 
@@ -71,9 +71,9 @@ export interface ISlideshowSettings {
   slideDuration: number;
   imageAnimation: LightboxImageAnimation;
   backgroundColor: string;
-  captionsPosition: LightboxCaptionsPosition;
-  captionFontFamily: string;
-  captionColor: string;
+  textPosition: LightboxTextPosition;
+  textFontFamily: string;
+  textColor: string;
   thumbnailsPosition: LightboxThumbnailsPosition;
   thumbnailWidth: number;
   thumbnailHeight: number;
@@ -83,6 +83,12 @@ export interface ISlideshowSettings {
   thumbnailPadding: number;
   thumbnailGap: number;
   isSlideshowAllowed: boolean;
+  showTitle: boolean;
+  titleFontSize: number;
+  titleAlignment: TitleAlignment;
+  showDescription: boolean;
+  descriptionFontSize: number;
+  descriptionMaxRowsCount: number | undefined;
   isFullCoverImage?: boolean;
 }
 
@@ -105,6 +111,8 @@ export interface IGeneralSettings {
   paginationTextColor: string;
   clickAction: ImageClickAction;
   openUrlInNewTab: boolean;
+  showSearchField: boolean;
+  searchFieldPlaceholder: string;
 }
 
 export interface ICubeSettings {
@@ -179,6 +187,7 @@ export interface ISettingsDTO {
   general: IGeneralSettings;
   thumbnails: IThumbnailSettings;
   mosaic: IMosaicSettings;
+  justified: IJustifiedSettings;
   masonry: IMasonrySettings;
   slideshow: ISlideshowSettings;
   lightbox: ILightboxSettings;

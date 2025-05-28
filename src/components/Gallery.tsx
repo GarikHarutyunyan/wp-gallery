@@ -16,11 +16,13 @@ import React, {
 import {useData} from './data-context/useData';
 import './gallery.css';
 import {useSettings} from './settings';
-
 const ThumbnailGallery = lazy(
   () => import('./thumbnail-gallery/ThumbnailGallery')
 );
 const MosaicGallery = lazy(() => import('./mosaic-gallery/MosaicGallery'));
+const JustifiedGallery = lazy(
+  () => import('./justified-gallery/JustifiedGallery')
+);
 const MasonryGallery = lazy(() => import('./masonry-gallery/MasonryGallery'));
 const CubeGallery = lazy(() => import('./cube-gallery/CubeGallery'));
 const CardsGallery = lazy(() => import('./cards-gallery/CardsGallery'));
@@ -31,12 +33,14 @@ const Slideshow = lazy(() => import('./slideshow/Slideshow'));
 const PaginationProvider = lazy(
   () => import('./thumbnail-gallery/PaginationProvider')
 );
+const FilterProvider = lazy(() => import('./filter-provider/FilterProvider'));
 
 const Gallery: React.FC = () => {
   const {
     type,
     generalSettings,
     mosaicSettings,
+    justifiedSettings,
     thumbnailSettings,
     masonrySettings,
     blogSettings,
@@ -45,6 +49,7 @@ const Gallery: React.FC = () => {
     isLoading,
     pagesCount,
     onPageChange,
+    onSearch,
     currentPage = 1,
     itemsPerPage = 1,
     isFullyLoaded,
@@ -55,6 +60,9 @@ const Gallery: React.FC = () => {
   const paginationType: PaginationType = useMemo(() => {
     if (type === GalleryType.MOSAIC) {
       return mosaicSettings!.paginationType;
+    }
+    if (type === GalleryType.JUSTIFIED) {
+      return justifiedSettings!.paginationType;
     }
     if (type === GalleryType.THUMBNAILS) {
       return thumbnailSettings!.paginationType;
@@ -70,12 +78,18 @@ const Gallery: React.FC = () => {
   }, [
     type,
     mosaicSettings?.paginationType,
+    justifiedSettings?.paginationType,
     thumbnailSettings?.paginationType,
     masonrySettings?.paginationType,
     blogSettings?.paginationType,
   ]);
 
-  const {clickAction, openUrlInNewTab} = generalSettings as IGeneralSettings;
+  const {
+    clickAction,
+    openUrlInNewTab,
+    showSearchField,
+    searchFieldPlaceholder,
+  } = generalSettings as IGeneralSettings;
   const showLightbox: boolean = clickAction === ImageClickAction.LIGHTBOX;
   const shouldOpenUrl: boolean = clickAction === ImageClickAction.URL;
   const isClickable: boolean = showLightbox || shouldOpenUrl;
@@ -96,6 +110,11 @@ const Gallery: React.FC = () => {
       case GalleryType.MOSAIC:
         gallery = (
           <MosaicGallery onClick={isClickable ? onImageClick : undefined} />
+        );
+        break;
+      case GalleryType.JUSTIFIED:
+        gallery = (
+          <JustifiedGallery onClick={isClickable ? onImageClick : undefined} />
         );
         break;
       case GalleryType.MASONRY:
@@ -190,6 +209,7 @@ const Gallery: React.FC = () => {
           onLoad={onPageChange as any}
           isFullyLoaded={isFullyLoaded}
           settings={generalSettings as IGeneralSettings}
+          page={currentPage}
         />
       </Suspense>
     );
@@ -206,13 +226,21 @@ const Gallery: React.FC = () => {
     );
   };
 
+  const renderFilterProvider = () => {
+    return (
+      <Suspense>
+        <FilterProvider onSearch={onSearch as any} />
+      </Suspense>
+    );
+  };
   const closeLightbox = (): void => {
     setActiveImageIndex(-1);
   };
 
   return (
     <>
-      {renderGallery()}
+      {showSearchField && renderFilterProvider()}
+      {!!images?.length && renderGallery()}
       {renderLoader()}
       {paginationType !== PaginationType.NONE && renderPaginationProvider()}
       {showLightbox && renderLightbox()}

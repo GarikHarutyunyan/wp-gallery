@@ -9,6 +9,7 @@ import {
   ICarouselSettings,
   ICubeSettings,
   IGeneralSettings,
+  IJustifiedSettings,
   ILightboxSettings,
   IMasonrySettings,
   IMosaicSettings,
@@ -32,6 +33,7 @@ import {
   carouselMockSettings,
   cubeMockSettings,
   generalMockSettings,
+  justifiedMockSettings,
   lightboxMockSettings,
   masonryMockSettings,
   mosaicMockSettings,
@@ -48,9 +50,10 @@ const SettingsContext = React.createContext<{
   generalSettings?: IGeneralSettings;
   thumbnailSettings?: IThumbnailSettings;
   mosaicSettings?: IMosaicSettings;
+  lightboxSettings?: ILightboxSettings;
+  justifiedSettings?: IJustifiedSettings;
   masonrySettings?: IMasonrySettings;
   slideshowSettings?: ISlideshowSettings;
-  lightboxSettings?: ILightboxSettings;
   cubeSettings?: ICubeSettings;
   carouselSettings?: ICarouselSettings;
   cardsSettings?: ICardsSettings;
@@ -58,6 +61,7 @@ const SettingsContext = React.createContext<{
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
+  changeJustifiedSettings?: any;
   changeMasonrySettings?: any;
   changeSlideshowSettings?: any;
   changeLightboxSettings?: any;
@@ -84,6 +88,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
+  const [justifiedSettings, setJustifiedSettings] =
+    useState<IJustifiedSettings>();
   const [masonrySettings, setMasonrySettings] = useState<IMasonrySettings>();
   const [slideshowSettings, setSlideshowSettings] =
     useState<ISlideshowSettings>();
@@ -113,6 +119,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setGeneralSettings(newSettings.general || generalMockSettings);
     setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
     setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
+    setJustifiedSettings(newSettings.justified || justifiedMockSettings);
     setMasonrySettings(newSettings.masonry || mosaicMockSettings);
     setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
     setLightboxSettings(newSettings.lightbox);
@@ -120,7 +127,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCarouselSettings(newSettings.carousel || carouselMockSettings);
     setCardsSettings(newSettings.cards || cardsMockSettings);
     setBlogSettings(newSettings.blog || blogMockSettings);
-
     initTemplate?.(
       newSettings?.template_id as string,
       newSettings?.title as string
@@ -147,6 +153,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setGeneralSettings(newSettings.general || generalMockSettings);
       setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
+      setJustifiedSettings(newSettings.justified || justifiedMockSettings);
       setMasonrySettings(newSettings.masonry || mosaicMockSettings);
       setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
@@ -164,6 +171,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setGeneralSettings(generalMockSettings);
       setThumbnailSettings(thumbnailMockSettings);
       setMosaicSettings(mosaicMockSettings);
+      setJustifiedSettings(justifiedMockSettings);
       setMasonrySettings(masonryMockSettings);
       setSlideshowSettings(slideshowMockSettings);
       setLightboxSettings(lightboxMockSettings);
@@ -196,7 +204,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       const settings: ISettingsDTO = {
         type: newType,
       } as ISettingsDTO;
-
       try {
         const response = await axios.post(fetchUrl, settings, {
           headers: {'X-WP-Nonce': nonce},
@@ -232,6 +239,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         thumbnails: thumbnailSettings,
         lightbox: lightboxSettings,
         mosaic: mosaicSettings,
+        justified: justifiedSettings,
         masonry: masonrySettings,
         cube: cubeSettings,
         carousel: carouselSettings,
@@ -252,6 +260,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setGeneralSettings(newSettings.general);
         setThumbnailSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
+        setJustifiedSettings(newSettings.justified);
         setMasonrySettings(newSettings.masonry);
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
@@ -315,6 +324,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setGeneralSettings(newSettings.general);
         setThumbnailSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
+        setJustifiedSettings(newSettings.justified);
         setMasonrySettings(newSettings.masonry);
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
@@ -389,6 +399,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         hasChanges,
         thumbnailSettings,
         mosaicSettings,
+        justifiedSettings,
         masonrySettings,
         slideshowSettings,
         generalSettings,
@@ -400,6 +411,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeGeneralSettings: createOnChange(setGeneralSettings),
         changeThumbnailSettings: createOnChange(setThumbnailSettings),
         changeMosaicSettings: createOnChange(setMosaicSettings),
+        changeJustifiedSettings: createOnChange(setJustifiedSettings),
         changeMasonrySettings: createOnChange(setMasonrySettings),
         changeSlideshowSettings: createOnChange(setSlideshowSettings),
         changeLightboxSettings: createOnChange(setLightboxSettings),

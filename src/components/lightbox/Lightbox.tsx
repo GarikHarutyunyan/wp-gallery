@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import {
   IImageDTO,
   ILightboxSettings,
-  LightboxCaptionsPosition,
   LightboxImageAnimation,
+  LightboxTextPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
-import React, {useEffect, useId, useMemo, useState} from 'react';
+import React, {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
@@ -20,6 +20,7 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
 import {useData} from '../data-context/useData';
 import {useSettings} from '../settings/useSettings';
+import {getSlideMargins} from './CommonFunctions/getSlideMargins';
 import {Captions} from './CustomCaptions/Captions';
 import './lightbox.css';
 
@@ -32,20 +33,51 @@ interface ILightboxBackgroundProps {
   id: string;
   isVisible: boolean;
   onClick: () => void;
+  setDrag: (value: boolean) => void;
 }
 
 const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   id,
   isVisible,
   onClick,
+  setDrag,
 }) => {
   const element = document.getElementById('wpwrap') || document.body;
+  const startPos = useRef<{x: number; y: number}>({x: 0, y: 0});
+  const dragged = useRef(false);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+
+  const dragThreshold = 5;
+
+  const handleMouseDown = (e: any) => {
+    startPos.current = {x: e.clientX, y: e.clientY};
+    dragged.current = false;
+    setIsMouseDown(true);
+  };
+
+  const handleMouseMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isMouseDown) return;
+
+    const dx = Math.abs(e.clientX - startPos.current.x);
+    const dy = Math.abs(e.clientY - startPos.current.y);
+    if (dx > dragThreshold || dy > dragThreshold) {
+      dragged.current = true;
+    }
+  };
+
+  const handleMouseUp = () => {
+    setDrag(dragged.current);
+    setIsMouseDown(false);
+  };
 
   return createPortal(
     <div
       onClick={onClick}
       className={'react-lightbox__background'}
       style={{display: isVisible ? 'block' : 'none'}}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
     >
       <div
         id={`reacg-lightbox__background-helper${id}`}
@@ -62,6 +94,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
 }) => {
   const {lightboxSettings: settings} = useSettings();
   const {lightboxImages: images} = useData();
+  const [drag, setDrag] = useState(false);
   const {
     isFullscreen,
     width,
@@ -85,14 +118,26 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     thumbnailPadding,
     thumbnailGap,
     backgroundColor,
-    captionsPosition,
-    captionFontFamily,
-    captionColor,
+    textPosition,
+    textFontFamily,
+    textColor,
+    showTitle,
+    titleFontSize,
+    titleAlignment,
+    showDescription,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
   } = settings as ILightboxSettings;
+  const lightboxId: string = useId();
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
-  const lightboxId: string = useId();
+  const [index, setIndex] = useState(0);
+
+  const minFactor = 1.45;
+  const maxFactor = 1.25;
+  const paddingAroundText = 10;
+  const titleMargin = 4;
 
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Video];
@@ -111,7 +156,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (captionsPosition !== LightboxCaptionsPosition.NONE) {
+    if (textPosition !== LightboxTextPosition.NONE) {
       newPlugins.push(Captions as any);
     }
 
@@ -123,8 +168,27 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     autoplay,
     isFullscreenAllowed,
     thumbnailsPosition,
-    captionsPosition,
+    textPosition,
   ]);
+
+  const togglePageScroll = (open:boolean) => {
+    // Scroll is toggled on <body> by default; <html> should be handled as well.
+    const html = document.documentElement;
+
+    if (open) {
+      html.classList.add("yarl__no_scroll");
+    } else {
+      html.classList.remove("yarl__no_scroll");
+    }
+  };
+
+  const handleClose = () => {
+    onClose();
+    togglePageScroll(false);
+  }
+  const handleOpen = () => {
+    togglePageScroll(true);
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -135,22 +199,73 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const thumbnail = document.querySelector('.yarl__thumbnails_track');
+      if (thumbnail) {
+        const handleEvent = (e: MouseEvent) => {
+          e.stopPropagation();
+        };
+
+        thumbnail.addEventListener('mousedown', handleEvent as EventListener);
+        thumbnail.addEventListener('mouseup', handleEvent as EventListener);
+
+        // Once found and attached, stop observing
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document.body, {childList: true, subtree: true});
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   const slides = useMemo(() => {
     return images!.map((image: IImageDTO) => ({
       description: (
         <>
-          <p
-            className={'reacg-lightbox-captions__title'}
-            style={{color: captionColor, fontFamily: captionFontFamily}}
-          >
-            {image.title}
-          </p>
-          <p
-            className={'reacg-lightbox-captions__description'}
-            style={{color: captionColor, fontFamily: captionFontFamily}}
-          >
-            {image.description}
-          </p>
+          {showTitle && image.title && (
+            <p
+              className={'reacg-lightbox-texts__title'}
+              style={{
+                margin: `${titleMargin}px 0`,
+                color: textColor,
+                fontFamily: textFontFamily,
+                fontSize: `clamp(${
+                  titleFontSize / minFactor
+                }rem, ${titleFontSize}vw, ${titleFontSize * maxFactor}rem)`,
+                textAlign: titleAlignment,
+              }}
+            >
+              {image.title}
+	      {image.caption && (
+              <span className={'reacg-lightbox__caption'}>
+                &nbsp;{image.caption}
+              </span>
+            )}
+            </p>
+          )}
+          {showDescription && image.description && (
+            <p
+              className={'reacg-lightbox-texts__description'}
+              style={{
+                color: textColor,
+                fontFamily: textFontFamily,
+                fontSize: `clamp(${
+                  descriptionFontSize / minFactor
+                }rem, ${descriptionFontSize}vw, ${
+                  descriptionFontSize * maxFactor
+                }rem)`,
+                WebkitLineClamp: descriptionMaxRowsCount,
+                WebkitBoxOrient: 'vertical',
+                display: '-webkit-box',
+              }}
+            >
+              {image.description}
+            </p>
+          )}
         </>
       ),
       type: image.type,
@@ -187,7 +302,43 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       ],
       metadata: image.thumbnail.url,
     }));
-  }, [images, captionColor, captionFontFamily]);
+  }, [
+    images,
+    textColor,
+    textFontFamily,
+    showTitle,
+    titleFontSize,
+    titleAlignment,
+    showDescription,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
+  ]);
+
+  const slideMargins = useMemo(() => {
+    return getSlideMargins({
+      images,
+      index,
+      showTitle,
+      showDescription,
+      textPosition,
+      titleFontSize,
+      descriptionFontSize,
+      descriptionMaxRowsCount,
+      minFactor,
+      maxFactor,
+      paddingAroundText,
+      titleMargin,
+    });
+  }, [
+    images,
+    index,
+    showTitle,
+    showDescription,
+    textPosition,
+    titleFontSize,
+    descriptionFontSize,
+    descriptionMaxRowsCount,
+  ]);
 
   const renderLighbox = () => {
     return (
@@ -195,9 +346,10 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         plugins={plugins}
         open={activeIndex >= 0}
         index={activeIndex}
-        close={onClose}
+        close={handleClose}
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
+        controller={{closeOnBackdropClick: !drag}}
         animation={{
           swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
           easing: {swipe: 'ease-out', navigation: 'ease-in-out'},
@@ -229,16 +381,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           'reacg-lightbox-animation-' + imageAnimation,
           {
             'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
-            'reacg-lightbox-captions':
-              captionsPosition !== LightboxCaptionsPosition.NONE,
-            'reacg-lightbox-captions_top': [
-              LightboxCaptionsPosition.TOP,
-              LightboxCaptionsPosition.ABOVE,
-            ].includes(captionsPosition),
-            'reacg-lightbox-captions_below':
-              captionsPosition === LightboxCaptionsPosition.BELOW,
-            'reacg-lightbox-captions_above':
-              captionsPosition === LightboxCaptionsPosition.ABOVE,
+            'reacg-lightbox-texts': textPosition !== LightboxTextPosition.NONE,
+            'reacg-lightbox-texts_top': [
+              LightboxTextPosition.TOP,
+              LightboxTextPosition.ABOVE,
+            ].includes(textPosition),
           }
         )}
         styles={{
@@ -250,7 +397,12 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             'margin': 'auto',
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
-            '--yarl__slide_captions_container_background': `${backgroundColor}80`,
+            '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
+            '--yarl__slide_captions_container_background':
+              (showTitle && images![index]?.title) ||
+              (showDescription && images![index]?.description)
+                ? `${backgroundColor}80`
+                : `none`,
           },
           thumbnail: {
             '--yarl__thumbnails_thumbnail_active_border_color':
@@ -259,7 +411,29 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               thumbnailBorderColor || 'transparent',
             '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
           },
+          toolbar: {
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
+          },
+          navigationPrev: {
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
+            ...(slideMargins.marginTop || slideMargins.marginBottom
+              ? {transform: 'translateY(0%)', top: 'auto'}
+              : {}),
+          },
+          navigationNext: {
+            marginTop: `${slideMargins.marginTop}`,
+            marginBottom: `${slideMargins.marginBottom}`,
+            ...(slideMargins.marginTop || slideMargins.marginBottom
+              ? {transform: 'translateY(0%)', top: 'auto'}
+              : {}),
+          },
           container: {backgroundColor: `${backgroundColor}`},
+          slide: {
+            marginTop: slideMargins.marginTop,
+            marginBottom: slideMargins.marginBottom,
+          },
         }}
         portal={{
           root: document.getElementById(
@@ -273,6 +447,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           slideshowStop: () => {
             if (videoAutoplay) setVideoAutoplay(false);
           },
+          view: ({index: currentIndex}) => setIndex(currentIndex),
+          entering: handleOpen,
         }}
       />
     );
@@ -283,8 +459,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       {renderLighbox()}
       <LightboxBackground
         isVisible={activeIndex >= 0}
-        onClick={onClose}
+        onClick={handleClose}
         id={lightboxId}
+        setDrag={setDrag}
       />
     </>
   );

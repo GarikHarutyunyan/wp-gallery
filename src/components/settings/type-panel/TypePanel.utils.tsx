@@ -3,6 +3,7 @@ import {BlogImage} from './images/BlogImage';
 import {CardsImage} from './images/CardsImage';
 import {CarouselImage} from './images/CarouselImage';
 import {CubeImage} from './images/CubeImage';
+import {JustifiedImage} from './images/JustifiedImage';
 import {MasonryImage} from './images/MasonryImage';
 import {MosaicImage} from './images/MosaicImage';
 import {SlideshowImage} from './images/SlideshowImage';
@@ -22,6 +23,11 @@ export const GalleryTypeOptions = [
     value: GalleryType.MASONRY,
     title: 'Masonry',
     image: <MasonryImage />,
+  },
+  {
+    value: GalleryType.JUSTIFIED,
+    title: 'Justified',
+    image: <JustifiedImage />,
   },
   {
     value: GalleryType.SLIDESHOW,
