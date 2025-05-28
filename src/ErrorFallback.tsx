@@ -13,7 +13,7 @@ const ErrorFallback = ({error}: any): ReactElement | null => {
       <h2>
         {'Something went wrong?\n No worries , we’re here 24/7 to help. '}
         <a
-          href="https://wordpress.org/support/plugin/regallery/"
+          href="https://wordpress.org/support/plugin/regallery/#new-topic-0"
           target="_blank"
           rel="noopener noreferrer"
         >
