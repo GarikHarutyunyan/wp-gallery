@@ -1,4 +1,4 @@
-import {useRef} from 'react';
+import {useCallback, useRef} from 'react';
 
 export const useDebouncedSearch = (
   callback: (...args: any[]) => void,
@@ -6,13 +6,17 @@ export const useDebouncedSearch = (
 ) => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  return (...args: any[]) => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+  const debouncedFn = useCallback(
+    (...args: any[]) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        callback(...args);
+      }, delay);
+    },
+    [callback, delay]
+  );
 
-    timeoutRef.current = setTimeout(() => {
-      callback(...args);
-    }, delay);
-  };
+  return debouncedFn;
 };
