@@ -11,7 +11,6 @@ const FilterProvider: React.FC<IFilterProviderProps> = ({onSearch}) => {
   const {searchPlaceholder} = useContext(TranslationsContext);
   const debouncedSearch = useDebouncedSearch((searchTerm: string) => {
     if (onSearch) {
-      console.log(searchTerm, 'searchterm');
       onSearch(searchTerm);
     }
   }, 700);
