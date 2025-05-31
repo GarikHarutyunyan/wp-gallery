@@ -203,11 +203,12 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCurrentPage(page);
   };
 
-  const getData = async (page: number, search: string = '') => {
+  const getData = async (page: number, search: string = '', type = '') => {
     if (
       lastRequestRef.current?.page === page &&
       lastRequestRef.current?.search === search &&
-      lastRequestRef.current?.itemsPerPage === itemsPerPage
+      lastRequestRef.current?.itemsPerPage === itemsPerPage &&
+      (type === 'pageChange' || type === 'search')
     ) {
       //Same request already in progress, skipping...,
       return;
@@ -305,12 +306,12 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     _event?: any,
     newPage: number = currentPage + 1
   ): Promise<void> => {
-    getData(newPage, searchTerm);
+    getData(newPage, searchTerm, 'pageChange');
   };
   const onSearch = async (newSearchTerm: string = ''): Promise<void> => {
     setCurrentPage(0);
     setSearchTerm(newSearchTerm);
-    getData(1, newSearchTerm);
+    getData(1, newSearchTerm, 'search');
   };
   const onReloadData = async () => {
     changeImagesCount?.(0);
