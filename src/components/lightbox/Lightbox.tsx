@@ -171,24 +171,24 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     textPosition,
   ]);
 
-  const togglePageScroll = (open:boolean) => {
+  const togglePageScroll = (open: boolean) => {
     // Scroll is toggled on <body> by default; <html> should be handled as well.
     const html = document.documentElement;
 
     if (open) {
-      html.classList.add("yarl__no_scroll");
+      html.classList.add('yarl__no_scroll');
     } else {
-      html.classList.remove("yarl__no_scroll");
+      html.classList.remove('yarl__no_scroll');
     }
   };
 
   const handleClose = () => {
     onClose();
     togglePageScroll(false);
-  }
+  };
   const handleOpen = () => {
     togglePageScroll(true);
-  }
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -240,11 +240,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               }}
             >
               {image.title}
-	      {image.caption && (
-              <span className={'reacg-lightbox__caption'}>
-                &nbsp;{image.caption}
-              </span>
-            )}
+              {image.caption && (
+                <span className={'reacg-lightbox__caption'}>
+                  &nbsp;{image.caption}
+                </span>
+              )}
             </p>
           )}
           {showDescription && image.description && (
@@ -350,6 +350,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
         controller={{closeOnBackdropClick: !drag}}
+        noScroll={{
+          disabled: true,
+        }}
         animation={{
           swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
           easing: {swipe: 'ease-out', navigation: 'ease-in-out'},
