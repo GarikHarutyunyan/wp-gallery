@@ -176,9 +176,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     const html = document.documentElement;
 
     if (open) {
-      html.classList.add('yarl__no_scroll');
+      html.classList.add('react-lightbox--no-scroll');
     } else {
-      html.classList.remove('yarl__no_scroll');
+      html.classList.remove('react-lightbox--no-scroll');
     }
   };
 
@@ -351,7 +351,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         slides={slides}
         controller={{closeOnBackdropClick: !drag}}
         noScroll={{
-          disabled: true,
+          disabled: false,
         }}
         animation={{
           swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
