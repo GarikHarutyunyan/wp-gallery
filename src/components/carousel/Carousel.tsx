@@ -13,7 +13,7 @@ interface ITCarouselProps {
 }
 
 const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
-  const {images} = useData();
+  const {images = []} = useData();
   const {carouselSettings: settings, wrapperRef} = useSettings();
   const {
     backgroundColor,
@@ -32,7 +32,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     id: 1,
     spaceBetween: spaceBetween,
     slidesPerView: imagesCount,
-    centeredSlides: true,
+    centeredSlides: imagesCount > 1 ? true : false,
     effect: 'coverflow',
     coverflowEffect: {
       rotate: 0,
@@ -45,6 +45,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     navigation: true,
     modules: [EffectCoverflow, Autoplay, Navigation],
   };
+
   const wrapper = wrapperRef.current;
   // Count the container width depends on main image width, images count and space between images.
   const contWidth =
@@ -55,7 +56,8 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const ratio: number = contWidth / height;
   const containerWidth: number = Math.min(innerWidth, contWidth);
   const containerHeight: number = containerWidth / ratio;
-
+  const carouselImages =
+    images.length < imagesCount + 1 ? [...images, ...images] : images;
   useEffect(() => {
     const handleResize = () => {
       setInnerWidth(wrapper?.clientWidth || contWidth);
@@ -82,7 +84,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
           effects={effects}
           loop={true}
           backgroundColor={backgroundColor}
-          images={images || []}
+          images={carouselImages}
           autoplay={autoplay}
           delay={slideDuration}
           playAndPauseAllowed={playAndPauseAllowed}

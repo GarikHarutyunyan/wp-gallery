@@ -11,7 +11,7 @@ import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {ICarouselSettings} from 'data-structures';
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useEffect} from 'react';
 import {Filter} from '../settings/Filter';
 interface ICarouselSettingsProps {
   isLoading?: boolean;
@@ -41,7 +41,19 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
+  useEffect(() => {
+    const totalAvailableImages = allImagesCount ?? 0;
+    if (totalAvailableImages === 0) return;
 
+    let count = Math.min(imagesCount, totalAvailableImages);
+
+    if (count % 2 === 0) count--;
+
+    if (count !== imagesCount) {
+      onChange({...value, imagesCount: count});
+    }
+  }, [allImagesCount, imagesCount]);
+  console.log(allImagesCount, 'aalllImage');
   const renderMainSettings = (): ReactNode => {
     return (
       <Section
@@ -94,7 +106,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   value={imagesCount}
                   onChange={onInputValueChange}
                   min={1}
-                  max={(allImagesCount || 1) - 1}
+                  max={allImagesCount}
                   step={2}
                 />
               </Filter>
