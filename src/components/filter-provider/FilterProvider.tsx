@@ -1,7 +1,7 @@
 import {Grid} from '@mui/material';
 import TextField from '@mui/material/TextField';
 import {TranslationsContext} from 'contexts/TranslationsContext';
-import React, {useContext} from 'react';
+import React, {useContext, useRef} from 'react';
 import {useDebouncedSearch} from 'utils';
 interface IFilterProviderProps {
   onSearch: (newSearchTerm?: string) => void;
@@ -9,8 +9,12 @@ interface IFilterProviderProps {
 
 const FilterProvider: React.FC<IFilterProviderProps> = ({onSearch}) => {
   const {searchPlaceholder} = useContext(TranslationsContext);
+  const previousTerm = useRef<string>('');
+
   const debouncedSearch = useDebouncedSearch((searchTerm: string) => {
-    if (onSearch) {
+    if (onSearch && searchTerm !== previousTerm.current) {
+      // If the search term is the same as the previous one, do not call onSearch
+      previousTerm.current = searchTerm;
       onSearch(searchTerm);
     }
   }, 700);
