@@ -32,7 +32,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     id: 1,
     spaceBetween: spaceBetween,
     slidesPerView: imagesCount,
-    centeredSlides: imagesCount > 1 ? true : false,
+    centeredSlides: imagesCount > 1,
     effect: 'coverflow',
     coverflowEffect: {
       rotate: 0,
@@ -56,8 +56,12 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const ratio: number = contWidth / height;
   const containerWidth: number = Math.min(innerWidth, contWidth);
   const containerHeight: number = containerWidth / ratio;
+  // This ensures that Swiper functions correctly in infinite loop mode when the total number of images is less than the number of visible slides
   const carouselImages =
-    images.length < imagesCount + 1 ? [...images, ...images] : images;
+    images.length < imagesCount + 1 && images.length > 1
+      ? [...images, ...images]
+      : images;
+
   useEffect(() => {
     const handleResize = () => {
       setInnerWidth(wrapper?.clientWidth || contWidth);
@@ -66,7 +70,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, [wrapper?.clientWidth]);
-
   return (
     <Box
       sx={{
@@ -82,7 +85,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         <SwiperGallery
           key={effects.id}
           effects={effects}
-          loop={true}
+          loop={!!(images.length > 1) && true}
           backgroundColor={backgroundColor}
           images={carouselImages}
           autoplay={autoplay}

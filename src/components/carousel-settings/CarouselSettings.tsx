@@ -53,7 +53,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
       onChange({...value, imagesCount: count});
     }
   }, [allImagesCount, imagesCount]);
-  console.log(allImagesCount, 'aalllImage');
+
   const renderMainSettings = (): ReactNode => {
     return (
       <Section

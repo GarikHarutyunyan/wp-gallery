@@ -242,11 +242,17 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     >
       {images?.map((image: IImageDTO, index) => {
         const isVideo: boolean = image.type === ImageType.VIDEO;
-
+        const coverflowOriginalIndex = images.findIndex(
+          (img) => img.id === image.id
+        );
         return (
           <SwiperSlide
             key={index}
-            onClick={() => onClick?.(index)}
+            onClick={() => {
+              const normalizedIndex =
+                key === 'coverflowEffect' ? coverflowOriginalIndex : index;
+              onClick?.(normalizedIndex);
+            }}
             className={slideClassName}
           >
             <SwiperImage
