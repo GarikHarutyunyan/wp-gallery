@@ -1,14 +1,19 @@
-import {Grid, Pagination, PaginationItem} from '@mui/material';
+import {
+  Grid,
+  Pagination,
+  PaginationItem,
+  PaginationRenderItemParams,
+} from '@mui/material';
 import {TranslationsContext} from 'contexts/TranslationsContext';
 import {Button} from 'core-components/button';
 import {IGeneralSettings, PaginationType} from 'data-structures';
-import React, {ReactNode, useContext, useEffect} from 'react';
+import React, {ReactNode, useContext, useEffect, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 import './pagination-provider.css';
 
 interface IPaginationProviderProps {
   type: PaginationType;
-  onLoad: (_event?: any, page?: number) => void;
+  onLoad: (_event?: any, page?: number) => Promise<void>;
   pagesCount: number;
   isFullyLoaded?: boolean;
   settings: IGeneralSettings;
@@ -32,9 +37,10 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
     paginationTextColor,
   } = settings;
   const {loadMoreText} = useContext(TranslationsContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (inView && !isFullyLoaded) {
+    if (inView && !isFullyLoaded && !isLoading) {
       onLoadData();
     }
   }, [inView]);
@@ -68,23 +74,34 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
         onChange={onLoadData}
         boundaryCount={2}
         page={page}
-        renderItem={(item) => (
-          <PaginationItem
-            {...item}
-            style={{
-              backgroundColor: item.selected
-                ? activeButtonColor
-                : inactiveButtonColor,
-              color: paginationTextColor,
-            }}
-          />
-        )}
+        renderItem={renderPaginationItem}
       />
     ) : null;
   };
 
+  const renderPaginationItem = (
+    item: PaginationRenderItemParams
+  ): ReactNode => {
+    const isDisabled: boolean = isLoading;
+    const backgroundColor: string = item.selected
+      ? activeButtonColor
+      : inactiveButtonColor;
+    const color: string = paginationTextColor;
+
+    return (
+      <PaginationItem
+        {...item}
+        style={{
+          backgroundColor,
+          color,
+        }}
+        disabled={isDisabled}
+      />
+    );
+  };
+
   const renderLoadMoreButton = (): ReactNode => {
-    return !isFullyLoaded ? (
+    return !isFullyLoaded && !isLoading ? (
       <Button
         onClick={onLoadData}
         className={'pagination-provider__load-more-button'}
@@ -103,7 +120,9 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   };
 
   const onLoadData = async (...args: any) => {
-    onLoad(...args);
+    setIsLoading(true);
+    await onLoad(...args);
+    setIsLoading(false);
   };
 
   return type !== PaginationType.NONE ? (
