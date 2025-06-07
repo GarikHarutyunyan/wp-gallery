@@ -92,7 +92,7 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
         playAndPauseAllowed={playAndPauseAllowed}
         size={Math.max(innerWidth, innerHeight)}
         imagesCount={5}
-        preLoadCount={1}
+        preLoadCount={4}
         allowTouchMove={true}
         perSlideOffset={perSlideOffset}
         onClick={onClick}

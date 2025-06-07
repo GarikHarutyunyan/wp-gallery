@@ -10,6 +10,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/effect-cube';
 import 'swiper/css/navigation';
 import {Swiper, SwiperSlide} from 'swiper/react';
+import {handleSlideChange} from './imagePreloader';
 import './swiper-gallery.css';
 import SwiperImage from './SwiperImage';
 
@@ -62,7 +63,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const isDragging = useRef<boolean>(false);
   const key = effects.effect + 'Effect';
-  const previousIndex = useRef<number>(-1);
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
@@ -142,60 +142,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
-  const loadImagesInRange = (startIndex: number, endIndex: number) => {
-    for (let i = startIndex; i <= endIndex; i++) {
-      const swiper = swiperRef?.current?.swiper;
-      const imgElement = swiper?.slides[i]?.querySelector(
-        'img'
-      ) as HTMLImageElement;
-
-      if (
-        imgElement &&
-        images &&
-        (!imgElement.src || imgElement.src === undefined)
-      ) {
-        imgElement.setAttribute('src', images[i].original.url);
-        imgElement.setAttribute(
-          'srcSet',
-          `${images[i].thumbnail.url} ${images[i].thumbnail.width}w, ${images[i].medium_large.url} ${images[i].medium_large.width}w, ${images[i].original.url} ${images[i].original.width}w`
-        );
-      }
-    }
-  };
-
-  const handleSlideChange = (
-    previousIndex: any,
-    swiperRef: any,
-    imagesCount: number,
-    preLoadCount: number
-  ) => {
-    const swiper = swiperRef.current?.swiper;
-    const activeIndex = parseInt(swiper.realIndex);
-
-    if (images && previousIndex.current !== -1) {
-      var loadStartIndex, loadEndIndex;
-      if (activeIndex > previousIndex.current) {
-        loadStartIndex = activeIndex;
-        loadEndIndex = Math.min(
-          imagesCount + activeIndex + preLoadCount,
-          images.length
-        );
-      } else {
-        loadStartIndex = activeIndex
-          ? Math.max(
-              activeIndex -
-                (imagesCount !== undefined ? imagesCount : 0) -
-                preLoadCount,
-              0
-            )
-          : 0;
-        loadEndIndex = activeIndex;
-      }
-      loadImagesInRange(loadStartIndex, loadEndIndex);
-    }
-    previousIndex.current = activeIndex;
-  };
-
   return (
     <Swiper
       key={imagesCount || 0}
@@ -216,14 +162,14 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       className={className}
       loopAdditionalSlides={0}
       onSlideChange={() => {
-        if (handleSlideChange) {
-          handleSlideChange(
-            previousIndex,
-            swiperRef,
-            imagesCount,
-            preLoadCount
-          );
-        }
+        if (key === 'coverflowEffect') return;
+        console.log('onSlideChange');
+        handleSlideChange(swiperRef, images, preLoadCount);
+      }}
+      onSlideChangeTransitionStart={() => {
+        if (key !== 'coverflowEffect') return;
+        console.log('onSlideChangeTransitionStart');
+        handleSlideChange(swiperRef, images, preLoadCount);
       }}
       {...effects}
       style={

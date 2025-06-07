@@ -85,7 +85,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         <SwiperGallery
           key={effects.id}
           effects={effects}
-          loop={!!(images.length > 1) && true}
+          loop={images.length > 1}
           backgroundColor={backgroundColor}
           images={carouselImages}
           autoplay={autoplay}
@@ -95,7 +95,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
           height={containerHeight}
           size={Math.max(width, height)}
           imagesCount={imagesCount}
-          preLoadCount={4}
+          preLoadCount={Math.ceil(imagesCount / 2)}
           padding={padding}
           scale={scale}
           allowTouchMove={false}

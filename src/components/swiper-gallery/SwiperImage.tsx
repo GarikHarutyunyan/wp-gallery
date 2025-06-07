@@ -33,23 +33,21 @@ const SwiperImage = forwardRef(
   ) => {
     const wrapperRef = useRef(null);
     const isVideo: boolean = image.type === ImageType.VIDEO;
-
+    const shouldLoadImage =
+      key === 'cardsEffect'
+        ? index < (imagesCount || 0) + 1
+        : index < (imagesCount || 0) / 2 + 1 ||
+          index > images.length - (imagesCount || 0) / 2 - 1;
     return (
       <div ref={wrapperRef} style={{height: '100%', width: '100%'}}>
         {!isVideo ? (
           <ReImage
             wrapperRef={wrapperRef}
             data-index={index}
-            src={
-              index < (imagesCount || 0) + 1 ||
-              index > images.length - (imagesCount || 0) - 1
-                ? image.original.url
-                : undefined
-            }
+            src={shouldLoadImage ? image.original.url : undefined}
             sizes={`${size}px`}
             srcSet={
-              index < (imagesCount || 0) + 1 ||
-              index > images.length - (imagesCount || 0) - 1
+              shouldLoadImage
                 ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
                 : undefined
             }
