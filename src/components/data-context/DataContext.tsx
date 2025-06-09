@@ -1,6 +1,5 @@
 import {Paper, Typography} from '@mui/material';
-import api from 'api/axiosInstance';
-import axios from 'axios';
+import axios, {CancelTokenSource} from 'axios';
 import {useAppInfo} from 'contexts/AppInfoContext';
 import {TranslationsContext} from 'contexts/TranslationsContext';
 import {
@@ -16,6 +15,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import {useSettings} from '../settings';
@@ -28,7 +28,7 @@ const DataContext = createContext<{
   lightboxImages?: IImageDTO[];
   isLoading?: boolean;
   pagesCount?: number;
-  onPageChange?: (_: any, page: number) => Promise<void>;
+  onPageChange?: (_: any, page: number) => void;
   onSearch?: (newSearchTerm: string) => void;
   currentPage?: number;
   itemsPerPage?: number;
@@ -89,7 +89,12 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const pagesCount: number =
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
   const isFullyLoaded: boolean = currentPage >= pagesCount;
-
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null);
+  const lastRequestRef = useRef<{
+    page: number;
+    search: string;
+    itemsPerPage: number;
+  } | null>(null);
   useEffect(() => {
     changeImagesCount?.(0);
     setLightboxImages([]);
@@ -199,6 +204,16 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const getData = async (page: number, search: string = '') => {
+    if (cancelTokenSourceRef.current) {
+      cancelTokenSourceRef.current.cancel(
+        'Operation canceled due to new request.'
+      );
+    }
+
+    const newCancelTokenSource = axios.CancelToken.source();
+    cancelTokenSourceRef.current = newCancelTokenSource;
+    lastRequestRef.current = {page, search, itemsPerPage};
+
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'gallery/' + galleryId + '/images'
       : undefined;
@@ -221,7 +236,9 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         queryString += `&per_page=${itemsPerPage}`;
       }
       try {
-        const response = await api.get(`${fetchUrl}${queryString}`);
+        const response = await axios.get(`${fetchUrl}${queryString}`, {
+          cancelToken: newCancelTokenSource.token,
+        });
         const imgData: any[] = response.data;
         const headers: any = response.headers;
         const newImages: IImageDTO[] = imgData.map((data: any) => ({
