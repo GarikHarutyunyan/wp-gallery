@@ -163,12 +163,10 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       loopAdditionalSlides={0}
       onSlideChange={() => {
         if (key === 'coverflowEffect') return;
-        console.log('onSlideChange');
         handleSlideChange(swiperRef, images, preLoadCount);
       }}
       onSlideChangeTransitionStart={() => {
         if (key !== 'coverflowEffect') return;
-        console.log('onSlideChangeTransitionStart');
         handleSlideChange(swiperRef, images, preLoadCount);
       }}
       {...effects}
@@ -195,6 +193,9 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           <SwiperSlide
             key={index}
             onClick={() => {
+              /*The normalizedIndex is used to control the lightbox behavior accurately when using coverflowEffect.
+                In this mode, I intentionally create duplicate slides for visual  purposes. However, these duplicates can lead to issues if they share the same index — such as breaking navigation.
+                To prevent this, I use coverflowOriginalIndex that take the first origial image id  from 2 the same images*/
               const normalizedIndex =
                 key === 'coverflowEffect' ? coverflowOriginalIndex : index;
               onClick?.(normalizedIndex);
