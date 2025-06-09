@@ -95,7 +95,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
           height={containerHeight}
           size={Math.max(width, height)}
           imagesCount={imagesCount}
-          preLoadCount={Math.ceil(imagesCount / 2)}
+          preLoadCount={Math.ceil(imagesCount / 2) + 4}
           padding={padding}
           scale={scale}
           allowTouchMove={false}
