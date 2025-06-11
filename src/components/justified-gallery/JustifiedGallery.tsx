@@ -1,34 +1,33 @@
 import {useData} from 'components/data-context/useData';
 import {ReacgPhotoAlbum} from 'components/photo-album/PhotoAlbum';
 import {useSettings} from 'components/settings';
-import {IMosaicSettings} from 'data-structures';
+import {IJustifiedSettings} from 'data-structures';
 import React from 'react';
 
-interface IMosaicGalleryProps {
+interface IJustifiedGalleryProps {
   onClick?: (index: number) => void;
 }
 
-const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
-  const {mosaicSettings: settings} = useSettings();
+const JustifiedGallery: React.FC<IJustifiedGalleryProps> = ({onClick}) => {
+  const {justifiedSettings: settings} = useSettings();
   const {images} = useData();
-  const {gap, backgroundColor, containerPadding, padding, width, columns} =
-    settings as IMosaicSettings;
-
+  const {gap, backgroundColor, containerPadding, padding, rowHeight, width} =
+    settings as IJustifiedSettings;
   return (
     <ReacgPhotoAlbum
       images={images || []}
-      layout={'columns'}
+      layout={'rows'}
       width={width}
-      columns={columns}
+      rowHeight={rowHeight}
       gap={gap}
       padding={padding}
       backgroundColor={backgroundColor}
       containerPadding={containerPadding}
-      settings={settings as IMosaicSettings}
+      settings={settings as IJustifiedSettings}
       onClick={onClick}
     />
   );
 };
 
-export {MosaicGallery};
-export default MosaicGallery;
+export {JustifiedGallery};
+export default JustifiedGallery;

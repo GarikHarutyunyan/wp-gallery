@@ -17,7 +17,6 @@ interface IPaginationProviderProps {
   onLoad: (_event?: any, page?: number) => Promise<void>;
   pagesCount: number;
   settings: IGeneralSettings;
-  page: number;
 }
 
 const PaginationProvider: React.FC<IPaginationProviderProps> = ({
@@ -25,7 +24,6 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   onLoad,
   pagesCount,
   settings,
-  page,
 }) => {
   const {ref, inView} = useInView();
   const {

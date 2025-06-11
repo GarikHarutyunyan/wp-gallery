@@ -1,17 +1,9 @@
 import axios from 'axios';
 import {useSnackbar} from 'notistack';
-import React, {
-  lazy,
-  Suspense,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import {TypeUtils} from 'utils';
 import {useAppInfo} from '../AppInfoContext';
 import {ITemplate, ITemplateReference} from './TemplatesContext.types';
-
-const PremiumOfferDialog = lazy(() => import('./PremiumOfferDialog'));
 
 const TemplatesContext = React.createContext<{
   templates?: ITemplateReference[];
@@ -41,11 +33,6 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [templates, setTemplates] = useState<ITemplateReference[]>([]);
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
-
-  useEffect(() => {
-    (window as any).reacg_open_premium_offer_dialog = openDialog;
-  }, []);
 
   const getTemplates = async () => {
     if (!showControls) {
@@ -97,7 +84,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       try {
         const response = await axios.get(fetchUrl);
         if (response.status === 204) {
-          openDialog();
+          (window as any).reacg_open_premium_offer_dialog?.();
         } else {
           const templateData: ITemplate = response.data;
 
@@ -144,14 +131,6 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setTemplate({template_id: id, title: title, template: true});
   };
 
-  const openDialog = () => {
-    setIsDialogVisible(true);
-  };
-
-  const closeDialog = () => {
-    setIsDialogVisible(false);
-  };
-
   useLayoutEffect(() => {
     getTemplates();
   }, []);
@@ -168,14 +147,6 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }}
     >
       {children}
-      {showControls && (
-        <Suspense>
-          <PremiumOfferDialog
-            isVisible={isDialogVisible}
-            onClose={closeDialog}
-          />
-        </Suspense>
-      )}
     </TemplatesContext.Provider>
   );
 };

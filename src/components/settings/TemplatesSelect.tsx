@@ -18,8 +18,8 @@ import React, {
   useState,
 } from 'react';
 import {TypeUtils} from 'utils';
+import {ProIcon} from '../alert-dialog/icons/ProIcon';
 import {FeatureHighlighter} from './feature-highlighter/FeatureHighlighter';
-import {ProIcon} from './ProIcon';
 import './template-select.css';
 import {useSettings} from './useSettings';
 
@@ -37,6 +37,7 @@ const TemplatesSelect: React.FC = () => {
     changeMasonrySettings,
     changeLightboxSettings,
     changeMosaicSettings,
+    changeJustifiedSettings,
     changeSlideshowSettings,
     changeThumbnailSettings,
     changeCubeSettings,
@@ -66,6 +67,7 @@ const TemplatesSelect: React.FC = () => {
         lightbox,
         masonry,
         mosaic,
+        justified,
         slideshow,
         thumbnails,
         cube,
@@ -82,6 +84,7 @@ const TemplatesSelect: React.FC = () => {
       lightbox && changeLightboxSettings(lightbox);
       masonry && changeMasonrySettings(masonry);
       mosaic && changeMosaicSettings(mosaic);
+      justified && changeJustifiedSettings(justified);
       slideshow && changeSlideshowSettings(slideshow);
       thumbnails && changeThumbnailSettings(thumbnails);
       cube && changeCubeSettings(cube);

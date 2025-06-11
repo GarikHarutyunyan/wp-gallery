@@ -1,6 +1,6 @@
 .react-lightbox__background {
-  position: absolute;
-  width: 100%;
+  position: fixed;
+  width: 100vw; /* or 100% + padding(which is added to the <body> to compensate for the missing scrollbar to avoid layout shift.) */
   height: 100%;
   top: 0;
   left: 0;
@@ -18,7 +18,11 @@
   right: auto;
   visibility: hidden;
 }
-
+.react-lightbox--no-scroll {
+  overflow: hidden;
+  overscroll-behavior: none;
+  height: auto;
+}
 .reacg-slideshow:hover .yarl__toolbar {
   visibility: unset;
 }

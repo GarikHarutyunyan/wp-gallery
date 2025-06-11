@@ -171,6 +171,25 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     textPosition,
   ]);
 
+  const togglePageScroll = (open: boolean) => {
+    // Scroll is toggled on <body> by default; <html> should be handled as well.
+    const html = document.documentElement;
+
+    if (open) {
+      html.classList.add('react-lightbox--no-scroll');
+    } else {
+      html.classList.remove('react-lightbox--no-scroll');
+    }
+  };
+
+  const handleClose = () => {
+    onClose();
+    togglePageScroll(false);
+  };
+  const handleOpen = () => {
+    togglePageScroll(true);
+  };
+
   useEffect(() => {
     const handleResize = () => {
       setInnerWidth(window.innerWidth);
@@ -221,11 +240,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               }}
             >
               {image.title}
-	      {image.caption && (
-              <span className={'reacg-lightbox__caption'}>
-                &nbsp;{image.caption}
-              </span>
-            )}
+              {image.caption && (
+                <span className={'reacg-lightbox__caption'}>
+                  &nbsp;{image.caption}
+                </span>
+              )}
             </p>
           )}
           {showDescription && image.description && (
@@ -327,10 +346,13 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         plugins={plugins}
         open={activeIndex >= 0}
         index={activeIndex}
-        close={onClose}
+        close={handleClose}
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
         controller={{closeOnBackdropClick: !drag}}
+        noScroll={{
+          disabled: false,
+        }}
         animation={{
           swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
           easing: {swipe: 'ease-out', navigation: 'ease-in-out'},
@@ -429,6 +451,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             if (videoAutoplay) setVideoAutoplay(false);
           },
           view: ({index: currentIndex}) => setIndex(currentIndex),
+          entering: handleOpen,
         }}
       />
     );
@@ -439,7 +462,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       {renderLighbox()}
       <LightboxBackground
         isVisible={activeIndex >= 0}
-        onClick={onClose}
+        onClick={handleClose}
         id={lightboxId}
         setDrag={setDrag}
       />

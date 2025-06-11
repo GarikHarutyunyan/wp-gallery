@@ -1,4 +1,8 @@
 .gallery__loader {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+}
+
+.gallery__loader {
+  width: 100%;
 }
