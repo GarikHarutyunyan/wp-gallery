@@ -51,7 +51,6 @@ const Gallery: React.FC = () => {
     onPageChange,
     currentPage = 1,
     itemsPerPage = 1,
-    isFullyLoaded,
     loadAllLightboxImages,
     images,
   } = useData();
@@ -201,7 +200,6 @@ const Gallery: React.FC = () => {
           type={paginationType}
           pagesCount={pagesCount || 1}
           onLoad={onPageChange as any}
-          isFullyLoaded={isFullyLoaded}
           settings={generalSettings as IGeneralSettings}
         />
       </Suspense>
