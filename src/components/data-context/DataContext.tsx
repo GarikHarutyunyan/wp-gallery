@@ -15,6 +15,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import {useSettings} from '../settings';
@@ -28,6 +29,7 @@ const DataContext = createContext<{
   isLoading?: boolean;
   pagesCount?: number;
   onPageChange?: (_: any, page: number) => void;
+  onSearch?: (newSearchTerm: string) => void;
   currentPage?: number;
   itemsPerPage?: number;
   isFullyLoaded?: boolean;
@@ -79,7 +81,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     orderDirection = 'asc',
   } = generalSettings as IGeneralSettings;
   const {galleryId, baseUrl, getGalleryTimestamp} = useAppInfo();
-  const {noDataText, setLoadMoreText, setNoDataText} =
+  const {noDataText, setLoadMoreText, setNoDataText, setSearchPlaceholder} =
     useContext(TranslationsContext);
   const [images, setImages] = useState<IImageDTO[]>([]);
   const [lightboxImages, setLightboxImages] = useState<
@@ -87,9 +89,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   >();
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [isFetched, setIsFetched] = useState(false);
-
   const pagesCount: number =
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
   const isFullyLoaded: boolean = currentPage >= pagesCount;
@@ -99,7 +100,6 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     search: string;
     itemsPerPage: number;
   } | null>(null);
-
   useEffect(() => {
     changeImagesCount?.(0);
     setLightboxImages([]);
@@ -108,7 +108,6 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const allData = (window as any).reacg_data;
     const currentData = allData?.[galleryId as string];
     const hasFirstChunk: boolean = currentData?.images?.length;
-
     if (!hasFirstChunk) {
       getData(1);
     } else {
@@ -121,7 +120,6 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   useUpdateEffect(() => {
     itemsPerPage > 0 && onReloadData();
   }, [itemsPerPage, paginationType, orderBy, orderDirection]);
-
   const loadAllLightboxImages = async (): Promise<void> => {
     if (
       (!lightboxImages || lightboxImages.length < imageCount) &&
@@ -146,6 +144,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
       queryString += `order_by=${orderBy}`;
       queryString += `&order=${orderDirection}`;
+      queryString += `&s=${searchTerm}`;
       queryString += `&timestamp=${getGalleryTimestamp?.()}`;
       const imgData: any[] = (await axios.get(`${fetchUrl}${queryString}`))
         .data;
@@ -196,9 +195,12 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       (window as any).reacg_global?.text?.load_more || undefined;
     const noDataText: string | undefined =
       (window as any).reacg_global?.text?.no_data || undefined;
+    const searchPlaceHolder: string | undefined =
+      (window as any).reacg_global?.text?.search || undefined;
 
     loadMoreText && setLoadMoreText?.(loadMoreText);
     noDataText && setNoDataText?.(noDataText);
+    searchPlaceHolder && setSearchPlaceholder?.(searchPlaceHolder);
     setImageCount(newImageCount);
 
     setImages(newImages);
@@ -227,12 +229,13 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       if (page === 1) {
         setImages([]);
       }
-
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
       queryString += `order_by=${orderBy}`;
       queryString += `&order=${orderDirection}`;
+      queryString += `&s=${search}`;
       queryString += `&timestamp=${getGalleryTimestamp?.()}`;
+
       if (paginationType !== PaginationType.NONE) {
         queryString += `&page=${page}`;
         queryString += `&per_page=${itemsPerPage}`;
@@ -312,7 +315,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setLightboxImages([]);
     setCurrentPage(0);
     setImageCount(0);
-    getData(1);
+    getData(1, searchTerm);
   };
 
   const renderContentPlaceholder = (): ReactElement => {
@@ -333,13 +336,15 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         isLoading,
         pagesCount,
         onPageChange,
+        onSearch,
         currentPage,
         itemsPerPage,
         isFullyLoaded,
         loadAllLightboxImages,
       }}
     >
-      {images.length || isLoading ? children : renderContentPlaceholder()}
+      {children}
+      {!images.length && !isLoading && renderContentPlaceholder()}
       <DataFetcher onClick={onReloadData} />
     </DataContext.Provider>
   );
