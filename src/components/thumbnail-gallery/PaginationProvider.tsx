@@ -4,6 +4,7 @@ import {
   PaginationItem,
   PaginationRenderItemParams,
 } from '@mui/material';
+import {useData} from 'components/data-context/useData';
 import {TranslationsContext} from 'contexts/TranslationsContext';
 import {Button} from 'core-components/button';
 import {IGeneralSettings, PaginationType} from 'data-structures';
@@ -15,7 +16,6 @@ interface IPaginationProviderProps {
   type: PaginationType;
   onLoad: (_event?: any, page?: number) => Promise<void>;
   pagesCount: number;
-  isFullyLoaded?: boolean;
   settings: IGeneralSettings;
   page: number;
 }
@@ -24,7 +24,6 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   type,
   onLoad,
   pagesCount,
-  isFullyLoaded,
   settings,
   page,
 }) => {
@@ -36,11 +35,12 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
     loadMoreButtonColor,
     paginationTextColor,
   } = settings;
+  const {isFullyLoaded, isLoading: isDataLoading} = useData();
   const {loadMoreText} = useContext(TranslationsContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (inView && !isFullyLoaded && !isLoading) {
+    if (inView && !isFullyLoaded && !isLoading && !isDataLoading) {
       onLoadData();
     }
   }, [inView]);
