@@ -82,7 +82,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   const renderPaginationItem = (
     item: PaginationRenderItemParams
   ): ReactNode => {
-    const isDisabled: boolean = isLoading || item.disabled;
+    const isDisabled: boolean = isLoading || isDataLoading || item.disabled;
     const backgroundColor: string = item.selected
       ? activeButtonColor
       : inactiveButtonColor;
@@ -101,7 +101,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   };
 
   const renderLoadMoreButton = (): ReactNode => {
-    return !isFullyLoaded && !isLoading ? (
+    return !isFullyLoaded && !isLoading && !isDataLoading ? (
       <Button
         onClick={onLoadData}
         className={'pagination-provider__load-more-button'}
