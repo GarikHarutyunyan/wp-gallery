@@ -82,7 +82,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   const renderPaginationItem = (
     item: PaginationRenderItemParams
   ): ReactNode => {
-    const isDisabled: boolean = isLoading;
+    const isDisabled: boolean = isLoading || item.disabled;
     const backgroundColor: string = item.selected
       ? activeButtonColor
       : inactiveButtonColor;
