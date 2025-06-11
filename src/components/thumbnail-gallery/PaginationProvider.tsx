@@ -65,7 +65,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   };
 
   const renderPagination = (): ReactNode => {
-    return pagesCount > 1 ? (
+    return pagesCount > 1 && !isDataLoading ? (
       <Pagination
         count={pagesCount}
         color={'primary'}
