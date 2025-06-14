@@ -43,14 +43,14 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
   };
   useEffect(() => {
     const totalAvailableImages = allImagesCount ?? 0;
-    if (totalAvailableImages === 0) return;
+    if (totalAvailableImages !== 0) {
+      let count = Math.min(imagesCount, totalAvailableImages);
 
-    let count = Math.min(imagesCount, totalAvailableImages);
+      if (count % 2 === 0) count--;
 
-    if (count % 2 === 0) count--;
-
-    if (count !== imagesCount) {
-      onChange({...value, imagesCount: count});
+      if (count !== imagesCount) {
+        onChange({...value, imagesCount: count});
+      }
     }
   }, [allImagesCount, imagesCount]);
 
