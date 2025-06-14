@@ -80,7 +80,7 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
         delay={slideDuration}
         size={Math.max(containerWidth, containerHeight)}
         imagesCount={1}
-        preLoadCount={1}
+        preLoadCount={4}
         allowTouchMove={true}
         onClick={onClick}
       />

@@ -13,7 +13,7 @@ interface ITCarouselProps {
 }
 
 const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
-  const {images} = useData();
+  const {images = []} = useData();
   const {carouselSettings: settings, wrapperRef} = useSettings();
   const {
     backgroundColor,
@@ -32,7 +32,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     id: 1,
     spaceBetween: spaceBetween,
     slidesPerView: imagesCount,
-    centeredSlides: true,
+    centeredSlides: imagesCount > 1,
     effect: 'coverflow',
     coverflowEffect: {
       rotate: 0,
@@ -45,6 +45,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     navigation: true,
     modules: [EffectCoverflow, Autoplay, Navigation],
   };
+
   const wrapper = wrapperRef.current;
   // Count the container width depends on main image width, images count and space between images.
   const contWidth =
@@ -55,6 +56,11 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const ratio: number = contWidth / height;
   const containerWidth: number = Math.min(innerWidth, contWidth);
   const containerHeight: number = containerWidth / ratio;
+  // This ensures that Swiper functions correctly in infinite loop mode when the total number of images is less than the number of visible slides
+  const carouselImages =
+    images.length < imagesCount + 1 && images.length > 1
+      ? [...images, ...images]
+      : images;
 
   useEffect(() => {
     const handleResize = () => {
@@ -64,7 +70,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, [wrapper?.clientWidth]);
-
   return (
     <Box
       sx={{
@@ -80,9 +85,9 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         <SwiperGallery
           key={effects.id}
           effects={effects}
-          loop={true}
+          loop={images.length > 1}
           backgroundColor={backgroundColor}
-          images={images || []}
+          images={carouselImages}
           autoplay={autoplay}
           delay={slideDuration}
           playAndPauseAllowed={playAndPauseAllowed}
@@ -90,7 +95,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
           height={containerHeight}
           size={Math.max(width, height)}
           imagesCount={imagesCount}
-          preLoadCount={4}
+          preLoadCount={Math.ceil(imagesCount / 2) + 4}
           padding={padding}
           scale={scale}
           allowTouchMove={false}
