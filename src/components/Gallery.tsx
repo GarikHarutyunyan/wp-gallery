@@ -155,7 +155,7 @@ const Gallery: React.FC = () => {
         break;
     }
 
-    return <Suspense>{gallery}</Suspense>;
+    return gallery;
   };
 
   const onImageClick = (index: number) => {
@@ -202,15 +202,13 @@ const Gallery: React.FC = () => {
 
   const renderPaginationProvider = () => {
     return (
-      <Suspense>
-        <PaginationProvider
-          type={paginationType}
-          pagesCount={pagesCount || 1}
-          onLoad={onPageChange as any}
-          settings={generalSettings as IGeneralSettings}
-          page={currentPage}
-        />
-      </Suspense>
+      <PaginationProvider
+        type={paginationType}
+        pagesCount={pagesCount || 1}
+        onLoad={onPageChange as any}
+        settings={generalSettings as IGeneralSettings}
+        page={currentPage}
+      />
     );
   };
 
@@ -218,32 +216,24 @@ const Gallery: React.FC = () => {
     if (!showLightbox) {
       return null;
     }
-    return (
-      <Suspense>
-        <Lightbox activeIndex={activeImageIndex} onClose={closeLightbox} />
-      </Suspense>
-    );
+    return <Lightbox activeIndex={activeImageIndex} onClose={closeLightbox} />;
   };
 
   const renderFilterProvider = () => {
-    return (
-      <Suspense>
-        <FilterProvider onSearch={onSearch as any} />
-      </Suspense>
-    );
+    return <FilterProvider onSearch={onSearch as any} />;
   };
   const closeLightbox = (): void => {
     setActiveImageIndex(-1);
   };
 
   return (
-    <>
+    <Suspense>
       {showSearchField && renderFilterProvider()}
       {!!images?.length && renderGallery()}
       {renderLoader()}
       {paginationType !== PaginationType.NONE && renderPaginationProvider()}
       {showLightbox && renderLightbox()}
-    </>
+    </Suspense>
   );
 };
 
