@@ -25,8 +25,6 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     showTitle,
     showDescription,
     showButton,
-    backgroundColor,
-    containerPadding,
     imageRadius,
     textVerticalAlignment,
     textHorizontalSpacing,
@@ -81,9 +79,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
       <div
         style={{
           fontFamily: textFontFamily,
-          backgroundColor: backgroundColor,
           gap: spacing,
-          padding: containerPadding,
         }}
         className="blog-gallery"
       >
@@ -129,7 +125,9 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         textAlign: titleAlignment,
                         margin: 0,
                         padding:
-                          showButton && !image.caption && (!showDescription || !image.description)
+                          showButton &&
+                          !image.caption &&
+                          (!showDescription || !image.description)
                             ? '0px 0px 15px'
                             : 0,
                       }}
@@ -146,9 +144,9 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         color: titleColor,
                         margin: 0,
                         padding:
-                            showButton && (!showDescription || !image.description)
-                                ? '0px 0px 15px'
-                                : 0,
+                          showButton && (!showDescription || !image.description)
+                            ? '0px 0px 15px'
+                            : 0,
                       }}
                     >
                       {image.caption}
