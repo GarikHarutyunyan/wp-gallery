@@ -1,8 +1,12 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import {
   GalleryType,
+  IBlogSettings,
   IGeneralSettings,
   ImageClickAction,
+  IMasonrySettings,
+  IMosaicSettings,
+  IThumbnailSettings,
   PaginationType,
 } from 'data-structures';
 import React, {
@@ -10,6 +14,7 @@ import React, {
   ReactElement,
   ReactNode,
   Suspense,
+  useCallback,
   useMemo,
   useState,
 } from 'react';
@@ -35,6 +40,9 @@ const PaginationProvider = lazy(
   () => import('./thumbnail-gallery/PaginationProvider')
 );
 const FilterProvider = lazy(() => import('./filter-provider/FilterProvider'));
+
+type NonBlogSettings = IMosaicSettings | IThumbnailSettings | IMasonrySettings;
+type GallerySettings = NonBlogSettings | IBlogSettings | undefined;
 
 const Gallery: React.FC = () => {
   const {
@@ -222,17 +230,86 @@ const Gallery: React.FC = () => {
   const renderFilterProvider = () => {
     return <FilterProvider onSearch={onSearch as any} />;
   };
+
   const closeLightbox = (): void => {
     setActiveImageIndex(-1);
   };
 
+  const getSettingsByType = useCallback((): GallerySettings => {
+    switch (type) {
+      case GalleryType.MOSAIC:
+        return mosaicSettings;
+      case GalleryType.JUSTIFIED:
+        return justifiedSettings;
+      case GalleryType.THUMBNAILS:
+        return thumbnailSettings;
+      case GalleryType.MASONRY:
+        return masonrySettings;
+      case GalleryType.BLOG:
+        return blogSettings;
+      default:
+        return undefined;
+    }
+  }, [
+    type,
+    mosaicSettings,
+    justifiedSettings,
+    thumbnailSettings,
+    masonrySettings,
+    blogSettings,
+  ]);
+
+  const selectedSettings = useMemo(
+    () => getSettingsByType(),
+    [getSettingsByType]
+  );
+
+  const {containerPadding, backgroundColor, calculatedWidth} = useMemo(() => {
+    const {containerPadding = 0, backgroundColor = 'transparent'} =
+      selectedSettings ?? {};
+    const {width = 100} =
+      type !== GalleryType.BLOG && selectedSettings
+        ? (selectedSettings as NonBlogSettings)
+        : {};
+
+    const {
+      columns = 4,
+      gap = 10,
+      padding = 0,
+    } = type === GalleryType.THUMBNAILS && selectedSettings
+      ? (selectedSettings as NonBlogSettings)
+      : {};
+
+    const calculatedWidth =
+      type === GalleryType.THUMBNAILS
+        ? `${columns * width + (columns - 1) * gap + columns * 2 * padding}px`
+        : `${width}%`;
+
+    return {
+      containerPadding,
+      backgroundColor,
+      calculatedWidth,
+    };
+  }, [selectedSettings, type]);
+
   return (
     <Suspense>
-      {showSearchField && renderFilterProvider()}
-      {!!images?.length && renderGallery()}
-      {renderLoader()}
-      {paginationType !== PaginationType.NONE && renderPaginationProvider()}
-      {showLightbox && renderLightbox()}
+      <div
+        style={{
+          margin: 'auto',
+          boxSizing: 'border-box',
+          padding: containerPadding + 'px',
+          backgroundColor,
+          width: calculatedWidth,
+          maxWidth: '100%',
+        }}
+      >
+        {showSearchField && renderFilterProvider()}
+        {!!images?.length && renderGallery()}
+        {renderLoader()}
+        {paginationType !== PaginationType.NONE && renderPaginationProvider()}
+        {showLightbox && renderLightbox()}
+      </div>
     </Suspense>
   );
 };

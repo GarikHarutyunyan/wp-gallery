@@ -11,8 +11,7 @@ interface IMasonryGalleryProps {
 const MasonryGallery: React.FC<IMasonryGalleryProps> = ({onClick}) => {
   const {masonrySettings: settings} = useSettings();
   const {images} = useData();
-  const {gap, backgroundColor, containerPadding, padding, width, columns} =
-    settings as IMasonrySettings;
+  const {gap, padding, width, columns} = settings as IMasonrySettings;
 
   return (
     <ReacgPhotoAlbum
@@ -22,8 +21,6 @@ const MasonryGallery: React.FC<IMasonryGalleryProps> = ({onClick}) => {
       columns={columns}
       gap={gap}
       padding={padding}
-      backgroundColor={backgroundColor}
-      containerPadding={containerPadding}
       settings={settings as IMasonrySettings}
       onClick={onClick}
     />
