@@ -11,8 +11,7 @@ interface IMosaicGalleryProps {
 const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
   const {mosaicSettings: settings} = useSettings();
   const {images} = useData();
-  const {gap, backgroundColor, containerPadding, padding, width, columns} =
-    settings as IMosaicSettings;
+  const {gap, padding, width, columns} = settings as IMosaicSettings;
 
   return (
     <ReacgPhotoAlbum
@@ -22,8 +21,6 @@ const MosaicGallery: React.FC<IMosaicGalleryProps> = ({onClick}) => {
       columns={columns}
       gap={gap}
       padding={padding}
-      backgroundColor={backgroundColor}
-      containerPadding={containerPadding}
       settings={settings as IMosaicSettings}
       onClick={onClick}
     />

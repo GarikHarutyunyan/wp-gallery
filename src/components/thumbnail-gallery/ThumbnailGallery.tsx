@@ -26,7 +26,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     height = 1,
     columns = 1,
     gap,
-    backgroundColor,
     containerPadding,
     padding,
     paddingColor,
@@ -142,11 +141,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   return (
     <div
       style={{
-        width:
-          width * columns + (columns - 1) * gap + columns * 2 * padding + 'px',
-        margin: '0 auto',
         overflow: 'hidden',
-        maxWidth: '100%',
       }}
     >
       <div
@@ -154,8 +149,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
         style={{
           overflow: 'hidden',
           maxWidth: '100%',
-          backgroundColor,
-          padding: containerPadding + 'px',
         }}
       >
         <ImageList
