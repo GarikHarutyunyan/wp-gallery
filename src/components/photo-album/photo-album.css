@@ -79,7 +79,7 @@
 /* Slide */
 .reacg-gallery .photo-album-item__image-wrapper_slide img,
 .reacg-gallery .photo-album-item__image-wrapper_slide video {
-  margin-left: 20px !important;
+  margin-left: 14% !important;
   -webkit-transform: scale(1.3);
   transform: scale(1.3);
   -webkit-transition:
