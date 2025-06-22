@@ -1,4 +1,5 @@
 import CircularProgress from '@mui/material/CircularProgress';
+import clsx from 'clsx';
 import {
   GalleryType,
   IGeneralSettings,
@@ -190,8 +191,16 @@ const Gallery: React.FC = () => {
 
   const renderLoader = (): ReactNode => {
     if (isLoading) {
+      const needsSpacing =
+        paginationType === PaginationType.LOAD_MORE ||
+        paginationType === PaginationType.SCROLL;
+
       return (
-        <div className={'gallery__loader'}>
+        <div
+          className={clsx('gallery__loader', {
+            'gallery__loader--with-spacing': needsSpacing,
+          })}
+        >
           <CircularProgress sx={{color: 'black'}} size={60} />
         </div>
       );
