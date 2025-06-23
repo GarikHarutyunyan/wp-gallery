@@ -6,3 +6,7 @@
 .gallery__loader {
   width: 100%;
 }
+
+.gallery__loader--with-spacing {
+  margin-top: 20px;
+}
