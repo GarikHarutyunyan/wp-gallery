@@ -12,7 +12,7 @@ interface ISwiperImageProps {
   padding?: number;
   size?: number;
   videoRef?: React.RefObject<HTMLVideoElement>;
-  onMouseDown?: (e: React.MouseEvent) => void;
+  isOverlay?: boolean;
 }
 
 const SwiperImage = forwardRef(
@@ -26,8 +26,8 @@ const SwiperImage = forwardRef(
       padding,
       size,
       videoRef,
-      onMouseDown,
       galleryKey: key,
+      isOverlay,
     }: ISwiperImageProps,
     ref
   ) => {
@@ -58,18 +58,47 @@ const SwiperImage = forwardRef(
             }}
           />
         ) : (
-          <video
-            ref={videoRef}
-            src={image.original.url}
-            poster={image.medium_large.url}
-            style={{
-              background: key !== 'coverflowEffect' ? backgroundColor : '',
-              padding: key !== 'coverflowEffect' ? padding + 'px' : 0,
+          <div
+            style={{position: 'relative', width: '100%', height: '100%'}}
+            onClick={(e) => {
+              e.stopPropagation();
+              const video = videoRef?.current;
+              if (video) {
+                if (video.paused) {
+                  video.play();
+                } else {
+                  video.pause();
+                }
+              }
             }}
-            className={'swiper-gallery__video'}
-            controls
-            onMouseDown={onMouseDown}
-          />
+          >
+            <video
+              ref={videoRef}
+              src={image.original.url}
+              poster={image.medium_large.url}
+              style={{
+                background: key !== 'coverflowEffect' ? backgroundColor : '',
+                padding: key !== 'coverflowEffect' ? padding + 'px' : 0,
+              }}
+              className={'swiper-gallery__video'}
+              controls
+            />
+
+            {isOverlay && (
+              <div
+                className="video-drag-overlay"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  zIndex: 2,
+                  pointerEvents: 'auto',
+                }}
+              />
+            )}
+          </div>
         )}
       </div>
     );
