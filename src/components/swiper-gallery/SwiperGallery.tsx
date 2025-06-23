@@ -61,7 +61,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const [paddingTop, setPaddingTop] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const isDragging = useRef<boolean>(false);
+  const [isOverlay, setIsOverLay] = useState<boolean>(false);
   const key = effects.effect + 'Effect';
 
   useEffect(() => {
@@ -115,33 +115,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
-  const onMouseDown = () => {
-    isDragging.current = true;
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-
-    return () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-  }, []);
-
-  const onMouseMove = () => {
-    if (isDragging.current && videoRef.current) {
-      (videoRef.current as HTMLVideoElement).controls = false;
-    }
-  };
-
-  const onMouseUp = () => {
-    isDragging.current = false;
-    if (videoRef.current) {
-      (videoRef.current as HTMLVideoElement).controls = true;
-    }
-  };
-
   return (
     <Swiper
       key={imagesCount || 0}
@@ -168,6 +141,16 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       onSlideChangeTransitionStart={() => {
         if (key !== 'coverflowEffect') return;
         handleSlideChange(swiperRef, images, preLoadCount);
+      }}
+      onTouchStart={() => {
+        setIsOverLay(true);
+      }}
+      onTouchEnd={() => {
+        setIsOverLay(false);
+        (videoRef.current as HTMLVideoElement).controls = true;
+      }}
+      onSliderFirstMove={() => {
+        (videoRef.current as HTMLVideoElement).controls = false;
       }}
       {...effects}
       style={
@@ -212,8 +195,8 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
               padding={padding}
               size={size}
               videoRef={videoRef}
-              onMouseDown={onMouseDown}
               galleryKey={key}
+              isOverlay={isOverlay}
             />
           </SwiperSlide>
         );
