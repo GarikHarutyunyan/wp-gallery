@@ -60,9 +60,8 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const [paddingTop, setPaddingTop] = useState<number>(0);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isOverlay, setIsOverLay] = useState<boolean>(false);
   const key = effects.effect + 'Effect';
+  const prevIndexRef = useRef<number | null>(null);
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
@@ -115,6 +114,36 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
+  const handleOnChangeVideoAutoPlayAndPause = (
+    swiper: any,
+    shouldPausePrevious: boolean = true
+  ) => {
+    if (!swiper) return;
+
+    const activeIndex = swiper.activeIndex;
+    const activeSlide = swiper.slides[activeIndex];
+    const activeVideo = activeSlide?.querySelector(
+      'video.swiper-gallery__video'
+    );
+
+    if (shouldPausePrevious && prevIndexRef.current !== null) {
+      const prevSlide = swiper.slides[prevIndexRef.current];
+      const prevVideo = prevSlide?.querySelector('video.swiper-gallery__video');
+
+      if (prevVideo && prevVideo !== activeVideo && !prevVideo.paused) {
+        prevVideo.pause();
+      }
+    }
+
+    if (activeVideo) {
+      activeVideo
+        .play()
+        .catch((err: any) => console.warn('Autoplay blocked:', err));
+    }
+
+    prevIndexRef.current = activeIndex;
+  };
+
   return (
     <Swiper
       key={imagesCount || 0}
@@ -134,7 +163,14 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       pagination={false}
       className={className}
       loopAdditionalSlides={0}
+      onInit={() => {
+        const swiper = swiperRef.current?.swiper;
+        handleOnChangeVideoAutoPlayAndPause(swiper, false); // Don't pause anything on init
+      }}
       onSlideChange={() => {
+        const swiper = swiperRef.current?.swiper;
+        handleOnChangeVideoAutoPlayAndPause(swiper, true); // Pause previous if needed
+
         if (key === 'coverflowEffect') return;
         handleSlideChange(swiperRef, images, preLoadCount);
       }}
@@ -143,14 +179,14 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         handleSlideChange(swiperRef, images, preLoadCount);
       }}
       onTouchStart={() => {
-        setIsOverLay(true);
+        if (key === 'coverflowEffect') return;
+        const videos = document.querySelectorAll('.swiper-gallery__video');
+        videos.forEach((v) => v.classList.add('no-pointer'));
       }}
       onTouchEnd={() => {
-        setIsOverLay(false);
-        (videoRef.current as HTMLVideoElement).controls = true;
-      }}
-      onSliderFirstMove={() => {
-        (videoRef.current as HTMLVideoElement).controls = false;
+        if (key === 'coverflowEffect') return;
+        const videos = document.querySelectorAll('.swiper-gallery__video');
+        videos.forEach((v) => v.classList.remove('no-pointer'));
       }}
       {...effects}
       style={
@@ -194,9 +230,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
               backgroundColor={backgroundColor}
               padding={padding}
               size={size}
-              videoRef={videoRef}
               galleryKey={key}
-              isOverlay={isOverlay}
             />
           </SwiperSlide>
         );
