@@ -32,6 +32,13 @@
   width: 100%;
   height: 100%;
 }
+.swiper-gallery__video {
+  pointer-events: auto;
+}
+
+.swiper-gallery__video.no-pointer {
+  pointer-events: none;
+}
 .reacg-gallery .swiper-button-next,
 .reacg-gallery .swiper-button-prev {
   color: hsla(0, 0%, 100%, 0.8);
