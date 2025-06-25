@@ -1,6 +1,6 @@
 import ReImage from 'core-components/re-image/ReImage';
 import {IImageDTO, ImageType} from 'data-structures';
-import React, {forwardRef, useRef} from 'react';
+import {forwardRef, useRef} from 'react';
 
 interface ISwiperImageProps {
   galleryKey: string;
@@ -11,8 +11,6 @@ interface ISwiperImageProps {
   backgroundColor?: string;
   padding?: number;
   size?: number;
-  videoRef?: React.RefObject<HTMLVideoElement>;
-  isOverlay?: boolean;
 }
 
 const SwiperImage = forwardRef(
@@ -25,19 +23,19 @@ const SwiperImage = forwardRef(
       backgroundColor,
       padding,
       size,
-      videoRef,
       galleryKey: key,
-      isOverlay,
     }: ISwiperImageProps,
     ref
   ) => {
     const wrapperRef = useRef(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
     const isVideo: boolean = image.type === ImageType.VIDEO;
     const shouldLoadImage =
       key === 'cardsEffect'
         ? index < (imagesCount || 0) + 1
         : index < (imagesCount || 0) / 2 + 1 ||
           index > images.length - (imagesCount || 0) / 2 - 1;
+
     return (
       <div ref={wrapperRef} style={{height: '100%', width: '100%'}}>
         {!isVideo ? (
@@ -61,8 +59,9 @@ const SwiperImage = forwardRef(
           <div
             style={{position: 'relative', width: '100%', height: '100%'}}
             onClick={(e) => {
-              e.stopPropagation();
+              if (key === 'coverflowEffect') return;
               const video = videoRef?.current;
+
               if (video) {
                 if (video.paused) {
                   video.play();
@@ -82,22 +81,11 @@ const SwiperImage = forwardRef(
               }}
               className={'swiper-gallery__video'}
               controls
+              muted
+              playsInline
+              loop
+              preload="auto"
             />
-
-            {isOverlay && (
-              <div
-                className="video-drag-overlay"
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  zIndex: 2,
-                  pointerEvents: 'auto',
-                }}
-              />
-            )}
           </div>
         )}
       </div>
