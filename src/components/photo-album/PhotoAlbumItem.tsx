@@ -66,6 +66,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             titleVisibility === TitleVisibility.ON_HOVER,
           'photo-album-item__title_hidden':
             titleVisibility === TitleVisibility.NONE,
+          'photo-album-item__title__always':
+            titleVisibility === TitleVisibility.ALWAYS_SHOWN,
         })}
         key={image.id}
       >
@@ -84,6 +86,10 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           className={clsx({
             'photo-album-item__title-content_center':
               titlePosition === TitlePosition.CENTER,
+            'photo-album-item__title-content_bottom':
+              titlePosition === TitlePosition.BOTTOM,
+            'photo-album-item__title-content_top':
+              titlePosition === TitlePosition.TOP,
           })}
           title={<span>{image.title || <br />}</span>}
           subtitle={
