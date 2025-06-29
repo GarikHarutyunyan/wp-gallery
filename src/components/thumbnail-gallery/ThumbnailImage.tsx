@@ -75,6 +75,8 @@ const ThumbnailImage = ({
             titlePosition !== ThumbnailTitlePosition.BELOW,
           'thumbnail-gallery__title_hidden':
             titleVisibility === TitleVisibility.NONE,
+          'thumbnail-gallery__title_always':
+            titleVisibility === TitleVisibility.ALWAYS_SHOWN,
         })}
       >
         <ImageListItemBar
@@ -94,6 +96,10 @@ const ThumbnailImage = ({
           className={clsx({
             'thumbnail-gallery__title-content_center':
               titlePosition === ThumbnailTitlePosition.CENTER,
+            'thumbnail-gallery__title-content_bottom':
+              titlePosition === ThumbnailTitlePosition.BOTTOM,
+            'thumbnail-gallery__title-content_top':
+              titlePosition === ThumbnailTitlePosition.TOP,
           })}
           title={<span>{image.title || <br />}</span>}
           subtitle={
