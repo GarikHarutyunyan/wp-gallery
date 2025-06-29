@@ -1,8 +1,14 @@
 .reacg-gallery
   .thumbnail-gallery__image-wrapper:hover
   .thumbnail-gallery__title_on-hover {
-  display: block;
+  opacity: 1;
   pointer-events: none;
+  .thumbnail-gallery__title-content_bottom {
+    transform: translate3d(0, 0px, 0);
+  }
+  .thumbnail-gallery__title-content_top {
+    transform: translate3d(0, 0px, 0);
+  }
 }
 
 .reacg-gallery .thumbnail-gallery__image-wrapper_clickable {
@@ -18,7 +24,22 @@
 }
 
 .reacg-gallery .thumbnail-gallery__title_on-hover {
-  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.reacg-gallery
+  .thumbnail-gallery__title_on-hover
+  .thumbnail-gallery__title-content_bottom {
+  transform: translate3d(0, 50%, 0);
+  transition: transform 0.3s ease-in-out;
+}
+
+.reacg-gallery
+  .thumbnail-gallery__title_on-hover
+  .thumbnail-gallery__title-content_top {
+  transform: translate3d(0, -50%, 0);
+  transition: transform 0.3s ease-in-out;
 }
 
 .reacg-gallery .thumbnail-gallery__title_hidden {
@@ -139,14 +160,46 @@
 }
 
 /* Black overlay */
+/* Black overlay  on hover*/
 .reacg-gallery
-  .thumbnail-gallery__image-wrapper_overlay:hover
-  .thumbnail-gallery__title
+  .thumbnail-gallery__image-wrapper_overlay
+  .thumbnail-gallery__title_on-hover
   > div {
   background: none;
 }
 
-.reacg-gallery .thumbnail-gallery__image-wrapper_overlay {
+.reacg-gallery
+  .thumbnail-gallery__image-wrapper_overlay:hover
+  .thumbnail-gallery__title_on-hover
+  > div {
+  background: none;
+}
+
+.reacg-gallery
+  [class*='thumbnail-gallery__image-wrapper_overlay-icon']
+  .thumbnail-gallery__title_on-hover
+  > div {
+  background: none;
+}
+
+/* Black overlay  alwyas title*/
+
+.reacg-gallery
+  .thumbnail-gallery__image-wrapper_overlay:hover
+  .thumbnail-gallery__title_always
+  .thumbnail-gallery__title-content_bottom {
+  background: none;
+}
+.reacg-gallery
+  .thumbnail-gallery__image-wrapper_overlay:hover
+  .thumbnail-gallery__title_always
+  .thumbnail-gallery__title-content_top {
+  background: none;
+}
+.reacg-gallery
+  [class*='thumbnail-gallery__image-wrapper_overlay-icon']:hover
+  .thumbnail-gallery__title_always
+  > .thumbnail-gallery__title-content_center {
   background: none;
 }
 
@@ -165,6 +218,44 @@
 }
 
 /* Black overlay with icon */
+
+/* Thumbnail titles: visible by default, fade & slide out on hover */
+
+.reacg-gallery
+  [class*='thumbnail-gallery__image-wrapper_overlay-icon']
+  .thumbnail-gallery__title_always
+  .thumbnail-gallery__title-content_center,
+.thumbnail-gallery__title-content_top,
+.thumbnail-gallery__title-content_bottom {
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.reacg-gallery
+  [class*='thumbnail-gallery__image-wrapper_overlay-icon']
+  .thumbnail-gallery__title_always
+  .thumbnail-gallery__title-content_center {
+  transition:
+    opacity 0.3s ease-in-out,
+    background 1.3s ease-in-out;
+}
+
+.reacg-gallery
+  [class*='thumbnail-gallery__image-wrapper_overlay-icon']:hover
+  .thumbnail-gallery__title_always {
+  .thumbnail-gallery__title-content_center {
+    opacity: 0;
+  }
+  .thumbnail-gallery__title-content_top {
+    opacity: 0;
+    transform: translate3d(0, -50%, 0);
+  }
+  .thumbnail-gallery__title-content_bottom {
+    opacity: 0;
+    transform: translate3d(0, 50%, 0);
+  }
+}
+
 .reacg-gallery
   [class*='thumbnail-gallery__image-wrapper_overlay-icon']:hover
   .thumbnail-gallery__title
@@ -200,6 +291,7 @@
   font-size: 2rem;
   opacity: 0;
   pointer-events: none;
+  transition: all 0.3s ease-in-out;
 }
 
 .reacg-gallery
@@ -216,22 +308,25 @@
 
 .reacg-gallery
   [class*='thumbnail-gallery__image-wrapper_overlay-icon']:hover
-  .thumbnail-gallery__title {
-  display: none;
-}
-
-.reacg-gallery
-  [class*='thumbnail-gallery__image-wrapper_overlay-icon']:hover
   .thumbnail-gallery__title_on-hover {
   display: unset;
 }
 
 .reacg-gallery
-  [class*='thumbnail-gallery__image-wrapper_overlay-icon']:hover
+  [class*='thumbnail-gallery__image-wrapper_overlay-icon']
   .thumbnail-gallery__title_on-hover
   .thumbnail-gallery__title-content_center
   > div {
   margin-top: 80px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+.reacg-gallery
+  [class*='thumbnail-gallery__image-wrapper_overlay-icon']:hover
+  .thumbnail-gallery__title_on-hover
+  .thumbnail-gallery__title-content_center
+  > div {
+  opacity: 1;
 }
 
 /* Black overlay with zoom icon */
