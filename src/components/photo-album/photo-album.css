@@ -4,7 +4,22 @@
 }
 
 .reacg-gallery .photo-album-item__title_on-hover {
-  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.reacg-gallery
+  .photo-album-item__title_on-hover
+  .photo-album-item__title-content_bottom {
+  transform: translate3d(0, 50%, 0);
+  transition: transform 0.3s ease-in-out;
+}
+
+.reacg-gallery
+  .photo-album-item__title_on-hover
+  .photo-album-item__title-content_top {
+  transform: translate3d(0, -50%, 0);
+  transition: transform 0.3s ease-in-out;
 }
 
 .reacg-gallery .photo-album-item__title_hidden {
@@ -19,8 +34,14 @@
 .reacg-gallery
   .photo-album-item__image-wrapper:hover
   .photo-album-item__title_on-hover {
-  display: block;
+  opacity: 1;
   pointer-events: none;
+  .photo-album-item__title-content_bottom {
+    transform: translate3d(0, 0px, 0);
+  }
+  .photo-album-item__title-content_top {
+    transform: translate3d(0, 0px, 0);
+  }
 }
 
 .reacg-gallery .photo-album-item__image-container img,
@@ -154,10 +175,47 @@
 }
 
 /* Black overlay */
+
+/* Black overlay  on hover*/
+.reacg-gallery
+  .photo-album-item__image-wrapper_overlay
+  .photo-album-item__title_on-hover
+  > div {
+  background: none;
+}
+
 .reacg-gallery
   .photo-album-item__image-wrapper_overlay:hover
-  .photo-album-item__title
+  .photo-album-item__title_on-hover
   > div {
+  background: none;
+}
+
+.reacg-gallery
+  [class*='photo-album-item__image-wrapper_overlay-icon']
+  .photo-album-item__title_on-hover
+  > div {
+  background: none;
+}
+
+/* Black overlay  alwyas title*/
+
+.reacg-gallery
+  .photo-album-item__image-wrapper_overlay:hover
+  .photo-album-item__title__always
+  .photo-album-item__title-content_bottom {
+  background: none;
+}
+.reacg-gallery
+  .photo-album-item__image-wrapper_overlay:hover
+  .photo-album-item__title__always
+  .photo-album-item__title-content_top {
+  background: none;
+}
+.reacg-gallery
+  [class*='thumbnail-gallery__image-wrapper_overlay-icon']:hover
+  .photo-album-item__title__always
+  > .photo-album-item__title-content_center {
   background: none;
 }
 
@@ -177,6 +235,44 @@
 }
 
 /* Black overlay with zoom icon */
+
+/* photo titles: visible by default, fade & slide out on hover */
+
+.reacg-gallery
+  [class*='photo-album-item__image-wrapper_overlay-icon']
+  .photo-album-item__title__always
+  .photo-album-item__title-content_center,
+.photo-album-item__title-content_top,
+.photo-album-item__title-content_bottom {
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.reacg-gallery
+  [class*='photo-album-item__image-wrapper_overlay-icon']
+  .photo-album-item__title__always
+  .photo-album-item__title-content_center {
+  transition:
+    opacity 0.3s ease-in-out,
+    background 1.3s ease-in-out;
+}
+
+.reacg-gallery
+  [class*='photo-album-item__image-wrapper_overlay-icon']:hover
+  .photo-album-item__title__always {
+  .photo-album-item__title-content_center {
+    opacity: 0;
+  }
+  .photo-album-item__title-content_top {
+    opacity: 0;
+    transform: translate3d(0, -50%, 0);
+  }
+  .photo-album-item__title-content_bottom {
+    opacity: 0;
+    transform: translate3d(0, 50%, 0);
+  }
+}
+
 .reacg-gallery
   [class*='photo-album-item__image-wrapper_overlay-icon']:hover
   .photo-album-item__title
@@ -216,6 +312,7 @@
   font-size: 2rem;
   opacity: 0;
   pointer-events: none;
+  transition: all 0.3s ease-in-out;
 }
 
 .reacg-gallery
@@ -232,14 +329,18 @@
 
 .reacg-gallery
   [class*='photo-album-item__image-wrapper_overlay-icon']:hover
-  .photo-album-item__title {
-  display: none;
+  .photo-album-item__title_on-hover {
+  display: unset;
 }
 
 .reacg-gallery
-  [class*='photo-album-item__image-wrapper_overlay-icon']:hover
-  .photo-album-item__title_on-hover {
-  display: unset;
+  [class*='photo-album-item__image-wrapper_overlay-icon']
+  .photo-album-item__title_on-hover
+  .photo-album-item__title-content_center
+  > div {
+  margin-top: 80px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .reacg-gallery
@@ -247,7 +348,7 @@
   .photo-album-item__title_on-hover
   .photo-album-item__title-content_center
   > div {
-  margin-top: 80px;
+  opacity: 1;
 }
 
 /* Black overlay with zoom icon */
