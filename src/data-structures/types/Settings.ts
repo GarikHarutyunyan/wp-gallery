@@ -97,6 +97,7 @@ export interface ILightboxSettings extends ISlideshowSettings {
   areControlButtonsShown: boolean;
   canDownload: boolean;
   canZoom: boolean;
+  canShare: boolean;
   isFullscreenAllowed: boolean;
 }
 

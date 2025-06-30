@@ -81,6 +81,7 @@ const lightboxMockSettings: ILightboxSettings = {
   padding: 15,
   canDownload: true,
   canZoom: true,
+  canShare: true,
   isFullscreenAllowed: false,
   isSlideshowAllowed: false,
   autoplay: false,
