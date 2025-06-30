@@ -4,9 +4,11 @@
   opacity: 1;
   pointer-events: none;
   .thumbnail-gallery__title-content_bottom {
+    -webkit-transform: translate3d(0, 0px, 0);
     transform: translate3d(0, 0px, 0);
   }
   .thumbnail-gallery__title-content_top {
+    -webkit-transform: translate3d(0, 0px, 0);
     transform: translate3d(0, 0px, 0);
   }
 }
@@ -20,25 +22,31 @@
   left: 50%;
   position: absolute;
   top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
   transform: translateX(-50%) translateY(-50%);
 }
 
 .reacg-gallery .thumbnail-gallery__title_on-hover {
   opacity: 0;
+  -webkit-transition: opacity 0.3s ease-in-out;
   transition: opacity 0.3s ease-in-out;
 }
 
 .reacg-gallery
   .thumbnail-gallery__title_on-hover
   .thumbnail-gallery__title-content_bottom {
+  -webkit-transform: translate3d(0, 50%, 0);
   transform: translate3d(0, 50%, 0);
+  -webkit-transition: transform 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out;
 }
 
 .reacg-gallery
   .thumbnail-gallery__title_on-hover
   .thumbnail-gallery__title-content_top {
+  -webkit-transform: translate3d(0, -50%, 0);
   transform: translate3d(0, -50%, 0);
+  -webkit-transition: transform 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out;
 }
 
@@ -235,6 +243,9 @@
   [class*='thumbnail-gallery__image-wrapper_overlay-icon']
   .thumbnail-gallery__title_always
   .thumbnail-gallery__title-content_center {
+  -webkit-transition:
+    opacity 0.3s ease-in-out,
+    background 1.3s ease-in-out;
   transition:
     opacity 0.3s ease-in-out,
     background 1.3s ease-in-out;
@@ -248,10 +259,12 @@
   }
   .thumbnail-gallery__title-content_top {
     opacity: 0;
+    -webkit-transform: translate3d(0, -50%, 0);
     transform: translate3d(0, -50%, 0);
   }
   .thumbnail-gallery__title-content_bottom {
     opacity: 0;
+    -webkit-transform: translate3d(0, 50%, 0);
     transform: translate3d(0, 50%, 0);
   }
 }
@@ -291,12 +304,14 @@
   font-size: 2rem;
   opacity: 0;
   pointer-events: none;
+  -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
 
 .reacg-gallery
   [class*='thumbnail-gallery__image-wrapper_overlay-icon']:hover::after {
   opacity: 1;
+  -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
 
@@ -319,6 +334,7 @@
   > div {
   margin-top: 80px;
   opacity: 0;
+  -webkit-transition: opacity 0.3s ease-in-out;
   transition: opacity 0.3s ease-in-out;
 }
 .reacg-gallery
