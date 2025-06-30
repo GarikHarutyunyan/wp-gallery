@@ -16,7 +16,7 @@ import React, {
 import {useData} from './data-context/useData';
 import './gallery.css';
 import {useSettings} from './settings';
-
+import ShareDialog from './share-dialog/ShareDIalog';
 const ThumbnailGallery = lazy(
   () => import('./thumbnail-gallery/ThumbnailGallery')
 );
@@ -243,6 +243,7 @@ const Gallery: React.FC = () => {
       {renderLoader()}
       {paginationType !== PaginationType.NONE && renderPaginationProvider()}
       {showLightbox && renderLightbox()}
+      <ShareDialog />
     </>
   );
 };

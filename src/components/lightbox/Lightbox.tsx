@@ -12,6 +12,7 @@ import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Download from 'yet-another-react-lightbox/plugins/download';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
+import Share from 'yet-another-react-lightbox/plugins/share';
 import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
@@ -104,6 +105,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     padding,
     canDownload,
     canZoom,
+    canShare,
     isSlideshowAllowed,
     autoplay,
     slideDuration,
@@ -159,11 +161,15 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     if (textPosition !== LightboxTextPosition.NONE) {
       newPlugins.push(Captions as any);
     }
+    if (canShare) {
+      newPlugins.push(Share as any);
+    }
 
     return newPlugins;
   }, [
     canDownload,
     canZoom,
+    canShare,
     isSlideshowAllowed,
     autoplay,
     isFullscreenAllowed,

@@ -1,6 +1,7 @@
 import {ImageListItem} from '@mui/material';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
+import ShareButton from 'components/share-dialog/ShareButton';
 import ReImage from 'core-components/re-image/ReImage';
 import {
   IImageDTO,
@@ -96,6 +97,12 @@ const ThumbnailImage = ({
               titlePosition === ThumbnailTitlePosition.CENTER,
           })}
           title={<span>{image.title || <br />}</span>}
+          actionIcon={
+            <ShareButton
+              url="https://upload.wikimedia.org/wikipedia/commons/a/a8/TEIDE.JPG"
+              title="Hello"
+            />
+          }
           subtitle={
             image.caption && (
               <span className="thumbnail-image__caption">{image.caption}</span>

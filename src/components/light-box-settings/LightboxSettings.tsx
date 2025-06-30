@@ -41,6 +41,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
     padding,
     canDownload,
     canZoom,
+    canShare,
     isSlideshowAllowed,
     autoplay,
     slideDuration,
@@ -179,6 +180,15 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                     id={'canZoom'}
                     name={'Zoom'}
                     value={canZoom}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'canShare'}
+                    name={'Share'}
+                    value={canShare}
                     onChange={onInputValueChange}
                   />
                 </Filter>
