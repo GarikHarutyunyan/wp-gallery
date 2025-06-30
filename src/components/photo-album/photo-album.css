@@ -6,20 +6,25 @@
 .reacg-gallery .photo-album-item__title_on-hover {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
+  -webkit-transition: opacity 0.3s ease-in-out;
 }
 
 .reacg-gallery
   .photo-album-item__title_on-hover
   .photo-album-item__title-content_bottom {
   transform: translate3d(0, 50%, 0);
+  -webkit-transform: translate3d(0, 50%, 0);
   transition: transform 0.3s ease-in-out;
+  -webkit-transition: transform 0.3s ease-in-out;
 }
 
 .reacg-gallery
   .photo-album-item__title_on-hover
   .photo-album-item__title-content_top {
+  -webkit-transform: translate3d(0, -50%, 0);
   transform: translate3d(0, -50%, 0);
   transition: transform 0.3s ease-in-out;
+  -webkit-transition: transform 0.3s ease-in-out;
 }
 
 .reacg-gallery .photo-album-item__title_hidden {
@@ -37,9 +42,11 @@
   opacity: 1;
   pointer-events: none;
   .photo-album-item__title-content_bottom {
+    -webkit-transform: translate3d(0, 0px, 0);
     transform: translate3d(0, 0px, 0);
   }
   .photo-album-item__title-content_top {
+    -webkit-transform: translate3d(0, 0px, 0);
     transform: translate3d(0, 0px, 0);
   }
 }
@@ -252,6 +259,9 @@
   [class*='photo-album-item__image-wrapper_overlay-icon']
   .photo-album-item__title__always
   .photo-album-item__title-content_center {
+  -webkit-transition:
+    opacity 0.3s ease-in-out,
+    background 1.3s ease-in-out;
   transition:
     opacity 0.3s ease-in-out,
     background 1.3s ease-in-out;
@@ -266,10 +276,12 @@
   .photo-album-item__title-content_top {
     opacity: 0;
     transform: translate3d(0, -50%, 0);
+    -webkit-transform: translate3d(0, -50%, 0);
   }
   .photo-album-item__title-content_bottom {
     opacity: 0;
     transform: translate3d(0, 50%, 0);
+    -webkit-transform: translate3d(0, 50%, 0);
   }
 }
 
@@ -340,6 +352,7 @@
   > div {
   margin-top: 80px;
   opacity: 0;
+  -webkit-transition: opacity 0.3s ease-in-out;
   transition: opacity 0.3s ease-in-out;
 }
 
