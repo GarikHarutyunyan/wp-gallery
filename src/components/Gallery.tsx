@@ -1,8 +1,12 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import {
   GalleryType,
+  IBlogSettings,
   IGeneralSettings,
   ImageClickAction,
+  IMasonrySettings,
+  IMosaicSettings,
+  IThumbnailSettings,
   PaginationType,
 } from 'data-structures';
 import React, {
@@ -10,6 +14,7 @@ import React, {
   ReactElement,
   ReactNode,
   Suspense,
+  useCallback,
   useMemo,
   useState,
 } from 'react';
@@ -35,6 +40,9 @@ const PaginationProvider = lazy(
   () => import('./thumbnail-gallery/PaginationProvider')
 );
 const FilterProvider = lazy(() => import('./filter-provider/FilterProvider'));
+
+type NonBlogSettings = IMosaicSettings | IThumbnailSettings | IMasonrySettings;
+type GallerySettings = NonBlogSettings | IBlogSettings | undefined;
 
 const Gallery: React.FC = () => {
   const {
@@ -155,7 +163,7 @@ const Gallery: React.FC = () => {
         break;
     }
 
-    return <Suspense>{gallery}</Suspense>;
+    return gallery;
   };
 
   const onImageClick = (index: number) => {
@@ -202,15 +210,13 @@ const Gallery: React.FC = () => {
 
   const renderPaginationProvider = () => {
     return (
-      <Suspense>
-        <PaginationProvider
-          type={paginationType}
-          pagesCount={pagesCount || 1}
-          onLoad={onPageChange as any}
-          settings={generalSettings as IGeneralSettings}
-          page={currentPage}
-        />
-      </Suspense>
+      <PaginationProvider
+        type={paginationType}
+        pagesCount={pagesCount || 1}
+        onLoad={onPageChange as any}
+        settings={generalSettings as IGeneralSettings}
+        page={currentPage}
+      />
     );
   };
 
@@ -218,32 +224,93 @@ const Gallery: React.FC = () => {
     if (!showLightbox) {
       return null;
     }
-    return (
-      <Suspense>
-        <Lightbox activeIndex={activeImageIndex} onClose={closeLightbox} />
-      </Suspense>
-    );
+    return <Lightbox activeIndex={activeImageIndex} onClose={closeLightbox} />;
   };
 
   const renderFilterProvider = () => {
-    return (
-      <Suspense>
-        <FilterProvider onSearch={onSearch as any} />
-      </Suspense>
-    );
+    return <FilterProvider onSearch={onSearch as any} />;
   };
+
   const closeLightbox = (): void => {
     setActiveImageIndex(-1);
   };
 
+  const getSettingsByType = useCallback((): GallerySettings => {
+    switch (type) {
+      case GalleryType.MOSAIC:
+        return mosaicSettings;
+      case GalleryType.JUSTIFIED:
+        return justifiedSettings;
+      case GalleryType.THUMBNAILS:
+        return thumbnailSettings;
+      case GalleryType.MASONRY:
+        return masonrySettings;
+      case GalleryType.BLOG:
+        return blogSettings;
+      default:
+        return undefined;
+    }
+  }, [
+    type,
+    mosaicSettings,
+    justifiedSettings,
+    thumbnailSettings,
+    masonrySettings,
+    blogSettings,
+  ]);
+
+  const selectedSettings = useMemo(
+    () => getSettingsByType(),
+    [getSettingsByType]
+  );
+
+  const {containerPadding, backgroundColor, calculatedWidth} = useMemo(() => {
+    const {containerPadding = 0, backgroundColor = 'transparent'} =
+      selectedSettings ?? {};
+    const {width = 100} =
+      type !== GalleryType.BLOG && selectedSettings
+        ? (selectedSettings as NonBlogSettings)
+        : {};
+
+    const {
+      columns = 4,
+      gap = 10,
+      padding = 0,
+    } = type === GalleryType.THUMBNAILS && selectedSettings
+      ? (selectedSettings as NonBlogSettings)
+      : {};
+
+    const calculatedWidth =
+      type === GalleryType.THUMBNAILS
+        ? `${columns * width + (columns - 1) * gap + columns * 2 * padding}px`
+        : `${width}%`;
+
+    return {
+      containerPadding,
+      backgroundColor,
+      calculatedWidth,
+    };
+  }, [selectedSettings, type]);
+
   return (
-    <>
-      {showSearchField && renderFilterProvider()}
-      {!!images?.length && renderGallery()}
-      {renderLoader()}
-      {paginationType !== PaginationType.NONE && renderPaginationProvider()}
-      {showLightbox && renderLightbox()}
-    </>
+    <Suspense>
+      <div
+        style={{
+          margin: 'auto',
+          boxSizing: 'border-box',
+          padding: containerPadding + 'px',
+          backgroundColor,
+          width: calculatedWidth,
+          maxWidth: '100%',
+        }}
+      >
+        {showSearchField && renderFilterProvider()}
+        {!!images?.length && renderGallery()}
+        {renderLoader()}
+        {paginationType !== PaginationType.NONE && renderPaginationProvider()}
+        {showLightbox && renderLightbox()}
+      </div>
+    </Suspense>
   );
 };
 
