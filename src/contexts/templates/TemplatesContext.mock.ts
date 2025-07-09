@@ -14,6 +14,7 @@ import {
   PaginationType,
   ThumbnailTitlePosition,
   TitleSource,
+  DescriptionSource,
   TitleAlignment,
   TitlePosition,
   TitleVisibility,
@@ -105,6 +106,8 @@ const lightboxMockSettings: ILightboxSettings = {
   showDescription: true,
   descriptionFontSize: 16,
   descriptionMaxRowsCount: 5,
+  titleSource: TitleSource.TITLE,
+  descriptionSource: DescriptionSource.DESCRIPTION,
 };
 
 const slideshowMockSettings: ISlideshowSettings = {
@@ -135,6 +138,8 @@ const slideshowMockSettings: ISlideshowSettings = {
   descriptionFontSize: 16,
   descriptionMaxRowsCount: 5,
   isFullCoverImage: false,
+  titleSource: TitleSource.TITLE,
+  descriptionSource: DescriptionSource.DESCRIPTION,
 };
 
 const masonryMockSettings: IMasonrySettings = {

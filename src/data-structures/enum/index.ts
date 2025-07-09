@@ -15,4 +15,5 @@ export * from './TextsAlignments';
 export * from './TitleAlignment';
 export * from './TitlePosition';
 export * from './TitleSource';
+export * from './DescriptionSource';
 export * from './TitleVisibility';

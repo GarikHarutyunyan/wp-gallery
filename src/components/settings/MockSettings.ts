@@ -26,6 +26,7 @@ import {
   TitleSource,
   TitlePosition,
   TitleVisibility,
+  DescriptionSource,
 } from 'data-structures';
 
 const thumbnailMockSettings: IThumbnailSettings = {
@@ -136,6 +137,8 @@ const slideshowMockSettings: ISlideshowSettings = {
   descriptionFontSize: 16,
   descriptionMaxRowsCount: 5,
   isFullCoverImage: false,
+  titleSource: TitleSource.TITLE,
+  descriptionSource: DescriptionSource.DESCRIPTION,
 };
 
 const generalMockSettings: IGeneralSettings = {
@@ -183,6 +186,8 @@ const lightboxMockSettings: ILightboxSettings = {
   showDescription: true,
   descriptionFontSize: 16,
   descriptionMaxRowsCount: 5,
+  titleSource: TitleSource.TITLE,
+  descriptionSource: DescriptionSource.DESCRIPTION,
 };
 
 const cubeMockSettings: ICubeSettings = {
@@ -229,6 +234,8 @@ const blogMockSettings: IBlogSettings = {
   hoverEffect: HoverEffect.NONE,
   textVerticalAlignment: TextsAlignment.CENTER,
   textFontFamily: 'Roboto',
+  titleSource: TitleSource.TITLE,
+  descriptionSource: DescriptionSource.DESCRIPTION,
   titleColor: 'black',
   descriptionColor: 'black',
   titleFontSize: 20,

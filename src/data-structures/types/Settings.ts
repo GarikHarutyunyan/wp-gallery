@@ -14,6 +14,7 @@ import {
   ThumbnailTitlePosition,
   TitleAlignment,
   TitleSource,
+  DescriptionSource,
   TitlePosition,
   TitleVisibility,
 } from 'data-structures';
@@ -93,6 +94,8 @@ export interface ISlideshowSettings {
   descriptionFontSize: number;
   descriptionMaxRowsCount: number | undefined;
   isFullCoverImage?: boolean;
+  titleSource: TitleSource;
+  descriptionSource: DescriptionSource.DESCRIPTION,
 }
 
 export interface ILightboxSettings extends ISlideshowSettings {
@@ -162,6 +165,8 @@ export interface IBlogSettings {
   titleAlignment: TitleAlignment;
   titleColor: string;
   descriptionColor: string;
+  titleSource: TitleSource;
+  descriptionSource: DescriptionSource;
   titleFontSize: number;
   descriptionFontSize: number;
   buttonText: string;

@@ -12,6 +12,8 @@ import {
   SizeTypeWidthOptions,
   TextsAlignmentOptions,
   TitleAlignmentOptions,
+  TitleSourceOptions,
+  DescriptionSourceOptions,
 } from 'data-structures';
 
 import React, {ReactNode} from 'react';
@@ -45,6 +47,8 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
     textFontFamily,
     titleColor,
     descriptionColor,
+    titleSource,
+    descriptionSource,
     titleFontSize,
     descriptionFontSize,
     imageHeightType,
@@ -156,8 +160,25 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                     onChange={onInputValueChange}
                   />
                 </Filter>
+              </Grid>
+              <Grid
+                  sx={{marginLeft: 0, paddingTop: 2}}
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+              >
                 {showTitle && (
                   <>
+                    <Filter isLoading={isLoading}>
+                      <SelectControl
+                          id={'titleSource'}
+                          name={'Title source'}
+                          value={titleSource}
+                          options={TitleSourceOptions}
+                          onChange={onInputValueChange}
+                      />
+                    </Filter>
                     <Filter isLoading={isLoading}>
                       <NumberControl
                         id={'titleFontSize'}
@@ -216,8 +237,25 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                     onChange={onInputValueChange}
                   />
                 </Filter>
+              </Grid>
+              <Grid
+                  sx={{marginLeft: 0, paddingTop: 2}}
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+              >
                 {showDescription && (
                   <>
+                    <Filter isLoading={isLoading}>
+                      <SelectControl
+                          id={'descriptionSource'}
+                          name={'Description source'}
+                          value={descriptionSource}
+                          options={DescriptionSourceOptions}
+                          onChange={onInputValueChange}
+                      />
+                    </Filter>
                     <Filter isLoading={isLoading}>
                       <NumberControl
                         id={'descriptionFontSize'}
