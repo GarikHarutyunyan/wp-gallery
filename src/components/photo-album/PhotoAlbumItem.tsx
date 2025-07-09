@@ -1,5 +1,7 @@
-import {ImageListItemBar} from '@mui/material';
+import {Box, ImageListItemBar} from '@mui/material';
 import clsx from 'clsx';
+import {DuotoneFilter} from 'components/image-editor-popover/DuotoneFilter';
+import ImageEditorPopover from 'components/image-editor-popover/ImageEditorPopover';
 import ReImage from 'core-components/re-image/ReImage';
 import {
   IImageDTO,
@@ -8,7 +10,8 @@ import {
   TitlePosition,
   TitleVisibility,
 } from 'data-structures';
-import React, {CSSProperties, ReactNode, useRef} from 'react';
+import React, {CSSProperties, ReactNode, useRef, useState} from 'react';
+import Cropper from 'react-easy-crop';
 import {createIcon} from 'yet-another-react-lightbox';
 import './photo-album.css';
 
@@ -31,6 +34,8 @@ interface IPhotoAlbumItemProps extends React.PropsWithChildren {
   onClick?: () => void;
   settings: IMasonrySettings;
   style: CSSProperties;
+  editableImage: IImageDTO | null;
+  setEditableImage: (image: IImageDTO | null) => void;
 }
 
 const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
@@ -41,6 +46,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
   onClick,
   settings,
   style,
+  setEditableImage,
+  editableImage,
   children,
 }) => {
   const {
@@ -58,6 +65,41 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
   const imageBorderRadius =
     padding < borderRadius / 2 ? borderRadius - padding : borderRadius / 2;
 
+  const [crop, setCrop] = useState<{x: number; y: number}>({
+    x: 0,
+    y: 0,
+  });
+  const [zoom, setZoom] = useState<number>(0);
+  const [duotoneShadowColor, setDuotoneShadowColor] =
+    useState<string>('#000000');
+  const [duotoneHighlightColor, setDuotoneHighlightColor] =
+    useState<string>('#ffffff');
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [isCropping, setIsCropping] = useState<boolean>(false);
+  const [cropedArea, setCropedArea] = useState<any>(null);
+  const [cropTransform, setCropTransform] = useState<string>('');
+  const [aspect, setAspect] = useState<number>(4 / 3);
+  const [rotation, setRotation] = useState<number>(0);
+  // ✅  edit click handler
+  const handleEditClick = (
+    image: any,
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget as HTMLElement);
+    setEditableImage(image);
+  };
+
+  const onCropChange = (newCrop: any) => {
+    if (!image) return;
+
+    setCrop(newCrop);
+  };
+
+  const onZoomChange = (newZoom: any) => {
+    if (!image) return;
+    setZoom(newZoom);
+  };
   const renderTitle = (): ReactNode => {
     return image ? (
       <div
@@ -100,51 +142,122 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
   };
 
   const wrapperRef = useRef(null);
+  const onCropComplete = (croppedArea: any) => {
+    setCropedArea(croppedArea);
+  };
 
   return (
-    <div
-      style={{
-        background: paddingColor,
-        borderRadius: `${borderRadius}px`,
-        ...style,
-      }}
-      onClick={onClick}
-    >
+    <>
       <div
-        ref={wrapperRef}
-        className={clsx(
-          'photo-album-item__image-wrapper',
-          'photo-album-item__image-wrapper_overflow',
-          'photo-album-item__image-wrapper_' + hoverEffect,
-          {'photo-album-item__image-wrapper_clickable': !!onClick}
-        )}
         style={{
-          borderRadius: `${imageBorderRadius}px`,
+          background: paddingColor,
+          borderRadius: `${borderRadius}px`,
+          ...style,
         }}
+        onClick={onClick}
       >
-        <ReImage
-          wrapperRef={wrapperRef}
-          {...imageProps}
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'block',
+        <div
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent gallery click
+            handleEditClick?.(image, e);
           }}
-        />
-        {image.type === ImageType.VIDEO && (
-          <VideoThumbnailIcon
-            style={{
-              height: getThumbnailIconSize(width, height),
-              width: getThumbnailIconSize(width, height),
-            }}
-            className={clsx('photo-album-item__video-icon', {
-              'photo-album-item__image-wrapper_clickable': !!onClick,
-            })}
+          ref={wrapperRef}
+          className={clsx(
+            'photo-album-item__image-wrapper',
+            'photo-album-item__image-wrapper_overflow',
+            'photo-album-item__image-wrapper_' + hoverEffect,
+            {'photo-album-item__image-wrapper_clickable': !!onClick}
+          )}
+          style={{
+            borderRadius: `${imageBorderRadius}px`,
+          }}
+        >
+          {' '}
+          <DuotoneFilter
+            key={image!.id}
+            id={`duotone-${image!.id}`}
+            shadowColor={duotoneShadowColor}
+            highlightColor={duotoneHighlightColor}
           />
-        )}
-        {renderTitle()}
+          <ReImage
+            wrapperRef={wrapperRef}
+            {...imageProps}
+            style={{
+              width: '100%',
+              height: '100%',
+              transform: cropTransform,
+              transformOrigin: 'center center',
+              filter: `url(#duotone-${image.id})`,
+              display: 'block',
+            }}
+          />
+          {isCropping && editableImage!.id === image.id ? (
+            <Box
+              position="absolute"
+              top={0}
+              left={0}
+              width="100%"
+              height="100%"
+              zIndex={10}
+              bgcolor="rgba(0, 0, 0, 0.5)"
+              style={{filter: `url(#duotone-${image.id})`}}
+            >
+              <Cropper
+                image={image.original.url}
+                crop={crop}
+                zoom={zoom}
+                aspect={aspect}
+                rotation={rotation}
+                onCropChange={onCropChange}
+                onZoomChange={onZoomChange}
+                onCropComplete={onCropComplete}
+                cropShape="rect"
+                showGrid={true}
+                objectFit="contain"
+              />
+            </Box>
+          ) : null}
+          {image.type === ImageType.VIDEO && (
+            <VideoThumbnailIcon
+              style={{
+                height: getThumbnailIconSize(width, height),
+                width: getThumbnailIconSize(width, height),
+              }}
+              className={clsx('photo-album-item__video-icon', {
+                'photo-album-item__image-wrapper_clickable': !!onClick,
+              })}
+            />
+          )}
+          {renderTitle()}
+        </div>
       </div>
-    </div>
+
+      {editableImage?.id === image.id ? (
+        <ImageEditorPopover
+          anchorEl={anchorEl}
+          open={!!anchorEl}
+          image={image}
+          setIsCropping={setIsCropping}
+          isCropping={isCropping}
+          onClose={() => {
+            setAnchorEl(null);
+            setIsCropping(false);
+          }}
+          cropedArea={cropedArea}
+          setCropTransform={setCropTransform}
+          onZoomChange={onZoomChange}
+          zoom={zoom}
+          setAspect={setAspect}
+          aspect={aspect}
+          setRotation={setRotation}
+          rotation={rotation}
+          setDuotoneShadowColor={setDuotoneShadowColor}
+          duotoneShadowColor={duotoneShadowColor}
+          setDuotoneHighlightColor={setDuotoneHighlightColor}
+          duotoneHighlightColor={duotoneHighlightColor}
+        />
+      ) : null}
+    </>
   );
 };
 

@@ -36,7 +36,7 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
 }) => {
   const [galleryWidth, setGalleryWidth] = useState(initialContainerWidth);
   const initialColumnsCount = columns || 4;
-
+  const [editableImage, setEditableImage] = useState<IImageDTO | null>(null);
   const photos = useMemo(() => {
     return images!.map((image: IImageDTO) => {
       const isVideo: boolean = image.type === ImageType.VIDEO;
@@ -104,11 +104,13 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
           style={wrapperStyle}
           key={image.original.url}
           onClick={onImageClick(index)}
+          setEditableImage={setEditableImage}
+          editableImage={editableImage}
           settings={settings}
         />
       ) : null;
     },
-    [images, onImageClick, settings]
+    [images, onImageClick, settings, editableImage, setEditableImage]
   );
 
   const getColumnsCount = useCallback(
