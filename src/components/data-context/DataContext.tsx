@@ -155,6 +155,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         title: data.title,
         description: data.description,
         caption: data.caption,
+        price: data.price,
         alt: data.alt,
         action_url: data.action_url,
       }));
@@ -181,6 +182,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       thumbnail: data.thumbnail,
       title: data.title,
       caption: data.caption,
+      price: data.price,
       alt: data.alt,
       description: data.description,
       action_url: data.action_url,
@@ -238,6 +240,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         thumbnail: data.thumbnail,
         title: data.title,
         caption: data.caption,
+        price: data.price,
         alt: data.alt,
         description: data.description,
         action_url: data.action_url,

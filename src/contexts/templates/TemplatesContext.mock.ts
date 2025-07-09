@@ -13,6 +13,8 @@ import {
   PaginationButtonShape,
   PaginationType,
   ThumbnailTitlePosition,
+  TitleSource,
+  DescriptionSource,
   TitleAlignment,
   TitlePosition,
   TitleVisibility,
@@ -29,6 +31,7 @@ const thumbnailMockSettings: IThumbnailSettings = {
   paddingColor: 'Skyblue',
   borderRadius: 5,
   titlePosition: ThumbnailTitlePosition.BOTTOM,
+  titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
   titleVisibility: TitleVisibility.NONE,
   titleFontFamily: 'Roboto',
@@ -48,6 +51,7 @@ const thumbnailMockSettings2: IThumbnailSettings = {
   paddingColor: 'Skyblue',
   borderRadius: 5,
   titlePosition: ThumbnailTitlePosition.BOTTOM,
+  titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
   titleVisibility: TitleVisibility.NONE,
   titleFontFamily: 'Roboto',
@@ -102,6 +106,8 @@ const lightboxMockSettings: ILightboxSettings = {
   showDescription: true,
   descriptionFontSize: 16,
   descriptionMaxRowsCount: 5,
+  titleSource: TitleSource.TITLE,
+  descriptionSource: DescriptionSource.DESCRIPTION,
 };
 
 const slideshowMockSettings: ISlideshowSettings = {
@@ -132,6 +138,8 @@ const slideshowMockSettings: ISlideshowSettings = {
   descriptionFontSize: 16,
   descriptionMaxRowsCount: 5,
   isFullCoverImage: false,
+  titleSource: TitleSource.TITLE,
+  descriptionSource: DescriptionSource.DESCRIPTION,
 };
 
 const masonryMockSettings: IMasonrySettings = {
@@ -144,6 +152,7 @@ const masonryMockSettings: IMasonrySettings = {
   columns: 5,
   borderRadius: 5,
   titlePosition: TitlePosition.BOTTOM,
+  titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
   titleVisibility: TitleVisibility.NONE,
   titleFontFamily: 'Roboto',

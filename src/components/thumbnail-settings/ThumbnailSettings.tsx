@@ -7,6 +7,7 @@ import {Section} from 'core-components/section';
 import {
   HoverEffectOptions,
   IThumbnailSettings,
+  TitleSourceOptions,
   ThumbnailTitlePosition,
   ThumbnailTitlePositionOptions,
   TitleAlignmentOptions,
@@ -42,6 +43,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
     padding,
     paddingColor,
     borderRadius,
+    titleSource,
     titlePosition,
     titleAlignment,
     titleVisibility,
@@ -218,6 +220,15 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
   const renderTitleSettings = (): ReactNode => {
     return (
       <>
+        <Filter isLoading={isLoading}>
+          <SelectControl
+              id={'titleSource'}
+              name={'Title source'}
+              value={titleSource}
+              options={TitleSourceOptions}
+              onChange={onInputValueChange}
+          />
+        </Filter>
         <Filter isLoading={isLoading}>
           <SelectControl
             id={'titlePosition'}

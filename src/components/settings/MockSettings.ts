@@ -23,8 +23,10 @@ import {
   TextsAlignment,
   ThumbnailTitlePosition,
   TitleAlignment,
+  TitleSource,
   TitlePosition,
   TitleVisibility,
+  DescriptionSource,
 } from 'data-structures';
 
 const thumbnailMockSettings: IThumbnailSettings = {
@@ -38,6 +40,7 @@ const thumbnailMockSettings: IThumbnailSettings = {
   paddingColor: 'Skyblue',
   borderRadius: 5,
   titlePosition: ThumbnailTitlePosition.BOTTOM,
+  titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
   titleVisibility: TitleVisibility.NONE,
   titleFontFamily: 'Roboto',
@@ -57,6 +60,7 @@ const mosaicMockSettings: IMosaicSettings = {
   columns: 5,
   borderRadius: 5,
   titlePosition: TitlePosition.BOTTOM,
+  titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
   titleVisibility: TitleVisibility.NONE,
   titleFontFamily: 'Roboto',
@@ -75,6 +79,7 @@ const justifiedMockSettings: IJustifiedSettings = {
   rowHeight: 250,
   borderRadius: 5,
   titlePosition: TitlePosition.BOTTOM,
+  titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
   titleVisibility: TitleVisibility.NONE,
   titleFontFamily: 'Roboto',
@@ -94,6 +99,7 @@ const masonryMockSettings: IMasonrySettings = {
   columns: 5,
   borderRadius: 5,
   titlePosition: TitlePosition.BOTTOM,
+  titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
   titleVisibility: TitleVisibility.NONE,
   titleFontFamily: 'Roboto',
@@ -131,6 +137,8 @@ const slideshowMockSettings: ISlideshowSettings = {
   descriptionFontSize: 16,
   descriptionMaxRowsCount: 5,
   isFullCoverImage: false,
+  titleSource: TitleSource.TITLE,
+  descriptionSource: DescriptionSource.DESCRIPTION,
 };
 
 const generalMockSettings: IGeneralSettings = {
@@ -178,6 +186,8 @@ const lightboxMockSettings: ILightboxSettings = {
   showDescription: true,
   descriptionFontSize: 16,
   descriptionMaxRowsCount: 5,
+  titleSource: TitleSource.TITLE,
+  descriptionSource: DescriptionSource.DESCRIPTION,
 };
 
 const cubeMockSettings: ICubeSettings = {
@@ -224,6 +234,8 @@ const blogMockSettings: IBlogSettings = {
   hoverEffect: HoverEffect.NONE,
   textVerticalAlignment: TextsAlignment.CENTER,
   textFontFamily: 'Roboto',
+  titleSource: TitleSource.TITLE,
+  descriptionSource: DescriptionSource.DESCRIPTION,
   titleColor: 'black',
   descriptionColor: 'black',
   titleFontSize: 20,

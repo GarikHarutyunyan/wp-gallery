@@ -58,6 +58,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     descriptionFontSize,
     descriptionMaxRowsCount,
     isFullCoverImage,
+    titleSource,
+    descriptionSource,
   } = settings as ISlideshowSettings;
   const wrapper = wrapperRef.current;
   const [innerWidth, setInnerWidth] = useState<number>(
@@ -117,7 +119,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     return images!.map((image: IImageDTO) => ({
       description: (
         <>
-          {showTitle && image.title && (
+          {showTitle && image[titleSource] && (
             <p
               className={'reacg-slideshow-texts__title'}
               style={{
@@ -130,15 +132,15 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
                 textAlign: titleAlignment,
               }}
             >
-              {image.title}
-            {image.caption && (
+              {image[titleSource]}
+            {image.price && (
               <span className={'reacg-slideshow__caption'}>
-                &nbsp;{image.caption}
+                &nbsp;{image.price}
               </span>
             )}
             </p>
           )}
-          {showDescription && image.description && (
+          {showDescription && image[descriptionSource] && (
             <p
               className={'reacg-slideshow-texts__description'}
               style={{
@@ -154,7 +156,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
                 display: '-webkit-box',
               }}
             >
-              {image.description}
+              {image[descriptionSource]}
             </p>
           )}
         </>
@@ -203,6 +205,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     showDescription,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    titleSource,
+    descriptionSource,
   ]);
 
   const slideMargins = useMemo(() => {

@@ -13,6 +13,7 @@ export interface IImageDTO {
   title: string;
   type: ImageType;
   caption: string;
+  price: string;
   alt: string;
   description: string;
   width: number;

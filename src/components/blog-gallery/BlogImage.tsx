@@ -1,5 +1,6 @@
 import ReImage from 'core-components/re-image/ReImage';
 import React from 'react';
+import {ImageType} from "data-structures";
 
 const BlogImage = ({
   image,
@@ -32,7 +33,7 @@ const BlogImage = ({
         height: `${imageHeight}${imageHeightType}`,
       }}
     >
-      {image.type === 'video' ? (
+      {image.type === ImageType.VIDEO ? (
         <video autoPlay muted loop playsInline>
           <source src={image.original.url} type="video/mp4" />
         </video>

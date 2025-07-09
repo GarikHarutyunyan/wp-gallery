@@ -9,6 +9,7 @@ import {
   IJustifiedSettings,
   TitleAlignmentOptions,
   TitlePositionOptions,
+  TitleSourceOptions,
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
@@ -39,6 +40,7 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
     paddingColor,
     rowHeight,
     borderRadius,
+    titleSource,
     titlePosition,
     titleAlignment,
     titleVisibility,
@@ -180,6 +182,15 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
   const renderTitleSettings = (): ReactNode => {
     return (
       <>
+        <Filter isLoading={isLoading}>
+          <SelectControl
+              id={'titleSource'}
+              name={'Title source'}
+              value={titleSource}
+              options={TitleSourceOptions}
+              onChange={onInputValueChange}
+          />
+        </Filter>
         <Filter isLoading={isLoading}>
           <SelectControl
             id={'titlePosition'}
