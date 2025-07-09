@@ -8,6 +8,7 @@ import {
   HoverEffectOptions,
   IMasonrySettings,
   TitleAlignmentOptions,
+  TitleSourceOptions,
   TitlePositionOptions,
   TitleVisibility,
   TitleVisibilityOptions,
@@ -39,6 +40,7 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
     paddingColor,
     columns,
     borderRadius,
+    titleSource,
     titlePosition,
     titleAlignment,
     titleVisibility,
@@ -178,6 +180,15 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
   const renderTitleSettings = (): ReactNode => {
     return (
       <>
+        <Filter isLoading={isLoading}>
+          <SelectControl
+              id={'titleSource'}
+              name={'Title source'}
+              value={titleSource}
+              options={TitleSourceOptions}
+              onChange={onInputValueChange}
+          />
+        </Filter>
         <Filter isLoading={isLoading}>
           <SelectControl
             id={'titlePosition'}

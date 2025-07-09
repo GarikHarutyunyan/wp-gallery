@@ -9,6 +9,7 @@ import {
   IMosaicSettings,
   TitleAlignmentOptions,
   TitlePositionOptions,
+  TitleSourceOptions,
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
@@ -38,6 +39,7 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
     paddingColor,
     columns,
     borderRadius,
+    titleSource,
     titlePosition,
     titleAlignment,
     titleVisibility,
@@ -177,6 +179,15 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
   const renderTitleSettings = (): ReactNode => {
     return (
       <>
+        <Filter isLoading={isLoading}>
+          <SelectControl
+              id={'titleSource'}
+              name={'Title source'}
+              value={titleSource}
+              options={TitleSourceOptions}
+              onChange={onInputValueChange}
+          />
+        </Filter>
         <Filter isLoading={isLoading}>
           <SelectControl
             id={'titlePosition'}

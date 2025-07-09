@@ -240,9 +240,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               }}
             >
               {image.title}
-              {image.caption && (
+              {image.price && (
                 <span className={'reacg-lightbox__caption'}>
-                  &nbsp;{image.caption}
+                  &nbsp;{image.price}
                 </span>
               )}
             </p>

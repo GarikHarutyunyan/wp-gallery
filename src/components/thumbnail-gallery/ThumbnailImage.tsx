@@ -8,6 +8,7 @@ import {
   ThumbnailTitlePosition,
   TitleAlignment,
   TitleVisibility,
+  TitleSource,
 } from 'data-structures';
 import {useMemo, useRef} from 'react';
 import {createIcon} from 'yet-another-react-lightbox';
@@ -23,6 +24,7 @@ interface IThumbnailImageProps {
   height: number;
   onClick?: () => void;
   getImageSource: (image: IImageDTO) => string;
+  titleSource: TitleSource;
   titlePosition: ThumbnailTitlePosition;
   titleVisibility: TitleVisibility;
   titleAlignment?: TitleAlignment;
@@ -41,6 +43,7 @@ const ThumbnailImage = ({
   height,
   onClick,
   getImageSource,
+  titleSource,
   titlePosition,
   titleVisibility,
   titleAlignment,
@@ -59,6 +62,8 @@ const ThumbnailImage = ({
   }, [width, height]);
 
   const renderTitle = (image: IImageDTO) => {
+    let title = image[titleSource];
+
     let paddingTitle = '0';
 
     if (titlePosition === ThumbnailTitlePosition.BELOW) {
@@ -95,10 +100,10 @@ const ThumbnailImage = ({
             'thumbnail-gallery__title-content_center':
               titlePosition === ThumbnailTitlePosition.CENTER,
           })}
-          title={<span>{image.title || <br />}</span>}
+          title={<span>{title || <br />}</span>}
           subtitle={
-            image.caption && (
-              <span className="thumbnail-image__caption">{image.caption}</span>
+            image.price && (
+              <span className="thumbnail-image__caption">{image.price}</span>
             )
           }
           position={

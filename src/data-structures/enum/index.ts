@@ -14,4 +14,5 @@ export * from './SizeTypeWidth';
 export * from './TextsAlignments';
 export * from './TitleAlignment';
 export * from './TitlePosition';
+export * from './TitleSource';
 export * from './TitleVisibility';

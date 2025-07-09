@@ -129,7 +129,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         textAlign: titleAlignment,
                         margin: 0,
                         padding:
-                          showButton && !image.caption && (!showDescription || !image.description)
+                          showButton && !image.price && (!showDescription || !image.description)
                             ? '0px 0px 15px'
                             : 0,
                       }}
@@ -137,7 +137,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                       {image.title}
                     </h1>
                   )}
-                  {showTitle && image.caption && (
+                  {showTitle && image.price && (
                     <p
                       className="blog-gallery__text-container-content-caption"
                       style={{
@@ -151,7 +151,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                                 : 0,
                       }}
                     >
-                      {image.caption}
+                      {image.price}
                     </p>
                   )}
                   {showDescription && image.description && (

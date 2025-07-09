@@ -13,6 +13,7 @@ import {
   TextsAlignment,
   ThumbnailTitlePosition,
   TitleAlignment,
+  TitleSource,
   TitlePosition,
   TitleVisibility,
 } from 'data-structures';
@@ -27,6 +28,7 @@ export interface IThumbnailSettings {
   padding: number;
   paddingColor: string;
   borderRadius: number;
+  titleSource: TitleSource;
   titlePosition: ThumbnailTitlePosition;
   titleAlignment: TitleAlignment;
   titleVisibility: TitleVisibility;
@@ -46,6 +48,7 @@ export interface IMasonrySettings {
   paddingColor: string;
   columns?: number | undefined;
   borderRadius: number;
+  titleSource: TitleSource;
   titlePosition: TitlePosition;
   titleAlignment: TitleAlignment;
   titleVisibility: TitleVisibility;
