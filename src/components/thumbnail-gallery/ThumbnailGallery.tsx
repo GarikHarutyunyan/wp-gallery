@@ -31,6 +31,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     padding,
     paddingColor,
     borderRadius,
+    titleSource,
     titlePosition,
     titleAlignment,
     titleVisibility,
@@ -173,6 +174,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
               height={getHeight}
               onClick={() => onClick?.(index)}
               getImageSource={getImageSource}
+              titleSource={titleSource}
               titlePosition={titlePosition}
               titleAlignment={titleAlignment}
               titleVisibility={titleVisibility}

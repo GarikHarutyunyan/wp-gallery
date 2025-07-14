@@ -4,6 +4,7 @@ import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {
+  DescriptionSourceOptions,
   ILightboxSettings,
   LightboxImageAnimationOptions,
   LightboxTextPosition,
@@ -11,6 +12,7 @@ import {
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
   TitleAlignmentOptions,
+  TitleSourceOptions,
 } from 'data-structures';
 import React, {ReactNode} from 'react';
 import {
@@ -59,9 +61,11 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
     textFontFamily,
     textColor,
     showTitle,
+    titleSource,
     titleFontSize,
     titleAlignment,
     showDescription,
+    descriptionSource,
     descriptionFontSize,
     descriptionMaxRowsCount,
   } = value as ILightboxSettings;
@@ -267,6 +271,15 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 {showTitle && (
                   <>
                     <Filter isLoading={isLoading}>
+                      <SelectControl
+                          id={'titleSource'}
+                          name={'Title source'}
+                          value={titleSource}
+                          options={TitleSourceOptions}
+                          onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
                       <NumberControl
                         id={'titleFontSize'}
                         name={'Title font size'}
@@ -309,6 +322,15 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 </Filter>
                 {showDescription && (
                   <>
+                    <Filter isLoading={isLoading}>
+                      <SelectControl
+                          id={'descriptionSource'}
+                          name={'Description source'}
+                          value={descriptionSource}
+                          options={DescriptionSourceOptions}
+                          onChange={onInputValueChange}
+                      />
+                    </Filter>
                     <Filter isLoading={isLoading}>
                       <NumberControl
                         id={'descriptionFontSize'}

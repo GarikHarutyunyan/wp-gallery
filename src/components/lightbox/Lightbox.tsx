@@ -127,6 +127,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     showDescription,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    titleSource,
+    descriptionSource,
   } = settings as ILightboxSettings;
   const lightboxId: string = useId();
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
@@ -226,7 +228,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     return images!.map((image: IImageDTO) => ({
       description: (
         <>
-          {showTitle && image.title && (
+          {showTitle && image[titleSource] && (
             <p
               className={'reacg-lightbox-texts__title'}
               style={{
@@ -239,15 +241,15 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
                 textAlign: titleAlignment,
               }}
             >
-              {image.title}
-              {image.caption && (
+              {image[titleSource]}
+              {image.price && (
                 <span className={'reacg-lightbox__caption'}>
-                  &nbsp;{image.caption}
+                  &nbsp;{image.price}
                 </span>
               )}
             </p>
           )}
-          {showDescription && image.description && (
+          {showDescription && image[descriptionSource] && (
             <p
               className={'reacg-lightbox-texts__description'}
               style={{
@@ -263,7 +265,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
                 display: '-webkit-box',
               }}
             >
-              {image.description}
+              {image[descriptionSource]}
             </p>
           )}
         </>
@@ -312,6 +314,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     showDescription,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    titleSource,
+    descriptionSource,
   ]);
 
   const slideMargins = useMemo(() => {

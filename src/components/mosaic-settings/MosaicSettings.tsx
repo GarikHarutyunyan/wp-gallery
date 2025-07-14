@@ -9,6 +9,7 @@ import {
   IMosaicSettings,
   TitleAlignmentOptions,
   TitlePositionOptions,
+  TitleSourceOptions,
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
@@ -38,6 +39,7 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
     paddingColor,
     columns,
     borderRadius,
+    titleSource,
     titlePosition,
     titleAlignment,
     titleVisibility,
@@ -157,16 +159,24 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
                 onChange={onInputValueChange}
               />
             </Filter>
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'titleVisibility'}
-                name={'Title visibility'}
-                value={titleVisibility}
-                options={TitleVisibilityOptions}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            {titleVisibility !== TitleVisibility.NONE && renderTitleSettings()}
+            <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+            >
+              <Filter isLoading={isLoading}>
+                <SelectControl
+                  id={'titleVisibility'}
+                  name={'Title visibility'}
+                  value={titleVisibility}
+                  options={TitleVisibilityOptions}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              {titleVisibility !== TitleVisibility.NONE && renderTitleSettings()}
+            </Grid>
           </Grid>
         }
         defaultExpanded={false}
@@ -177,6 +187,15 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
   const renderTitleSettings = (): ReactNode => {
     return (
       <>
+        <Filter isLoading={isLoading}>
+          <SelectControl
+              id={'titleSource'}
+              name={'Title source'}
+              value={titleSource}
+              options={TitleSourceOptions}
+              onChange={onInputValueChange}
+          />
+        </Filter>
         <Filter isLoading={isLoading}>
           <SelectControl
             id={'titlePosition'}

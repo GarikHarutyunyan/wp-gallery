@@ -31,6 +31,8 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     textVerticalAlignment,
     textHorizontalSpacing,
     textVerticalSpacing,
+    titleSource,
+    descriptionSource,
     titleAlignment,
     titleFontSize,
     titleColor,
@@ -88,6 +90,8 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
         className="blog-gallery"
       >
         {images!.map((image, index) => {
+          let title = image[titleSource];
+          let description = image[descriptionSource];
           return (
             <div
               key={image.original.url}
@@ -121,7 +125,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                 }}
               >
                 <div className="blog-gallery__text-container-content">
-                  {showTitle && image.title && (
+                  {showTitle && title && (
                     <h1
                       style={{
                         fontSize: titleFontSize,
@@ -129,15 +133,15 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         textAlign: titleAlignment,
                         margin: 0,
                         padding:
-                          showButton && !image.caption && (!showDescription || !image.description)
+                          showButton && !image.price && (!showDescription || !description)
                             ? '0px 0px 15px'
                             : 0,
                       }}
                     >
-                      {image.title}
+                      {title}
                     </h1>
                   )}
-                  {showTitle && image.caption && (
+                  {showTitle && image.price && (
                     <p
                       className="blog-gallery__text-container-content-caption"
                       style={{
@@ -146,15 +150,15 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         color: titleColor,
                         margin: 0,
                         padding:
-                            showButton && (!showDescription || !image.description)
+                            showButton && (!showDescription || !description)
                                 ? '0px 0px 15px'
                                 : 0,
                       }}
                     >
-                      {image.caption}
+                      {image.price}
                     </p>
                   )}
-                  {showDescription && image.description && (
+                  {showDescription && description && (
                     <p
                       className="blog-gallery__text-container-content-description"
                       style={{
@@ -163,7 +167,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         color: descriptionColor,
                       }}
                     >
-                      {image.description}
+                      {description}
                     </p>
                   )}
                   {showButton && (
