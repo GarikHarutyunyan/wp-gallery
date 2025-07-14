@@ -162,16 +162,24 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
                 onChange={onInputValueChange}
               />
             </Filter>
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'titleVisibility'}
-                name={'Title visibility'}
-                value={titleVisibility}
-                options={TitleVisibilityOptions}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            {titleVisibility !== TitleVisibility.NONE && renderTitleSettings()}
+            <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+            >
+              <Filter isLoading={isLoading}>
+                <SelectControl
+                  id={'titleVisibility'}
+                  name={'Title visibility'}
+                  value={titleVisibility}
+                  options={TitleVisibilityOptions}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              {titleVisibility !== TitleVisibility.NONE && renderTitleSettings()}
+            </Grid>
           </Grid>
         }
         defaultExpanded={false}
