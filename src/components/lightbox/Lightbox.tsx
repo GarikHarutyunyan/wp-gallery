@@ -9,6 +9,7 @@ import {
 import React, {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import Lightbox from 'yet-another-react-lightbox';
+import Captions from 'yet-another-react-lightbox/plugins/captions';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Download from 'yet-another-react-lightbox/plugins/download';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
@@ -21,7 +22,7 @@ import 'yet-another-react-lightbox/styles.css';
 import {useData} from '../data-context/useData';
 import {useSettings} from '../settings/useSettings';
 import {getSlideMargins} from './CommonFunctions/getSlideMargins';
-import {Captions} from './CustomCaptions/Captions';
+import CustomCaptions from './CustomCaptions/Captions';
 import './lightbox.css';
 
 interface ILightboxProviderProps {
@@ -157,7 +158,16 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       newPlugins.push(Thumbnails as any);
     }
     if (textPosition !== LightboxTextPosition.NONE) {
-      newPlugins.push(Captions as any);
+      if (
+        textPosition === LightboxTextPosition.BOTTOM ||
+        textPosition === LightboxTextPosition.TOP
+      ) {
+        console.log('caption');
+        newPlugins.push(Captions as any);
+      } else {
+        console.log('customcaption');
+        newPlugins.push(CustomCaptions as any);
+      }
     }
 
     return newPlugins;

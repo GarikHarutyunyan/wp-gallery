@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {getSlideMargins} from 'components/lightbox/CommonFunctions/getSlideMargins';
-import {Captions} from 'components/lightbox/CustomCaptions/Captions';
+import CustomCaptions from 'components/lightbox/CustomCaptions/Captions';
 import {useSettings} from 'components/settings';
 import {
   IImageDTO,
@@ -13,6 +13,7 @@ import {
 } from 'data-structures';
 import React, {ReactElement, useEffect, useMemo, useState} from 'react';
 import Lightbox, {SlideshowRef} from 'yet-another-react-lightbox';
+import Captions from 'yet-another-react-lightbox/plugins/captions';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Inline from 'yet-another-react-lightbox/plugins/inline';
 import YARLSlideshow from 'yet-another-react-lightbox/plugins/slideshow';
@@ -90,7 +91,16 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
       newPlugins.push(Thumbnails as any);
     }
     if (textPosition !== LightboxTextPosition.NONE) {
-      newPlugins.push(Captions as any);
+      if (
+        textPosition === LightboxTextPosition.BOTTOM ||
+        textPosition === LightboxTextPosition.TOP
+      ) {
+        console.log('caption');
+        newPlugins.push(Captions as any);
+      } else {
+        console.log('customcaption');
+        newPlugins.push(CustomCaptions as any);
+      }
     }
 
     return newPlugins;
@@ -131,11 +141,11 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
               }}
             >
               {image.title}
-            {image.caption && (
-              <span className={'reacg-slideshow__caption'}>
-                &nbsp;{image.caption}
-              </span>
-            )}
+              {image.caption && (
+                <span className={'reacg-slideshow__caption'}>
+                  &nbsp;{image.caption}
+                </span>
+              )}
             </p>
           )}
           {showDescription && image.description && (

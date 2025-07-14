@@ -7,7 +7,7 @@ import {CaptionsButton} from './CaptionsButton';
 import {CaptionsContextProvider} from './CaptionsContext';
 import {Title} from './Title';
 
-export function Captions({augment, addModule}: any) {
+export default function Captions({augment, addModule}: any) {
   augment(
     ({
       captions: captionsProps,
