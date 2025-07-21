@@ -4,6 +4,7 @@ import {useSettings} from 'components/settings';
 import {useAppInfo} from 'contexts';
 import {IImageDTO, IThumbnailSettings, ImageType} from 'data-structures';
 import React, {
+  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -139,6 +140,10 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   };
 
   const listRef = useRef<HTMLUListElement | null>(null);
+  const onImageClick = useCallback(
+      (index: number) => (onClick ? () => onClick(index) : undefined),
+      [onClick]
+  );
 
   return (
     <div
@@ -172,7 +177,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
               image={image}
               width={getWidth}
               height={getHeight}
-              onClick={() => onClick?.(index)}
+              onClick={onImageClick(index)}
               getImageSource={getImageSource}
               titleSource={titleSource}
               titlePosition={titlePosition}
