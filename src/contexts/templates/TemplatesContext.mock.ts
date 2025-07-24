@@ -81,6 +81,7 @@ const lightboxMockSettings: ILightboxSettings = {
   areControlButtonsShown: false,
   isInfinite: false,
   padding: 15,
+  canShare: false,
   canDownload: true,
   canZoom: true,
   isFullscreenAllowed: false,
