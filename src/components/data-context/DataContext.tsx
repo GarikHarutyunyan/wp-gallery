@@ -116,12 +116,12 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     itemsPerPage > 0 && onReloadData();
   }, [itemsPerPage, paginationType, orderBy, orderDirection]);
 
-  const loadAllLightboxImages = async (): Promise<void> => {
-    if (
-      (!lightboxImages || lightboxImages.length < imageCount) &&
-      images.length < imageCount
+  const loadAllLightboxImages = async (gid?: string): Promise<void> => {
+    if ( gid ||
+        ((!lightboxImages || lightboxImages.length < imageCount) &&
+      images.length < imageCount)
     ) {
-      const newLightboxImages: IImageDTO[] = await (getAllData as Function)();
+      const newLightboxImages: IImageDTO[] = await (getAllData as Function)(gid);
 
       setLightboxImages(newLightboxImages);
     } else if (images.length == imageCount) {
@@ -129,11 +129,10 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
-  const getAllData = async (): Promise<IImageDTO[]> => {
+  const getAllData = async (gid?: string): Promise<IImageDTO[]> => {
     const fetchUrl: string | undefined = baseUrl
-      ? baseUrl + 'gallery/' + galleryId + '/images'
+      ? baseUrl + 'gallery/' + (gid || galleryId) + '/images'
       : undefined;
-
     if (fetchUrl) {
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;

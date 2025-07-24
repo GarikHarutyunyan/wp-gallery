@@ -12,10 +12,12 @@ import React, {
   Suspense,
   useMemo,
   useState,
+  useEffect,
 } from 'react';
 import {useData} from './data-context/useData';
 import './gallery.css';
 import {useSettings} from './settings';
+import {useAppInfo} from "../contexts";
 
 const ThumbnailGallery = lazy(
   () => import('./thumbnail-gallery/ThumbnailGallery')
@@ -89,6 +91,18 @@ const Gallery: React.FC = () => {
   const isClickable: boolean = showLightbox || shouldOpenUrl;
 
   const [activeImageIndex, setActiveImageIndex] = useState<number>(-1);
+  const {galleryId} = useAppInfo();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const gid = params.get('gid');
+    const sid = params.get('sid');
+    const index = sid ? parseInt(sid, 10) : -1;
+
+    if (gid === galleryId && !isNaN(index) && index >= 0) {
+      openLightbox(index, gid);
+    }
+  }, []);
 
   const renderGallery = (): ReactNode => {
     const hideGallery: boolean =
@@ -177,8 +191,8 @@ const Gallery: React.FC = () => {
     }
   };
 
-  const openLightbox = async (index: number): Promise<void> => {
-    await (loadAllLightboxImages as Function)();
+  const openLightbox = async (index: number, gid?: string): Promise<void> => {
+    await (loadAllLightboxImages as Function)(gid);
     setActiveImageIndex(index);
   };
 

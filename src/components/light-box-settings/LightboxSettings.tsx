@@ -41,6 +41,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
     areControlButtonsShown,
     isInfinite,
     padding,
+    canShare,
     canDownload,
     canZoom,
     isSlideshowAllowed,
@@ -168,6 +169,14 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                     name={'Fullscreen'}
                     value={isFullscreenAllowed}
                     onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                      id={'canShare'}
+                      name={'Share'}
+                      value={canShare}
+                      onChange={onInputValueChange}
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>

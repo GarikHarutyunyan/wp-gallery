@@ -16,6 +16,7 @@ import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Video from 'yet-another-react-lightbox/plugins/video';
+import Share from 'yet-another-react-lightbox/plugins/share';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
 import {useData} from '../data-context/useData';
@@ -23,6 +24,7 @@ import {useSettings} from '../settings/useSettings';
 import {getSlideMargins} from './CommonFunctions/getSlideMargins';
 import {Captions} from './CustomCaptions/Captions';
 import './lightbox.css';
+import {useAppInfo} from "../../contexts";
 
 interface ILightboxProviderProps {
   activeIndex: number;
@@ -102,6 +104,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     areControlButtonsShown,
     isInfinite,
     padding,
+    canShare,
     canDownload,
     canZoom,
     isSlideshowAllowed,
@@ -135,6 +138,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const [index, setIndex] = useState(0);
+  const {galleryId} = useAppInfo();
 
   const minFactor = 1.45;
   const maxFactor = 1.25;
@@ -143,6 +147,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
 
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Video];
+    if (canShare) {
+      newPlugins.push(Share as any);
+    }
     if (canDownload) {
       newPlugins.push(Download as any);
     }
@@ -164,6 +171,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
 
     return newPlugins;
   }, [
+    canShare,
     canDownload,
     canZoom,
     isSlideshowAllowed,
@@ -187,6 +195,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   const handleClose = () => {
     onClose();
     togglePageScroll(false);
+    updateURL(-1);
   };
   const handleOpen = () => {
     togglePageScroll(true);
@@ -224,8 +233,27 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     };
   }, []);
 
+  const updateURL = (index: number) => {
+    window.history.replaceState({}, '', deepLink(index));
+  };
+
+  const deepLink = (index:number) => {
+    const url = new URL(window.location.href);
+    if (index >= 0) {
+      if ( galleryId ) {
+        url.searchParams.set("gid", galleryId);
+      }
+      url.searchParams.set("sid", index.toString());
+    } else {
+      url.searchParams.delete("gid");
+      url.searchParams.delete("sid");
+    }
+
+    return url.toString();
+  };
+
   const slides = useMemo(() => {
-    return images!.map((image: IImageDTO) => ({
+    return images!.map((image: IImageDTO, index: number) => ({
       description: (
         <>
           {showTitle && image[titleSource] && (
@@ -279,6 +307,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       ],
       poster: image.medium_large.url,
       src: image.original.url,
+      share: { url: deepLink(index), title: image.title, text: image.description },
       alt: image.alt,
       srcSet: [
         {
@@ -454,7 +483,10 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           slideshowStop: () => {
             if (videoAutoplay) setVideoAutoplay(false);
           },
-          view: ({index: currentIndex}) => setIndex(currentIndex),
+          view: ({index: currentIndex}) => {
+            setIndex(currentIndex);
+            updateURL(currentIndex);
+          },
           entering: handleOpen,
         }}
       />
