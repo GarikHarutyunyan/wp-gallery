@@ -48,6 +48,10 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     openInNewTab,
     descriptionMaxRowsCount,
     imagePosition,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   } = settings as IBlogSettings;
   const isMobile: boolean = containerInnerWidth <= 720;
 
@@ -90,8 +94,6 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
         className="blog-gallery"
       >
         {images!.map((image, index) => {
-          let title = image[titleSource];
-          let description = image[descriptionSource];
           return (
             <div
               key={image.original.url}
@@ -125,7 +127,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                 }}
               >
                 <div className="blog-gallery__text-container-content">
-                  {showTitle && title && (
+                  {showTitle && image[titleSource] && (
                     <h1
                       style={{
                         fontSize: titleFontSize,
@@ -133,32 +135,32 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         textAlign: titleAlignment,
                         margin: 0,
                         padding:
-                          showButton && !image.price && (!showDescription || !description)
+                          showButton && !image[captionSource] && (!showDescription || !image[descriptionSource])
                             ? '0px 0px 15px'
                             : 0,
                       }}
                     >
-                      {title}
+                      {image[titleSource]}
                     </h1>
                   )}
-                  {showTitle && image.price && (
+                  {showCaption && image[captionSource] && (
                     <p
                       className="blog-gallery__text-container-content-caption"
                       style={{
                         textAlign: titleAlignment,
-                        fontSize: titleFontSize,
-                        color: titleColor,
+                        fontSize: captionFontSize,
+                        color: captionFontColor,
                         margin: 0,
                         padding:
-                            showButton && (!showDescription || !description)
+                            showButton && (!showDescription || !image[descriptionSource])
                                 ? '0px 0px 15px'
                                 : 0,
                       }}
                     >
-                      {image.price}
+                      {image[captionSource]}
                     </p>
                   )}
-                  {showDescription && description && (
+                  {showDescription && image[descriptionSource] && (
                     <p
                       className="blog-gallery__text-container-content-description"
                       style={{
@@ -167,7 +169,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         color: descriptionColor,
                       }}
                     >
-                      {description}
+                      {image[descriptionSource]}
                     </p>
                   )}
                   {showButton && (

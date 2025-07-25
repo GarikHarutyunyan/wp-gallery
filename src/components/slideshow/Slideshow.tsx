@@ -60,6 +60,10 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     isFullCoverImage,
     titleSource,
     descriptionSource,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   } = settings as ISlideshowSettings;
   const wrapper = wrapperRef.current;
   const [innerWidth, setInnerWidth] = useState<number>(
@@ -119,7 +123,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     return images!.map((image: IImageDTO) => ({
       description: (
         <>
-          {showTitle && image[titleSource] && (
+          {((showTitle && image[titleSource]) || (showCaption && image[captionSource])) && (
             <p
               className={'reacg-slideshow-texts__title'}
               style={{
@@ -132,12 +136,20 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
                 textAlign: titleAlignment,
               }}
             >
-              {image[titleSource]}
-            {image.price && (
-              <span className={'reacg-slideshow__caption'}>
-                &nbsp;{image.price}
-              </span>
-            )}
+              {showTitle && image[titleSource]}
+              {showCaption && image[captionSource] && (
+                <span
+                    className={'reacg-slideshow__caption'}
+                    style={{
+                      color: captionFontColor,
+                      fontSize: `clamp(${
+                          captionFontSize / minFactor
+                      }rem, ${captionFontSize}vw, ${captionFontSize * maxFactor}rem)`,
+                    }}
+                >
+                  &nbsp;{image[captionSource]}
+                </span>
+              )}
             </p>
           )}
           {showDescription && image[descriptionSource] && (
@@ -207,6 +219,10 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     descriptionMaxRowsCount,
     titleSource,
     descriptionSource,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   ]);
 
   const slideMargins = useMemo(() => {
@@ -223,6 +239,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
       maxFactor,
       paddingAroundText,
       titleMargin,
+      showCaption,
     });
   }, [
     images,
@@ -233,6 +250,10 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     titleFontSize,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   ]);
 
   useEffect(() => {
@@ -302,6 +323,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
             '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
             '--yarl__slide_captions_container_background':
               (showTitle && images![index]?.title) ||
+              (showCaption && images![index]?.caption) ||
               (showDescription && images![index]?.description)
                 ? `${backgroundColor}80`
                 : `none`,

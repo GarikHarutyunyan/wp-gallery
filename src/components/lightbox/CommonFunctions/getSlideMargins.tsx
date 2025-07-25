@@ -13,6 +13,7 @@ type GetSlideMarginsParams = {
   maxFactor: number;
   paddingAroundText: number;
   titleMargin: number;
+  showCaption: boolean;
 };
 
 export const getSlideMargins = ({
@@ -28,6 +29,7 @@ export const getSlideMargins = ({
   maxFactor,
   paddingAroundText,
   titleMargin,
+  showCaption,
 }: GetSlideMarginsParams) => {
   // Calculate extra margin applied around the title
   const titleMarginPx = 2 * titleMargin;
@@ -35,7 +37,7 @@ export const getSlideMargins = ({
   // Total vertical padding (top + bottom) around text
   const verticalPaddingAroundText = 2 * paddingAroundText;
   // Determine whether we need space for the title and description
-  const titleSpace = !!(showTitle && images?.[index]?.title);
+  const titleSpace = !!((showTitle && images?.[index]?.title) || (showCaption && images?.[index]?.caption));
   const descriptionSpace = !!(showDescription && images?.[index]?.description);
 
   // Check if there is any text content to account for

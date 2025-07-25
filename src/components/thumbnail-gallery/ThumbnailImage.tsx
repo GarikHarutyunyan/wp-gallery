@@ -8,7 +8,7 @@ import {
   ThumbnailTitlePosition,
   TitleAlignment,
   TitleVisibility,
-  TitleSource,
+  TitleSource, CaptionSource,
 } from 'data-structures';
 import {useMemo, useRef} from 'react';
 import {createIcon} from 'yet-another-react-lightbox';
@@ -35,6 +35,10 @@ interface IThumbnailImageProps {
   borderRadius?: number;
   margin?: number;
   hoverEffect?: string;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionFontSize?: number | undefined;
+  captionFontColor?: string;
 }
 
 const ThumbnailImage = ({
@@ -54,6 +58,10 @@ const ThumbnailImage = ({
   borderRadius,
   margin,
   hoverEffect,
+  showCaption,
+  captionSource,
+  captionFontSize,
+  captionFontColor,
 }: IThumbnailImageProps) => {
   const videoThumbnailIconSize = useMemo<string>(() => {
     const size: number = Math.min(width, height, 55) - 10;
@@ -62,8 +70,6 @@ const ThumbnailImage = ({
   }, [width, height]);
 
   const renderTitle = (image: IImageDTO) => {
-    let title = image[titleSource];
-
     let paddingTitle = '0';
 
     if (titlePosition === ThumbnailTitlePosition.BELOW) {
@@ -84,9 +90,14 @@ const ThumbnailImage = ({
       >
         <ImageListItemBar
           sx={{
-            '& .MuiImageListItemBar-title,.MuiImageListItemBar-subtitle': {
+            '& .MuiImageListItemBar-title': {
               fontSize: `${titleFontSize}px`,
               fontFamily: titleFontFamily,
+              lineHeight: 'normal',
+            },
+            '& .MuiImageListItemBar-subtitle': {
+              fontSize: `${captionFontSize}px`,
+              color: captionFontColor,
               lineHeight: 'normal',
             },
           }}
@@ -100,10 +111,10 @@ const ThumbnailImage = ({
             'thumbnail-gallery__title-content_center':
               titlePosition === ThumbnailTitlePosition.CENTER,
           })}
-          title={<span>{title || <br />}</span>}
+          title={<span>{image[titleSource] || <br />}</span>}
           subtitle={
-            image.price && (
-              <span className="thumbnail-image__caption">{image.price}</span>
+            showCaption && image[captionSource] && (
+              <span className="thumbnail-image__caption">{image[captionSource]}</span>
             )
           }
           position={

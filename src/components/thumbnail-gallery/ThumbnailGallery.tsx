@@ -40,6 +40,10 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     titleColor,
     titleFontSize = 1,
     hoverEffect,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor
   } = settings as IThumbnailSettings;
   const elementRef = useRef();
   const [containerWidth, setContainerWidth] = useState(0);
@@ -190,6 +194,10 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
               borderRadius={borderRadius}
               margin={padding}
               hoverEffect={hoverEffect}
+              showCaption={showCaption}
+              captionSource={captionSource}
+              captionFontSize={captionFontSize}
+              captionFontColor={captionFontColor}
             />
           ))}
         </ImageList>

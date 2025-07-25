@@ -27,6 +27,7 @@ import {
   TitlePosition,
   TitleVisibility,
   DescriptionSource,
+  CaptionSource,
 } from 'data-structures';
 
 const thumbnailMockSettings: IThumbnailSettings = {
@@ -48,6 +49,10 @@ const thumbnailMockSettings: IThumbnailSettings = {
   titleFontSize: 20,
   hoverEffect: HoverEffect.NONE,
   paginationType: PaginationType.SIMPLE,
+  showCaption: false,
+  captionSource: CaptionSource.CAPTION,
+  captionFontSize: 18,
+  captionFontColor: 'Grey',
 };
 
 const mosaicMockSettings: IMosaicSettings = {
@@ -68,6 +73,10 @@ const mosaicMockSettings: IMosaicSettings = {
   titleFontSize: 20,
   hoverEffect: HoverEffect.BLUR,
   paginationType: PaginationType.SIMPLE,
+  showCaption: false,
+  captionSource: CaptionSource.CAPTION,
+  captionFontSize: 18,
+  captionFontColor: 'Grey',
 };
 const justifiedMockSettings: IJustifiedSettings = {
   width: 70,
@@ -87,6 +96,10 @@ const justifiedMockSettings: IJustifiedSettings = {
   titleFontSize: 20,
   hoverEffect: HoverEffect.BLUR,
   paginationType: PaginationType.SIMPLE,
+  showCaption: false,
+  captionSource: CaptionSource.CAPTION,
+  captionFontSize: 18,
+  captionFontColor: 'Grey',
 };
 
 const masonryMockSettings: IMasonrySettings = {
@@ -107,6 +120,10 @@ const masonryMockSettings: IMasonrySettings = {
   titleFontSize: 20,
   hoverEffect: HoverEffect.BLUR,
   paginationType: PaginationType.SIMPLE,
+  showCaption: false,
+  captionSource: CaptionSource.CAPTION,
+  captionFontSize: 18,
+  captionFontColor: 'Grey',
 };
 
 const slideshowMockSettings: ISlideshowSettings = {
@@ -139,6 +156,10 @@ const slideshowMockSettings: ISlideshowSettings = {
   isFullCoverImage: false,
   titleSource: TitleSource.TITLE,
   descriptionSource: DescriptionSource.DESCRIPTION,
+  showCaption: false,
+  captionSource: CaptionSource.CAPTION,
+  captionFontSize: 18,
+  captionFontColor: 'Grey',
 };
 
 const generalMockSettings: IGeneralSettings = {
@@ -189,6 +210,10 @@ const lightboxMockSettings: ILightboxSettings = {
   descriptionMaxRowsCount: 5,
   titleSource: TitleSource.TITLE,
   descriptionSource: DescriptionSource.DESCRIPTION,
+  showCaption: false,
+  captionSource: CaptionSource.CAPTION,
+  captionFontSize: 18,
+  captionFontColor: 'Grey',
 };
 
 const cubeMockSettings: ICubeSettings = {
@@ -258,6 +283,10 @@ const blogMockSettings: IBlogSettings = {
   titleAlignment: TitleAlignment.LEFT,
   descriptionMaxRowsCount: 5,
   imagePosition: BlogViewImagePosition.STAGGERED,
+  showCaption: false,
+  captionSource: CaptionSource.CAPTION,
+  captionFontSize: 18,
+  captionFontColor: 'Grey',
 };
 
 export {

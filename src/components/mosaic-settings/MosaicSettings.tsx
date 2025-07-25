@@ -5,6 +5,7 @@ import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {
+  CaptionSourceOptions,
   HoverEffectOptions,
   IMosaicSettings,
   TitleAlignmentOptions,
@@ -19,7 +20,7 @@ import {
   FontControl,
   NumberControl,
   SelectControl,
-  SliderControl,
+  SliderControl, SwitchControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
 
@@ -47,6 +48,10 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
     titleColor,
     titleFontSize,
     hoverEffect,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   } = value as IMosaicSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -189,15 +194,6 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
       <>
         <Filter isLoading={isLoading}>
           <SelectControl
-              id={'titleSource'}
-              name={'Title source'}
-              value={titleSource}
-              options={TitleSourceOptions}
-              onChange={onInputValueChange}
-          />
-        </Filter>
-        <Filter isLoading={isLoading}>
-          <SelectControl
             id={'titlePosition'}
             name={'Title position'}
             value={titlePosition}
@@ -222,23 +218,105 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
             onChange={onInputValueChange}
           />
         </Filter>
-        <Filter isLoading={isLoading}>
-          <ColorControl
-            id={'titleColor'}
-            name="Title color"
-            value={titleColor}
-            onChange={onInputValueChange}
-          />
-        </Filter>
-        <Filter isLoading={isLoading}>
-          <NumberControl
-            id={'titleFontSize'}
-            name={'Title font size'}
-            value={titleFontSize}
-            onChange={onInputValueChange}
-            unit={'px'}
-          />
-        </Filter>
+        <Grid
+            sx={{marginLeft: 0, paddingTop: 2}}
+            container
+            columns={24}
+            rowSpacing={2}
+            columnSpacing={4}
+        >
+          <Filter isLoading={isLoading}>
+            <SelectControl
+                id={'titleSource'}
+                name={'Title source'}
+                value={titleSource}
+                options={TitleSourceOptions}
+                onChange={onInputValueChange}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <NumberControl
+                id={'titleFontSize'}
+                name={'Title font size'}
+                value={titleFontSize}
+                onChange={onInputValueChange}
+                unit={'px'}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <ColorControl
+              id={'titleColor'}
+              name="Title color"
+              value={titleColor}
+              onChange={onInputValueChange}
+            />
+          </Filter>
+        </Grid>
+        <Grid
+            sx={{marginLeft: 0, paddingTop: 2}}
+            container
+            columns={24}
+            rowSpacing={2}
+            columnSpacing={4}
+        >
+          <Filter isLoading={isLoading}>
+            <SwitchControl
+                id={'showCaption'}
+                name={'Show caption'}
+                value={showCaption}
+                info={
+                  <p>
+                    The Caption must be set by editing each image from
+                    "Images" section.{' '}
+                    <a
+                        className="seetings__see-more-link"
+                        href="https://youtu.be/ziAG16MADbY"
+                        target="_blank"
+                    >
+                      See more
+                    </a>
+                  </p>
+                }
+                onChange={onInputValueChange}
+            />
+          </Filter>
+        </Grid>
+        {showCaption && (
+        <Grid
+            sx={{marginLeft: 0, paddingTop: 2}}
+            container
+            columns={24}
+            rowSpacing={2}
+            columnSpacing={4}
+        >
+          <Filter isLoading={isLoading}>
+            <SelectControl
+                id={'captionSource'}
+                name={'Caption source'}
+                value={captionSource}
+                options={CaptionSourceOptions}
+                onChange={onInputValueChange}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <NumberControl
+                id={'captionFontSize'}
+                name={'Caption font size'}
+                value={captionFontSize}
+                onChange={onInputValueChange}
+                unit={'px'}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <ColorControl
+                id={'captionFontColor'}
+                name="Caption color"
+                value={captionFontColor}
+                onChange={onInputValueChange}
+            />
+          </Filter>
+        </Grid>
+        )}
       </>
     );
   };

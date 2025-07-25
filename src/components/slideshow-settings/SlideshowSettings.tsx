@@ -5,6 +5,7 @@ import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {
+  CaptionSourceOptions,
   DescriptionSourceOptions,
   ISlideshowSettings,
   LightboxImageAnimation,
@@ -67,6 +68,10 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
     descriptionFontSize,
     descriptionMaxRowsCount,
     isFullCoverImage,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   } = value as ISlideshowSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -223,6 +228,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
               </Grid>
 
               {textPosition !== LightboxTextPosition.NONE && (
+              <>
                 <Grid
                   sx={{marginLeft: 0, paddingTop: 2}}
                   container
@@ -235,6 +241,19 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                       id={'showTitle'}
                       name={'Show title'}
                       value={showTitle}
+                      info={
+                        <p>
+                          The Caption must be set by editing each image from
+                          "Images" section.{' '}
+                          <a
+                              className="seetings__see-more-link"
+                              href="https://youtu.be/ziAG16MADbY"
+                              target="_blank"
+                          >
+                            See more
+                          </a>
+                        </p>
+                      }
                       onChange={onInputValueChange}
                     />
                   </Filter>
@@ -273,8 +292,67 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                     </>
                   )}
                 </Grid>
-              )}
-              {textPosition !== LightboxTextPosition.NONE && (
+                <Grid
+                    sx={{marginLeft: 0, paddingTop: 2}}
+                    container
+                    columns={24}
+                    rowSpacing={2}
+                    columnSpacing={4}
+                >
+                  <Filter isLoading={isLoading}>
+                    <SwitchControl
+                        id={'showCaption'}
+                        name={'Show caption'}
+                        value={showCaption}
+                        info={
+                          <p>
+                            The Caption must be set by editing each image from
+                            "Images" section.{' '}
+                            <a
+                                className="seetings__see-more-link"
+                                href="https://youtu.be/ziAG16MADbY"
+                                target="_blank"
+                            >
+                              See more
+                            </a>
+                          </p>
+                        }
+                        onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  {showCaption && (
+                      <>
+                        <Filter isLoading={isLoading}>
+                          <SelectControl
+                              id={'captionSource'}
+                              name={'Caption source'}
+                              value={captionSource}
+                              options={CaptionSourceOptions}
+                              onChange={onInputValueChange}
+                          />
+                        </Filter>
+                        <Filter isLoading={isLoading}>
+                          <NumberControl
+                              id={'captionFontSize'}
+                              name={'Caption font size'}
+                              value={captionFontSize}
+                              onChange={onInputValueChange}
+                              unit={'vw'}
+                              max={5}
+                              step={0.1}
+                          />
+                        </Filter>
+                        <Filter isLoading={isLoading}>
+                          <ColorControl
+                              id={'captionFontColor'}
+                              name="Caption color"
+                              value={captionFontColor}
+                              onChange={onInputValueChange}
+                          />
+                        </Filter>
+                      </>
+                  )}
+                </Grid>
                 <Grid
                   sx={{marginLeft: 0, paddingTop: 2}}
                   container
@@ -286,7 +364,19 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                     <SwitchControl
                       id={'showDescription'}
                       name={'Show description'}
-                      value={showDescription}
+                      value={showDescription}info={
+                      <p>
+                        The Caption must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                            className="seetings__see-more-link"
+                            href="https://youtu.be/ziAG16MADbY"
+                            target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
                       onChange={onInputValueChange}
                     />
                   </Filter>
@@ -325,6 +415,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                     </>
                   )}
                 </Grid>
+              </>
               )}
             </Grid>
             <ClickActionSettings isLoading={isLoading} />
