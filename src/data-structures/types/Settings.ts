@@ -18,6 +18,7 @@ import {
   TitlePosition,
   TitleVisibility,
 } from 'data-structures';
+import {CaptionSource} from "../enum/CaptionSource";
 
 export interface IThumbnailSettings {
   width?: number | undefined;
@@ -38,6 +39,10 @@ export interface IThumbnailSettings {
   titleFontSize?: number | undefined;
   hoverEffect: HoverEffect;
   paginationType: PaginationType;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
 }
 
 export interface IMasonrySettings {
@@ -58,6 +63,10 @@ export interface IMasonrySettings {
   titleFontSize?: number | undefined;
   hoverEffect: HoverEffect;
   paginationType: PaginationType;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
 }
 
 export interface IMosaicSettings extends IMasonrySettings {}
@@ -96,6 +105,10 @@ export interface ISlideshowSettings {
   isFullCoverImage?: boolean;
   titleSource: TitleSource;
   descriptionSource: DescriptionSource.DESCRIPTION,
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionFontSize: number;
+  captionFontColor: string;
 }
 
 export interface ILightboxSettings extends ISlideshowSettings {
@@ -187,6 +200,10 @@ export interface IBlogSettings {
   paginationType: PaginationType;
   descriptionMaxRowsCount: number | undefined;
   imagePosition: BlogViewImagePosition;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
 }
 
 export interface ISettingsDTO {

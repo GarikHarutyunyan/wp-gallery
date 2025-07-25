@@ -17,7 +17,7 @@ import {
   DescriptionSource,
   TitleAlignment,
   TitlePosition,
-  TitleVisibility,
+  TitleVisibility, CaptionSource,
 } from 'data-structures';
 
 const thumbnailMockSettings: IThumbnailSettings = {
@@ -39,6 +39,10 @@ const thumbnailMockSettings: IThumbnailSettings = {
   titleFontSize: 20,
   hoverEffect: HoverEffect.BLUR,
   paginationType: PaginationType.SIMPLE,
+  showCaption: false,
+  captionSource: CaptionSource.CAPTION,
+  captionFontSize: 18,
+  captionFontColor: 'Grey',
 };
 const thumbnailMockSettings2: IThumbnailSettings = {
   width: 200,
@@ -59,6 +63,10 @@ const thumbnailMockSettings2: IThumbnailSettings = {
   titleFontSize: 20,
   hoverEffect: HoverEffect.FLASH,
   paginationType: PaginationType.SIMPLE,
+  showCaption: false,
+  captionSource: CaptionSource.CAPTION,
+  captionFontSize: 18,
+  captionFontColor: 'Grey',
 };
 
 const generalMockSettings: IGeneralSettings = {
@@ -109,6 +117,10 @@ const lightboxMockSettings: ILightboxSettings = {
   descriptionMaxRowsCount: 5,
   titleSource: TitleSource.TITLE,
   descriptionSource: DescriptionSource.DESCRIPTION,
+  showCaption: false,
+  captionSource: CaptionSource.CAPTION,
+  captionFontSize: 18,
+  captionFontColor: 'Grey',
 };
 
 const slideshowMockSettings: ISlideshowSettings = {
@@ -141,6 +153,10 @@ const slideshowMockSettings: ISlideshowSettings = {
   isFullCoverImage: false,
   titleSource: TitleSource.TITLE,
   descriptionSource: DescriptionSource.DESCRIPTION,
+  showCaption: false,
+  captionSource: CaptionSource.CAPTION,
+  captionFontSize: 18,
+  captionFontColor: 'Grey',
 };
 
 const masonryMockSettings: IMasonrySettings = {
@@ -161,6 +177,10 @@ const masonryMockSettings: IMasonrySettings = {
   titleFontSize: 20,
   hoverEffect: HoverEffect.BLUR,
   paginationType: PaginationType.SIMPLE,
+  showCaption: false,
+  captionSource: CaptionSource.CAPTION,
+  captionFontSize: 18,
+  captionFontColor: 'Grey',
 };
 
 const template1 = {

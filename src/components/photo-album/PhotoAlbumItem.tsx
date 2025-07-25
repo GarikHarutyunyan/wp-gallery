@@ -55,12 +55,15 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
     titleFontFamily,
     titleFontSize,
     hoverEffect,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   } = settings;
   const imageBorderRadius =
     padding < borderRadius / 2 ? borderRadius - padding : borderRadius / 2;
 
   const renderTitle = (): ReactNode => {
-    let title = image?.[titleSource] || "";
     return image ? (
       <div
         className={clsx('photo-album-item__title', {
@@ -73,11 +76,16 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
       >
         <ImageListItemBar
           sx={{
-            '& .MuiImageListItemBar-title,.MuiImageListItemBar-subtitle': {
+            '& .MuiImageListItemBar-title': {
               fontSize: `${titleFontSize}px`,
               fontFamily: titleFontFamily,
               lineHeight: 'normal',
             },
+            '& .MuiImageListItemBar-subtitle': {
+            fontSize: `${captionFontSize}px`,
+            color: captionFontColor,
+            lineHeight: 'normal',
+          },
           }}
           style={{
             textAlign: titleAlignment,
@@ -87,10 +95,10 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             'photo-album-item__title-content_center':
               titlePosition === TitlePosition.CENTER,
           })}
-          title={<span>{title || <br />}</span>}
+          title={<span>{image?.[titleSource] || <br />}</span>}
           subtitle={
-            image.price && (
-              <span className="photo-album-item__caption">{image.price}</span>
+              showCaption && image[captionSource] && (
+              <span className="photo-album-item__caption">{image[captionSource]}</span>
             )
           }
           position={

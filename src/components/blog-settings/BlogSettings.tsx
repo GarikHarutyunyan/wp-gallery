@@ -14,6 +14,7 @@ import {
   TitleAlignmentOptions,
   TitleSourceOptions,
   DescriptionSourceOptions,
+  CaptionSourceOptions,
 } from 'data-structures';
 
 import React, {ReactNode} from 'react';
@@ -67,6 +68,10 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
     textVerticalSpacing,
     descriptionMaxRowsCount,
     imagePosition,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   } = value as IBlogSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -208,7 +213,71 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                   </>
                 )}
               </Grid>
-
+              <Grid
+                  sx={{marginLeft: 0, paddingTop: 2}}
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                      id={'showCaption'}
+                      name={'Show caption'}
+                      value={showCaption}
+                      info={
+                        <p>
+                          The Caption must be set by editing each image from
+                          "Images" section.{' '}
+                          <a
+                              className="seetings__see-more-link"
+                              href="https://youtu.be/ziAG16MADbY"
+                              target="_blank"
+                          >
+                            See more
+                          </a>
+                        </p>
+                      }
+                      onChange={onInputValueChange}
+                  />
+                </Filter>
+              </Grid>
+              {showCaption && (
+                  <Grid
+                      sx={{marginLeft: 0, paddingTop: 2}}
+                      container
+                      columns={24}
+                      rowSpacing={2}
+                      columnSpacing={4}
+                  >
+                    <Filter isLoading={isLoading}>
+                      <SelectControl
+                          id={'captionSource'}
+                          name={'Caption source'}
+                          value={captionSource}
+                          options={CaptionSourceOptions}
+                          onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                          id={'captionFontSize'}
+                          name={'Caption font size'}
+                          value={captionFontSize}
+                          onChange={onInputValueChange}
+                          unit={'px'}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                          id={'captionFontColor'}
+                          name="Caption color"
+                          value={captionFontColor}
+                          onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </Grid>
+              )}
               <Grid
                 sx={{marginLeft: 0, paddingTop: 2}}
                 container
