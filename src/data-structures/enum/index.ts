@@ -17,3 +17,4 @@ export * from './TitlePosition';
 export * from './TitleSource';
 export * from './DescriptionSource';
 export * from './TitleVisibility';
+export * from './CaptionSource';
