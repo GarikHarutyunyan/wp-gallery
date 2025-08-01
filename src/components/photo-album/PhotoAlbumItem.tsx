@@ -64,6 +64,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
     padding < borderRadius / 2 ? borderRadius - padding : borderRadius / 2;
 
   const renderTitle = (): ReactNode => {
+    const paddingTitle = (titlePosition !== TitlePosition.CENTER) ? imageBorderRadius / 2 + 'px' : '0';
+
     return image ? (
       <div
         className={clsx('photo-album-item__title', {
@@ -89,6 +91,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           }}
           style={{
             textAlign: titleAlignment,
+            paddingLeft: paddingTitle,
+            paddingRight: paddingTitle,
             color: titleColor,
           }}
           className={clsx({
