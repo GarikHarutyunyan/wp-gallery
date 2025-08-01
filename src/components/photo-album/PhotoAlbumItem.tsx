@@ -85,6 +85,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             },
             '& .MuiImageListItemBar-subtitle': {
             fontSize: `${captionFontSize}px`,
+            fontFamily: titleFontFamily,
             color: captionFontColor,
             lineHeight: 'normal',
           },
