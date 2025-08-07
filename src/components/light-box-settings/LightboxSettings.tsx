@@ -42,6 +42,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
     areControlButtonsShown,
     isInfinite,
     padding,
+    showCounter,
     canShare,
     canDownload,
     canZoom,
@@ -208,6 +209,14 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 name={'Loop'}
                 value={isInfinite}
                 onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                  id={'showCounter'}
+                  name={'Counter'}
+                  value={showCounter}
+                  onChange={onInputValueChange}
               />
             </Filter>
             <Filter isLoading={isLoading}>

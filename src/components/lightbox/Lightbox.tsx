@@ -16,6 +16,8 @@ import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Video from 'yet-another-react-lightbox/plugins/video';
+import Counter from "yet-another-react-lightbox/plugins/counter";
+import "yet-another-react-lightbox/plugins/counter.css";
 import Share from 'yet-another-react-lightbox/plugins/share';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
@@ -104,6 +106,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     areControlButtonsShown,
     isInfinite,
     padding,
+    showCounter,
     canShare,
     canDownload,
     canZoom,
@@ -151,6 +154,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
 
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Video];
+    if (showCounter) {
+      newPlugins.push(Counter as any);
+    }
     if (canShare) {
       newPlugins.push(Share as any);
     }
@@ -175,6 +181,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
 
     return newPlugins;
   }, [
+    showCounter,
     canShare,
     canDownload,
     canZoom,
@@ -406,6 +413,15 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         controller={{closeOnBackdropClick: !drag}}
         noScroll={{
           disabled: false,
+        }}
+        counter={{
+          separator: "/",
+          container: {
+            style: {
+              top: (textPosition === LightboxTextPosition.TOP || textPosition === LightboxTextPosition.ABOVE ? "unset" : 0),
+              bottom: (textPosition === LightboxTextPosition.TOP || textPosition === LightboxTextPosition.ABOVE ? 0 : "unset")
+            }
+          }
         }}
         animation={{
           swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
