@@ -135,7 +135,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         textAlign: titleAlignment,
                         margin: 0,
                         padding:
-                          showButton && !image[captionSource] && (!showDescription || !image[descriptionSource])
+                          showButton && (!showCaption || !image[captionSource]) && (!showDescription || !image[descriptionSource])
                             ? '0px 0px 15px'
                             : 0,
                       }}
