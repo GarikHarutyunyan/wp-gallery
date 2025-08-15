@@ -4,6 +4,7 @@ import React from 'react';
 interface ITextControlProps {
   id: string;
   name: string;
+  placeholder?: string;
   value: string;
   onChange: any;
 }
@@ -11,6 +12,7 @@ interface ITextControlProps {
 const TextControl: React.FC<ITextControlProps> = ({
   id,
   name,
+  placeholder,
   value,
   onChange,
 }) => {
@@ -20,6 +22,7 @@ const TextControl: React.FC<ITextControlProps> = ({
   return (
     <TextField
       label={name}
+      placeholder={placeholder}
       variant="standard"
       margin="none"
       value={value}

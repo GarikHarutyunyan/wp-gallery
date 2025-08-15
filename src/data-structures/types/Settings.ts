@@ -6,7 +6,6 @@ import {
   LightboxImageAnimation,
   LightboxTextPosition,
   LightboxThumbnailsPosition,
-  PaginationButtonShape,
   PaginationType,
   SizeTypeHeight,
   SizeTypeWidth,
@@ -127,9 +126,14 @@ export interface IGeneralSettings {
   itemsPerPage: number | undefined;
   activeButtonColor: string;
   inactiveButtonColor: string;
-  paginationButtonShape: PaginationButtonShape;
   loadMoreButtonColor: string;
   paginationTextColor: string;
+  paginationButtonTextSize: number;
+  paginationButtonBorderRadius: number;
+  paginationButtonBorderSize: number;
+  paginationButtonBorderColor: string;
+  loadMoreButtonText: string;
+  paginationButtonClass: string;
   clickAction: ImageClickAction;
   openUrlInNewTab: boolean;
 }
