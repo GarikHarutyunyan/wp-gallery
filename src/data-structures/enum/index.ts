@@ -7,7 +7,6 @@ export * from './LightboxTextPosition';
 export * from './LightboxThumbnailsPosition';
 export * from './OrderBy';
 export * from './OrderDirection';
-export * from './PaginationButtonShape';
 export * from './PaginationType';
 export * from './SizeTypeHeight';
 export * from './SizeTypeWidth';

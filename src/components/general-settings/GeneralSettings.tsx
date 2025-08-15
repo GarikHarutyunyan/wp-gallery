@@ -1,24 +1,24 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {useSettings} from 'components/settings';
-import {useTemplates} from 'contexts';
+import {TranslationsContext, useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {
   GalleryType,
   IGeneralSettings,
   OrderByOptions,
   OrderDirectionOptions,
-  PaginationButtonShapeOptions,
   PaginationType,
   PaginationTypeOptions,
 } from 'data-structures';
-import React, {ReactNode, useMemo} from 'react';
+import React, {ReactNode, useContext, useMemo} from 'react';
 import {Utils} from 'utils';
 import {
   ColorControl,
   ISelectOption,
   NumberControl,
-  SelectControl,
+  SelectControl, SwitchControl,
+  TextControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
 
@@ -80,9 +80,14 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     itemsPerPage,
     activeButtonColor,
     inactiveButtonColor,
-    paginationButtonShape,
     loadMoreButtonColor,
     paginationTextColor,
+    paginationButtonTextSize,
+    paginationButtonBorderRadius,
+    paginationButtonBorderSize,
+    paginationButtonBorderColor,
+    loadMoreButtonText,
+    paginationButtonClass,
   } = value as IGeneralSettings;
 
   const showOnlyGalleryOptions: boolean =
@@ -146,6 +151,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     type as GalleryType
   );
 
+  const {loadMoreText} = useContext(TranslationsContext);
+
   const renderMainSettings = (): ReactNode => {
     return (
       <Section
@@ -172,60 +179,124 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                     min={1}
                   />
                 </Filter>
-                {paginationType === PaginationType.SIMPLE ? (
-                  <>
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'activeButtonColor'}
-                        name="Active button color"
-                        value={activeButtonColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'inactiveButtonColor'}
-                        name="Inactive button color"
-                        value={inactiveButtonColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <SelectControl
-                        id={'paginationButtonShape'}
-                        name={'Button shape'}
-                        value={paginationButtonShape}
-                        options={PaginationButtonShapeOptions}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                  </>
-                ) : null}
-                {paginationType === PaginationType.LOAD_MORE ? (
-                  <>
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'loadMoreButtonColor'}
-                        name="Load more button color"
-                        value={loadMoreButtonColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                  </>
-                ) : null}
                 {[PaginationType.LOAD_MORE, PaginationType.SIMPLE].includes(
                   paginationType
                 ) ? (
-                  <>
+                    <Grid
+                        sx={{marginLeft: 0, paddingTop: 2}}
+                        container
+                        columns={24}
+                        rowSpacing={2}
+                        columnSpacing={4}
+                    >
+                    {paginationType === PaginationType.LOAD_MORE ? (
+                        <>
+                          <Filter isLoading={isLoading}>
+                            <ColorControl
+                                id={'loadMoreButtonColor'}
+                                name="Button color"
+                                value={loadMoreButtonColor}
+                                onChange={onInputValueChange}
+                            />
+                          </Filter>
+                        </>
+                    ) : null}
+                    {paginationType === PaginationType.SIMPLE ? (
+                        <>
+                          <Filter isLoading={isLoading}>
+                            <ColorControl
+                                id={'activeButtonColor'}
+                                name="Active button color"
+                                value={activeButtonColor}
+                                onChange={onInputValueChange}
+                            />
+                          </Filter>
+                        </>
+                    ) : null}
                     <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'paginationTextColor'}
-                        name="Button text color"
-                        value={paginationTextColor}
-                        onChange={onInputValueChange}
+                      <NumberControl
+                          id={'paginationButtonBorderRadius'}
+                          name={'Button border radius'}
+                          value={paginationButtonBorderRadius}
+                          onChange={onInputValueChange}
+                          unit={'px'}
+                          max={50}
+                          step={1}
                       />
                     </Filter>
-                  </>
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                          id={'paginationButtonBorderSize'}
+                          name={'Button border size'}
+                          value={paginationButtonBorderSize}
+                          onChange={onInputValueChange}
+                          unit={'px'}
+                          max={20}
+                          step={1}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                          id={'paginationButtonBorderColor'}
+                          name={'Button border color'}
+                          value={paginationButtonBorderColor}
+                          onChange={onInputValueChange}
+                      />
+                    </Filter>
+
+                    {paginationType === PaginationType.SIMPLE ? (
+                        <>
+                          <Filter isLoading={isLoading}>
+                            <ColorControl
+                                id={'inactiveButtonColor'}
+                                name="Inactive button color"
+                                value={inactiveButtonColor}
+                                onChange={onInputValueChange}
+                            />
+                          </Filter>
+                        </>
+                    ) : null}
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                          id={'paginationTextColor'}
+                          name="Button text color"
+                          value={paginationTextColor}
+                          onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                          id={'paginationButtonTextSize'}
+                          name={'Button text size'}
+                          value={paginationButtonTextSize}
+                          onChange={onInputValueChange}
+                          unit={'rem'}
+                          max={3}
+                          step={0.025}
+                      />
+                    </Filter>
+                    {paginationType === PaginationType.LOAD_MORE ? (
+                        <>
+                          <Filter isLoading={isLoading}>
+                            <TextControl
+                                id={'loadMoreButtonText'}
+                                name="Button text"
+                                placeholder={loadMoreText?.toUpperCase()}
+                                value={loadMoreButtonText}
+                                onChange={onInputValueChange}
+                            />
+                          </Filter>
+                        </>
+                    ) : null}
+                    <Filter isLoading={isLoading}>
+                      <TextControl
+                          id={'paginationButtonClass'}
+                          name="Button CSS class"
+                          value={paginationButtonClass}
+                          onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </Grid>
                 ) : null}
               </>
             ) : null}
