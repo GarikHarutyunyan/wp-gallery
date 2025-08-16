@@ -241,7 +241,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                       id={'showTitle'}
                       name={'Show title'}
                       value={showTitle}
-                      info={
+                      tooltip={
                         <p>
                           The Caption must be set by editing each image from
                           "Images" section.{' '}
@@ -304,7 +304,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                         id={'showCaption'}
                         name={'Show caption'}
                         value={showCaption}
-                        info={
+                        tooltip={
                           <p>
                             The Caption must be set by editing each image from
                             "Images" section.{' '}
@@ -364,7 +364,8 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                     <SwitchControl
                       id={'showDescription'}
                       name={'Show description'}
-                      value={showDescription}info={
+                      value={showDescription}
+                      tooltip={
                       <p>
                         The Caption must be set by editing each image from
                         "Images" section.{' '}
