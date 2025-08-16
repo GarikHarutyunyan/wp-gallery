@@ -60,7 +60,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
         <SelectControl
           id={'clickAction'}
           name={'Image click'}
-          info={renderClickActionInfo()}
+          tooltip={renderClickActionInfo()}
           value={clickAction}
           options={ImageClickActionOptions}
           onChange={onActionValueChange}

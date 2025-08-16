@@ -308,7 +308,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                 id={'showCaption'}
                 name={'Show caption'}
                 value={showCaption}
-                info={
+                tooltip={
                   <p>
                     The Caption must be set by editing each image from
                     "Images" section.{' '}

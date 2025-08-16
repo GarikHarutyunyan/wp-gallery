@@ -17,7 +17,7 @@ import {
   ColorControl,
   ISelectOption,
   NumberControl,
-  SelectControl, SwitchControl,
+  SelectControl,
   TextControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
@@ -292,6 +292,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                       <TextControl
                           id={'paginationButtonClass'}
                           name="Button CSS class"
+                          tooltip={<p>Multiple CSS class names should be separated with spaces.</p>}
                           value={paginationButtonClass}
                           onChange={onInputValueChange}
                       />

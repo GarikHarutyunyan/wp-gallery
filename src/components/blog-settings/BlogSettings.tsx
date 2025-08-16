@@ -149,7 +149,7 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                     id={'showTitle'}
                     name={'Show title'}
                     value={showTitle}
-                    info={
+                    tooltip={
                       <p>
                         The Title must be set by editing each image from
                         "Images" section.{' '}
@@ -225,7 +225,7 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                       id={'showCaption'}
                       name={'Show caption'}
                       value={showCaption}
-                      info={
+                      tooltip={
                         <p>
                           The Caption must be set by editing each image from
                           "Images" section.{' '}
@@ -290,7 +290,7 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                     id={'showDescription'}
                     name={'Show description'}
                     value={showDescription}
-                    info={
+                    tooltip={
                       <p>
                         The Description must be set by editing each image from
                         "Images" section.{' '}

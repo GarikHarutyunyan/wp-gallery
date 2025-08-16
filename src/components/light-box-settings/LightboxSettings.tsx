@@ -289,7 +289,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                     id={'showTitle'}
                     name={'Show title'}
                     value={showTitle}
-                    info={
+                    tooltip={
                       <p>
                         The Caption must be set by editing each image from
                         "Images" section.{' '}
@@ -352,7 +352,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                       id={'showCaption'}
                       name={'Show caption'}
                       value={showCaption}
-                      info={
+                      tooltip={
                         <p>
                           The Caption must be set by editing each image from
                           "Images" section.{' '}
@@ -413,7 +413,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                     id={'showDescription'}
                     name={'Show description'}
                     value={showDescription}
-                    info={
+                    tooltip={
                       <p>
                         The Caption must be set by editing each image from
                         "Images" section.{' '}

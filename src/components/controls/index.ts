@@ -5,3 +5,4 @@ export * from './SelectControl';
 export * from './SliderControl';
 export * from './SwitchControl';
 export * from './TextControl';
+export * from './LabelWithTooltip';
