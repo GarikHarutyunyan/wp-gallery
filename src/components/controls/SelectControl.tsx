@@ -1,6 +1,5 @@
 import {MenuItem, TextField} from '@mui/material';
 import React, {CSSProperties, forwardRef, ReactNode} from 'react';
-import './control.css';
 import {LabelWithTooltip} from "./LabelWithTooltip";
 
 interface ISelectOption {

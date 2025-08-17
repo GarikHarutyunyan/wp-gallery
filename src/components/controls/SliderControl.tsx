@@ -33,7 +33,7 @@ const SliderControl: React.FC<ISliderControlProps> = ({
   return (
     <FormControl margin="none" fullWidth>
       <InputLabel shrink variant="standard" focused={focused}>
-        {<LabelWithTooltip label={name} tooltip={tooltip} />}
+        <LabelWithTooltip label={name} tooltip={tooltip} />
       </InputLabel>
       <Slider
         min={min}

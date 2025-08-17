@@ -1,9 +1,8 @@
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import Switch from '@mui/material/Switch';
 import React, {ReactNode} from 'react';
 import {LabelWithTooltip} from "./LabelWithTooltip";
+import {InputLabel} from "@mui/material";
 interface ISwitchControlProps {
   id?: string;
   name: string;
@@ -26,15 +25,14 @@ const SwitchControl: React.FC<ISwitchControlProps> = ({
   };
 
   return (
-    <FormControl>
-      <FormLabel component={'label'} className={"SwitchControlLabel"}>
-        {<LabelWithTooltip label={name} tooltip={tooltip} />}
-      </FormLabel>
-      <FormControlLabel
-        control={<Switch checked={value} onChange={onValueChange} />}
-        label={label}
-        style={{margin: '-5px'}}
-      />
+    <FormControl margin="none" fullWidth>
+      <InputLabel shrink variant="standard">
+        <LabelWithTooltip label={name} tooltip={tooltip} />
+      </InputLabel>
+      <Switch
+          checked={value}
+          onChange={onValueChange}
+          sx={{mt: 2}} />
     </FormControl>
   );
 };

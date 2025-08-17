@@ -1,6 +1,6 @@
 import {TextField} from '@mui/material';
 import React, {ReactNode} from 'react';
-import { LabelWithTooltip } from '../controls';
+import {LabelWithTooltip} from "./LabelWithTooltip";
 
 interface ITextControlProps {
   id: string;

@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { Aligner } from 'core-components';
-import './control.css';
 
 interface ILabelWithTooltipProps {
   label?: string;
@@ -18,7 +17,7 @@ export const LabelWithTooltip: React.FC<ILabelWithTooltipProps> = ({ label, tool
         <Tooltip title={tooltip}>
           <InfoOutlinedIcon
               fontSize="small"
-              className={"LabelWithTooltipIcon"}
+              className={"seetings__cursor_pointer"}
           />
         </Tooltip>
       </Aligner>
