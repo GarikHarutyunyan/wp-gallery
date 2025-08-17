@@ -155,7 +155,14 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         description: data.description,
         author: data.author,
         date_created: data.date_created,
-        exif: data.exif,
+        exif: (<>
+          {data.exif.split("\n").map((line: string) => (
+              <>
+                {line}
+                <br/>
+              </>
+          ))}
+        </>),
         caption: data.caption,
         price: data.price,
         alt: data.alt,
@@ -191,7 +198,14 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       description: data.description,
       author: data.author,
       date_created: data.date_created,
-      exif: data.exif,
+      exif: (<>
+        {data.exif.split("\n").map((line: string) => (
+            <>
+              {line}
+              <br/>
+            </>
+        ))}
+      </>),
       action_url: data.action_url,
       item_url: data.item_url,
       checkout_url: data.checkout_url,
@@ -254,7 +268,14 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         description: data.description,
         author: data.author,
         date_created: data.date_created,
-        exif: data.exif,
+        exif: (<>
+          {data.exif.split("\n").map((line: string) => (
+              <>
+                {line}
+                <br/>
+              </>
+          ))}
+        </>),
         action_url: data.action_url,
         item_url: data.item_url,
         checkout_url: data.checkout_url,

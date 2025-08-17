@@ -1,3 +1,5 @@
+import {ReactElement} from "react";
+
 interface IImageUrl {
   url: string;
   width: number;
@@ -18,7 +20,7 @@ export interface IImageDTO {
   description: string;
   author: string;
   date_created: string;
-  exif: string;
+  exif: ReactElement;
   width: number;
   height: number;
   original: IImageUrl;
