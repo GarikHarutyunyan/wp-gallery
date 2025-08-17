@@ -136,6 +136,7 @@ export interface IGeneralSettings {
   paginationButtonClass: string;
   clickAction: ImageClickAction;
   openUrlInNewTab: boolean;
+  actionUrlSource: string;
 }
 
 export interface ICubeSettings {

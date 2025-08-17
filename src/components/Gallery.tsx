@@ -1,5 +1,6 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import {
+  ActionURLSource,
   GalleryType,
   IGeneralSettings,
   ImageClickAction,
@@ -85,7 +86,7 @@ const Gallery: React.FC = () => {
     blogSettings?.paginationType,
   ]);
 
-  const {clickAction, openUrlInNewTab} = generalSettings as IGeneralSettings;
+  const {clickAction, openUrlInNewTab, actionUrlSource} = generalSettings as IGeneralSettings;
   const showLightbox: boolean = clickAction === ImageClickAction.LIGHTBOX;
   const shouldOpenUrl: boolean = clickAction === ImageClickAction.URL;
   const isClickable: boolean = showLightbox || shouldOpenUrl;
@@ -180,7 +181,7 @@ const Gallery: React.FC = () => {
   };
 
   const onCustomActionToggle = (index: number) => {
-    const url: string = images?.[index]?.action_url || '';
+    const url: string = images?.[index]?.[actionUrlSource as ActionURLSource] || '';
 
     if (!!url) {
       if (openUrlInNewTab) {

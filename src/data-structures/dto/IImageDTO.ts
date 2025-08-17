@@ -23,4 +23,6 @@ export interface IImageDTO {
   medium_large: IImageUrl;
   thumbnail: IImageUrl;
   action_url: string;
+  item_url: string;
+  checkout_url: string;
 }
