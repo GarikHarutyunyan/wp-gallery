@@ -7,8 +7,9 @@ import {
   IGeneralSettings,
   ImageClickAction,
   ImageClickActionOptions,
+  ActionURLSourceOptions,
 } from 'data-structures';
-import {ReactElement} from 'react';
+import React, {ReactElement} from 'react';
 
 interface IClickActionSettingsProps {
   isLoading?: boolean;
@@ -18,7 +19,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {generalSettings, changeGeneralSettings: onActionChange} =
     useSettings();
-  const {clickAction, openUrlInNewTab} = generalSettings as IGeneralSettings;
+  const {clickAction, openUrlInNewTab, actionUrlSource} = generalSettings as IGeneralSettings;
 
   const isClickActionUrl: boolean = clickAction === ImageClickAction.URL;
 
@@ -67,14 +68,25 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
         />
       </Filter>
       {isClickActionUrl ? (
-        <Filter isLoading={isLoading}>
-          <SwitchControl
-            id={'openUrlInNewTab'}
-            name={'Open URL in new tab'}
-            value={openUrlInNewTab}
-            onChange={onActionValueChange}
-          />
-        </Filter>
+        <>
+          <Filter isLoading={isLoading}>
+            <SwitchControl
+              id={'openUrlInNewTab'}
+              name={'Open URL in new tab'}
+              value={openUrlInNewTab}
+              onChange={onActionValueChange}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <SelectControl
+                id={'actionUrlSource'}
+                name={'Action URL source'}
+                value={actionUrlSource}
+                options={ActionURLSourceOptions}
+                onChange={onActionValueChange}
+            />
+          </Filter>
+        </>
       ) : null}
     </Grid>
   );

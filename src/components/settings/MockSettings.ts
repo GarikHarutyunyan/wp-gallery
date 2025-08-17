@@ -177,6 +177,7 @@ const generalMockSettings: IGeneralSettings = {
   paginationButtonClass: '',
   clickAction: ImageClickAction.LIGHTBOX,
   openUrlInNewTab: false,
+  actionUrlSource: 'action_url',
 };
 
 const lightboxMockSettings: ILightboxSettings = {

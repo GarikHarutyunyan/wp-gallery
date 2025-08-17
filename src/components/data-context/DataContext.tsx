@@ -157,6 +157,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         price: data.price,
         alt: data.alt,
         action_url: data.action_url,
+        item_url: data.item_url,
+        checkout_url: data.checkout_url,
       }));
 
       return newImages;
@@ -185,6 +187,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       alt: data.alt,
       description: data.description,
       action_url: data.action_url,
+      item_url: data.item_url,
+      checkout_url: data.checkout_url,
     }));
 
     const loadMoreText: string | undefined =
@@ -243,6 +247,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         alt: data.alt,
         description: data.description,
         action_url: data.action_url,
+        item_url: data.item_url,
+        checkout_url: data.checkout_url,
       }));
       const newImageCount: number = headers?.['x-images-count'];
       const loadMoreText: string | undefined =
