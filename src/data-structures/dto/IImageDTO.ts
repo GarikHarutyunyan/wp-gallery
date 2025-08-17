@@ -16,6 +16,9 @@ export interface IImageDTO {
   price: string;
   alt: string;
   description: string;
+  author: string;
+  date_created: string;
+  exif: string;
   width: number;
   height: number;
   original: IImageUrl;
