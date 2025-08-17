@@ -14,10 +14,10 @@ import {
   TitleAlignment,
   TitleSource,
   DescriptionSource,
+  CaptionSource,
   TitlePosition,
   TitleVisibility,
 } from 'data-structures';
-import {CaptionSource} from "../enum/CaptionSource";
 
 export interface IThumbnailSettings {
   width?: number | undefined;

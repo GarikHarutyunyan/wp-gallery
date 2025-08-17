@@ -37,16 +37,20 @@
   margin: 0 14px 14px;
 }
 
-.mixed-fields {
+.reacg-section .mixed-fields {
   display: flex;
   align-items: flex-end;
 }
 
-.seetings__see-more-link {
+.reacg-section .seetings__see-more-link {
   color: #42abff;
 }
 
 /* Mui-override */
-.MuiSelect-select:focus {
+.reacg-section .MuiSelect-select:focus {
   background-color: unset !important;
+}
+
+.reacg-section .MuiSwitch-input {
+  height: 100%;
 }
