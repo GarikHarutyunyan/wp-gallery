@@ -20,7 +20,7 @@ const ErrorFallback = ({error}: any): ReactElement | null => {
           {'WordPress support forum'}
         </a>
       </h2>
-      <pre style={{color: 'red'}}>{`Error: ${error.message}`}</pre>
+      <h2 style={{color: 'red'}}>{`Error: ${error.message}`}</h2>
     </div>
   );
 };
