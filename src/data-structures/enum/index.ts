@@ -1,4 +1,8 @@
+export * from './ActionURLSource';
+export * from './AspectRatio';
 export * from './BlogViewImagePosition';
+export * from './CaptionSource';
+export * from './DescriptionSource';
 export * from './GalleryType';
 export * from './HoverEffect';
 export * from './ImageClickAction';
@@ -14,8 +18,4 @@ export * from './TextsAlignments';
 export * from './TitleAlignment';
 export * from './TitlePosition';
 export * from './TitleSource';
-export * from './DescriptionSource';
 export * from './TitleVisibility';
-export * from './CaptionSource';
-export * from './ActionURLSource';
-export * from './Ratio';

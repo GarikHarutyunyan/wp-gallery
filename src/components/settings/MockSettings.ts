@@ -1,5 +1,8 @@
 import {
+  ActionURLSource,
   BlogViewImagePosition,
+  CaptionSource,
+  DescriptionSource,
   HoverEffect,
   IBlogSettings,
   ICardsSettings,
@@ -22,17 +25,14 @@ import {
   TextsAlignment,
   ThumbnailTitlePosition,
   TitleAlignment,
-  TitleSource,
   TitlePosition,
+  TitleSource,
   TitleVisibility,
-  DescriptionSource,
-  CaptionSource,
-  ActionURLSource,
 } from 'data-structures';
 
 const thumbnailMockSettings: IThumbnailSettings = {
-  fullWidth: false,
-  ratio: '1.33',
+  fillContainer: false,
+  aspectRatio: '1.33',
   width: 150,
   height: 150,
   columns: 5,
@@ -310,5 +310,6 @@ export {
   masonryMockSettings,
   mosaicMockSettings,
   slideshowMockSettings,
-  thumbnailMockSettings,
+  thumbnailMockSettings
 };
+

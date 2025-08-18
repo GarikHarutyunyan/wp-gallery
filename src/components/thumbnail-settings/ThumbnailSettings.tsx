@@ -5,16 +5,16 @@ import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {
+  AspectRatioOptions,
+  CaptionSourceOptions,
   HoverEffectOptions,
   IThumbnailSettings,
-  TitleSourceOptions,
   ThumbnailTitlePosition,
   ThumbnailTitlePositionOptions,
   TitleAlignmentOptions,
+  TitleSourceOptions,
   TitleVisibility,
   TitleVisibilityOptions,
-  CaptionSourceOptions,
-  RatioOptions,
 } from 'data-structures';
 import React, {ReactNode, useMemo} from 'react';
 import {
@@ -23,7 +23,8 @@ import {
   ISelectOption,
   NumberControl,
   SelectControl,
-  SliderControl, SwitchControl,
+  SliderControl,
+  SwitchControl,
 } from '../controls';
 import {Filter} from '../settings/Filter';
 
@@ -36,8 +37,8 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
   const {thumbnailSettings: value, changeThumbnailSettings: onChange} =
     useSettings();
   const {
-    fullWidth,
-    ratio,
+    fillContainer,
+    aspectRatio,
     width,
     height,
     columns,
@@ -101,45 +102,55 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
             <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
               <Filter isLoading={isLoading}>
                 <SwitchControl
-                    id={'fullWidth'}
-                    name={'Full width'}
-                    value={fullWidth}
-                    onChange={onInputValueChange}
+                  id={'fillContainer'}
+                  name={'Fill container'}
+                  tooltip={
+                    <p>
+                      Choose how thumbnails are sized. Enable “Fill Container”
+                      to let thumbnails scale automatically to fill the
+                      available space using Image aspect ratio and Columns.
+                      Disable to set fixed Image width and height manually
+                      (container may not always be filled).
+                    </p>
+                  }
+                  value={fillContainer}
+                  onChange={onInputValueChange}
                 />
               </Filter>
-              {fullWidth ? (
-
-                      <Filter isLoading={isLoading}>
-                        <SelectControl
-                            id={'ratio'}
-                            name={'Image ratio'}
-                            value={ratio}
-                            options={RatioOptions}
-                            onChange={onInputValueChange}
-                        />
-                      </Filter>) :
-                  (<>
-                    <Filter isLoading={isLoading}>
-                      <NumberControl
-                          id={'width'}
-                          name={'Image width'}
-                          value={width}
-                          onChange={onInputValueChange}
-                          min={0}
-                          unit={'px'}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <NumberControl
-                          id={'height'}
-                          name={'Image height'}
-                          value={height}
-                          onChange={onInputValueChange}
-                          min={0}
-                          unit={'px'}
-                      />
-                    </Filter>
-                  </>)}
+              {fillContainer ? (
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                    id={'aspectRatio'}
+                    name={'Image aspect ratio'}
+                    value={aspectRatio}
+                    options={AspectRatioOptions}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+              ) : (
+                <>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'width'}
+                      name={'Image width'}
+                      value={width}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'height'}
+                      name={'Image height'}
+                      value={height}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                </>
+              )}
               <Filter isLoading={isLoading}>
                 <NumberControl
                   id={'columns'}
@@ -150,23 +161,24 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                 />
               </Filter>
               <Grid
-                  sx={{marginLeft: 0, paddingTop: 2}}
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
               >
                 <Filter isLoading={isLoading}>
                   <SelectControl
-                      id={'titleVisibility'}
-                      name={'Title visibility'}
-                      value={titleVisibility}
-                      options={TitleVisibilityOptions}
-                      onChange={onInputValueChange}
-                      isDisabled={!isThumbnailTitlePositionEditable}
+                    id={'titleVisibility'}
+                    name={'Title visibility'}
+                    value={titleVisibility}
+                    options={TitleVisibilityOptions}
+                    onChange={onInputValueChange}
+                    isDisabled={!isThumbnailTitlePositionEditable}
                   />
                 </Filter>
-                {titleVisibility !== TitleVisibility.NONE && renderTitleSettings()}
+                {titleVisibility !== TitleVisibility.NONE &&
+                  renderTitleSettings()}
               </Grid>
             </Grid>
             <ClickActionSettings isLoading={isLoading} />
@@ -279,27 +291,27 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
         </Filter>
         <Filter isLoading={isLoading}>
           <FontControl
-              id={'titleFontFamily'}
-              name={'Title font family'}
-              value={titleFontFamily}
-              onChange={onInputValueChange}
-              isDisabled={!isThumbnailTitlePositionEditable}
+            id={'titleFontFamily'}
+            name={'Title font family'}
+            value={titleFontFamily}
+            onChange={onInputValueChange}
+            isDisabled={!isThumbnailTitlePositionEditable}
           />
         </Filter>
         <Grid
-            sx={{marginLeft: 0, paddingTop: 2}}
-            container
-            columns={24}
-            rowSpacing={2}
-            columnSpacing={4}
+          sx={{marginLeft: 0, paddingTop: 2}}
+          container
+          columns={24}
+          rowSpacing={2}
+          columnSpacing={4}
         >
           <Filter isLoading={isLoading}>
             <SelectControl
-                id={'titleSource'}
-                name={'Title source'}
-                value={titleSource}
-                options={TitleSourceOptions}
-                onChange={onInputValueChange}
+              id={'titleSource'}
+              name={'Title source'}
+              value={titleSource}
+              options={TitleSourceOptions}
+              onChange={onInputValueChange}
             />
           </Filter>
           <Filter isLoading={isLoading}>
@@ -313,77 +325,77 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
           </Filter>
           <Filter isLoading={isLoading}>
             <ColorControl
-                id={'titleColor'}
-                name="Title color"
-                value={titleColor}
-                onChange={onInputValueChange}
+              id={'titleColor'}
+              name="Title color"
+              value={titleColor}
+              onChange={onInputValueChange}
             />
           </Filter>
         </Grid>
         <Grid
-            sx={{marginLeft: 0, paddingTop: 2}}
-            container
-            columns={24}
-            rowSpacing={2}
-            columnSpacing={4}
+          sx={{marginLeft: 0, paddingTop: 2}}
+          container
+          columns={24}
+          rowSpacing={2}
+          columnSpacing={4}
         >
           <Filter isLoading={isLoading}>
             <SwitchControl
-                id={'showCaption'}
-                name={'Show caption'}
-                value={showCaption}
-                tooltip={
-                  <p>
-                    The Caption must be set by editing each image from
-                    "Images" section.{' '}
-                    <a
-                        className="seetings__see-more-link"
-                        href="https://youtu.be/ziAG16MADbY"
-                        target="_blank"
-                    >
-                      See more
-                    </a>
-                  </p>
-                }
-                onChange={onInputValueChange}
+              id={'showCaption'}
+              name={'Show caption'}
+              value={showCaption}
+              tooltip={
+                <p>
+                  The Caption must be set by editing each image from "Images"
+                  section.{' '}
+                  <a
+                    className="seetings__see-more-link"
+                    href="https://youtu.be/ziAG16MADbY"
+                    target="_blank"
+                  >
+                    See more
+                  </a>
+                </p>
+              }
+              onChange={onInputValueChange}
             />
           </Filter>
         </Grid>
         {showCaption && (
-        <Grid
+          <Grid
             sx={{marginLeft: 0, paddingTop: 2}}
             container
             columns={24}
             rowSpacing={2}
             columnSpacing={4}
-        >
-          <Filter isLoading={isLoading}>
-            <SelectControl
+          >
+            <Filter isLoading={isLoading}>
+              <SelectControl
                 id={'captionSource'}
                 name={'Caption source'}
                 value={captionSource}
                 options={CaptionSourceOptions}
                 onChange={onInputValueChange}
-            />
-          </Filter>
-          <Filter isLoading={isLoading}>
-            <NumberControl
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <NumberControl
                 id={'captionFontSize'}
                 name={'Caption font size'}
                 value={captionFontSize}
                 onChange={onInputValueChange}
                 unit={'px'}
-            />
-          </Filter>
-          <Filter isLoading={isLoading}>
-            <ColorControl
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <ColorControl
                 id={'captionFontColor'}
                 name="Caption color"
                 value={captionFontColor}
                 onChange={onInputValueChange}
-            />
-          </Filter>
-        </Grid>
+              />
+            </Filter>
+          </Grid>
         )}
       </>
     );

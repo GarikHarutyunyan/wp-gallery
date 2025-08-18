@@ -23,8 +23,8 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   const {thumbnailSettings: settings} = useSettings();
   const {images} = useData();
   const {
-    fullWidth,
-    ratio,
+    fillContainer,
+    aspectRatio,
     width = 1,
     height = 1,
     columns = 1,
@@ -45,7 +45,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     showCaption,
     captionSource,
     captionFontSize,
-    captionFontColor
+    captionFontColor,
   } = settings as IThumbnailSettings;
   const elementRef = useRef();
   const [containerWidth, setContainerWidth] = useState(0);
@@ -54,17 +54,29 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   const [imageHeight, setImageHeight] = useState(0);
 
   useEffect(() => {
-    if ( fullWidth ) {
-      setImageRatio(Number(ratio));
-      setImageWidth((elementRef?.current as any)?.getBoundingClientRect().width / columns);
+    if (fillContainer) {
+      setImageRatio(Number(aspectRatio));
+      setImageWidth(
+        (elementRef?.current as any)?.getBoundingClientRect().width / columns
+      );
       setImageHeight(imageWidth / imageRatio);
-    }
-    else {
+    } else {
       setImageRatio(width / height);
       setImageWidth(width);
       setImageHeight(height);
     }
-  }, [fullWidth, ratio, imageWidth, columns, height, width, imageRatio, setImageRatio, setImageHeight, setImageWidth]);
+  }, [
+    fillContainer,
+    aspectRatio,
+    imageWidth,
+    columns,
+    height,
+    width,
+    imageRatio,
+    setImageRatio,
+    setImageHeight,
+    setImageWidth,
+  ]);
 
   const changeContainerWidth = () => {
     const divElement = elementRef?.current;
@@ -139,12 +151,15 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   }, [imageWidth, getWidth, gap, columns, padding, validColumnsCount]);
 
   const getImageSource = (image: IImageDTO) => {
-    if (imageWidth <= image.thumbnail.width && imageHeight <= image.thumbnail.height) {
+    if (
+      imageWidth <= image.thumbnail.width &&
+      imageHeight <= image.thumbnail.height
+    ) {
       return `${image.thumbnail.url}`;
     }
     if (
-        imageWidth <= image.medium_large.width &&
-        imageHeight <= image.medium_large.height
+      imageWidth <= image.medium_large.width &&
+      imageHeight <= image.medium_large.height
     ) {
       return `${image.medium_large.url}`;
     }
@@ -161,15 +176,18 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
 
   const listRef = useRef<HTMLUListElement | null>(null);
   const onImageClick = useCallback(
-      (index: number) => (onClick ? () => onClick(index) : undefined),
-      [onClick]
+    (index: number) => (onClick ? () => onClick(index) : undefined),
+    [onClick]
   );
 
   return (
     <div
       style={{
         width:
-            imageWidth * columns + (columns - 1) * gap + columns * 2 * padding + 'px',
+          imageWidth * columns +
+          (columns - 1) * gap +
+          columns * 2 * padding +
+          'px',
         margin: '0 auto',
         overflow: 'hidden',
         maxWidth: '100%',
