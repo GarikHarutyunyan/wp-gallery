@@ -16,7 +16,9 @@ import {
   DescriptionSource,
   TitleAlignment,
   TitlePosition,
-  TitleVisibility, CaptionSource,
+  TitleVisibility,
+  CaptionSource,
+  ActionURLSource,
 } from 'data-structures';
 
 const thumbnailMockSettings: IThumbnailSettings = {
@@ -84,7 +86,7 @@ const generalMockSettings: IGeneralSettings = {
   paginationButtonClass: '',
   clickAction: ImageClickAction.LIGHTBOX,
   openUrlInNewTab: false,
-  actionUrlSource: 'action_url',
+  actionUrlSource: ActionURLSource.ACTIONURL,
 };
 
 const lightboxMockSettings: ILightboxSettings = {

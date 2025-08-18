@@ -27,6 +27,7 @@ import {
   TitleVisibility,
   DescriptionSource,
   CaptionSource,
+  ActionURLSource,
 } from 'data-structures';
 
 const thumbnailMockSettings: IThumbnailSettings = {
@@ -177,7 +178,7 @@ const generalMockSettings: IGeneralSettings = {
   paginationButtonClass: '',
   clickAction: ImageClickAction.LIGHTBOX,
   openUrlInNewTab: false,
-  actionUrlSource: 'action_url',
+  actionUrlSource: ActionURLSource.ACTIONURL,
 };
 
 const lightboxMockSettings: ILightboxSettings = {
@@ -293,6 +294,7 @@ const blogMockSettings: IBlogSettings = {
   captionSource: CaptionSource.CAPTION,
   captionFontSize: 18,
   captionFontColor: 'Grey',
+  buttonUrlSource: ActionURLSource.ACTIONURL,
 };
 
 export {
