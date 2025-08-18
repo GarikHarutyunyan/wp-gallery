@@ -210,6 +210,7 @@ export interface IBlogSettings {
   captionSource: CaptionSource;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  buttonUrlSource: string;
 }
 
 export interface ISettingsDTO {

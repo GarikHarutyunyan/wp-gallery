@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {Button} from 'core-components/button';
-import {IBlogSettings} from 'data-structures';
+import {ActionURLSource, IBlogSettings} from 'data-structures';
 import '../photo-album/photo-album.css';
 import './BlogGallery.css';
 import BlogImage from './BlogImage';
@@ -46,6 +46,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     textFontFamily,
     hoverEffect,
     openInNewTab,
+    buttonUrlSource,
     descriptionMaxRowsCount,
     imagePosition,
     showCaption,
@@ -175,7 +176,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                   {showButton && (
                     <Button
                       onClick={() =>
-                        onCustomActionToggle(image.action_url || '')
+                        onCustomActionToggle(image?.[buttonUrlSource as ActionURLSource] || '')
                       }
                       className={'blog-gallery__button'}
                       style={{

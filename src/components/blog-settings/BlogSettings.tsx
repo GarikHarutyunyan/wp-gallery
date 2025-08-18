@@ -15,6 +15,7 @@ import {
   TitleSourceOptions,
   DescriptionSourceOptions,
   CaptionSourceOptions,
+  ActionURLSourceOptions,
 } from 'data-structures';
 
 import React, {ReactNode} from 'react';
@@ -64,6 +65,7 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
     showDescription,
     showButton,
     openInNewTab,
+    buttonUrlSource,
     textHorizontalSpacing,
     textVerticalSpacing,
     descriptionMaxRowsCount,
@@ -378,6 +380,15 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                         name={'Open in new tab'}
                         value={openInNewTab}
                         onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SelectControl
+                          id={'buttonUrlSource'}
+                          name={'Button URL source'}
+                          value={buttonUrlSource}
+                          options={ActionURLSourceOptions}
+                          onChange={onInputValueChange}
                       />
                     </Filter>
                     <Filter isLoading={isLoading}>
