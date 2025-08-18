@@ -1,4 +1,7 @@
 import {
+  ActionURLSource,
+  CaptionSource,
+  DescriptionSource,
   GalleryType,
   HoverEffect,
   IGeneralSettings,
@@ -12,16 +15,15 @@ import {
   LightboxThumbnailsPosition,
   PaginationType,
   ThumbnailTitlePosition,
-  TitleSource,
-  DescriptionSource,
   TitleAlignment,
   TitlePosition,
+  TitleSource,
   TitleVisibility,
-  CaptionSource,
-  ActionURLSource,
 } from 'data-structures';
 
 const thumbnailMockSettings: IThumbnailSettings = {
+  fillContainer: false,
+  aspectRatio: '1.33',
   width: 150,
   height: 150,
   columns: 5,
@@ -46,6 +48,8 @@ const thumbnailMockSettings: IThumbnailSettings = {
   captionFontColor: 'Grey',
 };
 const thumbnailMockSettings2: IThumbnailSettings = {
+  fillContainer: false,
+  aspectRatio: '1.33',
   width: 200,
   height: 250,
   columns: 3,
@@ -228,4 +232,4 @@ const template5 = {
   name: 'None',
 };
 
-export {template1, template2, template3, template4, template5};
+export { template1, template2, template3, template4, template5 };

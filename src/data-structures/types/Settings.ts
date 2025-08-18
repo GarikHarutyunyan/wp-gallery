@@ -1,5 +1,7 @@
 import {
   BlogViewImagePosition,
+  CaptionSource,
+  DescriptionSource,
   GalleryType,
   HoverEffect,
   ImageClickAction,
@@ -12,14 +14,14 @@ import {
   TextsAlignment,
   ThumbnailTitlePosition,
   TitleAlignment,
-  TitleSource,
-  DescriptionSource,
-  CaptionSource,
   TitlePosition,
+  TitleSource,
   TitleVisibility,
 } from 'data-structures';
 
 export interface IThumbnailSettings {
+  fillContainer: boolean;
+  aspectRatio: string;
   width?: number | undefined;
   height?: number | undefined;
   columns?: number | undefined;
