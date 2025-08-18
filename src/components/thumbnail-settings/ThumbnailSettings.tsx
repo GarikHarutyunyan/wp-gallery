@@ -14,6 +14,7 @@ import {
   TitleVisibility,
   TitleVisibilityOptions,
   CaptionSourceOptions,
+  RatioOptions,
 } from 'data-structures';
 import React, {ReactNode, useMemo} from 'react';
 import {
@@ -35,6 +36,8 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
   const {thumbnailSettings: value, changeThumbnailSettings: onChange} =
     useSettings();
   const {
+    fullWidth,
+    ratio,
     width,
     height,
     columns,
@@ -97,25 +100,46 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
           <>
             <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
               <Filter isLoading={isLoading}>
-                <NumberControl
-                  id={'width'}
-                  name={'Width'}
-                  value={width}
-                  onChange={onInputValueChange}
-                  min={0}
-                  unit={'px'}
+                <SwitchControl
+                    id={'fullWidth'}
+                    name={'Full width'}
+                    value={fullWidth}
+                    onChange={onInputValueChange}
                 />
               </Filter>
-              <Filter isLoading={isLoading}>
-                <NumberControl
-                  id={'height'}
-                  name={'Height'}
-                  value={height}
-                  onChange={onInputValueChange}
-                  min={0}
-                  unit={'px'}
-                />
-              </Filter>
+              {fullWidth ? (
+
+                      <Filter isLoading={isLoading}>
+                        <SelectControl
+                            id={'ratio'}
+                            name={'Image ratio'}
+                            value={ratio}
+                            options={RatioOptions}
+                            onChange={onInputValueChange}
+                        />
+                      </Filter>) :
+                  (<>
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                          id={'width'}
+                          name={'Image width'}
+                          value={width}
+                          onChange={onInputValueChange}
+                          min={0}
+                          unit={'px'}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                          id={'height'}
+                          name={'Image height'}
+                          value={height}
+                          onChange={onInputValueChange}
+                          min={0}
+                          unit={'px'}
+                      />
+                    </Filter>
+                  </>)}
               <Filter isLoading={isLoading}>
                 <NumberControl
                   id={'columns'}

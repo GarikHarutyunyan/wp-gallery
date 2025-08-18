@@ -18,3 +18,4 @@ export * from './DescriptionSource';
 export * from './TitleVisibility';
 export * from './CaptionSource';
 export * from './ActionURLSource';
+export * from './Ratio';

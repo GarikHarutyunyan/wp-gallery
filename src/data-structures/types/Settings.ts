@@ -20,6 +20,8 @@ import {
 } from 'data-structures';
 
 export interface IThumbnailSettings {
+  fullWidth: boolean;
+  ratio: string;
   width?: number | undefined;
   height?: number | undefined;
   columns?: number | undefined;

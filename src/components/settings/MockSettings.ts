@@ -31,6 +31,8 @@ import {
 } from 'data-structures';
 
 const thumbnailMockSettings: IThumbnailSettings = {
+  fullWidth: false,
+  ratio: '1.33',
   width: 150,
   height: 150,
   columns: 5,
