@@ -149,8 +149,6 @@ const ThumbnailImage = ({
           titlePosition === ThumbnailTitlePosition.ABOVE
             ? 'hidden'
             : 'unset',
-        display:
-          titlePosition === ThumbnailTitlePosition.ABOVE ? 'flex' : 'initial',
       }}
     >
       <ImageListItem
@@ -160,6 +158,8 @@ const ThumbnailImage = ({
             titlePosition === ThumbnailTitlePosition.ABOVE
               ? 'space-between'
               : 'initial',
+          height:
+            titlePosition === ThumbnailTitlePosition.ABOVE ? '100%' : 'initial',
         }}
       >
         {titlePosition === ThumbnailTitlePosition.ABOVE
