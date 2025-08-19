@@ -3,12 +3,13 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
 import ReImage from 'core-components/re-image/ReImage';
 import {
+  CaptionSource,
   IImageDTO,
   ImageType,
   ThumbnailTitlePosition,
   TitleAlignment,
+  TitleSource,
   TitleVisibility,
-  TitleSource, CaptionSource,
 } from 'data-structures';
 import {useMemo, useRef} from 'react';
 import {createIcon} from 'yet-another-react-lightbox';
@@ -72,7 +73,10 @@ const ThumbnailImage = ({
   const renderTitle = (image: IImageDTO) => {
     let paddingTitle = '0';
 
-    if (titlePosition === ThumbnailTitlePosition.BELOW) {
+    if (
+      titlePosition === ThumbnailTitlePosition.BELOW ||
+      titlePosition === ThumbnailTitlePosition.ABOVE
+    ) {
       paddingTitle = margin + 'px';
     } else if (titlePosition !== ThumbnailTitlePosition.CENTER) {
       paddingTitle = (borderRadius || 0) / 2 + '%';
@@ -83,7 +87,8 @@ const ThumbnailImage = ({
         className={clsx('thumbnail-gallery__title', {
           'thumbnail-gallery__title_on-hover':
             titleVisibility === TitleVisibility.ON_HOVER &&
-            titlePosition !== ThumbnailTitlePosition.BELOW,
+            titlePosition !== ThumbnailTitlePosition.BELOW &&
+            titlePosition !== ThumbnailTitlePosition.ABOVE,
           'thumbnail-gallery__title_hidden':
             titleVisibility === TitleVisibility.NONE,
         })}
@@ -114,14 +119,18 @@ const ThumbnailImage = ({
           })}
           title={<span>{image[titleSource] || <br />}</span>}
           subtitle={
-            showCaption && image[captionSource] && (
-              <span className="thumbnail-image__caption">{image[captionSource]}</span>
+            showCaption && (
+              <span className="thumbnail-image__caption">
+                {image[captionSource] || <br />}
+              </span>
             )
           }
           position={
-            titlePosition !== ThumbnailTitlePosition.CENTER
-              ? titlePosition
-              : 'bottom'
+            titlePosition === ThumbnailTitlePosition.CENTER
+              ? 'bottom'
+              : titlePosition === ThumbnailTitlePosition.ABOVE
+              ? 'below'
+              : titlePosition
           }
         />
       </div>
@@ -136,10 +145,16 @@ const ThumbnailImage = ({
       onClick={onClick}
       style={{
         overflow:
-          titlePosition === ThumbnailTitlePosition.BELOW ? 'hidden' : 'unset',
+          titlePosition === ThumbnailTitlePosition.BELOW ||
+          titlePosition === ThumbnailTitlePosition.ABOVE
+            ? 'hidden'
+            : 'unset',
       }}
     >
       <ImageListItem key={image.thumbnail.url}>
+        {titlePosition === ThumbnailTitlePosition.ABOVE
+          ? renderTitle(image)
+          : null}
         <div
           style={{
             background: backgroundColor,
@@ -186,7 +201,8 @@ const ThumbnailImage = ({
                 })}
               />
             )}
-            {titlePosition !== ThumbnailTitlePosition.BELOW
+            {titlePosition !== ThumbnailTitlePosition.BELOW &&
+            titlePosition !== ThumbnailTitlePosition.ABOVE
               ? renderTitle(image)
               : null}
           </div>

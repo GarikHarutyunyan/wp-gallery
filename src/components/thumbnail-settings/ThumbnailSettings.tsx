@@ -74,10 +74,16 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
     const belowOption: ISelectOption = ThumbnailTitlePositionOptions.find(
       (option) => option.value === ThumbnailTitlePosition.BELOW
     ) as ISelectOption;
+    const aboveOption: ISelectOption = ThumbnailTitlePositionOptions.find(
+      (option) => option.value === ThumbnailTitlePosition.ABOVE
+    ) as ISelectOption;
 
     if (titleVisibility === TitleVisibility.ON_HOVER) {
       if (belowOption) {
         belowOption.isDisabled = true;
+      }
+      if (aboveOption) {
+        aboveOption.isDisabled = true;
       }
 
       if (titlePosition === ThumbnailTitlePosition.BELOW) {
@@ -86,12 +92,19 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
           titlePosition: ThumbnailTitlePosition.BOTTOM,
         });
       }
+      if (titlePosition === ThumbnailTitlePosition.ABOVE) {
+        onChange({
+          ...value,
+          titlePosition: ThumbnailTitlePosition.TOP,
+        });
+      }
     } else {
       belowOption.isDisabled = false;
+      aboveOption.isDisabled = false;
     }
 
     return ThumbnailTitlePositionOptions;
-  }, [titleVisibility]);
+  }, [titlePosition, titleVisibility]);
 
   const renderBasicSettings = (): ReactNode => {
     return (
