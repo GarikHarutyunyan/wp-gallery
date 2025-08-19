@@ -149,9 +149,19 @@ const ThumbnailImage = ({
           titlePosition === ThumbnailTitlePosition.ABOVE
             ? 'hidden'
             : 'unset',
+        display:
+          titlePosition === ThumbnailTitlePosition.ABOVE ? 'flex' : 'initial',
       }}
     >
-      <ImageListItem key={image.thumbnail.url}>
+      <ImageListItem
+        key={image.thumbnail.url}
+        style={{
+          justifyContent:
+            titlePosition === ThumbnailTitlePosition.ABOVE
+              ? 'space-between'
+              : 'initial',
+        }}
+      >
         {titlePosition === ThumbnailTitlePosition.ABOVE
           ? renderTitle(image)
           : null}
