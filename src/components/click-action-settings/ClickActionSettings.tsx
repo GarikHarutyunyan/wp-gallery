@@ -4,12 +4,12 @@ import {useSettings} from 'components/settings';
 import {Filter} from 'components/settings/Filter';
 import {useTemplates} from 'contexts';
 import {
+  ActionURLSourceOptions,
   IGeneralSettings,
   ImageClickAction,
   ImageClickActionOptions,
-  ActionURLSourceOptions,
 } from 'data-structures';
-import React, {ReactElement} from 'react';
+import {ReactElement} from 'react';
 
 interface IClickActionSettingsProps {
   isLoading?: boolean;
@@ -19,7 +19,8 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {generalSettings, changeGeneralSettings: onActionChange} =
     useSettings();
-  const {clickAction, openUrlInNewTab, actionUrlSource} = generalSettings as IGeneralSettings;
+  const {clickAction, openUrlInNewTab, actionUrlSource} =
+    generalSettings as IGeneralSettings;
 
   const isClickActionUrl: boolean = clickAction === ImageClickAction.URL;
 
@@ -79,11 +80,11 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
           </Filter>
           <Filter isLoading={isLoading}>
             <SelectControl
-                id={'actionUrlSource'}
-                name={'Action URL source'}
-                value={actionUrlSource}
-                options={ActionURLSourceOptions}
-                onChange={onActionValueChange}
+              id={'actionUrlSource'}
+              name={'URL source'}
+              value={actionUrlSource}
+              options={ActionURLSourceOptions}
+              onChange={onActionValueChange}
             />
           </Filter>
         </>

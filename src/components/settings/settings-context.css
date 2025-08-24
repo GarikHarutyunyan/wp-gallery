@@ -74,3 +74,27 @@
 .type-panel-select__title {
   margin-left: 10px !important;
 }
+
+.reacg-section__body {
+  .reacg-section__header {
+    background: linear-gradient(to top, #ffffff, #fafafa);
+    border-radius: 4px;
+  }
+  .reacg-section__container-inherit {
+    width: calc(100% - 32px);
+    margin-left: 32px;
+    border: 1px solid #eee;
+    border-radius: 0 0 4px 4px;
+    border-top: none;
+    padding-bottom: 16px;
+    padding-right: 16px;
+    padding-top: 16px;
+    background: linear-gradient(to bottom, #ffffff, #fafafa);
+  }
+  .reacg-section__container-inherit .MuiInput-input {
+    background: transparent;
+  }
+  .reacg-section__container-inherit .MuiGrid-item {
+    padding-left: 16px;
+  }
+}

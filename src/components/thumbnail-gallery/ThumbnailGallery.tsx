@@ -34,9 +34,12 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     padding,
     paddingColor,
     borderRadius,
+    showTitle,
     titleSource,
     titlePosition,
+    captionPosition,
     titleAlignment,
+    captionVisibility,
     titleVisibility,
     titleFontFamily,
     titleColor,
@@ -46,6 +49,12 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     captionSource,
     captionFontSize,
     captionFontColor,
+    showDescription,
+    descriptionSource,
+    descriptionPosition,
+    descriptionFontSize,
+    descriptionFontColor,
+    descriptionMaxRowsCount,
   } = settings as IThumbnailSettings;
   const elementRef = useRef();
   const [containerWidth, setContainerWidth] = useState(0);
@@ -217,9 +226,12 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
               height={getHeight}
               onClick={onImageClick(index)}
               getImageSource={getImageSource}
+              showTitle={showTitle}
               titleSource={titleSource}
               titlePosition={titlePosition}
+              captionPosition={captionPosition}
               titleAlignment={titleAlignment}
+              captionVisibility={captionVisibility}
               titleVisibility={titleVisibility}
               titleFontFamily={titleFontFamily}
               titleColor={titleColor}
@@ -232,6 +244,12 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
               captionSource={captionSource}
               captionFontSize={captionFontSize}
               captionFontColor={captionFontColor}
+              showDescription={showDescription}
+              descriptionSource={descriptionSource}
+              descriptionPosition={descriptionPosition}
+              descriptionFontSize={descriptionFontSize}
+              descriptionFontColor={descriptionFontColor}
+              descriptionMaxRowsCount={descriptionMaxRowsCount}
             />
           ))}
         </ImageList>
