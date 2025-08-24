@@ -49,8 +49,10 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
     borderRadius,
     titleSource,
     titleVisibility,
+    captionVisibility,
     titleAlignment,
     titlePosition,
+    captionPosition,
     titleColor,
     titleFontFamily,
     titleFontSize,
@@ -59,20 +61,23 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
     captionSource,
     captionFontSize,
     captionFontColor,
+    showTitle,
   } = settings;
   const imageBorderRadius =
     padding < borderRadius / 2 ? borderRadius - padding : borderRadius / 2;
 
   const renderTitle = (): ReactNode => {
-    const paddingTitle = (titlePosition !== TitlePosition.CENTER) ? imageBorderRadius / 2 + 'px' : '0';
+    const paddingTitle =
+      titlePosition !== TitlePosition.CENTER
+        ? imageBorderRadius / 2 + 'px'
+        : '0';
 
     return image ? (
       <div
         className={clsx('photo-album-item__title', {
           'photo-album-item__title_on-hover':
-            titleVisibility === TitleVisibility.ON_HOVER,
-          'photo-album-item__title_hidden':
-            titleVisibility === TitleVisibility.NONE,
+            showTitle && titleVisibility === TitleVisibility.ON_HOVER,
+          'photo-album-item__title_hidden': !showTitle,
         })}
         key={image.id}
       >
@@ -84,11 +89,11 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
               lineHeight: 'normal',
             },
             '& .MuiImageListItemBar-subtitle': {
-            fontSize: `${captionFontSize}px`,
-            fontFamily: titleFontFamily,
-            color: captionFontColor,
-            lineHeight: 'normal',
-          },
+              fontSize: `${captionFontSize}px`,
+              fontFamily: titleFontFamily,
+              color: captionFontColor,
+              lineHeight: 'normal',
+            },
           }}
           style={{
             textAlign: titleAlignment,
@@ -100,14 +105,69 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             'photo-album-item__title-content_center':
               titlePosition === TitlePosition.CENTER,
           })}
-          title={<span>{image?.[titleSource] || <br />}</span>}
+          title={showTitle && <span>{image?.[titleSource] || <br />}</span>}
           subtitle={
-              showCaption && image[captionSource] && (
-              <span className="photo-album-item__caption">{image[captionSource]}</span>
+            titlePosition === captionPosition &&
+            showCaption &&
+            image[captionSource] && (
+              <span className="photo-album-item__caption">
+                {image[captionSource]}
+              </span>
             )
           }
           position={
             titlePosition !== TitlePosition.CENTER ? titlePosition : 'bottom'
+          }
+        />
+      </div>
+    ) : null;
+  };
+
+  const renderCaption = (): ReactNode => {
+    const paddingTitle =
+      titlePosition !== TitlePosition.CENTER
+        ? imageBorderRadius / 2 + 'px'
+        : '0';
+
+    return image ? (
+      <div
+        className={clsx('photo-album-item__title', {
+          'photo-album-item__title_on-hover':
+            showCaption && captionVisibility === TitleVisibility.ON_HOVER,
+          'photo-album-item__title_hidden': !showCaption,
+        })}
+        key={image.id}
+      >
+        <ImageListItemBar
+          sx={{
+            '& .MuiImageListItemBar-subtitle': {
+              fontSize: `${captionFontSize}px`,
+              fontFamily: titleFontFamily,
+              color: captionFontColor,
+              lineHeight: 'normal',
+            },
+          }}
+          style={{
+            textAlign: titleAlignment,
+            paddingLeft: paddingTitle,
+            paddingRight: paddingTitle,
+            color: captionFontColor,
+          }}
+          className={clsx({
+            'photo-album-item__title-content_center':
+              captionPosition === TitlePosition.CENTER,
+          })}
+          subtitle={
+            showCaption && (
+              <span className="photo-album-item__caption">
+                {image[captionSource] || <br />}
+              </span>
+            )
+          }
+          position={
+            captionPosition !== TitlePosition.CENTER
+              ? captionPosition
+              : 'bottom'
           }
         />
       </div>
@@ -158,6 +218,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           />
         )}
         {renderTitle()}
+        {titlePosition != captionPosition && renderCaption()}
       </div>
     </div>
   );

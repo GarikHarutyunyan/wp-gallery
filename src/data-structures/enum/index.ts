@@ -2,6 +2,7 @@ export * from './ActionURLSource';
 export * from './AspectRatio';
 export * from './BlogViewImagePosition';
 export * from './CaptionSource';
+export * from './DescriptionPosition';
 export * from './DescriptionSource';
 export * from './GalleryType';
 export * from './HoverEffect';

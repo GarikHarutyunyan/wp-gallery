@@ -1,6 +1,7 @@
 import {
   BlogViewImagePosition,
   CaptionSource,
+  DescriptionPosition,
   DescriptionSource,
   GalleryType,
   HoverEffect,
@@ -31,9 +32,12 @@ export interface IThumbnailSettings {
   padding: number;
   paddingColor: string;
   borderRadius: number;
+  showTitle: boolean;
   titleSource: TitleSource;
   titlePosition: ThumbnailTitlePosition;
+  captionPosition: ThumbnailTitlePosition;
   titleAlignment: TitleAlignment;
+  captionVisibility: TitleVisibility;
   titleVisibility: TitleVisibility;
   titleFontFamily: string;
   titleColor: string;
@@ -44,6 +48,12 @@ export interface IThumbnailSettings {
   captionSource: CaptionSource;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  showDescription: boolean;
+  descriptionSource: DescriptionSource;
+  descriptionPosition: DescriptionPosition;
+  descriptionFontSize?: number | undefined;
+  descriptionFontColor: string;
+  descriptionMaxRowsCount?: number | undefined; 
 }
 
 export interface IMasonrySettings {
@@ -59,6 +69,8 @@ export interface IMasonrySettings {
   titlePosition: TitlePosition;
   titleAlignment: TitleAlignment;
   titleVisibility: TitleVisibility;
+  captionVisibility: TitleVisibility;
+  captionPosition: TitlePosition;
   titleFontFamily: string;
   titleColor: string;
   titleFontSize?: number | undefined;
@@ -68,6 +80,7 @@ export interface IMasonrySettings {
   captionSource: CaptionSource;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  showTitle: boolean;
 }
 
 export interface IMosaicSettings extends IMasonrySettings {}

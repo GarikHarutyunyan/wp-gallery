@@ -2,6 +2,7 @@ import {
   ActionURLSource,
   BlogViewImagePosition,
   CaptionSource,
+  DescriptionPosition,
   DescriptionSource,
   HoverEffect,
   IBlogSettings,
@@ -43,9 +44,12 @@ const thumbnailMockSettings: IThumbnailSettings = {
   paddingColor: 'Skyblue',
   borderRadius: 5,
   titlePosition: ThumbnailTitlePosition.BOTTOM,
+  captionPosition: ThumbnailTitlePosition.BOTTOM,
   titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
-  titleVisibility: TitleVisibility.NONE,
+  showTitle: false,
+  captionVisibility: TitleVisibility.ALWAYS_SHOWN,
+  titleVisibility: TitleVisibility.ALWAYS_SHOWN,
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
@@ -55,6 +59,12 @@ const thumbnailMockSettings: IThumbnailSettings = {
   captionSource: CaptionSource.CAPTION,
   captionFontSize: 18,
   captionFontColor: 'Grey',
+  showDescription: false,
+  descriptionSource: DescriptionSource.DESCRIPTION,
+  descriptionPosition: DescriptionPosition.BELOW,
+  descriptionFontSize: 18,
+  descriptionFontColor: 'Black',
+  descriptionMaxRowsCount: 3,
 };
 
 const mosaicMockSettings: IMosaicSettings = {
@@ -67,9 +77,11 @@ const mosaicMockSettings: IMosaicSettings = {
   columns: 5,
   borderRadius: 5,
   titlePosition: TitlePosition.BOTTOM,
+  captionPosition: TitlePosition.BOTTOM,
   titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
-  titleVisibility: TitleVisibility.NONE,
+  titleVisibility: TitleVisibility.ALWAYS_SHOWN,
+  captionVisibility: TitleVisibility.ALWAYS_SHOWN,
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
@@ -79,6 +91,7 @@ const mosaicMockSettings: IMosaicSettings = {
   captionSource: CaptionSource.CAPTION,
   captionFontSize: 18,
   captionFontColor: 'Grey',
+  showTitle: false,
 };
 const justifiedMockSettings: IJustifiedSettings = {
   width: 70,
@@ -90,9 +103,11 @@ const justifiedMockSettings: IJustifiedSettings = {
   rowHeight: 250,
   borderRadius: 5,
   titlePosition: TitlePosition.BOTTOM,
+  captionPosition: TitlePosition.BOTTOM,
   titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
-  titleVisibility: TitleVisibility.NONE,
+  titleVisibility: TitleVisibility.ALWAYS_SHOWN,
+  captionVisibility: TitleVisibility.ALWAYS_SHOWN,
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
@@ -102,6 +117,7 @@ const justifiedMockSettings: IJustifiedSettings = {
   captionSource: CaptionSource.CAPTION,
   captionFontSize: 18,
   captionFontColor: 'Grey',
+  showTitle: false,
 };
 
 const masonryMockSettings: IMasonrySettings = {
@@ -114,9 +130,11 @@ const masonryMockSettings: IMasonrySettings = {
   columns: 5,
   borderRadius: 5,
   titlePosition: TitlePosition.BOTTOM,
+  captionPosition: TitlePosition.BOTTOM,
   titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
-  titleVisibility: TitleVisibility.NONE,
+  titleVisibility: TitleVisibility.ALWAYS_SHOWN,
+  captionVisibility: TitleVisibility.ALWAYS_SHOWN,
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
@@ -126,6 +144,7 @@ const masonryMockSettings: IMasonrySettings = {
   captionSource: CaptionSource.CAPTION,
   captionFontSize: 18,
   captionFontColor: 'Grey',
+  showTitle: false,
 };
 
 const slideshowMockSettings: ISlideshowSettings = {

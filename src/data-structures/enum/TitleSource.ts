@@ -2,20 +2,20 @@ export enum TitleSource {
   TITLE = 'title',
   CAPTION = 'caption',
   ALT = 'alt',
-  PRICE = 'price',
   DESCRIPTION = 'description',
+  PRICE = 'price',
   AUTHOR = 'author',
   DATECREATED = 'date_created',
   EXIF = 'exif',
 }
 
 export const TitleSourceOptions = [
-  {value: TitleSource.TITLE, title: 'Title'},
-  {value: TitleSource.CAPTION, title: 'Caption'},
-  {value: TitleSource.ALT, title: 'Alt'},
-  {value: TitleSource.PRICE, title: 'Price'},
-  {value: TitleSource.DESCRIPTION, title: 'Description'},
+  {value: TitleSource.TITLE, title: 'Item Title'},
+  {value: TitleSource.CAPTION, title: 'Item Caption'},
+  {value: TitleSource.ALT, title: 'Item Alt'},
+  {value: TitleSource.DESCRIPTION, title: 'Item Description'},
+  {value: TitleSource.PRICE, title: 'Product Price'},
   {value: TitleSource.AUTHOR, title: 'Author'},
-  {value: TitleSource.DATECREATED, title: 'Date created'},
-  {value: TitleSource.EXIF, title: 'EXIF'},
+  {value: TitleSource.DATECREATED, title: 'Date Created'},
+  {value: TitleSource.EXIF, title: 'Image EXIF'},
 ];
