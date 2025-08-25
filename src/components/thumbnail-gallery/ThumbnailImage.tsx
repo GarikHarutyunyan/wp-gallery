@@ -251,6 +251,7 @@ const ThumbnailImage = ({
           lineHeight: 'normal',
           paddingLeft: paddingTitle,
           paddingRight: paddingTitle,
+          textAlign: titleAlignment,
         }}
       >
         {image[descriptionSource]}

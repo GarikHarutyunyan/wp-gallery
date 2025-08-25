@@ -82,21 +82,17 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
   };
 
   const titlePositionOptions: ISelectOption[] = useMemo(() => {
-    const belowOption: ISelectOption = ThumbnailTitlePositionOptions.find(
-      (option) => option.value === ThumbnailTitlePosition.BELOW
-    ) as ISelectOption;
-    const aboveOption: ISelectOption = ThumbnailTitlePositionOptions.find(
-      (option) => option.value === ThumbnailTitlePosition.ABOVE
-    ) as ISelectOption;
+    let options = [...ThumbnailTitlePositionOptions]; // Copy, never mutate original.
 
     if (titleVisibility === TitleVisibility.ON_HOVER) {
-      if (belowOption) {
-        belowOption.isDisabled = true;
-      }
-      if (aboveOption) {
-        aboveOption.isDisabled = true;
-      }
+      // Remove BELOW and ABOVE completely.
+      options = options.filter(
+        (option) =>
+          option.value !== ThumbnailTitlePosition.BELOW &&
+          option.value !== ThumbnailTitlePosition.ABOVE
+      );
 
+      // If current value is BELOW or ABOVE, replace with fallback.
       if (titlePosition === ThumbnailTitlePosition.BELOW) {
         onChange({
           ...value,
@@ -109,13 +105,10 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
           titlePosition: ThumbnailTitlePosition.TOP,
         });
       }
-    } else {
-      belowOption.isDisabled = false;
-      aboveOption.isDisabled = false;
     }
 
-    return ThumbnailTitlePositionOptions;
-  }, [titlePosition, titleVisibility]);
+    return options;
+  }, [titlePosition, titleVisibility, onChange, value]);
 
   const renderBasicSettings = (): ReactNode => {
     return (
