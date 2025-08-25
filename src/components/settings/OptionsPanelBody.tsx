@@ -46,6 +46,9 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   const hideLightboxOptions: boolean = !showLightbox;
 
   const onActiveTabChange = (_: any, newActiveTab: string) => {
+    if (hideLightboxOptions && newActiveTab === 'lightbox') {
+      return;
+    }
     setActiveTab(newActiveTab);
   };
 
