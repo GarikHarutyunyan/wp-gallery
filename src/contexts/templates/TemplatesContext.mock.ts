@@ -1,6 +1,7 @@
 import {
   ActionURLSource,
   CaptionSource,
+  DescriptionPosition,
   DescriptionSource,
   GalleryType,
   HoverEffect,
@@ -33,10 +34,13 @@ const thumbnailMockSettings: IThumbnailSettings = {
   padding: 10,
   paddingColor: 'Skyblue',
   borderRadius: 5,
+  showTitle: false,
   titlePosition: ThumbnailTitlePosition.BOTTOM,
+  captionPosition: ThumbnailTitlePosition.BOTTOM,
   titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
-  titleVisibility: TitleVisibility.NONE,
+  captionVisibility: TitleVisibility.ALWAYS_SHOWN,
+  titleVisibility: TitleVisibility.ALWAYS_SHOWN,
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
@@ -46,32 +50,12 @@ const thumbnailMockSettings: IThumbnailSettings = {
   captionSource: CaptionSource.CAPTION,
   captionFontSize: 18,
   captionFontColor: 'Grey',
-};
-const thumbnailMockSettings2: IThumbnailSettings = {
-  fillContainer: false,
-  aspectRatio: '1.33',
-  width: 200,
-  height: 250,
-  columns: 3,
-  gap: 10,
-  backgroundColor: 'White',
-  containerPadding: 0,
-  padding: 10,
-  paddingColor: 'Skyblue',
-  borderRadius: 5,
-  titlePosition: ThumbnailTitlePosition.BOTTOM,
-  titleSource: TitleSource.TITLE,
-  titleAlignment: TitleAlignment.LEFT,
-  titleVisibility: TitleVisibility.NONE,
-  titleFontFamily: 'Roboto',
-  titleColor: 'Black',
-  titleFontSize: 20,
-  hoverEffect: HoverEffect.FLASH,
-  paginationType: PaginationType.SIMPLE,
-  showCaption: false,
-  captionSource: CaptionSource.CAPTION,
-  captionFontSize: 18,
-  captionFontColor: 'Grey',
+  showDescription: false,
+  descriptionSource: DescriptionSource.DESCRIPTION,
+  descriptionPosition: DescriptionPosition.BELOW,
+  descriptionFontSize: 18,
+  descriptionFontColor: 'Black',
+  descriptionMaxRowsCount: 3,
 };
 
 const generalMockSettings: IGeneralSettings = {
@@ -181,9 +165,11 @@ const masonryMockSettings: IMasonrySettings = {
   columns: 5,
   borderRadius: 5,
   titlePosition: TitlePosition.BOTTOM,
+  captionPosition: TitlePosition.BOTTOM,
   titleSource: TitleSource.TITLE,
   titleAlignment: TitleAlignment.LEFT,
-  titleVisibility: TitleVisibility.NONE,
+  titleVisibility: TitleVisibility.ALWAYS_SHOWN,
+  captionVisibility: TitleVisibility.ALWAYS_SHOWN,
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
@@ -193,6 +179,7 @@ const masonryMockSettings: IMasonrySettings = {
   captionSource: CaptionSource.CAPTION,
   captionFontSize: 18,
   captionFontColor: 'Grey',
+  showTitle: false,
 };
 
 const template1 = {
@@ -222,7 +209,7 @@ const template4 = {
   id: '4',
   name: 'Thumbnail Big Items',
   type: GalleryType.THUMBNAILS,
-  thumbnails: thumbnailMockSettings2,
+  thumbnails: thumbnailMockSettings,
   general: generalMockSettings,
   lightbox: lightboxMockSettings,
 };
@@ -233,3 +220,4 @@ const template5 = {
 };
 
 export { template1, template2, template3, template4, template5 };
+

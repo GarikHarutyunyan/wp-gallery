@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import ReImage from 'core-components/re-image/ReImage';
 import {
   CaptionSource,
+  DescriptionPosition,
+  DescriptionSource,
   IImageDTO,
   ImageType,
   ThumbnailTitlePosition,
@@ -25,8 +27,11 @@ interface IThumbnailImageProps {
   height: number;
   onClick?: () => void;
   getImageSource: (image: IImageDTO) => string;
+  showTitle: boolean;
   titleSource: TitleSource;
   titlePosition: ThumbnailTitlePosition;
+  captionPosition: ThumbnailTitlePosition;
+  captionVisibility: TitleVisibility;
   titleVisibility: TitleVisibility;
   titleAlignment?: TitleAlignment;
   titleFontFamily?: string;
@@ -40,6 +45,12 @@ interface IThumbnailImageProps {
   captionSource: CaptionSource;
   captionFontSize?: number | undefined;
   captionFontColor?: string;
+  showDescription: boolean;
+  descriptionSource: DescriptionSource;
+  descriptionPosition: DescriptionPosition;
+  descriptionFontSize?: number | undefined;
+  descriptionFontColor?: string | undefined;
+  descriptionMaxRowsCount?: number | undefined;
 }
 
 const ThumbnailImage = ({
@@ -48,8 +59,11 @@ const ThumbnailImage = ({
   height,
   onClick,
   getImageSource,
+  showTitle,
   titleSource,
   titlePosition,
+  captionPosition,
+  captionVisibility,
   titleVisibility,
   titleAlignment,
   titleFontFamily,
@@ -63,6 +77,12 @@ const ThumbnailImage = ({
   captionSource,
   captionFontSize,
   captionFontColor,
+  showDescription,
+  descriptionSource,
+  descriptionPosition,
+  descriptionFontSize,
+  descriptionFontColor,
+  descriptionMaxRowsCount,
 }: IThumbnailImageProps) => {
   const videoThumbnailIconSize = useMemo<string>(() => {
     const size: number = Math.min(width, height, 55) - 10;
@@ -86,31 +106,37 @@ const ThumbnailImage = ({
       <div
         className={clsx('thumbnail-gallery__title', {
           'thumbnail-gallery__title_on-hover':
+            showTitle &&
             titleVisibility === TitleVisibility.ON_HOVER &&
             titlePosition !== ThumbnailTitlePosition.BELOW &&
             titlePosition !== ThumbnailTitlePosition.ABOVE,
-          'thumbnail-gallery__title_hidden':
-            titleVisibility === TitleVisibility.NONE,
+          'thumbnail-gallery__title_hidden': !showTitle,
+          'thumbnail-gallery__item-outline':
+            showTitle &&
+            (titlePosition === ThumbnailTitlePosition.BELOW ||
+              titlePosition === ThumbnailTitlePosition.ABOVE),
         })}
+        style={{
+          paddingLeft: paddingTitle,
+          paddingRight: paddingTitle,
+        }}
       >
         <ImageListItemBar
           sx={{
-            '& .MuiImageListItemBar-title': {
-              fontSize: `${titleFontSize}px`,
-              fontFamily: titleFontFamily,
-              lineHeight: 'normal',
-            },
             '& .MuiImageListItemBar-subtitle': {
               fontSize: `${captionFontSize}px`,
               fontFamily: titleFontFamily,
               color: captionFontColor,
               lineHeight: 'normal',
             },
+            '& .MuiImageListItemBar-title': {
+              fontSize: `${titleFontSize}px`,
+              fontFamily: titleFontFamily,
+              lineHeight: 'normal',
+            },
           }}
           style={{
             textAlign: titleAlignment,
-            paddingLeft: paddingTitle,
-            paddingRight: paddingTitle,
             color: titleColor,
           }}
           className={clsx({
@@ -119,9 +145,13 @@ const ThumbnailImage = ({
           })}
           title={<span>{image[titleSource] || <br />}</span>}
           subtitle={
-            showCaption && (
+            titlePosition === captionPosition &&
+            titlePosition !== ThumbnailTitlePosition.ABOVE &&
+            titlePosition !== ThumbnailTitlePosition.BELOW &&
+            showCaption &&
+            image[captionSource] && (
               <span className="thumbnail-image__caption">
-                {image[captionSource] || <br />}
+                {image[captionSource]}
               </span>
             )
           }
@@ -133,6 +163,98 @@ const ThumbnailImage = ({
               : titlePosition
           }
         />
+      </div>
+    );
+  };
+
+  const renderCaption = (image: IImageDTO) => {
+    let paddingTitle = '0';
+
+    if (
+      captionPosition === ThumbnailTitlePosition.BELOW ||
+      captionPosition === ThumbnailTitlePosition.ABOVE
+    ) {
+      paddingTitle = margin + 'px';
+    } else if (captionPosition !== ThumbnailTitlePosition.CENTER) {
+      paddingTitle = (borderRadius || 0) / 2 + '%';
+    }
+
+    return (
+      <div
+        className={clsx('thumbnail-gallery__title', {
+          'thumbnail-gallery__title_on-hover':
+            showCaption &&
+            captionVisibility === TitleVisibility.ON_HOVER &&
+            captionPosition !== ThumbnailTitlePosition.BELOW &&
+            captionPosition !== ThumbnailTitlePosition.ABOVE,
+          'thumbnail-gallery__title_hidden': !showCaption,
+          'thumbnail-gallery__item-outline':
+            showCaption &&
+            (captionPosition === ThumbnailTitlePosition.BELOW ||
+              captionPosition === ThumbnailTitlePosition.ABOVE),
+        })}
+        style={{
+          paddingLeft: paddingTitle,
+          paddingRight: paddingTitle,
+        }}
+      >
+        <ImageListItemBar
+          sx={{
+            '& .MuiImageListItemBar-subtitle': {
+              fontSize: `${captionFontSize}px`,
+              fontFamily: titleFontFamily,
+              color: captionFontColor,
+              lineHeight: 'normal',
+            },
+          }}
+          style={{
+            textAlign: titleAlignment,
+            color: captionFontColor,
+          }}
+          className={clsx({
+            'thumbnail-gallery__title-content_center':
+              captionPosition === ThumbnailTitlePosition.CENTER,
+          })}
+          subtitle={
+            showCaption && (
+              <span className="thumbnail-image__caption">
+                {image[captionSource] || <br />}
+              </span>
+            )
+          }
+          position={
+            captionPosition === ThumbnailTitlePosition.CENTER
+              ? 'bottom'
+              : captionPosition === ThumbnailTitlePosition.ABOVE
+              ? 'below'
+              : captionPosition
+          }
+        />
+      </div>
+    );
+  };
+
+  const renderDescription = (image: IImageDTO) => {
+    const paddingTitle = margin + 'px';
+
+    return (
+      <div
+        className={clsx(
+          'thumbnail-gallery__description',
+          'thumbnail-gallery__item-outline'
+        )}
+        style={{
+          WebkitLineClamp: descriptionMaxRowsCount,
+          fontSize: descriptionFontSize,
+          color: descriptionFontColor,
+          fontFamily: titleFontFamily,
+          lineHeight: 'normal',
+          paddingLeft: paddingTitle,
+          paddingRight: paddingTitle,
+          textAlign: titleAlignment,
+        }}
+      >
+        {image[descriptionSource]}
       </div>
     );
   };
@@ -155,17 +277,46 @@ const ThumbnailImage = ({
         key={image.thumbnail.url}
         style={{
           justifyContent:
-            titlePosition === ThumbnailTitlePosition.ABOVE
-              ? 'space-between'
+            ((titlePosition === ThumbnailTitlePosition.ABOVE ||
+              captionPosition === ThumbnailTitlePosition.ABOVE) &&
+              (!showDescription ||
+                descriptionPosition === DescriptionPosition.ABOVE)) ||
+            ((titlePosition !== ThumbnailTitlePosition.ABOVE ||
+              captionPosition !== ThumbnailTitlePosition.ABOVE) &&
+              showDescription &&
+              descriptionPosition === DescriptionPosition.ABOVE)
+              ? 'end'
+              : titlePosition === ThumbnailTitlePosition.ABOVE ||
+                captionPosition === ThumbnailTitlePosition.ABOVE
+              ? 'start'
               : 'initial',
           height:
-            titlePosition === ThumbnailTitlePosition.ABOVE ? '100%' : 'initial',
+            ((titlePosition === ThumbnailTitlePosition.ABOVE ||
+              captionPosition === ThumbnailTitlePosition.ABOVE) &&
+              (!showDescription ||
+                descriptionPosition === DescriptionPosition.ABOVE)) ||
+            ((titlePosition !== ThumbnailTitlePosition.ABOVE ||
+              captionPosition !== ThumbnailTitlePosition.ABOVE) &&
+              showDescription &&
+              descriptionPosition === DescriptionPosition.ABOVE)
+              ? '100%'
+              : titlePosition === ThumbnailTitlePosition.ABOVE ||
+                captionPosition === ThumbnailTitlePosition.ABOVE
+              ? '100%'
+              : 'initial',
         }}
       >
-        {titlePosition === ThumbnailTitlePosition.ABOVE
+        {showTitle && titlePosition === ThumbnailTitlePosition.ABOVE
           ? renderTitle(image)
           : null}
+        {showCaption && captionPosition === ThumbnailTitlePosition.ABOVE
+          ? renderCaption(image)
+          : null}
+        {showDescription && descriptionPosition === DescriptionPosition.ABOVE
+          ? renderDescription(image)
+          : null}
         <div
+          className="thumbnail-gallery__item-outline"
           style={{
             background: backgroundColor,
             borderRadius: borderRadius,
@@ -212,13 +363,22 @@ const ThumbnailImage = ({
               />
             )}
             {titlePosition !== ThumbnailTitlePosition.BELOW &&
-            titlePosition !== ThumbnailTitlePosition.ABOVE
-              ? renderTitle(image)
-              : null}
+              titlePosition !== ThumbnailTitlePosition.ABOVE &&
+              renderTitle(image)}
+            {titlePosition != captionPosition &&
+              captionPosition !== ThumbnailTitlePosition.BELOW &&
+              captionPosition !== ThumbnailTitlePosition.ABOVE &&
+              renderCaption(image)}
           </div>
         </div>
-        {titlePosition === ThumbnailTitlePosition.BELOW
+        {showTitle && titlePosition === ThumbnailTitlePosition.BELOW
           ? renderTitle(image)
+          : null}
+        {showCaption && captionPosition === ThumbnailTitlePosition.BELOW
+          ? renderCaption(image)
+          : null}
+        {showDescription && descriptionPosition === DescriptionPosition.BELOW
+          ? renderDescription(image)
           : null}
       </ImageListItem>
     </div>

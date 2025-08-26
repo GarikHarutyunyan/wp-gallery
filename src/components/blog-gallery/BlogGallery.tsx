@@ -136,7 +136,9 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         textAlign: titleAlignment,
                         margin: 0,
                         padding:
-                          showButton && (!showCaption || !image[captionSource]) && (!showDescription || !image[descriptionSource])
+                          showButton &&
+                          (!showCaption || !image[captionSource]) &&
+                          (!showDescription || !image[descriptionSource])
                             ? '0px 0px 15px'
                             : 0,
                       }}
@@ -153,9 +155,10 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         color: captionFontColor,
                         margin: 0,
                         padding:
-                            showButton && (!showDescription || !image[descriptionSource])
-                                ? '0px 0px 15px'
-                                : 0,
+                          showButton &&
+                          (!showDescription || !image[descriptionSource])
+                            ? '0px 0px 15px'
+                            : 0,
                       }}
                     >
                       {image[captionSource]}
@@ -176,7 +179,9 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                   {showButton && (
                     <Button
                       onClick={() =>
-                        onCustomActionToggle(image?.[buttonUrlSource as ActionURLSource] || '')
+                        onCustomActionToggle(
+                          image?.[buttonUrlSource as ActionURLSource] || ''
+                        )
                       }
                       className={'blog-gallery__button'}
                       style={{
