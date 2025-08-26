@@ -146,8 +146,6 @@ const ThumbnailImage = ({
           title={<span>{image[titleSource] || <br />}</span>}
           subtitle={
             titlePosition === captionPosition &&
-            titlePosition !== ThumbnailTitlePosition.ABOVE &&
-            titlePosition !== ThumbnailTitlePosition.BELOW &&
             showCaption &&
             image[captionSource] && (
               <span className="thumbnail-image__caption">
@@ -309,7 +307,9 @@ const ThumbnailImage = ({
         {showTitle && titlePosition === ThumbnailTitlePosition.ABOVE
           ? renderTitle(image)
           : null}
-        {showCaption && captionPosition === ThumbnailTitlePosition.ABOVE
+        {titlePosition != captionPosition &&
+        showCaption &&
+        captionPosition === ThumbnailTitlePosition.ABOVE
           ? renderCaption(image)
           : null}
         {showDescription && descriptionPosition === DescriptionPosition.ABOVE
@@ -374,7 +374,9 @@ const ThumbnailImage = ({
         {showTitle && titlePosition === ThumbnailTitlePosition.BELOW
           ? renderTitle(image)
           : null}
-        {showCaption && captionPosition === ThumbnailTitlePosition.BELOW
+        {titlePosition != captionPosition &&
+        showCaption &&
+        captionPosition === ThumbnailTitlePosition.BELOW
           ? renderCaption(image)
           : null}
         {showDescription && descriptionPosition === DescriptionPosition.BELOW
