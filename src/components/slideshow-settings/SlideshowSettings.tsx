@@ -10,7 +10,6 @@ import {
   ISlideshowSettings,
   LightboxImageAnimation,
   LightboxImageAnimationOptions,
-  LightboxTextPosition,
   LightboxTextPositionOptions,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
@@ -303,275 +302,268 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
               rowSpacing={2}
               columnSpacing={4}
             >
-              <Filter isLoading={isLoading}>
-                <SelectControl
-                  id={'textPosition'}
-                  name={'Text position'}
-                  value={textPosition}
-                  options={LightboxTextPositionOptions}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-              {textPosition !== LightboxTextPosition.NONE && (
-                <>
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showTitle'}
+                    name={'Show title'}
+                    value={showTitle}
+                    tooltip={
+                      <p>
+                        The Caption must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {showTitle && (
                   <Filter isLoading={isLoading}>
-                    <FontControl
-                      id={'textFontFamily'}
-                      name={'Text font family'}
-                      value={textFontFamily}
+                    <SelectControl
+                      id={'titleSource'}
+                      name={'Source'}
+                      value={titleSource}
+                      options={TitleSourceOptions}
                       onChange={onInputValueChange}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {showTitle && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'titleFontSize'}
+                      name={'Font size'}
+                      value={titleFontSize}
+                      onChange={onInputValueChange}
+                      unit={'vw'}
+                      max={5}
+                      step={0.1}
+                    />
+                  </Filter>
+
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'titleAlignment'}
+                      name={'Alignement'}
+                      value={titleAlignment}
+                      options={TitleAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showCaption'}
+                    name={'Show caption'}
+                    value={showCaption}
+                    tooltip={
+                      <p>
+                        The Caption must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {showCaption && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'captionSource'}
+                      name={'Source'}
+                      value={captionSource}
+                      options={CaptionSourceOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {showCaption && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'captionFontSize'}
+                      name={'Font size'}
+                      value={captionFontSize}
+                      onChange={onInputValueChange}
+                      unit={'vw'}
+                      max={5}
+                      step={0.1}
                     />
                   </Filter>
                   <Filter isLoading={isLoading}>
                     <ColorControl
-                      id={'textColor'}
-                      name="Text color"
-                      value={textColor}
+                      id={'captionFontColor'}
+                      name="Color"
+                      value={captionFontColor}
                       onChange={onInputValueChange}
                     />
                   </Filter>
-                </>
+                </Grid>
               )}
             </Grid>
-
-            {textPosition !== LightboxTextPosition.NONE && (
-              <>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showDescription'}
+                    name={'Show description'}
+                    value={showDescription}
+                    tooltip={
+                      <p>
+                        The Caption must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {showDescription && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'descriptionSource'}
+                      name={'Source'}
+                      value={descriptionSource}
+                      options={DescriptionSourceOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {showDescription && (
                 <Grid
-                  sx={{marginLeft: 0, paddingTop: 2}}
                   container
                   columns={24}
                   rowSpacing={2}
                   columnSpacing={4}
+                  className="reacg-section__container-inherit"
                 >
-                  <Grid
-                    sx={{marginLeft: 0, paddingTop: 2}}
-                    container
-                    columns={24}
-                    rowSpacing={2}
-                    columnSpacing={4}
-                  >
-                    <Filter isLoading={isLoading}>
-                      <SwitchControl
-                        id={'showTitle'}
-                        name={'Show title'}
-                        value={showTitle}
-                        tooltip={
-                          <p>
-                            The Caption must be set by editing each image from
-                            "Images" section.{' '}
-                            <a
-                              className="seetings__see-more-link"
-                              href="https://youtu.be/ziAG16MADbY"
-                              target="_blank"
-                            >
-                              See more
-                            </a>
-                          </p>
-                        }
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    {showTitle && (
-                      <Filter isLoading={isLoading}>
-                        <SelectControl
-                          id={'titleSource'}
-                          name={'Source'}
-                          value={titleSource}
-                          options={TitleSourceOptions}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-                    )}
-                  </Grid>
-                  {showTitle && (
-                    <Grid
-                      container
-                      columns={24}
-                      rowSpacing={2}
-                      columnSpacing={4}
-                      className="reacg-section__container-inherit"
-                    >
-                      <Filter isLoading={isLoading}>
-                        <NumberControl
-                          id={'titleFontSize'}
-                          name={'Font size'}
-                          value={titleFontSize}
-                          onChange={onInputValueChange}
-                          unit={'vw'}
-                          max={5}
-                          step={0.1}
-                        />
-                      </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'descriptionFontSize'}
+                      name={'Font size'}
+                      value={descriptionFontSize}
+                      onChange={onInputValueChange}
+                      unit={'vw'}
+                      max={5}
+                      step={0.1}
+                    />
+                  </Filter>
 
-                      <Filter isLoading={isLoading}>
-                        <SelectControl
-                          id={'titleAlignment'}
-                          name={'Alignement'}
-                          value={titleAlignment}
-                          options={TitleAlignmentOptions}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-                    </Grid>
-                  )}
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'descriptionMaxRowsCount'}
+                      name={'Max rows count'}
+                      value={descriptionMaxRowsCount}
+                      onChange={onInputValueChange}
+                      min={1}
+                    />
+                  </Filter>
                 </Grid>
-                <Grid
-                  sx={{marginLeft: 0, paddingTop: 2}}
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
-                >
-                  <Grid
-                    sx={{marginLeft: 0, paddingTop: 2}}
-                    container
-                    columns={24}
-                    rowSpacing={2}
-                    columnSpacing={4}
-                  >
-                    <Filter isLoading={isLoading}>
-                      <SwitchControl
-                        id={'showCaption'}
-                        name={'Show caption'}
-                        value={showCaption}
-                        tooltip={
-                          <p>
-                            The Caption must be set by editing each image from
-                            "Images" section.{' '}
-                            <a
-                              className="seetings__see-more-link"
-                              href="https://youtu.be/ziAG16MADbY"
-                              target="_blank"
-                            >
-                              See more
-                            </a>
-                          </p>
-                        }
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    {showCaption && (
-                      <Filter isLoading={isLoading}>
-                        <SelectControl
-                          id={'captionSource'}
-                          name={'Source'}
-                          value={captionSource}
-                          options={CaptionSourceOptions}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-                    )}
-                  </Grid>
-                  {showCaption && (
-                    <Grid
-                      container
-                      columns={24}
-                      rowSpacing={2}
-                      columnSpacing={4}
-                      className="reacg-section__container-inherit"
-                    >
-                      <Filter isLoading={isLoading}>
-                        <NumberControl
-                          id={'captionFontSize'}
-                          name={'Font size'}
-                          value={captionFontSize}
-                          onChange={onInputValueChange}
-                          unit={'vw'}
-                          max={5}
-                          step={0.1}
-                        />
-                      </Filter>
-                      <Filter isLoading={isLoading}>
-                        <ColorControl
-                          id={'captionFontColor'}
-                          name="Color"
-                          value={captionFontColor}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-                    </Grid>
-                  )}
-                </Grid>
-                <Grid
-                  sx={{marginLeft: 0, paddingTop: 2}}
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
-                >
-                  <Grid
-                    sx={{marginLeft: 0, paddingTop: 2}}
-                    container
-                    columns={24}
-                    rowSpacing={2}
-                    columnSpacing={4}
-                  >
-                    <Filter isLoading={isLoading}>
-                      <SwitchControl
-                        id={'showDescription'}
-                        name={'Show description'}
-                        value={showDescription}
-                        tooltip={
-                          <p>
-                            The Caption must be set by editing each image from
-                            "Images" section.{' '}
-                            <a
-                              className="seetings__see-more-link"
-                              href="https://youtu.be/ziAG16MADbY"
-                              target="_blank"
-                            >
-                              See more
-                            </a>
-                          </p>
-                        }
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    {showDescription && (
-                      <Filter isLoading={isLoading}>
-                        <SelectControl
-                          id={'descriptionSource'}
-                          name={'Source'}
-                          value={descriptionSource}
-                          options={DescriptionSourceOptions}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-                    )}
-                  </Grid>
-                  {showDescription && (
-                    <Grid
-                      container
-                      columns={24}
-                      rowSpacing={2}
-                      columnSpacing={4}
-                      className="reacg-section__container-inherit"
-                    >
-                      <Filter isLoading={isLoading}>
-                        <NumberControl
-                          id={'descriptionFontSize'}
-                          name={'Font size'}
-                          value={descriptionFontSize}
-                          onChange={onInputValueChange}
-                          unit={'vw'}
-                          max={5}
-                          step={0.1}
-                        />
-                      </Filter>
-
-                      <Filter isLoading={isLoading}>
-                        <NumberControl
-                          id={'descriptionMaxRowsCount'}
-                          name={'Max rows count'}
-                          value={descriptionMaxRowsCount}
-                          onChange={onInputValueChange}
-                          min={1}
-                        />
-                      </Filter>
-                    </Grid>
-                  )}
-                </Grid>
-              </>
+              )}
+            </Grid>
+            {(showTitle || showCaption || showDescription) && (
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                    id={'textPosition'}
+                    name={'Text position'}
+                    value={textPosition}
+                    options={LightboxTextPositionOptions}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <FontControl
+                    id={'textFontFamily'}
+                    name={'Text font family'}
+                    value={textFontFamily}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <ColorControl
+                    id={'textColor'}
+                    name="Text color"
+                    value={textColor}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+              </Grid>
             )}
           </Grid>
         }

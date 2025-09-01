@@ -95,12 +95,20 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (textPosition !== LightboxTextPosition.NONE) {
+    if (showTitle || showCaption || showDescription) {
       newPlugins.push(Captions as any);
     }
 
     return newPlugins;
-  }, [isSlideshowAllowed, autoplay, thumbnailsPosition, textPosition]);
+  }, [
+    isSlideshowAllowed,
+    autoplay,
+    thumbnailsPosition,
+    textPosition,
+    showTitle,
+    showCaption,
+    showDescription,
+  ]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -123,7 +131,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     return images!.map((image: IImageDTO) => ({
       description: (
         <>
-          {((showTitle && image[titleSource]) || (showCaption && image[captionSource])) && (
+          {((showTitle && image[titleSource]) ||
+            (showCaption && image[captionSource])) && (
             <p
               className={'reacg-slideshow-texts__title'}
               style={{
@@ -139,13 +148,15 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
               {showTitle && image[titleSource]}
               {showCaption && image[captionSource] && (
                 <span
-                    className={'reacg-slideshow__caption'}
-                    style={{
-                      color: captionFontColor,
-                      fontSize: `clamp(${
-                          captionFontSize / minFactor
-                      }rem, ${captionFontSize}vw, ${captionFontSize * maxFactor}rem)`,
-                    }}
+                  className={'reacg-slideshow__caption'}
+                  style={{
+                    color: captionFontColor,
+                    fontSize: `clamp(${
+                      captionFontSize / minFactor
+                    }rem, ${captionFontSize}vw, ${
+                      captionFontSize * maxFactor
+                    }rem)`,
+                  }}
                 >
                   &nbsp;{image[captionSource]}
                 </span>
@@ -307,7 +318,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           'reacg-slideshow-animation-' + imageAnimation,
           {
             // 'reacg-slideshow-control-buttons_hidden': !areControlButtonsShown,
-            'reacg-slideshow-texts': textPosition !== LightboxTextPosition.NONE,
+            'reacg-slideshow-texts':
+              showTitle || showCaption || showDescription,
             'reacg-slideshow-texts_top': [
               LightboxTextPosition.TOP,
               LightboxTextPosition.ABOVE,

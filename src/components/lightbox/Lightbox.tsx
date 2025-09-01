@@ -10,23 +10,23 @@ import React, {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
+import Counter from 'yet-another-react-lightbox/plugins/counter';
+import 'yet-another-react-lightbox/plugins/counter.css';
 import Download from 'yet-another-react-lightbox/plugins/download';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
+import Share from 'yet-another-react-lightbox/plugins/share';
 import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Video from 'yet-another-react-lightbox/plugins/video';
-import Counter from "yet-another-react-lightbox/plugins/counter";
-import "yet-another-react-lightbox/plugins/counter.css";
-import Share from 'yet-another-react-lightbox/plugins/share';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
+import {useAppInfo} from '../../contexts';
 import {useData} from '../data-context/useData';
 import {useSettings} from '../settings/useSettings';
 import {getSlideMargins} from './CommonFunctions/getSlideMargins';
 import {Captions} from './CustomCaptions/Captions';
 import './lightbox.css';
-import {useAppInfo} from "../../contexts";
 
 interface ILightboxProviderProps {
   activeIndex: number;
@@ -175,7 +175,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (textPosition !== LightboxTextPosition.NONE) {
+    if (showTitle || showCaption || showDescription) {
       newPlugins.push(Captions as any);
     }
 
@@ -190,6 +190,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     isFullscreenAllowed,
     thumbnailsPosition,
     textPosition,
+    showTitle,
+    showCaption,
+    showDescription,
   ]);
 
   const togglePageScroll = (open: boolean) => {
@@ -248,16 +251,16 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     window.history.replaceState({}, '', deepLink(index));
   };
 
-  const deepLink = (index:number) => {
+  const deepLink = (index: number) => {
     const url = new URL(window.location.href);
     if (index >= 0) {
-      if ( galleryId ) {
-        url.searchParams.set("gid", galleryId);
+      if (galleryId) {
+        url.searchParams.set('gid', galleryId);
       }
-      url.searchParams.set("sid", index.toString());
+      url.searchParams.set('sid', index.toString());
     } else {
-      url.searchParams.delete("gid");
-      url.searchParams.delete("sid");
+      url.searchParams.delete('gid');
+      url.searchParams.delete('sid');
     }
 
     return url.toString();
@@ -267,7 +270,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     return images!.map((image: IImageDTO, index: number) => ({
       description: (
         <>
-          {((showTitle && image[titleSource]) || (showCaption && image[captionSource])) && (
+          {((showTitle && image[titleSource]) ||
+            (showCaption && image[captionSource])) && (
             <p
               className={'reacg-lightbox-texts__title'}
               style={{
@@ -282,15 +286,17 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             >
               {showTitle && image[titleSource]}
               {showCaption && image[captionSource] && (
-                  <span
-                      className={'reacg-lightbox__caption'}
-                      style={{
-                        color: captionFontColor,
-                        fontSize: `clamp(${
-                            captionFontSize / minFactor
-                        }rem, ${captionFontSize}vw, ${captionFontSize * maxFactor}rem)`,
-                      }}
-                  >
+                <span
+                  className={'reacg-lightbox__caption'}
+                  style={{
+                    color: captionFontColor,
+                    fontSize: `clamp(${
+                      captionFontSize / minFactor
+                    }rem, ${captionFontSize}vw, ${
+                      captionFontSize * maxFactor
+                    }rem)`,
+                  }}
+                >
                   &nbsp;{image[captionSource]}
                 </span>
               )}
@@ -326,7 +332,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       ],
       poster: image.medium_large.url,
       src: image.original.url,
-      share: { url: deepLink(index), title: image.title, text: image.description },
+      share: {
+        url: deepLink(index),
+        title: image.title,
+        text: image.description,
+      },
       alt: image.alt,
       srcSet: [
         {
@@ -415,13 +425,21 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           disabled: false,
         }}
         counter={{
-          separator: "/",
+          separator: '/',
           container: {
             style: {
-              top: (textPosition === LightboxTextPosition.TOP || textPosition === LightboxTextPosition.ABOVE ? "unset" : 0),
-              bottom: (textPosition === LightboxTextPosition.TOP || textPosition === LightboxTextPosition.ABOVE ? 0 : "unset")
-            }
-          }
+              top:
+                textPosition === LightboxTextPosition.TOP ||
+                textPosition === LightboxTextPosition.ABOVE
+                  ? 'unset'
+                  : 0,
+              bottom:
+                textPosition === LightboxTextPosition.TOP ||
+                textPosition === LightboxTextPosition.ABOVE
+                  ? 0
+                  : 'unset',
+            },
+          },
         }}
         animation={{
           swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
@@ -454,7 +472,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           'reacg-lightbox-animation-' + imageAnimation,
           {
             'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
-            'reacg-lightbox-texts': textPosition !== LightboxTextPosition.NONE,
+            'reacg-lightbox-texts': showTitle || showCaption || showDescription,
             'reacg-lightbox-texts_top': [
               LightboxTextPosition.TOP,
               LightboxTextPosition.ABOVE,
