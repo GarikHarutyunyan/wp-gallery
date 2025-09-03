@@ -91,17 +91,6 @@ const ThumbnailImage = ({
   }, [width, height]);
 
   const renderTitle = (image: IImageDTO) => {
-    let paddingTitle = '0';
-
-    if (
-      titlePosition === ThumbnailTitlePosition.BELOW ||
-      titlePosition === ThumbnailTitlePosition.ABOVE
-    ) {
-      paddingTitle = margin + 'px';
-    } else if (titlePosition !== ThumbnailTitlePosition.CENTER) {
-      paddingTitle = (borderRadius || 0) / 2 + '%';
-    }
-
     return (
       <div
         className={clsx('thumbnail-gallery__title', {
@@ -116,10 +105,6 @@ const ThumbnailImage = ({
             (titlePosition === ThumbnailTitlePosition.BELOW ||
               titlePosition === ThumbnailTitlePosition.ABOVE),
         })}
-        style={{
-          paddingLeft: paddingTitle,
-          paddingRight: paddingTitle,
-        }}
       >
         <ImageListItemBar
           sx={{
@@ -138,6 +123,11 @@ const ThumbnailImage = ({
           style={{
             textAlign: titleAlignment,
             color: titleColor,
+            padding:
+              titlePosition === ThumbnailTitlePosition.TOP ||
+              titlePosition === ThumbnailTitlePosition.BOTTOM
+                ? '0 calc(' + (borderRadius || 0) / 2 + '% - 16px)'
+                : 0,
           }}
           className={clsx({
             'thumbnail-gallery__title-content_center':
@@ -166,17 +156,6 @@ const ThumbnailImage = ({
   };
 
   const renderCaption = (image: IImageDTO) => {
-    let paddingTitle = '0';
-
-    if (
-      captionPosition === ThumbnailTitlePosition.BELOW ||
-      captionPosition === ThumbnailTitlePosition.ABOVE
-    ) {
-      paddingTitle = margin + 'px';
-    } else if (captionPosition !== ThumbnailTitlePosition.CENTER) {
-      paddingTitle = (borderRadius || 0) / 2 + '%';
-    }
-
     return (
       <div
         className={clsx('thumbnail-gallery__title', {
@@ -191,10 +170,6 @@ const ThumbnailImage = ({
             (captionPosition === ThumbnailTitlePosition.BELOW ||
               captionPosition === ThumbnailTitlePosition.ABOVE),
         })}
-        style={{
-          paddingLeft: paddingTitle,
-          paddingRight: paddingTitle,
-        }}
       >
         <ImageListItemBar
           sx={{
@@ -208,6 +183,11 @@ const ThumbnailImage = ({
           style={{
             textAlign: titleAlignment,
             color: captionFontColor,
+            padding:
+              titlePosition === ThumbnailTitlePosition.TOP ||
+              titlePosition === ThumbnailTitlePosition.BOTTOM
+                ? '0 calc(' + (borderRadius || 0) / 2 + '% - 16px)'
+                : 0,
           }}
           className={clsx({
             'thumbnail-gallery__title-content_center':
@@ -233,8 +213,6 @@ const ThumbnailImage = ({
   };
 
   const renderDescription = (image: IImageDTO) => {
-    const paddingTitle = margin + 'px';
-
     return (
       <div
         className={clsx(
@@ -247,8 +225,6 @@ const ThumbnailImage = ({
           color: descriptionFontColor,
           fontFamily: titleFontFamily,
           lineHeight: 'normal',
-          paddingLeft: paddingTitle,
-          paddingRight: paddingTitle,
           textAlign: titleAlignment,
         }}
       >
@@ -274,6 +250,10 @@ const ThumbnailImage = ({
       <ImageListItem
         key={image.thumbnail.url}
         style={{
+          padding: margin + 'px',
+          background: backgroundColor,
+          borderRadius: borderRadius + '%',
+          boxSizing: 'border-box',
           justifyContent:
             ((titlePosition === ThumbnailTitlePosition.ABOVE ||
               captionPosition === ThumbnailTitlePosition.ABOVE) &&
@@ -315,13 +295,7 @@ const ThumbnailImage = ({
         {showDescription && descriptionPosition === DescriptionPosition.ABOVE
           ? renderDescription(image)
           : null}
-        <div
-          className="thumbnail-gallery__item-outline"
-          style={{
-            background: backgroundColor,
-            borderRadius: borderRadius,
-          }}
-        >
+        <div className="thumbnail-gallery__item-outline">
           <div
             ref={wrapperRef}
             className={clsx(
@@ -333,7 +307,6 @@ const ThumbnailImage = ({
             style={{
               width: width + 'px',
               height: height + 'px',
-              margin: margin + 'px',
               borderRadius: borderRadius + '%',
             }}
           >
