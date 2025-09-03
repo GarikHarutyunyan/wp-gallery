@@ -319,7 +319,7 @@ const ThumbnailImage = ({
           className="thumbnail-gallery__item-outline"
           style={{
             background: backgroundColor,
-            borderRadius: borderRadius,
+            borderRadius: borderRadius + '%',
           }}
         >
           <div
