@@ -71,6 +71,9 @@ const SwiperImage = forwardRef(
             className={'swiper-gallery__video'}
             controls
             onMouseDown={onMouseDown}
+            muted
+            playsInline
+            loop
           />
         )}
       </div>
