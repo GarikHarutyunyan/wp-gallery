@@ -166,19 +166,25 @@ const TemplatesSelect: React.FC = () => {
 
   const options: ISelectOption[] =
     templates?.map((template) => {
-      const {title, id} = template;
+      const {title, id, type} = template;
       const isDisabled: boolean = id === 'none';
 
       return {
         title: title,
-        value: id,
+        value: id as string,
         render: getPropOptionRender(template),
         isDisabled,
+        type: type,
       };
     }) || [];
 
   const onChange = (newValue: string | number) => {
-    changeTemplate?.(newValue as string);
+    const selected = options.find((opt) => opt.value === newValue);
+    if (selected) {
+      console.log(newValue);
+      console.log((selected as any).type);
+      changeTemplate?.(newValue as string, (selected as any).type);
+    }
   };
 
   const resetPreviewDialogInfo = () =>

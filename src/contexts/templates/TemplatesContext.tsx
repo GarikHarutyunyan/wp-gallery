@@ -8,9 +8,9 @@ import {ITemplate, ITemplateReference} from './TemplatesContext.types';
 const TemplatesContext = React.createContext<{
   templates?: ITemplateReference[];
   template?: ITemplate;
-  changeTemplate?: (id: string) => void;
+  changeTemplate?: (id: string, type: string) => void;
   resetTemplate?: () => void;
-  initTemplate?: (id: string, title: string) => void;
+  initTemplate?: (id: string, title: string, type: string) => void;
   isLoading?: boolean;
 }>({});
 
@@ -18,12 +18,14 @@ const noneOption: ITemplateReference = {
   id: 'none',
   title: 'None',
   paid: false,
+  type: '',
 };
 
 const emptyTemplate: ITemplate = {
   title: 'None',
   template_id: 'none',
   template: true,
+  templateType: '',
 };
 
 const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
@@ -39,7 +41,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       return;
     }
     const fetchUrl: string =
-      'https://regallery.team/core/wp-json/reacgcore/v2/templates'; //baseUrl      ? baseUrl + 'templates'      : undefined;
+      'https://regallery.team/core/wp-json/reacgcore/v2/templates';
 
     try {
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
@@ -47,8 +49,20 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       queryString += `version=${pluginVersion}`;
       const response = await axios.get(`${fetchUrl}${queryString}`);
       const templatesData: ITemplateReference[] = response.data;
+
+      const customTemplatesResponse = await axios.get(
+        baseUrl +
+          'templates' +
+          (baseUrl?.includes('?') ? '&' : '?') +
+          'version=' +
+          pluginVersion
+      );
+      const customTemplatesData: ITemplateReference[] =
+        customTemplatesResponse.data;
+
       const withNoneOption: ITemplateReference[] = [
         ...templatesData,
+        ...customTemplatesData,
         noneOption,
       ];
 
@@ -59,7 +73,10 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
-  const getTemplate = async (id: string | number): Promise<void> => {
+  const getTemplate = async (
+    id: string | number,
+    type: string
+  ): Promise<void> => {
     const coreUrl: string = `https://regallery.team/core/wp-json/reacgcore/v2/template/${id}`;
     const coreUrlQueryStringSeperator: string = coreUrl.includes('?')
       ? '&'
@@ -75,7 +92,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     optionsUrlQueryString += `timestamp=${getOptionsTimestamp?.()}`;
 
     const fetchUrl: string =
-      id === 0
+      id === 0 || type === 'custom'
         ? `${optionsUrl}${optionsUrlQueryString}`
         : `${coreUrl}${coreUrlQueryString}`;
 
@@ -87,6 +104,9 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           (window as any).reacg_open_premium_offer_dialog?.();
         } else {
           const templateData: ITemplate = response.data;
+          templateData.templateType = type;
+          templateData.template_id = id;
+          console.log(templateData);
 
           setTemplate(templateData);
         }
@@ -119,16 +139,21 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
-  const changeTemplate = (id: string) => {
+  const changeTemplate = (id: string, type: string) => {
     if (id === 'none') {
       resetTemplate();
     } else {
-      getTemplate(id);
+      getTemplate(id, type);
     }
   };
 
-  const initTemplate = (id: string, title: string) => {
-    setTemplate({template_id: id, title: title, template: true});
+  const initTemplate = (id: string, title: string, type: string) => {
+    setTemplate({
+      template_id: id,
+      title: title,
+      template: true,
+      templateType: type,
+    });
   };
 
   useLayoutEffect(() => {

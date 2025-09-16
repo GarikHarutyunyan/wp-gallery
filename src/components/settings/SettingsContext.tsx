@@ -112,6 +112,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const currentData = allData?.[galleryId as string];
     const optionsData: any = currentData?.options;
     const newSettings: ISettingsDTO = optionsData;
+    console.log(optionsData);
 
     setType(newSettings.type);
     setCss(newSettings.css || '');
@@ -129,13 +130,20 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setBlogSettings(newSettings.blog || blogMockSettings);
     initTemplate?.(
       newSettings?.template_id as string,
-      newSettings?.title as string
+      newSettings?.title as string,
+      newSettings?.templateType as string
     );
   };
 
   const getData = async () => {
+    const allData = (window as any).reacg_data;
+    const currentData = allData?.[galleryId as string];
+    const optionsData: any = currentData?.options;
+    console.log(optionsData);
     const fetchUrl: string | undefined = baseUrl
-      ? baseUrl + 'options/' + galleryId
+      ? baseUrl + 'options/' + optionsData.templateType === 'custom'
+        ? optionsData.template_id
+        : galleryId
       : undefined;
 
     if (fetchUrl) {
@@ -163,7 +171,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setBlogSettings(newSettings.blog || blogMockSettings);
       initTemplate?.(
         newSettings?.template_id as string,
-        newSettings?.title as string
+        newSettings?.title as string,
+        newSettings?.templateType as string
       );
       setIsLoading(false);
     } else {
@@ -246,6 +255,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         cards: cardsSettings,
         slideshow: slideshowSettings,
         blog: blogSettings,
+        templateType: template?.templateType,
         template_id:
           template?.template_id == 'none' ? '' : template?.template_id,
         css: css || '',
@@ -272,7 +282,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           (TypeUtils.isNumber(newSettings?.template_id)
             ? newSettings?.template_id
             : 'none') as string,
-          newSettings?.title as string
+          newSettings?.title as string,
+          newSettings?.templateType as string
         );
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
@@ -335,7 +346,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCss(newSettings.css || '');
         initTemplate?.(
           newSettings?.template_id as string,
-          newSettings?.title as string
+          newSettings?.title as string,
+          newSettings?.templateType as string
         );
         enqueueSnackbar(successMessage, {
           variant: 'success',

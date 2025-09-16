@@ -1,10 +1,11 @@
 import {MenuItem, TextField} from '@mui/material';
 import React, {CSSProperties, forwardRef, ReactNode} from 'react';
-import {LabelWithTooltip} from "./LabelWithTooltip";
+import {LabelWithTooltip} from './LabelWithTooltip';
 
 interface ISelectOption {
   title: string;
   value: string;
+  type?: string;
   render?: (value?: string) => ReactNode;
   isDisabled?: boolean;
 }
