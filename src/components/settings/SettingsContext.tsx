@@ -112,7 +112,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const currentData = allData?.[galleryId as string];
     const optionsData: any = currentData?.options;
     const newSettings: ISettingsDTO = optionsData;
-    console.log(optionsData);
 
     setType(newSettings.type);
     setCss(newSettings.css || '');
@@ -136,14 +135,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const getData = async () => {
-    const allData = (window as any).reacg_data;
-    const currentData = allData?.[galleryId as string];
-    const optionsData: any = currentData?.options;
-    console.log(optionsData);
     const fetchUrl: string | undefined = baseUrl
-      ? baseUrl + 'options/' + optionsData.templateType === 'custom'
-        ? optionsData.template_id
-        : galleryId
+      ? baseUrl + 'options/' + galleryId
       : undefined;
 
     if (fetchUrl) {

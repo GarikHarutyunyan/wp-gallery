@@ -8,6 +8,7 @@ interface ISelectOption {
   type?: string;
   render?: (value?: string) => ReactNode;
   isDisabled?: boolean;
+  className?: string;
 }
 
 export enum ReSize {
@@ -72,9 +73,14 @@ const SelectControl: React.FC<ISelectControlProps> = forwardRef(
         hiddenLabel={hideLabel}
         inputProps={{renderValue}}
       >
-        {options.map(({value, title, render, isDisabled}) => {
+        {options.map(({value, title, render, isDisabled, className}) => {
           return (
-            <MenuItem key={value} value={value} disabled={isDisabled}>
+            <MenuItem
+              className={className}
+              key={value}
+              value={value}
+              disabled={isDisabled}
+            >
               {render?.(value) || title}
             </MenuItem>
           );

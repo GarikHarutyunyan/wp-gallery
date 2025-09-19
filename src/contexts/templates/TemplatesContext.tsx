@@ -6,7 +6,8 @@ import {useAppInfo} from '../AppInfoContext';
 import {ITemplate, ITemplateReference} from './TemplatesContext.types';
 
 const TemplatesContext = React.createContext<{
-  templates?: ITemplateReference[];
+  preBuiltTemplates?: ITemplateReference[];
+  myTemplates?: ITemplateReference[];
   template?: ITemplate;
   changeTemplate?: (id: string, type: string) => void;
   resetTemplate?: () => void;
@@ -14,17 +15,9 @@ const TemplatesContext = React.createContext<{
   isLoading?: boolean;
 }>({});
 
-const noneOption: ITemplateReference = {
-  id: 'none',
-  title: 'None',
-  paid: false,
-  type: '',
-};
-
 const emptyTemplate: ITemplate = {
-  title: 'None',
+  title: 'Custom template',
   template_id: 'none',
-  template: true,
   templateType: '',
 };
 
@@ -32,7 +25,10 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {pluginVersion, showControls, baseUrl, getOptionsTimestamp} =
     useAppInfo();
   const {enqueueSnackbar} = useSnackbar();
-  const [templates, setTemplates] = useState<ITemplateReference[]>([]);
+  const [preBuiltTemplates, setPreBuiltTemplates] = useState<
+    ITemplateReference[]
+  >([]);
+  const [myTemplates, setMyTemplates] = useState<ITemplateReference[]>([]);
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -48,29 +44,22 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       let queryString = queryStringSeperator;
       queryString += `version=${pluginVersion}`;
       const response = await axios.get(`${fetchUrl}${queryString}`);
-      const templatesData: ITemplateReference[] = response.data;
+      const preBuiltTemplatesData: ITemplateReference[] = response.data;
 
-      const customTemplatesResponse = await axios.get(
-        baseUrl +
-          'templates' +
-          (baseUrl?.includes('?') ? '&' : '?') +
-          'version=' +
-          pluginVersion
-      );
-      const customTemplatesData: ITemplateReference[] =
-        customTemplatesResponse.data;
-
-      const withNoneOption: ITemplateReference[] = [
-        ...templatesData,
-        ...customTemplatesData,
-        noneOption,
-      ];
-
-      setTemplates(withNoneOption);
+      setPreBuiltTemplates(preBuiltTemplatesData);
     } catch (error) {
       console.error(error);
-      setTemplates([noneOption]);
     }
+
+    const myTemplatesResponse = await axios.get(
+      baseUrl +
+        'templates' +
+        (baseUrl?.includes('?') ? '&' : '?') +
+        'version=' +
+        pluginVersion
+    );
+    const myTemplatesData: ITemplateReference[] = myTemplatesResponse.data;
+    setMyTemplates(myTemplatesData);
   };
 
   const getTemplate = async (
@@ -92,7 +81,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     optionsUrlQueryString += `timestamp=${getOptionsTimestamp?.()}`;
 
     const fetchUrl: string =
-      id === 0 || type === 'custom'
+      id === 0 || type === 'my'
         ? `${optionsUrl}${optionsUrlQueryString}`
         : `${coreUrl}${coreUrlQueryString}`;
 
@@ -106,7 +95,6 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           const templateData: ITemplate = response.data;
           templateData.templateType = type;
           templateData.template_id = id;
-          console.log(templateData);
 
           setTemplate(templateData);
         }
@@ -151,7 +139,6 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setTemplate({
       template_id: id,
       title: title,
-      template: true,
       templateType: type,
     });
   };
@@ -163,7 +150,8 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   return (
     <TemplatesContext.Provider
       value={{
-        templates,
+        preBuiltTemplates,
+        myTemplates,
         template,
         changeTemplate,
         resetTemplate,
