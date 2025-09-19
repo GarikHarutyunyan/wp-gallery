@@ -5,7 +5,6 @@ import {LabelWithTooltip} from './LabelWithTooltip';
 interface ISelectOption {
   title: string;
   value: string;
-  type?: string;
   render?: (value?: string) => ReactNode;
   isDisabled?: boolean;
   className?: string;

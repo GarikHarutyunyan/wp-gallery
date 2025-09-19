@@ -94,7 +94,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         } else {
           const templateData: ITemplate = response.data;
           templateData.templateType = type;
-          templateData.template_id = id;
+          templateData.template_id = id as string;
 
           setTemplate(templateData);
         }
