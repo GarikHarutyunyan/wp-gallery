@@ -114,7 +114,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       // The Default Template's id is fixed 0, to not show warning message in case of changing default template
       if (template?.template_id !== 0) {
         const warningMessage: string =
-          'Please note that when adjusting any parameter, the template will automatically changed to "None".';
+          'Please note that when adjusting any parameter, the template will automatically changed to "Custom template".';
 
         enqueueSnackbar(warningMessage, {
           variant: 'warning',
