@@ -98,3 +98,13 @@
     padding-left: 16px;
   }
 }
+
+ul.MuiMenu-list .reacg-templates-list-option {
+  margin-left: 10px;
+}
+
+ul.MuiMenu-list .reacg-templates-list-option-group {
+  opacity: 1;
+  color: #2271b1;
+  font-weight: bold;
+}
