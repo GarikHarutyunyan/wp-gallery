@@ -31,7 +31,8 @@ const showHighlighter: boolean = !!storageValue
   : true;
 
 const TemplatesSelect: React.FC = () => {
-  const {templates, template, changeTemplate, isLoading} = useTemplates();
+  const {preBuiltTemplates, myTemplates, template, changeTemplate, isLoading} =
+    useTemplates();
   const {
     changeGeneralSettings,
     changeMasonrySettings,
@@ -163,22 +164,55 @@ const TemplatesSelect: React.FC = () => {
       e.stopPropagation();
       window.open(preview_url, '_blank');
     };
-
-  const options: ISelectOption[] =
-    templates?.map((template) => {
+  const options: ISelectOption[] = [
+    {
+      title: 'Pre-built Templates',
+      value: 'separator-pre-built-templates',
+      isDisabled: true,
+      className: 'reacg-templates-list-option-group',
+    },
+    ...(preBuiltTemplates?.map((template) => {
       const {title, id} = template;
-      const isDisabled: boolean = id === 'none';
 
       return {
         title: title,
-        value: id,
+        value: id as string,
         render: getPropOptionRender(template),
-        isDisabled,
+        isDisabled: false,
+        type: 'pre-bult',
+        className: 'reacg-templates-list-option',
       };
-    }) || [];
+    }) || []),
+    {
+      title: 'My Templates',
+      value: 'separator-my-templates',
+      isDisabled: true,
+      className: 'reacg-templates-list-option-group',
+    },
+    ...(myTemplates?.map((template) => {
+      const {title, id} = template;
+
+      return {
+        title: title,
+        value: id as string,
+        render: getPropOptionRender(template),
+        isDisabled: false,
+        type: 'my',
+        className: 'reacg-templates-list-option',
+      };
+    }) || []),
+    {
+      value: 'none',
+      title: 'Custom template',
+      isDisabled: true,
+    },
+  ];
 
   const onChange = (newValue: string | number) => {
-    changeTemplate?.(newValue as string);
+    const selected = options.find((opt) => opt.value === newValue);
+    if (selected) {
+      changeTemplate?.(newValue as string, (selected as any).type);
+    }
   };
 
   const resetPreviewDialogInfo = () =>

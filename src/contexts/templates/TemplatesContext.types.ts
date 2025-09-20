@@ -1,9 +1,9 @@
-import {ISettingsDTO} from 'data-structures';
+import { ISettingsDTO } from 'data-structures';
 
 export interface ITemplate extends Partial<ISettingsDTO> {
   template_id: string;
   title: string;
-  template: boolean;
+  templateType: string;
 }
 
 export interface ITemplateReference {

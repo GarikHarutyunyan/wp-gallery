@@ -242,6 +242,7 @@ export interface ISettingsDTO {
   cards: ICardsSettings;
   blog: IBlogSettings;
   template_id?: number | string;
+  templateType?: string;
   title?: string;
   css?: string;
   custom_css?: string;

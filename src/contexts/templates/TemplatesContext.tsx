@@ -6,31 +6,29 @@ import {useAppInfo} from '../AppInfoContext';
 import {ITemplate, ITemplateReference} from './TemplatesContext.types';
 
 const TemplatesContext = React.createContext<{
-  templates?: ITemplateReference[];
+  preBuiltTemplates?: ITemplateReference[];
+  myTemplates?: ITemplateReference[];
   template?: ITemplate;
-  changeTemplate?: (id: string) => void;
+  changeTemplate?: (id: string, type: string) => void;
   resetTemplate?: () => void;
-  initTemplate?: (id: string, title: string) => void;
+  initTemplate?: (id: string, title: string, type: string) => void;
   isLoading?: boolean;
 }>({});
 
-const noneOption: ITemplateReference = {
-  id: 'none',
-  title: 'None',
-  paid: false,
-};
-
 const emptyTemplate: ITemplate = {
-  title: 'None',
+  title: 'Custom template',
   template_id: 'none',
-  template: true,
+  templateType: '',
 };
 
 const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {pluginVersion, showControls, baseUrl, getOptionsTimestamp} =
     useAppInfo();
   const {enqueueSnackbar} = useSnackbar();
-  const [templates, setTemplates] = useState<ITemplateReference[]>([]);
+  const [preBuiltTemplates, setPreBuiltTemplates] = useState<
+    ITemplateReference[]
+  >([]);
+  const [myTemplates, setMyTemplates] = useState<ITemplateReference[]>([]);
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -39,27 +37,35 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       return;
     }
     const fetchUrl: string =
-      'https://regallery.team/core/wp-json/reacgcore/v2/templates'; //baseUrl      ? baseUrl + 'templates'      : undefined;
+      'https://regallery.team/core/wp-json/reacgcore/v2/templates';
 
     try {
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
       queryString += `version=${pluginVersion}`;
       const response = await axios.get(`${fetchUrl}${queryString}`);
-      const templatesData: ITemplateReference[] = response.data;
-      const withNoneOption: ITemplateReference[] = [
-        ...templatesData,
-        noneOption,
-      ];
+      const preBuiltTemplatesData: ITemplateReference[] = response.data;
 
-      setTemplates(withNoneOption);
+      setPreBuiltTemplates(preBuiltTemplatesData);
     } catch (error) {
       console.error(error);
-      setTemplates([noneOption]);
     }
+
+    const myTemplatesResponse = await axios.get(
+      baseUrl +
+        'templates' +
+        (baseUrl?.includes('?') ? '&' : '?') +
+        'version=' +
+        pluginVersion
+    );
+    const myTemplatesData: ITemplateReference[] = myTemplatesResponse.data;
+    setMyTemplates(myTemplatesData);
   };
 
-  const getTemplate = async (id: string | number): Promise<void> => {
+  const getTemplate = async (
+    id: string | number,
+    type: string
+  ): Promise<void> => {
     const coreUrl: string = `https://regallery.team/core/wp-json/reacgcore/v2/template/${id}`;
     const coreUrlQueryStringSeperator: string = coreUrl.includes('?')
       ? '&'
@@ -75,7 +81,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     optionsUrlQueryString += `timestamp=${getOptionsTimestamp?.()}`;
 
     const fetchUrl: string =
-      id === 0
+      id === 0 || type === 'my'
         ? `${optionsUrl}${optionsUrlQueryString}`
         : `${coreUrl}${coreUrlQueryString}`;
 
@@ -87,6 +93,8 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           (window as any).reacg_open_premium_offer_dialog?.();
         } else {
           const templateData: ITemplate = response.data;
+          templateData.templateType = type;
+          templateData.template_id = id as string;
 
           setTemplate(templateData);
         }
@@ -106,7 +114,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       // The Default Template's id is fixed 0, to not show warning message in case of changing default template
       if (template?.template_id !== 0) {
         const warningMessage: string =
-          'Please note that when adjusting any parameter, the template will automatically changed to "None".';
+          'Please note that when adjusting any parameter, the template will automatically changed to "Custom template".';
 
         enqueueSnackbar(warningMessage, {
           variant: 'warning',
@@ -119,16 +127,20 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
-  const changeTemplate = (id: string) => {
+  const changeTemplate = (id: string, type: string) => {
     if (id === 'none') {
       resetTemplate();
     } else {
-      getTemplate(id);
+      getTemplate(id, type);
     }
   };
 
-  const initTemplate = (id: string, title: string) => {
-    setTemplate({template_id: id, title: title, template: true});
+  const initTemplate = (id: string, title: string, type: string) => {
+    setTemplate({
+      template_id: id,
+      title: title,
+      templateType: type,
+    });
   };
 
   useLayoutEffect(() => {
@@ -138,7 +150,8 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   return (
     <TemplatesContext.Provider
       value={{
-        templates,
+        preBuiltTemplates,
+        myTemplates,
         template,
         changeTemplate,
         resetTemplate,
