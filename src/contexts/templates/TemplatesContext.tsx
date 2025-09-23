@@ -76,7 +76,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         ? `${optionsUrl}${optionsUrlQueryString}`
         : `${coreUrl}${coreUrlQueryString}`;
 
-    if (fetchUrl && id) {
+    if (fetchUrl) {
       setIsLoading(true);
       try {
         const response = await axios.get(fetchUrl);
@@ -100,11 +100,12 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const resetTemplate = (): void => {
-    if (galleryId) {
-      // The Default Template's id is fixed 0, to not show warning message in case of changing default template.
+    // If the template is not current.
+    if (galleryId && template?.template_id !== parseInt(galleryId)) {
+      // The Default template's id is fixed 0, to not show warning message in case of changing default template.
       if (template?.template_id !== 0) {
         const warningMessage: string =
-          'Please note that when adjusting any parameter, the template will automatically changed to current gallery template.';
+          'Please note that when adjusting any parameter, the template will automatically changed to the current gallery template.';
 
         enqueueSnackbar(warningMessage, {
           variant: 'warning',
