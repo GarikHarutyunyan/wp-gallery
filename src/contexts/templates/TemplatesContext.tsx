@@ -1,28 +1,22 @@
 import axios from 'axios';
 import {useSnackbar} from 'notistack';
 import React, {useLayoutEffect, useState} from 'react';
-import {TypeUtils} from 'utils';
 import {useAppInfo} from '../AppInfoContext';
 import {ITemplate, ITemplateReference} from './TemplatesContext.types';
 
 const TemplatesContext = React.createContext<{
+  galleryId?: string;
   preBuiltTemplates?: ITemplateReference[];
   myTemplates?: ITemplateReference[];
   template?: ITemplate;
-  changeTemplate?: (id: string, type: string) => void;
+  changeTemplate?: (id: number, type: string) => void;
   resetTemplate?: () => void;
-  initTemplate?: (id: string, title: string, type: string) => void;
+  initTemplate?: (id: number, title: string, type: string) => void;
   isLoading?: boolean;
 }>({});
 
-const emptyTemplate: ITemplate = {
-  title: 'Custom template',
-  template_id: 'none',
-  templateType: '',
-};
-
 const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
-  const {pluginVersion, showControls, baseUrl, getOptionsTimestamp} =
+  const {galleryId, pluginVersion, showControls, baseUrl, getOptionsTimestamp} =
     useAppInfo();
   const {enqueueSnackbar} = useSnackbar();
   const [preBuiltTemplates, setPreBuiltTemplates] = useState<
@@ -62,10 +56,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setMyTemplates(myTemplatesData);
   };
 
-  const getTemplate = async (
-    id: string | number,
-    type: string
-  ): Promise<void> => {
+  const getTemplate = async (id: number, type: string): Promise<void> => {
     const coreUrl: string = `https://regallery.team/core/wp-json/reacgcore/v2/template/${id}`;
     const coreUrlQueryStringSeperator: string = coreUrl.includes('?')
       ? '&'
@@ -85,7 +76,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         ? `${optionsUrl}${optionsUrlQueryString}`
         : `${coreUrl}${coreUrlQueryString}`;
 
-    if (fetchUrl && id !== '') {
+    if (fetchUrl && id) {
       setIsLoading(true);
       try {
         const response = await axios.get(fetchUrl);
@@ -94,7 +85,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         } else {
           const templateData: ITemplate = response.data;
           templateData.templateType = type;
-          templateData.template_id = id as string;
+          templateData.template_id = id;
 
           setTemplate(templateData);
         }
@@ -109,12 +100,11 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const resetTemplate = (): void => {
-    // The same as !== 'none', BE keeps '' instead of 'none'
-    if (TypeUtils.isNumber(template?.template_id)) {
-      // The Default Template's id is fixed 0, to not show warning message in case of changing default template
+    if (galleryId) {
+      // The Default Template's id is fixed 0, to not show warning message in case of changing default template.
       if (template?.template_id !== 0) {
         const warningMessage: string =
-          'Please note that when adjusting any parameter, the template will automatically changed to "Custom template".';
+          'Please note that when adjusting any parameter, the template will automatically changed to current gallery template.';
 
         enqueueSnackbar(warningMessage, {
           variant: 'warning',
@@ -122,20 +112,20 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           style: {maxWidth: '288px'},
         });
       }
-
-      setTemplate(emptyTemplate);
+      const templateData: ITemplate = {
+        title: myTemplates.find((item) => item.id === galleryId)?.title || '',
+        template_id: parseInt(galleryId),
+        templateType: 'my',
+      };
+      setTemplate(templateData);
     }
   };
 
-  const changeTemplate = (id: string, type: string) => {
-    if (id === 'none') {
-      resetTemplate();
-    } else {
-      getTemplate(id, type);
-    }
+  const changeTemplate = (id: number, type: string) => {
+    getTemplate(id, type);
   };
 
-  const initTemplate = (id: string, title: string, type: string) => {
+  const initTemplate = (id: number, title: string, type: string) => {
     setTemplate({
       template_id: id,
       title: title,
@@ -150,6 +140,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   return (
     <TemplatesContext.Provider
       value={{
+        galleryId,
         preBuiltTemplates,
         myTemplates,
         template,
