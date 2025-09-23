@@ -64,10 +64,8 @@ const TemplatesSelect: React.FC = () => {
   );
   const value =
     template && TypeUtils.isNumber(template.template_id)
-      ? parseInt(template.template_id)
-      : typeof galleryId !== 'undefined'
-      ? parseInt(galleryId)
-      : 0;
+      ? template.template_id
+      : parseInt(galleryId || '');
   useLayoutEffect(() => {
     if (template && TypeUtils.isNumber(template.template_id)) {
       const {
@@ -209,10 +207,10 @@ const TemplatesSelect: React.FC = () => {
     }) || []),
   ];
 
-  const onChange = (newValue: string | number) => {
-    const selected = options.find((opt) => opt.value === newValue);
+  const onChange = (newValue: number) => {
+    const selected = options.find((opt) => parseInt(opt.value) === newValue);
     if (selected) {
-      changeTemplate?.(newValue as string, (selected as any).type);
+      changeTemplate?.(newValue, (selected as any).type);
     }
   };
 

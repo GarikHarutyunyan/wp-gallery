@@ -111,6 +111,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const currentData = allData?.[galleryId as string];
     const optionsData: any = currentData?.options;
     const newSettings: ISettingsDTO = optionsData;
+    const template_id = newSettings?.template_id?.toString();
 
     setType(newSettings.type);
     setCss(newSettings.css || '');
@@ -127,7 +128,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCardsSettings(newSettings.cards || cardsMockSettings);
     setBlogSettings(newSettings.blog || blogMockSettings);
     initTemplate?.(
-      newSettings?.template_id as string,
+      parseInt(
+        template_id === '' || template_id === 'none'
+          ? galleryId || ''
+          : template_id || ''
+      ),
       newSettings?.title as string,
       newSettings?.templateType as string
     );
@@ -146,6 +151,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       const newSettings: ISettingsDTO = (
         await axios.get(`${fetchUrl}${queryString}`)
       ).data;
+      const template_id = newSettings?.template_id?.toString();
 
       setType(newSettings.type);
       setCss(newSettings.css || '');
@@ -162,7 +168,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCardsSettings(newSettings.cards || cardsMockSettings);
       setBlogSettings(newSettings.blog || blogMockSettings);
       initTemplate?.(
-        newSettings?.template_id as string,
+        parseInt(
+          template_id === '' || template_id === 'none'
+            ? galleryId || ''
+            : template_id || ''
+        ),
         newSettings?.title as string,
         newSettings?.templateType as string
       );
@@ -257,6 +267,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           headers: {'X-WP-Nonce': nonce},
         });
         const newSettings: ISettingsDTO = response.data;
+        const template_id = newSettings?.template_id?.toString();
 
         setGeneralSettings(newSettings.general);
         setThumbnailSettings(newSettings.thumbnails);
@@ -270,7 +281,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
         initTemplate?.(
-          newSettings?.template_id as string,
+          parseInt(
+            template_id === '' || template_id === 'none'
+              ? galleryId || ''
+              : template_id || ''
+          ),
           newSettings?.title as string,
           newSettings?.templateType as string
         );
@@ -320,6 +335,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         queryString += `timestamp=${getOptionsTimestamp?.()}`;
         const response = await axios.get(`${fetchUrl}${queryString}`);
         const newSettings: ISettingsDTO = response.data;
+        const template_id = newSettings?.template_id?.toString();
 
         setGeneralSettings(newSettings.general);
         setThumbnailSettings(newSettings.thumbnails);
@@ -334,7 +350,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setBlogSettings(newSettings.blog);
         setCss(newSettings.css || '');
         initTemplate?.(
-          newSettings?.template_id as string,
+          parseInt(
+            template_id === '' || template_id === 'none'
+              ? galleryId || ''
+              : template_id || ''
+          ),
           newSettings?.title as string,
           newSettings?.templateType as string
         );
