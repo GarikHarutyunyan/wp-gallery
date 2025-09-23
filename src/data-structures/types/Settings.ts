@@ -241,7 +241,7 @@ export interface ISettingsDTO {
   carousel: ICarouselSettings;
   cards: ICardsSettings;
   blog: IBlogSettings;
-  template_id?: number | string;
+  template_id?: number;
   templateType?: string;
   title?: string;
   css?: string;
