@@ -6,6 +6,7 @@ import {useAppInfo} from '../AppInfoContext';
 import {ITemplate, ITemplateReference} from './TemplatesContext.types';
 
 const TemplatesContext = React.createContext<{
+  galleryId?: string;
   preBuiltTemplates?: ITemplateReference[];
   myTemplates?: ITemplateReference[];
   template?: ITemplate;
@@ -15,14 +16,8 @@ const TemplatesContext = React.createContext<{
   isLoading?: boolean;
 }>({});
 
-const emptyTemplate: ITemplate = {
-  title: 'Custom template',
-  template_id: 'none',
-  templateType: '',
-};
-
 const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
-  const {pluginVersion, showControls, baseUrl, getOptionsTimestamp} =
+  const {galleryId, pluginVersion, showControls, baseUrl, getOptionsTimestamp} =
     useAppInfo();
   const {enqueueSnackbar} = useSnackbar();
   const [preBuiltTemplates, setPreBuiltTemplates] = useState<
@@ -109,21 +104,27 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const resetTemplate = (): void => {
-    // The same as !== 'none', BE keeps '' instead of 'none'
-    if (TypeUtils.isNumber(template?.template_id)) {
-      // The Default Template's id is fixed 0, to not show warning message in case of changing default template
-      if (template?.template_id !== 0) {
-        const warningMessage: string =
-          'Please note that when adjusting any parameter, the template will automatically changed to "Custom template".';
+    if (galleryId) {
+      // The same as !== 'none', BE keeps '' instead of 'none'
+      if (TypeUtils.isNumber(template?.template_id)) {
+        // The Default Template's id is fixed 0, to not show warning message in case of changing default template
+        if (template?.template_id !== 0) {
+          const warningMessage: string =
+            'Please note that when adjusting any parameter, the template will automatically changed to current gallery template.';
 
-        enqueueSnackbar(warningMessage, {
-          variant: 'warning',
-          anchorOrigin: {horizontal: 'right', vertical: 'top'},
-          style: {maxWidth: '288px'},
-        });
+          enqueueSnackbar(warningMessage, {
+            variant: 'warning',
+            anchorOrigin: {horizontal: 'right', vertical: 'top'},
+            style: {maxWidth: '288px'},
+          });
+        }
+        const templateData: ITemplate = {
+          title: myTemplates.find((item) => item.id === galleryId)?.title || '',
+          template_id: galleryId,
+          templateType: 'my',
+        };
+        setTemplate(templateData);
       }
-
-      setTemplate(emptyTemplate);
     }
   };
 
@@ -150,6 +151,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   return (
     <TemplatesContext.Provider
       value={{
+        galleryId,
         preBuiltTemplates,
         myTemplates,
         template,

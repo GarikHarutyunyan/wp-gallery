@@ -26,7 +26,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {TypeUtils} from 'utils';
 import {
   blogMockSettings,
   cardsMockSettings,
@@ -249,8 +248,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         slideshow: slideshowSettings,
         blog: blogSettings,
         templateType: template?.templateType,
-        template_id:
-          template?.template_id == 'none' ? '' : template?.template_id,
+        template_id: template?.template_id,
         css: css || '',
       } as ISettingsDTO;
 
@@ -272,9 +270,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
         initTemplate?.(
-          (TypeUtils.isNumber(newSettings?.template_id)
-            ? newSettings?.template_id
-            : 'none') as string,
+          newSettings?.template_id as string,
           newSettings?.title as string,
           newSettings?.templateType as string
         );

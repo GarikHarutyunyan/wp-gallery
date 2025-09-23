@@ -31,8 +31,14 @@ const showHighlighter: boolean = !!storageValue
   : true;
 
 const TemplatesSelect: React.FC = () => {
-  const {preBuiltTemplates, myTemplates, template, changeTemplate, isLoading} =
-    useTemplates();
+  const {
+    galleryId,
+    preBuiltTemplates,
+    myTemplates,
+    template,
+    changeTemplate,
+    isLoading,
+  } = useTemplates();
   const {
     changeGeneralSettings,
     changeMasonrySettings,
@@ -56,10 +62,12 @@ const TemplatesSelect: React.FC = () => {
   const [previewDialogInfo, setPreviewDialogInfo] = useState(
     initialPreviewDialogInfo
   );
-  const value = TypeUtils.isNumber(template?.template_id)
-    ? template!.template_id
-    : 'none';
-
+  const value =
+    template && TypeUtils.isNumber(template.template_id)
+      ? parseInt(template.template_id)
+      : typeof galleryId !== 'undefined'
+      ? parseInt(galleryId)
+      : 0;
   useLayoutEffect(() => {
     if (template && TypeUtils.isNumber(template.template_id)) {
       const {
@@ -179,7 +187,7 @@ const TemplatesSelect: React.FC = () => {
         value: id as string,
         render: getPropOptionRender(template),
         isDisabled: false,
-        type: 'pre-bult',
+        type: 'pre-built',
         className: 'reacg-templates-list-option',
       };
     }) || []),
@@ -191,21 +199,14 @@ const TemplatesSelect: React.FC = () => {
     },
     ...(myTemplates?.map((template) => {
       const {title, id} = template;
-
       return {
         title: title,
         value: id as string,
-        render: getPropOptionRender(template),
         isDisabled: false,
         type: 'my',
         className: 'reacg-templates-list-option',
       };
     }) || []),
-    {
-      value: 'none',
-      title: 'Custom template',
-      isDisabled: true,
-    },
   ];
 
   const onChange = (newValue: string | number) => {
