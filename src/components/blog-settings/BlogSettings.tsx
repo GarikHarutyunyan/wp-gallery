@@ -1,3 +1,4 @@
+import {InputLabel} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
@@ -17,6 +18,7 @@ import {
   TitleAlignmentOptions,
   TitleSourceOptions,
 } from 'data-structures';
+import {LabelWithTooltip} from '../controls/LabelWithTooltip';
 
 import React, {ReactNode} from 'react';
 import {
@@ -553,51 +555,66 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
               )}
             </Grid>
             {(showTitle || showCaption || showDescription || showButton) && (
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <FontControl
-                    id={'textFontFamily'}
-                    name={'Text font family'}
-                    value={textFontFamily}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                    id={'textVerticalAlignment'}
-                    name={'Text vertical alignment'}
-                    value={textVerticalAlignment}
-                    options={TextsAlignmentOptions}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'textHorizontalSpacing'}
-                    name={'Text horizontal spacing'}
-                    value={textHorizontalSpacing}
-                    onChange={onInputValueChange}
-                    min={0}
-                    unit={'px'}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'textVerticalSpacing'}
-                    name={'Text vertical spacing'}
-                    value={textVerticalSpacing}
-                    onChange={onInputValueChange}
-                    min={0}
-                    unit={'px'}
-                  />
-                </Filter>
-              </Grid>
+              <>
+                <Grid
+                  sx={{marginLeft: 0, paddingTop: 2}}
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                >
+                  <Filter isLoading={isLoading}>
+                    <InputLabel shrink variant="filled">
+                      <LabelWithTooltip label={'Text'} tooltip={''} />
+                    </InputLabel>
+                  </Filter>
+                </Grid>
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <FontControl
+                      id={'textFontFamily'}
+                      name={'Font family'}
+                      value={textFontFamily}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'textVerticalAlignment'}
+                      name={'Vertical alignment'}
+                      value={textVerticalAlignment}
+                      options={TextsAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'textHorizontalSpacing'}
+                      name={'Horizontal spacing'}
+                      value={textHorizontalSpacing}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'textVerticalSpacing'}
+                      name={'Vertical spacing'}
+                      value={textVerticalSpacing}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                </Grid>
+              </>
             )}
           </Grid>
         }

@@ -56,6 +56,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
     titleColor,
     titleFontFamily,
     titleFontSize,
+    overlayTextBackground,
+    invertTextColor,
     hoverEffect,
     showCaption,
     captionSource,
@@ -100,6 +102,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             paddingLeft: paddingTitle,
             paddingRight: paddingTitle,
             color: titleColor,
+            backgroundColor: overlayTextBackground,
+            mixBlendMode: invertTextColor ? 'difference' : 'initial',
           }}
           className={clsx({
             'photo-album-item__title-content_center':

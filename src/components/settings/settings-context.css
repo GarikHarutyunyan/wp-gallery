@@ -94,8 +94,9 @@
   .reacg-section__container-inherit .MuiInput-input {
     background: transparent;
   }
-  .reacg-section__container-inherit .MuiGrid-item:first-of-type {
+  .reacg-section__container-inherit .MuiGrid-item {
     padding-left: 16px;
+    padding-right: 16px;
   }
 }
 

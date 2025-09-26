@@ -1,3 +1,4 @@
+import {InputLabel} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
@@ -25,6 +26,7 @@ import {
   SliderControl,
   SwitchControl,
 } from '../controls';
+import {LabelWithTooltip} from '../controls/LabelWithTooltip';
 import {Filter} from '../settings/Filter';
 
 interface ISlideshowSettingsProps {
@@ -531,39 +533,54 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
               )}
             </Grid>
             {(showTitle || showCaption || showDescription) && (
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                    id={'textPosition'}
-                    name={'Text position'}
-                    value={textPosition}
-                    options={LightboxTextPositionOptions}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <FontControl
-                    id={'textFontFamily'}
-                    name={'Text font family'}
-                    value={textFontFamily}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <ColorControl
-                    id={'textColor'}
-                    name="Text color"
-                    value={textColor}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-              </Grid>
+              <>
+                <Grid
+                  sx={{marginLeft: 0, paddingTop: 2}}
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                >
+                  <Filter isLoading={isLoading}>
+                    <InputLabel shrink variant="filled">
+                      <LabelWithTooltip label={'Text'} tooltip={''} />
+                    </InputLabel>
+                  </Filter>
+                </Grid>
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'textPosition'}
+                      name={'Position'}
+                      value={textPosition}
+                      options={LightboxTextPositionOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <FontControl
+                      id={'textFontFamily'}
+                      name={'Font family'}
+                      value={textFontFamily}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'textColor'}
+                      name="Color"
+                      value={textColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </Grid>
+              </>
             )}
           </Grid>
         }

@@ -79,6 +79,8 @@ export interface IMasonrySettings {
   titleFontFamily: string;
   titleColor: string;
   titleFontSize?: number | undefined;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
   hoverEffect: HoverEffect;
   paginationType: PaginationType;
   showCaption: boolean;

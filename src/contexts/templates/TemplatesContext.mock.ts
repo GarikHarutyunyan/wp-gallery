@@ -178,6 +178,8 @@ const masonryMockSettings: IMasonrySettings = {
   titleFontFamily: 'Roboto',
   titleColor: 'Black',
   titleFontSize: 20,
+  overlayTextBackground: 'rgba(0, 0, 0, 0.5)',
+  invertTextColor: false,
   hoverEffect: HoverEffect.BLUR,
   paginationType: PaginationType.SIMPLE,
   showCaption: false,
