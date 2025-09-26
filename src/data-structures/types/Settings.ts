@@ -27,6 +27,9 @@ export interface IThumbnailSettings {
   height?: number | undefined;
   columns?: number | undefined;
   gap: number;
+  itemBorder: number;
+  itemBackgroundColor: string;
+  itemBorderRadius: number;
   backgroundColor: string;
   containerPadding: number;
   padding: number;
@@ -40,6 +43,8 @@ export interface IThumbnailSettings {
   captionVisibility: TitleVisibility;
   titleVisibility: TitleVisibility;
   titleFontFamily: string;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
   titleColor: string;
   titleFontSize?: number | undefined;
   hoverEffect: HoverEffect;
