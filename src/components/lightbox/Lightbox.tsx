@@ -411,6 +411,13 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     captionFontColor,
   ]);
 
+  const responsivePadding = useMemo(() => {
+    if (innerWidth <= 768 || innerHeight <= 576) {
+      return padding / 10;
+    }
+    return padding;
+  }, [innerWidth, innerHeight, padding]);
+
   const renderLighbox = () => {
     return (
       <Lightbox
@@ -451,9 +458,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         carousel={{
           preload: 5,
           finite: !isInfinite,
-          padding,
+          padding: responsivePadding,
         }}
-        // #TODO add generic validation mechanism to avoid this kind of checkings
         thumbnails={{
           position: thumbnailsPosition as any,
           width: thumbnailWidth > 0 ? thumbnailWidth : 10,
