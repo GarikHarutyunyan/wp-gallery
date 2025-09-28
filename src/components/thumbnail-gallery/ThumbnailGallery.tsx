@@ -31,6 +31,9 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     gap,
     backgroundColor,
     containerPadding,
+    itemBorder,
+    itemBackgroundColor,
+    itemBorderRadius,
     padding,
     paddingColor,
     borderRadius,
@@ -44,6 +47,8 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     titleFontFamily,
     titleColor,
     titleFontSize = 1,
+    overlayTextBackground,
+    invertTextColor,
     hoverEffect,
     showCaption,
     captionSource,
@@ -236,6 +241,11 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
               titleFontFamily={titleFontFamily}
               titleColor={titleColor}
               titleFontSize={titleFontSize}
+              overlayTextBackground={overlayTextBackground}
+              invertTextColor={invertTextColor}
+              itemBorder={itemBorder}
+              itemBackgroundColor={itemBackgroundColor}
+              itemBorderRadius={itemBorderRadius}
               backgroundColor={paddingColor}
               borderRadius={borderRadius}
               margin={padding}

@@ -37,6 +37,11 @@ interface IThumbnailImageProps {
   titleFontFamily?: string;
   titleColor?: string;
   titleFontSize?: number | undefined;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
+  itemBorder: number;
+  itemBackgroundColor: string;
+  itemBorderRadius: number;
   backgroundColor?: string;
   borderRadius?: number;
   margin?: number;
@@ -69,6 +74,11 @@ const ThumbnailImage = ({
   titleFontFamily,
   titleColor,
   titleFontSize,
+  overlayTextBackground,
+  invertTextColor,
+  itemBorder,
+  itemBackgroundColor,
+  itemBorderRadius,
   backgroundColor,
   borderRadius,
   margin,
@@ -89,6 +99,11 @@ const ThumbnailImage = ({
 
     return size > 0 ? `${size}px` : '0px';
   }, [width, height]);
+
+  if (itemBorder) {
+    width = width - 2 * itemBorder;
+    height = height - 2 * itemBorder;
+  }
 
   const renderTitle = (image: IImageDTO) => {
     let paddingTitle = '0';
@@ -138,6 +153,17 @@ const ThumbnailImage = ({
           style={{
             textAlign: titleAlignment,
             color: titleColor,
+            backgroundColor:
+              titlePosition !== ThumbnailTitlePosition.BELOW &&
+              titlePosition !== ThumbnailTitlePosition.ABOVE
+                ? overlayTextBackground
+                : 'initial',
+            mixBlendMode:
+              invertTextColor &&
+              titlePosition !== ThumbnailTitlePosition.BELOW &&
+              titlePosition !== ThumbnailTitlePosition.ABOVE
+                ? 'difference'
+                : 'initial',
           }}
           className={clsx({
             'thumbnail-gallery__title-content_center':
@@ -208,6 +234,17 @@ const ThumbnailImage = ({
           style={{
             textAlign: titleAlignment,
             color: captionFontColor,
+            backgroundColor:
+              captionPosition !== ThumbnailTitlePosition.BELOW &&
+              captionPosition !== ThumbnailTitlePosition.ABOVE
+                ? overlayTextBackground
+                : 'initial',
+            mixBlendMode:
+              invertTextColor &&
+              captionPosition !== ThumbnailTitlePosition.BELOW &&
+              captionPosition !== ThumbnailTitlePosition.ABOVE
+                ? 'difference'
+                : 'initial',
           }}
           className={clsx({
             'thumbnail-gallery__title-content_center':
@@ -264,6 +301,10 @@ const ThumbnailImage = ({
       className={'reacg-thumbnails-item'}
       onClick={onClick}
       style={{
+        padding: itemBorder + 'px',
+        background: itemBackgroundColor,
+        borderRadius: itemBorderRadius + '%',
+        boxSizing: 'border-box',
         overflow:
           titlePosition === ThumbnailTitlePosition.BELOW ||
           titlePosition === ThumbnailTitlePosition.ABOVE
@@ -335,6 +376,7 @@ const ThumbnailImage = ({
               height: height + 'px',
               margin: margin + 'px',
               borderRadius: borderRadius + '%',
+              boxSizing: 'border-box',
             }}
           >
             <ReImage
