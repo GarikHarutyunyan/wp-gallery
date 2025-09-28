@@ -100,8 +100,10 @@ const ThumbnailImage = ({
     return size > 0 ? `${size}px` : '0px';
   }, [width, height]);
 
-  width = width - 2 * itemBorder;
-  height = height - 2 * itemBorder;
+  if (itemBorder) {
+    width = width - 2 * itemBorder;
+    height = height - 2 * itemBorder;
+  }
 
   const renderTitle = (image: IImageDTO) => {
     let paddingTitle = '0';

@@ -68,20 +68,19 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
   const imageBorderRadius =
     padding < borderRadius / 2 ? borderRadius - padding : borderRadius / 2;
 
-  const renderTitle = (): ReactNode => {
+  const renderTitle = (image: IImageDTO): ReactNode => {
     const paddingTitle =
       titlePosition !== TitlePosition.CENTER
         ? imageBorderRadius / 2 + 'px'
         : '0';
 
-    return image ? (
+    return (
       <div
         className={clsx('photo-album-item__title', {
           'photo-album-item__title_on-hover':
             showTitle && titleVisibility === TitleVisibility.ON_HOVER,
           'photo-album-item__title_hidden': !showTitle,
         })}
-        key={image.id}
       >
         <ImageListItemBar
           sx={{
@@ -124,23 +123,22 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           }
         />
       </div>
-    ) : null;
+    );
   };
 
-  const renderCaption = (): ReactNode => {
+  const renderCaption = (image: IImageDTO): ReactNode => {
     const paddingTitle =
       titlePosition !== TitlePosition.CENTER
         ? imageBorderRadius / 2 + 'px'
         : '0';
 
-    return image ? (
+    return (
       <div
         className={clsx('photo-album-item__title', {
           'photo-album-item__title_on-hover':
             showCaption && captionVisibility === TitleVisibility.ON_HOVER,
           'photo-album-item__title_hidden': !showCaption,
         })}
-        key={image.id}
       >
         <ImageListItemBar
           sx={{
@@ -175,7 +173,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           }
         />
       </div>
-    ) : null;
+    );
   };
 
   const wrapperRef = useRef(null);
@@ -221,8 +219,10 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             })}
           />
         )}
-        {renderTitle()}
-        {titlePosition != captionPosition && renderCaption()}
+        {(showTitle || showCaption) && renderTitle(image)}
+        {showCaption &&
+          titlePosition != captionPosition &&
+          renderCaption(image)}
       </div>
     </div>
   );
