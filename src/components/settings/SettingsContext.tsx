@@ -82,8 +82,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     resetTemplate,
     isLoading: areTemplatesLoading,
   } = useTemplates();
-  const {galleryId, showControls, baseUrl, nonce, getOptionsTimestamp} =
-    useAppInfo();
+  const {
+    galleryId,
+    pluginVersion,
+    showControls,
+    baseUrl,
+    nonce,
+    getOptionsTimestamp,
+  } = useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
@@ -245,6 +251,17 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
+
+      let isPro = false;
+      try {
+        const response = await axios.get(
+          `https://regallery.team/core/wp-json/reacgcore/v2/user?version=${pluginVersion}`
+        );
+        isPro = !!response.data.responseJSON;
+      } catch (error: any) {
+        console.error(error);
+      }
+
       const settings: ISettingsDTO = {
         general: generalSettings,
         thumbnails: thumbnailSettings,
@@ -260,6 +277,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         templateType: template?.templateType,
         template_id: template?.template_id,
         css: css || '',
+        custom_css: isPro ? customCss : customCss.slice(0, 100), // Do not allow to save more than 100 characteres as custom css with free plan.
       } as ISettingsDTO;
 
       try {
