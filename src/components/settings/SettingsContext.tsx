@@ -204,7 +204,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const currentData = allData?.[galleryId as string];
     const hasFirstChunk: boolean = currentData?.options;
 
-    if (!hasFirstChunk) {
+    if (!hasFirstChunk || showControls) {
       getData();
     } else {
       getDataFromWindow();
