@@ -308,7 +308,9 @@ const ThumbnailImage = ({
         boxSizing: 'border-box',
         overflow:
           titlePosition === ThumbnailTitlePosition.BELOW ||
-          titlePosition === ThumbnailTitlePosition.ABOVE
+          titlePosition === ThumbnailTitlePosition.ABOVE ||
+          captionPosition === ThumbnailTitlePosition.BELOW ||
+          captionPosition === ThumbnailTitlePosition.ABOVE
             ? 'hidden'
             : 'unset',
       }}
@@ -349,8 +351,8 @@ const ThumbnailImage = ({
         {showTitle && titlePosition === ThumbnailTitlePosition.ABOVE
           ? renderTitle(image)
           : null}
-        {titlePosition != captionPosition &&
-        showCaption &&
+        {showCaption &&
+        (titlePosition != captionPosition || !showTitle) &&
         captionPosition === ThumbnailTitlePosition.ABOVE
           ? renderCaption(image)
           : null}
@@ -406,10 +408,12 @@ const ThumbnailImage = ({
                 })}
               />
             )}
-            {titlePosition !== ThumbnailTitlePosition.BELOW &&
+            {showTitle &&
+              titlePosition !== ThumbnailTitlePosition.BELOW &&
               titlePosition !== ThumbnailTitlePosition.ABOVE &&
               renderTitle(image)}
-            {titlePosition != captionPosition &&
+            {showCaption &&
+              (titlePosition != captionPosition || !showTitle) &&
               captionPosition !== ThumbnailTitlePosition.BELOW &&
               captionPosition !== ThumbnailTitlePosition.ABOVE &&
               renderCaption(image)}
@@ -418,8 +422,8 @@ const ThumbnailImage = ({
         {showTitle && titlePosition === ThumbnailTitlePosition.BELOW
           ? renderTitle(image)
           : null}
-        {titlePosition != captionPosition &&
-        showCaption &&
+        {showCaption &&
+        (titlePosition != captionPosition || !showTitle) &&
         captionPosition === ThumbnailTitlePosition.BELOW
           ? renderCaption(image)
           : null}

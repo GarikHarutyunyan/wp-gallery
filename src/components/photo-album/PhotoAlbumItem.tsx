@@ -221,9 +221,9 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             })}
           />
         )}
-        {(showTitle || showCaption) && renderTitle(image)}
+        {showTitle && renderTitle(image)}
         {showCaption &&
-          titlePosition != captionPosition &&
+          (titlePosition != captionPosition || !showTitle) &&
           renderCaption(image)}
       </div>
     </div>
