@@ -2,6 +2,7 @@ import axios from 'axios';
 import clsx from 'clsx';
 import {useTemplates} from 'contexts';
 import {useAppInfo} from 'contexts/AppInfoContext';
+import {usePro} from 'contexts/ProContext';
 import {
   GalleryType,
   IBlogSettings,
@@ -241,6 +242,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     resetTemplate?.();
     setCss('');
   };
+  const {isPro} = usePro();
 
   const onSave = async (): Promise<void> => {
     setHasChanges(false);
@@ -252,16 +254,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (fetchUrl) {
       setIsLoading(true);
 
-      let isPro = false;
-      try {
-        const response = await axios.get(
-          `https://regallery.team/core/wp-json/reacgcore/v2/user?version=${pluginVersion}`
-        );
-        isPro = !!response.data.responseJSON;
-      } catch (error: any) {
-        console.error(error);
+      if (!isPro && generalSettings) {
+        generalSettings.enableWatermark = false;
       }
-
       const settings: ISettingsDTO = {
         general: generalSettings,
         thumbnails: thumbnailSettings,

@@ -14,6 +14,7 @@ import {
   TitleVisibility,
 } from 'data-structures';
 import {useMemo, useRef} from 'react';
+import {Watermark} from 'utils/renderWatermark';
 import {createIcon} from 'yet-another-react-lightbox';
 
 const VideoThumbnailIcon = createIcon(
@@ -393,6 +394,7 @@ const ThumbnailImage = ({
                 height: height + 'px',
               }}
             />
+            <Watermark />
             {image.type === ImageType.VIDEO && (
               <VideoThumbnailIcon
                 style={{

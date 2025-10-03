@@ -8,7 +8,8 @@ import {
 } from 'data-structures';
 import React, {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
-import Lightbox from 'yet-another-react-lightbox';
+import {Watermark} from 'utils/renderWatermark';
+import {Lightbox} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Counter from 'yet-another-react-lightbox/plugins/counter';
 import 'yet-another-react-lightbox/plugins/counter.css';
@@ -454,6 +455,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         }}
         render={{
           buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
+          slideFooter: () => <Watermark />,
         }}
         carousel={{
           preload: 5,

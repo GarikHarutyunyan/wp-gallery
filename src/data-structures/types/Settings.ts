@@ -10,6 +10,7 @@ import {
   LightboxTextPosition,
   LightboxThumbnailsPosition,
   PaginationType,
+  Position,
   SizeTypeHeight,
   SizeTypeWidth,
   TextsAlignment,
@@ -159,6 +160,11 @@ export interface IGeneralSettings {
   clickAction: ImageClickAction;
   openUrlInNewTab: boolean;
   actionUrlSource: string;
+  enableWatermark: boolean;
+  watermarkImageURL: string;
+  watermarkTransparency: number;
+  watermarkSize: number;
+  watermarkPosition: Position;
 }
 
 export interface ICubeSettings {

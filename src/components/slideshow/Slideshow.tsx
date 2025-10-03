@@ -12,6 +12,7 @@ import {
   LightboxThumbnailsPosition,
 } from 'data-structures';
 import React, {ReactElement, useEffect, useMemo, useState} from 'react';
+import {Watermark} from 'utils/renderWatermark';
 import Lightbox, {SlideshowRef} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Inline from 'yet-another-react-lightbox/plugins/inline';
@@ -22,6 +23,7 @@ import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Video from 'yet-another-react-lightbox/plugins/video';
 import 'yet-another-react-lightbox/styles.css';
 import './slideshow.css';
+import { usePro } from 'contexts/ProContext';
 
 interface ISlideshowProps {
   onClick?: (index: number) => void;
@@ -294,6 +296,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
         }}
         render={{
           buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
+          slideFooter: () => <Watermark />,
         }}
         carousel={{
           preload: 5,

@@ -1,6 +1,7 @@
 import ReImage from 'core-components/re-image/ReImage';
 import {IImageDTO, ImageType} from 'data-structures';
 import React, {forwardRef, useRef} from 'react';
+import {Watermark} from 'utils/renderWatermark';
 
 interface ISwiperImageProps {
   galleryKey: string;
@@ -76,6 +77,7 @@ const SwiperImage = forwardRef(
             loop
           />
         )}
+        <Watermark />
       </div>
     );
   }

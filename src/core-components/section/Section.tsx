@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import {Aligner} from 'core-components/aligner';
 import {ExpandMore} from 'core-components/expand-more';
 import React, {ReactNode, useState} from 'react';
-import {TypeUtils} from 'utils';
 import './section.css';
 
 interface ISectionProps {
@@ -37,7 +36,7 @@ const Section: React.FC<ISectionProps> = ({
           'reacg-section__header_clickable': canExpand,
         })}
       >
-        {TypeUtils.isString(header) ? (
+        {
           <Typography
             gutterBottom
             variant="subtitle1"
@@ -46,9 +45,7 @@ const Section: React.FC<ISectionProps> = ({
           >
             {header}
           </Typography>
-        ) : (
-          header
-        )}
+        }
         <span>
           <ExpandMore
             expand={isExpanded}
