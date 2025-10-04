@@ -9,6 +9,10 @@
   cursor: pointer;
 }
 
+.reacg-gallery .thumbnail-gallery__image-wrapper_non_clickable {
+  cursor: default;
+}
+
 .reacg-gallery .thumbnail-gallery__video-icon {
   color: #707070;
   left: 50%;

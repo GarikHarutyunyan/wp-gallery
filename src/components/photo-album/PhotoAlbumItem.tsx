@@ -182,6 +182,11 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
 
   return (
     <div
+      className={clsx(
+        !!onClick
+          ? 'photo-album-item__image-wrapper_clickable'
+          : 'photo-album-item__image-wrapper_non_clickable'
+      )}
       style={{
         background: paddingColor,
         borderRadius: `${borderRadius}px`,
@@ -194,8 +199,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
         className={clsx(
           'photo-album-item__image-wrapper',
           'photo-album-item__image-wrapper_overflow',
-          'photo-album-item__image-wrapper_' + hoverEffect,
-          {'photo-album-item__image-wrapper_clickable': !!onClick}
+          'photo-album-item__image-wrapper_' + hoverEffect
         )}
         style={{
           borderRadius: `${imageBorderRadius}px`,
