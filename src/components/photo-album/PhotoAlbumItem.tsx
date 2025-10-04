@@ -9,6 +9,7 @@ import {
   TitleVisibility,
 } from 'data-structures';
 import React, {CSSProperties, ReactNode, useRef} from 'react';
+import {Watermark} from 'utils/renderWatermark';
 import {createIcon} from 'yet-another-react-lightbox';
 import './photo-album.css';
 
@@ -209,6 +210,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             display: 'block',
           }}
         />
+        <Watermark />
         {image.type === ImageType.VIDEO && (
           <VideoThumbnailIcon
             style={{

@@ -1,4 +1,5 @@
 import {GoogleFontsProvider, TranslationsProvider, useAppInfo} from 'contexts';
+import {ProProvider} from 'contexts/ProContext';
 import ErrorFallback from 'ErrorFallback';
 import {SnackbarProvider} from 'notistack';
 import React, {lazy, Suspense} from 'react';
@@ -13,13 +14,15 @@ const App: React.FC = () => {
 
   const renderApp = () => {
     return (
-      <TranslationsProvider>
-        <SnackbarProvider domRoot={document.body}>
-          <GoogleFontsProvider>
-            <GalleryWrapper />
-          </GoogleFontsProvider>
-        </SnackbarProvider>
-      </TranslationsProvider>
+      <ProProvider>
+        <TranslationsProvider>
+          <SnackbarProvider domRoot={document.body}>
+            <GoogleFontsProvider>
+              <GalleryWrapper />
+            </GoogleFontsProvider>
+          </SnackbarProvider>
+        </TranslationsProvider>
+      </ProProvider>
     );
   };
 

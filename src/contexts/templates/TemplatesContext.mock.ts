@@ -15,6 +15,7 @@ import {
   LightboxTextPosition,
   LightboxThumbnailsPosition,
   PaginationType,
+  Position,
   ThumbnailTitlePosition,
   TitleAlignment,
   TitlePosition,
@@ -80,6 +81,11 @@ const generalMockSettings: IGeneralSettings = {
   clickAction: ImageClickAction.LIGHTBOX,
   openUrlInNewTab: false,
   actionUrlSource: ActionURLSource.ACTIONURL,
+  enableWatermark: false,
+  watermarkImageURL: '',
+  watermarkTransparency: 50,
+  watermarkSize: 50,
+  watermarkPosition: Position.MIDDLECENTER,
 };
 
 const lightboxMockSettings: ILightboxSettings = {

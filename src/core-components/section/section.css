@@ -19,6 +19,8 @@
 .reacg-section__title {
   padding: 10px 20px;
   margin: 0 !important;
+  display: inline-flex;
+  align-items: center;
 }
 
 .reacg-section__expand-more {

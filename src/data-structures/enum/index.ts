@@ -13,6 +13,7 @@ export * from './LightboxThumbnailsPosition';
 export * from './OrderBy';
 export * from './OrderDirection';
 export * from './PaginationType';
+export * from './Position';
 export * from './SizeTypeHeight';
 export * from './SizeTypeWidth';
 export * from './TextsAlignments';
@@ -20,3 +21,4 @@ export * from './TitleAlignment';
 export * from './TitlePosition';
 export * from './TitleSource';
 export * from './TitleVisibility';
+

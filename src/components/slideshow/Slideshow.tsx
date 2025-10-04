@@ -12,6 +12,7 @@ import {
   LightboxThumbnailsPosition,
 } from 'data-structures';
 import React, {ReactElement, useEffect, useMemo, useState} from 'react';
+import {Watermark} from 'utils/renderWatermark';
 import Lightbox, {SlideshowRef} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Inline from 'yet-another-react-lightbox/plugins/inline';
@@ -271,8 +272,79 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     setIndex(0);
   }, [isInfinite]);
 
+  const WatermarkOverlay: React.FC<{
+    rootRef: React.RefObject<HTMLDivElement>;
+  }> = ({rootRef}) => {
+    const [rect, setRect] = useState<{
+      width: number;
+      height: number;
+      left: number;
+      top: number;
+    } | null>(null);
+    useEffect(() => {
+      function updateRect() {
+        if (!rootRef.current) return;
+        // Query only inside this slideshow instance
+        const media = rootRef.current.querySelector(
+          '.yarl__slide_current img, .yarl__slide_current video'
+        );
+        if (media) {
+          const r = (media as HTMLElement).getBoundingClientRect();
+          // Find the slide container to get its position
+          const slide = media.closest('.yarl__slide');
+          if (slide) {
+            const slideRect = (slide as HTMLElement).getBoundingClientRect();
+            setRect({
+              width: r.width,
+              height: r.height,
+              left: r.left - slideRect.left,
+              top: r.top - slideRect.top,
+            });
+          } else {
+            setRect({width: r.width, height: r.height, left: 0, top: 0});
+          }
+        } else {
+          setRect(null);
+        }
+      }
+      updateRect();
+      window.addEventListener('resize', updateRect);
+      const observer = new MutationObserver(updateRect);
+      if (rootRef.current)
+        observer.observe(rootRef.current, {childList: true, subtree: true});
+      return () => {
+        window.removeEventListener('resize', updateRect);
+        observer.disconnect();
+      };
+    }, [rootRef]);
+    if (!rect) return null;
+    return (
+      <div
+        className={'react-watermark-overlay'}
+        style={{
+          position: 'absolute',
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+          pointerEvents: 'none',
+          zIndex: 10,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: 1,
+        }}
+      >
+        <Watermark />
+      </div>
+    );
+  };
+
+  const slideshowRootRef = React.useRef<HTMLDivElement>(null);
+
   return (
     <Box
+      ref={slideshowRootRef}
       sx={{
         width: `${containerWidth}px`,
         height: `${containerHeight}px`,
@@ -294,6 +366,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
         }}
         render={{
           buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
+          slideFooter: () => <WatermarkOverlay rootRef={slideshowRootRef} />,
         }}
         carousel={{
           preload: 5,

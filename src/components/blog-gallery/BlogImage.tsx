@@ -1,6 +1,7 @@
 import ReImage from 'core-components/re-image/ReImage';
+import {ImageType} from 'data-structures';
 import React from 'react';
-import {ImageType} from "data-structures";
+import {Watermark} from 'utils/renderWatermark';
 
 const BlogImage = ({
   image,
@@ -49,6 +50,7 @@ const BlogImage = ({
           alt={image.alt}
         />
       )}
+      <Watermark />
     </div>
   );
 };
