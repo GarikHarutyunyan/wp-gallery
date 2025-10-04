@@ -94,6 +94,9 @@ const ThumbnailImage = ({
   descriptionFontColor,
   descriptionMaxRowsCount,
 }: IThumbnailImageProps) => {
+  if (overlayTextBackground === '') {
+    overlayTextBackground = 'unset';
+  }
   const videoThumbnailIconSize = useMemo<string>(() => {
     const size: number = Math.min(width, height, 55) - 10;
 

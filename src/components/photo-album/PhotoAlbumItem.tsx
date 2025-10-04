@@ -101,7 +101,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             paddingLeft: paddingTitle,
             paddingRight: paddingTitle,
             color: titleColor,
-            backgroundColor: overlayTextBackground,
+            backgroundColor:
+              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
             mixBlendMode: invertTextColor ? 'difference' : 'initial',
           }}
           className={clsx({
