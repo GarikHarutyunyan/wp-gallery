@@ -196,3 +196,8 @@
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail):visited {
   width: unset;
 }
+.reacg-lightbox
+  .yarl__slide:not(.yarl__slide_current)
+  .react-watermark-overlay {
+  opacity: 0 !important;
+}

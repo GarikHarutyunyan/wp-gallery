@@ -93,6 +93,69 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   );
 };
 
+const WatermarkOverlay: React.FC = () => {
+  const [rect, setRect] = useState<{
+    width: number;
+    height: number;
+    left: number;
+    top: number;
+  } | null>(null);
+  useEffect(() => {
+    function updateRect() {
+      const media = document.querySelector(
+        '.reacg-lightbox .yarl__slide_current img, .reacg-lightbox .yarl__slide_current video'
+      );
+      if (media) {
+        const r = (media as HTMLElement).getBoundingClientRect();
+        // Find the slide container to get its position
+        const slide = media.closest('.yarl__slide');
+        if (slide) {
+          const slideRect = (slide as HTMLElement).getBoundingClientRect();
+          setRect({
+            width: r.width,
+            height: r.height,
+            left: r.left - slideRect.left,
+            top: r.top - slideRect.top,
+          });
+        } else {
+          setRect({width: r.width, height: r.height, left: 0, top: 0});
+        }
+      } else {
+        setRect(null);
+      }
+    }
+    updateRect();
+    window.addEventListener('resize', updateRect);
+    const observer = new MutationObserver(updateRect);
+    observer.observe(document.body, {childList: true, subtree: true});
+    return () => {
+      window.removeEventListener('resize', updateRect);
+      observer.disconnect();
+    };
+  }, []);
+  if (!rect) return null;
+  return (
+    <div
+      className={'react-watermark-overlay'}
+      style={{
+        position: 'absolute',
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height,
+        pointerEvents: 'none',
+        zIndex: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: 1,
+      }}
+    >
+      <Watermark />
+    </div>
+  );
+};
+
 const VLightbox: React.FC<ILightboxProviderProps> = ({
   activeIndex,
   onClose,
@@ -455,7 +518,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         }}
         render={{
           buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
-          slideFooter: () => <Watermark />,
+          slideFooter: () => <WatermarkOverlay />,
         }}
         carousel={{
           preload: 5,

@@ -172,3 +172,9 @@
 .yarl__slide_captions:empty {
   display: none;
 }
+
+.reacg-slideshow
+  .yarl__slide:not(.yarl__slide_current)
+  .react-watermark-overlay {
+  opacity: 0 !important;
+}

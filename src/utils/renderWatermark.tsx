@@ -83,7 +83,8 @@ export function Watermark() {
         pointerEvents: 'none',
         position: 'absolute',
         width: `${generalSettings.watermarkSize}%`,
-        height: `${generalSettings.watermarkSize}%`,
+        height: 'auto',
+        border: 'none',
         opacity: 1 - generalSettings.watermarkTransparency / 100,
         ...getWatermarkPositionStyles(generalSettings.watermarkPosition),
       }}
