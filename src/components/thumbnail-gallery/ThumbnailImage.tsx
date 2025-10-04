@@ -302,7 +302,12 @@ const ThumbnailImage = ({
 
   return (
     <div
-      className={'reacg-thumbnails-item'}
+      className={clsx(
+        'reacg-thumbnails-item',
+        !!onClick
+          ? 'thumbnail-gallery__image-wrapper_clickable'
+          : 'thumbnail-gallery__image-wrapper_non_clickable'
+      )}
       onClick={onClick}
       style={{
         padding: itemBorder + 'px',
@@ -374,8 +379,7 @@ const ThumbnailImage = ({
             className={clsx(
               'thumbnail-gallery__image-wrapper',
               'thumbnail-gallery__image-wrapper_overflow',
-              'thumbnail-gallery__image-wrapper_' + hoverEffect,
-              {'thumbnail-gallery__image-wrapper_clickable': !!onClick}
+              'thumbnail-gallery__image-wrapper_' + hoverEffect
             )}
             style={{
               width: width + 'px',

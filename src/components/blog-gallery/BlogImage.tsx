@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import ReImage from 'core-components/re-image/ReImage';
 import {ImageType} from 'data-structures';
 import React from 'react';
@@ -21,9 +22,13 @@ const BlogImage = ({
     <div
       ref={wrapperRef}
       onClick={() => onClick?.(index)}
-      className={`blog-gallery__image-container ${
-        !!onClick ? 'blog-gallery__image_clickable' : ''
-      } photo-album-item__image-wrapper_${hoverEffect}`}
+      className={clsx(
+        'blog-gallery__image-container',
+        'photo-album-item__image-wrapper_' + hoverEffect,
+        !!onClick
+          ? 'blog-gallery__image_clickable'
+          : 'blog-gallery__image_non_clickable'
+      )}
       style={{
         width: `${
           containerInnerWidth >= 1 && containerInnerWidth <= 720
