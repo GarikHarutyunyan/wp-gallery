@@ -136,9 +136,21 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
 
     if (activeVideo) {
-      activeVideo
-        .play()
-        .catch((err: any) => console.warn('Autoplay blocked:', err));
+      if (activeVideo.readyState >= 3) {
+        activeVideo
+          .play()
+          .catch((err: any) => console.warn('Autoplay blocked:', err));
+      } else {
+        const onCanPlay = () => {
+          activeVideo.removeEventListener('canplay', onCanPlay);
+          activeVideo
+            .play()
+            .catch((err: any) => console.warn('Autoplay blocked:', err));
+        };
+        activeVideo.addEventListener('canplay', onCanPlay);
+        // Optionally, force the video to load if it hasn't started.
+        activeVideo.load && activeVideo.load();
+      }
     }
 
     prevIndexRef.current = activeIndex;
@@ -213,7 +225,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
             key={index}
             onClick={() => {
               /*The normalizedIndex is used to control the lightbox behavior accurately when using coverflowEffect.
-                In this mode, I intentionally create duplicate slides for visual  purposes. However, these duplicates can lead to issues if they share the same index — such as breaking navigation.
+                In this mode, I intentionally create duplicate slides for visual  purposes. However, these duplicates can lead to issues if they share the same index - such as breaking navigation.
                 To prevent this, I use coverflowOriginalIndex that take the first origial image id  from 2 the same images*/
               const normalizedIndex =
                 key === 'coverflowEffect' ? coverflowOriginalIndex : index;
