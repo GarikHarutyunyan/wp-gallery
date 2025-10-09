@@ -110,15 +110,16 @@ const ThumbnailImage = ({
   }
 
   const renderTitle = (image: IImageDTO) => {
-    let paddingTitle = '0';
-
+    let itemPaddingText = '0';
+    let imagePaddingText = '0';
     if (
       titlePosition === ThumbnailTitlePosition.BELOW ||
       titlePosition === ThumbnailTitlePosition.ABOVE
     ) {
-      paddingTitle = margin + 'px';
+      itemPaddingText = (itemBorderRadius || 0) / 2 + '%';
+      imagePaddingText = margin + 'px';
     } else if (titlePosition !== ThumbnailTitlePosition.CENTER) {
-      paddingTitle = (borderRadius || 0) / 2 + '%';
+      imagePaddingText = (borderRadius || 0) / 2 + '%';
     }
 
     return (
@@ -136,8 +137,8 @@ const ThumbnailImage = ({
               titlePosition === ThumbnailTitlePosition.ABOVE),
         })}
         style={{
-          paddingLeft: paddingTitle,
-          paddingRight: paddingTitle,
+          paddingLeft: itemPaddingText,
+          paddingRight: itemPaddingText,
         }}
       >
         <ImageListItemBar
@@ -155,6 +156,8 @@ const ThumbnailImage = ({
             },
           }}
           style={{
+            paddingLeft: imagePaddingText,
+            paddingRight: imagePaddingText,
             textAlign: titleAlignment,
             color: titleColor,
             backgroundColor:
@@ -196,15 +199,16 @@ const ThumbnailImage = ({
   };
 
   const renderCaption = (image: IImageDTO) => {
-    let paddingTitle = '0';
-
+    let itemPaddingText = '0';
+    let imagePaddingText = '0';
     if (
       captionPosition === ThumbnailTitlePosition.BELOW ||
       captionPosition === ThumbnailTitlePosition.ABOVE
     ) {
-      paddingTitle = margin + 'px';
+      itemPaddingText = (itemBorderRadius || 0) / 2 + '%';
+      imagePaddingText = margin + 'px';
     } else if (captionPosition !== ThumbnailTitlePosition.CENTER) {
-      paddingTitle = (borderRadius || 0) / 2 + '%';
+      imagePaddingText = (borderRadius || 0) / 2 + '%';
     }
 
     return (
@@ -222,8 +226,8 @@ const ThumbnailImage = ({
               captionPosition === ThumbnailTitlePosition.ABOVE),
         })}
         style={{
-          paddingLeft: paddingTitle,
-          paddingRight: paddingTitle,
+          paddingLeft: itemPaddingText,
+          paddingRight: itemPaddingText,
         }}
       >
         <ImageListItemBar
@@ -236,6 +240,8 @@ const ThumbnailImage = ({
             },
           }}
           style={{
+            paddingLeft: imagePaddingText,
+            paddingRight: imagePaddingText,
             textAlign: titleAlignment,
             color: captionFontColor,
             backgroundColor:
@@ -274,7 +280,9 @@ const ThumbnailImage = ({
   };
 
   const renderDescription = (image: IImageDTO) => {
-    const paddingTitle = margin + 'px';
+    const itemPaddingText = itemBorderRadius
+      ? itemBorderRadius / 2 + '%'
+      : (margin || 0) + 'px';
 
     return (
       <div
@@ -288,8 +296,8 @@ const ThumbnailImage = ({
           color: descriptionFontColor,
           fontFamily: titleFontFamily,
           lineHeight: 'normal',
-          paddingLeft: paddingTitle,
-          paddingRight: paddingTitle,
+          paddingLeft: itemPaddingText,
+          paddingRight: itemPaddingText,
           textAlign: titleAlignment,
         }}
       >
