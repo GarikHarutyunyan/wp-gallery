@@ -1,5 +1,5 @@
 import {Paper, Typography} from '@mui/material';
-import axios, {CancelTokenSource} from 'axios';
+import axios from 'axios';
 import {useAppInfo} from 'contexts/AppInfoContext';
 import {TranslationsContext} from 'contexts/TranslationsContext';
 import {
@@ -15,7 +15,6 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import {useSettings} from '../settings';
@@ -29,7 +28,6 @@ const DataContext = createContext<{
   isLoading?: boolean;
   pagesCount?: number;
   onPageChange?: (_: any, page: number) => void;
-  onSearch?: (newSearchTerm: string) => void;
   currentPage?: number;
   itemsPerPage?: number;
   isFullyLoaded?: boolean;
@@ -81,7 +79,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     orderDirection = 'asc',
   } = generalSettings as IGeneralSettings;
   const {galleryId, baseUrl, getGalleryTimestamp} = useAppInfo();
-  const {noDataText, setLoadMoreText, setNoDataText, setSearchPlaceholder} =
+  const {noDataText, setLoadMoreText, setNoDataText} =
     useContext(TranslationsContext);
   const [images, setImages] = useState<IImageDTO[]>([]);
   const [lightboxImages, setLightboxImages] = useState<
@@ -89,17 +87,13 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   >();
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [searchTerm, setSearchTerm] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [isFetched, setIsFetched] = useState(false);
+
   const pagesCount: number =
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
   const isFullyLoaded: boolean = currentPage >= pagesCount;
-  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null);
-  const lastRequestRef = useRef<{
-    page: number;
-    search: string;
-    itemsPerPage: number;
-  } | null>(null);
+
   useEffect(() => {
     changeImagesCount?.(0);
     setLightboxImages([]);
@@ -108,6 +102,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const allData = (window as any).reacg_data;
     const currentData = allData?.[galleryId as string];
     const hasFirstChunk: boolean = currentData?.images?.length;
+
     if (!hasFirstChunk) {
       getData(1);
     } else {
@@ -120,12 +115,13 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   useUpdateEffect(() => {
     itemsPerPage > 0 && onReloadData();
   }, [itemsPerPage, paginationType, orderBy, orderDirection]);
-  const loadAllLightboxImages = async (): Promise<void> => {
-    if (
-      (!lightboxImages || lightboxImages.length < imageCount) &&
-      images.length < imageCount
+
+  const loadAllLightboxImages = async (gid?: string): Promise<void> => {
+    if ( gid ||
+        ((!lightboxImages || lightboxImages.length < imageCount) &&
+      images.length < imageCount)
     ) {
-      const newLightboxImages: IImageDTO[] = await (getAllData as Function)();
+      const newLightboxImages: IImageDTO[] = await (getAllData as Function)(gid);
 
       setLightboxImages(newLightboxImages);
     } else if (images.length == imageCount) {
@@ -133,18 +129,16 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
-  const getAllData = async (): Promise<IImageDTO[]> => {
+  const getAllData = async (gid?: string): Promise<IImageDTO[]> => {
     const fetchUrl: string | undefined = baseUrl
-      ? baseUrl + 'gallery/' + galleryId + '/images'
+      ? baseUrl + 'gallery/' + (gid || galleryId) + '/images'
       : undefined;
-
     if (fetchUrl) {
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
 
       queryString += `order_by=${orderBy}`;
       queryString += `&order=${orderDirection}`;
-      queryString += `&s=${searchTerm}`;
       queryString += `&timestamp=${getGalleryTimestamp?.()}`;
       const imgData: any[] = (await axios.get(`${fetchUrl}${queryString}`))
         .data;
@@ -159,9 +153,22 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         thumbnail: data.thumbnail,
         title: data.title,
         description: data.description,
+        author: data.author,
+        date_created: data.date_created,
+        exif: (<>
+          {data.exif.split("\n").map((line: string) => (
+              <>
+                {line}
+                <br/>
+              </>
+          ))}
+        </>),
         caption: data.caption,
+        price: data.price,
         alt: data.alt,
         action_url: data.action_url,
+        item_url: data.item_url,
+        checkout_url: data.checkout_url,
       }));
 
       return newImages;
@@ -186,21 +193,31 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       thumbnail: data.thumbnail,
       title: data.title,
       caption: data.caption,
+      price: data.price,
       alt: data.alt,
       description: data.description,
+      author: data.author,
+      date_created: data.date_created,
+      exif: (<>
+        {data.exif.split("\n").map((line: string) => (
+            <>
+              {line}
+              <br/>
+            </>
+        ))}
+      </>),
       action_url: data.action_url,
+      item_url: data.item_url,
+      checkout_url: data.checkout_url,
     }));
 
     const loadMoreText: string | undefined =
       (window as any).reacg_global?.text?.load_more || undefined;
     const noDataText: string | undefined =
       (window as any).reacg_global?.text?.no_data || undefined;
-    const searchPlaceHolder: string | undefined =
-      (window as any).reacg_global?.text?.search || undefined;
 
     loadMoreText && setLoadMoreText?.(loadMoreText);
     noDataText && setNoDataText?.(noDataText);
-    searchPlaceHolder && setSearchPlaceholder?.(searchPlaceHolder);
     setImageCount(newImageCount);
 
     setImages(newImages);
@@ -208,17 +225,10 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCurrentPage(page);
   };
 
-  const getData = async (page: number, search: string = '') => {
-    if (cancelTokenSourceRef.current) {
-      cancelTokenSourceRef.current.cancel(
-        'Operation canceled due to new request.'
-      );
+  const getData = async (page: number) => {
+    if (isLoading) {
+      return;
     }
-
-    const newCancelTokenSource = axios.CancelToken.source();
-    cancelTokenSourceRef.current = newCancelTokenSource;
-    lastRequestRef.current = {page, search, itemsPerPage};
-
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'gallery/' + galleryId + '/images'
       : undefined;
@@ -229,67 +239,66 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       if (page === 1) {
         setImages([]);
       }
+
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
       queryString += `order_by=${orderBy}`;
       queryString += `&order=${orderDirection}`;
-      queryString += `&s=${search}`;
       queryString += `&timestamp=${getGalleryTimestamp?.()}`;
-
       if (paginationType !== PaginationType.NONE) {
         queryString += `&page=${page}`;
         queryString += `&per_page=${itemsPerPage}`;
       }
-      try {
-        const response = await axios.get(`${fetchUrl}${queryString}`, {
-          cancelToken: newCancelTokenSource.token,
-        });
-        const imgData: any[] = response.data;
-        const headers: any = response.headers;
-        const newImages: IImageDTO[] = imgData.map((data: any) => ({
-          id: data.id,
-          type: data.type,
-          original: data.original,
-          width: data.width,
-          height: data.height,
-          large: data.large,
-          medium_large: data.medium_large,
-          thumbnail: data.thumbnail,
-          title: data.title,
-          caption: data.caption,
-          alt: data.alt,
-          description: data.description,
-          action_url: data.action_url,
-        }));
-        const newImageCount: number = headers?.['x-images-count'];
-        const loadMoreText: string | undefined =
-          (window as any).reacg_global?.text?.load_more || undefined;
-        const noDataText: string | undefined =
-          (window as any).reacg_global?.text?.no_data || undefined;
-        const searchPlaceHolder: string | undefined =
-          (window as any).reacg_global?.text?.search || undefined;
-        loadMoreText && setLoadMoreText?.(loadMoreText);
-        noDataText && setNoDataText?.(noDataText);
-        searchPlaceHolder && setSearchPlaceholder?.(searchPlaceHolder);
-        setImageCount(newImageCount);
+      const response: any = await axios.get(`${fetchUrl}${queryString}`);
+      const imgData: any[] = response.data;
+      const headers: any = response.headers;
+      const newImages: IImageDTO[] = imgData.map((data: any) => ({
+        id: data.id,
+        type: data.type,
+        original: data.original,
+        width: data.width,
+        height: data.height,
+        large: data.large,
+        medium_large: data.medium_large,
+        thumbnail: data.thumbnail,
+        title: data.title,
+        caption: data.caption,
+        price: data.price,
+        alt: data.alt,
+        description: data.description,
+        author: data.author,
+        date_created: data.date_created,
+        exif: (<>
+          {data.exif.split("\n").map((line: string) => (
+              <>
+                {line}
+                <br/>
+              </>
+          ))}
+        </>),
+        action_url: data.action_url,
+        item_url: data.item_url,
+        checkout_url: data.checkout_url,
+      }));
+      const newImageCount: number = headers?.['x-images-count'];
+      const loadMoreText: string | undefined =
+        (window as any).reacg_global?.text?.load_more || undefined;
+      const noDataText: string | undefined =
+        (window as any).reacg_global?.text?.no_data || undefined;
 
-        if (paginationType === PaginationType.SIMPLE) {
-          setImages(newImages);
-          changeImagesCount?.(newImages.length);
-        } else {
-          setImages((prevImages) => [...prevImages, ...newImages]);
-          changeImagesCount?.(newImages.length);
-        }
-        setCurrentPage(page);
-        setIsLoading(false);
-        setLightboxImages(newImages);
-      } catch (error: any) {
-        if (axios.isCancel(error)) {
-          console.log('Request canceled:', error.message);
-        } else {
-          console.error('Error loading images:', error);
-        }
+      loadMoreText && setLoadMoreText?.(loadMoreText);
+      noDataText && setNoDataText?.(noDataText);
+      setImageCount(newImageCount);
+
+      if (paginationType === PaginationType.SIMPLE) {
+        setImages(newImages);
+        changeImagesCount?.(newImages.length);
+      } else {
+        setImages((prevImages) => [...prevImages, ...newImages]);
+        changeImagesCount?.(newImages.length);
       }
+      setCurrentPage(page);
+      setIsLoading(false);
     } else {
       setImages(propsImages);
       changeImagesCount?.(propsImages.length);
@@ -301,13 +310,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     _event?: any,
     newPage: number = currentPage + 1
   ): Promise<void> => {
-    await getData(newPage, searchTerm);
-  };
-
-  const onSearch = async (newSearchTerm: string = ''): Promise<void> => {
-    setCurrentPage(0);
-    setSearchTerm(newSearchTerm);
-    getData(1, newSearchTerm);
+    getData(newPage);
   };
 
   const onReloadData = async () => {
@@ -315,7 +318,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setLightboxImages([]);
     setCurrentPage(0);
     setImageCount(0);
-    getData(1, searchTerm);
+    getData(1);
   };
 
   const renderContentPlaceholder = (): ReactElement => {
@@ -336,15 +339,13 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         isLoading,
         pagesCount,
         onPageChange,
-        onSearch,
         currentPage,
         itemsPerPage,
         isFullyLoaded,
         loadAllLightboxImages,
       }}
     >
-      {children}
-      {!images.length && !isLoading && renderContentPlaceholder()}
+      {images.length || isLoading ? children : renderContentPlaceholder()}
       <DataFetcher onClick={onReloadData} />
     </DataContext.Provider>
   );

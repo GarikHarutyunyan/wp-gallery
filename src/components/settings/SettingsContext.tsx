@@ -2,6 +2,7 @@ import axios from 'axios';
 import clsx from 'clsx';
 import {useTemplates} from 'contexts';
 import {useAppInfo} from 'contexts/AppInfoContext';
+import {usePro} from 'contexts/ProContext';
 import {
   GalleryType,
   IBlogSettings,
@@ -26,7 +27,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {TypeUtils} from 'utils';
 import {
   blogMockSettings,
   cardsMockSettings,
@@ -83,8 +83,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     resetTemplate,
     isLoading: areTemplatesLoading,
   } = useTemplates();
-  const {galleryId, showControls, baseUrl, nonce, getOptionsTimestamp} =
-    useAppInfo();
+  const {
+    galleryId,
+    pluginVersion,
+    showControls,
+    baseUrl,
+    nonce,
+    getOptionsTimestamp,
+  } = useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
@@ -112,6 +118,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const currentData = allData?.[galleryId as string];
     const optionsData: any = currentData?.options;
     const newSettings: ISettingsDTO = optionsData;
+    const template_id = newSettings?.template_id?.toString();
 
     setType(newSettings.type);
     setCss(newSettings.css || '');
@@ -128,8 +135,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCardsSettings(newSettings.cards || cardsMockSettings);
     setBlogSettings(newSettings.blog || blogMockSettings);
     initTemplate?.(
-      newSettings?.template_id as string,
-      newSettings?.title as string
+      parseInt(
+        template_id === '' || template_id === 'none'
+          ? galleryId || ''
+          : template_id || ''
+      ),
+      newSettings?.title as string,
+      newSettings?.templateType as string
     );
   };
 
@@ -146,6 +158,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       const newSettings: ISettingsDTO = (
         await axios.get(`${fetchUrl}${queryString}`)
       ).data;
+      const template_id = newSettings?.template_id?.toString();
 
       setType(newSettings.type);
       setCss(newSettings.css || '');
@@ -162,8 +175,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCardsSettings(newSettings.cards || cardsMockSettings);
       setBlogSettings(newSettings.blog || blogMockSettings);
       initTemplate?.(
-        newSettings?.template_id as string,
-        newSettings?.title as string
+        parseInt(
+          template_id === '' || template_id === 'none'
+            ? galleryId || ''
+            : template_id || ''
+        ),
+        newSettings?.title as string,
+        newSettings?.templateType as string
       );
       setIsLoading(false);
     } else {
@@ -187,7 +205,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const currentData = allData?.[galleryId as string];
     const hasFirstChunk: boolean = currentData?.options;
 
-    if (!hasFirstChunk) {
+    if (!hasFirstChunk || showControls) {
       getData();
     } else {
       getDataFromWindow();
@@ -224,6 +242,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     resetTemplate?.();
     setCss('');
   };
+  const {isPro} = usePro();
 
   const onSave = async (): Promise<void> => {
     setHasChanges(false);
@@ -234,6 +253,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
+
+      if (!isPro && generalSettings) {
+        generalSettings.enableWatermark = false;
+      }
       const settings: ISettingsDTO = {
         general: generalSettings,
         thumbnails: thumbnailSettings,
@@ -246,9 +269,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         cards: cardsSettings,
         slideshow: slideshowSettings,
         blog: blogSettings,
-        template_id:
-          template?.template_id == 'none' ? '' : template?.template_id,
+        templateType: template?.templateType,
+        template_id: template?.template_id,
         css: css || '',
+        custom_css: isPro ? customCss : customCss.slice(0, 100), // Do not allow to save more than 100 characteres as custom css with free plan.
       } as ISettingsDTO;
 
       try {
@@ -256,6 +280,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           headers: {'X-WP-Nonce': nonce},
         });
         const newSettings: ISettingsDTO = response.data;
+        const template_id = newSettings?.template_id?.toString();
 
         setGeneralSettings(newSettings.general);
         setThumbnailSettings(newSettings.thumbnails);
@@ -269,10 +294,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
         initTemplate?.(
-          (TypeUtils.isNumber(newSettings?.template_id)
-            ? newSettings?.template_id
-            : 'none') as string,
-          newSettings?.title as string
+          parseInt(
+            template_id === '' || template_id === 'none'
+              ? galleryId || ''
+              : template_id || ''
+          ),
+          newSettings?.title as string,
+          newSettings?.templateType as string
         );
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
@@ -320,6 +348,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         queryString += `timestamp=${getOptionsTimestamp?.()}`;
         const response = await axios.get(`${fetchUrl}${queryString}`);
         const newSettings: ISettingsDTO = response.data;
+        const template_id = newSettings?.template_id?.toString();
 
         setGeneralSettings(newSettings.general);
         setThumbnailSettings(newSettings.thumbnails);
@@ -334,8 +363,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setBlogSettings(newSettings.blog);
         setCss(newSettings.css || '');
         initTemplate?.(
-          newSettings?.template_id as string,
-          newSettings?.title as string
+          parseInt(
+            template_id === '' || template_id === 'none'
+              ? galleryId || ''
+              : template_id || ''
+          ),
+          newSettings?.title as string,
+          newSettings?.templateType as string
         );
         enqueueSnackbar(successMessage, {
           variant: 'success',

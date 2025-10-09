@@ -130,11 +130,6 @@
   object-fit: cover;
 }
 
-.reacg-slideshow img.yarl__slide_image_cover {
-  height: 100%;
-  width: 100%;
-}
-
 .reacg-slideshow button,
 .reacg-slideshow button:hover,
 .reacg-slideshow button:focus,
@@ -176,4 +171,10 @@
 
 .yarl__slide_captions:empty {
   display: none;
+}
+
+.reacg-slideshow
+  .yarl__slide:not(.yarl__slide_current)
+  .react-watermark-overlay {
+  opacity: 0 !important;
 }

@@ -1,6 +1,7 @@
 import ReImage from 'core-components/re-image/ReImage';
 import {IImageDTO, ImageType} from 'data-structures';
 import {forwardRef, useRef} from 'react';
+import {Watermark} from 'utils/renderWatermark';
 
 interface ISwiperImageProps {
   galleryKey: string;
@@ -35,7 +36,6 @@ const SwiperImage = forwardRef(
         ? index < (imagesCount || 0) + 1
         : index < (imagesCount || 0) / 2 + 1 ||
           index > images.length - (imagesCount || 0) / 2 - 1;
-
     return (
       <div ref={wrapperRef} style={{height: '100%', width: '100%'}}>
         {!isVideo ? (
@@ -88,6 +88,7 @@ const SwiperImage = forwardRef(
             />
           </div>
         )}
+        <Watermark />
       </div>
     );
   }

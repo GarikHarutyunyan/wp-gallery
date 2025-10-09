@@ -1,4 +1,9 @@
+export * from './ActionURLSource';
+export * from './AspectRatio';
 export * from './BlogViewImagePosition';
+export * from './CaptionSource';
+export * from './DescriptionPosition';
+export * from './DescriptionSource';
 export * from './GalleryType';
 export * from './HoverEffect';
 export * from './ImageClickAction';
@@ -7,11 +12,13 @@ export * from './LightboxTextPosition';
 export * from './LightboxThumbnailsPosition';
 export * from './OrderBy';
 export * from './OrderDirection';
-export * from './PaginationButtonShape';
 export * from './PaginationType';
+export * from './Position';
 export * from './SizeTypeHeight';
 export * from './SizeTypeWidth';
 export * from './TextsAlignments';
 export * from './TitleAlignment';
 export * from './TitlePosition';
+export * from './TitleSource';
 export * from './TitleVisibility';
+

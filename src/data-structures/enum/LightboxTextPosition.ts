@@ -3,7 +3,6 @@ export enum LightboxTextPosition {
   BOTTOM = 'bottom',
   ABOVE = 'above',
   BELOW = 'below',
-  NONE = 'none',
 }
 
 export const LightboxTextPositionOptions = [
@@ -11,5 +10,4 @@ export const LightboxTextPositionOptions = [
   {value: LightboxTextPosition.BOTTOM, title: 'Bottom'},
   {value: LightboxTextPosition.ABOVE, title: 'Above'},
   {value: LightboxTextPosition.BELOW, title: 'Below'},
-  {value: LightboxTextPosition.NONE, title: 'None'},
 ];

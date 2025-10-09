@@ -1,3 +1,5 @@
+import {ReactElement} from "react";
+
 interface IImageUrl {
   url: string;
   width: number;
@@ -13,8 +15,12 @@ export interface IImageDTO {
   title: string;
   type: ImageType;
   caption: string;
+  price: string;
   alt: string;
   description: string;
+  author: string;
+  date_created: string;
+  exif: ReactElement;
   width: number;
   height: number;
   original: IImageUrl;
@@ -22,4 +28,6 @@ export interface IImageDTO {
   medium_large: IImageUrl;
   thumbnail: IImageUrl;
   action_url: string;
+  item_url: string;
+  checkout_url: string;
 }
