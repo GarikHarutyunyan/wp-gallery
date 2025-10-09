@@ -1,6 +1,6 @@
 import ReImage from 'core-components/re-image/ReImage';
 import {IImageDTO, ImageType} from 'data-structures';
-import React, {forwardRef, useRef} from 'react';
+import {forwardRef, useRef} from 'react';
 import {Watermark} from 'utils/renderWatermark';
 
 interface ISwiperImageProps {
@@ -12,8 +12,6 @@ interface ISwiperImageProps {
   backgroundColor?: string;
   padding?: number;
   size?: number;
-  videoRef?: React.RefObject<HTMLVideoElement>;
-  onMouseDown?: (e: React.MouseEvent) => void;
 }
 
 const SwiperImage = forwardRef(
@@ -26,13 +24,12 @@ const SwiperImage = forwardRef(
       backgroundColor,
       padding,
       size,
-      videoRef,
-      onMouseDown,
       galleryKey: key,
     }: ISwiperImageProps,
     ref
   ) => {
     const wrapperRef = useRef(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
     const isVideo: boolean = image.type === ImageType.VIDEO;
     const shouldLoadImage =
       key === 'cardsEffect'
@@ -59,21 +56,37 @@ const SwiperImage = forwardRef(
             }}
           />
         ) : (
-          <video
-            ref={videoRef}
-            src={image.original.url}
-            poster={image.medium_large.url}
-            style={{
-              background: key !== 'coverflowEffect' ? backgroundColor : '',
-              padding: key !== 'coverflowEffect' ? padding + 'px' : 0,
+          <div
+            style={{position: 'relative', width: '100%', height: '100%'}}
+            onClick={(e) => {
+              if (key === 'coverflowEffect') return;
+              const video = videoRef?.current;
+
+              if (video) {
+                if (video.paused) {
+                  video.play();
+                } else {
+                  video.pause();
+                }
+              }
             }}
-            className={'swiper-gallery__video'}
-            controls
-            onMouseDown={onMouseDown}
-            muted
-            playsInline
-            loop
-          />
+          >
+            <video
+              ref={videoRef}
+              src={image.original.url}
+              poster={image.medium_large.url}
+              style={{
+                background: key !== 'coverflowEffect' ? backgroundColor : '',
+                padding: key !== 'coverflowEffect' ? padding + 'px' : 0,
+              }}
+              className={'swiper-gallery__video'}
+              controls
+              muted
+              playsInline
+              loop
+              preload="auto"
+            />
+          </div>
         )}
         <Watermark />
       </div>
