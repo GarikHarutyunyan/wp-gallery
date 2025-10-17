@@ -217,6 +217,7 @@ const generalMockSettings: IGeneralSettings = {
   watermarkTransparency: 50,
   watermarkSize: 50,
   watermarkPosition: Position.MIDDLECENTER,
+  enableSearch: false,
 };
 
 const lightboxMockSettings: ILightboxSettings = {

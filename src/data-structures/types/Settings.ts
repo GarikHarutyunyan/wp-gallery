@@ -165,6 +165,7 @@ export interface IGeneralSettings {
   watermarkTransparency: number;
   watermarkSize: number;
   watermarkPosition: Position;
+  enableSearch: boolean;
 }
 
 export interface ICubeSettings {
