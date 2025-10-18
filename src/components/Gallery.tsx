@@ -239,7 +239,11 @@ const Gallery: React.FC = () => {
   };
 
   const renderFilterProvider = () => {
-    return <FilterProvider onSearch={onSearch as any} />;
+    return (
+      <Suspense>
+        <FilterProvider onSearch={onSearch as any} />
+      </Suspense>
+    );
   };
 
   const closeLightbox = (): void => {
