@@ -241,7 +241,10 @@ const Gallery: React.FC = () => {
   const renderFilterProvider = () => {
     return (
       <Suspense>
-        <FilterProvider onSearch={onSearch as any} />
+        <FilterProvider
+          onSearch={onSearch as any}
+          settings={generalSettings as IGeneralSettings}
+        />
       </Suspense>
     );
   };

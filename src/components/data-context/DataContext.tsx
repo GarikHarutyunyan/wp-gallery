@@ -122,11 +122,14 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   }, [itemsPerPage, paginationType, orderBy, orderDirection]);
 
   const loadAllLightboxImages = async (gid?: string): Promise<void> => {
-    if ( gid ||
-        ((!lightboxImages || lightboxImages.length < imageCount) &&
-      images.length < imageCount)
+    if (
+      gid ||
+      ((!lightboxImages || lightboxImages.length < imageCount) &&
+        images.length < imageCount)
     ) {
-      const newLightboxImages: IImageDTO[] = await (getAllData as Function)(gid);
+      const newLightboxImages: IImageDTO[] = await (getAllData as Function)(
+        gid
+      );
 
       setLightboxImages(newLightboxImages);
     } else if (images.length == imageCount) {
@@ -161,14 +164,16 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         description: data.description,
         author: data.author,
         date_created: data.date_created,
-        exif: (<>
-          {data.exif.split("\n").map((line: string) => (
+        exif: (
+          <>
+            {data.exif.split('\n').map((line: string) => (
               <>
                 {line}
-                <br/>
+                <br />
               </>
-          ))}
-        </>),
+            ))}
+          </>
+        ),
         caption: data.caption,
         price: data.price,
         alt: data.alt,
@@ -204,14 +209,16 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       description: data.description,
       author: data.author,
       date_created: data.date_created,
-      exif: (<>
-        {data.exif.split("\n").map((line: string) => (
+      exif: (
+        <>
+          {data.exif.split('\n').map((line: string) => (
             <>
               {line}
-              <br/>
+              <br />
             </>
-        ))}
-      </>),
+          ))}
+        </>
+      ),
       action_url: data.action_url,
       item_url: data.item_url,
       checkout_url: data.checkout_url,
@@ -270,57 +277,59 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         const response = await axios.get(`${fetchUrl}${queryString}`, {
           cancelToken: newCancelTokenSource.token,
         });
-      const imgData: any[] = response.data;
-      const headers: any = response.headers;
-      const newImages: IImageDTO[] = imgData.map((data: any) => ({
-        id: data.id,
-        type: data.type,
-        original: data.original,
-        width: data.width,
-        height: data.height,
-        large: data.large,
-        medium_large: data.medium_large,
-        thumbnail: data.thumbnail,
-        title: data.title,
-        caption: data.caption,
-        price: data.price,
-        alt: data.alt,
-        description: data.description,
-        author: data.author,
-        date_created: data.date_created,
-        exif: (<>
-          {data.exif.split("\n").map((line: string) => (
-              <>
-                {line}
-                <br/>
-              </>
-          ))}
-        </>),
-        action_url: data.action_url,
-        item_url: data.item_url,
-        checkout_url: data.checkout_url,
-      }));
-      const newImageCount: number = headers?.['x-images-count'];
-      const loadMoreText: string | undefined =
-        (window as any).reacg_global?.text?.load_more || undefined;
-      const noDataText: string | undefined =
-        (window as any).reacg_global?.text?.no_data || undefined;
+        const imgData: any[] = response.data;
+        const headers: any = response.headers;
+        const newImages: IImageDTO[] = imgData.map((data: any) => ({
+          id: data.id,
+          type: data.type,
+          original: data.original,
+          width: data.width,
+          height: data.height,
+          large: data.large,
+          medium_large: data.medium_large,
+          thumbnail: data.thumbnail,
+          title: data.title,
+          caption: data.caption,
+          price: data.price,
+          alt: data.alt,
+          description: data.description,
+          author: data.author,
+          date_created: data.date_created,
+          exif: (
+            <>
+              {data.exif.split('\n').map((line: string) => (
+                <>
+                  {line}
+                  <br />
+                </>
+              ))}
+            </>
+          ),
+          action_url: data.action_url,
+          item_url: data.item_url,
+          checkout_url: data.checkout_url,
+        }));
+        const newImageCount: number = headers?.['x-images-count'];
+        const loadMoreText: string | undefined =
+          (window as any).reacg_global?.text?.load_more || undefined;
+        const noDataText: string | undefined =
+          (window as any).reacg_global?.text?.no_data || undefined;
         const searchPlaceHolder: string | undefined =
           (window as any).reacg_global?.text?.search || undefined;
-      loadMoreText && setLoadMoreText?.(loadMoreText);
-      noDataText && setNoDataText?.(noDataText);
+        loadMoreText && setLoadMoreText?.(loadMoreText);
+        noDataText && setNoDataText?.(noDataText);
         searchPlaceHolder && setSearchPlaceholder?.(searchPlaceHolder);
-      setImageCount(newImageCount);
+        setImageCount(newImageCount);
 
-      if (paginationType === PaginationType.SIMPLE) {
-        setImages(newImages);
-        changeImagesCount?.(newImages.length);
-      } else {
-        setImages((prevImages) => [...prevImages, ...newImages]);
-        changeImagesCount?.(newImages.length);
-      }
-      setCurrentPage(page);
-      setIsLoading(false);
+        if (paginationType === PaginationType.SIMPLE) {
+          setImages(newImages);
+          changeImagesCount?.(newImages.length);
+        } else {
+          setImages((prevImages) => [...prevImages, ...newImages]);
+          changeImagesCount?.(newImages.length);
+        }
+        setCurrentPage(page);
+        setIsLoading(false);
         setLightboxImages(newImages);
       } catch (error: any) {
         if (axios.isCancel(error)) {

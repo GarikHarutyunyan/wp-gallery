@@ -100,6 +100,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     watermarkSize,
     watermarkPosition,
     enableSearch,
+    searchInputPlaceholder,
   } = value as IGeneralSettings;
 
   const showOnlyGalleryOptions: boolean =
@@ -163,7 +164,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     type as GalleryType
   );
 
-  const {loadMoreText} = useContext(TranslationsContext);
+  const {loadMoreText, searchPlaceholder} = useContext(TranslationsContext);
 
   const renderMainSettings = (): ReactNode => {
     return (
@@ -468,9 +469,19 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                   }
                 />
               </Filter>
+              <Filter isLoading={isLoading}>
+                <TextControl
+                  id={'searchInputPlaceholder'}
+                  name="Search placeholder"
+                  placeholder={searchPlaceholder}
+                  value={searchInputPlaceholder}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
             </Grid>
           </Grid>
         }
+        defaultExpanded={false}
       />
     );
   };
