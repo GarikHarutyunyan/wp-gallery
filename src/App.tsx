@@ -14,30 +14,28 @@ const App: React.FC = () => {
 
   const renderApp = () => {
     return (
-      <ProProvider>
-        <TranslationsProvider>
-          <SnackbarProvider domRoot={document.body}>
-            <GoogleFontsProvider>
-              <GalleryWrapper />
-            </GoogleFontsProvider>
-          </SnackbarProvider>
-        </TranslationsProvider>
-      </ProProvider>
+      <TranslationsProvider>
+        <SnackbarProvider domRoot={document.body}>
+          <GoogleFontsProvider>
+            <GalleryWrapper />
+          </GoogleFontsProvider>
+        </SnackbarProvider>
+      </TranslationsProvider>
     );
   };
 
-  const renderAppWithAlert = () => {
+  const renderAppForAmdin = () => {
     return (
       <Suspense>
         <AlertDialog />
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          {renderApp()}
+          <ProProvider>{renderApp()}</ProProvider>
         </ErrorBoundary>
       </Suspense>
     );
   };
 
-  return showControls ? renderAppWithAlert() : renderApp();
+  return showControls ? renderAppForAmdin() : renderApp();
 };
 
 export default App;
