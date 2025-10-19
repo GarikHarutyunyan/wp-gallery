@@ -44,11 +44,6 @@
   }
 }
 
-.options-panel_header,
-.type-panel_header {
-  margin: 15px 20px !important;
-}
-
 .options-panel_body-button {
   margin: 5px 5px !important;
   text-transform: none !important;
@@ -77,8 +72,9 @@
 
 .reacg-section__body {
   .reacg-section__header {
-    background: linear-gradient(to top, #ffffff, #fafafa);
+    background: linear-gradient(to top, #ffffff, #f5f5f5);
     border-radius: 4px;
+    box-shadow: 0px 14px 10px -10px #ccc;
   }
   .reacg-section__container-inherit {
     width: calc(100% - 32px);
