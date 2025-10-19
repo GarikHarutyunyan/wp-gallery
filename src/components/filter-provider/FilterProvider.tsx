@@ -13,7 +13,7 @@ const FilterProvider: React.FC<IFilterProviderProps> = ({
   onSearch,
   settings,
 }) => {
-  const {searchInputPlaceholder} = settings;
+  const {searchPlaceholderText} = settings;
   const {searchPlaceholder} = useContext(TranslationsContext);
   const previousTerm = useRef<string>('');
 
@@ -28,25 +28,26 @@ const FilterProvider: React.FC<IFilterProviderProps> = ({
   const renderFilter = () => {
     return (
       <TextField
-        id="outlined-basic"
+        className="filter-provider__search-input"
         placeholder={
-          searchInputPlaceholder ? searchInputPlaceholder : searchPlaceholder
+          searchPlaceholderText ? searchPlaceholderText : searchPlaceholder
         }
         variant="outlined"
         onChange={(e) => debouncedSearch(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
         fullWidth
         InputProps={{
           sx: {
-            '& input': {
+            '.filter-provider__search-input & input': {
               'padding': '11px 20px',
-              'minHeight': 0,
+              'minHeight': '0',
               'margin': '0',
-              'border': 0,
+              'border': '0',
               'borderRadius': 'inherit',
-              'backgroundColor': '#fff',
+              'backgroundColor': 'none',
               'boxShadow': 'unset',
               'color': 'inherit',
-              '&:focus': {
+              '&:focus, &:hover, &:active, &:focus-visible, &:focus-within': {
                 boxShadow: 'none',
                 outline: 'none',
                 borderColor: 'unset',

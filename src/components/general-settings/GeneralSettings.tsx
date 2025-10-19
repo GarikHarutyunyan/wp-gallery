@@ -100,7 +100,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     watermarkSize,
     watermarkPosition,
     enableSearch,
-    searchInputPlaceholder,
+    searchPlaceholderText,
   } = value as IGeneralSettings;
 
   const showOnlyGalleryOptions: boolean =
@@ -472,10 +472,10 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
               {enableSearch && (
                 <Filter isLoading={isLoading}>
                   <TextControl
-                    id={'searchInputPlaceholder'}
-                    name="Search placeholder"
+                    id={'searchPlaceholderText'}
+                    name="Placeholder text"
+                    value={searchPlaceholderText}
                     placeholder={searchPlaceholder}
-                    value={searchInputPlaceholder}
                     onChange={onInputValueChange}
                   />
                 </Filter>
