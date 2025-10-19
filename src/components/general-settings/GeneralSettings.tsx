@@ -469,15 +469,17 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                   }
                 />
               </Filter>
-              <Filter isLoading={isLoading}>
-                <TextControl
-                  id={'searchInputPlaceholder'}
-                  name="Search placeholder"
-                  placeholder={searchPlaceholder}
-                  value={searchInputPlaceholder}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
+              {enableSearch && (
+                <Filter isLoading={isLoading}>
+                  <TextControl
+                    id={'searchInputPlaceholder'}
+                    name="Search placeholder"
+                    placeholder={searchPlaceholder}
+                    value={searchInputPlaceholder}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+              )}
             </Grid>
           </Grid>
         }
