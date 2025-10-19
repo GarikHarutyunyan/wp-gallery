@@ -99,6 +99,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     watermarkTransparency,
     watermarkSize,
     watermarkPosition,
+    enableSearch,
+    searchPlaceholderText,
   } = value as IGeneralSettings;
 
   const showOnlyGalleryOptions: boolean =
@@ -162,7 +164,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     type as GalleryType
   );
 
-  const {loadMoreText} = useContext(TranslationsContext);
+  const {loadMoreText, searchPlaceholder} = useContext(TranslationsContext);
 
   const renderMainSettings = (): ReactNode => {
     return (
@@ -439,10 +441,58 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const renderSearchSettings = (): ReactNode => {
+    return (
+      <Section
+        header={'Filter'}
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'enableSearch'}
+                  name={'Enable Search'}
+                  value={enableSearch}
+                  onChange={onInputValueChange}
+                  tooltip={
+                    <p>
+                      Activate a search field that allows users to find gallery
+                      items by matching keywords in the title, description, alt
+                      text, or caption.
+                    </p>
+                  }
+                />
+              </Filter>
+              {enableSearch && (
+                <Filter isLoading={isLoading}>
+                  <TextControl
+                    id={'searchPlaceholderText'}
+                    name="Placeholder text"
+                    value={searchPlaceholderText}
+                    placeholder={searchPlaceholder}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+              )}
+            </Grid>
+          </Grid>
+        }
+        defaultExpanded={false}
+      />
+    );
+  };
+
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderSortingSettings()}
       {!showOnlyGalleryOptions ? renderMainSettings() : null}
+      {renderSearchSettings()}
       {renderWatermarkSettings()}
     </Paper>
   );
