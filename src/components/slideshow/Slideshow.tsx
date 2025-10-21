@@ -129,7 +129,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   }, [autoplay]);
 
   const slides = useMemo(() => {
-    return images!.map((image: IImageDTO) => ({
+    return images?.map((image: IImageDTO) => ({
       description: (
         <>
           {((showTitle && image[titleSource]) ||
@@ -407,9 +407,9 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
             '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
             '--yarl__slide_captions_container_background':
-              (showTitle && images![index]?.title) ||
-              (showCaption && images![index]?.caption) ||
-              (showDescription && images![index]?.description)
+              (showTitle && images?.[index]?.title) ||
+              (showCaption && images?.[index]?.caption) ||
+              (showDescription && images?.[index]?.description)
                 ? `${backgroundColor}80`
                 : `none`,
           },

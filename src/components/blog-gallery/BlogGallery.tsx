@@ -94,7 +94,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
         }}
         className="blog-gallery"
       >
-        {images!.map((image, index) => {
+        {images?.map((image, index) => {
           return (
             <div
               key={image.original.url}
