@@ -75,7 +75,10 @@
 
 /* Slide */
 .reacg-gallery .thumbnail-gallery__image-wrapper_slide img {
-  margin-left: 14% !important;
+  /* Fallback for older browsers */
+  margin-left: 10% !important;
+  /* Cap percentage-based shift to max 20px in supporting browsers */
+  margin-left: min(10%, 20px) !important;
   -webkit-transform: scale(1.3);
   transform: scale(1.3);
   -webkit-transition:
