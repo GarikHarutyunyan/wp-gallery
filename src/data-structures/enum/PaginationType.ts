@@ -8,8 +8,8 @@ export enum PaginationType {
 }
 
 export const PaginationTypeOptions: ISelectOption[] = [
-  {value: PaginationType.SIMPLE, title: 'Simple'},
+  {value: PaginationType.SIMPLE, title: 'Paged'},
   {value: PaginationType.LOAD_MORE, title: 'Load More'},
-  {value: PaginationType.SCROLL, title: 'Scroll'},
+  {value: PaginationType.SCROLL, title: 'Scroll Load'},
   {value: PaginationType.NONE, title: 'None'},
 ];

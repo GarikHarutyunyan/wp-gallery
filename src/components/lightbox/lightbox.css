@@ -12,6 +12,10 @@
   z-index: 1;
 }
 
+.reacg-lightbox .yarl__counter {
+  font-size: 16px;
+}
+
 .reacg-slideshow .yarl__toolbar {
   z-index: 1;
   top: auto;
@@ -154,11 +158,6 @@
   object-fit: cover;
 }
 
-.reacg-lightbox img.yarl__slide_image_cover {
-  height: 100%;
-  width: 100%;
-}
-
 .reacg-lightbox button,
 .reacg-lightbox button:hover,
 .reacg-lightbox button:focus,
@@ -196,4 +195,9 @@
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail):active,
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail):visited {
   width: unset;
+}
+.reacg-lightbox
+  .yarl__slide:not(.yarl__slide_current)
+  .react-watermark-overlay {
+  opacity: 0 !important;
 }

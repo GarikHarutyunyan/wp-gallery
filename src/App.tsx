@@ -1,4 +1,5 @@
 import {GoogleFontsProvider, TranslationsProvider, useAppInfo} from 'contexts';
+import {ProProvider} from 'contexts/ProContext';
 import ErrorFallback from 'ErrorFallback';
 import {SnackbarProvider} from 'notistack';
 import React, {lazy, Suspense} from 'react';
@@ -23,18 +24,18 @@ const App: React.FC = () => {
     );
   };
 
-  const renderAppWithAlert = () => {
+  const renderAppForAmdin = () => {
     return (
       <Suspense>
         <AlertDialog />
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          {renderApp()}
+          <ProProvider>{renderApp()}</ProProvider>
         </ErrorBoundary>
       </Suspense>
     );
   };
 
-  return showControls ? renderAppWithAlert() : renderApp();
+  return showControls ? renderAppForAmdin() : renderApp();
 };
 
 export default App;

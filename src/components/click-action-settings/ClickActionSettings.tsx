@@ -4,6 +4,7 @@ import {useSettings} from 'components/settings';
 import {Filter} from 'components/settings/Filter';
 import {useTemplates} from 'contexts';
 import {
+  ActionURLSourceOptions,
   IGeneralSettings,
   ImageClickAction,
   ImageClickActionOptions,
@@ -18,7 +19,8 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {generalSettings, changeGeneralSettings: onActionChange} =
     useSettings();
-  const {clickAction, openUrlInNewTab} = generalSettings as IGeneralSettings;
+  const {clickAction, openUrlInNewTab, actionUrlSource} =
+    generalSettings as IGeneralSettings;
 
   const isClickActionUrl: boolean = clickAction === ImageClickAction.URL;
 
@@ -60,21 +62,32 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
         <SelectControl
           id={'clickAction'}
           name={'Image click'}
-          info={renderClickActionInfo()}
+          tooltip={renderClickActionInfo()}
           value={clickAction}
           options={ImageClickActionOptions}
           onChange={onActionValueChange}
         />
       </Filter>
       {isClickActionUrl ? (
-        <Filter isLoading={isLoading}>
-          <SwitchControl
-            id={'openUrlInNewTab'}
-            name={'Open URL in new tab'}
-            value={openUrlInNewTab}
-            onChange={onActionValueChange}
-          />
-        </Filter>
+        <>
+          <Filter isLoading={isLoading}>
+            <SwitchControl
+              id={'openUrlInNewTab'}
+              name={'Open URL in new tab'}
+              value={openUrlInNewTab}
+              onChange={onActionValueChange}
+            />
+          </Filter>
+          <Filter isLoading={isLoading}>
+            <SelectControl
+              id={'actionUrlSource'}
+              name={'URL source'}
+              value={actionUrlSource}
+              options={ActionURLSourceOptions}
+              onChange={onActionValueChange}
+            />
+          </Filter>
+        </>
       ) : null}
     </Grid>
   );

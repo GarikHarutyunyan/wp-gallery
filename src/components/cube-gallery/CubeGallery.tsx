@@ -3,7 +3,7 @@ import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {SwiperGallery} from 'components/swiper-gallery/SwiperGallery';
 import {ICubeSettings} from 'data-structures';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Autoplay, EffectCube} from 'swiper/modules';
 import './cube-gallery.css';
 
@@ -43,6 +43,7 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
   const ratio: number = width / height;
   const containerWidth: number = Math.min(innerWidth, width);
   const containerHeight: number = containerWidth / ratio;
+  const galleryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -54,15 +55,20 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
   }, [wrapper?.clientWidth]);
 
   useEffect(() => {
-    const cubeShadow = document.querySelector(
-      '.swiper-cube .swiper-cube-shadow'
-    ) as HTMLElement;
+    if (!galleryRef.current) return;
 
-    cubeShadow.style.width = shadow ? '100%' : '0%';
+    const cubeShadow = galleryRef.current.querySelector(
+      '.swiper-cube .swiper-cube-shadow'
+    );
+
+    if (cubeShadow) {
+      (cubeShadow as HTMLElement).style.width = shadow ? '100%' : '0%';
+    }
   }, [shadow]);
 
   return (
     <Box
+      ref={galleryRef}
       sx={{
         width: `${containerWidth}px`,
         height: `${containerHeight}px`,
