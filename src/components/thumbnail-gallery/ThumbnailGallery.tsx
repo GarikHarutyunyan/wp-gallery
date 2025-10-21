@@ -223,7 +223,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
           style={{margin: '0 auto'}}
           ref={listRef}
         >
-          {images!.map((image, index) => (
+          {images?.map((image, index) => (
             <ThumbnailImage
               key={image.original.url + index}
               image={image}
@@ -261,7 +261,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
               descriptionFontColor={descriptionFontColor}
               descriptionMaxRowsCount={descriptionMaxRowsCount}
             />
-          ))}
+          )) || []}
         </ImageList>
       </div>
     </div>

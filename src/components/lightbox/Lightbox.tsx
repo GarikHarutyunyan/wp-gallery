@@ -331,7 +331,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   };
 
   const slides = useMemo(() => {
-    return images!.map((image: IImageDTO, index: number) => ({
+    return images?.map((image: IImageDTO, index: number) => ({
       description: (
         <>
           {((showTitle && image[titleSource]) ||
@@ -561,9 +561,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
             '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
             '--yarl__slide_captions_container_background':
-              (showTitle && images![index]?.title) ||
-              (showCaption && images![index]?.caption) ||
-              (showDescription && images![index]?.description)
+              (showTitle && images?.[index]?.title) ||
+              (showCaption && images?.[index]?.caption) ||
+              (showDescription && images?.[index]?.description)
                 ? `${backgroundColor}80`
                 : `none`,
           },
