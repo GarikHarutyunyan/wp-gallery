@@ -106,10 +106,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
               overlayTextBackground === '' ? 'unset' : overlayTextBackground,
             mixBlendMode: invertTextColor ? 'difference' : 'initial',
           }}
-          className={clsx({
-            'photo-album-item__title-content_center':
-              titlePosition === TitlePosition.CENTER,
-          })}
+          className={`photo-album-item__title-content_${titlePosition}`}
           title={showTitle && <span>{image?.[titleSource] || <br />}</span>}
           subtitle={
             titlePosition === captionPosition &&
@@ -157,10 +154,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             paddingRight: paddingTitle,
             color: captionFontColor,
           }}
-          className={clsx({
-            'photo-album-item__title-content_center':
-              captionPosition === TitlePosition.CENTER,
-          })}
+          className={`photo-album-item__title-content_${captionPosition}`}
           subtitle={
             showCaption && (
               <span className="photo-album-item__caption">
@@ -221,9 +215,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
               height: getThumbnailIconSize(width, height),
               width: getThumbnailIconSize(width, height),
             }}
-            className={clsx('photo-album-item__video-icon', {
-              'photo-album-item__image-wrapper_clickable': !!onClick,
-            })}
+            className={'photo-album-item__video-icon'}
           />
         )}
         {showTitle && renderTitle(image)}

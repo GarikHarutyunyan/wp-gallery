@@ -172,10 +172,7 @@ const ThumbnailImage = ({
                 ? 'difference'
                 : 'initial',
           }}
-          className={clsx({
-            'thumbnail-gallery__title-content_center':
-              titlePosition === ThumbnailTitlePosition.CENTER,
-          })}
+          className={`thumbnail-gallery__title-content_${titlePosition}`}
           title={<span>{image[titleSource] || <br />}</span>}
           subtitle={
             titlePosition === captionPosition &&
@@ -256,10 +253,7 @@ const ThumbnailImage = ({
                 ? 'difference'
                 : 'initial',
           }}
-          className={clsx({
-            'thumbnail-gallery__title-content_center':
-              captionPosition === ThumbnailTitlePosition.CENTER,
-          })}
+          className={`thumbnail-gallery__title-content_${captionPosition}`}
           subtitle={
             showCaption && (
               <span className="thumbnail-image__caption">
@@ -418,9 +412,7 @@ const ThumbnailImage = ({
                   height: videoThumbnailIconSize,
                   width: videoThumbnailIconSize,
                 }}
-                className={clsx('yarl__thumbnails_thumbnail_icon', {
-                  'thumbnail-gallery__video-icon': !!onClick,
-                })}
+                className={'thumbnail-gallery__video-icon'}
               />
             )}
             {showTitle &&
