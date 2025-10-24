@@ -61,40 +61,37 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     descriptionFontColor,
     descriptionMaxRowsCount,
   } = settings as IThumbnailSettings;
-  const elementRef = useRef();
+  const elementRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [imageRatio, setImageRatio] = useState(1);
   const [imageWidth, setImageWidth] = useState(0);
   const [imageHeight, setImageHeight] = useState(0);
 
+  // Get the width of the nearest gallery wrapper related to this instance
+  const getWrapperWidth = (): number => {
+    const el = elementRef?.current as HTMLElement | null;
+    // Prefer the closest ancestor with the wrapper class to avoid cross-instance collisions
+    const wrapper = el?.closest('.reacg-gallery-wrapper') as HTMLElement | null;
+    if (wrapper && wrapper.clientWidth) return wrapper.clientWidth;
+    // Fallback to the current element's bounding box if wrapper not found
+    return el?.getBoundingClientRect().width || 0;
+  };
+
   useEffect(() => {
     if (fillContainer) {
       setImageRatio(Number(aspectRatio));
-      setImageWidth(
-        (elementRef?.current as any)?.getBoundingClientRect().width / columns
-      );
+      const currentWidth = getWrapperWidth();
+      setImageWidth(currentWidth / columns);
       setImageHeight(imageWidth / imageRatio);
     } else {
       setImageRatio(width / height);
       setImageWidth(width);
       setImageHeight(height);
     }
-  }, [
-    fillContainer,
-    aspectRatio,
-    imageWidth,
-    columns,
-    height,
-    width,
-    imageRatio,
-    setImageRatio,
-    setImageHeight,
-    setImageWidth,
-  ]);
+  }, [fillContainer, aspectRatio, columns, height, width]);
 
   const changeContainerWidth = () => {
     const divElement = elementRef?.current;
-
     setContainerWidth((divElement as any)?.getBoundingClientRect().width);
   };
 
@@ -208,7 +205,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
       }}
     >
       <div
-        ref={elementRef as any}
+        ref={elementRef}
         style={{
           overflow: 'hidden',
           maxWidth: '100%',
