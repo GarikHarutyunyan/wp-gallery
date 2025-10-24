@@ -8,16 +8,21 @@ import {
 } from 'data-structures';
 import React, {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
-import Lightbox from 'yet-another-react-lightbox';
+import {Watermark} from 'utils/renderWatermark';
+import {Lightbox} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
+import Counter from 'yet-another-react-lightbox/plugins/counter';
+import 'yet-another-react-lightbox/plugins/counter.css';
 import Download from 'yet-another-react-lightbox/plugins/download';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
+import Share from 'yet-another-react-lightbox/plugins/share';
 import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Video from 'yet-another-react-lightbox/plugins/video';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
+import {useAppInfo} from '../../contexts';
 import {useData} from '../data-context/useData';
 import {useSettings} from '../settings/useSettings';
 import {getSlideMargins} from './CommonFunctions/getSlideMargins';
@@ -88,6 +93,69 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   );
 };
 
+const WatermarkOverlay: React.FC = () => {
+  const [rect, setRect] = useState<{
+    width: number;
+    height: number;
+    left: number;
+    top: number;
+  } | null>(null);
+  useEffect(() => {
+    function updateRect() {
+      const media = document.querySelector(
+        '.reacg-lightbox .yarl__slide_current img, .reacg-lightbox .yarl__slide_current video'
+      );
+      if (media) {
+        const r = (media as HTMLElement).getBoundingClientRect();
+        // Find the slide container to get its position
+        const slide = media.closest('.yarl__slide');
+        if (slide) {
+          const slideRect = (slide as HTMLElement).getBoundingClientRect();
+          setRect({
+            width: r.width,
+            height: r.height,
+            left: r.left - slideRect.left,
+            top: r.top - slideRect.top,
+          });
+        } else {
+          setRect({width: r.width, height: r.height, left: 0, top: 0});
+        }
+      } else {
+        setRect(null);
+      }
+    }
+    updateRect();
+    window.addEventListener('resize', updateRect);
+    const observer = new MutationObserver(updateRect);
+    observer.observe(document.body, {childList: true, subtree: true});
+    return () => {
+      window.removeEventListener('resize', updateRect);
+      observer.disconnect();
+    };
+  }, []);
+  if (!rect) return null;
+  return (
+    <div
+      className={'react-watermark-overlay'}
+      style={{
+        position: 'absolute',
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height,
+        pointerEvents: 'none',
+        zIndex: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: 1,
+      }}
+    >
+      <Watermark />
+    </div>
+  );
+};
+
 const VLightbox: React.FC<ILightboxProviderProps> = ({
   activeIndex,
   onClose,
@@ -102,6 +170,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     areControlButtonsShown,
     isInfinite,
     padding,
+    showCounter,
+    canShare,
     canDownload,
     canZoom,
     isSlideshowAllowed,
@@ -127,12 +197,19 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     showDescription,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    titleSource,
+    descriptionSource,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   } = settings as ILightboxSettings;
   const lightboxId: string = useId();
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const [index, setIndex] = useState(0);
+  const {galleryId} = useAppInfo();
 
   const minFactor = 1.45;
   const maxFactor = 1.25;
@@ -141,6 +218,12 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
 
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Video];
+    if (showCounter) {
+      newPlugins.push(Counter as any);
+    }
+    if (canShare) {
+      newPlugins.push(Share as any);
+    }
     if (canDownload) {
       newPlugins.push(Download as any);
     }
@@ -156,12 +239,14 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (textPosition !== LightboxTextPosition.NONE) {
+    if (showTitle || showCaption || showDescription) {
       newPlugins.push(Captions as any);
     }
 
     return newPlugins;
   }, [
+    showCounter,
+    canShare,
     canDownload,
     canZoom,
     isSlideshowAllowed,
@@ -169,6 +254,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     isFullscreenAllowed,
     thumbnailsPosition,
     textPosition,
+    showTitle,
+    showCaption,
+    showDescription,
   ]);
 
   const togglePageScroll = (open: boolean) => {
@@ -185,6 +273,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   const handleClose = () => {
     onClose();
     togglePageScroll(false);
+    updateURL(-1);
   };
   const handleOpen = () => {
     togglePageScroll(true);
@@ -222,11 +311,31 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     };
   }, []);
 
+  const updateURL = (index: number) => {
+    window.history.replaceState({}, '', deepLink(index));
+  };
+
+  const deepLink = (index: number) => {
+    const url = new URL(window.location.href);
+    if (index >= 0) {
+      if (galleryId) {
+        url.searchParams.set('gid', galleryId);
+      }
+      url.searchParams.set('sid', index.toString());
+    } else {
+      url.searchParams.delete('gid');
+      url.searchParams.delete('sid');
+    }
+
+    return url.toString();
+  };
+
   const slides = useMemo(() => {
-    return images!.map((image: IImageDTO) => ({
+    return images?.map((image: IImageDTO, index: number) => ({
       description: (
         <>
-          {showTitle && image.title && (
+          {((showTitle && image[titleSource]) ||
+            (showCaption && image[captionSource])) && (
             <p
               className={'reacg-lightbox-texts__title'}
               style={{
@@ -239,15 +348,25 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
                 textAlign: titleAlignment,
               }}
             >
-              {image.title}
-              {image.caption && (
-                <span className={'reacg-lightbox__caption'}>
-                  &nbsp;{image.caption}
+              {showTitle && image[titleSource]}
+              {showCaption && image[captionSource] && (
+                <span
+                  className={'reacg-lightbox__caption'}
+                  style={{
+                    color: captionFontColor,
+                    fontSize: `clamp(${
+                      captionFontSize / minFactor
+                    }rem, ${captionFontSize}vw, ${
+                      captionFontSize * maxFactor
+                    }rem)`,
+                  }}
+                >
+                  &nbsp;{image[captionSource]}
                 </span>
               )}
             </p>
           )}
-          {showDescription && image.description && (
+          {showDescription && image[descriptionSource] && (
             <p
               className={'reacg-lightbox-texts__description'}
               style={{
@@ -263,7 +382,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
                 display: '-webkit-box',
               }}
             >
-              {image.description}
+              {image[descriptionSource]}
             </p>
           )}
         </>
@@ -277,6 +396,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       ],
       poster: image.medium_large.url,
       src: image.original.url,
+      share: {
+        url: deepLink(index),
+        title: image.title,
+        text: image.description,
+      },
       alt: image.alt,
       srcSet: [
         {
@@ -312,6 +436,12 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     showDescription,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    titleSource,
+    descriptionSource,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   ]);
 
   const slideMargins = useMemo(() => {
@@ -328,6 +458,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       maxFactor,
       paddingAroundText,
       titleMargin,
+      showCaption,
     });
   }, [
     images,
@@ -338,7 +469,18 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     titleFontSize,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   ]);
+
+  const responsivePadding = useMemo(() => {
+    if (innerWidth <= 768 || innerHeight <= 576) {
+      return padding / 10;
+    }
+    return padding;
+  }, [innerWidth, innerHeight, padding]);
 
   const renderLighbox = () => {
     return (
@@ -353,19 +495,36 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         noScroll={{
           disabled: false,
         }}
+        counter={{
+          separator: '/',
+          container: {
+            style: {
+              top:
+                textPosition === LightboxTextPosition.TOP ||
+                textPosition === LightboxTextPosition.ABOVE
+                  ? 'unset'
+                  : 0,
+              bottom:
+                textPosition === LightboxTextPosition.TOP ||
+                textPosition === LightboxTextPosition.ABOVE
+                  ? 0
+                  : 'unset',
+            },
+          },
+        }}
         animation={{
           swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
           easing: {swipe: 'ease-out', navigation: 'ease-in-out'},
         }}
         render={{
           buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
+          slideFooter: () => <WatermarkOverlay />,
         }}
         carousel={{
           preload: 5,
           finite: !isInfinite,
-          padding,
+          padding: responsivePadding,
         }}
-        // #TODO add generic validation mechanism to avoid this kind of checkings
         thumbnails={{
           position: thumbnailsPosition as any,
           width: thumbnailWidth > 0 ? thumbnailWidth : 10,
@@ -384,7 +543,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           'reacg-lightbox-animation-' + imageAnimation,
           {
             'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
-            'reacg-lightbox-texts': textPosition !== LightboxTextPosition.NONE,
+            'reacg-lightbox-texts': showTitle || showCaption || showDescription,
             'reacg-lightbox-texts_top': [
               LightboxTextPosition.TOP,
               LightboxTextPosition.ABOVE,
@@ -402,8 +561,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
             '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
             '--yarl__slide_captions_container_background':
-              (showTitle && images![index]?.title) ||
-              (showDescription && images![index]?.description)
+              (showTitle && images?.[index]?.title) ||
+              (showCaption && images?.[index]?.caption) ||
+              (showDescription && images?.[index]?.description)
                 ? `${backgroundColor}80`
                 : `none`,
           },
@@ -450,7 +610,10 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           slideshowStop: () => {
             if (videoAutoplay) setVideoAutoplay(false);
           },
-          view: ({index: currentIndex}) => setIndex(currentIndex),
+          view: ({index: currentIndex}) => {
+            setIndex(currentIndex);
+            updateURL(currentIndex);
+          },
           entering: handleOpen,
         }}
       />

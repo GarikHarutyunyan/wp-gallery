@@ -42,7 +42,7 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
   const initialColumnsCount = columns || 4;
 
   const photos = useMemo(() => {
-    return images!.map((image: IImageDTO) => {
+    return images?.map((image: IImageDTO) => {
       const isVideo: boolean = image.type === ImageType.VIDEO;
       const width = isVideo ? image.medium_large.width : image.original.width;
       const height = isVideo

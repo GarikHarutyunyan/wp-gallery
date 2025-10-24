@@ -120,12 +120,16 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   useUpdateEffect(() => {
     itemsPerPage > 0 && onReloadData();
   }, [itemsPerPage, paginationType, orderBy, orderDirection]);
-  const loadAllLightboxImages = async (): Promise<void> => {
+
+  const loadAllLightboxImages = async (gid?: string): Promise<void> => {
     if (
-      (!lightboxImages || lightboxImages.length < imageCount) &&
-      images.length < imageCount
+      gid ||
+      ((!lightboxImages || lightboxImages.length < imageCount) &&
+        images.length < imageCount)
     ) {
-      const newLightboxImages: IImageDTO[] = await (getAllData as Function)();
+      const newLightboxImages: IImageDTO[] = await (getAllData as Function)(
+        gid
+      );
 
       setLightboxImages(newLightboxImages);
     } else if (images.length == imageCount) {
@@ -133,11 +137,10 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
-  const getAllData = async (): Promise<IImageDTO[]> => {
+  const getAllData = async (gid?: string): Promise<IImageDTO[]> => {
     const fetchUrl: string | undefined = baseUrl
-      ? baseUrl + 'gallery/' + galleryId + '/images'
+      ? baseUrl + 'gallery/' + (gid || galleryId) + '/images'
       : undefined;
-
     if (fetchUrl) {
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
@@ -159,9 +162,24 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         thumbnail: data.thumbnail,
         title: data.title,
         description: data.description,
+        author: data.author,
+        date_created: data.date_created,
+        exif: (
+          <>
+            {data.exif.split('\n').map((line: string) => (
+              <>
+                {line}
+                <br />
+              </>
+            ))}
+          </>
+        ),
         caption: data.caption,
+        price: data.price,
         alt: data.alt,
         action_url: data.action_url,
+        item_url: data.item_url,
+        checkout_url: data.checkout_url,
       }));
 
       return newImages;
@@ -186,9 +204,24 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       thumbnail: data.thumbnail,
       title: data.title,
       caption: data.caption,
+      price: data.price,
       alt: data.alt,
       description: data.description,
+      author: data.author,
+      date_created: data.date_created,
+      exif: (
+        <>
+          {data.exif.split('\n').map((line: string) => (
+            <>
+              {line}
+              <br />
+            </>
+          ))}
+        </>
+      ),
       action_url: data.action_url,
+      item_url: data.item_url,
+      checkout_url: data.checkout_url,
     }));
 
     const loadMoreText: string | undefined =
@@ -229,13 +262,13 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       if (page === 1) {
         setImages([]);
       }
+
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
       queryString += `order_by=${orderBy}`;
       queryString += `&order=${orderDirection}`;
       queryString += `&s=${search}`;
       queryString += `&timestamp=${getGalleryTimestamp?.()}`;
-
       if (paginationType !== PaginationType.NONE) {
         queryString += `&page=${page}`;
         queryString += `&per_page=${itemsPerPage}`;
@@ -257,9 +290,24 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           thumbnail: data.thumbnail,
           title: data.title,
           caption: data.caption,
+          price: data.price,
           alt: data.alt,
           description: data.description,
+          author: data.author,
+          date_created: data.date_created,
+          exif: (
+            <>
+              {data.exif.split('\n').map((line: string) => (
+                <>
+                  {line}
+                  <br />
+                </>
+              ))}
+            </>
+          ),
           action_url: data.action_url,
+          item_url: data.item_url,
+          checkout_url: data.checkout_url,
         }));
         const newImageCount: number = headers?.['x-images-count'];
         const loadMoreText: string | undefined =

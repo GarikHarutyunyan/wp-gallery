@@ -1,5 +1,6 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import {
+  ActionURLSource,
   GalleryType,
   IGeneralSettings,
   ImageClickAction,
@@ -10,9 +11,11 @@ import React, {
   ReactElement,
   ReactNode,
   Suspense,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
+import {useAppInfo} from '../contexts';
 import {useData} from './data-context/useData';
 import './gallery.css';
 import {useSettings} from './settings';
@@ -84,17 +87,25 @@ const Gallery: React.FC = () => {
     blogSettings?.paginationType,
   ]);
 
-  const {
-    clickAction,
-    openUrlInNewTab,
-    showSearchField,
-    searchFieldPlaceholder,
-  } = generalSettings as IGeneralSettings;
+  const {clickAction, openUrlInNewTab, actionUrlSource, enableSearch} =
+    generalSettings as IGeneralSettings;
   const showLightbox: boolean = clickAction === ImageClickAction.LIGHTBOX;
   const shouldOpenUrl: boolean = clickAction === ImageClickAction.URL;
   const isClickable: boolean = showLightbox || shouldOpenUrl;
 
   const [activeImageIndex, setActiveImageIndex] = useState<number>(-1);
+  const {galleryId} = useAppInfo();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const gid = params.get('gid');
+    const sid = params.get('sid');
+    const index = sid ? parseInt(sid, 10) : -1;
+
+    if (gid === galleryId && !isNaN(index) && index >= 0) {
+      openLightbox(index, gid);
+    }
+  }, []);
 
   const renderGallery = (): ReactNode => {
     const hideGallery: boolean =
@@ -172,7 +183,8 @@ const Gallery: React.FC = () => {
   };
 
   const onCustomActionToggle = (index: number) => {
-    const url: string = images?.[index]?.action_url || '';
+    const url: string =
+      images?.[index]?.[actionUrlSource as ActionURLSource] || '';
 
     if (!!url) {
       if (openUrlInNewTab) {
@@ -183,8 +195,8 @@ const Gallery: React.FC = () => {
     }
   };
 
-  const openLightbox = async (index: number): Promise<void> => {
-    await (loadAllLightboxImages as Function)();
+  const openLightbox = async (index: number, gid?: string): Promise<void> => {
+    await (loadAllLightboxImages as Function)(gid);
     setActiveImageIndex(index);
   };
 
@@ -228,17 +240,21 @@ const Gallery: React.FC = () => {
   const renderFilterProvider = () => {
     return (
       <Suspense>
-        <FilterProvider onSearch={onSearch as any} />
+        <FilterProvider
+          onSearch={onSearch as any}
+          settings={generalSettings as IGeneralSettings}
+        />
       </Suspense>
     );
   };
+
   const closeLightbox = (): void => {
     setActiveImageIndex(-1);
   };
 
   return (
     <>
-      {showSearchField && renderFilterProvider()}
+      {enableSearch && renderFilterProvider()}
       {!!images?.length && renderGallery()}
       {renderLoader()}
       {paginationType !== PaginationType.NONE && renderPaginationProvider()}
