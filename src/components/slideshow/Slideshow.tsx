@@ -52,6 +52,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     textPosition,
     textFontFamily,
     textColor,
+    textBackground,
+    invertTextColor,
     showTitle,
     titleFontSize,
     titleAlignment,
@@ -398,6 +400,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
               LightboxTextPosition.ABOVE,
             ].includes(textPosition),
             'reacg-slideshow-is-full-cover-image': isFullCoverImage,
+            'reacg-invert-captions': invertTextColor,
           }
         )}
         styles={{
@@ -407,10 +410,11 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
             '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
             '--yarl__slide_captions_container_background':
-              (showTitle && images?.[index]?.title) ||
-              (showCaption && images?.[index]?.caption) ||
-              (showDescription && images?.[index]?.description)
-                ? `${backgroundColor}80`
+              textBackground &&
+              ((showTitle && images?.[index]?.title) ||
+                (showCaption && images?.[index]?.caption) ||
+                (showDescription && images?.[index]?.description))
+                ? `${textBackground}`
                 : `none`,
           },
           thumbnail: {

@@ -191,6 +191,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     textPosition,
     textFontFamily,
     textColor,
+    textBackground,
+    invertTextColor,
     showTitle,
     titleFontSize,
     titleAlignment,
@@ -548,6 +550,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               LightboxTextPosition.TOP,
               LightboxTextPosition.ABOVE,
             ].includes(textPosition),
+            'reacg-invert-captions': invertTextColor,
           }
         )}
         styles={{
@@ -561,10 +564,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
             '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
             '--yarl__slide_captions_container_background':
-              (showTitle && images?.[index]?.title) ||
-              (showCaption && images?.[index]?.caption) ||
-              (showDescription && images?.[index]?.description)
-                ? `${backgroundColor}80`
+              textBackground &&
+              ((showTitle && images?.[index]?.title) ||
+                (showCaption && images?.[index]?.caption) ||
+                (showDescription && images?.[index]?.description))
+                ? `${textBackground}`
                 : `none`,
           },
           thumbnail: {

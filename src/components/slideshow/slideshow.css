@@ -178,3 +178,7 @@
   .react-watermark-overlay {
   opacity: 0 !important;
 }
+
+.reacg-slideshow.reacg-invert-captions .yarl__slide_captions_container {
+  mix-blend-mode: difference;
+}
