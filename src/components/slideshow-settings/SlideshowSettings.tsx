@@ -60,6 +60,8 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
     textPosition,
     textFontFamily,
     textColor,
+    textBackground,
+    invertTextColor,
     showTitle,
     titleSource,
     titleFontSize,
@@ -576,6 +578,34 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                       id={'textColor'}
                       name="Color"
                       value={textColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'textBackground'}
+                      name={'Text background'}
+                      value={textBackground}
+                      onChange={onInputValueChange}
+                      tooltip={
+                        <p>
+                          Set a background color for text displayed on the
+                          image.
+                        </p>
+                      }
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <SwitchControl
+                      id={'invertTextColor'}
+                      name={'Invert color'}
+                      tooltip={
+                        <p>
+                          Enable this to invert the text color dynamically,
+                          ensuring it stays visible against any background.
+                        </p>
+                      }
+                      value={invertTextColor}
                       onChange={onInputValueChange}
                     />
                   </Filter>

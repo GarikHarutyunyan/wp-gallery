@@ -109,6 +109,8 @@ export interface ISlideshowSettings {
   textPosition: LightboxTextPosition;
   textFontFamily: string;
   textColor: string;
+  textBackground: string;
+  invertTextColor: boolean;
   thumbnailsPosition: LightboxThumbnailsPosition;
   thumbnailWidth: number;
   thumbnailHeight: number;

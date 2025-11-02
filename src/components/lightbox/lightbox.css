@@ -201,3 +201,6 @@
   .react-watermark-overlay {
   opacity: 0 !important;
 }
+.reacg-lightbox.reacg-invert-captions .yarl__slide_captions_container {
+  mix-blend-mode: difference;
+}

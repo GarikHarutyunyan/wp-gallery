@@ -484,9 +484,8 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
                       onChange={onInputValueChange}
                       tooltip={
                         <p>
-                          Set a background color for text displayed directly on
-                          the image (top, center, or bottom positions). Not
-                          applied when the text is above or below the image.
+                          Set a background color for text displayed on the
+                          image.
                         </p>
                       }
                     />
@@ -498,8 +497,7 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
                       tooltip={
                         <p>
                           Enable this to invert the text color dynamically,
-                          ensuring it stays visible against any background. Not
-                          applied when the text is above or below the image.
+                          ensuring it stays visible against any background.
                         </p>
                       }
                       value={invertTextColor}
