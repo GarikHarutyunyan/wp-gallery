@@ -1,4 +1,5 @@
 import CircularProgress from '@mui/material/CircularProgress';
+import clsx from 'clsx';
 import {
   ActionURLSource,
   GalleryType,
@@ -87,8 +88,13 @@ const Gallery: React.FC = () => {
     blogSettings?.paginationType,
   ]);
 
-  const {clickAction, openUrlInNewTab, actionUrlSource, enableSearch} =
-    generalSettings as IGeneralSettings;
+  const {
+    clickAction,
+    openUrlInNewTab,
+    actionUrlSource,
+    enableSearch,
+    enableWhiteLabel,
+  } = generalSettings as IGeneralSettings;
   const showLightbox: boolean = clickAction === ImageClickAction.LIGHTBOX;
   const shouldOpenUrl: boolean = clickAction === ImageClickAction.URL;
   const isClickable: boolean = showLightbox || shouldOpenUrl;
@@ -203,8 +209,12 @@ const Gallery: React.FC = () => {
   const renderLoader = (): ReactNode => {
     if (isLoading) {
       return (
-        <div className={'gallery__loader'}>
-          <CircularProgress sx={{color: 'black'}} size={60} />
+        <div
+          className={clsx('gallery__loader', {
+            'gallery__loader--logo': !enableWhiteLabel,
+          })}
+        >
+          <CircularProgress sx={{color: 'black'}} size={50} />
         </div>
       );
     }

@@ -88,6 +88,7 @@ const generalMockSettings: IGeneralSettings = {
   watermarkPosition: Position.MIDDLECENTER,
   enableSearch: false,
   searchPlaceholderText: 'Search',
+  enableWhiteLabel: false,
 };
 
 const lightboxMockSettings: ILightboxSettings = {
