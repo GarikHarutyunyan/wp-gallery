@@ -120,6 +120,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const newSettings: ISettingsDTO = optionsData;
     const template_id = newSettings?.template_id?.toString();
 
+    if (newSettings.general) {
+      newSettings.general.enableWhiteLabel = isPro;
+    }
+
     setType(newSettings.type);
     setCss(newSettings.css || '');
     setCustomCss(newSettings.custom_css || '');
@@ -159,6 +163,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         await axios.get(`${fetchUrl}${queryString}`)
       ).data;
       const template_id = newSettings?.template_id?.toString();
+      if (newSettings.general) {
+        newSettings.general.enableWhiteLabel = isPro;
+      }
 
       setType(newSettings.type);
       setCss(newSettings.css || '');
@@ -254,8 +261,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (fetchUrl) {
       setIsLoading(true);
 
-      if (!isPro && generalSettings) {
-        generalSettings.enableWatermark = false;
+      if (generalSettings) {
+        if (!isPro) {
+          generalSettings.enableWatermark = false;
+        }
+        generalSettings.enableWhiteLabel = isPro;
       }
       const settings: ISettingsDTO = {
         general: generalSettings,

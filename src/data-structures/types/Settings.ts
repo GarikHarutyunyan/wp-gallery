@@ -169,6 +169,7 @@ export interface IGeneralSettings {
   watermarkPosition: Position;
   enableSearch: boolean;
   searchPlaceholderText: string;
+  enableWhiteLabel: boolean;
 }
 
 export interface ICubeSettings {
