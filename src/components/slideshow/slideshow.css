@@ -51,12 +51,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 600;
+  line-height: 1.5;
 }
 
 .reacg-slideshow-texts__description {
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
+  line-height: 1.5;
 }
 
 /* Fade */
