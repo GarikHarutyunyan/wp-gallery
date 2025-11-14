@@ -108,6 +108,8 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
           color: paginationTextColor,
           width: `${paginationButtonTextSize + 1}rem`,
           height: `${paginationButtonTextSize + 1}rem`,
+          minWidth: '32px',
+          minHeight: '32px',
         }}
         disabled={isDisabled}
       />
