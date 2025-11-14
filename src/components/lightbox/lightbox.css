@@ -64,12 +64,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 600;
+  line-height: 1.5;
 }
 
 .reacg-lightbox-texts__description {
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.5;
 }
 
 /* Fade */
