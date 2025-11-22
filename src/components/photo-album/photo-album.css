@@ -304,7 +304,7 @@
   margin-top: 80px;
 }
 .reacg-gallery
-  [class*='photo-album-item__image-wrapper_overlay-icon']:hover
+  [class*='photo-album-item__image-wrapper_overlay-icon']
   .photo-album-item__title-content_center
   > div {
   -webkit-transition: all 0.3s ease-in-out;
