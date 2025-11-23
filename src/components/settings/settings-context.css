@@ -31,10 +31,6 @@
     height: 100%;
   }
 
-  .type-option__wrapper-mobile .type-option__title {
-    font-size: 0.6rem;
-  }
-
   .type-option__active .type-option__image-container svg path {
     fill: #155c92;
   }
@@ -57,6 +53,82 @@
   display: flex;
   align-items: center;
   width: 100%;
+  svg {
+    width: 30px;
+    height: 30px;
+    max-width: 100%;
+  }
+}
+.reacg-settings-panel {
+  flex-direction: row;
+}
+.reacg-settings-panel__buttons {
+  flex-direction: row;
+}
+.reacg-templates-select__container {
+  width: 200px;
+  margin: 0 5px;
+  scroll-margin: 50px;
+}
+
+.reacg-settings--m,
+.reacg-settings--s,
+.reacg-settings--xs {
+  .reacg-settings-panel {
+    flex-direction: column-reverse;
+  }
+  .type-option__title {
+    font-size: 0.7rem;
+  }
+}
+
+.reacg-settings--s,
+.reacg-settings--xs {
+  .reacg-templates-select__container {
+    width: unset;
+    margin: 5px;
+  }
+  .reacg-settings-panel__buttons {
+    flex-direction: column;
+  }
+  .type-option__wrapper .type-option__title {
+    font-size: 0.6rem;
+  }
+}
+
+.reacg-settings--xs {
+  .reacg-settings-panel-tabs {
+    button {
+      min-width: unset;
+      font-size: 0.6rem;
+    }
+    .MuiTab-iconWrapper {
+      font-size: 13px;
+      margin-right: 2px;
+    }
+  }
+  .reacg-section__body {
+    .MuiGrid-container {
+      flex-direction: column;
+    }
+    .MuiGrid-item {
+      max-width: 100%;
+    }
+    .MuiGrid-container .MuiGrid-container .MuiGrid-item {
+      max-width: calc(100% - 64px);
+    }
+    .MuiGrid-container
+      .MuiGrid-container.reacg-section__container-inherit
+      .MuiGrid-item {
+      max-width: 100%;
+    }
+    .MuiGrid-container
+      .MuiGrid-container
+      .MuiGrid-container.reacg-section__container-inherit {
+      width: calc(100% - 64px);
+      margin-top: 16px;
+    }
+  }
 }
 
 .type-panel-select__image {
@@ -68,6 +140,17 @@
 
 .type-panel-select__title {
   margin-left: 10px !important;
+  font-weight: bold !important;
+  color: #85a3b8 !important;
+  font-size: 1.2rem !important;
+}
+.Mui-selected svg path,
+.MuiSelect-outlined svg path {
+  fill: #155c92 !important;
+}
+.Mui-selected .type-panel-select__title,
+.MuiSelect-outlined .type-panel-select__title {
+  color: #155c92 !important;
 }
 
 .reacg-section__body {

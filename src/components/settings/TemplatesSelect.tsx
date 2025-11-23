@@ -219,7 +219,7 @@ const TemplatesSelect: React.FC = () => {
 
   const renderSelect = (): ReactElement => {
     return (
-      <Box style={{width: '200px', margin: 'auto 10px', scrollMargin: '50px'}}>
+      <Box className="reacg-templates-select__container">
         {isLoading ? (
           <Skeleton height={48} />
         ) : (
