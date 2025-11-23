@@ -5,7 +5,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import {Box, Tab, Tabs, Tooltip} from '@mui/material';
 import clsx from 'clsx';
 import {Align, Aligner} from 'core-components/aligner';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {TemplatesSelect} from './TemplatesSelect';
 
 interface ISettingsPanelTabsProps {
@@ -38,34 +38,12 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
     setIsReseting(false);
   };
 
-  const [isTablet, setIsTablet] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const updateIsMobile = () => {
-      const parentElement = document.querySelector('.reacg-preview');
-      if (parentElement) {
-        setIsTablet(
-          parentElement && parentElement.getBoundingClientRect().width < 720
-        );
-        setIsMobile(
-          parentElement && parentElement.getBoundingClientRect().width < 480
-        );
-      }
-    };
-
-    // Initial check.
-    updateIsMobile();
-
-    // Add event listener to handle window resize.
-    window.addEventListener('resize', updateIsMobile);
-
-    // Cleanup event listener on component unmount.
-    return () => window.removeEventListener('resize', updateIsMobile);
-  }, []);
-
   return (
-    <Aligner style={{flexDirection: isTablet ? 'column-reverse' : 'row'}}>
-      <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+    <Aligner className="reacg-settings-panel">
+      <Box
+        className="reacg-settings-panel-tabs"
+        sx={{borderBottom: 1, borderColor: 'divider'}}
+      >
         <Tabs
           value={activeTab}
           onChange={onActiveTabChange}
@@ -130,10 +108,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
           />
         </Tabs>
       </Box>
-      <Aligner
-        style={{flexDirection: isMobile ? 'column' : 'row'}}
-        align={Align.END}
-      >
+      <Aligner className="reacg-settings-panel__buttons" align={Align.END}>
         <TemplatesSelect />
         <LoadingButton
           loading={isSaving}
