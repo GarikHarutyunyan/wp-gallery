@@ -1,4 +1,4 @@
-import {ISelectOption} from 'components/controls/SelectControl';
+import { ISelectOption } from 'components/controls/SelectControl';
 
 export enum HoverEffect {
   ZOOM_IN = 'zoom-in',
@@ -12,6 +12,7 @@ export enum HoverEffect {
   OVERLAY_ZOOM_ICON = 'overlay-icon-zoom',
   OVERLAY_CART_ICON = 'overlay-icon-cart',
   OVERLAY_PLUS_ICON = 'overlay-icon-plus',
+  OVERLAY_FULLSCREEN_ICON = 'overlay-icon-fullscreen',
   FLASH = 'flash',
   SHINE = 'shine',
   CIRCLE = 'circle',
@@ -30,6 +31,7 @@ export const HoverEffectOptions: ISelectOption[] = [
   {value: HoverEffect.OVERLAY_ZOOM_ICON, title: 'Overlay Zoom Icon'},
   {value: HoverEffect.OVERLAY_CART_ICON, title: 'Overlay Cart Icon'},
   {value: HoverEffect.OVERLAY_PLUS_ICON, title: 'Overlay Plus Icon'},
+  {value: HoverEffect.OVERLAY_FULLSCREEN_ICON, title: 'Overlay Fullscreen Icon'},
   {value: HoverEffect.FLASH, title: 'Flash'},
   {value: HoverEffect.SHINE, title: 'Shine'},
   {value: HoverEffect.CIRCLE, title: 'Circle'},
