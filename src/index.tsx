@@ -17,6 +17,8 @@ const addApplication = (rootElement: HTMLElement) => {
     rootElement.getAttribute('data-gallery-timestamp') || '';
   const getOptionsTimestamp = () =>
     rootElement.getAttribute('data-options-timestamp') || '';
+  const optionsContainerSelector =
+    rootElement.getAttribute('data-options-container') || '';
 
   const baseUrl: string | undefined = (window as any).reacg_global?.rest_root;
   const nonce: string | undefined = (window as any).reacg?.rest_nonce;
@@ -34,6 +36,7 @@ const addApplication = (rootElement: HTMLElement) => {
         pluginVersion={pluginVersion}
         getGalleryTimestamp={getGalleryTimestamp}
         getOptionsTimestamp={getOptionsTimestamp}
+        optionsContainerSelector={optionsContainerSelector}
       >
         <App />
       </AppInfoProvider>
