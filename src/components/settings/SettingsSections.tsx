@@ -1,5 +1,7 @@
+import {useAppInfo} from 'contexts';
 import {Section} from 'core-components/section';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {ReactElement, useEffect, useRef, useState} from 'react';
+import {createPortal} from 'react-dom';
 import {clsx} from 'yet-another-react-lightbox';
 import {OptionsPanelBody} from './OptionsPanelBody';
 import {OptionsPanelHeader} from './OptionsPanelHeader';
@@ -21,6 +23,7 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   onReset,
 }) => {
   const {hasChanges} = useSettings();
+  const {optionsContainerSelector} = useAppInfo();
 
   useEffect(() => {
     const beforeUnloadCallback = (event: any) => {
@@ -85,7 +88,7 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   // Wrapper used to find the nearest .reacg-preview ancestor instead of querying the whole document
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
-  return (
+  const content: ReactElement = (
     <div ref={wrapperRef}>
       <TypePanel
         isMedium={isMedium}
@@ -112,6 +115,16 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
       />
     </div>
   );
+
+  if (optionsContainerSelector) {
+    const containerElement = document.querySelector(optionsContainerSelector);
+
+    if (containerElement) {
+      return createPortal(content, containerElement);
+    }
+  }
+
+  return content;
 };
 
 export default SettingsSections;
