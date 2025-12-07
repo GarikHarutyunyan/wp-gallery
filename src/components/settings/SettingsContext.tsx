@@ -208,6 +208,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   useLayoutEffect(() => {
+    if (!galleryId) {
+      return;
+    }
     const allData = (window as any).reacg_data;
     const currentData = allData?.[galleryId as string];
     const hasFirstChunk: boolean = currentData?.options;
