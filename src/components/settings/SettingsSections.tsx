@@ -43,10 +43,10 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   const [isExtraSmall, setIsExtraSmall] = useState(false);
   useEffect(() => {
     const resize = () => {
-      // Prefer the nearest .reacg-preview ancestor to support multiple previews on the page
+      // Prefer the nearest .reacg-wrapper ancestor to support multiple previews on the page
       const parentElement =
-        (wrapperRef.current?.closest('.reacg-preview') as HTMLElement | null) ??
-        document.querySelector('.reacg-preview');
+        (wrapperRef.current?.closest('.reacg-wrapper') as HTMLElement | null) ??
+        document.querySelector('.reacg-wrapper');
       if (parentElement) {
         const parentWidth = (
           parentElement as HTMLElement
@@ -62,8 +62,8 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
 
     // Observe size changes on the nearest preview wrapper (or fallback to window resize).
     const observedElement =
-      (wrapperRef.current?.closest('.reacg-preview') as HTMLElement | null) ??
-      (document.querySelector('.reacg-preview') as HTMLElement | null) ??
+      (wrapperRef.current?.closest('.reacg-wrapper') as HTMLElement | null) ??
+      (document.querySelector('.reacg-wrapper') as HTMLElement | null) ??
       wrapperRef.current;
 
     let ro: ResizeObserver | null = null;
@@ -85,7 +85,7 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
     };
   }, []);
 
-  // Wrapper used to find the nearest .reacg-preview ancestor instead of querying the whole document
+  // Wrapper used to find the nearest .reacg-wrapper ancestor instead of querying the whole document
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   const content: ReactElement = (
