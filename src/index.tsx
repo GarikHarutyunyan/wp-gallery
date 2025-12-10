@@ -4,8 +4,18 @@ import ReactDOM2 from 'react-dom';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
+const rootMap: Map<HTMLElement, ReactDOM.Root> = new Map();
+
 const addApplication = (rootElement: HTMLElement) => {
+  const isElementEmpty = !rootElement.hasChildNodes();
+
+  if (!isElementEmpty) {
+    rootMap.get(rootElement)?.unmount();
+  }
+
   const root = ReactDOM.createRoot(rootElement);
+  rootMap.set(rootElement, root);
+
   const galleryId: string | undefined =
     rootElement.getAttribute('data-gallery-id') || undefined;
   const showControls: boolean = !!+(
