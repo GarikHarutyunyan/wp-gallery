@@ -6,7 +6,7 @@ import React, {ReactNode, useState} from 'react';
 import './section.css';
 
 interface ISectionProps {
-  header: ReactNode | string;
+  header?: ReactNode | string;
   body: ReactNode;
   canExpand?: boolean;
   defaultExpanded?: boolean;
@@ -73,8 +73,10 @@ const Section: React.FC<ISectionProps> = ({
         className
       )}
     >
-      {renderHeader()}
-      {isExpanded || !outlined ? <Divider variant={'middle'} /> : null}
+      {header && renderHeader()}
+      {header && (isExpanded || !outlined) ? (
+        <Divider variant={'middle'} />
+      ) : null}
       {renderBody()}
     </Paper>
   );

@@ -1,10 +1,10 @@
+import {Divider} from '@mui/material';
 import {useAppInfo} from 'contexts';
 import {Section} from 'core-components/section';
 import React, {ReactElement, useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {clsx} from 'yet-another-react-lightbox';
 import {OptionsPanelBody} from './OptionsPanelBody';
-import {OptionsPanelHeader} from './OptionsPanelHeader';
 import './settings-context.css';
 import {TypePanel} from './type-panel/TypePanel';
 import {useSettings} from './useSettings';
@@ -96,8 +96,8 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
         isExtraSmall={isExtraSmall}
         onTypeChange={onTypeChange}
       />
+      <Divider variant={'middle'} />
       <Section
-        header={<OptionsPanelHeader />}
         body={
           <OptionsPanelBody
             isLoading={isLoading}
