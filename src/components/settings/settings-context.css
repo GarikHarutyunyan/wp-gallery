@@ -1,6 +1,10 @@
+.reacg-wrapper {
+  hr {
+    margin: 0;
+  }
+}
 .reacg-settings {
   box-shadow: unset !important;
-
   .type-option__wrapper {
     max-width: 980px;
     margin-top: 10px;

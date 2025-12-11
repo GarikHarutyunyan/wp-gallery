@@ -1,7 +1,6 @@
 import {Section} from 'core-components/section';
 import {clsx} from 'yet-another-react-lightbox';
 import {TypePanelBody} from './TypePanelBody';
-import {TypePanelHeader} from './TypePanelHeader';
 
 interface ITypePanelProps {
   isMedium: boolean;
@@ -18,7 +17,6 @@ const TypePanel = ({
 }: ITypePanelProps) => {
   return (
     <Section
-      header={<TypePanelHeader />}
       body={
         <TypePanelBody
           isMedium={isMedium}
