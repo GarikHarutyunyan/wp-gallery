@@ -1,7 +1,7 @@
 type ButtonConfig = {
   label: string;
   backgroundColor: string;
-  onClick: () => void;
+  onClick: (utm_medium?: string) => void;
 };
 
 export type AlertConfig = {
@@ -10,4 +10,5 @@ export type AlertConfig = {
   buttonConfig: ButtonConfig;
   errorMessage?: string;
   onClose?: () => void;
+  utm_medium?: string;
 };
