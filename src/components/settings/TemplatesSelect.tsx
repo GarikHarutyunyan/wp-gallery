@@ -172,7 +172,7 @@ const TemplatesSelect: React.FC = () => {
     };
   const options: ISelectOption[] = [
     {
-      title: 'Pre-built Templates',
+      title: 'Pre-Designed Templates',
       value: 'separator-pre-built-templates',
       isDisabled: true,
       className: 'reacg-templates-list-option-group',
@@ -239,7 +239,7 @@ const TemplatesSelect: React.FC = () => {
       {showHighlighter ? (
         <FeatureHighlighter
           text={
-            'Look for a quick way to transform your gallery in seconds with our pre-built templates!'
+            'Look for a quick way to transform your gallery in seconds with our Pre-Designed Templates!'
           }
         >
           {renderSelect()}
