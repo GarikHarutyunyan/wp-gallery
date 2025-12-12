@@ -81,7 +81,9 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       try {
         const response = await axios.get(fetchUrl);
         if (response.status === 204) {
-          (window as any).reacg_open_premium_offer_dialog?.();
+          (window as any).reacg_open_premium_offer_dialog?.({
+            utm_medium: 'select_template',
+          });
         } else {
           const templateData: ITemplate = response.data;
           templateData.templateType = type;

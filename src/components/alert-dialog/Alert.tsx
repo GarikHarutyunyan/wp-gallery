@@ -7,11 +7,11 @@ interface IAlertProps {
 }
 
 const Alert = ({config}: IAlertProps) => {
-  const {image, description, errorMessage, buttonConfig} = config;
+  const {image, description, errorMessage, buttonConfig, utm_medium} = config;
   const {label, backgroundColor, onClick} = buttonConfig;
 
-  const handleClick = () => {
-    onClick();
+  const handleClick = (utm_medium?: string) => {
+    onClick(utm_medium);
   };
 
   const renderErrorMessage = () => {
@@ -76,7 +76,7 @@ const Alert = ({config}: IAlertProps) => {
         sx={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}
       >
         <Button
-          onClick={handleClick}
+          onClick={() => handleClick(utm_medium)}
           style={{
             background: backgroundColor,
             color: 'white',

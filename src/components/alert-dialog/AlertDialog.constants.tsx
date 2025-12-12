@@ -14,10 +14,23 @@ export const premiumConfig: AlertConfig = {
   ),
   description: 'This feature is available in the Pro plan',
   buttonConfig: {
-    label: 'GET STARTED',
+    label: (window as any).reacg_global?.upgrade?.text || 'GET STARTED',
     backgroundColor: '#a7c957',
-    onClick: () => {
-      window.open('https://regallery.team/#pricing', '_blank');
+    onClick: (utm_medium?: string) => {
+      let url =
+        (window as any).reacg_global?.upgrade?.url ||
+        'https://regallery.team/#pricing';
+      if (utm_medium) {
+        const urlQueryStringSeperator: string = url.includes('?') ? '&' : '?';
+        utm_medium = urlQueryStringSeperator + 'utm_medium=' + utm_medium;
+        if (url.includes('#')) {
+          const [base, hash] = url.split('#');
+          url = base + utm_medium + '#' + hash;
+        } else {
+          url = url + utm_medium;
+        }
+      }
+      window.open(url, '_blank');
     },
   },
 };
