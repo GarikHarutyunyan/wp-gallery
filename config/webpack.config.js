@@ -215,10 +215,10 @@ module.exports = function (webpackEnv) {
       // filename: isEnvProduction
       //   ? 'static/js/[name].[contenthash:8].js'
       //   : isEnvDevelopment && 'static/js/bundle.js',
-      filename: 'wp-content/plugins/regallery/assets/js/wp-gallery.js', // Change this to your desired filename
+      filename: 'assets/js/wp-gallery.js', // Change this to your desired filename
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: isEnvProduction
-        ? 'wp-content/plugins/regallery/assets/js/wp-gallery/wp-gallery.[name].[contenthash:8].chunk.js'
+        ? 'assets/js/wp-gallery/wp-gallery.[name].[contenthash:8].chunk.js'
         : isEnvDevelopment && 'wp-gallery/wp-gallery.[name].chunk.js',
       // assetModuleFilename: 'static/media/[name].[hash][ext]',
       // webpack uses `publicPath` to determine where the app is being served from.
@@ -652,9 +652,7 @@ module.exports = function (webpackEnv) {
       // - "entrypoints" key: Array of files which are included in `index.html`,
       //   can be used to reconstruct the HTML if necessary
       new CleanWebpackPlugin({
-        cleanOnceBeforeBuildPatterns: [
-          'wp-content/plugins/regallery/assets/js/wp-gallery/',
-        ], // Clean only /wp-gallery directory
+        cleanOnceBeforeBuildPatterns: ['/assets/js/wp-gallery/'], // Clean only /wp-gallery directory
         protectWebpackAssets: false, // Prevents Webpack from deleting files it generates
       }),
       // new WebpackManifestPlugin({
