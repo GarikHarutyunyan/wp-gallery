@@ -15,8 +15,10 @@ const App: React.FC = () => {
   // This ensures that all dynamically loaded chunks use the correct base URL
   // This is particularly useful in WordPress environments where the plugin URL may vary
   // More Info: https://webpack.js.org/guides/public-path/#on-the-fly
-  // @ts-ignore
-  __webpack_public_path__ = pluginAssetsUrl;
+  if (pluginAssetsUrl) {
+    // @ts-ignore
+    __webpack_public_path__ = pluginAssetsUrl;
+  }
 
   const renderApp = () => {
     return (
