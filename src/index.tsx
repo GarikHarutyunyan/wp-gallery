@@ -34,6 +34,8 @@ const addApplication = (rootElement: HTMLElement) => {
   const nonce: string | undefined = (window as any).reacg?.rest_nonce;
   const pluginUrl: string | undefined = (window as any).reacg_global
     ?.plugin_url;
+  const pluginAssetsUrl: string | undefined = (window as any).reacg_global
+    ?.plugin_assets_url;
 
   root.render(
     <React.StrictMode>
@@ -43,6 +45,7 @@ const addApplication = (rootElement: HTMLElement) => {
         baseUrl={baseUrl}
         nonce={nonce}
         pluginUrl={pluginUrl}
+        pluginAssetsUrl={pluginAssetsUrl}
         pluginVersion={pluginVersion}
         getGalleryTimestamp={getGalleryTimestamp}
         getOptionsTimestamp={getOptionsTimestamp}

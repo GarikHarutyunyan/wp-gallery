@@ -6,6 +6,7 @@ interface IAppInfo {
   baseUrl?: string;
   nonce?: string;
   pluginUrl?: string;
+  pluginAssetsUrl?: string;
   pluginVersion?: string;
   getGalleryTimestamp?: () => string;
   getOptionsTimestamp?: () => string;
@@ -22,6 +23,7 @@ const AppInfoProvider: React.FC<AppInfoProviderProps> = ({
   baseUrl,
   nonce,
   pluginUrl,
+  pluginAssetsUrl,
   pluginVersion,
   children,
   getGalleryTimestamp,
@@ -36,6 +38,7 @@ const AppInfoProvider: React.FC<AppInfoProviderProps> = ({
         baseUrl,
         nonce,
         pluginUrl,
+        pluginAssetsUrl,
         pluginVersion,
         getGalleryTimestamp,
         getOptionsTimestamp,

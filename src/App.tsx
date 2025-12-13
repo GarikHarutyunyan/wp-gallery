@@ -10,7 +10,15 @@ import {GalleryWrapper} from './components/GalleryWrapper';
 const AlertDialog = lazy(() => import('components/alert-dialog/AlertDialog'));
 
 const App: React.FC = () => {
-  const {showControls} = useAppInfo();
+  const {pluginAssetsUrl, showControls} = useAppInfo();
+  // Override the __webpack_public_path__ at runtime to use the plugin_url from global variable
+  // This ensures that all dynamically loaded chunks use the correct base URL
+  // This is particularly useful in WordPress environments where the plugin URL may vary
+  // More Info: https://webpack.js.org/guides/public-path/#on-the-fly
+  if (pluginAssetsUrl) {
+    // @ts-ignore
+    __webpack_public_path__ = pluginAssetsUrl;
+  }
 
   const renderApp = () => {
     return (
