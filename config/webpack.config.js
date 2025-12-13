@@ -652,7 +652,7 @@ module.exports = function (webpackEnv) {
       // - "entrypoints" key: Array of files which are included in `index.html`,
       //   can be used to reconstruct the HTML if necessary
       new CleanWebpackPlugin({
-        cleanOnceBeforeBuildPatterns: ['/assets/js/wp-gallery/'], // Clean only /wp-gallery directory
+        cleanOnceBeforeBuildPatterns: ['wp-gallery/'], // Clean only /wp-gallery directory
         protectWebpackAssets: false, // Prevents Webpack from deleting files it generates
       }),
       // new WebpackManifestPlugin({
