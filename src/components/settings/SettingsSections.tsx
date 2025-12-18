@@ -117,9 +117,12 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   );
 
   if (optionsContainerSelector) {
-    const containerElement =
-      document.querySelector(optionsContainerSelector) ||
-      parent.document.querySelector(optionsContainerSelector);
+    const docElement = document.querySelector(optionsContainerSelector);
+    // eslint-disable-next-line no-restricted-globals
+    const parentElement = parent.document.querySelector(
+      optionsContainerSelector
+    );
+    const containerElement = docElement || parentElement;
 
     if (containerElement) {
       return createPortal(content, containerElement);
