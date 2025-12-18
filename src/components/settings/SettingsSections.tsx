@@ -117,7 +117,9 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   );
 
   if (optionsContainerSelector) {
-    const containerElement = document.querySelector(optionsContainerSelector);
+    const containerElement =
+      document.querySelector(optionsContainerSelector) ||
+      parent.document.querySelector(optionsContainerSelector);
 
     if (containerElement) {
       return createPortal(content, containerElement);
