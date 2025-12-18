@@ -119,7 +119,7 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   if (optionsContainerSelector) {
     const docElement = document.querySelector(optionsContainerSelector);
     // eslint-disable-next-line no-restricted-globals
-    const parentElement = parent.document.querySelector(
+    const parentElement = parent?.document.querySelector(
       optionsContainerSelector
     );
     const containerElement = docElement || parentElement;
