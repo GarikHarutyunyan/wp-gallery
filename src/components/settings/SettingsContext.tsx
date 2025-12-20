@@ -2,6 +2,7 @@ import axios from 'axios';
 import clsx from 'clsx';
 import {useTemplates} from 'contexts';
 import {useAppInfo} from 'contexts/AppInfoContext';
+import {usePro} from 'contexts/ProContext';
 import {
   GalleryType,
   IBlogSettings,
@@ -9,6 +10,7 @@ import {
   ICarouselSettings,
   ICubeSettings,
   IGeneralSettings,
+  IJustifiedSettings,
   ILightboxSettings,
   IMasonrySettings,
   IMosaicSettings,
@@ -25,13 +27,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {TypeUtils} from 'utils';
 import {
   blogMockSettings,
   cardsMockSettings,
   carouselMockSettings,
   cubeMockSettings,
   generalMockSettings,
+  justifiedMockSettings,
   lightboxMockSettings,
   masonryMockSettings,
   mosaicMockSettings,
@@ -48,9 +50,10 @@ const SettingsContext = React.createContext<{
   generalSettings?: IGeneralSettings;
   thumbnailSettings?: IThumbnailSettings;
   mosaicSettings?: IMosaicSettings;
+  lightboxSettings?: ILightboxSettings;
+  justifiedSettings?: IJustifiedSettings;
   masonrySettings?: IMasonrySettings;
   slideshowSettings?: ISlideshowSettings;
-  lightboxSettings?: ILightboxSettings;
   cubeSettings?: ICubeSettings;
   carouselSettings?: ICarouselSettings;
   cardsSettings?: ICardsSettings;
@@ -58,6 +61,7 @@ const SettingsContext = React.createContext<{
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
+  changeJustifiedSettings?: any;
   changeMasonrySettings?: any;
   changeSlideshowSettings?: any;
   changeLightboxSettings?: any;
@@ -79,11 +83,19 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     resetTemplate,
     isLoading: areTemplatesLoading,
   } = useTemplates();
-  const {galleryId, showControls, baseUrl, nonce, getOptionsTimestamp} =
-    useAppInfo();
+  const {
+    galleryId,
+    pluginVersion,
+    showControls,
+    baseUrl,
+    nonce,
+    getOptionsTimestamp,
+  } = useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
+  const [justifiedSettings, setJustifiedSettings] =
+    useState<IJustifiedSettings>();
   const [masonrySettings, setMasonrySettings] = useState<IMasonrySettings>();
   const [slideshowSettings, setSlideshowSettings] =
     useState<ISlideshowSettings>();
@@ -106,6 +118,11 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const currentData = allData?.[galleryId as string];
     const optionsData: any = currentData?.options;
     const newSettings: ISettingsDTO = optionsData;
+    const template_id = newSettings?.template_id?.toString();
+
+    if (newSettings.general) {
+      newSettings.general.enableWhiteLabel = isPro;
+    }
 
     setType(newSettings.type);
     setCss(newSettings.css || '');
@@ -113,6 +130,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setGeneralSettings(newSettings.general || generalMockSettings);
     setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
     setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
+    setJustifiedSettings(newSettings.justified || justifiedMockSettings);
     setMasonrySettings(newSettings.masonry || mosaicMockSettings);
     setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
     setLightboxSettings(newSettings.lightbox);
@@ -121,8 +139,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCardsSettings(newSettings.cards || cardsMockSettings);
     setBlogSettings(newSettings.blog || blogMockSettings);
     initTemplate?.(
-      newSettings?.template_id as string,
-      newSettings?.title as string
+      parseInt(
+        template_id === '' || template_id === 'none'
+          ? galleryId || ''
+          : template_id || ''
+      ),
+      newSettings?.title as string,
+      newSettings?.templateType as string
     );
   };
 
@@ -139,6 +162,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       const newSettings: ISettingsDTO = (
         await axios.get(`${fetchUrl}${queryString}`)
       ).data;
+      const template_id = newSettings?.template_id?.toString();
+      if (newSettings.general) {
+        newSettings.general.enableWhiteLabel = isPro;
+      }
 
       setType(newSettings.type);
       setCss(newSettings.css || '');
@@ -146,6 +173,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setGeneralSettings(newSettings.general || generalMockSettings);
       setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
+      setJustifiedSettings(newSettings.justified || justifiedMockSettings);
       setMasonrySettings(newSettings.masonry || mosaicMockSettings);
       setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
@@ -154,8 +182,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCardsSettings(newSettings.cards || cardsMockSettings);
       setBlogSettings(newSettings.blog || blogMockSettings);
       initTemplate?.(
-        newSettings?.template_id as string,
-        newSettings?.title as string
+        parseInt(
+          template_id === '' || template_id === 'none'
+            ? galleryId || ''
+            : template_id || ''
+        ),
+        newSettings?.title as string,
+        newSettings?.templateType as string
       );
       setIsLoading(false);
     } else {
@@ -163,6 +196,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setGeneralSettings(generalMockSettings);
       setThumbnailSettings(thumbnailMockSettings);
       setMosaicSettings(mosaicMockSettings);
+      setJustifiedSettings(justifiedMockSettings);
       setMasonrySettings(masonryMockSettings);
       setSlideshowSettings(slideshowMockSettings);
       setLightboxSettings(lightboxMockSettings);
@@ -174,11 +208,14 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   useLayoutEffect(() => {
+    if (!galleryId) {
+      return;
+    }
     const allData = (window as any).reacg_data;
     const currentData = allData?.[galleryId as string];
     const hasFirstChunk: boolean = currentData?.options;
 
-    if (!hasFirstChunk) {
+    if (!hasFirstChunk || showControls) {
       getData();
     } else {
       getDataFromWindow();
@@ -195,7 +232,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       const settings: ISettingsDTO = {
         type: newType,
       } as ISettingsDTO;
-
       try {
         const response = await axios.post(fetchUrl, settings, {
           headers: {'X-WP-Nonce': nonce},
@@ -216,6 +252,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     resetTemplate?.();
     setCss('');
   };
+  const {isPro} = usePro();
 
   const onSave = async (): Promise<void> => {
     setHasChanges(false);
@@ -226,20 +263,29 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     if (fetchUrl) {
       setIsLoading(true);
+
+      if (generalSettings) {
+        if (!isPro) {
+          generalSettings.enableWatermark = false;
+        }
+        generalSettings.enableWhiteLabel = isPro;
+      }
       const settings: ISettingsDTO = {
         general: generalSettings,
         thumbnails: thumbnailSettings,
         lightbox: lightboxSettings,
         mosaic: mosaicSettings,
+        justified: justifiedSettings,
         masonry: masonrySettings,
         cube: cubeSettings,
         carousel: carouselSettings,
         cards: cardsSettings,
         slideshow: slideshowSettings,
         blog: blogSettings,
-        template_id:
-          template?.template_id == 'none' ? '' : template?.template_id,
+        templateType: template?.templateType,
+        template_id: template?.template_id,
         css: css || '',
+        custom_css: isPro ? customCss : customCss.slice(0, 100), // Do not allow to save more than 100 characteres as custom css with free plan.
       } as ISettingsDTO;
 
       try {
@@ -247,10 +293,12 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           headers: {'X-WP-Nonce': nonce},
         });
         const newSettings: ISettingsDTO = response.data;
+        const template_id = newSettings?.template_id?.toString();
 
         setGeneralSettings(newSettings.general);
         setThumbnailSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
+        setJustifiedSettings(newSettings.justified);
         setMasonrySettings(newSettings.masonry);
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
@@ -259,10 +307,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
         initTemplate?.(
-          (TypeUtils.isNumber(newSettings?.template_id)
-            ? newSettings?.template_id
-            : 'none') as string,
-          newSettings?.title as string
+          parseInt(
+            template_id === '' || template_id === 'none'
+              ? galleryId || ''
+              : template_id || ''
+          ),
+          newSettings?.title as string,
+          newSettings?.templateType as string
         );
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
@@ -273,6 +324,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           variant: 'error',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
+        (window as any).reacg_open_error_dialog?.({
+          errorMessage: 'Cannot update options',
+        });
         console.error(error);
       }
 
@@ -281,6 +335,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       enqueueSnackbar('Cannot update options!', {
         variant: 'error',
         anchorOrigin: {horizontal: 'right', vertical: 'top'},
+      });
+      (window as any).reacg_open_error_dialog?.({
+        errorMessage: 'Cannot update options',
       });
     }
   };
@@ -304,10 +361,12 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         queryString += `timestamp=${getOptionsTimestamp?.()}`;
         const response = await axios.get(`${fetchUrl}${queryString}`);
         const newSettings: ISettingsDTO = response.data;
+        const template_id = newSettings?.template_id?.toString();
 
         setGeneralSettings(newSettings.general);
         setThumbnailSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
+        setJustifiedSettings(newSettings.justified);
         setMasonrySettings(newSettings.masonry);
         setSlideshowSettings(newSettings.slideshow);
         setLightboxSettings(newSettings.lightbox);
@@ -317,8 +376,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setBlogSettings(newSettings.blog);
         setCss(newSettings.css || '');
         initTemplate?.(
-          newSettings?.template_id as string,
-          newSettings?.title as string
+          parseInt(
+            template_id === '' || template_id === 'none'
+              ? galleryId || ''
+              : template_id || ''
+          ),
+          newSettings?.title as string,
+          newSettings?.templateType as string
         );
         enqueueSnackbar(successMessage, {
           variant: 'success',
@@ -329,6 +393,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           variant: 'error',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
         });
+        (window as any).reacg_open_error_dialog?.({
+          errorMessage: 'Cannot reset options',
+        });
         console.error(error);
       }
 
@@ -338,6 +405,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       enqueueSnackbar('Cannot reset options!', {
         variant: 'error',
         anchorOrigin: {horizontal: 'right', vertical: 'top'},
+      });
+      (window as any).reacg_open_error_dialog?.({
+        errorMessage: 'Cannot reset options',
       });
     }
   };
@@ -376,6 +446,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         hasChanges,
         thumbnailSettings,
         mosaicSettings,
+        justifiedSettings,
         masonrySettings,
         slideshowSettings,
         generalSettings,
@@ -387,6 +458,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeGeneralSettings: createOnChange(setGeneralSettings),
         changeThumbnailSettings: createOnChange(setThumbnailSettings),
         changeMosaicSettings: createOnChange(setMosaicSettings),
+        changeJustifiedSettings: createOnChange(setJustifiedSettings),
         changeMasonrySettings: createOnChange(setMasonrySettings),
         changeSlideshowSettings: createOnChange(setSlideshowSettings),
         changeLightboxSettings: createOnChange(setLightboxSettings),

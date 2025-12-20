@@ -1,6 +1,6 @@
 .react-lightbox__background {
-  position: absolute;
-  width: 100%;
+  position: fixed;
+  width: 100vw; /* or 100% + padding(which is added to the <body> to compensate for the missing scrollbar to avoid layout shift.) */
   height: 100%;
   top: 0;
   left: 0;
@@ -12,13 +12,21 @@
   z-index: 1;
 }
 
+.reacg-lightbox .yarl__counter {
+  font-size: 16px;
+}
+
 .reacg-slideshow .yarl__toolbar {
   z-index: 1;
   top: auto;
   right: auto;
   visibility: hidden;
 }
-
+.react-lightbox--no-scroll {
+  overflow: hidden;
+  overscroll-behavior: none;
+  height: auto;
+}
 .reacg-slideshow:hover .yarl__toolbar {
   visibility: unset;
 }
@@ -56,12 +64,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 600;
+  line-height: 1.5;
 }
 
 .reacg-lightbox-texts__description {
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.5;
 }
 
 /* Fade */
@@ -187,4 +197,12 @@
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail):active,
 .reacg-lightbox button:not(.yarl__thumbnails_thumbnail):visited {
   width: unset;
+}
+.reacg-lightbox
+  .yarl__slide:not(.yarl__slide_current)
+  .react-watermark-overlay {
+  opacity: 0 !important;
+}
+.reacg-lightbox.reacg-invert-captions .yarl__slide_captions_container {
+  mix-blend-mode: difference;
 }

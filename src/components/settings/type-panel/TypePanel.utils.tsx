@@ -3,6 +3,7 @@ import {BlogImage} from './images/BlogImage';
 import {CardsImage} from './images/CardsImage';
 import {CarouselImage} from './images/CarouselImage';
 import {CubeImage} from './images/CubeImage';
+import {JustifiedImage} from './images/JustifiedImage';
 import {MasonryImage} from './images/MasonryImage';
 import {MosaicImage} from './images/MosaicImage';
 import {SlideshowImage} from './images/SlideshowImage';
@@ -10,7 +11,7 @@ import {ThumbnailsImage} from './images/ThumbnailsImage';
 export const GalleryTypeOptions = [
   {
     value: GalleryType.THUMBNAILS,
-    title: 'Thumbnails',
+    title: 'Grid',
     image: <ThumbnailsImage />,
   },
   {
@@ -24,8 +25,13 @@ export const GalleryTypeOptions = [
     image: <MasonryImage />,
   },
   {
+    value: GalleryType.JUSTIFIED,
+    title: 'Justified',
+    image: <JustifiedImage />,
+  },
+  {
     value: GalleryType.SLIDESHOW,
-    title: 'Slideshow',
+    title: 'Slider',
     image: <SlideshowImage />,
   },
   {

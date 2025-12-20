@@ -9,6 +9,7 @@ import {
   TitleVisibility,
 } from 'data-structures';
 import React, {CSSProperties, ReactNode, useRef} from 'react';
+import {Watermark} from 'utils/renderWatermark';
 import {createIcon} from 'yet-another-react-lightbox';
 import './photo-album.css';
 
@@ -47,60 +48,139 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
     padding,
     paddingColor,
     borderRadius,
+    titleSource,
     titleVisibility,
+    captionVisibility,
     titleAlignment,
     titlePosition,
+    captionPosition,
     titleColor,
     titleFontFamily,
     titleFontSize,
+    overlayTextBackground,
+    invertTextColor,
     hoverEffect,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
+    showTitle,
   } = settings;
   const imageBorderRadius =
     padding < borderRadius / 2 ? borderRadius - padding : borderRadius / 2;
 
-  const renderTitle = (): ReactNode => {
-    return image ? (
+  const renderTitle = (image: IImageDTO): ReactNode => {
+    const paddingTitle =
+      titlePosition !== TitlePosition.CENTER
+        ? imageBorderRadius / 2 + 'px'
+        : '0';
+
+    return (
       <div
         className={clsx('photo-album-item__title', {
           'photo-album-item__title_on-hover':
-            titleVisibility === TitleVisibility.ON_HOVER,
-          'photo-album-item__title_hidden':
-            titleVisibility === TitleVisibility.NONE,
+            showTitle && titleVisibility === TitleVisibility.ON_HOVER,
+          'photo-album-item__title_hidden': !showTitle,
         })}
-        key={image.id}
       >
         <ImageListItemBar
+          sx={{
+            '& .MuiImageListItemBar-title': {
+              fontSize: `${titleFontSize}px`,
+              fontFamily: titleFontFamily,
+              lineHeight: 'normal',
+            },
+            '& .MuiImageListItemBar-subtitle': {
+              fontSize: `${captionFontSize}px`,
+              fontFamily: titleFontFamily,
+              color: captionFontColor,
+              lineHeight: 'normal',
+            },
+          }}
           style={{
             textAlign: titleAlignment,
+            paddingLeft: paddingTitle,
+            paddingRight: paddingTitle,
             color: titleColor,
+            backgroundColor:
+              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
+            mixBlendMode: invertTextColor ? 'difference' : 'initial',
           }}
-          className={clsx({
-            'photo-album-item__title-content_center':
-              titlePosition === TitlePosition.CENTER,
-          })}
-          title={
-            <span
-              style={{
-                color: titleColor,
-                fontFamily: titleFontFamily,
-                fontSize: `${titleFontSize}px`,
-              }}
-            >
-              {image.title || <br />}
-            </span>
+          className={`photo-album-item__title-content_${titlePosition}`}
+          title={showTitle && <span>{image?.[titleSource] || <br />}</span>}
+          subtitle={
+            titlePosition === captionPosition &&
+            showCaption &&
+            image[captionSource] && (
+              <span className="photo-album-item__caption">
+                {image[captionSource]}
+              </span>
+            )
           }
           position={
             titlePosition !== TitlePosition.CENTER ? titlePosition : 'bottom'
           }
         />
       </div>
-    ) : null;
+    );
+  };
+
+  const renderCaption = (image: IImageDTO): ReactNode => {
+    const paddingTitle =
+      titlePosition !== TitlePosition.CENTER
+        ? imageBorderRadius / 2 + 'px'
+        : '0';
+
+    return (
+      <div
+        className={clsx('photo-album-item__title', {
+          'photo-album-item__title_on-hover':
+            showCaption && captionVisibility === TitleVisibility.ON_HOVER,
+          'photo-album-item__title_hidden': !showCaption,
+        })}
+      >
+        <ImageListItemBar
+          sx={{
+            '& .MuiImageListItemBar-subtitle': {
+              fontSize: `${captionFontSize}px`,
+              fontFamily: titleFontFamily,
+              color: captionFontColor,
+              lineHeight: 'normal',
+            },
+          }}
+          style={{
+            textAlign: titleAlignment,
+            paddingLeft: paddingTitle,
+            paddingRight: paddingTitle,
+            color: captionFontColor,
+          }}
+          className={`photo-album-item__title-content_${captionPosition}`}
+          subtitle={
+            showCaption && (
+              <span className="photo-album-item__caption">
+                {image[captionSource] || <br />}
+              </span>
+            )
+          }
+          position={
+            captionPosition !== TitlePosition.CENTER
+              ? captionPosition
+              : 'bottom'
+          }
+        />
+      </div>
+    );
   };
 
   const wrapperRef = useRef(null);
 
   return (
     <div
+      className={clsx(
+        !!onClick
+          ? 'photo-album-item__image-wrapper_clickable'
+          : 'photo-album-item__image-wrapper_non_clickable'
+      )}
       style={{
         background: paddingColor,
         borderRadius: `${borderRadius}px`,
@@ -113,8 +193,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
         className={clsx(
           'photo-album-item__image-wrapper',
           'photo-album-item__image-wrapper_overflow',
-          'photo-album-item__image-wrapper_' + hoverEffect,
-          {'photo-album-item__image-wrapper_clickable': !!onClick}
+          'photo-album-item__image-wrapper_' + hoverEffect
         )}
         style={{
           borderRadius: `${imageBorderRadius}px`,
@@ -129,18 +208,20 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             display: 'block',
           }}
         />
+        <Watermark />
         {image.type === ImageType.VIDEO && (
           <VideoThumbnailIcon
             style={{
               height: getThumbnailIconSize(width, height),
               width: getThumbnailIconSize(width, height),
             }}
-            className={clsx('photo-album-item__video-icon', {
-              'photo-album-item__image-wrapper_clickable': !!onClick,
-            })}
+            className={'photo-album-item__video-icon'}
           />
         )}
-        {renderTitle()}
+        {showTitle && renderTitle(image)}
+        {showCaption &&
+          (titlePosition != captionPosition || !showTitle) &&
+          renderCaption(image)}
       </div>
     </div>
   );

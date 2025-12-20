@@ -4,8 +4,18 @@ import ReactDOM2 from 'react-dom';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
+const rootMap: Map<HTMLElement, ReactDOM.Root> = new Map();
+
 const addApplication = (rootElement: HTMLElement) => {
+  const isElementEmpty = !rootElement.hasChildNodes();
+
+  if (!isElementEmpty) {
+    rootMap.get(rootElement)?.unmount();
+  }
+
   const root = ReactDOM.createRoot(rootElement);
+  rootMap.set(rootElement, root);
+
   const galleryId: string | undefined =
     rootElement.getAttribute('data-gallery-id') || undefined;
   const showControls: boolean = !!+(
@@ -17,11 +27,15 @@ const addApplication = (rootElement: HTMLElement) => {
     rootElement.getAttribute('data-gallery-timestamp') || '';
   const getOptionsTimestamp = () =>
     rootElement.getAttribute('data-options-timestamp') || '';
+  const optionsContainerSelector =
+    rootElement.getAttribute('data-options-container') || '';
 
   const baseUrl: string | undefined = (window as any).reacg_global?.rest_root;
   const nonce: string | undefined = (window as any).reacg?.rest_nonce;
   const pluginUrl: string | undefined = (window as any).reacg_global
     ?.plugin_url;
+  const pluginAssetsUrl: string | undefined = (window as any).reacg_global
+    ?.plugin_assets_url;
 
   root.render(
     <React.StrictMode>
@@ -31,9 +45,11 @@ const addApplication = (rootElement: HTMLElement) => {
         baseUrl={baseUrl}
         nonce={nonce}
         pluginUrl={pluginUrl}
+        pluginAssetsUrl={pluginAssetsUrl}
         pluginVersion={pluginVersion}
         getGalleryTimestamp={getGalleryTimestamp}
         getOptionsTimestamp={getOptionsTimestamp}
+        optionsContainerSelector={optionsContainerSelector}
       >
         <App />
       </AppInfoProvider>

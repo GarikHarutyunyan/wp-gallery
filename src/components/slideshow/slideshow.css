@@ -51,12 +51,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 600;
+  line-height: 1.5;
 }
 
 .reacg-slideshow-texts__description {
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
+  line-height: 1.5;
 }
 
 /* Fade */
@@ -171,4 +173,14 @@
 
 .yarl__slide_captions:empty {
   display: none;
+}
+
+.reacg-slideshow
+  .yarl__slide:not(.yarl__slide_current)
+  .react-watermark-overlay {
+  opacity: 0 !important;
+}
+
+.reacg-slideshow.reacg-invert-captions .yarl__slide_captions_container {
+  mix-blend-mode: difference;
 }

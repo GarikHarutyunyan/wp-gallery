@@ -5,6 +5,7 @@ import {CardsSettings} from 'components/cards-settings/CardsSettings';
 import {CarouselSettings} from 'components/carousel-settings';
 import {CubeSettings} from 'components/cube-settings/CubeSettings';
 import {GeneralSettings} from 'components/general-settings';
+import {JustifiedSettings} from 'components/justified-settings';
 import {LightboxSettings} from 'components/light-box-settings';
 import {MasonrySettings} from 'components/masonry-settings';
 import {MosaicSettings} from 'components/mosaic-settings';
@@ -30,6 +31,7 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     type,
     thumbnailSettings,
     mosaicSettings,
+    justifiedSettings,
     masonrySettings,
     slideshowSettings,
     cubeSettings,
@@ -44,6 +46,9 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   const hideLightboxOptions: boolean = !showLightbox;
 
   const onActiveTabChange = (_: any, newActiveTab: string) => {
+    if (hideLightboxOptions && newActiveTab === 'lightbox') {
+      return;
+    }
     setActiveTab(newActiveTab);
   };
 
@@ -52,6 +57,9 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     switch (type) {
       case GalleryType.MOSAIC:
         galleryOprions = renderMosaicSettings();
+        break;
+      case GalleryType.JUSTIFIED:
+        galleryOprions = renderJustifiedSettings();
         break;
       case GalleryType.MASONRY:
         galleryOprions = renderMasonrySettings();
@@ -81,6 +89,9 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
 
   const renderMosaicSettings = (): ReactNode => {
     return mosaicSettings && <MosaicSettings isLoading={isLoading} />;
+  };
+  const renderJustifiedSettings = (): ReactNode => {
+    return justifiedSettings && <JustifiedSettings isLoading={isLoading} />;
   };
 
   const renderMasonrySettings = (): ReactNode => {

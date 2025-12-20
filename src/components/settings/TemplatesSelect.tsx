@@ -18,8 +18,8 @@ import React, {
   useState,
 } from 'react';
 import {TypeUtils} from 'utils';
+import {ProIcon} from '../alert-dialog/icons/ProIcon';
 import {FeatureHighlighter} from './feature-highlighter/FeatureHighlighter';
-import {ProIcon} from './ProIcon';
 import './template-select.css';
 import {useSettings} from './useSettings';
 
@@ -31,12 +31,20 @@ const showHighlighter: boolean = !!storageValue
   : true;
 
 const TemplatesSelect: React.FC = () => {
-  const {templates, template, changeTemplate, isLoading} = useTemplates();
+  const {
+    galleryId,
+    preBuiltTemplates,
+    myTemplates,
+    template,
+    changeTemplate,
+    isLoading,
+  } = useTemplates();
   const {
     changeGeneralSettings,
     changeMasonrySettings,
     changeLightboxSettings,
     changeMosaicSettings,
+    changeJustifiedSettings,
     changeSlideshowSettings,
     changeThumbnailSettings,
     changeCubeSettings,
@@ -54,10 +62,10 @@ const TemplatesSelect: React.FC = () => {
   const [previewDialogInfo, setPreviewDialogInfo] = useState(
     initialPreviewDialogInfo
   );
-  const value = TypeUtils.isNumber(template?.template_id)
-    ? template!.template_id
-    : 'none';
-
+  const value =
+    template && TypeUtils.isNumber(template.template_id)
+      ? template.template_id
+      : parseInt(galleryId || '');
   useLayoutEffect(() => {
     if (template && TypeUtils.isNumber(template.template_id)) {
       const {
@@ -66,6 +74,7 @@ const TemplatesSelect: React.FC = () => {
         lightbox,
         masonry,
         mosaic,
+        justified,
         slideshow,
         thumbnails,
         cube,
@@ -82,6 +91,7 @@ const TemplatesSelect: React.FC = () => {
       lightbox && changeLightboxSettings(lightbox);
       masonry && changeMasonrySettings(masonry);
       mosaic && changeMosaicSettings(mosaic);
+      justified && changeJustifiedSettings(justified);
       slideshow && changeSlideshowSettings(slideshow);
       thumbnails && changeThumbnailSettings(thumbnails);
       cube && changeCubeSettings(cube);
@@ -160,22 +170,48 @@ const TemplatesSelect: React.FC = () => {
       e.stopPropagation();
       window.open(preview_url, '_blank');
     };
-
-  const options: ISelectOption[] =
-    templates?.map((template) => {
+  const options: ISelectOption[] = [
+    {
+      title: 'Pre-Designed Templates',
+      value: 'separator-pre-built-templates',
+      isDisabled: true,
+      className: 'reacg-templates-list-option-group',
+    },
+    ...(preBuiltTemplates?.map((template) => {
       const {title, id} = template;
-      const isDisabled: boolean = id === 'none';
 
       return {
         title: title,
-        value: id,
+        value: id as string,
         render: getPropOptionRender(template),
-        isDisabled,
+        isDisabled: false,
+        type: 'pre-built',
+        className: 'reacg-templates-list-option',
       };
-    }) || [];
+    }) || []),
+    {
+      title: 'My Templates',
+      value: 'separator-my-templates',
+      isDisabled: true,
+      className: 'reacg-templates-list-option-group',
+    },
+    ...(myTemplates?.map((template) => {
+      const {title, id} = template;
+      return {
+        title: title,
+        value: id as string,
+        isDisabled: false,
+        type: 'my',
+        className: 'reacg-templates-list-option',
+      };
+    }) || []),
+  ];
 
-  const onChange = (newValue: string | number) => {
-    changeTemplate?.(newValue as string);
+  const onChange = (newValue: number) => {
+    const selected = options.find((opt) => parseInt(opt.value) === newValue);
+    if (selected) {
+      changeTemplate?.(newValue, (selected as any).type);
+    }
   };
 
   const resetPreviewDialogInfo = () =>
@@ -183,7 +219,7 @@ const TemplatesSelect: React.FC = () => {
 
   const renderSelect = (): ReactElement => {
     return (
-      <Box style={{width: '200px', margin: 'auto 10px', scrollMargin: '50px'}}>
+      <Box className="reacg-templates-select__container">
         {isLoading ? (
           <Skeleton height={48} />
         ) : (
@@ -203,7 +239,7 @@ const TemplatesSelect: React.FC = () => {
       {showHighlighter ? (
         <FeatureHighlighter
           text={
-            'Look for a quick way to transform your gallery in seconds with our pre-built templates!'
+            'Look for a quick way to transform your gallery in seconds with our Pre-Designed Templates!'
           }
         >
           {renderSelect()}

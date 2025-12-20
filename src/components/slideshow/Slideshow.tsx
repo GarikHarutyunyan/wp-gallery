@@ -12,6 +12,7 @@ import {
   LightboxThumbnailsPosition,
 } from 'data-structures';
 import React, {ReactElement, useEffect, useMemo, useState} from 'react';
+import {Watermark} from 'utils/renderWatermark';
 import Lightbox, {SlideshowRef} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Inline from 'yet-another-react-lightbox/plugins/inline';
@@ -51,6 +52,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     textPosition,
     textFontFamily,
     textColor,
+    textBackground,
+    invertTextColor,
     showTitle,
     titleFontSize,
     titleAlignment,
@@ -58,6 +61,12 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     descriptionFontSize,
     descriptionMaxRowsCount,
     isFullCoverImage,
+    titleSource,
+    descriptionSource,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   } = settings as ISlideshowSettings;
   const wrapper = wrapperRef.current;
   const [innerWidth, setInnerWidth] = useState<number>(
@@ -89,12 +98,20 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (textPosition !== LightboxTextPosition.NONE) {
+    if (showTitle || showCaption || showDescription) {
       newPlugins.push(Captions as any);
     }
 
     return newPlugins;
-  }, [isSlideshowAllowed, autoplay, thumbnailsPosition, textPosition]);
+  }, [
+    isSlideshowAllowed,
+    autoplay,
+    thumbnailsPosition,
+    textPosition,
+    showTitle,
+    showCaption,
+    showDescription,
+  ]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -114,10 +131,11 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   }, [autoplay]);
 
   const slides = useMemo(() => {
-    return images!.map((image: IImageDTO) => ({
+    return images?.map((image: IImageDTO) => ({
       description: (
         <>
-          {showTitle && image.title && (
+          {((showTitle && image[titleSource]) ||
+            (showCaption && image[captionSource])) && (
             <p
               className={'reacg-slideshow-texts__title'}
               style={{
@@ -130,11 +148,25 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
                 textAlign: titleAlignment,
               }}
             >
-              {image.title}
+              {showTitle && image[titleSource]}
+              {showCaption && image[captionSource] && (
+                <span
+                  className={'reacg-slideshow__caption'}
+                  style={{
+                    color: captionFontColor,
+                    fontSize: `clamp(${
+                      captionFontSize / minFactor
+                    }rem, ${captionFontSize}vw, ${
+                      captionFontSize * maxFactor
+                    }rem)`,
+                  }}
+                >
+                  &nbsp;{image[captionSource]}
+                </span>
+              )}
             </p>
           )}
-
-          {showDescription && image.description && (
+          {showDescription && image[descriptionSource] && (
             <p
               className={'reacg-slideshow-texts__description'}
               style={{
@@ -150,7 +182,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
                 display: '-webkit-box',
               }}
             >
-              {image.description}
+              {image[descriptionSource]}
             </p>
           )}
         </>
@@ -199,6 +231,12 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     showDescription,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    titleSource,
+    descriptionSource,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   ]);
 
   const slideMargins = useMemo(() => {
@@ -215,6 +253,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
       maxFactor,
       paddingAroundText,
       titleMargin,
+      showCaption,
     });
   }, [
     images,
@@ -225,14 +264,89 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     titleFontSize,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
   ]);
 
   useEffect(() => {
     setIndex(0);
   }, [isInfinite]);
 
+  const WatermarkOverlay: React.FC<{
+    rootRef: React.RefObject<HTMLDivElement>;
+  }> = ({rootRef}) => {
+    const [rect, setRect] = useState<{
+      width: number;
+      height: number;
+      left: number;
+      top: number;
+    } | null>(null);
+    useEffect(() => {
+      function updateRect() {
+        if (!rootRef.current) return;
+        // Query only inside this slideshow instance
+        const media = rootRef.current.querySelector(
+          '.yarl__slide_current img, .yarl__slide_current video'
+        );
+        if (media) {
+          const r = (media as HTMLElement).getBoundingClientRect();
+          // Find the slide container to get its position
+          const slide = media.closest('.yarl__slide');
+          if (slide) {
+            const slideRect = (slide as HTMLElement).getBoundingClientRect();
+            setRect({
+              width: r.width,
+              height: r.height,
+              left: r.left - slideRect.left,
+              top: r.top - slideRect.top,
+            });
+          } else {
+            setRect({width: r.width, height: r.height, left: 0, top: 0});
+          }
+        } else {
+          setRect(null);
+        }
+      }
+      updateRect();
+      window.addEventListener('resize', updateRect);
+      const observer = new MutationObserver(updateRect);
+      if (rootRef.current)
+        observer.observe(rootRef.current, {childList: true, subtree: true});
+      return () => {
+        window.removeEventListener('resize', updateRect);
+        observer.disconnect();
+      };
+    }, [rootRef]);
+    if (!rect) return null;
+    return (
+      <div
+        className={'react-watermark-overlay'}
+        style={{
+          position: 'absolute',
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+          pointerEvents: 'none',
+          zIndex: 10,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: 1,
+        }}
+      >
+        <Watermark />
+      </div>
+    );
+  };
+
+  const slideshowRootRef = React.useRef<HTMLDivElement>(null);
+
   return (
     <Box
+      ref={slideshowRootRef}
       sx={{
         width: `${containerWidth}px`,
         height: `${containerHeight}px`,
@@ -254,6 +368,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
         }}
         render={{
           buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
+          slideFooter: () => <WatermarkOverlay rootRef={slideshowRootRef} />,
         }}
         carousel={{
           preload: 5,
@@ -278,12 +393,14 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           'reacg-slideshow-animation-' + imageAnimation,
           {
             // 'reacg-slideshow-control-buttons_hidden': !areControlButtonsShown,
-            'reacg-slideshow-texts': textPosition !== LightboxTextPosition.NONE,
+            'reacg-slideshow-texts':
+              showTitle || showCaption || showDescription,
             'reacg-slideshow-texts_top': [
               LightboxTextPosition.TOP,
               LightboxTextPosition.ABOVE,
             ].includes(textPosition),
             'reacg-slideshow-is-full-cover-image': isFullCoverImage,
+            'reacg-invert-captions': invertTextColor,
           }
         )}
         styles={{
@@ -293,9 +410,11 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
             '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
             '--yarl__slide_captions_container_background':
-              (showTitle && images![index]?.title) ||
-              (showDescription && images![index]?.description)
-                ? `${backgroundColor}80`
+              textBackground &&
+              ((showTitle && images?.[index]?.title) ||
+                (showCaption && images?.[index]?.caption) ||
+                (showDescription && images?.[index]?.description))
+                ? `${textBackground}`
                 : `none`,
           },
           thumbnail: {

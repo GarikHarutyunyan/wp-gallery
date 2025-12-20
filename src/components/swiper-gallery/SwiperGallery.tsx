@@ -10,6 +10,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/effect-cube';
 import 'swiper/css/navigation';
 import {Swiper, SwiperSlide} from 'swiper/react';
+import {handleSlideChange} from './imagePreloader';
 import './swiper-gallery.css';
 import SwiperImage from './SwiperImage';
 
@@ -59,10 +60,8 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const [paddingTop, setPaddingTop] = useState<number>(0);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const isDragging = useRef<boolean>(false);
   const key = effects.effect + 'Effect';
-  const previousIndex = useRef<number>(-1);
+  const prevIndexRef = useRef<number | null>(null);
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
@@ -115,85 +114,46 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
-  const onMouseDown = () => {
-    isDragging.current = true;
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-
-    return () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-  }, []);
-
-  const onMouseMove = () => {
-    if (isDragging.current && videoRef.current) {
-      (videoRef.current as HTMLVideoElement).controls = false;
-    }
-  };
-
-  const onMouseUp = () => {
-    isDragging.current = false;
-    if (videoRef.current) {
-      (videoRef.current as HTMLVideoElement).controls = true;
-    }
-  };
-
-  const loadImagesInRange = (startIndex: number, endIndex: number) => {
-    for (let i = startIndex; i <= endIndex; i++) {
-      const swiper = swiperRef?.current?.swiper;
-      const imgElement = swiper?.slides[i]?.querySelector(
-        'img'
-      ) as HTMLImageElement;
-
-      if (
-        imgElement &&
-        images &&
-        (!imgElement.src || imgElement.src === undefined)
-      ) {
-        imgElement.setAttribute('src', images[i].original.url);
-        imgElement.setAttribute(
-          'srcSet',
-          `${images[i].thumbnail.url} ${images[i].thumbnail.width}w, ${images[i].medium_large.url} ${images[i].medium_large.width}w, ${images[i].original.url} ${images[i].original.width}w`
-        );
-      }
-    }
-  };
-
-  const handleSlideChange = (
-    previousIndex: any,
-    swiperRef: any,
-    imagesCount: number,
-    preLoadCount: number
+  const handleOnChangeVideoAutoPlayAndPause = (
+    swiper: any,
+    shouldPausePrevious: boolean = true
   ) => {
-    const swiper = swiperRef.current?.swiper;
-    const activeIndex = parseInt(swiper.realIndex);
+    if (!swiper) return;
 
-    if (images && previousIndex.current !== -1) {
-      var loadStartIndex, loadEndIndex;
-      if (activeIndex > previousIndex.current) {
-        loadStartIndex = activeIndex;
-        loadEndIndex = Math.min(
-          imagesCount + activeIndex + preLoadCount,
-          images.length
-        );
-      } else {
-        loadStartIndex = activeIndex
-          ? Math.max(
-              activeIndex -
-                (imagesCount !== undefined ? imagesCount : 0) -
-                preLoadCount,
-              0
-            )
-          : 0;
-        loadEndIndex = activeIndex;
+    const activeIndex = swiper.activeIndex;
+    const activeSlide = swiper.slides[activeIndex];
+    const activeVideo = activeSlide?.querySelector(
+      'video.swiper-gallery__video'
+    );
+
+    if (shouldPausePrevious && prevIndexRef.current !== null) {
+      const prevSlide = swiper.slides[prevIndexRef.current];
+      const prevVideo = prevSlide?.querySelector('video.swiper-gallery__video');
+
+      if (prevVideo && prevVideo !== activeVideo && !prevVideo.paused) {
+        prevVideo.pause();
       }
-      loadImagesInRange(loadStartIndex, loadEndIndex);
     }
-    previousIndex.current = activeIndex;
+
+    if (activeVideo) {
+      if (activeVideo.readyState >= 3) {
+        activeVideo
+          .play()
+          .catch((err: any) => console.warn('Autoplay blocked:', err));
+      } else {
+        const onCanPlay = () => {
+          activeVideo.removeEventListener('canplay', onCanPlay);
+          activeVideo
+            .play()
+            .catch((err: any) => console.warn('Autoplay blocked:', err));
+        };
+        activeVideo.addEventListener('canplay', onCanPlay);
+        // Optionally, force the video to load if it hasn't started.
+        activeVideo.load && activeVideo.load();
+      }
+    }
+
+    prevIndexRef.current = activeIndex;
   };
 
   return (
@@ -215,15 +175,30 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       pagination={false}
       className={className}
       loopAdditionalSlides={0}
+      onInit={() => {
+        const swiper = swiperRef.current?.swiper;
+        handleOnChangeVideoAutoPlayAndPause(swiper, false); // Don't pause anything on init
+      }}
       onSlideChange={() => {
-        if (handleSlideChange) {
-          handleSlideChange(
-            previousIndex,
-            swiperRef,
-            imagesCount,
-            preLoadCount
-          );
-        }
+        const swiper = swiperRef.current?.swiper;
+        handleOnChangeVideoAutoPlayAndPause(swiper, true); // Pause previous if needed
+
+        if (key === 'coverflowEffect') return;
+        handleSlideChange(swiperRef, images, preLoadCount);
+      }}
+      onSlideChangeTransitionStart={() => {
+        if (key !== 'coverflowEffect') return;
+        handleSlideChange(swiperRef, images, preLoadCount);
+      }}
+      onTouchStart={() => {
+        if (key === 'coverflowEffect') return;
+        const videos = document.querySelectorAll('.swiper-gallery__video');
+        videos.forEach((v) => v.classList.add('no-pointer'));
+      }}
+      onTouchEnd={() => {
+        if (key === 'coverflowEffect') return;
+        const videos = document.querySelectorAll('.swiper-gallery__video');
+        videos.forEach((v) => v.classList.remove('no-pointer'));
       }}
       {...effects}
       style={
@@ -242,11 +217,20 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     >
       {images?.map((image: IImageDTO, index) => {
         const isVideo: boolean = image.type === ImageType.VIDEO;
-
+        const coverflowOriginalIndex = images.findIndex(
+          (img) => img.id === image.id
+        );
         return (
           <SwiperSlide
             key={index}
-            onClick={() => onClick?.(index)}
+            onClick={() => {
+              /*The normalizedIndex is used to control the lightbox behavior accurately when using coverflowEffect.
+                In this mode, I intentionally create duplicate slides for visual  purposes. However, these duplicates can lead to issues if they share the same index - such as breaking navigation.
+                To prevent this, I use coverflowOriginalIndex that take the first origial image id  from 2 the same images*/
+              const normalizedIndex =
+                key === 'coverflowEffect' ? coverflowOriginalIndex : index;
+              onClick?.(normalizedIndex);
+            }}
             className={slideClassName}
           >
             <SwiperImage
@@ -258,8 +242,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
               backgroundColor={backgroundColor}
               padding={padding}
               size={size}
-              videoRef={videoRef}
-              onMouseDown={onMouseDown}
               galleryKey={key}
             />
           </SwiperSlide>
