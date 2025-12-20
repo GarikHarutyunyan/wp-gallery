@@ -114,7 +114,12 @@ module.exports = function (webpackEnv) {
         // css is located in `static/css`, use '../../' to locate index.html folder
         // in production `paths.publicUrlOrPath` can be a relative path
         options: paths.publicUrlOrPath.startsWith('.')
-          ? {publicPath: '../../'}
+          ? {
+              publicPath: '../../',
+              filename: 'wp-gallery/wp-gallery.[contenthash:8].css',
+              chunkFilename:
+                'wp-gallery/wp-gallery.[name].[contenthash:8].chunk.css',
+            }
           : {},
       },
       {
@@ -258,6 +263,7 @@ module.exports = function (webpackEnv) {
       level: 'none',
     },
     optimization: {
+      chunkIds: 'named',
       minimize: isEnvProduction,
       minimizer: [
         // This is only used in production mode
@@ -638,8 +644,9 @@ module.exports = function (webpackEnv) {
         new MiniCssExtractPlugin({
           // Options similar to the same options in webpackOptions.output
           // both options are optional
-          filename: 'static/css/[name].[contenthash:8].css',
-          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+          filename: 'wp-gallery/wp-gallery.css',
+          chunkFilename:
+            'wp-gallery/wp-gallery.[name].[contenthash:8].chunk.css',
         }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding
