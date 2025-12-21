@@ -34,8 +34,11 @@ const SwiperImage = forwardRef(
     const shouldLoadImage =
       key === 'cardsEffect'
         ? index < (imagesCount || 0) + 1
+        : key === 'coverflowEffect'
+        ? index <= (imagesCount || 0) + 2 // only load slides 0 → imagesCount + 2
         : index < (imagesCount || 0) / 2 + 1 ||
           index > images.length - (imagesCount || 0) / 2 - 1;
+
     return (
       <div ref={wrapperRef} style={{height: '100%', width: '100%'}}>
         {!isVideo ? (
