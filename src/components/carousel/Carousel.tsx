@@ -61,7 +61,6 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
 
   const carouselImages = shouldDuplicate ? [...images, ...images] : images;
 
-  console.log(carouselImages);
   useEffect(() => {
     const handleResize = () => {
       setInnerWidth(wrapper?.clientWidth || contWidth);
