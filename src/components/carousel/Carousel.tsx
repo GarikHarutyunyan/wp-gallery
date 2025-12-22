@@ -101,6 +101,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
           allowTouchMove={false}
           onClick={onClick}
           slideClassName={clsx({carousel__slide_clickable: !!onClick})}
+          settings={settings as ICarouselSettings}
         />
       )}
     </Box>
