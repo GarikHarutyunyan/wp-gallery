@@ -1,11 +1,16 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
-import {NumberControl, SliderControl, SwitchControl} from 'components/controls';
+import {
+  NumberControl,
+  SelectControl,
+  SliderControl,
+  SwitchControl,
+} from 'components/controls';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
-import {ICardsSettings} from 'data-structures';
+import {HoverEffectOptions, ICardsSettings} from 'data-structures';
 import React, {ReactNode} from 'react';
 import {Filter} from '../settings/Filter';
 
@@ -24,6 +29,7 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
     playAndPauseAllowed,
     perSlideOffset,
     navigationButton,
+    hoverEffect,
   } = value as ICardsSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -31,7 +37,7 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
     key && onChange({...value, [key]: inputValue});
   };
 
-  const renderMainSettings = (): ReactNode => {
+  const renderBasicSettings = (): ReactNode => {
     return (
       <Section
         header={'Basic'}
@@ -112,9 +118,32 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
     );
   };
 
+  const renderAdvancedSettings = (): ReactNode => {
+    return (
+      <Section
+        header={'Advanced'}
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'hoverEffect'}
+                name={'Hover effect'}
+                value={hoverEffect}
+                options={HoverEffectOptions}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+          </Grid>
+        }
+        defaultExpanded={false}
+      />
+    );
+  };
+
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
-      {renderMainSettings()}
+      {renderBasicSettings()}
+      {renderAdvancedSettings()}
     </Paper>
   );
 };

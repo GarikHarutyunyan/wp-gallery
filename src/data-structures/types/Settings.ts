@@ -59,7 +59,7 @@ export interface IThumbnailSettings {
   descriptionPosition: DescriptionPosition;
   descriptionFontSize?: number | undefined;
   descriptionFontColor: string;
-  descriptionMaxRowsCount?: number | undefined; 
+  descriptionMaxRowsCount?: number | undefined;
 }
 
 export interface IMasonrySettings {
@@ -128,7 +128,7 @@ export interface ISlideshowSettings {
   descriptionMaxRowsCount: number | undefined;
   isFullCoverImage?: boolean;
   titleSource: TitleSource;
-  descriptionSource: DescriptionSource.DESCRIPTION,
+  descriptionSource: DescriptionSource.DESCRIPTION;
   showCaption: boolean;
   captionSource: CaptionSource;
   captionFontSize: number;
@@ -181,6 +181,7 @@ export interface ICubeSettings {
   autoplay: boolean;
   slideDuration: number;
   shadow: boolean;
+  hoverEffect: HoverEffect;
 }
 
 export interface ICarouselSettings {
@@ -194,6 +195,7 @@ export interface ICarouselSettings {
   scale: number;
   imagesCount: number;
   spaceBetween: number;
+  hoverEffect: HoverEffect;
 }
 
 export interface ICardsSettings {
@@ -204,6 +206,7 @@ export interface ICardsSettings {
   playAndPauseAllowed: boolean;
   autoplay: boolean;
   slideDuration: number;
+  hoverEffect: HoverEffect;
 }
 
 export interface IBlogSettings {
