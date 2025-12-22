@@ -1,7 +1,14 @@
 import ReImage from 'core-components/re-image/ReImage';
-import {IImageDTO, ImageType} from 'data-structures';
+import {
+  ICardsSettings,
+  ICarouselSettings,
+  ICubeSettings,
+  IImageDTO,
+  ImageType,
+} from 'data-structures';
 import {forwardRef, useRef} from 'react';
 import {Watermark} from 'utils/renderWatermark';
+import {clsx} from 'yet-another-react-lightbox';
 
 interface ISwiperImageProps {
   galleryKey: string;
@@ -12,6 +19,7 @@ interface ISwiperImageProps {
   backgroundColor?: string;
   padding?: number;
   size?: number;
+  settings: ICubeSettings | ICardsSettings | ICarouselSettings;
 }
 
 const SwiperImage = forwardRef(
@@ -25,6 +33,7 @@ const SwiperImage = forwardRef(
       padding,
       size,
       galleryKey: key,
+      settings,
     }: ISwiperImageProps,
     ref
   ) => {
@@ -36,9 +45,23 @@ const SwiperImage = forwardRef(
         ? index < (imagesCount || 0) + 1
         : index < (imagesCount || 0) / 2 + 1 ||
           index > images.length - (imagesCount || 0) / 2 - 1;
+    const {hoverEffect} = settings;
 
     return (
-      <div ref={wrapperRef} style={{height: '100%', width: '100%'}}>
+      <div
+        ref={wrapperRef}
+        style={{
+          borderRadius: 1 + '%',
+          boxSizing: 'border-box',
+          height: '100%',
+          width: '100%',
+        }}
+        className={clsx(
+          'swiper-gallery__image-wrapper',
+          'swiper-gallery__image-wrapper_overflow',
+          'swiper-gallery__image-wrapper_' + hoverEffect
+        )}
+      >
         {!isVideo ? (
           <ReImage
             wrapperRef={wrapperRef}

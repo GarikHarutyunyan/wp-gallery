@@ -1,7 +1,13 @@
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import IconButton from '@mui/material/IconButton';
-import {IImageDTO, ImageType} from 'data-structures';
+import {
+  ICardsSettings,
+  ICarouselSettings,
+  ICubeSettings,
+  IImageDTO,
+  ImageType,
+} from 'data-structures';
 import React, {useEffect, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import 'swiper/css';
@@ -33,6 +39,7 @@ interface ISwiperGalleryProps {
   scale?: any;
   allowTouchMove: boolean;
   perSlideOffset?: any;
+  settings: ICubeSettings | ICardsSettings | ICarouselSettings;
   onClick?: (index: number) => void;
 }
 
@@ -55,6 +62,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   scale,
   allowTouchMove,
   perSlideOffset,
+  settings,
   onClick,
 }) => {
   const swiperRef = useRef<any>(null);
@@ -237,6 +245,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
               padding={padding}
               size={size}
               galleryKey={key}
+              settings={settings}
             />
           </SwiperSlide>
         );
