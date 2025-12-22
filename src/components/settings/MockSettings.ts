@@ -277,6 +277,7 @@ const cubeMockSettings: ICubeSettings = {
   autoplay: false,
   slideDuration: 3000,
   shadow: true,
+  hoverEffect: HoverEffect.ZOOM_IN,
 };
 
 const carouselMockSettings: ICarouselSettings = {
@@ -290,6 +291,7 @@ const carouselMockSettings: ICarouselSettings = {
   scale: 0.1,
   imagesCount: 3,
   spaceBetween: -10,
+  hoverEffect: HoverEffect.BLUR,
 };
 
 const cardsMockSettings: ICardsSettings = {
@@ -300,6 +302,7 @@ const cardsMockSettings: ICardsSettings = {
   playAndPauseAllowed: false,
   autoplay: false,
   slideDuration: 3000,
+  hoverEffect: HoverEffect.OVERLAY_FULLSCREEN_ICON,
 };
 
 const blogMockSettings: IBlogSettings = {
@@ -353,6 +356,5 @@ export {
   masonryMockSettings,
   mosaicMockSettings,
   slideshowMockSettings,
-  thumbnailMockSettings
+  thumbnailMockSettings,
 };
-
