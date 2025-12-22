@@ -95,6 +95,7 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
         preLoadCount={9}
         allowTouchMove={true}
         perSlideOffset={perSlideOffset}
+        settings={settings as ICardsSettings}
         onClick={onClick}
       />
     </Box>
