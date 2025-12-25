@@ -50,12 +50,7 @@ const SwiperImage = forwardRef(
     return (
       <div
         ref={wrapperRef}
-        style={{
-          borderRadius: 1 + '%',
-          boxSizing: 'border-box',
-          height: '100%',
-          width: '100%',
-        }}
+        style={{height: '100%', width: '100%'}}
         className={clsx(
           'swiper-gallery__image-wrapper',
           'swiper-gallery__image-wrapper_overflow',
