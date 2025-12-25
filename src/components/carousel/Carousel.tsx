@@ -32,7 +32,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     id: 1,
     spaceBetween: spaceBetween,
     slidesPerView: imagesCount,
-    centeredSlides: false,
+    centeredSlides: imagesCount > 1,
     effect: 'coverflow',
     coverflowEffect: {
       rotate: 0,
@@ -57,9 +57,10 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const containerWidth: number = Math.min(innerWidth, contWidth);
   const containerHeight: number = containerWidth / ratio;
   // This ensures that Swiper functions correctly in infinite loop mode when the total number of images is less than the number of visible slides
-  const shouldDuplicate = images.length > 1 && imagesCount * 2 > images.length;
-
-  const carouselImages = shouldDuplicate ? [...images, ...images] : images;
+  const carouselImages =
+    images.length < imagesCount + 1 && images.length > 1
+      ? [...images, ...images]
+      : images;
 
   useEffect(() => {
     const handleResize = () => {
@@ -94,10 +95,10 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
           height={containerHeight}
           size={Math.max(width, height)}
           imagesCount={imagesCount}
-          preLoadCount={imagesCount + 2}
+          preLoadCount={Math.ceil(imagesCount / 2) + 4}
           padding={padding}
           scale={scale}
-          allowTouchMove={true}
+          allowTouchMove={false}
           onClick={onClick}
           slideClassName={clsx({carousel__slide_clickable: !!onClick})}
           settings={settings as ICarouselSettings}
