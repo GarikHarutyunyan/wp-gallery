@@ -31,7 +31,7 @@ export const GalleryTypeOptions = [
   },
   {
     value: GalleryType.SLIDESHOW,
-    title: 'Slideshow',
+    title: 'Slider',
     image: <SlideshowImage />,
   },
   {
