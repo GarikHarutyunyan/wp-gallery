@@ -185,12 +185,10 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         handleSlideChange(swiperRef, images, preLoadCount);
       }}
       onTouchStart={() => {
-        if (key === 'coverflowEffect') return;
         const videos = document.querySelectorAll('.swiper-gallery__video');
         videos.forEach((v) => v.classList.add('no-pointer'));
       }}
       onTouchEnd={() => {
-        if (key === 'coverflowEffect') return;
         const videos = document.querySelectorAll('.swiper-gallery__video');
         videos.forEach((v) => v.classList.remove('no-pointer'));
       }}
