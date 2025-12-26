@@ -20,6 +20,7 @@ import {
 } from 'data-structures';
 import {LabelWithTooltip} from '../controls/LabelWithTooltip';
 
+import {usePro} from 'contexts/ProContext';
 import React, {ReactNode} from 'react';
 import {
   ColorControl,
@@ -209,6 +210,8 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const {isPro} = usePro();
+
   const renderTitleSection = (): ReactNode => {
     return (
       <Section
@@ -318,6 +321,7 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                     id={'showCaption'}
                     name={'Show caption'}
                     value={showCaption}
+                    pro={true}
                     tooltip={
                       <p>
                         The Caption must be set by editing each image from
@@ -331,7 +335,14 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                         </a>
                       </p>
                     }
-                    onChange={onInputValueChange}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'show_caption',
+                            })
+                    }
                   />
                 </Filter>
                 {showCaption && (

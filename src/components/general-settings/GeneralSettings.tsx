@@ -447,7 +447,12 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   const renderSearchSettings = (): ReactNode => {
     return (
       <Section
-        header={'Filter'}
+        header={
+          <>
+            Filter
+            <ProIcon />
+          </>
+        }
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Grid
@@ -462,7 +467,14 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                   id={'enableSearch'}
                   name={'Enable Search'}
                   value={enableSearch}
-                  onChange={onInputValueChange}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'enable_search',
+                          })
+                  }
                   tooltip={
                     <p>
                       Activate a search field that allows users to find gallery
