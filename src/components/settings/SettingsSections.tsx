@@ -1,3 +1,5 @@
+import createCache from '@emotion/cache';
+import {CacheProvider} from '@emotion/react';
 import {Divider} from '@mui/material';
 import {useAppInfo} from 'contexts';
 import {Section} from 'core-components/section';
@@ -117,10 +119,25 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   );
 
   if (optionsContainerSelector) {
-    const containerElement = document.querySelector(optionsContainerSelector);
+    const docElement = document.querySelector(optionsContainerSelector);
+    // eslint-disable-next-line no-restricted-globals
+    const parentElement = parent?.document.querySelector(
+      optionsContainerSelector
+    );
+    const containerElement = docElement || parentElement;
 
     if (containerElement) {
-      return createPortal(content, containerElement);
+      const cache = createCache({
+        key: 'reacg-settings',
+        container: containerElement,
+        prepend: true,
+      });
+
+      const cachedContent = (
+        <CacheProvider value={cache}>{content}</CacheProvider>
+      );
+
+      return createPortal(cachedContent, containerElement);
     }
   }
 
