@@ -4,13 +4,14 @@ import {ClickActionSettings} from 'components/click-action-settings/ClickActionS
 import {
   ColorControl,
   NumberControl,
+  SelectControl,
   SliderControl,
   SwitchControl,
 } from 'components/controls';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
-import {ICubeSettings} from 'data-structures';
+import {HoverEffectOptions, ICubeSettings} from 'data-structures';
 import React, {ReactNode} from 'react';
 import {Filter} from '../settings/Filter';
 
@@ -30,6 +31,7 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
     autoplay,
     slideDuration,
     shadow,
+    hoverEffect,
   } = value as ICubeSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -37,7 +39,7 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
     key && onChange({...value, [key]: inputValue});
   };
 
-  const renderMainSettings = (): ReactNode => {
+  const renderBasicSettings = (): ReactNode => {
     return (
       <Section
         header={'Basic'}
@@ -118,6 +120,15 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                   />
                 </Filter>
               )}
+              <Filter isLoading={isLoading}>
+                <SelectControl
+                  id={'hoverEffect'}
+                  name={'Hover effect'}
+                  value={hoverEffect}
+                  options={HoverEffectOptions}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
             </Grid>
             <ClickActionSettings isLoading={isLoading} />
           </>
@@ -128,7 +139,7 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
 
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
-      {renderMainSettings()}
+      {renderBasicSettings()}
     </Paper>
   );
 };
