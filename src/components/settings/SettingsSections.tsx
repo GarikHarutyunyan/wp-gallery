@@ -1,3 +1,5 @@
+import createCache from '@emotion/cache';
+import {CacheProvider} from '@emotion/react';
 import {Divider} from '@mui/material';
 import {useAppInfo} from 'contexts';
 import {Section} from 'core-components/section';
@@ -125,7 +127,17 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
     const containerElement = docElement || parentElement;
 
     if (containerElement) {
-      return createPortal(content, containerElement);
+      const cache = createCache({
+        key: 'reacg-settings',
+        container: containerElement,
+        prepend: true,
+      });
+
+      const cachedContent = (
+        <CacheProvider value={cache}>{content}</CacheProvider>
+      );
+
+      return createPortal(cachedContent, containerElement);
     }
   }
 
