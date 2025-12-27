@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
+import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {
   CaptionSourceOptions,
@@ -340,6 +341,8 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const {isPro} = usePro();
+
   const renderTitleSection = (): ReactNode => {
     return (
       <Section
@@ -444,6 +447,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                     id={'showCaption'}
                     name={'Show caption'}
                     value={showCaption}
+                    pro={true}
                     tooltip={
                       <p>
                         The Caption must be set by editing each image from
@@ -457,7 +461,14 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                         </a>
                       </p>
                     }
-                    onChange={onInputValueChange}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'show_caption',
+                            })
+                    }
                   />
                 </Filter>
                 {showCaption && (

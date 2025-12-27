@@ -174,7 +174,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       loop={loop}
       pagination={false}
       className={className}
-      loopAdditionalSlides={0}
+      loopAdditionalSlides={imagesCount - 1}
       onInit={() => {
         const swiper = swiperRef.current?.swiper;
         handleOnChangeVideoAutoPlayAndPause(swiper, false); // Don't pause anything on init
@@ -182,21 +182,13 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       onSlideChange={() => {
         const swiper = swiperRef.current?.swiper;
         handleOnChangeVideoAutoPlayAndPause(swiper, true); // Pause previous if needed
-
-        if (key === 'coverflowEffect') return;
-        handleSlideChange(swiperRef, images, preLoadCount);
-      }}
-      onSlideChangeTransitionStart={() => {
-        if (key !== 'coverflowEffect') return;
         handleSlideChange(swiperRef, images, preLoadCount);
       }}
       onTouchStart={() => {
-        if (key === 'coverflowEffect') return;
         const videos = document.querySelectorAll('.swiper-gallery__video');
         videos.forEach((v) => v.classList.add('no-pointer'));
       }}
       onTouchEnd={() => {
-        if (key === 'coverflowEffect') return;
         const videos = document.querySelectorAll('.swiper-gallery__video');
         videos.forEach((v) => v.classList.remove('no-pointer'));
       }}
