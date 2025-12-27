@@ -88,6 +88,7 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
         imagesCount={1}
         preLoadCount={4}
         allowTouchMove={true}
+        settings={settings as ICubeSettings}
         onClick={onClick}
       />
     </Box>

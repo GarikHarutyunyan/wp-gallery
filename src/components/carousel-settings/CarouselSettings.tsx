@@ -4,13 +4,14 @@ import {ClickActionSettings} from 'components/click-action-settings/ClickActionS
 import {
   ColorControl,
   NumberControl,
+  SelectControl,
   SliderControl,
   SwitchControl,
 } from 'components/controls';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
-import {ICarouselSettings} from 'data-structures';
+import {HoverEffectOptions, ICarouselSettings} from 'data-structures';
 import React, {ReactNode, useEffect} from 'react';
 import {Filter} from '../settings/Filter';
 interface ICarouselSettingsProps {
@@ -35,6 +36,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     scale,
     imagesCount,
     spaceBetween,
+    hoverEffect,
   } = value as ICarouselSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -54,7 +56,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     }
   }, [allImagesCount, imagesCount]);
 
-  const renderMainSettings = (): ReactNode => {
+  const renderBasicSettings = (): ReactNode => {
     return (
       <Section
         header={'Basic'}
@@ -163,6 +165,15 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   </Filter>
                 )}
               </>
+              <Filter isLoading={isLoading}>
+                <SelectControl
+                  id={'hoverEffect'}
+                  name={'Hover effect'}
+                  value={hoverEffect}
+                  options={HoverEffectOptions}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
             </Grid>
             <ClickActionSettings isLoading={isLoading} />
           </>
@@ -173,7 +184,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
 
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
-      {renderMainSettings()}
+      {renderBasicSettings()}
     </Paper>
   );
 };
