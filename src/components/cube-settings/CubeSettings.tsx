@@ -120,6 +120,15 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                   />
                 </Filter>
               )}
+              <Filter isLoading={isLoading}>
+                <SelectControl
+                  id={'hoverEffect'}
+                  name={'Hover effect'}
+                  value={hoverEffect}
+                  options={HoverEffectOptions}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
             </Grid>
             <ClickActionSettings isLoading={isLoading} />
           </>
@@ -128,32 +137,9 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
     );
   };
 
-  const renderAdvancedSettings = (): ReactNode => {
-    return (
-      <Section
-        header={'Advanced'}
-        body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'hoverEffect'}
-                name={'Hover effect'}
-                value={hoverEffect}
-                options={HoverEffectOptions}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-          </Grid>
-        }
-        defaultExpanded={false}
-      />
-    );
-  };
-
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderBasicSettings()}
-      {renderAdvancedSettings()}
     </Paper>
   );
 };
