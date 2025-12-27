@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import ReImage from 'core-components/re-image/ReImage';
 import {
   ICardsSettings,
@@ -8,7 +9,6 @@ import {
 } from 'data-structures';
 import {forwardRef, useRef} from 'react';
 import {Watermark} from 'utils/renderWatermark';
-import {clsx} from 'yet-another-react-lightbox';
 
 interface ISwiperImageProps {
   galleryKey: string;
@@ -50,7 +50,6 @@ const SwiperImage = forwardRef(
     return (
       <div
         ref={wrapperRef}
-        style={{height: '100%', width: '100%'}}
         className={clsx(
           'swiper-gallery__image-wrapper',
           'swiper-gallery__image-wrapper_overflow',
