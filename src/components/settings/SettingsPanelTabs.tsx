@@ -96,7 +96,9 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
               '& .MuiTab-iconWrapper': {
                 fontSize: 18,
               },
-              'color': hideLightboxOptions ? 'rgba(0, 0, 0, 0.38)' : 'initial',
+              'color': hideLightboxOptions
+                ? 'rgba(0, 0, 0, 0.38)'
+                : 'rgba(0, 0, 0, 0.6)',
               'cursor': hideLightboxOptions ? 'default' : 'pointer',
             }}
             onClick={() => {
