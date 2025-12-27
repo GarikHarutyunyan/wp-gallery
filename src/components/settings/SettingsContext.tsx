@@ -267,6 +267,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       if (generalSettings) {
         if (!isPro) {
           generalSettings.enableWatermark = false;
+          generalSettings.enableSearch = false;
         }
         generalSettings.enableWhiteLabel = isPro;
       }
