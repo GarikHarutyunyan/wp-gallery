@@ -4,6 +4,7 @@ import Paper from '@mui/material/Paper';
 import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
+import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {
   CaptionSourceOptions,
@@ -337,6 +338,8 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const {isPro} = usePro();
+
   const renderCaptionSettings = (): ReactNode => {
     return (
       <>
@@ -352,6 +355,7 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
               id={'showCaption'}
               name={'Show caption'}
               value={showCaption}
+              pro={true}
               tooltip={
                 <p>
                   The Caption must be set by editing each image from "Images"
@@ -365,7 +369,14 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
                   </a>
                 </p>
               }
-              onChange={onInputValueChange}
+              onChange={
+                isPro
+                  ? onInputValueChange
+                  : () =>
+                      (window as any).reacg_open_premium_offer_dialog({
+                        utm_medium: 'show_caption',
+                      })
+              }
             />
           </Filter>
           {showCaption && (

@@ -77,7 +77,6 @@ const SwiperImage = forwardRef(
           <div
             style={{position: 'relative', width: '100%', height: '100%'}}
             onClick={(e) => {
-              if (key === 'coverflowEffect') return;
               const video = videoRef?.current;
 
               if (video) {
