@@ -1,7 +1,7 @@
 import {TextField} from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import React, {ReactNode} from 'react';
-import {LabelWithTooltip} from "./LabelWithTooltip";
+import {LabelWithTooltip} from './LabelWithTooltip';
 
 interface INumberControlProps {
   id?: string;
@@ -16,12 +16,18 @@ interface INumberControlProps {
   step?: number;
 }
 const numberInputOnWheelPreventChange = (e: any) => {
-  e.target.blur();
-  e.stopPropagation();
+  const el = e.currentTarget;
+  const isFocused: boolean =
+    document.activeElement === el || el.contains(document.activeElement);
 
-  setTimeout(() => {
-    e.target.focus();
-  }, 0);
+  if (isFocused) {
+    e.target.blur();
+    e.stopPropagation();
+
+    setTimeout(() => {
+      e.target.focus({preventScroll: true});
+    }, 0);
+  }
 };
 
 const NumberControl: React.FC<INumberControlProps> = ({
