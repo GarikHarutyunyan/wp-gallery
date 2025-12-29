@@ -1,13 +1,17 @@
 import {Divider} from '@mui/material';
 import {useAppInfo} from 'contexts';
 import {Section} from 'core-components/section';
-import React, {ReactElement, useEffect, useRef, useState} from 'react';
+import ErrorFallback from 'ErrorFallback';
+import React, {lazy, ReactElement, useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
+import {ErrorBoundary} from 'react-error-boundary';
 import {clsx} from 'yet-another-react-lightbox';
 import {OptionsPanelBody} from './OptionsPanelBody';
 import './settings-context.css';
 import {TypePanel} from './type-panel/TypePanel';
 import {useSettings} from './useSettings';
+
+const AlertDialog = lazy(() => import('components/alert-dialog/AlertDialog'));
 
 interface ISettingsSectionsProps {
   isLoading: boolean;
@@ -89,31 +93,34 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   const content: ReactElement = (
-    <div ref={wrapperRef}>
-      <TypePanel
-        isMedium={isMedium}
-        isSmall={isSmall}
-        isExtraSmall={isExtraSmall}
-        onTypeChange={onTypeChange}
-      />
-      <Divider variant={'middle'} />
-      <Section
-        body={
-          <OptionsPanelBody
-            isLoading={isLoading}
-            onSave={onSave}
-            onReset={onReset}
-          />
-        }
-        outlined={false}
-        className={clsx(
-          'reacg-settings',
-          isMedium ? 'reacg-settings--m' : '',
-          isSmall ? 'reacg-settings--s' : '',
-          isExtraSmall ? 'reacg-settings--xs' : ''
-        )}
-      />
-    </div>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <AlertDialog />
+      <div ref={wrapperRef}>
+        <TypePanel
+          isMedium={isMedium}
+          isSmall={isSmall}
+          isExtraSmall={isExtraSmall}
+          onTypeChange={onTypeChange}
+        />
+        <Divider variant={'middle'} />
+        <Section
+          body={
+            <OptionsPanelBody
+              isLoading={isLoading}
+              onSave={onSave}
+              onReset={onReset}
+            />
+          }
+          outlined={false}
+          className={clsx(
+            'reacg-settings',
+            isMedium ? 'reacg-settings--m' : '',
+            isSmall ? 'reacg-settings--s' : '',
+            isExtraSmall ? 'reacg-settings--xs' : ''
+          )}
+        />
+      </div>
+    </ErrorBoundary>
   );
 
   if (optionsContainerSelector) {

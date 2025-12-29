@@ -1,6 +1,7 @@
-import React, {useContext} from 'react';
+import React, {ReactElement, useContext, useEffect} from 'react';
 
 interface IAppInfo {
+  galleryInstanceId?: string;
   galleryId?: string;
   showControls?: boolean;
   baseUrl?: string;
@@ -17,9 +18,10 @@ const AppInfoContext = React.createContext<IAppInfo>({} as IAppInfo);
 
 type AppInfoProviderProps = React.PropsWithChildren & IAppInfo;
 
-const AppInfoProvider: React.FC<AppInfoProviderProps> = ({
+const AppInfoProvider = ({
+  galleryInstanceId,
   galleryId,
-  showControls,
+  showControls: defaultShowControls,
   baseUrl,
   nonce,
   pluginUrl,
@@ -29,10 +31,34 @@ const AppInfoProvider: React.FC<AppInfoProviderProps> = ({
   getGalleryTimestamp,
   getOptionsTimestamp,
   optionsContainerSelector,
-}) => {
+}: AppInfoProviderProps): ReactElement => {
+  const [showControls, setShowControls] = React.useState<boolean | undefined>(
+    defaultShowControls
+  );
+
+  useEffect(() => {
+    const changeControlsVisibility = (e: Event) => {
+      (e as CustomEvent).detail?.show !== undefined &&
+        setShowControls((e as CustomEvent).detail.show);
+    };
+
+    window.addEventListener(
+      `${galleryInstanceId}-show-controls`,
+      changeControlsVisibility,
+      false
+    );
+
+    return () =>
+      window.removeEventListener(
+        `${galleryInstanceId}-show-controls`,
+        changeControlsVisibility
+      );
+  }, []);
+
   return (
     <AppInfoContext.Provider
       value={{
+        galleryInstanceId,
         galleryId,
         showControls,
         baseUrl,
