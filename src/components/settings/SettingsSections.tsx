@@ -1,8 +1,17 @@
+import createCache, {EmotionCache} from '@emotion/cache';
+import {CacheProvider} from '@emotion/react';
 import {Divider} from '@mui/material';
 import {useAppInfo} from 'contexts';
 import {Section} from 'core-components/section';
 import ErrorFallback from 'ErrorFallback';
-import React, {lazy, ReactElement, useEffect, useRef, useState} from 'react';
+import React, {
+  lazy,
+  ReactElement,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {createPortal} from 'react-dom';
 import {ErrorBoundary} from 'react-error-boundary';
 import {clsx} from 'yet-another-react-lightbox';
@@ -123,11 +132,40 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
     </ErrorBoundary>
   );
 
-  if (optionsContainerSelector) {
-    const containerElement = document.querySelector(optionsContainerSelector);
+  const cache = useMemo<EmotionCache | null>(() => {
+    if (optionsContainerSelector) {
+      const docElement = document.querySelector(optionsContainerSelector);
+      // eslint-disable-next-line no-restricted-globals
+      const parentElement = parent?.document.querySelector(
+        optionsContainerSelector
+      );
+      const containerElement = docElement || parentElement;
 
-    if (containerElement) {
-      return createPortal(content, containerElement);
+      if (containerElement) {
+        return createCache({
+          key: 'reacg-settings',
+          container: containerElement,
+          prepend: true,
+        });
+      }
+    }
+    return null;
+  }, [optionsContainerSelector]);
+
+  if (optionsContainerSelector) {
+    const docElement = document.querySelector(optionsContainerSelector);
+    // eslint-disable-next-line no-restricted-globals
+    const parentElement = parent?.document.querySelector(
+      optionsContainerSelector
+    );
+    const containerElement = docElement || parentElement;
+
+    if (containerElement && cache) {
+      const cachedContent = (
+        <CacheProvider value={cache}>{content}</CacheProvider>
+      );
+
+      return createPortal(cachedContent, containerElement);
     }
   }
 
