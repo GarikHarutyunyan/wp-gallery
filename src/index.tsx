@@ -2,7 +2,6 @@ import {AppInfoProvider} from 'contexts/AppInfoContext';
 import React from 'react';
 import ReactDOM2 from 'react-dom';
 import ReactDOM from 'react-dom/client';
-import {StringUtils} from 'utils/StringUtils';
 import App from './App';
 
 const rootMap: Map<HTMLElement, ReactDOM.Root> = new Map();
@@ -23,6 +22,8 @@ const addApplication = (rootElement: HTMLElement) => {
   // Enables multiple galleries with different settings on the same page
   const galleryId: string | undefined =
     rootElement.getAttribute('data-gallery-id') || undefined;
+  const galleryInstanceId: string | undefined =
+    rootElement.getAttribute('id') || undefined;
   const showControls: boolean = !!+(
     rootElement.getAttribute('data-options-section') || 0
   );
@@ -48,7 +49,7 @@ const addApplication = (rootElement: HTMLElement) => {
   root.render(
     <React.StrictMode>
       <AppInfoProvider
-        galleryInstanceId={StringUtils.getUuid()}
+        galleryInstanceId={galleryInstanceId}
         galleryId={galleryId}
         showControls={showControls}
         baseUrl={baseUrl}
