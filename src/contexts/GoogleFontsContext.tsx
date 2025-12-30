@@ -39,7 +39,7 @@ const GoogleFontsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   useLayoutEffect(() => {
     getData();
-  }, []);
+  }, [showControls]);
 
   return (
     <GoogleFontsContext.Provider value={{googleFonts: options}}>
