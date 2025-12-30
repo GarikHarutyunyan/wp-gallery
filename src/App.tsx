@@ -16,21 +16,17 @@ const App: React.FC = () => {
     __webpack_public_path__ = pluginAssetsUrl;
   }
 
-  const renderApp = () => {
-    return (
-      <TranslationsProvider>
-        <SnackbarProvider domRoot={document.body}>
-          <GoogleFontsProvider>
-            <ProProvider>
-              <GalleryWrapper />
-            </ProProvider>
-          </GoogleFontsProvider>
-        </SnackbarProvider>
-      </TranslationsProvider>
-    );
-  };
-
-  return renderApp();
+  return (
+    <TranslationsProvider>
+      <SnackbarProvider domRoot={document.body}>
+        <GoogleFontsProvider>
+          <ProProvider>
+            <GalleryWrapper />
+          </ProProvider>
+        </GoogleFontsProvider>
+      </SnackbarProvider>
+    </TranslationsProvider>
+  );
 };
 
 export default App;
