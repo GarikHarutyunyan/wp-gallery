@@ -1,3 +1,4 @@
+import {usePro} from 'contexts/ProContext';
 import React, {CSSProperties} from 'react';
 import './pro-icon.css';
 
@@ -8,6 +9,11 @@ interface IProIconProps {
 }
 
 const ProIcon: React.FC<IProIconProps> = ({width = 30, height = 30, style}) => {
+  const {isPro} = usePro();
+
+  if (isPro) {
+    return null;
+  }
   return (
     <svg
       width={`${width}px`}
