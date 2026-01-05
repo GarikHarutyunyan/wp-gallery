@@ -1,9 +1,10 @@
-import React, {ReactElement, useContext, useEffect} from 'react';
+import React, {ReactElement, useContext, useEffect, useState} from 'react';
 
 interface IAppInfo {
   galleryInstanceId?: string;
   galleryId?: string;
   showControls?: boolean;
+  changeShowControls?: (show: boolean) => void;
   baseUrl?: string;
   nonce?: string;
   pluginUrl?: string;
@@ -32,7 +33,7 @@ const AppInfoProvider = ({
   getOptionsTimestamp,
   optionsContainerSelector,
 }: AppInfoProviderProps): ReactElement => {
-  const [showControls, setShowControls] = React.useState<boolean | undefined>(
+  const [showControls, setShowControls] = useState<boolean | undefined>(
     defaultShowControls
   );
 
@@ -63,6 +64,7 @@ const AppInfoProvider = ({
         galleryInstanceId,
         galleryId,
         showControls,
+        changeShowControls: setShowControls,
         baseUrl,
         nonce,
         pluginUrl,

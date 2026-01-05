@@ -4,6 +4,7 @@ import {Divider} from '@mui/material';
 import {useAppInfo} from 'contexts';
 import {Section} from 'core-components/section';
 import ErrorFallback from 'ErrorFallback';
+import {useDetectExternalRemoval} from 'hooks/useDetectExternalRemoval';
 import React, {
   lazy,
   ReactElement,
@@ -15,10 +16,11 @@ import React, {
 import {createPortal} from 'react-dom';
 import {ErrorBoundary} from 'react-error-boundary';
 import {clsx} from 'yet-another-react-lightbox';
-import {OptionsPanelBody} from './OptionsPanelBody';
+import {OptionsPanelBody} from '../OptionsPanelBody';
+import {TypePanel} from '../type-panel/TypePanel';
+import {useSettings} from '../useSettings';
 import './settings-context.css';
-import {TypePanel} from './type-panel/TypePanel';
-import {useSettings} from './useSettings';
+import {getContainerElement} from './SettingsSections.utils';
 
 const AlertDialog = lazy(() => import('components/alert-dialog/AlertDialog'));
 
@@ -36,7 +38,10 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   onReset,
 }) => {
   const {hasChanges} = useSettings();
-  const {optionsContainerSelector} = useAppInfo();
+  const {changeShowControls, optionsContainerSelector} = useAppInfo();
+  const [isMedium, setIsMedium] = useState(false);
+  const [isSmall, setIsSmall] = useState(false);
+  const [isExtraSmall, setIsExtraSmall] = useState(false);
 
   useEffect(() => {
     const beforeUnloadCallback = (event: any) => {
@@ -51,9 +56,6 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
       window.removeEventListener('beforeunload', beforeUnloadCallback);
   }, [hasChanges]);
 
-  const [isMedium, setIsMedium] = useState(false);
-  const [isSmall, setIsSmall] = useState(false);
-  const [isExtraSmall, setIsExtraSmall] = useState(false);
   useEffect(() => {
     const resize = () => {
       // Prefer the nearest .reacg-wrapper ancestor to support multiple previews on the page
@@ -101,6 +103,21 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   // Wrapper used to find the nearest .reacg-wrapper ancestor instead of querying the whole document
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
+  const detectExternalRemovalOptions = useMemo(() => {
+    const containerElement = getContainerElement(optionsContainerSelector);
+
+    return {
+      container: containerElement ?? undefined,
+      onRemoved: () => {
+        // console.warn("A's DOM node was removed externally");
+        changeShowControls?.(false);
+      },
+      once: false,
+    };
+  }, [optionsContainerSelector, changeShowControls]);
+
+  useDetectExternalRemoval(wrapperRef, detectExternalRemovalOptions);
+
   const content: ReactElement = (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <AlertDialog />
@@ -134,12 +151,7 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
 
   const cache = useMemo<EmotionCache | null>(() => {
     if (optionsContainerSelector) {
-      const docElement = document.querySelector(optionsContainerSelector);
-      // eslint-disable-next-line no-restricted-globals
-      const parentElement = parent?.document.querySelector(
-        optionsContainerSelector
-      );
-      const containerElement = docElement || parentElement;
+      const containerElement = getContainerElement(optionsContainerSelector);
 
       if (containerElement) {
         return createCache({
@@ -153,12 +165,7 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   }, [optionsContainerSelector]);
 
   if (optionsContainerSelector) {
-    const docElement = document.querySelector(optionsContainerSelector);
-    // eslint-disable-next-line no-restricted-globals
-    const parentElement = parent?.document.querySelector(
-      optionsContainerSelector
-    );
-    const containerElement = docElement || parentElement;
+    const containerElement = getContainerElement(optionsContainerSelector);
 
     if (containerElement && cache) {
       const cachedContent = (

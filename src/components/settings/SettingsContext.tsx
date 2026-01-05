@@ -41,7 +41,9 @@ import {
   thumbnailMockSettings,
 } from './MockSettings';
 
-const SettingsSections = lazy(() => import('./SettingsSections'));
+const SettingsSections = lazy(
+  () => import('./settings-sections/SettingsSections')
+);
 
 const SettingsContext = React.createContext<{
   type?: GalleryType;
@@ -83,14 +85,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     resetTemplate,
     isLoading: areTemplatesLoading,
   } = useTemplates();
-  const {
-    galleryId,
-    pluginVersion,
-    showControls,
-    baseUrl,
-    nonce,
-    getOptionsTimestamp,
-  } = useAppInfo();
+  const {galleryId, showControls, baseUrl, nonce, getOptionsTimestamp} =
+    useAppInfo();
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
