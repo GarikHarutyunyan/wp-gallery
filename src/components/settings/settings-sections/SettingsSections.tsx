@@ -17,9 +17,9 @@ import {createPortal} from 'react-dom';
 import {ErrorBoundary} from 'react-error-boundary';
 import {clsx} from 'yet-another-react-lightbox';
 import {OptionsPanelBody} from '../OptionsPanelBody';
+import '../settings-context.css';
 import {TypePanel} from '../type-panel/TypePanel';
 import {useSettings} from '../useSettings';
-import './settings-context.css';
 import {getContainerElement} from './SettingsSections.utils';
 
 const AlertDialog = lazy(() => import('components/alert-dialog/AlertDialog'));
