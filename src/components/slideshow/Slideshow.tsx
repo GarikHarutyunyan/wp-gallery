@@ -371,6 +371,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           slideFooter: () => <WatermarkOverlay rootRef={slideshowRootRef} />,
         }}
         carousel={{
+          spacing: 0,
           preload: 5,
           finite: !isInfinite,
           padding,

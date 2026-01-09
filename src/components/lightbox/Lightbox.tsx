@@ -523,6 +523,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           slideFooter: () => <WatermarkOverlay />,
         }}
         carousel={{
+          spacing: 0,
           preload: 5,
           finite: !isInfinite,
           padding: responsivePadding,
