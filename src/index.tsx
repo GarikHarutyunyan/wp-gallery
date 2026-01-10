@@ -18,9 +18,6 @@ const addApplication = (rootElement: HTMLElement) => {
 
   const galleryId: string | undefined =
     rootElement.getAttribute('data-gallery-id') || undefined;
-  const showControls: boolean = !!+(
-    rootElement.getAttribute('data-options-section') || 0
-  );
   const pluginVersion: string =
     rootElement.getAttribute('data-plugin-version') || '';
   const getGalleryTimestamp = () =>
@@ -29,6 +26,7 @@ const addApplication = (rootElement: HTMLElement) => {
     rootElement.getAttribute('data-options-timestamp') || '';
   const optionsContainerSelector =
     rootElement.getAttribute('data-options-container') || '';
+  const showControls: boolean = optionsContainerSelector ? true : false;
 
   const baseUrl: string | undefined = (window as any).reacg_global?.rest_root;
   const nonce: string | undefined = (window as any).reacg?.rest_nonce;
