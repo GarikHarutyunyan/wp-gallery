@@ -1,4 +1,10 @@
-import {IImageDTO, LightboxTextPosition} from 'data-structures';
+import {
+  CaptionSource,
+  DescriptionSource,
+  IImageDTO,
+  LightboxTextPosition,
+  TitleSource,
+} from 'data-structures';
 
 type GetSlideMarginsParams = {
   images?: IImageDTO[];
@@ -14,6 +20,9 @@ type GetSlideMarginsParams = {
   paddingAroundText: number;
   titleMargin: number;
   showCaption: boolean;
+  titleSource: TitleSource;
+  captionSource: CaptionSource;
+  descriptionSource: DescriptionSource;
 };
 
 export const getSlideMargins = ({
@@ -30,6 +39,9 @@ export const getSlideMargins = ({
   paddingAroundText,
   titleMargin,
   showCaption,
+  titleSource,
+  captionSource,
+  descriptionSource,
 }: GetSlideMarginsParams) => {
   // Calculate extra margin applied around the title
   const titleMarginPx = 2 * titleMargin;
@@ -37,8 +49,13 @@ export const getSlideMargins = ({
   // Total vertical padding (top + bottom) around text
   const verticalPaddingAroundText = 2 * paddingAroundText;
   // Determine whether we need space for the title and description
-  const titleSpace = !!((showTitle && images?.[index]?.title) || (showCaption && images?.[index]?.caption));
-  const descriptionSpace = !!(showDescription && images?.[index]?.description);
+  const titleSpace = !!(
+    (showTitle && images?.[index]?.[titleSource]) ||
+    (showCaption && images?.[index]?.[captionSource])
+  );
+  const descriptionSpace = !!(
+    showDescription && images?.[index]?.[descriptionSource]
+  );
 
   // Check if there is any text content to account for
   const hasCaptions = titleSpace || descriptionSpace;

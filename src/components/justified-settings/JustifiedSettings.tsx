@@ -505,6 +505,7 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
                     <SwitchControl
                       id={'invertTextColor'}
                       name={'Invert color'}
+                      pro={true}
                       tooltip={
                         <p>
                           Enable this to invert the text color dynamically,
@@ -512,7 +513,14 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
                         </p>
                       }
                       value={invertTextColor}
-                      onChange={onInputValueChange}
+                      onChange={
+                        isPro
+                          ? onInputValueChange
+                          : () =>
+                              (window as any).reacg_open_premium_offer_dialog({
+                                utm_medium: 'invert_color',
+                              })
+                      }
                     />
                   </Filter>
                 </Grid>

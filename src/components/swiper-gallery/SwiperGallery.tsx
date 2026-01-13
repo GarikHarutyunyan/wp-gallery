@@ -182,7 +182,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       loop={loop}
       pagination={false}
       className={className}
-      loopAdditionalSlides={imagesCount - 1}
+      loopAdditionalSlides={0}
       onInit={() => {
         const swiper = swiperRef.current?.swiper;
         handleOnChangeVideoAutoPlayAndPause(swiper, false); // Don't pause anything on init

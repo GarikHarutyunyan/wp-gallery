@@ -117,9 +117,7 @@ const TemplatesSelect: React.FC = () => {
                 arrow
                 enterDelay={500}
               >
-                <div>
-                  <ProIcon />
-                </div>
+                <ProIcon />
               </Tooltip>
             ) : null}
             {youtube_link ? (

@@ -254,6 +254,9 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
       paddingAroundText,
       titleMargin,
       showCaption,
+      titleSource,
+      captionSource,
+      descriptionSource,
     });
   }, [
     images,
@@ -268,6 +271,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     captionSource,
     captionFontSize,
     captionFontColor,
+    titleSource,
+    descriptionSource,
   ]);
 
   useEffect(() => {
@@ -371,6 +376,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           slideFooter: () => <WatermarkOverlay rootRef={slideshowRootRef} />,
         }}
         carousel={{
+          spacing: 0,
           preload: 5,
           finite: !isInfinite,
           padding,

@@ -461,6 +461,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       paddingAroundText,
       titleMargin,
       showCaption,
+      titleSource,
+      captionSource,
+      descriptionSource,
     });
   }, [
     images,
@@ -475,6 +478,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     captionSource,
     captionFontSize,
     captionFontColor,
+    titleSource,
+    descriptionSource,
   ]);
 
   const responsivePadding = useMemo(() => {
@@ -523,6 +528,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           slideFooter: () => <WatermarkOverlay />,
         }}
         carousel={{
+          spacing: 0,
           preload: 5,
           finite: !isInfinite,
           padding: responsivePadding,

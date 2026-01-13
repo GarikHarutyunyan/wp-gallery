@@ -128,7 +128,7 @@ export interface ISlideshowSettings {
   descriptionMaxRowsCount: number | undefined;
   isFullCoverImage?: boolean;
   titleSource: TitleSource;
-  descriptionSource: DescriptionSource.DESCRIPTION;
+  descriptionSource: DescriptionSource;
   showCaption: boolean;
   captionSource: CaptionSource;
   captionFontSize: number;
