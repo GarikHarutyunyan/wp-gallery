@@ -91,8 +91,15 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     getOptionsTimestamp,
     optionsContainerSelector,
   } = useAppInfo();
+  const docElement = document?.querySelector(
+    optionsContainerSelector
+  ) as HTMLElement | null;
+  // eslint-disable-next-line no-restricted-globals
+  const parentElement = parent?.document.querySelector(
+    optionsContainerSelector
+  ) as HTMLElement | null;
   const shouldRenderSettings: boolean =
-    !!showControls && !!document.querySelector(optionsContainerSelector);
+    !!showControls && (!!docElement || !!parentElement);
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();

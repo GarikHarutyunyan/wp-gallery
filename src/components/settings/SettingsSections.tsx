@@ -156,19 +156,14 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
       ROOT_SELECTOR
     ) as HTMLElement | null;
 
-    if (!root) {
-      // Clear only the first time for this container
-      if (!containerElement.hasAttribute(INIT_ATTR)) {
-        while (containerElement.firstChild) {
-          containerElement.removeChild(containerElement.firstChild);
-        }
-        containerElement.setAttribute(INIT_ATTR, '1');
-      }
+    // Clear only the first time for this container
 
-      root = document.createElement('div');
-      root.setAttribute('data-reacg-settings-root', 'true');
-      containerElement.appendChild(root);
+    while (containerElement.firstChild) {
+      containerElement.removeChild(containerElement.firstChild);
     }
+
+    root = document.createElement('div');
+    containerElement.appendChild(root);
 
     setPortalTarget(root);
   }, [containerElement]);
