@@ -26,6 +26,7 @@ interface ISelectControlProps {
   hideLabel?: boolean;
   size?: ReSize;
   style?: CSSProperties;
+  pro?: boolean;
 }
 
 const SelectControl: React.FC<ISelectControlProps> = forwardRef(
@@ -41,6 +42,7 @@ const SelectControl: React.FC<ISelectControlProps> = forwardRef(
       hideLabel,
       size,
       style,
+      pro,
     },
     ref
   ) => {
@@ -61,7 +63,7 @@ const SelectControl: React.FC<ISelectControlProps> = forwardRef(
         ref={ref as any}
         select
         fullWidth
-        label={<LabelWithTooltip label={name} tooltip={tooltip} />}
+        label={<LabelWithTooltip label={name} tooltip={tooltip} pro={pro} />}
         variant={'standard'}
         margin={'none'}
         value={value}
