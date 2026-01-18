@@ -1,21 +1,21 @@
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import { BlogSettings } from 'components/blog-settings';
-import { CardsSettings } from 'components/cards-settings/CardsSettings';
-import { CarouselSettings } from 'components/carousel-settings';
-import { CubeSettings } from 'components/cube-settings/CubeSettings';
-import { GeneralSettings } from 'components/general-settings';
-import { JustifiedSettings } from 'components/justified-settings';
-import { LightboxSettings } from 'components/light-box-settings';
-import { MasonrySettings } from 'components/masonry-settings';
-import { MosaicSettings } from 'components/mosaic-settings';
-import { SliderSettings } from 'components/slider-settings';
-import { SlideshowSettings } from 'components/slideshow-settings';
-import { ThumbnailSettings } from 'components/thumbnail-settings';
-import { GalleryType, ImageClickAction } from 'data-structures';
-import React, { ReactNode, useState } from 'react';
-import { SettingsPanelTabs } from './SettingsPanelTabs';
-import { useSettings } from './useSettings';
+import {BlogSettings} from 'components/blog-settings';
+import {CardsSettings} from 'components/cards-settings/CardsSettings';
+import {CarouselSettings} from 'components/carousel-settings';
+import {CubeSettings} from 'components/cube-settings/CubeSettings';
+import {GeneralSettings} from 'components/general-settings';
+import {JustifiedSettings} from 'components/justified-settings';
+import {LightboxSettings} from 'components/light-box-settings';
+import {MasonrySettings} from 'components/masonry-settings';
+import {MosaicSettings} from 'components/mosaic-settings';
+import {SliderSettings} from 'components/slider-settings';
+import {SlideshowSettings} from 'components/slideshow-settings';
+import {ThumbnailSettings} from 'components/thumbnail-settings';
+import {GalleryType, ImageClickAction} from 'data-structures';
+import React, {ReactNode, useState} from 'react';
+import {SettingsPanelTabs} from './SettingsPanelTabs';
+import {useSettings} from './useSettings';
 
 interface IOptionsPanelBodyProps {
   isLoading: boolean;
@@ -147,5 +147,4 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   );
 };
 
-export { OptionsPanelBody };
-
+export {OptionsPanelBody};

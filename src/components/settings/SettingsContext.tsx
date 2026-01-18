@@ -15,6 +15,7 @@ import {
   IMasonrySettings,
   IMosaicSettings,
   ISettingsDTO,
+  ISliderSettings,
   ISlideshowSettings,
   IThumbnailSettings,
 } from 'data-structures';
@@ -37,6 +38,7 @@ import {
   lightboxMockSettings,
   masonryMockSettings,
   mosaicMockSettings,
+  sliderMockSettings,
   slideshowMockSettings,
   thumbnailMockSettings,
 } from './MockSettings';
@@ -58,6 +60,7 @@ const SettingsContext = React.createContext<{
   carouselSettings?: ICarouselSettings;
   cardsSettings?: ICardsSettings;
   blogSettings?: IBlogSettings;
+  sliderSettings?: ISliderSettings;
   changeGeneralSettings?: any;
   changeThumbnailSettings?: any;
   changeMosaicSettings?: any;
@@ -69,6 +72,7 @@ const SettingsContext = React.createContext<{
   changeCarouselSettings?: any;
   changeCardsSettings?: any;
   changeBlogSettings?: any;
+  changeSliderSettings?: any;
   changeCss?: any;
   wrapperRef?: any;
   imagesCount?: number;
@@ -105,6 +109,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [carouselSettings, setCarouselSettings] = useState<ICarouselSettings>();
   const [cardsSettings, setCardsSettings] = useState<ICardsSettings>();
   const [blogSettings, setBlogSettings] = useState<IBlogSettings>();
+  const [sliderSettings, setSliderSettings] = useState<ISliderSettings>();
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
   const [css, setCss] = useState('');
@@ -134,6 +139,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCarouselSettings(newSettings.carousel || carouselMockSettings);
     setCardsSettings(newSettings.cards || cardsMockSettings);
     setBlogSettings(newSettings.blog || blogMockSettings);
+    setSliderSettings(newSettings.slider || sliderMockSettings);
     initTemplate?.(
       parseInt(
         template_id === '' || template_id === 'none'
@@ -174,6 +180,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCarouselSettings(newSettings.carousel || carouselMockSettings);
       setCardsSettings(newSettings.cards || cardsMockSettings);
       setBlogSettings(newSettings.blog || blogMockSettings);
+      setSliderSettings(newSettings.slider || sliderMockSettings);
       initTemplate?.(
         parseInt(
           template_id === '' || template_id === 'none'
@@ -197,6 +204,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCarouselSettings(carouselMockSettings);
       setCardsSettings(cardsMockSettings);
       setBlogSettings(blogMockSettings);
+      setSliderSettings(sliderMockSettings);
     }
   };
 
@@ -276,6 +284,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         cards: cardsSettings,
         slideshow: slideshowSettings,
         blog: blogSettings,
+        slider: sliderSettings,
         templateType: template?.templateType,
         template_id: template?.template_id,
         css: css || '',
@@ -300,6 +309,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCarouselSettings(newSettings.carousel);
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
+        setSliderSettings(newSettings.slider);
         initTemplate?.(
           parseInt(
             template_id === '' || template_id === 'none'
@@ -368,6 +378,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCarouselSettings(newSettings.carousel);
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
+        setSliderSettings(newSettings.slider);
         setCss(newSettings.css || '');
         initTemplate?.(
           parseInt(
@@ -449,6 +460,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         carouselSettings,
         cardsSettings,
         blogSettings,
+        sliderSettings,
         changeGeneralSettings: createOnChange(setGeneralSettings),
         changeThumbnailSettings: createOnChange(setThumbnailSettings),
         changeMosaicSettings: createOnChange(setMosaicSettings),
@@ -460,6 +472,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeCarouselSettings: createOnChange(setCarouselSettings),
         changeCardsSettings: createOnChange(setCardsSettings),
         changeBlogSettings: createOnChange(setBlogSettings),
+        changeSliderSettings: createOnChange(setSliderSettings),
         changeCss: createOnChange(setCss),
         wrapperRef,
         imagesCount,
