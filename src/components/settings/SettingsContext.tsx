@@ -91,13 +91,15 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     getOptionsTimestamp,
     optionsContainerSelector,
   } = useAppInfo();
-  const docElement = document?.querySelector(
-    optionsContainerSelector
-  ) as HTMLElement | null;
-  // eslint-disable-next-line no-restricted-globals
-  const parentElement = parent?.document.querySelector(
-    optionsContainerSelector
-  ) as HTMLElement | null;
+  const docElement =
+    optionsContainerSelector &&
+    (document?.querySelector(optionsContainerSelector) as HTMLElement | null);
+  const parentElement =
+    optionsContainerSelector &&
+    // eslint-disable-next-line no-restricted-globals
+    (parent?.document.querySelector(
+      optionsContainerSelector
+    ) as HTMLElement | null);
   const shouldRenderSettings: boolean =
     !!showControls && (!!docElement || !!parentElement);
   const [thumbnailSettings, setThumbnailSettings] =
