@@ -8,4 +8,5 @@ export enum GalleryType {
   CAROUSEL = 'carousel',
   CARDS = 'cards',
   BLOG = 'blog',
+  SLIDER = 'slider',
 }

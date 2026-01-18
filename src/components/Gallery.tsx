@@ -35,6 +35,7 @@ const BlogGallery = lazy(() => import('./blog-gallery/BlogGallery'));
 const Carousel = lazy(() => import('./carousel/Carousel'));
 const Lightbox = lazy(() => import('./lightbox/Lightbox'));
 const Slideshow = lazy(() => import('./slideshow/Slideshow'));
+const Slider = lazy(() => import('./slider/Slider'));
 const PaginationProvider = lazy(
   () => import('./thumbnail-gallery/PaginationProvider')
 );
@@ -169,6 +170,9 @@ const Gallery: React.FC = () => {
         gallery = (
           <BlogGallery onClick={isClickable ? onImageClick : undefined} />
         );
+        break;
+      case GalleryType.SLIDER:
+        gallery = <Slider onClick={isClickable ? onImageClick : undefined} />;
         break;
     }
 

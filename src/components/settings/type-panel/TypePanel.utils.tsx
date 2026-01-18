@@ -6,6 +6,7 @@ import {CubeImage} from './images/CubeImage';
 import {JustifiedImage} from './images/JustifiedImage';
 import {MasonryImage} from './images/MasonryImage';
 import {MosaicImage} from './images/MosaicImage';
+import {SliderImage} from './images/SliderImage';
 import {SlideshowImage} from './images/SlideshowImage';
 import {ThumbnailsImage} from './images/ThumbnailsImage';
 export const GalleryTypeOptions = [
@@ -53,5 +54,10 @@ export const GalleryTypeOptions = [
     value: GalleryType.BLOG,
     title: 'Blog',
     image: <BlogImage />,
+  },
+  {
+    value: GalleryType.SLIDER,
+    title: 'Slider',
+    image: <SliderImage />,
   },
 ];

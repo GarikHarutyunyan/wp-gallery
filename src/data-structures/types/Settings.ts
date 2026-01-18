@@ -13,6 +13,8 @@ import {
   Position,
   SizeTypeHeight,
   SizeTypeWidth,
+  SliderAnimation,
+  SliderTextPosition,
   TextsAlignment,
   ThumbnailTitlePosition,
   TitleAlignment,
@@ -249,6 +251,46 @@ export interface IBlogSettings {
   buttonUrlSource: string;
 }
 
+export interface ISliderSettings {
+  width: number;
+  height: number;
+  padding: number;
+  autoplay: boolean;
+  isInfinite: boolean;
+  slideDuration: number;
+  imageAnimation: SliderAnimation;
+  backgroundColor: string;
+  textPosition: SliderTextPosition;
+  textFontFamily: string;
+  textColor: string;
+  textBackground: string;
+  invertTextColor: boolean;
+  thumbnailsPosition: LightboxThumbnailsPosition;
+  thumbnailWidth: number;
+  thumbnailHeight: number;
+  thumbnailBorder: number;
+  thumbnailBorderColor: string;
+  thumbnailBorderRadius: number;
+  thumbnailPadding: number;
+  thumbnailGap: number;
+  isSliderAllowed: boolean;
+  showTitle: boolean;
+  titleFontSize: number;
+  titleAlignment: TitleAlignment;
+  showDescription: boolean;
+  descriptionFontSize: number;
+  descriptionMaxRowsCount: number | undefined;
+  isFullCoverImage?: boolean;
+  titleSource: TitleSource;
+  descriptionSource: DescriptionSource;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionFontSize: number;
+  captionFontColor: string;
+  navigationButton: boolean;
+  pagination: boolean;
+}
+
 export interface ISettingsDTO {
   type: GalleryType;
   general: IGeneralSettings;
@@ -262,6 +304,7 @@ export interface ISettingsDTO {
   carousel: ICarouselSettings;
   cards: ICardsSettings;
   blog: IBlogSettings;
+  slider: ISliderSettings;
   template_id?: number;
   templateType?: string;
   title?: string;

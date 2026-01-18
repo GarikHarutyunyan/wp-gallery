@@ -51,6 +51,7 @@ const TemplatesSelect: React.FC = () => {
     changeCarouselSettings,
     changeCardsSettings,
     changeBlogSettings,
+    changeSliderSettings,
     type: activeType,
     changeType,
     changeCss,
@@ -80,6 +81,7 @@ const TemplatesSelect: React.FC = () => {
         cube,
         carousel,
         cards,
+        slider,
         blog,
         css,
       } = template;
@@ -98,6 +100,7 @@ const TemplatesSelect: React.FC = () => {
       carousel && changeCarouselSettings(carousel);
       cards && changeCardsSettings(cards);
       blog && changeBlogSettings(blog);
+      slider && changeSliderSettings(slider);
       TypeUtils.isString(css) && changeCss(css);
     }
   }, [template?.template_id]);
