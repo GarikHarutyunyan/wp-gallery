@@ -3,6 +3,7 @@ import {SelectControl, SwitchControl} from 'components/controls';
 import {useSettings} from 'components/settings';
 import {Filter} from 'components/settings/Filter';
 import {useTemplates} from 'contexts';
+import {usePro} from 'contexts/ProContext';
 import {
   ActionURLSourceOptions,
   IGeneralSettings,
@@ -56,6 +57,8 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
     );
   };
 
+  const {isPro} = usePro();
+
   return (
     <Grid container columns={24} columnSpacing={4} marginTop={2}>
       <Filter isLoading={isLoading}>
@@ -65,7 +68,20 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
           tooltip={renderClickActionInfo()}
           value={clickAction}
           options={ImageClickActionOptions}
-          onChange={onActionValueChange}
+          onChange={(inputValue: any) => {
+            if (
+              !isPro &&
+              ImageClickActionOptions.find(
+                (option) => option.value === inputValue
+              )?.isPro
+            ) {
+              (window as any).reacg_open_premium_offer_dialog({
+                utm_medium: 'clickAction',
+              });
+            } else {
+              onActionValueChange(inputValue, 'clickAction');
+            }
+          }}
         />
       </Filter>
       {isClickActionUrl ? (
