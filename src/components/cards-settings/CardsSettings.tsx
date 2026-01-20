@@ -9,6 +9,7 @@ import {
 } from 'components/controls';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
+import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {HoverEffectOptions, ICardsSettings} from 'data-structures';
 import React, {ReactNode} from 'react';
@@ -36,6 +37,8 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
     resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
+
+  const {isPro} = usePro();
 
   const renderBasicSettings = (): ReactNode => {
     return (
@@ -116,7 +119,20 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
                   name={'Hover effect'}
                   value={hoverEffect}
                   options={HoverEffectOptions}
-                  onChange={onInputValueChange}
+                  onChange={(inputValue: any) => {
+                    if (
+                      !isPro &&
+                      HoverEffectOptions.find(
+                        (option) => option.value === inputValue
+                      )?.isPro
+                    ) {
+                      (window as any).reacg_open_premium_offer_dialog({
+                        utm_medium: 'hoverEffect',
+                      });
+                    } else {
+                      onInputValueChange(inputValue, 'hoverEffect');
+                    }
+                  }}
                 />
               </Filter>
             </Grid>

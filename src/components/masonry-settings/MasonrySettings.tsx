@@ -226,7 +226,20 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
                     name={'Hover effect'}
                     value={hoverEffect}
                     options={HoverEffectOptions}
-                    onChange={onInputValueChange}
+                    onChange={(inputValue: any) => {
+                      if (
+                        !isPro &&
+                        HoverEffectOptions.find(
+                          (option) => option.value === inputValue
+                        )?.isPro
+                      ) {
+                        (window as any).reacg_open_premium_offer_dialog({
+                          utm_medium: 'hoverEffect',
+                        });
+                      } else {
+                        onInputValueChange(inputValue, 'hoverEffect');
+                      }
+                    }}
                   />
                 </Filter>
               </Grid>
@@ -282,7 +295,20 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
                 name={'Source'}
                 value={titleSource}
                 options={TitleSourceOptions}
-                onChange={onInputValueChange}
+                onChange={(inputValue: any) => {
+                  if (
+                    !isPro &&
+                    TitleSourceOptions.find(
+                      (option) => option.value === inputValue
+                    )?.isPro
+                  ) {
+                    (window as any).reacg_open_premium_offer_dialog({
+                      utm_medium: 'titleSource',
+                    });
+                  } else {
+                    onInputValueChange(inputValue, 'titleSource');
+                  }
+                }}
               />
             </Filter>
           )}
@@ -384,7 +410,20 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
                 name={'Source'}
                 value={captionSource}
                 options={CaptionSourceOptions}
-                onChange={onInputValueChange}
+                onChange={(inputValue: any) => {
+                  if (
+                    !isPro &&
+                    CaptionSourceOptions.find(
+                      (option) => option.value === inputValue
+                    )?.isPro
+                  ) {
+                    (window as any).reacg_open_premium_offer_dialog({
+                      utm_medium: 'captionSource',
+                    });
+                  } else {
+                    onInputValueChange(inputValue, 'captionSource');
+                  }
+                }}
               />
             </Filter>
           )}
