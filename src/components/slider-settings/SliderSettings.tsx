@@ -14,6 +14,9 @@ import {
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
   SliderAnimationOptions,
+  SliderDirectionOptions,
+  SliderSlidesDesign,
+  SliderSlidesDesignOptions,
   SliderTextPositionOptions,
   TitleAlignmentOptions,
   TitleSourceOptions,
@@ -47,6 +50,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     isSliderAllowed,
     autoplay,
     slideDuration,
+    slideDelay,
     imageAnimation,
     thumbnailsPosition,
     thumbnailWidth,
@@ -70,13 +74,17 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     descriptionSource,
     descriptionFontSize,
     descriptionMaxRowsCount,
-    isFullCoverImage,
     showCaption,
     captionSource,
     captionFontSize,
     captionFontColor,
     navigationButton,
     pagination,
+    direction,
+    keyboard,
+    mousewheel,
+    slidesDesign,
+    backgroundBlur,
   } = value as ISliderSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -119,15 +127,6 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                   unit={'px'}
                 />
               </Filter>
-
-              <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id={'isFullCoverImage'}
-                  name={'Full cover image'}
-                  value={isFullCoverImage ?? false}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
               <Filter isLoading={isLoading}>
                 <SwitchControl
                   id={'autoplay'}
@@ -139,32 +138,16 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
               {autoplay || isSliderAllowed ? (
                 <Filter isLoading={isLoading}>
                   <NumberControl
-                    id={'slideDuration'}
+                    id={'slideDelay'}
                     name={'Time interval'}
-                    value={slideDuration}
+                    value={slideDelay}
                     onChange={onInputValueChange}
                     min={700}
                     unit={'ms'}
                   />
                 </Filter>
               ) : null}
-              <Filter isLoading={isLoading}>
-                <SelectControl
-                  id={'imageAnimation'}
-                  name={'Animation'}
-                  pro={true}
-                  value={imageAnimation}
-                  options={SliderAnimationOptions}
-                  onChange={
-                    isPro
-                      ? onInputValueChange
-                      : () =>
-                          (window as any).reacg_open_premium_offer_dialog({
-                            utm_medium: 'animation',
-                          })
-                  }
-                />
-              </Filter>
+
               <Filter isLoading={isLoading}>
                 <SwitchControl
                   id={'isSliderAllowed'}
@@ -673,11 +656,177 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const renderAdvancedSettings = (): ReactNode => {
+    return (
+      <Section
+        header={'Advanced'}
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <InputLabel shrink variant="filled">
+                    <LabelWithTooltip label={'Container'} tooltip={''} />
+                  </InputLabel>
+                </Filter>
+              </Grid>
+              <Grid
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+                className="reacg-section__container-inherit"
+              >
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                    id={'direction'}
+                    name={'Sldier direction'}
+                    // pro={true}
+                    value={direction}
+                    options={SliderDirectionOptions}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'keyboard'}
+                    name={'Keyboard'}
+                    value={keyboard}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'mousewheel'}
+                    name={'Mousewheel'}
+                    value={mousewheel}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+
+                {/* <Filter isLoading={isLoading}>
+                  <ColorControl
+                    id={'backgroundColor'}
+                    name={'Background color'}
+                    value={backgroundColor}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SliderControl
+                    id={'containerPadding'}
+                    name="Padding (px)"
+                    min={0}
+                    max={100}
+                    value={containerPadding}
+                    onChange={onInputValueChange}
+                  />
+                </Filter> */}
+              </Grid>
+            </Grid>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <InputLabel shrink variant="filled">
+                    <LabelWithTooltip label={'Images'} tooltip={''} />
+                  </InputLabel>
+                </Filter>
+              </Grid>
+              <Grid
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+                className="reacg-section__container-inherit"
+              >
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                    id={'imageAnimation'}
+                    name={'Animation'}
+                    pro={true}
+                    value={imageAnimation}
+                    options={SliderAnimationOptions}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'animation',
+                            })
+                    }
+                  />
+                </Filter>
+
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'slideDuration'}
+                    name={'Slide duration'}
+                    value={slideDuration}
+                    onChange={onInputValueChange}
+                    min={300}
+                    unit={'ms'}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                    id={'slidesDesign'}
+                    name={'Slides Design'}
+                    value={slidesDesign}
+                    options={SliderSlidesDesignOptions}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {slidesDesign === SliderSlidesDesign.BLURFIT && (
+                  <Filter isLoading={isLoading}>
+                    <SliderControl
+                      id={'backgroundBlur'}
+                      name="background Blur(px)"
+                      min={7}
+                      max={45}
+                      value={backgroundBlur}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
+        }
+        defaultExpanded={false}
+      />
+    );
+  };
+
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderMainSettings()}
       {renderTitleSection()}
       {renderFilmstripSettings()}
+      {renderAdvancedSettings()}
     </Paper>
   );
 };

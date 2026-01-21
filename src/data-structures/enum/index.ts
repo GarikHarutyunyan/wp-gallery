@@ -17,6 +17,8 @@ export * from './Position';
 export * from './SizeTypeHeight';
 export * from './SizeTypeWidth';
 export * from './SliderAnimation';
+export * from './SliderDirection';
+export * from './SliderSlidesDesign';
 export * from './SliderTextPosition';
 export * from './TextsAlignments';
 export * from './TitleAlignment';

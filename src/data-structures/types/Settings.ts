@@ -14,6 +14,8 @@ import {
   SizeTypeHeight,
   SizeTypeWidth,
   SliderAnimation,
+  SliderDirection,
+  SliderSlidesDesign,
   SliderTextPosition,
   TextsAlignment,
   ThumbnailTitlePosition,
@@ -258,6 +260,7 @@ export interface ISliderSettings {
   autoplay: boolean;
   isInfinite: boolean;
   slideDuration: number;
+  slideDelay: number;
   imageAnimation: SliderAnimation;
   backgroundColor: string;
   textPosition: SliderTextPosition;
@@ -280,7 +283,8 @@ export interface ISliderSettings {
   showDescription: boolean;
   descriptionFontSize: number;
   descriptionMaxRowsCount: number | undefined;
-  isFullCoverImage?: boolean;
+  slidesDesign: SliderSlidesDesign;
+  backgroundBlur: number;
   titleSource: TitleSource;
   descriptionSource: DescriptionSource;
   showCaption: boolean;
@@ -289,6 +293,9 @@ export interface ISliderSettings {
   captionFontColor: string;
   navigationButton: boolean;
   pagination: boolean;
+  direction: SliderDirection;
+  keyboard: boolean;
+  mousewheel: boolean;
 }
 
 export interface ISettingsDTO {

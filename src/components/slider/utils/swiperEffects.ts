@@ -1,6 +1,9 @@
 import {EffectCreative, EffectFade, EffectFlip} from 'swiper/modules';
 
-export const getSwiperEffectOptions = (animation: string) => {
+export const getSwiperEffectOptions = (
+  animation: string,
+  direction: 'horizontal' | 'vertical'
+) => {
   switch (animation) {
     case 'fade':
       return {
@@ -12,8 +15,29 @@ export const getSwiperEffectOptions = (animation: string) => {
       return {
         effect: 'flip',
         modules: [EffectFlip],
-        effectOptions: {}, // default flip options
+        effectOptions: {
+          flipEffect: {
+            slideShadows: false, // shadows often cause clipping bugs
+            limitRotation: true,
+          },
+        }, // default flip options
       };
+    // case 'creative':
+    //   return {
+    //     effect: 'creative',
+    //     modules: [EffectCreative],
+    //     effectOptions: {
+    //       creativeEffect: {
+    //         prev: {
+    //           shadow: true,
+    //           translate: [0, 0, -400],
+    //         },
+    //         next: {
+    //           translate: ['100%', 0, 0],
+    //         },
+    //       },
+    //     },
+    //   };
     case 'creative':
       return {
         effect: 'creative',
@@ -21,11 +45,14 @@ export const getSwiperEffectOptions = (animation: string) => {
         effectOptions: {
           creativeEffect: {
             prev: {
-              shadow: true,
-              translate: [0, 0, -400],
+              shadow: false,
+              translate:
+                direction === 'horizontal' ? ['-20%', 0, -1] : [0, '-20%', -1],
             },
             next: {
-              translate: ['100%', 0, 0],
+              shadow: false,
+              translate:
+                direction === 'horizontal' ? ['100%', 0, 0] : [0, '100%', 0],
             },
           },
         },

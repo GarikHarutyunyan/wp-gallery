@@ -4,7 +4,12 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
-import {IImageDTO, ISliderSettings, SliderTextPosition} from 'data-structures';
+import {
+  IImageDTO,
+  ISliderSettings,
+  SliderSlidesDesign,
+  SliderTextPosition,
+} from 'data-structures';
 import {useEffect, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import type {Swiper as SwiperType} from 'swiper';
@@ -24,6 +29,8 @@ import 'swiper/css/parallax';
 import 'swiper/css/thumbs';
 import {
   Autoplay,
+  Keyboard,
+  Mousewheel,
   Navigation,
   Pagination,
   Parallax,
@@ -56,33 +63,65 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     isSliderAllowed,
     autoplay,
     slideDuration,
+    slideDelay,
     imageAnimation,
     thumbnailsPosition,
     thumbnailPadding,
     backgroundColor,
     textPosition,
+    descriptionFontSize,
+    captionFontSize,
+    titleFontSize,
+    descriptionMaxRowsCount,
     showTitle,
     showDescription,
-    isFullCoverImage,
     showCaption,
     navigationButton,
     pagination,
+    direction,
+    slidesDesign,
+    backgroundBlur,
+    keyboard,
+    mousewheel,
   } = settings as ISliderSettings;
 
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
 
   const mainSwiperRef = useRef<SwiperRef | null>(null);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
-
+  const textRef = useRef<HTMLDivElement | null>(null);
+  const [textHeight, setTextHeight] = useState<number>(0);
   const thumbsVertical = isThumbnailsVertical(thumbnailsPosition);
   const {
     effect,
     modules: effectModules,
     effectOptions,
-  } = getSwiperEffectOptions(imageAnimation);
-
+  } = getSwiperEffectOptions(imageAnimation, direction);
   const hasThumbs = hasThumbnails(thumbnailsPosition);
+  console.log(textHeight);
+  useEffect(() => {
+    console.log(textRef.current);
+    if (!textRef.current) return;
 
+    const update = () => {
+      setTextHeight(textRef.current!.offsetHeight);
+    };
+
+    update();
+
+    const ro = new ResizeObserver(update);
+    ro.observe(textRef.current);
+
+    return () => ro.disconnect();
+  }, [
+    showTitle,
+    showDescription,
+    showCaption,
+    descriptionFontSize,
+    captionFontSize,
+    titleFontSize,
+    descriptionMaxRowsCount,
+  ]);
   const handlePlay = () => {
     const swiper = mainSwiperRef.current?.swiper;
     if (swiper?.autoplay) {
@@ -114,7 +153,15 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
 
   useEffect(() => {
     setThumbsSwiper(null);
-  }, [images, isInfinite, imageAnimation]);
+  }, [
+    images,
+    direction,
+    isInfinite,
+    imageAnimation,
+    hasThumbs,
+    keyboard,
+    mousewheel,
+  ]);
 
   return (
     <Box className="slider">
@@ -128,11 +175,12 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
         }}
       >
         <Swiper
-          key={`main-${isInfinite}-${hasThumbs}-${imageAnimation}`}
+          key={`main-${direction}-${isInfinite}-${hasThumbs}-${imageAnimation}-${keyboard}-${mousewheel}`}
           ref={mainSwiperRef}
           style={
             {
               width,
+              height: direction === 'vertical' ? height + textHeight : '',
               // '--swiper-navigation-top-offset': 'calc(50% - 49px)',
             } as React.CSSProperties
           }
@@ -142,12 +190,18 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
             Autoplay,
             Parallax,
             Thumbs,
+            Keyboard,
+            Mousewheel,
             ...effectModules,
           ]}
+          keyboard={{
+            enabled: keyboard,
+          }}
+          mousewheel={mousewheel}
           autoplay={
             autoplay || isPlaying
               ? {
-                  delay: slideDuration,
+                  delay: slideDelay,
                   stopOnLastSlide: false,
                 }
               : false
@@ -164,6 +218,8 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
           {...effectOptions}
           className="slider__main-swiper"
           loop={isInfinite}
+          direction={direction || 'vertical'}
+          speed={slideDuration}
         >
           {images.map((image: IImageDTO, index) => (
             <SwiperSlide
@@ -172,34 +228,69 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
             >
               {/* ABOVE */}
               {textPosition === SliderTextPosition.ABOVE && (
-                <SlideText image={image} settings={settings!} />
+                <SlideText ref={textRef} image={image} settings={settings!} />
               )}
               <div
                 className="slider__slide-content"
                 style={{
+                  backgroundColor:
+                    (slidesDesign === SliderSlidesDesign.FIT ||
+                      slidesDesign === SliderSlidesDesign.BLURFIT) &&
+                    effect === 'creative'
+                      ? backgroundColor
+                      : '',
                   padding: padding,
                   height, // only the inner content gets padding
                 }}
               >
+                {slidesDesign === SliderSlidesDesign.BLURFIT && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0, // full size
+                      backgroundImage: `url(${image.original.url})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat',
+                      filter: `blur(${backgroundBlur}px)`, // blur only background
+                      transform: 'scale(1.1)', // avoid edges showing
+                      zIndex: 0,
+                    }}
+                  />
+                )}
                 <img
                   src={image.original.url}
                   alt=""
                   style={{
-                    width: isFullCoverImage ? '100%' : 'auto',
-                    height: isFullCoverImage ? '100%' : 'auto',
-                    objectFit: isFullCoverImage ? 'cover' : 'contain',
+                    width:
+                      slidesDesign === SliderSlidesDesign.FILL
+                        ? '100%'
+                        : 'auto',
+                    height:
+                      slidesDesign === SliderSlidesDesign.FILL
+                        ? '100%'
+                        : 'auto',
+                    objectFit:
+                      slidesDesign === SliderSlidesDesign.FILL
+                        ? 'cover'
+                        : 'contain',
+                    zIndex: 1,
                   }}
                 />
 
                 {(showTitle || showCaption || showDescription) &&
                   textPosition !== SliderTextPosition.ABOVE &&
                   textPosition !== SliderTextPosition.BELOW && (
-                    <SlideText image={image} settings={settings!} />
+                    <SlideText
+                      ref={textRef}
+                      image={image}
+                      settings={settings!}
+                    />
                   )}
               </div>
               {/* BELOW */}
               {textPosition === SliderTextPosition.BELOW && (
-                <SlideText image={image} settings={settings!} />
+                <SlideText ref={textRef} image={image} settings={settings!} />
               )}
             </SwiperSlide>
           ))}
@@ -223,7 +314,7 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
 
         {hasThumbs && (
           <SliderThumbs
-            key={`thumbs-${isInfinite}-${hasThumbs}-${imageAnimation}`}
+            key={`thumbs-${direction}-${isInfinite}-${hasThumbs}-${imageAnimation}-${keyboard}-${mousewheel}`}
             images={images}
             direction={thumbsVertical ? 'vertical' : 'horizontal'}
             settings={settings!}
