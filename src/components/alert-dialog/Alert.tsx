@@ -55,18 +55,19 @@ const Alert = ({config}: IAlertProps) => {
       <Box sx={{display: 'flex', justifyContent: 'center'}}>{image}</Box>
       {renderErrorMessage()}
       <Typography
-        variant={'h5'}
+        variant={'h6'}
         component={'div'}
         sx={{
           color: 'black',
-          fontWeight: 600,
-          display: 'flex',
+          fontWeight: 400,
+          fontSize: '1rem',
+          lineHeight: 1.4,
           gap: 1,
           alignItems: 'center',
           justifyContent: 'center',
-          textAlign: 'center',
-          padding: '30px',
-          fontFamily: 'lexend',
+          textAlign: 'left',
+          padding: '25px 8px',
+          fontFamily: 'inherit',
           whiteSpace: 'pre-line',
         }}
       >
@@ -83,8 +84,8 @@ const Alert = ({config}: IAlertProps) => {
             padding: '6px 40px',
             fontSize: 'large',
             boxShadow: 'unset',
-            fontWeight: 400,
-            fontFamily: 'lexend',
+            fontWeight: 600,
+            fontFamily: 'inherit',
           }}
         >
           {label}
