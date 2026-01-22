@@ -3,14 +3,7 @@ import {CacheProvider} from '@emotion/react';
 import {Divider} from '@mui/material';
 import {useAppInfo} from 'contexts';
 import {Section} from 'core-components/section';
-import React, {
-  ReactElement,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {ReactElement, useEffect, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {clsx} from 'yet-another-react-lightbox';
 import {OptionsPanelBody} from './OptionsPanelBody';
@@ -97,7 +90,7 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   }, []);
 
   const content: ReactElement = (
-    <div ref={wrapperRef}>
+    <div ref={wrapperRef} className={'reacg-settings__wrapper-selector'}>
       <TypePanel
         isMedium={isMedium}
         isSmall={isSmall}
@@ -136,37 +129,26 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
       optionsContainerSelector
     ) as HTMLElement | null;
 
-    return docElement || parentElement || null;
+    const newContainerElement = docElement || parentElement || null;
+
+    document
+      .querySelectorAll('.reacg-settings__wrapper-selector')
+      .forEach((el) => {
+        if (el.parentElement === newContainerElement) {
+          newContainerElement?.removeChild(el);
+        }
+      });
+    // eslint-disable-next-line no-restricted-globals
+    parent?.document
+      .querySelectorAll('.reacg-settings__wrapper-selector')
+      .forEach((el) => {
+        if (el.parentElement === newContainerElement) {
+          newContainerElement?.removeChild(el);
+        }
+      });
+
+    return newContainerElement || null;
   }, [optionsContainerSelector]);
-
-  // 2) Create a stable mount node inside container, clear container ONLY once
-  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
-
-  useLayoutEffect(() => {
-    if (!containerElement) {
-      setPortalTarget(null);
-      return;
-    }
-
-    const INIT_ATTR = 'data-reacg-settings-initialized';
-    const ROOT_SELECTOR = '[data-reacg-settings-root="true"]';
-
-    // Reuse existing root if already created (also helps when StrictMode re-mounts)
-    let root = containerElement.querySelector(
-      ROOT_SELECTOR
-    ) as HTMLElement | null;
-
-    // Clear only the first time for this container
-
-    while (containerElement.firstChild) {
-      containerElement.removeChild(containerElement.firstChild);
-    }
-
-    root = document.createElement('div');
-    containerElement.appendChild(root);
-
-    setPortalTarget(root);
-  }, [containerElement]);
 
   // 3) Emotion cache should point to container (where style tags will be injected)
   const cache = useMemo<EmotionCache | null>(() => {
@@ -180,10 +162,10 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   }, [containerElement]);
 
   // 4) Portal into the mount node
-  if (portalTarget && cache) {
+  if (containerElement && cache) {
     return createPortal(
       <CacheProvider value={cache}>{content}</CacheProvider>,
-      portalTarget
+      containerElement
     );
   }
 
