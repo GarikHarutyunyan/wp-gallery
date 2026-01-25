@@ -2,6 +2,7 @@ import {AlertConfig} from './AlertDialog.types';
 import {CustomerService} from './icons/CustomerServiceIcon';
 import {LigthBulbIcon} from './icons/LigthBulbIcon';
 import {ProIcon} from './icons/ProIcon';
+import {SpecialOfferIcon} from './icons/SpecialOfferIcon';
 import {TroubleshoutingIcon} from './icons/TroubleshoutingIcon';
 
 export const premiumConfig: AlertConfig = {
@@ -170,6 +171,51 @@ export const errorConfig: AlertConfig = {
       if (url) {
         window.open(url, '_blank');
       }
+    },
+  },
+};
+export const specialOfferConfig: AlertConfig = {
+  image: <SpecialOfferIcon width={180} height={90} />,
+  description: (
+    <>
+      <i>
+        You’re already building great galleries, unlock the Pro tools for less!
+      </i>
+      <br />
+      <br />
+      To help you take your galleries further, here’s a special{' '}
+      <strong>THANK-YOU OFFER</strong> just for you.
+      <br />
+      <br />
+      <center>
+        <strong style={{fontSize: 'x-large'}}>🔥 60% OFF Re Gallery Pro</strong>
+      </center>
+      <br />
+      Use your exclusive{' '}
+      <code style={{fontSize: 'large'}}>
+        <strong>DISCOUNT60</strong>
+      </code>{' '}
+      promo code to unlock advanced gallery features and upgrade in seconds.
+    </>
+  ),
+  buttonConfig: {
+    label: 'Upgrade to Pro - Save 60%',
+    backgroundColor: '#a7c957',
+    onClick: (utm_medium?: string) => {
+      let url =
+        (window as any).reacg_global?.upgrade?.url ||
+        'https://regallery.team/#pricing';
+      if (utm_medium) {
+        const urlQueryStringSeperator: string = url.includes('?') ? '&' : '?';
+        utm_medium = urlQueryStringSeperator + 'utm_medium=' + utm_medium;
+        if (url.includes('#')) {
+          const [base, hash] = url.split('#');
+          url = base + utm_medium + '#' + hash;
+        } else {
+          url = url + utm_medium;
+        }
+      }
+      window.open(url, '_blank');
     },
   },
 };
