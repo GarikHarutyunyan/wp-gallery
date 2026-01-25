@@ -8,6 +8,7 @@ import {
   needHelpConfig,
   newHereConfig,
   premiumConfig,
+  specialOfferConfig,
 } from './AlertDialog.constants';
 import {AlertConfig} from './AlertDialog.types';
 
@@ -37,6 +38,9 @@ const AlertDialog: React.FC<IAlertDialogProps> = () => {
       handleOpen({...newHereConfig, ...customConfig});
     (window as any).reacg_open_error_dialog = (customConfig: AlertConfig) =>
       handleOpen({...errorConfig, ...customConfig});
+    (window as any).reacg_open_special_offer_dialog = (
+      customConfig: AlertConfig
+    ) => handleOpen({...specialOfferConfig, ...customConfig});
   }, []);
 
   const handleOpen = (newConfig: AlertConfig) => {
