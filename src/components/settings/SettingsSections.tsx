@@ -153,10 +153,11 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   // 3) Emotion cache should point to container (where style tags will be injected)
   const cache = useMemo<EmotionCache | null>(() => {
     if (!containerElement) return null;
+    const container: HTMLElement = containerElement.ownerDocument.head;
 
     return createCache({
       key: 'reacg-settings',
-      container: containerElement,
+      container,
       prepend: true,
     });
   }, [containerElement]);
