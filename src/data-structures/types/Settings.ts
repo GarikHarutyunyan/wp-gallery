@@ -36,22 +36,22 @@ export interface IThumbnailSettings {
   padding: number;
   paddingColor: string;
   borderRadius: number;
+  paginationType: PaginationType;
+  hoverEffect: HoverEffect;
   showTitle: boolean;
   titleSource: TitleSource;
-  titlePosition: ThumbnailTitlePosition;
-  captionPosition: ThumbnailTitlePosition;
-  titleAlignment: TitleAlignment;
-  captionVisibility: TitleVisibility;
   titleVisibility: TitleVisibility;
+  titlePosition: ThumbnailTitlePosition;
+  titleFontSize?: number | undefined;
+  titleColor: string;
+  titleAlignment: TitleAlignment;
   titleFontFamily: string;
   overlayTextBackground: string;
   invertTextColor: boolean;
-  titleColor: string;
-  titleFontSize?: number | undefined;
-  hoverEffect: HoverEffect;
-  paginationType: PaginationType;
   showCaption: boolean;
   captionSource: CaptionSource;
+  captionVisibility: TitleVisibility;
+  captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
   showDescription: boolean;
@@ -182,6 +182,22 @@ export interface ICubeSettings {
   slideDuration: number;
   shadow: boolean;
   hoverEffect: HoverEffect;
+  showTitle: boolean;
+  titleSource: TitleSource;
+  titleVisibility: TitleVisibility;
+  titlePosition: ThumbnailTitlePosition;
+  titleFontSize?: number | undefined;
+  titleColor: string;
+  titleAlignment: TitleAlignment;
+  titleFontFamily: string;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionVisibility: TitleVisibility;
+  captionPosition: ThumbnailTitlePosition;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
 }
 
 export interface ICarouselSettings {
@@ -196,6 +212,22 @@ export interface ICarouselSettings {
   imagesCount: number;
   spaceBetween: number;
   hoverEffect: HoverEffect;
+  showTitle: boolean;
+  titleSource: TitleSource;
+  titleVisibility: TitleVisibility;
+  titlePosition: ThumbnailTitlePosition;
+  titleFontSize?: number | undefined;
+  titleColor: string;
+  titleAlignment: TitleAlignment;
+  titleFontFamily: string;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionVisibility: TitleVisibility;
+  captionPosition: ThumbnailTitlePosition;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
 }
 
 export interface ICardsSettings {
@@ -207,6 +239,22 @@ export interface ICardsSettings {
   autoplay: boolean;
   slideDuration: number;
   hoverEffect: HoverEffect;
+  showTitle: boolean;
+  titleSource: TitleSource;
+  titleVisibility: TitleVisibility;
+  titlePosition: ThumbnailTitlePosition;
+  titleFontSize?: number | undefined;
+  titleColor: string;
+  titleAlignment: TitleAlignment;
+  titleFontFamily: string;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionVisibility: TitleVisibility;
+  captionPosition: ThumbnailTitlePosition;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
 }
 
 export interface IBlogSettings {
