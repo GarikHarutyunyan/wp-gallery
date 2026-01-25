@@ -1,4 +1,5 @@
 import {MenuItem, TextField} from '@mui/material';
+import {ProIcon} from 'components/alert-dialog/icons/ProIcon';
 import React, {CSSProperties, forwardRef, ReactNode} from 'react';
 import {LabelWithTooltip} from './LabelWithTooltip';
 
@@ -8,6 +9,7 @@ interface ISelectOption {
   render?: (value?: string) => ReactNode;
   isDisabled?: boolean;
   className?: string;
+  isPro?: boolean;
 }
 
 export enum ReSize {
@@ -74,7 +76,7 @@ const SelectControl: React.FC<ISelectControlProps> = forwardRef(
         hiddenLabel={hideLabel}
         inputProps={{renderValue}}
       >
-        {options.map(({value, title, render, isDisabled, className}) => {
+        {options.map(({value, title, render, isDisabled, className, isPro}) => {
           return (
             <MenuItem
               className={className}
@@ -83,6 +85,7 @@ const SelectControl: React.FC<ISelectControlProps> = forwardRef(
               disabled={isDisabled}
             >
               {render?.(value) || title}
+              {isPro && <ProIcon style={{width: 25, height: 25}} />}
             </MenuItem>
           );
         })}

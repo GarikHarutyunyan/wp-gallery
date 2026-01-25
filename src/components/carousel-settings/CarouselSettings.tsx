@@ -10,6 +10,7 @@ import {
 } from 'components/controls';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
+import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {HoverEffectOptions, ICarouselSettings} from 'data-structures';
 import React, {ReactNode, useEffect} from 'react';
@@ -55,6 +56,8 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
       }
     }
   }, [allImagesCount, imagesCount]);
+
+  const {isPro} = usePro();
 
   const renderBasicSettings = (): ReactNode => {
     return (
@@ -171,7 +174,20 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   name={'Hover effect'}
                   value={hoverEffect}
                   options={HoverEffectOptions}
-                  onChange={onInputValueChange}
+                  onChange={(inputValue: any) => {
+                    if (
+                      !isPro &&
+                      HoverEffectOptions.find(
+                        (option) => option.value === inputValue
+                      )?.isPro
+                    ) {
+                      (window as any).reacg_open_premium_offer_dialog({
+                        utm_medium: 'hoverEffect',
+                      });
+                    } else {
+                      onInputValueChange(inputValue, 'hoverEffect');
+                    }
+                  }}
                 />
               </Filter>
             </Grid>

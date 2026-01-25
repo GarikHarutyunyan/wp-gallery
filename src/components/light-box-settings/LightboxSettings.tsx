@@ -194,16 +194,32 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                   <SwitchControl
                     id={'canShare'}
                     name={'Share'}
+                    pro={true}
                     value={canShare}
-                    onChange={onInputValueChange}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'lightbox_share',
+                            })
+                    }
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'canDownload'}
                     name={'Download'}
+                    pro={true}
                     value={canDownload}
-                    onChange={onInputValueChange}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'lightbox_download',
+                            })
+                    }
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>
@@ -228,8 +244,16 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
               <SwitchControl
                 id={'showCounter'}
                 name={'Counter'}
+                pro={true}
                 value={showCounter}
-                onChange={onInputValueChange}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () =>
+                        (window as any).reacg_open_premium_offer_dialog({
+                          utm_medium: 'lightbox_counter',
+                        })
+                }
               />
             </Filter>
             <Filter isLoading={isLoading}>
@@ -412,7 +436,20 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                       name={'Source'}
                       value={titleSource}
                       options={TitleSourceOptions}
-                      onChange={onInputValueChange}
+                      onChange={(inputValue: any) => {
+                        if (
+                          !isPro &&
+                          TitleSourceOptions.find(
+                            (option) => option.value === inputValue
+                          )?.isPro
+                        ) {
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'titleSource',
+                          });
+                        } else {
+                          onInputValueChange(inputValue, 'titleSource');
+                        }
+                      }}
                     />
                   </Filter>
                 )}
@@ -499,7 +536,20 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                       name={'Source'}
                       value={captionSource}
                       options={CaptionSourceOptions}
-                      onChange={onInputValueChange}
+                      onChange={(inputValue: any) => {
+                        if (
+                          !isPro &&
+                          CaptionSourceOptions.find(
+                            (option) => option.value === inputValue
+                          )?.isPro
+                        ) {
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'captionSource',
+                          });
+                        } else {
+                          onInputValueChange(inputValue, 'captionSource');
+                        }
+                      }}
                     />
                   </Filter>
                 )}
@@ -576,7 +626,20 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                       name={'Source'}
                       value={descriptionSource}
                       options={DescriptionSourceOptions}
-                      onChange={onInputValueChange}
+                      onChange={(inputValue: any) => {
+                        if (
+                          !isPro &&
+                          DescriptionSourceOptions.find(
+                            (option) => option.value === inputValue
+                          )?.isPro
+                        ) {
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'descriptionSource',
+                          });
+                        } else {
+                          onInputValueChange(inputValue, 'descriptionSource');
+                        }
+                      }}
                     />
                   </Filter>
                 )}

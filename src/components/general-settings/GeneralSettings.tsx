@@ -178,7 +178,20 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                 name={'Pagination type'}
                 value={paginationType}
                 options={filteredPaginationTypeOptions}
-                onChange={onPaginationTypeChange}
+                onChange={(inputValue: any) => {
+                  if (
+                    !isPro &&
+                    filteredPaginationTypeOptions.find(
+                      (option) => option.value === inputValue
+                    )?.isPro
+                  ) {
+                    (window as any).reacg_open_premium_offer_dialog({
+                      utm_medium: 'paginationType',
+                    });
+                  } else {
+                    onPaginationTypeChange(inputValue, 'paginationType');
+                  }
+                }}
               />
             </Filter>
             {paginationType !== PaginationType.NONE ? (
