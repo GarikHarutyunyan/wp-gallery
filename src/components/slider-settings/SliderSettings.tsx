@@ -15,13 +15,16 @@ import {
   LightboxThumbnailsPositionOptions,
   SliderAnimationOptions,
   SliderDirectionOptions,
+  SliderNavigationPositionOptions,
+  SliderNavigationTypeOptions,
   SliderSlidesDesign,
   SliderSlidesDesignOptions,
   SliderTextPositionOptions,
   TitleAlignmentOptions,
   TitleSourceOptions,
 } from 'data-structures';
-import React, {ReactNode} from 'react';
+import {SliderPaginationPositionOptions} from 'data-structures/enum/SliderPaginationPosition';
+import React, {ReactNode, useEffect} from 'react';
 import {
   ColorControl,
   FontControl,
@@ -79,7 +82,35 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     captionFontSize,
     captionFontColor,
     navigationButton,
+    navigationshowsOnHover,
+    navigationType,
+    navigationColor,
+    navigationBackgroundColor,
+    navigationSize,
+    navigationPosition,
+    navigationPadding,
+    navigationOpacity,
+    navigationBorder,
+    navigationBorderColor,
+    navigationBorderRadius,
+    navigationHover,
+    navigationColorHover,
+    navigationBackgroundColorHover,
     pagination,
+    paginationPosition,
+    paginationBulletsImage,
+    paginationDynamicBullets,
+    paginationshowsOnHover,
+    paginationBulletsBackgroundColor,
+    paginationBulletsSize,
+    paginationBulletsBorder,
+    paginationBulletsBorderColor,
+    paginationBulletsBorderRadius,
+    paginationActiveBulletBackgroundColor,
+    paginationActiveBulletSize,
+    paginationActiveBulletBorder,
+    paginationActiveBulletBorderColor,
+    paginationActiveBulletBorderRadius,
     direction,
     keyboard,
     mousewheel,
@@ -91,7 +122,9 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
-
+  useEffect(() => {
+    onChange({...value, paginationActiveBulletSize: 0});
+  }, [paginationDynamicBullets]);
   const renderMainSettings = (): ReactNode => {
     return (
       <Section
@@ -179,22 +212,6 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                   id={'backgroundColor'}
                   name="Background color"
                   value={backgroundColor}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-              <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id={'navigationButton'}
-                  name={'Navigation'}
-                  value={navigationButton}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-              <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id={'pagination'}
-                  name={'Pagination'}
-                  value={pagination}
                   onChange={onInputValueChange}
                 />
               </Filter>
@@ -655,6 +672,424 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
       />
     );
   };
+  const renderNavigationSettings = (): ReactNode => {
+    return (
+      <Section
+        header={
+          <>
+            Navigation
+            <ProIcon />
+          </>
+        }
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'navigationButton'}
+                name={'Navigation'}
+                value={navigationButton}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            {navigationButton && (
+              <>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id="navigationshowsOnHover"
+                    name="Shows on hover"
+                    value={navigationshowsOnHover}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                    id={'navigationType'}
+                    name={'Type'}
+                    value={navigationType}
+                    options={SliderNavigationTypeOptions}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'enable_filmstrip',
+                            })
+                    }
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                    id="navigationPosition"
+                    name="Position"
+                    value={navigationPosition}
+                    options={SliderNavigationPositionOptions}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SliderControl
+                    id="navigationSize"
+                    name="Size (px)"
+                    min={0}
+                    max={300}
+                    value={navigationSize}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SliderControl
+                    id={'navigationPadding'}
+                    name="Padding (px)"
+                    min={0}
+                    max={100}
+                    value={navigationPadding}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SliderControl
+                    id={'navigationOpacity'}
+                    name="Opacity"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={navigationOpacity}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+
+                <Grid
+                  sx={{marginLeft: 0, paddingTop: 2}}
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                >
+                  <Filter isLoading={isLoading}>
+                    <SliderControl
+                      id="navigationBorder"
+                      name="Border (px)"
+                      min={0}
+                      max={5}
+                      value={navigationBorder}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <SliderControl
+                      id="navigationBorderRadius"
+                      name="Border radius (%)"
+                      min={0}
+                      max={99}
+                      value={navigationBorderRadius}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id="navigationBorderColor"
+                      name="Border color"
+                      value={navigationBorderColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </Grid>
+                <Filter isLoading={isLoading}>
+                  <ColorControl
+                    id="navigationColor"
+                    name="color"
+                    value={navigationColor}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <ColorControl
+                    id="navigationBackgroundColor"
+                    name="Background color"
+                    value={navigationBackgroundColor}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+
+                <Grid
+                  sx={{marginLeft: 0, paddingTop: 2}}
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                >
+                  <Filter isLoading={isLoading}>
+                    <SwitchControl
+                      id="navigationHover"
+                      name="Hover"
+                      value={navigationHover}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  {navigationHover && (
+                    <>
+                      <Filter isLoading={isLoading}>
+                        <ColorControl
+                          id="navigationColorHover"
+                          name="Color hover"
+                          value={navigationColorHover}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <ColorControl
+                          id="navigationBackgroundColorHover"
+                          name="Background color hover"
+                          value={navigationBackgroundColorHover}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                    </>
+                  )}{' '}
+                </Grid>
+              </>
+            )}
+          </Grid>
+        }
+        defaultExpanded={false}
+      />
+    );
+  };
+
+  const renderPaginationSettings = (): ReactNode => {
+    return (
+      <Section
+        header={
+          <>
+            Pagination
+            <ProIcon />
+          </>
+        }
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            {/* ENABLE PAGINATION */}
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id="pagination"
+                name="Pagination"
+                value={pagination}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+
+            {pagination && (
+              <>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id="paginationDynamicBullets"
+                    name="Dynamic bullets"
+                    value={paginationDynamicBullets}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+
+                {/* BASIC OPTIONS */}
+
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id="paginationshowsOnHover"
+                    name="Shows on hover"
+                    value={paginationshowsOnHover}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id="paginationBulletsImage"
+                    name="Image bullets"
+                    value={paginationBulletsImage}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {!paginationDynamicBullets && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'paginationPosition'}
+                      name={'Position'}
+                      value={paginationPosition}
+                      options={SliderPaginationPositionOptions}
+                      onChange={
+                        isPro
+                          ? onInputValueChange
+                          : () =>
+                              (window as any).reacg_open_premium_offer_dialog({
+                                utm_medium: 'enable_filmstrip',
+                              })
+                      }
+                    />
+                  </Filter>
+                )}
+                {/* ───────────────── BULLETS ───────────────── */}
+                <>
+                  {/* LABEL */}
+                  <Grid
+                    sx={{marginLeft: 0, paddingTop: 2}}
+                    container
+                    columns={24}
+                    rowSpacing={2}
+                    columnSpacing={4}
+                  >
+                    <Filter isLoading={isLoading}>
+                      <InputLabel shrink variant="filled">
+                        <LabelWithTooltip label="Bullets" tooltip="" />
+                      </InputLabel>
+                    </Filter>
+                  </Grid>
+
+                  {/* CONTROLS */}
+                  <Grid
+                    container
+                    columns={24}
+                    rowSpacing={2}
+                    columnSpacing={4}
+                    className="reacg-section__container-inherit"
+                  >
+                    {!paginationBulletsImage && (
+                      <Filter isLoading={isLoading}>
+                        <ColorControl
+                          id="paginationBulletsBackgroundColor"
+                          name="Background color"
+                          value={paginationBulletsBackgroundColor}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                    )}
+
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id="paginationBulletsSize"
+                        name="Size (px)"
+                        min={0}
+                        max={300}
+                        value={paginationBulletsSize}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id="paginationBulletsBorder"
+                        name="Border (px)"
+                        min={0}
+                        max={5}
+                        value={paginationBulletsBorder}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id="paginationBulletsBorderRadius"
+                        name="Border radius (%)"
+                        min={0}
+                        max={99}
+                        value={paginationBulletsBorderRadius}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id="paginationBulletsBorderColor"
+                        name="Border color"
+                        value={paginationBulletsBorderColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </Grid>
+                </>
+
+                {/* ─────────────── ACTIVE BULLET ─────────────── */}
+                <>
+                  {/* LABEL */}
+                  <Grid
+                    sx={{marginLeft: 0, paddingTop: 2}}
+                    container
+                    columns={24}
+                    rowSpacing={2}
+                    columnSpacing={4}
+                  >
+                    <Filter isLoading={isLoading}>
+                      <InputLabel shrink variant="filled">
+                        <LabelWithTooltip label="Active bullet" tooltip="" />
+                      </InputLabel>
+                    </Filter>
+                  </Grid>
+
+                  {/* CONTROLS */}
+                  <Grid
+                    container
+                    columns={24}
+                    rowSpacing={2}
+                    columnSpacing={4}
+                    className="reacg-section__container-inherit"
+                  >
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id="paginationActiveBulletBackgroundColor"
+                        name="Background color"
+                        value={paginationActiveBulletBackgroundColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id="paginationActiveBulletBorderColor"
+                        name="Border color"
+                        value={paginationActiveBulletBorderColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    {!paginationDynamicBullets && (
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id="paginationActiveBulletSize"
+                          name="Size (px)"
+                          min={0}
+                          max={300}
+                          value={paginationActiveBulletSize}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                    )}
+
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id="paginationActiveBulletBorder"
+                        name="Border (px)"
+                        min={0}
+                        max={5}
+                        value={paginationActiveBulletBorder}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id="paginationActiveBulletBorderRadius"
+                        name="Border radius (%)"
+                        min={0}
+                        max={99}
+                        value={paginationActiveBulletBorderRadius}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </Grid>
+                </>
+              </>
+            )}
+          </Grid>
+        }
+        defaultExpanded={false}
+      />
+    );
+  };
 
   const renderAdvancedSettings = (): ReactNode => {
     return (
@@ -826,6 +1261,8 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
       {renderMainSettings()}
       {renderTitleSection()}
       {renderFilmstripSettings()}
+      {renderNavigationSettings()}
+      {renderPaginationSettings()}
       {renderAdvancedSettings()}
     </Paper>
   );

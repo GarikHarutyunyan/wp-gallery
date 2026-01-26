@@ -2,15 +2,11 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
+import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
-import {
-  IImageDTO,
-  ISliderSettings,
-  SliderSlidesDesign,
-  SliderTextPosition,
-} from 'data-structures';
-import {useEffect, useRef, useState} from 'react';
+import {IImageDTO, ISliderSettings, SliderTextPosition} from 'data-structures';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import type {Swiper as SwiperType} from 'swiper';
 import 'swiper/css';
@@ -36,9 +32,12 @@ import {
   Parallax,
   Thumbs,
 } from 'swiper/modules';
+
 import {Swiper, SwiperRef, SwiperSlide} from 'swiper/react';
 
 import './slider.css';
+import {SliderNavigation} from './SliderNavigation';
+import {SliderSlideContent} from './SliderSlideContent';
 import SliderThumbs from './SliderThumbs';
 import {SlideText} from './SlideText';
 import {getSwiperEffectOptions} from './utils/swiperEffects';
@@ -59,7 +58,6 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     width,
     height,
     isInfinite,
-    padding,
     isSliderAllowed,
     autoplay,
     slideDuration,
@@ -78,13 +76,24 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     showCaption,
     navigationButton,
     pagination,
+    paginationPosition,
+    paginationDynamicBullets,
+    paginationshowsOnHover,
+    paginationBulletsBackgroundColor,
+    paginationBulletsSize,
+    paginationBulletsBorder,
+    paginationBulletsBorderRadius,
+    paginationBulletsBorderColor,
+    paginationBulletsImage,
+    paginationActiveBulletBackgroundColor,
+    paginationActiveBulletSize,
+    paginationActiveBulletBorder,
+    paginationActiveBulletBorderColor,
+    paginationActiveBulletBorderRadius,
     direction,
-    slidesDesign,
-    backgroundBlur,
     keyboard,
     mousewheel,
   } = settings as ISliderSettings;
-
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
 
   const mainSwiperRef = useRef<SwiperRef | null>(null);
@@ -98,9 +107,8 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     effectOptions,
   } = getSwiperEffectOptions(imageAnimation, direction);
   const hasThumbs = hasThumbnails(thumbnailsPosition);
-  console.log(textHeight);
+
   useEffect(() => {
-    console.log(textRef.current);
     if (!textRef.current) return;
 
     const update = () => {
@@ -152,22 +160,38 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
   }, [autoplay, isSliderAllowed]);
 
   useEffect(() => {
-    setThumbsSwiper(null);
+    hasThumbs && setThumbsSwiper(null);
   }, [
-    images,
     direction,
     isInfinite,
     imageAnimation,
     hasThumbs,
     keyboard,
     mousewheel,
+    paginationDynamicBullets,
+    paginationBulletsImage,
   ]);
-
+  const staticKey = useMemo(
+    () =>
+      `${direction}-${isInfinite}-${hasThumbs}-${imageAnimation}-${keyboard}-${mousewheel}-${paginationDynamicBullets}-${paginationBulletsImage}`,
+    [
+      direction,
+      isInfinite,
+      imageAnimation,
+      hasThumbs,
+      keyboard,
+      mousewheel,
+      paginationDynamicBullets,
+      paginationBulletsImage,
+    ]
+  );
   return (
     <Box className="slider">
       {/* Inner Box (flex container for slider + thumbnails) */}
       <div
-        className="slider__layout"
+        className={clsx('slider__layout', {
+          'slider__layout--pagination-hover': paginationshowsOnHover,
+        })}
         style={{
           flexDirection: getThumbnailsFlexDirection(thumbnailsPosition),
           gap: thumbnailPadding,
@@ -175,13 +199,46 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
         }}
       >
         <Swiper
-          key={`main-${direction}-${isInfinite}-${hasThumbs}-${imageAnimation}-${keyboard}-${mousewheel}`}
+          key={`main-${staticKey}`}
           ref={mainSwiperRef}
           style={
             {
               width,
-              height: direction === 'vertical' ? height + textHeight : '',
+              'height': direction === 'vertical' ? height + textHeight : '',
               // '--swiper-navigation-top-offset': 'calc(50% - 49px)',
+
+              /* ───────────── NORMAL BULLETS ───────────── */
+              '--slider-pagination-bullet-bg':
+                paginationBulletsBackgroundColor || '#aeb0b1',
+              '--slider-pagination-bullet-size': `${
+                paginationBulletsSize || 21
+              }px`,
+
+              '--slider-pagination-bullet-border': `${
+                paginationBulletsBorder || 0
+              }px`,
+              '--slider-pagination-bullet-border-radius': `${paginationBulletsBorderRadius}px`,
+              '--slider-pagination-bullet-border-color':
+                paginationBulletsBorderColor || '#ffffff',
+              /* ───────────── ACTIVE BULLET ───────────── */
+              '--slider-pagination-active-bullet-bg':
+                paginationActiveBulletBackgroundColor || '#007aff',
+              '--slider-pagination-active-bullet-size': `${
+                paginationActiveBulletSize || paginationBulletsSize || 21
+              }px`,
+
+              '--slider-pagination-active-bullet-border': `${
+                paginationActiveBulletBorder || paginationBulletsBorder
+              }px`,
+              '--slider-pagination-active-bullet-border-radius': `${
+                paginationActiveBulletBorderRadius ||
+                paginationBulletsBorderRadius ||
+                0
+              }px`,
+              '--slider-pagination-active-bullet-border-color':
+                paginationActiveBulletBorderColor ||
+                paginationBulletsBorderColor ||
+                '#ffffff',
             } as React.CSSProperties
           }
           modules={[
@@ -209,14 +266,36 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
           slidesPerView={1}
           spaceBetween={0}
           parallax={true}
-          navigation={navigationButton}
           thumbs={{swiper: thumbsSwiper}}
           pagination={
-            pagination ? {clickable: true, dynamicBullets: true} : false
+            pagination
+              ? paginationBulletsImage
+                ? {
+                    clickable: true,
+                    dynamicBullets: paginationDynamicBullets,
+                    renderBullet: (index: any, className: any) => {
+                      const src = images[index]?.original?.url;
+                      return `
+              <span class="${className} slider__pagination-bullet">
+                <img src="${src}" alt="" />
+              </span>
+            `;
+                    },
+                  }
+                : {
+                    clickable: true,
+                    dynamicBullets: paginationDynamicBullets,
+                  }
+              : false
           }
           effect={effect as any}
           {...effectOptions}
-          className="slider__main-swiper"
+          className={clsx(
+            'slider__main-swiper',
+            pagination &&
+              !paginationDynamicBullets &&
+              `slider__pagination--${paginationPosition}`
+          )}
           loop={isInfinite}
           direction={direction || 'vertical'}
           speed={slideDuration}
@@ -230,70 +309,22 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
               {textPosition === SliderTextPosition.ABOVE && (
                 <SlideText ref={textRef} image={image} settings={settings!} />
               )}
-              <div
-                className="slider__slide-content"
-                style={{
-                  backgroundColor:
-                    (slidesDesign === SliderSlidesDesign.FIT ||
-                      slidesDesign === SliderSlidesDesign.BLURFIT) &&
-                    effect === 'creative'
-                      ? backgroundColor
-                      : '',
-                  padding: padding,
-                  height, // only the inner content gets padding
-                }}
-              >
-                {slidesDesign === SliderSlidesDesign.BLURFIT && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0, // full size
-                      backgroundImage: `url(${image.original.url})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      backgroundRepeat: 'no-repeat',
-                      filter: `blur(${backgroundBlur}px)`, // blur only background
-                      transform: 'scale(1.1)', // avoid edges showing
-                      zIndex: 0,
-                    }}
-                  />
-                )}
-                <img
-                  src={image.original.url}
-                  alt=""
-                  style={{
-                    width:
-                      slidesDesign === SliderSlidesDesign.FILL
-                        ? '100%'
-                        : 'auto',
-                    height:
-                      slidesDesign === SliderSlidesDesign.FILL
-                        ? '100%'
-                        : 'auto',
-                    objectFit:
-                      slidesDesign === SliderSlidesDesign.FILL
-                        ? 'cover'
-                        : 'contain',
-                    zIndex: 1,
-                  }}
-                />
 
-                {(showTitle || showCaption || showDescription) &&
-                  textPosition !== SliderTextPosition.ABOVE &&
-                  textPosition !== SliderTextPosition.BELOW && (
-                    <SlideText
-                      ref={textRef}
-                      image={image}
-                      settings={settings!}
-                    />
-                  )}
-              </div>
+              <SliderSlideContent
+                image={image}
+                effect={effect}
+                settings={settings!}
+                textRef={textRef}
+              />
+
               {/* BELOW */}
               {textPosition === SliderTextPosition.BELOW && (
                 <SlideText ref={textRef} image={image} settings={settings!} />
               )}
             </SwiperSlide>
           ))}
+          {navigationButton && <SliderNavigation settings={settings!} />}
+          {/* {navigationButton && <SliderNavigation settings={settings!} />} */}
           {isSliderAllowed && (
             <IconButton
               className="slider__play-pause"
@@ -314,7 +345,7 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
 
         {hasThumbs && (
           <SliderThumbs
-            key={`thumbs-${direction}-${isInfinite}-${hasThumbs}-${imageAnimation}-${keyboard}-${mousewheel}`}
+            key={`thumbs-${staticKey}`}
             images={images}
             direction={thumbsVertical ? 'vertical' : 'horizontal'}
             settings={settings!}

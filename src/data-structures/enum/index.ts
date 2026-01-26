@@ -18,6 +18,8 @@ export * from './SizeTypeHeight';
 export * from './SizeTypeWidth';
 export * from './SliderAnimation';
 export * from './SliderDirection';
+export * from './SliderNavigationPosition';
+export * from './SliderNavigationType';
 export * from './SliderSlidesDesign';
 export * from './SliderTextPosition';
 export * from './TextsAlignments';

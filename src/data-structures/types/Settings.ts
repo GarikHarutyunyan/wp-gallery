@@ -15,6 +15,8 @@ import {
   SizeTypeWidth,
   SliderAnimation,
   SliderDirection,
+  SliderNavigationPosition,
+  SliderNavigationType,
   SliderSlidesDesign,
   SliderTextPosition,
   TextsAlignment,
@@ -24,6 +26,7 @@ import {
   TitleSource,
   TitleVisibility,
 } from 'data-structures';
+import {SliderPaginationPosition} from 'data-structures/enum/SliderPaginationPosition';
 
 export interface IThumbnailSettings {
   fillContainer: boolean;
@@ -292,7 +295,35 @@ export interface ISliderSettings {
   captionFontSize: number;
   captionFontColor: string;
   navigationButton: boolean;
+  navigationshowsOnHover: boolean;
+  navigationType: SliderNavigationType;
+  navigationColor: string;
+  navigationPosition: SliderNavigationPosition;
+  navigationBackgroundColor: string;
+  navigationSize: number;
+  navigationPadding: number;
+  navigationOpacity: number;
+  navigationBorder: number;
+  navigationBorderColor: string;
+  navigationBorderRadius: number;
+  navigationHover: boolean;
+  navigationColorHover: string;
+  navigationBackgroundColorHover: string;
   pagination: boolean;
+  paginationPosition: SliderPaginationPosition;
+  paginationDynamicBullets: boolean;
+  paginationBulletsImage: boolean;
+  paginationshowsOnHover: boolean;
+  paginationBulletsBackgroundColor: string;
+  paginationBulletsSize: number;
+  paginationBulletsBorder: number;
+  paginationBulletsBorderColor: string;
+  paginationBulletsBorderRadius: number;
+  paginationActiveBulletBackgroundColor: string;
+  paginationActiveBulletSize: number;
+  paginationActiveBulletBorder: number;
+  paginationActiveBulletBorderColor: string;
+  paginationActiveBulletBorderRadius: number;
   direction: SliderDirection;
   keyboard: boolean;
   mousewheel: boolean;
