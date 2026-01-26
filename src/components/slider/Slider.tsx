@@ -33,8 +33,9 @@ import {
   Thumbs,
 } from 'swiper/modules';
 
-import {Swiper, SwiperRef, SwiperSlide} from 'swiper/react';
+import {Swiper, SwiperSlide} from 'swiper/react';
 
+import {useObservedTextHeight} from './hooks/useObservedTextHeight';
 import './slider.css';
 import {SliderNavigation} from './SliderNavigation';
 import {SliderSlideContent} from './SliderSlideContent';
@@ -53,6 +54,7 @@ interface ISliderProps {
 
 const Slider: React.FC<ISliderProps> = ({onClick}) => {
   const {images = []} = useData();
+  const mainSwiperRef = useRef<SwiperType | null>(null);
   const {sliderSettings: settings} = useSettings();
   const {
     width,
@@ -67,14 +69,11 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     thumbnailPadding,
     backgroundColor,
     textPosition,
-    descriptionFontSize,
-    captionFontSize,
-    titleFontSize,
-    descriptionMaxRowsCount,
     showTitle,
     showDescription,
     showCaption,
     navigationButton,
+    navigationPosition,
     pagination,
     paginationPosition,
     paginationDynamicBullets,
@@ -95,59 +94,49 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     mousewheel,
   } = settings as ISliderSettings;
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
-
-  const mainSwiperRef = useRef<SwiperRef | null>(null);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
-  const textRef = useRef<HTMLDivElement | null>(null);
-  const [textHeight, setTextHeight] = useState<number>(0);
+  console.log(images);
   const thumbsVertical = isThumbnailsVertical(thumbnailsPosition);
   const {
     effect,
     modules: effectModules,
     effectOptions,
   } = getSwiperEffectOptions(imageAnimation, direction);
+  const textRef = useRef<HTMLDivElement | null>(null);
   const hasThumbs = hasThumbnails(thumbnailsPosition);
+  const hasTextAbove =
+    (showTitle || showDescription || showCaption) &&
+    textPosition === SliderTextPosition.ABOVE;
 
-  useEffect(() => {
-    if (!textRef.current) return;
-
-    const update = () => {
-      setTextHeight(textRef.current!.offsetHeight);
-    };
-
-    update();
-
-    const ro = new ResizeObserver(update);
-    ro.observe(textRef.current);
-
-    return () => ro.disconnect();
-  }, [
+  const hasTextBelow =
+    (showTitle || showDescription || showCaption) &&
+    textPosition === SliderTextPosition.BELOW;
+  const observedTextHeight = useObservedTextHeight(
+    textRef,
     showTitle,
     showDescription,
-    showCaption,
-    descriptionFontSize,
-    captionFontSize,
-    titleFontSize,
-    descriptionMaxRowsCount,
-  ]);
+    showCaption
+  );
+  const textHeight = hasTextBelow || hasTextAbove ? observedTextHeight : 0;
+
   const handlePlay = () => {
-    const swiper = mainSwiperRef.current?.swiper;
+    const swiper = mainSwiperRef.current;
     if (swiper?.autoplay) {
-      swiper.autoplay.start();
+      // ✅ check for object, not call it
+      swiper.autoplay.start(); // ✅ start autoplay
       setIsPlaying(true);
     }
   };
 
   const handlePause = () => {
-    const swiper = mainSwiperRef.current?.swiper;
+    const swiper = mainSwiperRef.current;
     if (swiper?.autoplay) {
-      swiper.autoplay.stop();
+      swiper.autoplay.stop(); // ✅ stop autoplay
       setIsPlaying(false);
     }
   };
-
   useEffect(() => {
-    const swiper = mainSwiperRef.current?.swiper;
+    const swiper = mainSwiperRef.current;
     if (swiper?.autoplay) {
       if (autoplay) {
         swiper.autoplay.start();
@@ -198,149 +187,157 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
           backgroundColor: backgroundColor || 'transparent',
         }}
       >
-        <Swiper
-          key={`main-${staticKey}`}
-          ref={mainSwiperRef}
-          style={
-            {
-              width,
-              'height': direction === 'vertical' ? height + textHeight : '',
-              // '--swiper-navigation-top-offset': 'calc(50% - 49px)',
+        <div className="slider__main-swiper--wrapper">
+          {navigationButton && navigationPosition.includes('out-top') && (
+            <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
+          )}
+          <Swiper
+            key={`main-${staticKey}`}
+            onSwiper={(swiper: any) => (mainSwiperRef.current = swiper)}
+            style={
+              {
+                width,
+                'height': direction === 'vertical' ? height + textHeight : '',
+                // '--swiper-navigation-top-offset': 'calc(50% - 49px)',
 
-              /* ───────────── NORMAL BULLETS ───────────── */
-              '--slider-pagination-bullet-bg':
-                paginationBulletsBackgroundColor || '#aeb0b1',
-              '--slider-pagination-bullet-size': `${
-                paginationBulletsSize || 21
-              }px`,
+                /* ───────────── NORMAL BULLETS ───────────── */
+                '--slider-pagination-bullet-bg':
+                  paginationBulletsBackgroundColor || '#aeb0b1',
+                '--slider-pagination-bullet-size': `${
+                  paginationBulletsSize || 21
+                }px`,
 
-              '--slider-pagination-bullet-border': `${
-                paginationBulletsBorder || 0
-              }px`,
-              '--slider-pagination-bullet-border-radius': `${paginationBulletsBorderRadius}px`,
-              '--slider-pagination-bullet-border-color':
-                paginationBulletsBorderColor || '#ffffff',
-              /* ───────────── ACTIVE BULLET ───────────── */
-              '--slider-pagination-active-bullet-bg':
-                paginationActiveBulletBackgroundColor || '#007aff',
-              '--slider-pagination-active-bullet-size': `${
-                paginationActiveBulletSize || paginationBulletsSize || 21
-              }px`,
+                '--slider-pagination-bullet-border': `${
+                  paginationBulletsBorder || 0
+                }px`,
+                '--slider-pagination-bullet-border-radius': `${paginationBulletsBorderRadius}px`,
+                '--slider-pagination-bullet-border-color':
+                  paginationBulletsBorderColor || '#ffffff',
+                /* ───────────── ACTIVE BULLET ───────────── */
+                '--slider-pagination-active-bullet-bg':
+                  paginationActiveBulletBackgroundColor || '#007aff',
+                '--slider-pagination-active-bullet-size': `${
+                  paginationActiveBulletSize || paginationBulletsSize || 21
+                }px`,
 
-              '--slider-pagination-active-bullet-border': `${
-                paginationActiveBulletBorder || paginationBulletsBorder
-              }px`,
-              '--slider-pagination-active-bullet-border-radius': `${
-                paginationActiveBulletBorderRadius ||
-                paginationBulletsBorderRadius ||
-                0
-              }px`,
-              '--slider-pagination-active-bullet-border-color':
-                paginationActiveBulletBorderColor ||
-                paginationBulletsBorderColor ||
-                '#ffffff',
-            } as React.CSSProperties
-          }
-          modules={[
-            Navigation,
-            Pagination,
-            Autoplay,
-            Parallax,
-            Thumbs,
-            Keyboard,
-            Mousewheel,
-            ...effectModules,
-          ]}
-          keyboard={{
-            enabled: keyboard,
-          }}
-          mousewheel={mousewheel}
-          autoplay={
-            autoplay || isPlaying
-              ? {
-                  delay: slideDelay,
-                  stopOnLastSlide: false,
-                }
-              : false
-          }
-          slidesPerView={1}
-          spaceBetween={0}
-          parallax={true}
-          thumbs={{swiper: thumbsSwiper}}
-          pagination={
-            pagination
-              ? paginationBulletsImage
+                '--slider-pagination-active-bullet-border': `${
+                  paginationActiveBulletBorder || paginationBulletsBorder
+                }px`,
+                '--slider-pagination-active-bullet-border-radius': `${
+                  paginationActiveBulletBorderRadius ||
+                  paginationBulletsBorderRadius ||
+                  0
+                }px`,
+                '--slider-pagination-active-bullet-border-color':
+                  paginationActiveBulletBorderColor ||
+                  paginationBulletsBorderColor ||
+                  '#ffffff',
+              } as React.CSSProperties
+            }
+            modules={[
+              Navigation,
+              Pagination,
+              Autoplay,
+              Parallax,
+              Thumbs,
+              Keyboard,
+              Mousewheel,
+              ...effectModules,
+            ]}
+            keyboard={{
+              enabled: keyboard,
+            }}
+            mousewheel={mousewheel}
+            autoplay={
+              autoplay || isPlaying
                 ? {
-                    clickable: true,
-                    dynamicBullets: paginationDynamicBullets,
-                    renderBullet: (index: any, className: any) => {
-                      const src = images[index]?.original?.url;
-                      return `
+                    delay: slideDelay,
+                    stopOnLastSlide: false,
+                  }
+                : false
+            }
+            slidesPerView={1}
+            spaceBetween={0}
+            parallax={true}
+            thumbs={{swiper: thumbsSwiper}}
+            pagination={
+              pagination
+                ? paginationBulletsImage
+                  ? {
+                      clickable: true,
+                      dynamicBullets: paginationDynamicBullets,
+                      renderBullet: (index: any, className: any) => {
+                        const src = images[index]?.original?.url;
+                        return `
               <span class="${className} slider__pagination-bullet">
                 <img src="${src}" alt="" />
               </span>
             `;
-                    },
-                  }
-                : {
-                    clickable: true,
-                    dynamicBullets: paginationDynamicBullets,
-                  }
-              : false
-          }
-          effect={effect as any}
-          {...effectOptions}
-          className={clsx(
-            'slider__main-swiper',
-            pagination &&
-              !paginationDynamicBullets &&
-              `slider__pagination--${paginationPosition}`
+                      },
+                    }
+                  : {
+                      clickable: true,
+                      dynamicBullets: paginationDynamicBullets,
+                    }
+                : false
+            }
+            effect={effect as any}
+            {...effectOptions}
+            className={clsx(
+              'slider__main-swiper',
+              pagination &&
+                !paginationDynamicBullets &&
+                `slider__pagination--${paginationPosition}`
+            )}
+            loop={isInfinite}
+            direction={direction || 'vertical'}
+            speed={slideDuration}
+          >
+            {images.map((image: IImageDTO, index) => (
+              <SwiperSlide
+                key={image.id ?? index}
+                onClick={() => onClick?.(index)}
+              >
+                {/* ABOVE */}
+                {hasTextAbove && (
+                  <SlideText ref={textRef} image={image} settings={settings!} />
+                )}
+
+                <SliderSlideContent
+                  image={image}
+                  effect={effect}
+                  settings={settings!}
+                  textRef={textRef}
+                />
+
+                {/* BELOW */}
+                {hasTextBelow && (
+                  <SlideText ref={textRef} image={image} settings={settings!} />
+                )}
+              </SwiperSlide>
+            ))}
+            {navigationButton && !navigationPosition.includes('out') && (
+              <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
+            )}
+            {isSliderAllowed && (
+              <IconButton
+                className="slider__play-pause"
+                onClick={isPlaying ? handlePause : handlePlay}
+                aria-label={isPlaying ? 'pause' : 'play'}
+                size="large"
+              >
+                {isPlaying ? (
+                  <PauseIcon fontSize="inherit" />
+                ) : (
+                  <PlayArrowIcon fontSize="inherit" />
+                )}
+              </IconButton>
+            )}
+          </Swiper>
+          {navigationButton && navigationPosition.includes('out-bottom') && (
+            <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
           )}
-          loop={isInfinite}
-          direction={direction || 'vertical'}
-          speed={slideDuration}
-        >
-          {images.map((image: IImageDTO, index) => (
-            <SwiperSlide
-              key={image.id ?? index}
-              onClick={() => onClick?.(index)}
-            >
-              {/* ABOVE */}
-              {textPosition === SliderTextPosition.ABOVE && (
-                <SlideText ref={textRef} image={image} settings={settings!} />
-              )}
-
-              <SliderSlideContent
-                image={image}
-                effect={effect}
-                settings={settings!}
-                textRef={textRef}
-              />
-
-              {/* BELOW */}
-              {textPosition === SliderTextPosition.BELOW && (
-                <SlideText ref={textRef} image={image} settings={settings!} />
-              )}
-            </SwiperSlide>
-          ))}
-          {navigationButton && <SliderNavigation settings={settings!} />}
-          {/* {navigationButton && <SliderNavigation settings={settings!} />} */}
-          {isSliderAllowed && (
-            <IconButton
-              className="slider__play-pause"
-              onClick={isPlaying ? handlePause : handlePlay}
-              aria-label={isPlaying ? 'pause' : 'play'}
-              size="large"
-            >
-              {isPlaying ? (
-                <PauseIcon fontSize="inherit" />
-              ) : (
-                <PlayArrowIcon fontSize="inherit" />
-              )}
-            </IconButton>
-          )}
-        </Swiper>
-
+        </div>
         {/* THUMBNAILS (SEPARATE COMPONENT) */}
 
         {hasThumbs && (
