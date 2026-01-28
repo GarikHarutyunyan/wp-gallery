@@ -1,27 +1,59 @@
-.reacg-gallery .slider {
+/* .reacg-gallery .slider {
+
+} */
+.reacg-gallery .slider__layout {
+  display: flex;
+  box-sizing: border-box;
+  max-width: 100%;
+  max-height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.reacg-gallery .slider__layout {
+.reacg-gallery .slider__layout .slider__main-swiper.swiper .swiper-slide {
   display: flex;
   justify-content: center;
-  align-items: end;
-  box-sizing: border-box;
+  align-items: center;
+}
+/* MAIN SWIPER WRAPPER */
+.reacg-gallery .slider__main-swiper--wrapper {
   max-width: 100%;
   max-height: 100%;
+  min-width: 10px;
 }
+
+.reacg-gallery .slider__main-swiper--wrapper.slider__shadow--drop {
+  box-shadow: 0px 25px 20px -12px var(--slider-shadow-color, rgba(0, 0, 0, 0.15));
+}
+
+.reacg-gallery .slider__main-swiper--wrapper.slider__shadow--left {
+  box-shadow: -18px 18px 20px 0px
+    var(--slider-shadow-color, rgba(0, 0, 0, 0.15));
+}
+
+.reacg-gallery .slider__main-swiper--wrapper.slider__shadow--right {
+  box-shadow: 18px 18px 20px 0px var(--slider-shadow-color, rgba(0, 0, 0, 0.15));
+}
+
+.reacg-gallery .slider__main-swiper--wrapper.slider__shadow--float {
+  box-shadow: 0 20px 40px -10px var(--slider-shadow-color, rgba(0, 0, 0, 0.3));
+}
+
+.reacg-gallery .slider__main-swiper--wrapper.slider__shadow--glow {
+  box-shadow: 0 0 30px 10px var(--slider-shadow-color, rgba(0, 0, 0, 0.3));
+}
+
 .reacg-gallery .slider__main-swiper.swiper,
 .reacg-gallery .slider__thumbs-swiper.swiper {
   margin-left: 0;
   margin-right: 0;
+  width: 100%;
+  height: 100%;
 }
-.slider__main-swiper--wrapper {
-  max-width: 100%;
-  max-height: 100%;
-}
+
 .reacg-gallery .slider__main-swiper {
   max-width: 100%;
+  max-height: 100%;
 }
 .reacg-gallery .slider__main-swiper img {
   width: 100%;
@@ -44,29 +76,75 @@
 }
 
 /* SLIDER THUMBS  */
+
+.reacg-gallery .slider__layout--thumbnail-hover .slider__thumbs {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+
+/* Show pagination on hover of slider layout */
+.reacg-gallery .slider__layout--thumbnail-hover:hover .slider__thumbs {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
 .reacg-gallery .slider__thumbs {
   max-width: 100%;
   max-height: 100%;
   box-sizing: border-box;
+  background: var(--slider-thumbs-bar-bg, transparent);
+  opacity: var(--slider-thumbs-bar-opacity, 1);
+  padding: var(--slider-thumbs-bar-padding, 0);
+  border: var(--slider-thumbs-bar-border, none);
+  border-radius: var(--slider-thumbs-bar-radius, 0);
 }
 .reacg-gallery .slider__thumbs-swiper {
   width: 100%;
   height: 100%;
 }
 
-.reacg-gallery .slider__thumbs-swiper .swiper-slide {
-  height: auto;
-  opacity: 0.4;
-  width: auto;
-  cursor: pointer;
-  transition: opacity 0.3s ease;
+.slider__thumb-content {
+  width: var(--slider-thumb-width);
+  height: var(--slider-thumb-height);
+  padding: var(--slider-thumb-padding);
+  border-radius: var(--slider-thumb-radius);
+  border: var(--slider-thumb-border);
+  background: var(--slider-thumb-bg);
+  opacity: var(--slider-thumb-opacity);
+  margin: var(--slider-thumb-margin);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.reacg-gallery .slider__thumbs-swiper .swiper-slide-thumb-active {
-  opacity: 1;
+/* ✅ ACTIVE THUMB (this is the key) */
+.slider__thumb.swiper-slide-thumb-active .slider__thumb-content {
+  width: var(--slider-thumb-active-width);
+  height: var(--slider-thumb-active-height);
+  padding: var(--slider-thumb-active-padding);
+  border-radius: var(--slider-thumb-active-radius);
+  border: var(--slider-thumb-active-border);
+  background: var(--slider-thumb-active-bg);
+  opacity: var(--slider-thumb-active-opacity);
+  margin: var(--slider-thumb-active-margin);
 }
+
+.reacg-gallery .slider__thumbs-swiper .swiper-slide {
+  height: auto;
+  width: auto;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
 .reacg-gallery .slider__thumb-content {
-  overflow: 'hidden';
+  overflow: hidden;
 }
 .reacg-gallery .slider__thumbs-swiper img {
   width: 100%;

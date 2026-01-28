@@ -17,6 +17,7 @@ import {
   SliderDirection,
   SliderNavigationPosition,
   SliderNavigationType,
+  SliderShadowType,
   SliderSlidesDesign,
   SliderTextPosition,
   TextsAlignment,
@@ -259,6 +260,8 @@ export interface IBlogSettings {
 export interface ISliderSettings {
   width: number;
   height: number;
+  heightType: SizeTypeHeight;
+  widthType: SizeTypeWidth;
   padding: number;
   autoplay: boolean;
   isInfinite: boolean;
@@ -272,13 +275,32 @@ export interface ISliderSettings {
   textBackground: string;
   invertTextColor: boolean;
   thumbnailsPosition: LightboxThumbnailsPosition;
+  thumbnailShowsOnHover: boolean;
   thumbnailWidth: number;
   thumbnailHeight: number;
+  thumbnailPadding: number;
+  thumbnailOpacity: number;
   thumbnailBorder: number;
+  thumbnailBackgroundColor: string;
   thumbnailBorderColor: string;
   thumbnailBorderRadius: number;
-  thumbnailPadding: number;
   thumbnailGap: number;
+  activeThumbnailWidth: number;
+  activeThumbnailHeight: number;
+  activeThumbnailPadding: number;
+  activeThumbnailOpacity: number;
+  activeThumbnailBorder: number;
+  activeThumbnailBackgroundColor: string;
+  activeThumbnailBorderColor: string;
+  activeThumbnailBorderRadius: number;
+  activeThumbnailGap: number;
+  thumbnailBarBackgroundColor: string;
+  thumbnailBarOpacity: number;
+  thumbnailBarPadding: number;
+  thumbnailBarBorder: number;
+  thumbnailBarBorderColor: string;
+  thumbnailBarBorderRadius: number;
+  thumbnailBarGap: number;
   isSliderAllowed: boolean;
   showTitle: boolean;
   titleFontSize: number;
@@ -324,6 +346,9 @@ export interface ISliderSettings {
   paginationActiveBulletBorder: number;
   paginationActiveBulletBorderColor: string;
   paginationActiveBulletBorderRadius: number;
+  shadow: boolean;
+  shadowType: SliderShadowType;
+  shadowColor: string;
   direction: SliderDirection;
   keyboard: boolean;
   mousewheel: boolean;

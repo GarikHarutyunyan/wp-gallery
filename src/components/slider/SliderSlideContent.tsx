@@ -24,6 +24,7 @@ export const SliderSlideContent: FC<SliderSlideContentProps> = ({
     backgroundColor,
     padding,
     height,
+    heightType,
     backgroundBlur,
     showTitle,
     showCaption,
@@ -49,7 +50,7 @@ export const SliderSlideContent: FC<SliderSlideContentProps> = ({
       style={{
         backgroundColor: isFitCreative ? backgroundColor : '',
         padding,
-        height,
+        height: `${height}${heightType}`,
       }}
     >
       {slidesDesign === SliderSlidesDesign.BLURFIT && (

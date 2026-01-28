@@ -1,7 +1,4 @@
-import PauseIcon from '@mui/icons-material/Pause';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
@@ -38,6 +35,7 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 import {useObservedTextHeight} from './hooks/useObservedTextHeight';
 import './slider.css';
 import {SliderNavigation} from './SliderNavigation';
+import {SliderPlayPause} from './SliderPlayPause';
 import {SliderSlideContent} from './SliderSlideContent';
 import SliderThumbs from './SliderThumbs';
 import {SlideText} from './SlideText';
@@ -58,7 +56,9 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
   const {sliderSettings: settings} = useSettings();
   const {
     width,
+    widthType,
     height,
+    heightType,
     isInfinite,
     isSliderAllowed,
     autoplay,
@@ -66,7 +66,7 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     slideDelay,
     imageAnimation,
     thumbnailsPosition,
-    thumbnailPadding,
+    thumbnailShowsOnHover,
     backgroundColor,
     textPosition,
     showTitle,
@@ -89,13 +89,17 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     paginationActiveBulletBorder,
     paginationActiveBulletBorderColor,
     paginationActiveBulletBorderRadius,
+    thumbnailBarGap,
     direction,
     keyboard,
     mousewheel,
+    shadow,
+    shadowType,
+    shadowColor,
   } = settings as ISliderSettings;
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
-  console.log(images);
+
   const thumbsVertical = isThumbnailsVertical(thumbnailsPosition);
   const {
     effect,
@@ -115,38 +119,10 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     textRef,
     showTitle,
     showDescription,
-    showCaption
+    showCaption,
+    textPosition
   );
   const textHeight = hasTextBelow || hasTextAbove ? observedTextHeight : 0;
-
-  const handlePlay = () => {
-    const swiper = mainSwiperRef.current;
-    if (swiper?.autoplay) {
-      // ✅ check for object, not call it
-      swiper.autoplay.start(); // ✅ start autoplay
-      setIsPlaying(true);
-    }
-  };
-
-  const handlePause = () => {
-    const swiper = mainSwiperRef.current;
-    if (swiper?.autoplay) {
-      swiper.autoplay.stop(); // ✅ stop autoplay
-      setIsPlaying(false);
-    }
-  };
-  useEffect(() => {
-    const swiper = mainSwiperRef.current;
-    if (swiper?.autoplay) {
-      if (autoplay) {
-        swiper.autoplay.start();
-        setIsPlaying(true);
-      } else {
-        swiper.autoplay.stop();
-        setIsPlaying(false);
-      }
-    }
-  }, [autoplay, isSliderAllowed]);
 
   useEffect(() => {
     hasThumbs && setThumbsSwiper(null);
@@ -180,24 +156,38 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
       <div
         className={clsx('slider__layout', {
           'slider__layout--pagination-hover': paginationshowsOnHover,
+          'slider__layout--thumbnail-hover': thumbnailShowsOnHover,
         })}
         style={{
           flexDirection: getThumbnailsFlexDirection(thumbnailsPosition),
-          gap: thumbnailPadding,
+          gap: thumbnailBarGap,
           backgroundColor: backgroundColor || 'transparent',
         }}
       >
-        <div className="slider__main-swiper--wrapper">
+        <div
+          className={clsx('slider__main-swiper--wrapper', {
+            [`slider__shadow--${shadowType}`]: shadow,
+          })}
+          style={{
+            width: `${width}${widthType}`,
+            height:
+              direction === 'vertical'
+                ? `calc(${height}${heightType} + ${textHeight}px)`
+                : `${height}${heightType}`,
+            ...(shadow && shadowColor
+              ? ({'--slider-shadow-color': shadowColor} as React.CSSProperties)
+              : {}),
+          }}
+        >
           {navigationButton && navigationPosition.includes('out-top') && (
             <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
           )}
           <Swiper
             key={`main-${staticKey}`}
             onSwiper={(swiper: any) => (mainSwiperRef.current = swiper)}
+            preventInteractionOnTransition={true}
             style={
               {
-                width,
-                'height': direction === 'vertical' ? height + textHeight : '',
                 // '--swiper-navigation-top-offset': 'calc(50% - 49px)',
 
                 /* ───────────── NORMAL BULLETS ───────────── */
@@ -319,20 +309,12 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
             {navigationButton && !navigationPosition.includes('out') && (
               <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
             )}
-            {isSliderAllowed && (
-              <IconButton
-                className="slider__play-pause"
-                onClick={isPlaying ? handlePause : handlePlay}
-                aria-label={isPlaying ? 'pause' : 'play'}
-                size="large"
-              >
-                {isPlaying ? (
-                  <PauseIcon fontSize="inherit" />
-                ) : (
-                  <PlayArrowIcon fontSize="inherit" />
-                )}
-              </IconButton>
-            )}
+
+            <SliderPlayPause
+              swiperRef={mainSwiperRef}
+              autoplay={autoplay}
+              isSliderAllowed={isSliderAllowed}
+            />
           </Swiper>
           {navigationButton && navigationPosition.includes('out-bottom') && (
             <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
@@ -347,6 +329,7 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
             direction={thumbsVertical ? 'vertical' : 'horizontal'}
             settings={settings!}
             setThumbsSwiper={setThumbsSwiper}
+            textHeight={textHeight}
           />
         )}
       </div>

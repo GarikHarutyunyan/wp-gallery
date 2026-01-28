@@ -20,6 +20,7 @@ export * from './SliderAnimation';
 export * from './SliderDirection';
 export * from './SliderNavigationPosition';
 export * from './SliderNavigationType';
+export * from './SliderShadowType';
 export * from './SliderSlidesDesign';
 export * from './SliderTextPosition';
 export * from './TextsAlignments';

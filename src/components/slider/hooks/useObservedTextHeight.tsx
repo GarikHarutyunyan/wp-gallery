@@ -1,10 +1,12 @@
+import {SliderTextPosition} from 'data-structures';
 import {RefObject, useLayoutEffect, useState} from 'react';
 
 export function useObservedTextHeight<T extends HTMLElement>(
   ref: RefObject<T>,
   showTitle: boolean,
   showDescription: boolean,
-  showCaption: boolean
+  showCaption: boolean,
+  textPosition: SliderTextPosition
 ) {
   const [height, setHeight] = useState(0);
 
@@ -22,7 +24,7 @@ export function useObservedTextHeight<T extends HTMLElement>(
     ro.observe(el);
 
     return () => ro.disconnect();
-  }, [ref.current, showTitle, showDescription, showCaption]); // <--- run when ref becomes non-null
+  }, [ref.current, showTitle, showDescription, showCaption, textPosition]); // <--- run when ref becomes non-null
 
   return height;
 }

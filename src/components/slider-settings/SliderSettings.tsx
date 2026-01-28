@@ -13,10 +13,13 @@ import {
   ISliderSettings,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
+  SizeTypeHeightOptions,
+  SizeTypeWidthOptions,
   SliderAnimationOptions,
   SliderDirectionOptions,
   SliderNavigationPositionOptions,
   SliderNavigationTypeOptions,
+  SliderShadowTypeOptions,
   SliderSlidesDesign,
   SliderSlidesDesignOptions,
   SliderTextPositionOptions,
@@ -48,6 +51,8 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     width,
     height,
     // areControlButtonsShown,
+    widthType,
+    heightType,
     isInfinite,
     padding,
     isSliderAllowed,
@@ -55,14 +60,36 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     slideDuration,
     slideDelay,
     imageAnimation,
+    shadow,
+    shadowType,
+    shadowColor,
     thumbnailsPosition,
+    thumbnailShowsOnHover,
     thumbnailWidth,
     thumbnailHeight,
+    thumbnailPadding,
+    thumbnailOpacity,
     thumbnailBorder,
     thumbnailBorderColor,
     thumbnailBorderRadius,
-    thumbnailPadding,
+    thumbnailBackgroundColor,
     thumbnailGap,
+    activeThumbnailWidth,
+    activeThumbnailHeight,
+    activeThumbnailPadding,
+    activeThumbnailOpacity,
+    activeThumbnailBorder,
+    activeThumbnailBackgroundColor,
+    activeThumbnailBorderColor,
+    activeThumbnailBorderRadius,
+    activeThumbnailGap,
+    thumbnailBarBackgroundColor,
+    thumbnailBarOpacity,
+    thumbnailBarPadding,
+    thumbnailBarBorder,
+    thumbnailBarBorderColor,
+    thumbnailBarBorderRadius,
+    thumbnailBarGap,
     backgroundColor,
     textPosition,
     textFontFamily,
@@ -140,26 +167,50 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                     onChange={onInputValueChange}
                   />
                 </Filter> */}
+
               <Filter isLoading={isLoading}>
-                <NumberControl
-                  id={'width'}
-                  name={'Width'}
-                  value={width}
-                  onChange={onInputValueChange}
-                  min={0}
-                  unit={'px'}
-                />
+                <div className="mixed-fields">
+                  <div style={{flexBasis: '80%'}}>
+                    <NumberControl
+                      id={'width'}
+                      name={'Width'}
+                      value={width}
+                      onChange={onInputValueChange}
+                      min={0}
+                    />
+                  </div>
+                  <div style={{flexBasis: '20%'}}>
+                    <SelectControl
+                      id="widthType"
+                      value={widthType}
+                      options={SizeTypeWidthOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </div>
+                </div>
               </Filter>
               <Filter isLoading={isLoading}>
-                <NumberControl
-                  id={'height'}
-                  name={'Height'}
-                  value={height}
-                  onChange={onInputValueChange}
-                  min={0}
-                  unit={'px'}
-                />
+                <div className="mixed-fields">
+                  <div style={{flexBasis: '80%'}}>
+                    <NumberControl
+                      id="height"
+                      name="Height"
+                      value={height}
+                      onChange={onInputValueChange}
+                      min={0}
+                    />
+                  </div>
+                  <div style={{flexBasis: '20%'}}>
+                    <SelectControl
+                      id="heightType"
+                      value={heightType}
+                      options={SizeTypeHeightOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </div>
+                </div>
               </Filter>
+
               <Filter isLoading={isLoading}>
                 <SwitchControl
                   id={'autoplay'}
@@ -250,76 +301,345 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                 }
               />
             </Filter>
+
+            {/* ───────────────── THUMBNAILS ───────────────── */}
             {thumbnailsPosition !== LightboxThumbnailsPosition.NONE && (
               <>
                 <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id={'thumbnailBorder'}
-                    name="Border (px)"
-                    min={0}
-                    max={20}
-                    value={thumbnailBorder}
+                  <SwitchControl
+                    id="thumbnailShowsOnHover"
+                    name="Shows on hover"
+                    value={thumbnailShowsOnHover}
                     onChange={onInputValueChange}
                   />
                 </Filter>
-                <Filter isLoading={isLoading}>
-                  <ColorControl
-                    id={'thumbnailBorderColor'}
-                    name="Border color"
-                    value={thumbnailBorderColor}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id={'thumbnailBorderRadius'}
-                    name="Border radius (%)"
-                    min={0}
-                    value={thumbnailBorderRadius}
-                    max={50}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'thumbnailWidth'}
-                    name={'Width'}
-                    value={thumbnailWidth}
-                    onChange={onInputValueChange}
-                    min={0}
-                    unit={'px'}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'thumbnailHeight'}
-                    name={'Height'}
-                    value={thumbnailHeight}
-                    onChange={onInputValueChange}
-                    min={0}
-                    unit={'px'}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id={'thumbnailGap'}
-                    name="Gap (px)"
-                    min={0}
-                    max={100}
-                    value={thumbnailGap}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id={'thumbnailPadding'}
-                    name="Distance (px)"
-                    min={0}
-                    max={100}
-                    value={thumbnailPadding}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
+
+                <>
+                  {/* LABEL */}
+                  <Grid
+                    sx={{marginLeft: 0, paddingTop: 2}}
+                    container
+                    columns={24}
+                    rowSpacing={2}
+                    columnSpacing={4}
+                  >
+                    <Filter isLoading={isLoading}>
+                      <InputLabel shrink variant="filled">
+                        <LabelWithTooltip label="Thumbnail" tooltip="" />
+                      </InputLabel>
+                    </Filter>
+                  </Grid>
+
+                  {/* CONTROLS */}
+                  <Grid
+                    container
+                    columns={24}
+                    rowSpacing={2}
+                    columnSpacing={4}
+                    className="reacg-section__container-inherit"
+                  >
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                        id={'thumbnailWidth'}
+                        name={'Width'}
+                        value={thumbnailWidth}
+                        onChange={onInputValueChange}
+                        min={0}
+                        unit={'px'}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                        id={'thumbnailHeight'}
+                        name={'Height'}
+                        value={thumbnailHeight}
+                        onChange={onInputValueChange}
+                        min={0}
+                        unit={'px'}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id={'thumbnailBackgroundColor'}
+                        name="Background color"
+                        value={thumbnailBackgroundColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'thumbnailPadding'}
+                        name="Padding (px)"
+                        min={0}
+                        max={100}
+                        value={thumbnailPadding}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'thumbnailOpacity'}
+                        name="Opacity"
+                        min={0}
+                        max={1}
+                        step={0.05}
+                        value={thumbnailOpacity}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'thumbnailBorder'}
+                        name="Border (px)"
+                        min={0}
+                        max={20}
+                        value={thumbnailBorder}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id={'thumbnailBorderColor'}
+                        name="Border color"
+                        value={thumbnailBorderColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'thumbnailBorderRadius'}
+                        name="Border radius (%)"
+                        min={0}
+                        value={thumbnailBorderRadius}
+                        max={50}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'thumbnailGap'}
+                        name="Gap (px)"
+                        min={0}
+                        max={100}
+                        value={thumbnailGap}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </Grid>
+                </>
+                {/* ─────────────────ACTIVE THUMBNAIL ───────────────── */}
+
+                <>
+                  {/* LABEL */}
+                  <Grid
+                    sx={{marginLeft: 0, paddingTop: 2}}
+                    container
+                    columns={24}
+                    rowSpacing={2}
+                    columnSpacing={4}
+                  >
+                    <Filter isLoading={isLoading}>
+                      <InputLabel shrink variant="filled">
+                        <LabelWithTooltip label="Active Thumbnail" tooltip="" />
+                      </InputLabel>
+                    </Filter>
+                  </Grid>
+
+                  {/* CONTROLS */}
+                  <Grid
+                    container
+                    columns={24}
+                    rowSpacing={2}
+                    columnSpacing={4}
+                    className="reacg-section__container-inherit"
+                  >
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                        id={'activeThumbnailWidth'}
+                        name={'Width'}
+                        value={activeThumbnailWidth}
+                        onChange={onInputValueChange}
+                        min={0}
+                        unit={'px'}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <NumberControl
+                        id={'activeThumbnailHeight'}
+                        name={'Height'}
+                        value={activeThumbnailHeight}
+                        onChange={onInputValueChange}
+                        min={0}
+                        unit={'px'}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id={'activeThumbnailBackgroundColor'}
+                        name="Background color"
+                        value={activeThumbnailBackgroundColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'activeThumbnailPadding'}
+                        name="Padding (px)"
+                        min={0}
+                        max={100}
+                        value={activeThumbnailPadding}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'activeThumbnailOpacity'}
+                        name="Opacity"
+                        min={0}
+                        max={1}
+                        step={0.05}
+                        value={activeThumbnailOpacity}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'activeThumbnailBorder'}
+                        name="Border (px)"
+                        min={0}
+                        max={20}
+                        value={activeThumbnailBorder}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id={'activeThumbnailBorderColor'}
+                        name="Border color"
+                        value={activeThumbnailBorderColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'activeThumbnailBorderRadius'}
+                        name="Border radius (%)"
+                        min={0}
+                        value={activeThumbnailBorderRadius}
+                        max={50}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'activeThumbnailGap'}
+                        name="Gap (px)"
+                        min={0}
+                        max={100}
+                        value={activeThumbnailGap}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </Grid>
+                </>
+                {/* ───────────────── THUMBNAIL BAR ───────────────── */}
+                <>
+                  {/* LABEL */}
+                  <Grid
+                    sx={{marginLeft: 0, paddingTop: 2}}
+                    container
+                    columns={24}
+                    rowSpacing={2}
+                    columnSpacing={4}
+                  >
+                    <Filter isLoading={isLoading}>
+                      <InputLabel shrink variant="filled">
+                        <LabelWithTooltip label="Thumbnail Bar" tooltip="" />
+                      </InputLabel>
+                    </Filter>
+                  </Grid>
+
+                  {/* CONTROLS */}
+                  <Grid
+                    container
+                    columns={24}
+                    rowSpacing={2}
+                    columnSpacing={4}
+                    className="reacg-section__container-inherit"
+                  >
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'thumbnailBarGap'}
+                        name="Gap (px)"
+                        min={0}
+                        max={100}
+                        value={thumbnailBarGap}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id={'thumbnailBarBackgroundColor'}
+                        name="Background color"
+                        value={thumbnailBarBackgroundColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'thumbnailBarPadding'}
+                        name="Padding (px)"
+                        min={0}
+                        max={100}
+                        value={thumbnailBarPadding}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'thumbnailBarOpacity'}
+                        name="Opacity"
+                        min={0}
+                        max={1}
+                        step={0.05}
+                        value={thumbnailBarOpacity}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'thumbnailBarBorder'}
+                        name="Border (px)"
+                        min={0}
+                        max={20}
+                        value={thumbnailBarBorder}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id={'thumbnailBarBorderColor'}
+                        name="Border color"
+                        value={thumbnailBarBorderColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SliderControl
+                        id={'thumbnailBarBorderRadius'}
+                        name="Border radius (%)"
+                        min={0}
+                        value={thumbnailBarBorderRadius}
+                        max={50}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </Grid>
+                </>
               </>
             )}
           </Grid>
@@ -1091,6 +1411,59 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const renderShadowSettings = (): ReactNode => {
+    return (
+      <Section
+        header={'Shadow'}
+        body={
+          <>
+            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id="shadow"
+                  name="Shadow"
+                  value={shadow}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+
+              {shadow && (
+                <>
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'shadowType'}
+                      name={'Type'}
+                      value={shadowType}
+                      options={SliderShadowTypeOptions}
+                      onChange={
+                        isPro
+                          ? onInputValueChange
+                          : () =>
+                              (window as any).reacg_open_premium_offer_dialog({
+                                utm_medium: 'enable_filmstrip',
+                              })
+                      }
+                    />
+                  </Filter>
+
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'shadowColor'}
+                      name="Color"
+                      value={shadowColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </>
+              )}
+            </Grid>
+          </>
+        }
+        defaultExpanded={false}
+      />
+    );
+  };
+
   const renderAdvancedSettings = (): ReactNode => {
     return (
       <Section
@@ -1264,6 +1637,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
       {renderNavigationSettings()}
       {renderPaginationSettings()}
       {renderAdvancedSettings()}
+      {renderShadowSettings()}
     </Paper>
   );
 };
