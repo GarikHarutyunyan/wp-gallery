@@ -11,13 +11,15 @@ const ErrorFallback = ({error}: any): ReactElement | null => {
   return (
     <div role={'alert'}>
       <h2>
-        {'Something went wrong?\n No worries , we’re here 24/7 to help. '}
+        {
+          'Oops! Something went wrong. Just ping us, our support team is available 24/7 and happy to help. '
+        }
         <a
-          href="https://wordpress.org/support/plugin/regallery/#new-topic-0"
+          href={(window as any).reacg_global?.support_url || ''}
           target="_blank"
           rel="noopener noreferrer"
         >
-          {'WordPress support forum'}
+          <strong>{'Contact Us'}</strong>
         </a>
       </h2>
       <h2 style={{color: 'red'}}>{`Error: ${error.message}`}</h2>

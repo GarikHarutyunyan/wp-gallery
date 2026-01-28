@@ -1,4 +1,4 @@
-import {ISelectOption} from 'components/controls';
+import { ISelectOption } from 'components/controls';
 
 export enum PaginationType {
   SIMPLE = 'simple',
@@ -10,6 +10,6 @@ export enum PaginationType {
 export const PaginationTypeOptions: ISelectOption[] = [
   {value: PaginationType.SIMPLE, title: 'Paged'},
   {value: PaginationType.LOAD_MORE, title: 'Load More'},
-  {value: PaginationType.SCROLL, title: 'Scroll Load'},
+  {value: PaginationType.SCROLL, title: 'Scroll Load', isPro: true},
   {value: PaginationType.NONE, title: 'None'},
 ];

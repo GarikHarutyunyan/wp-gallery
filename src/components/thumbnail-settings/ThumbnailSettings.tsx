@@ -56,21 +56,21 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
     padding,
     paddingColor,
     borderRadius,
+    hoverEffect,
     showTitle,
     titleSource,
-    titlePosition,
-    captionPosition,
-    titleAlignment,
-    captionVisibility,
     titleVisibility,
-    titleFontFamily,
-    titleColor,
+    titlePosition,
     titleFontSize,
+    titleColor,
+    titleAlignment,
+    titleFontFamily,
     overlayTextBackground,
     invertTextColor,
-    hoverEffect,
     showCaption,
     captionSource,
+    captionVisibility,
+    captionPosition,
     captionFontSize,
     captionFontColor,
     showDescription,
@@ -457,7 +457,20 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                     name={'Hover effect'}
                     value={hoverEffect}
                     options={HoverEffectOptions}
-                    onChange={onInputValueChange}
+                    onChange={(inputValue: any) => {
+                      if (
+                        !isPro &&
+                        HoverEffectOptions.find(
+                          (option) => option.value === inputValue
+                        )?.isPro
+                      ) {
+                        (window as any).reacg_open_premium_offer_dialog({
+                          utm_medium: 'hoverEffect',
+                        });
+                      } else {
+                        onInputValueChange(inputValue, 'hoverEffect');
+                      }
+                    }}
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>
@@ -541,7 +554,20 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                 name={'Source'}
                 value={titleSource}
                 options={TitleSourceOptions}
-                onChange={onInputValueChange}
+                onChange={(inputValue: any) => {
+                  if (
+                    !isPro &&
+                    TitleSourceOptions.find(
+                      (option) => option.value === inputValue
+                    )?.isPro
+                  ) {
+                    (window as any).reacg_open_premium_offer_dialog({
+                      utm_medium: 'titleSource',
+                    });
+                  } else {
+                    onInputValueChange(inputValue, 'titleSource');
+                  }
+                }}
               />
             </Filter>
           )}
@@ -645,7 +671,20 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                 name={'Source'}
                 value={captionSource}
                 options={CaptionSourceOptions}
-                onChange={onInputValueChange}
+                onChange={(inputValue: any) => {
+                  if (
+                    !isPro &&
+                    CaptionSourceOptions.find(
+                      (option) => option.value === inputValue
+                    )?.isPro
+                  ) {
+                    (window as any).reacg_open_premium_offer_dialog({
+                      utm_medium: 'captionSource',
+                    });
+                  } else {
+                    onInputValueChange(inputValue, 'captionSource');
+                  }
+                }}
               />
             </Filter>
           )}
@@ -747,7 +786,20 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                 name={'Source'}
                 value={descriptionSource}
                 options={DescriptionSourceOptions}
-                onChange={onInputValueChange}
+                onChange={(inputValue: any) => {
+                  if (
+                    !isPro &&
+                    DescriptionSourceOptions.find(
+                      (option) => option.value === inputValue
+                    )?.isPro
+                  ) {
+                    (window as any).reacg_open_premium_offer_dialog({
+                      utm_medium: 'descriptionSource',
+                    });
+                  } else {
+                    onInputValueChange(inputValue, 'descriptionSource');
+                  }
+                }}
               />
             </Filter>
           )}

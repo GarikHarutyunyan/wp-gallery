@@ -153,10 +153,14 @@
   color: #85a3b8 !important;
   font-size: 1.2rem !important;
 }
-.Mui-selected svg path,
-.MuiSelect-outlined svg path {
-  fill: #155c92 !important;
+
+.reacg-settings-panel-tabs .Mui-selected svg path,
+.Mui-selected .type-panel-select__body svg path,
+.MuiSelect-outlined .type-panel-select__body svg path {
+  fill: #155c92;
 }
+
+.reacg-settings-panel-tabs .Mui-selected,
 .Mui-selected .type-panel-select__title,
 .MuiSelect-outlined .type-panel-select__title {
   color: #155c92 !important;

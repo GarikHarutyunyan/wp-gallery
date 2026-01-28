@@ -14,7 +14,7 @@ export const CaptionSourceOptions = [
   {value: CaptionSource.CAPTION, title: 'Item Caption'},
   {value: CaptionSource.ALT, title: 'Item Alt'},
   {value: CaptionSource.DESCRIPTION, title: 'Item Description'},
-  {value: CaptionSource.PRICE, title: 'Product Price'},
+  {value: CaptionSource.PRICE, title: 'Product Price', isPro: true},
   {value: CaptionSource.AUTHOR, title: 'Author'},
   {value: CaptionSource.DATECREATED, title: 'Date Created'},
   {value: CaptionSource.EXIF, title: 'Image EXIF'},

@@ -8,6 +8,7 @@ import {
   needHelpConfig,
   newHereConfig,
   premiumConfig,
+  specialOfferConfig,
 } from './AlertDialog.constants';
 import {AlertConfig} from './AlertDialog.types';
 
@@ -37,6 +38,9 @@ const AlertDialog: React.FC<IAlertDialogProps> = () => {
       handleOpen({...newHereConfig, ...customConfig});
     (window as any).reacg_open_error_dialog = (customConfig: AlertConfig) =>
       handleOpen({...errorConfig, ...customConfig});
+    (window as any).reacg_open_special_offer_dialog = (
+      customConfig: AlertConfig
+    ) => handleOpen({...specialOfferConfig, ...customConfig});
   }, []);
 
   const handleOpen = (newConfig: AlertConfig) => {
@@ -57,10 +61,10 @@ const AlertDialog: React.FC<IAlertDialogProps> = () => {
 
   return (
     <Dialog
-      sx={{borderRadius: 4}}
+      sx={{borderRadius: 2}}
       open={isVisible}
       onClose={handleClose}
-      PaperProps={{sx: {borderRadius: 6}}}
+      PaperProps={{sx: {borderRadius: 4}}}
     >
       <IconButton onClick={handleClose} className={'modal-close'}>
         <CloseIcon />

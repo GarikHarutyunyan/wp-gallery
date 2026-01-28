@@ -365,7 +365,20 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                       name={'Source'}
                       value={titleSource}
                       options={TitleSourceOptions}
-                      onChange={onInputValueChange}
+                      onChange={(inputValue: any) => {
+                        if (
+                          !isPro &&
+                          TitleSourceOptions.find(
+                            (option) => option.value === inputValue
+                          )?.isPro
+                        ) {
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'titleSource',
+                          });
+                        } else {
+                          onInputValueChange(inputValue, 'titleSource');
+                        }
+                      }}
                     />
                   </Filter>
                 )}
@@ -452,7 +465,20 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                       name={'Source'}
                       value={captionSource}
                       options={CaptionSourceOptions}
-                      onChange={onInputValueChange}
+                      onChange={(inputValue: any) => {
+                        if (
+                          !isPro &&
+                          CaptionSourceOptions.find(
+                            (option) => option.value === inputValue
+                          )?.isPro
+                        ) {
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'captionSource',
+                          });
+                        } else {
+                          onInputValueChange(inputValue, 'captionSource');
+                        }
+                      }}
                     />
                   </Filter>
                 )}
@@ -529,7 +555,20 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                       name={'Source'}
                       value={descriptionSource}
                       options={DescriptionSourceOptions}
-                      onChange={onInputValueChange}
+                      onChange={(inputValue: any) => {
+                        if (
+                          !isPro &&
+                          DescriptionSourceOptions.find(
+                            (option) => option.value === inputValue
+                          )?.isPro
+                        ) {
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'descriptionSource',
+                          });
+                        } else {
+                          onInputValueChange(inputValue, 'descriptionSource');
+                        }
+                      }}
                     />
                   </Filter>
                 )}

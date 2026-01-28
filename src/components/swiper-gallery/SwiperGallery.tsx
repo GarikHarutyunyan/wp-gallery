@@ -232,6 +232,10 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
               onClick?.(normalizedIndex);
             }}
             className={slideClassName}
+            style={{
+              backgroundColor: key !== 'coverflowEffect' ? backgroundColor : '',
+              padding: key !== 'coverflowEffect' ? padding + 'px' : 0,
+            }}
           >
             <SwiperImage
               key={index}

@@ -28,18 +28,6 @@ interface IThumbnailImageProps {
   height: number;
   onClick?: () => void;
   getImageSource: (image: IImageDTO) => string;
-  showTitle: boolean;
-  titleSource: TitleSource;
-  titlePosition: ThumbnailTitlePosition;
-  captionPosition: ThumbnailTitlePosition;
-  captionVisibility: TitleVisibility;
-  titleVisibility: TitleVisibility;
-  titleAlignment?: TitleAlignment;
-  titleFontFamily?: string;
-  titleColor?: string;
-  titleFontSize?: number | undefined;
-  overlayTextBackground: string;
-  invertTextColor: boolean;
   itemBorder: number;
   itemBackgroundColor: string;
   itemBorderRadius: number;
@@ -47,8 +35,20 @@ interface IThumbnailImageProps {
   borderRadius?: number;
   margin?: number;
   hoverEffect?: string;
+  showTitle: boolean;
+  titleSource: TitleSource;
+  captionVisibility: TitleVisibility;
+  titlePosition: ThumbnailTitlePosition;
+  titleVisibility: TitleVisibility;
+  titleFontSize?: number | undefined;
+  titleColor?: string;
+  titleAlignment?: TitleAlignment;
+  titleFontFamily?: string;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
   showCaption: boolean;
   captionSource: CaptionSource;
+  captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor?: string;
   showDescription: boolean;
@@ -65,18 +65,6 @@ const ThumbnailImage = ({
   height,
   onClick,
   getImageSource,
-  showTitle,
-  titleSource,
-  titlePosition,
-  captionPosition,
-  captionVisibility,
-  titleVisibility,
-  titleAlignment,
-  titleFontFamily,
-  titleColor,
-  titleFontSize,
-  overlayTextBackground,
-  invertTextColor,
   itemBorder,
   itemBackgroundColor,
   itemBorderRadius,
@@ -84,8 +72,20 @@ const ThumbnailImage = ({
   borderRadius,
   margin,
   hoverEffect,
+  showTitle,
+  titleSource,
+  titleVisibility,
+  titlePosition,
+  titleFontSize,
+  titleColor,
+  titleAlignment,
+  titleFontFamily,
+  overlayTextBackground,
+  invertTextColor,
   showCaption,
   captionSource,
+  captionVisibility,
+  captionPosition,
   captionFontSize,
   captionFontColor,
   showDescription,

@@ -1,3 +1,90 @@
+.reacg-gallery
+  .swiper-gallery__image-wrapper:hover
+  .swiper-gallery__title_on-hover {
+  opacity: 1;
+  pointer-events: none;
+}
+.reacg-gallery
+  .swiper-gallery__image-wrapper:hover
+  .swiper-gallery__title_on-hover
+  > div {
+  -webkit-transform: translate3d(0, 0px, 0);
+  transform: translate3d(0, 0px, 0);
+}
+.reacg-gallery .swiper-gallery__title_on-hover {
+  opacity: 0;
+  -webkit-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.reacg-gallery
+  .swiper-gallery__title_on-hover
+  .swiper-gallery__title-content_bottom {
+  -webkit-transform: translate3d(0, 50%, 0);
+  transform: translate3d(0, 50%, 0);
+  -webkit-transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
+}
+
+.reacg-gallery
+  .swiper-gallery__title_on-hover
+  .swiper-gallery__title-content_top {
+  -webkit-transform: translate3d(0, -50%, 0);
+  transform: translate3d(0, -50%, 0);
+  -webkit-transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
+}
+
+.reacg-gallery .swiper-gallery__title_hidden {
+  display: none;
+}
+
+.reacg-gallery .swiper-gallery__title-content_center {
+  text-align: center;
+  height: 100%;
+}
+.reacg-gallery .swiper-gallery__title > div {
+  -webkit-transition: background 0.3s ease-in-out;
+  transition: background 0.3s ease-in-out;
+}
+.reacg-gallery
+  [class*='swiper-gallery__image-wrapper_overlay']:hover
+  .swiper-gallery__title
+  > div,
+.reacg-gallery
+  [class*='swiper-gallery__image-wrapper_overlay']
+  .swiper-gallery__title_on-hover
+  > div {
+  background: none !important;
+}
+.reacg-gallery
+  .swiper-gallery__image-wrapper_overlay:hover
+  .swiper-gallery__title
+  > div {
+  background: none;
+}
+.reacg-gallery
+  [class*='swiper-gallery__image-wrapper_overlay-icon']:hover
+  .swiper-gallery__title_on-hover {
+  display: unset;
+}
+.reacg-gallery
+  [class*='swiper-gallery__image-wrapper_overlay-icon']:hover
+  .swiper-gallery__title-content_center
+  > div {
+  margin-top: 80px;
+}
+.reacg-gallery
+  [class*='swiper-gallery__image-wrapper_overlay-icon']
+  .swiper-gallery__title-content_center
+  > div {
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.reacg-gallery .swiper-gallery__title .MuiImageListItemBar-titleWrap {
+  color: inherit;
+}
+
 .reacg-gallery .swiper-slide img,
 .reacg-gallery .swiper-slide video {
   display: block;
@@ -23,6 +110,7 @@
 .reacg-gallery .swiper-slide {
   background-position: center;
   background-size: cover;
+  box-sizing: border-box;
 }
 .reacg-gallery .swiper-coverflow .swiper-slide {
   pointer-events: fill;
