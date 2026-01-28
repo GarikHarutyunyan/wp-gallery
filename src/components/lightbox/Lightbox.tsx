@@ -314,6 +314,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   }, []);
 
   const updateURL = (index: number) => {
+    if (window.location.protocol === 'blob:') return;
     window.history.replaceState({}, '', deepLink(index));
   };
 
