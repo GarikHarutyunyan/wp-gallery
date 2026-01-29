@@ -85,12 +85,23 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   } = useTemplates();
   const {
     galleryId,
-    pluginVersion,
     showControls,
     baseUrl,
     nonce,
     getOptionsTimestamp,
+    optionsContainerSelector,
   } = useAppInfo();
+  const docElement =
+    optionsContainerSelector &&
+    (document?.querySelector(optionsContainerSelector) as HTMLElement | null);
+  const parentElement =
+    optionsContainerSelector &&
+    // eslint-disable-next-line no-restricted-globals
+    (parent?.document.querySelector(
+      optionsContainerSelector
+    ) as HTMLElement | null);
+  const shouldRenderSettings: boolean =
+    !!showControls && (!!docElement || !!parentElement);
   const [thumbnailSettings, setThumbnailSettings] =
     useState<IThumbnailSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
@@ -208,7 +219,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const currentData = allData?.[galleryId as string];
     const hasFirstChunk: boolean = currentData?.options;
 
-    if (!hasFirstChunk || showControls) {
+    if (!hasFirstChunk || shouldRenderSettings) {
       getData();
     } else {
       getDataFromWindow();
@@ -466,7 +477,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeImagesCount: setImagesCount,
       }}
     >
-      {showControls && (
+      {shouldRenderSettings && (
         <Suspense>
           <SettingsSections
             isLoading={isLoading || !!areTemplatesLoading}
