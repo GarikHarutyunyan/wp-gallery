@@ -101,6 +101,33 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
           onClick={onClick}
           slideClassName={clsx({carousel__slide_clickable: !!onClick})}
           settings={settings as ICarouselSettings}
+          breakpoints={{
+            // when window width is >= 0
+            0: {
+              slidesPerView: imagesCount > 1 ? 1 : imagesCount,
+              spaceBetween: spaceBetween < 0 ? spaceBetween : 0,
+            },
+            // when window width is >= 480px
+            480: {
+              slidesPerView: imagesCount > 2 ? 2 : imagesCount,
+              spaceBetween: spaceBetween < 20 ? spaceBetween : 20,
+            },
+            // when window width is >= 640px
+            640: {
+              slidesPerView: imagesCount > 3 ? 3 : imagesCount,
+              spaceBetween: spaceBetween < 30 ? spaceBetween : 30,
+            },
+            // when window width is >= 1024px
+            1024: {
+              slidesPerView: imagesCount > 4 ? 4 : imagesCount,
+              spaceBetween: spaceBetween < 40 ? spaceBetween : 40,
+            },
+            // when window width is >= 1280px
+            1280: {
+              slidesPerView: imagesCount,
+              spaceBetween: spaceBetween,
+            },
+          }}
         />
       )}
     </Box>
