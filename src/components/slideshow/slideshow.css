@@ -35,8 +35,10 @@
 }
 
 .yarl__slide_captions_container {
-  padding-left: 18px;
-  padding-right: 18px;
+  padding: 0;
+}
+.yarl__slide_captions_container .yarl__slide_description {
+  padding: 10px 18px;
 }
 
 .reacg-slideshow-texts_top {
