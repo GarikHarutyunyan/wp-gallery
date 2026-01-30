@@ -81,6 +81,14 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           'photo-album-item__title_on-hover':
             showTitle && titleVisibility === TitleVisibility.ON_HOVER,
           'photo-album-item__title_hidden': !showTitle,
+          'reacg-gallery__text-background-top-gradient':
+            overlayTextBackground === '' && titlePosition === TitlePosition.TOP,
+          'reacg-gallery__text-background-bottom-gradient':
+            overlayTextBackground === '' &&
+            titlePosition === TitlePosition.BOTTOM,
+          'reacg-gallery__text-background-center-gradient':
+            overlayTextBackground === '' &&
+            titlePosition === TitlePosition.CENTER,
         })}
       >
         <ImageListItemBar
@@ -137,6 +145,15 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           'photo-album-item__title_on-hover':
             showCaption && captionVisibility === TitleVisibility.ON_HOVER,
           'photo-album-item__title_hidden': !showCaption,
+          'reacg-gallery__text-background-top-gradient':
+            overlayTextBackground === '' &&
+            captionPosition === TitlePosition.TOP,
+          'reacg-gallery__text-background-bottom-gradient':
+            overlayTextBackground === '' &&
+            captionPosition === TitlePosition.BOTTOM,
+          'reacg-gallery__text-background-center-gradient':
+            overlayTextBackground === '' &&
+            captionPosition === TitlePosition.CENTER,
         })}
       >
         <ImageListItemBar

@@ -98,6 +98,15 @@ const SwiperImage = forwardRef(
               showTitle &&
               (titlePosition === ThumbnailTitlePosition.BELOW ||
                 titlePosition === ThumbnailTitlePosition.ABOVE),
+            'reacg-gallery__text-background-top-gradient':
+              overlayTextBackground === '' &&
+              titlePosition === ThumbnailTitlePosition.TOP,
+            'reacg-gallery__text-background-bottom-gradient':
+              overlayTextBackground === '' &&
+              titlePosition === ThumbnailTitlePosition.BOTTOM,
+            'reacg-gallery__text-background-center-gradient':
+              overlayTextBackground === '' &&
+              titlePosition === ThumbnailTitlePosition.CENTER,
           })}
           style={{
             paddingLeft: itemPaddingText,
@@ -186,6 +195,15 @@ const SwiperImage = forwardRef(
               showCaption &&
               (captionPosition === ThumbnailTitlePosition.BELOW ||
                 captionPosition === ThumbnailTitlePosition.ABOVE),
+            'reacg-gallery__text-background-top-gradient':
+              overlayTextBackground === '' &&
+              captionPosition === ThumbnailTitlePosition.TOP,
+            'reacg-gallery__text-background-bottom-gradient':
+              overlayTextBackground === '' &&
+              captionPosition === ThumbnailTitlePosition.BOTTOM,
+            'reacg-gallery__text-background-center-gradient':
+              overlayTextBackground === '' &&
+              captionPosition === ThumbnailTitlePosition.CENTER,
           })}
           style={{
             paddingLeft: itemPaddingText,
