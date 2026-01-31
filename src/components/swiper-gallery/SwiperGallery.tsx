@@ -41,6 +41,7 @@ interface ISwiperGalleryProps {
   allowTouchMove: boolean;
   perSlideOffset?: any;
   settings: ICubeSettings | ICardsSettings | ICarouselSettings;
+  breakpoints?: any;
   titleCaptionHeight?: number;
   onClick?: (index: number) => void;
 }
@@ -65,9 +66,13 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   allowTouchMove,
   perSlideOffset,
   settings,
+  breakpoints,
   titleCaptionHeight,
   onClick,
 }) => {
+  if (!padding) {
+    padding = 0;
+  }
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const [paddingTop, setPaddingTop] = useState<number>(0);
@@ -186,6 +191,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       pagination={false}
       className={className}
       loopAdditionalSlides={0}
+      breakpoints={breakpoints}
       onInit={() => {
         const swiper = swiperRef.current?.swiper;
         handleOnChangeVideoAutoPlayAndPause(swiper, false); // Don't pause anything on init
