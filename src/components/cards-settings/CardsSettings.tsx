@@ -18,12 +18,15 @@ import {
   CaptionSourceOptions,
   HoverEffectOptions,
   ICardsSettings,
+  ThumbnailTitlePosition,
+  ThumbnailTitlePositionOptions,
   TitleAlignmentOptions,
-  TitlePositionOptions,
   TitleSourceOptions,
+  TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useMemo} from 'react';
+import {ISelectOption} from '../controls';
 import {LabelWithTooltip} from '../controls/LabelWithTooltip';
 import {Filter} from '../settings/Filter';
 
@@ -65,6 +68,35 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
     resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
   };
+
+  const titlePositionOptions: ISelectOption[] = useMemo(() => {
+    let options = [...ThumbnailTitlePositionOptions]; // Copy, never mutate original.
+
+    if (titleVisibility === TitleVisibility.ON_HOVER) {
+      // Remove BELOW and ABOVE completely.
+      options = options.filter(
+        (option) =>
+          option.value !== ThumbnailTitlePosition.BELOW &&
+          option.value !== ThumbnailTitlePosition.ABOVE
+      );
+
+      // If current value is BELOW or ABOVE, replace with fallback.
+      if (titlePosition === ThumbnailTitlePosition.BELOW) {
+        onChange({
+          ...value,
+          titlePosition: ThumbnailTitlePosition.BOTTOM,
+        });
+      }
+      if (titlePosition === ThumbnailTitlePosition.ABOVE) {
+        onChange({
+          ...value,
+          titlePosition: ThumbnailTitlePosition.TOP,
+        });
+      }
+    }
+
+    return options;
+  }, [titlePosition, titleVisibility, onChange, value]);
 
   const {isPro} = usePro();
 
@@ -255,7 +287,7 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
                 id={'titlePosition'}
                 name={'Position'}
                 value={titlePosition}
-                options={TitlePositionOptions}
+                options={titlePositionOptions}
                 onChange={onInputValueChange}
               />
             </Filter>
@@ -368,7 +400,7 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
                 id={'captionPosition'}
                 name={'Position'}
                 value={captionPosition}
-                options={TitlePositionOptions}
+                options={titlePositionOptions}
                 onChange={onInputValueChange}
               />
             </Filter>
