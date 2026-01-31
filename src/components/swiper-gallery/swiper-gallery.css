@@ -131,14 +131,6 @@
 .swiper-gallery__video.no-pointer {
   pointer-events: none;
 }
-.reacg-gallery .swiper-button-next,
-.reacg-gallery .swiper-button-prev {
-  color: hsla(0, 0%, 100%, 0.8);
-  width: 60px;
-  height: 60px;
-  top: calc(50% - 30px);
-  margin-top: 0;
-}
 .reacg-gallery .swiper-button-next:after,
 .swiper-rtl .swiper-button-prev:after,
 .reacg-gallery .swiper-button-prev:after,
@@ -172,11 +164,10 @@
 }
 
 .reacg-gallery button.playPauseButton {
-  color: hsla(0, 0%, 100%, 0.8);
+  color: var(--swiper-navigation-color, hsla(0, 0%, 100%, 0.8));
   position: absolute;
   height: 40px;
   width: 40px;
-  top: calc(50% - 20px);
   left: calc(50% - 20px);
   z-index: 100;
 }

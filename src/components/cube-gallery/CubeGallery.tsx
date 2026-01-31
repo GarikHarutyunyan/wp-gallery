@@ -35,6 +35,12 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
     autoplay,
     slideDuration,
     shadow,
+    showTitle,
+    showCaption,
+    titlePosition,
+    captionPosition,
+    titleFontSize,
+    captionFontSize,
   } = settings as ICubeSettings;
   const wrapper = wrapperRef.current;
   const [innerWidth, setInnerWidth] = useState<number>(
@@ -43,6 +49,8 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
   const ratio: number = width / height;
   const containerWidth: number = Math.min(innerWidth, width);
   const containerHeight: number = containerWidth / ratio;
+
+  const [titleCaptionHeight, setTitleCaptionHeight] = useState(0);
   const galleryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -66,12 +74,57 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
     }
   }, [shadow]);
 
+  useEffect(() => {
+    if (!galleryRef.current) return;
+
+    const measureTitleCaptionHeight = () => {
+      const title = galleryRef.current?.querySelector(
+        '.swiper-gallery__title-caption.swiper-gallery__item-outline'
+      ) as HTMLElement;
+      const caption = galleryRef.current?.querySelector(
+        '.swiper-gallery__caption.swiper-gallery__item-outline'
+      ) as HTMLElement;
+
+      let totalHeight = 0;
+      if (title) totalHeight += title.offsetHeight;
+      if (caption) totalHeight += caption.offsetHeight;
+
+      setTitleCaptionHeight(totalHeight);
+    };
+
+    // Initial measurement
+    measureTitleCaptionHeight();
+
+    // Watch for changes using ResizeObserver
+    const resizeObserver = new ResizeObserver(() => {
+      measureTitleCaptionHeight();
+    });
+
+    const swiperSlide = galleryRef.current.querySelector(
+      '.swiper-slide'
+    ) as HTMLElement;
+    if (swiperSlide) {
+      resizeObserver.observe(swiperSlide);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [
+    showTitle,
+    showCaption,
+    titlePosition,
+    captionPosition,
+    titleFontSize,
+    captionFontSize,
+  ]);
+
   return (
     <Box
       ref={galleryRef}
       sx={{
         width: `${containerWidth}px`,
-        height: `${containerHeight}px`,
+        height: `${containerHeight + titleCaptionHeight}px`,
         mx: 'auto',
       }}
     >
@@ -89,6 +142,7 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
         preLoadCount={4}
         allowTouchMove={true}
         settings={settings as ICubeSettings}
+        titleCaptionHeight={titleCaptionHeight}
         onClick={onClick}
       />
     </Box>
