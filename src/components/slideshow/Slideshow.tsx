@@ -407,6 +407,12 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
             ].includes(textPosition),
             'reacg-slideshow-is-full-cover-image': isFullCoverImage,
             'reacg-invert-captions': invertTextColor,
+            'reacg-slideshow-gallery__text-background-top-gradient':
+              textBackground === '' &&
+              textPosition === LightboxTextPosition.TOP,
+            'reacg-slideshow-gallery__text-background-bottom-gradient':
+              textBackground === '' &&
+              textPosition === LightboxTextPosition.BOTTOM,
           }
         )}
         styles={{

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {ICarouselSettings} from 'data-structures';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Autoplay, EffectCoverflow, Navigation} from 'swiper/modules';
 import {SwiperGallery} from '../swiper-gallery/SwiperGallery';
 import './carousel.css';
@@ -26,6 +26,12 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     imagesCount,
     spaceBetween,
     scale,
+    showTitle,
+    showCaption,
+    titlePosition,
+    captionPosition,
+    titleFontSize,
+    captionFontSize,
   } = settings as ICarouselSettings;
 
   const effects = {
@@ -61,6 +67,53 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
 
   const carouselImages = shouldDuplicate ? [...images, ...images] : images;
 
+  const [titleCaptionHeight, setTitleCaptionHeight] = useState(0);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!galleryRef.current) return;
+
+    const measureTitleCaptionHeight = () => {
+      const title = galleryRef.current?.querySelector(
+        '.swiper-gallery__title-caption.swiper-gallery__item-outline'
+      ) as HTMLElement;
+      const caption = galleryRef.current?.querySelector(
+        '.swiper-gallery__caption.swiper-gallery__item-outline'
+      ) as HTMLElement;
+
+      let totalHeight = 0;
+      if (title) totalHeight += title.offsetHeight;
+      if (caption) totalHeight += caption.offsetHeight;
+
+      setTitleCaptionHeight(totalHeight);
+    };
+
+    // Initial measurement
+    measureTitleCaptionHeight();
+
+    // Watch for changes using ResizeObserver
+    const resizeObserver = new ResizeObserver(() => {
+      measureTitleCaptionHeight();
+    });
+
+    const swiperSlide = galleryRef.current.querySelector(
+      '.swiper-slide'
+    ) as HTMLElement;
+    if (swiperSlide) {
+      resizeObserver.observe(swiperSlide);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [
+    showTitle,
+    showCaption,
+    titlePosition,
+    captionPosition,
+    titleFontSize,
+    captionFontSize,
+  ]);
+
   useEffect(() => {
     const handleResize = () => {
       setInnerWidth(wrapper?.clientWidth || contWidth);
@@ -71,9 +124,10 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   }, [wrapper?.clientWidth]);
   return (
     <Box
+      ref={galleryRef}
       sx={{
         width: `${containerWidth}px`,
-        height: `${containerHeight}px`,
+        height: `${containerHeight + titleCaptionHeight}px`,
         mx: 'auto',
         background: backgroundColor,
         padding: `${padding}px`,
@@ -91,7 +145,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
           delay={slideDuration}
           playAndPauseAllowed={playAndPauseAllowed}
           width={containerWidth}
-          height={containerHeight}
+          height={containerHeight + titleCaptionHeight}
           size={Math.max(width, height)}
           imagesCount={imagesCount}
           preLoadCount={imagesCount + 2}
@@ -128,6 +182,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
               spaceBetween: spaceBetween,
             },
           }}
+          titleCaptionHeight={titleCaptionHeight}
         />
       )}
     </Box>

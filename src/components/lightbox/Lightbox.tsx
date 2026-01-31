@@ -558,6 +558,12 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               LightboxTextPosition.ABOVE,
             ].includes(textPosition),
             'reacg-invert-captions': invertTextColor,
+            'reacg-slideshow-gallery__text-background-top-gradient':
+              textBackground === '' &&
+              textPosition === LightboxTextPosition.TOP,
+            'reacg-slideshow-gallery__text-background-bottom-gradient':
+              textBackground === '' &&
+              textPosition === LightboxTextPosition.BOTTOM,
           }
         )}
         styles={{
