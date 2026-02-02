@@ -61,7 +61,8 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   );
   const ratio: number = contWidth / height;
   const containerWidth: number = Math.min(innerWidth, contWidth);
-  const containerHeight: number = containerWidth / ratio;
+  const containerHeight: number =
+    innerWidth >= 480 ? containerWidth / ratio : height;
   // This ensures that Swiper functions correctly in infinite loop mode when the total number of images is less than the number of visible slides
   const shouldDuplicate = images.length > 1 && imagesCount * 2 > images.length;
 
