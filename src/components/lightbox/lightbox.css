@@ -25,7 +25,6 @@
 .react-lightbox--no-scroll {
   overflow: hidden;
   overscroll-behavior: none;
-  height: auto;
 }
 .reacg-slideshow:hover .yarl__toolbar {
   visibility: unset;
