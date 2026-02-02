@@ -277,7 +277,7 @@ const SwiperImage = forwardRef(
             />
           ) : (
             <div
-              style={{position: 'relative', width: '100%', height: '100%'}}
+              style={{position: 'absolute', width: '100%', height: '100%'}}
               onClick={(e) => {
                 const video = videoRef?.current;
 
