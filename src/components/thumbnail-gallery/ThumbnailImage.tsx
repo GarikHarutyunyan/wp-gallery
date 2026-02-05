@@ -135,6 +135,15 @@ const ThumbnailImage = ({
             showTitle &&
             (titlePosition === ThumbnailTitlePosition.BELOW ||
               titlePosition === ThumbnailTitlePosition.ABOVE),
+          'reacg-gallery__text-background-top-gradient':
+            overlayTextBackground === 'unset' &&
+            titlePosition === ThumbnailTitlePosition.TOP,
+          'reacg-gallery__text-background-bottom-gradient':
+            overlayTextBackground === 'unset' &&
+            titlePosition === ThumbnailTitlePosition.BOTTOM,
+          'reacg-gallery__text-background-center-gradient':
+            overlayTextBackground === 'unset' &&
+            titlePosition === ThumbnailTitlePosition.CENTER,
         })}
         style={{
           paddingLeft: itemPaddingText,
@@ -221,6 +230,15 @@ const ThumbnailImage = ({
             showCaption &&
             (captionPosition === ThumbnailTitlePosition.BELOW ||
               captionPosition === ThumbnailTitlePosition.ABOVE),
+          'reacg-gallery__text-background-top-gradient':
+            overlayTextBackground === 'unset' &&
+            captionPosition === ThumbnailTitlePosition.TOP,
+          'reacg-gallery__text-background-bottom-gradient':
+            overlayTextBackground === 'unset' &&
+            captionPosition === ThumbnailTitlePosition.BOTTOM,
+          'reacg-gallery__text-background-center-gradient':
+            overlayTextBackground === 'unset' &&
+            captionPosition === ThumbnailTitlePosition.CENTER,
         })}
         style={{
           paddingLeft: itemPaddingText,

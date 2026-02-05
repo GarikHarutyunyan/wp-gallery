@@ -262,13 +262,24 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   ]);
 
   const togglePageScroll = (open: boolean) => {
-    // Scroll is toggled on <body> by default; <html> should be handled as well.
+    // Toggle scroll by the custom class to avoid toggle height with .yarl__no_scroll
     const html = document.documentElement;
+    const body = document.body;
 
     if (open) {
-      html.classList.add('react-lightbox--no-scroll');
+      if (html) {
+        html.classList.add('react-lightbox--no-scroll');
+      }
+      if (body) {
+        body.classList.add('react-lightbox--no-scroll');
+      }
     } else {
-      html.classList.remove('react-lightbox--no-scroll');
+      if (html) {
+        html.classList.remove('react-lightbox--no-scroll');
+      }
+      if (body) {
+        body.classList.remove('react-lightbox--no-scroll');
+      }
     }
   };
 
@@ -501,7 +512,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         slides={slides}
         controller={{closeOnBackdropClick: !drag}}
         noScroll={{
-          disabled: false,
+          disabled: true,
         }}
         counter={{
           separator: '/',
@@ -558,6 +569,12 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               LightboxTextPosition.ABOVE,
             ].includes(textPosition),
             'reacg-invert-captions': invertTextColor,
+            'reacg-slideshow-gallery__text-background-top-gradient':
+              textBackground === '' &&
+              textPosition === LightboxTextPosition.TOP,
+            'reacg-slideshow-gallery__text-background-bottom-gradient':
+              textBackground === '' &&
+              textPosition === LightboxTextPosition.BOTTOM,
           }
         )}
         styles={{

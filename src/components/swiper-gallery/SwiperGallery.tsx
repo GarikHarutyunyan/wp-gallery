@@ -7,6 +7,7 @@ import {
   ICubeSettings,
   IImageDTO,
   ImageType,
+  ThumbnailTitlePosition,
 } from 'data-structures';
 import React, {useEffect, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
@@ -40,6 +41,8 @@ interface ISwiperGalleryProps {
   allowTouchMove: boolean;
   perSlideOffset?: any;
   settings: ICubeSettings | ICardsSettings | ICarouselSettings;
+  breakpoints?: any;
+  titleCaptionHeight?: number;
   onClick?: (index: number) => void;
 }
 
@@ -63,8 +66,13 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   allowTouchMove,
   perSlideOffset,
   settings,
+  breakpoints,
+  titleCaptionHeight,
   onClick,
 }) => {
+  if (!padding) {
+    padding = 0;
+  }
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const [paddingTop, setPaddingTop] = useState<number>(0);
@@ -183,6 +191,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       pagination={false}
       className={className}
       loopAdditionalSlides={0}
+      breakpoints={breakpoints}
       onInit={() => {
         const swiper = swiperRef.current?.swiper;
         handleOnChangeVideoAutoPlayAndPause(swiper, false); // Don't pause anything on init
@@ -201,19 +210,38 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         videos.forEach((v) => v.classList.remove('no-pointer'));
       }}
       {...effects}
-      style={
-        key === 'cardsEffect' || key === 'cubeEffect'
-          ? {
-              width,
-              height,
-            }
+      style={{
+        '--swiper-navigation-size': '60px',
+        '--swiper-navigation-color': 'hsla(0, 0%, 100%, 0.8)',
+        '--swiper-navigation-top-offset': `calc(50% + ${
+          titleCaptionHeight &&
+          ((settings.titlePosition === ThumbnailTitlePosition.ABOVE &&
+            settings.titlePosition === settings.captionPosition) ||
+          ((settings.titlePosition === ThumbnailTitlePosition.ABOVE ||
+            settings.captionPosition === ThumbnailTitlePosition.ABOVE) &&
+            settings.titlePosition !== ThumbnailTitlePosition.BELOW &&
+            settings.captionPosition !== ThumbnailTitlePosition.BELOW &&
+            settings.titlePosition !== settings.captionPosition)
+            ? titleCaptionHeight / 2
+            : (settings.titlePosition === ThumbnailTitlePosition.BELOW &&
+                settings.titlePosition === settings.captionPosition) ||
+              ((settings.titlePosition === ThumbnailTitlePosition.BELOW ||
+                settings.captionPosition === ThumbnailTitlePosition.BELOW) &&
+                settings.titlePosition !== ThumbnailTitlePosition.ABOVE &&
+                settings.captionPosition !== ThumbnailTitlePosition.ABOVE &&
+                settings.titlePosition !== settings.captionPosition)
+            ? -titleCaptionHeight / 2
+            : 0)
+        }px)`,
+        ...(key === 'cardsEffect' || key === 'cubeEffect'
+          ? {width, height}
           : key === 'coverflowEffect'
           ? {
               paddingTop: `${paddingTop}px`,
               paddingBottom: `${paddingTop}px`,
             }
-          : {}
-      }
+          : {}),
+      }}
     >
       {images?.map((image: IImageDTO, index) => {
         const isVideo: boolean = image.type === ImageType.VIDEO;
@@ -248,6 +276,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
               size={size}
               galleryKey={key}
               settings={settings}
+              titleCaptionHeight={titleCaptionHeight}
             />
           </SwiperSlide>
         );
@@ -258,6 +287,29 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           onClick={isPlaying ? handlePause : handlePlay}
           aria-label={isPlaying ? 'pause' : 'play'}
           size="large"
+          style={{
+            top: `calc(50% + ${
+              titleCaptionHeight &&
+              ((settings.titlePosition === ThumbnailTitlePosition.ABOVE &&
+                settings.titlePosition === settings.captionPosition) ||
+              ((settings.titlePosition === ThumbnailTitlePosition.ABOVE ||
+                settings.captionPosition === ThumbnailTitlePosition.ABOVE) &&
+                settings.titlePosition !== ThumbnailTitlePosition.BELOW &&
+                settings.captionPosition !== ThumbnailTitlePosition.BELOW &&
+                settings.titlePosition !== settings.captionPosition)
+                ? titleCaptionHeight / 2
+                : (settings.titlePosition === ThumbnailTitlePosition.BELOW &&
+                    settings.titlePosition === settings.captionPosition) ||
+                  ((settings.titlePosition === ThumbnailTitlePosition.BELOW ||
+                    settings.captionPosition ===
+                      ThumbnailTitlePosition.BELOW) &&
+                    settings.titlePosition !== ThumbnailTitlePosition.ABOVE &&
+                    settings.captionPosition !== ThumbnailTitlePosition.ABOVE &&
+                    settings.titlePosition !== settings.captionPosition)
+                ? -titleCaptionHeight / 2
+                : 0)
+            }px - 20px)`,
+          }}
         >
           {isPlaying ? (
             <PauseIcon fontSize="inherit" />

@@ -23,6 +23,7 @@ interface ISwiperImageProps {
   padding?: number;
   size?: number;
   settings: ICubeSettings | ICardsSettings | ICarouselSettings;
+  titleCaptionHeight?: number;
 }
 
 const SwiperImage = forwardRef(
@@ -37,6 +38,7 @@ const SwiperImage = forwardRef(
       size,
       galleryKey: key,
       settings,
+      titleCaptionHeight,
     }: ISwiperImageProps,
     ref
   ) => {
@@ -87,18 +89,30 @@ const SwiperImage = forwardRef(
 
       return (
         <div
-          className={clsx('swiper-gallery__title', {
-            'swiper-gallery__title_on-hover':
-              showTitle &&
-              titleVisibility === TitleVisibility.ON_HOVER &&
-              titlePosition !== ThumbnailTitlePosition.BELOW &&
-              titlePosition !== ThumbnailTitlePosition.ABOVE,
-            'swiper-gallery__title_hidden': !showTitle,
-            'swiper-gallery__item-outline':
-              showTitle &&
-              (titlePosition === ThumbnailTitlePosition.BELOW ||
-                titlePosition === ThumbnailTitlePosition.ABOVE),
-          })}
+          className={clsx(
+            'swiper-gallery__title swiper-gallery__title-caption',
+            {
+              'swiper-gallery__title_on-hover':
+                showTitle &&
+                titleVisibility === TitleVisibility.ON_HOVER &&
+                titlePosition !== ThumbnailTitlePosition.BELOW &&
+                titlePosition !== ThumbnailTitlePosition.ABOVE,
+              'swiper-gallery__title_hidden': !showTitle,
+              'swiper-gallery__item-outline':
+                showTitle &&
+                (titlePosition === ThumbnailTitlePosition.BELOW ||
+                  titlePosition === ThumbnailTitlePosition.ABOVE),
+              'reacg-gallery__text-background-top-gradient':
+                overlayTextBackground === '' &&
+                titlePosition === ThumbnailTitlePosition.TOP,
+              'reacg-gallery__text-background-bottom-gradient':
+                overlayTextBackground === '' &&
+                titlePosition === ThumbnailTitlePosition.BOTTOM,
+              'reacg-gallery__text-background-center-gradient':
+                overlayTextBackground === '' &&
+                titlePosition === ThumbnailTitlePosition.CENTER,
+            }
+          )}
           style={{
             paddingLeft: itemPaddingText,
             paddingRight: itemPaddingText,
@@ -119,32 +133,21 @@ const SwiperImage = forwardRef(
               },
             }}
             style={{
-              paddingLeft: imagePaddingText,
-              paddingRight: imagePaddingText,
+              paddingLeft: '6px',
+              paddingRight: '6px',
               textAlign: titleAlignment,
               color: titleColor,
               backgroundColor:
-                titlePosition !== ThumbnailTitlePosition.BELOW &&
-                titlePosition !== ThumbnailTitlePosition.ABOVE
-                  ? overlayTextBackground === ''
-                    ? 'unset'
-                    : overlayTextBackground
-                  : 'initial',
-              mixBlendMode:
-                invertTextColor &&
-                titlePosition !== ThumbnailTitlePosition.BELOW &&
-                titlePosition !== ThumbnailTitlePosition.ABOVE
-                  ? 'difference'
-                  : 'initial',
+                overlayTextBackground === '' ? 'unset' : overlayTextBackground,
+              mixBlendMode: invertTextColor ? 'difference' : 'initial',
             }}
             className={`swiper-gallery__title-content_${titlePosition}`}
             title={<span>{image[titleSource] || <br />}</span>}
             subtitle={
               titlePosition === captionPosition &&
-              showCaption &&
-              image[captionSource] && (
+              showCaption && (
                 <span className="thumbnail-image__caption">
-                  {image[captionSource]}
+                  {image[captionSource] || <br />}
                 </span>
               )
             }
@@ -175,7 +178,7 @@ const SwiperImage = forwardRef(
 
       return (
         <div
-          className={clsx('swiper-gallery__title', {
+          className={clsx('swiper-gallery__title swiper-gallery__caption', {
             'swiper-gallery__title_on-hover':
               showCaption &&
               captionVisibility === TitleVisibility.ON_HOVER &&
@@ -186,6 +189,15 @@ const SwiperImage = forwardRef(
               showCaption &&
               (captionPosition === ThumbnailTitlePosition.BELOW ||
                 captionPosition === ThumbnailTitlePosition.ABOVE),
+            'reacg-gallery__text-background-top-gradient':
+              overlayTextBackground === '' &&
+              captionPosition === ThumbnailTitlePosition.TOP,
+            'reacg-gallery__text-background-bottom-gradient':
+              overlayTextBackground === '' &&
+              captionPosition === ThumbnailTitlePosition.BOTTOM,
+            'reacg-gallery__text-background-center-gradient':
+              overlayTextBackground === '' &&
+              captionPosition === ThumbnailTitlePosition.CENTER,
           })}
           style={{
             paddingLeft: itemPaddingText,
@@ -202,23 +214,13 @@ const SwiperImage = forwardRef(
               },
             }}
             style={{
-              paddingLeft: imagePaddingText,
-              paddingRight: imagePaddingText,
+              paddingLeft: '6px',
+              paddingRight: '6px',
               textAlign: titleAlignment,
               color: captionFontColor,
               backgroundColor:
-                captionPosition !== ThumbnailTitlePosition.BELOW &&
-                captionPosition !== ThumbnailTitlePosition.ABOVE
-                  ? overlayTextBackground === ''
-                    ? 'unset'
-                    : overlayTextBackground
-                  : 'initial',
-              mixBlendMode:
-                invertTextColor &&
-                captionPosition !== ThumbnailTitlePosition.BELOW &&
-                captionPosition !== ThumbnailTitlePosition.ABOVE
-                  ? 'difference'
-                  : 'initial',
+                overlayTextBackground === '' ? 'unset' : overlayTextBackground,
+              mixBlendMode: invertTextColor ? 'difference' : 'initial',
             }}
             className={`swiper-gallery__title-content_${captionPosition}`}
             subtitle={
@@ -241,66 +243,85 @@ const SwiperImage = forwardRef(
     };
 
     return (
-      <div
-        ref={wrapperRef}
-        className={clsx(
-          'swiper-gallery__image-wrapper',
-          'swiper-gallery__image-wrapper_overflow',
-          'swiper-gallery__image-wrapper_' + hoverEffect
-        )}
-      >
-        {!isVideo ? (
-          <ReImage
-            wrapperRef={wrapperRef}
-            data-index={index}
-            src={shouldLoadImage ? image.original.url : undefined}
-            sizes={`${size}px`}
-            srcSet={
-              shouldLoadImage
-                ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
-                : undefined
-            }
-            alt={image.alt}
-          />
-        ) : (
-          <div
-            style={{position: 'relative', width: '100%', height: '100%'}}
-            onClick={(e) => {
-              const video = videoRef?.current;
-
-              if (video) {
-                if (video.paused) {
-                  video.play();
-                } else {
-                  video.pause();
-                }
-              }
-            }}
-          >
-            <video
-              ref={videoRef}
-              src={image.original.url}
-              poster={image.medium_large.url}
-              className={'swiper-gallery__video'}
-              controls
-              muted
-              playsInline
-              loop
-              preload="auto"
-            />
-          </div>
-        )}
-        <Watermark />
+      <>
         {showTitle &&
-          titlePosition !== ThumbnailTitlePosition.BELOW &&
-          titlePosition !== ThumbnailTitlePosition.ABOVE &&
+          titlePosition === ThumbnailTitlePosition.ABOVE &&
           renderTitle(image)}
         {showCaption &&
           (titlePosition != captionPosition || !showTitle) &&
-          captionPosition !== ThumbnailTitlePosition.BELOW &&
-          captionPosition !== ThumbnailTitlePosition.ABOVE &&
+          captionPosition === ThumbnailTitlePosition.ABOVE &&
           renderCaption(image)}
-      </div>
+        <div
+          ref={wrapperRef}
+          className={clsx(
+            'swiper-gallery__image-wrapper',
+            'swiper-gallery__image-wrapper_overflow',
+            'swiper-gallery__image-wrapper_' + hoverEffect
+          )}
+          style={{
+            height: `calc(100% - ${titleCaptionHeight}px)`,
+          }}
+        >
+          {!isVideo ? (
+            <ReImage
+              wrapperRef={wrapperRef}
+              data-index={index}
+              src={shouldLoadImage ? image.original.url : undefined}
+              sizes={`${size}px`}
+              srcSet={
+                shouldLoadImage
+                  ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
+                  : undefined
+              }
+              alt={image.alt}
+            />
+          ) : (
+            <div
+              style={{position: 'absolute', width: '100%', height: '100%'}}
+              onClick={(e) => {
+                const video = videoRef?.current;
+
+                if (video) {
+                  if (video.paused) {
+                    video.play();
+                  } else {
+                    video.pause();
+                  }
+                }
+              }}
+            >
+              <video
+                ref={videoRef}
+                src={image.original.url}
+                poster={image.medium_large.url}
+                className={'swiper-gallery__video'}
+                controls
+                muted
+                playsInline
+                loop
+                preload="auto"
+              />
+            </div>
+          )}
+          <Watermark />
+          {showTitle &&
+            titlePosition !== ThumbnailTitlePosition.BELOW &&
+            titlePosition !== ThumbnailTitlePosition.ABOVE &&
+            renderTitle(image)}
+          {showCaption &&
+            (titlePosition != captionPosition || !showTitle) &&
+            captionPosition !== ThumbnailTitlePosition.BELOW &&
+            captionPosition !== ThumbnailTitlePosition.ABOVE &&
+            renderCaption(image)}
+        </div>
+        {showTitle &&
+          titlePosition === ThumbnailTitlePosition.BELOW &&
+          renderTitle(image)}
+        {showCaption &&
+          (titlePosition != captionPosition || !showTitle) &&
+          captionPosition === ThumbnailTitlePosition.BELOW &&
+          renderCaption(image)}
+      </>
     );
   }
 );
