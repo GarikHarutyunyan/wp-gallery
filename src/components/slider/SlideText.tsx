@@ -1,61 +1,66 @@
-import React, {forwardRef} from 'react';
-
 import {IImageDTO, ISliderSettings} from 'data-structures';
+import {forwardRef} from 'react';
+import {getTextVerticalPosition} from './utils/getTextVerticalPosition';
 
 interface SlideTextProps {
   image: IImageDTO;
   settings: ISliderSettings;
+  variant: 'main' | 'thumb';
 }
 
-const getVerticalPosition = (
-  textPosition: ISliderSettings['textPosition']
-): React.CSSProperties => {
-  switch (textPosition) {
-    case 'top':
-      return {top: 0, transform: 'none'};
-
-    case 'bottom':
-      return {bottom: 0, transform: 'none'};
-
-    case 'center':
-      return {
-        top: '50%',
-        transform: 'translateY(-50%)',
-        height: '100%',
-      };
-
-    case 'above':
-    case 'below':
-      return {
-        position: 'relative',
-        backgroundColor: 'transparent',
-      };
-
-    default:
-      return {};
-  }
-};
-
 export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
-  ({image, settings}, ref) => {
-    const {
-      textPosition,
-      showTitle,
-      titleSource,
-      titleAlignment,
-      showCaption,
-      captionSource,
-      captionFontColor,
-      showDescription,
-      descriptionSource,
-      descriptionFontSize,
-      captionFontSize,
-      titleFontSize,
-      descriptionMaxRowsCount,
-      textBackground,
-      textColor,
-      textFontFamily,
-    } = settings;
+  ({image, settings, variant}, ref) => {
+    const isThumb = variant === 'thumb';
+
+    const textPosition = isThumb
+      ? settings.thumbnailTextPosition
+      : settings.textPosition;
+    const textFontFamily = isThumb
+      ? settings.thumbnailTextFontFamily
+      : settings.textFontFamily;
+    const textColor = isThumb
+      ? settings.thumbnailTextColor
+      : settings.textColor;
+    const textBackground = isThumb
+      ? settings.thumbnailTextBackground
+      : settings.textBackground;
+    const showTitle = isThumb
+      ? settings.thumbnailShowTitle
+      : settings.showTitle;
+    const titleSource = isThumb
+      ? settings.thumbnailTitleSource
+      : settings.titleSource;
+    const titleFontSize = isThumb
+      ? settings.thumbnailTitleFontSize
+      : settings.titleFontSize;
+    const titleAlignment = isThumb
+      ? settings.thumbnailTitleAlignment
+      : settings.titleAlignment;
+    const showCaption = isThumb
+      ? settings.thumbnailShowCaption
+      : settings.showCaption;
+    const captionSource = isThumb
+      ? settings.thumbnailCaptionSource
+      : settings.captionSource;
+    const captionFontSize = isThumb
+      ? settings.thumbnailCaptionFontSize
+      : settings.captionFontSize;
+    const captionFontColor = isThumb
+      ? settings.thumbnailCaptionFontColor
+      : settings.captionFontColor;
+    const showDescription = isThumb
+      ? settings.thumbnailShowDescription
+      : settings.showDescription;
+    const descriptionSource = isThumb
+      ? settings.thumbnailDescriptionSource
+      : settings.descriptionSource;
+    const descriptionFontSize = isThumb
+      ? settings.thumbnailDescriptionFontSize
+      : settings.descriptionFontSize;
+    const descriptionMaxRowsCount = isThumb
+      ? settings.thumbnailDescriptionMaxRowsCount
+      : settings.descriptionMaxRowsCount;
+
     return (
       <div
         ref={ref}
@@ -68,7 +73,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
           backgroundColor: textBackground || 'transparent',
           color: textColor,
           fontFamily: textFontFamily,
-          ...getVerticalPosition(textPosition),
+          ...getTextVerticalPosition(textPosition),
         }}
       >
         <div
@@ -84,7 +89,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
           {/* TITLE + CAPTION */}
           {showTitle && (
             <p
-              data-swiper-parallax="-30%"
+              data-swiper-parallax={isThumb ? undefined : '-30%'}
               className="slider__slide-title"
               style={{
                 fontSize: `${titleFontSize}vw`,
@@ -116,7 +121,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
           {/* DESCRIPTION */}
           {showDescription && image?.[descriptionSource] && (
             <p
-              data-swiper-parallax="-20%"
+              data-swiper-parallax={isThumb ? undefined : '-30%'}
               className="slider__slide-description"
               style={{
                 fontSize: `${descriptionFontSize}vw`,

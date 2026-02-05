@@ -39,13 +39,13 @@ import {SliderPlayPause} from './SliderPlayPause';
 import {SliderSlideContent} from './SliderSlideContent';
 import SliderThumbs from './SliderThumbs';
 import {SlideText} from './SlideText';
-import {getSwiperEffectOptions} from './utils/swiperEffects';
+import {getPaginationCSSVars} from './utils/getPaginationCSSVars';
+import {getSwiperEffectOptions} from './utils/getSwiperEffects';
 import {
   getThumbnailsFlexDirection,
   hasThumbnails,
   isThumbnailsVertical,
-} from './utils/thumbnailsPosition';
-
+} from './utils/getThumbnailsPosition';
 interface ISliderProps {
   onClick?: (index: number) => void;
 }
@@ -78,17 +78,7 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     paginationPosition,
     paginationDynamicBullets,
     paginationshowsOnHover,
-    paginationBulletsBackgroundColor,
-    paginationBulletsSize,
-    paginationBulletsBorder,
-    paginationBulletsBorderRadius,
-    paginationBulletsBorderColor,
     paginationBulletsImage,
-    paginationActiveBulletBackgroundColor,
-    paginationActiveBulletSize,
-    paginationActiveBulletBorder,
-    paginationActiveBulletBorderColor,
-    paginationActiveBulletBorderRadius,
     thumbnailBarGap,
     direction,
     keyboard,
@@ -159,6 +149,7 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
           'slider__layout--thumbnail-hover': thumbnailShowsOnHover,
         })}
         style={{
+          width: `${width}${widthType}`,
           flexDirection: getThumbnailsFlexDirection(thumbnailsPosition),
           gap: thumbnailBarGap,
           backgroundColor: backgroundColor || 'transparent',
@@ -169,11 +160,6 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
             [`slider__shadow--${shadowType}`]: shadow,
           })}
           style={{
-            width: `${width}${widthType}`,
-            height:
-              direction === 'vertical'
-                ? `calc(${height}${heightType} + ${textHeight}px)`
-                : `${height}${heightType}`,
             ...(shadow && shadowColor
               ? ({'--slider-shadow-color': shadowColor} as React.CSSProperties)
               : {}),
@@ -184,46 +170,20 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
           )}
           <Swiper
             key={`main-${staticKey}`}
+            className={clsx(
+              'slider__main-swiper',
+              pagination &&
+                !paginationDynamicBullets &&
+                `slider__pagination--${paginationPosition}`,
+              (imageAnimation === 'zoom' || imageAnimation === 'rotate') &&
+                'swiper-overflow-visible'
+            )}
+            style={{
+              height: `calc(${height}${heightType} + ${textHeight}px)`,
+              ...getPaginationCSSVars(settings!),
+            }}
             onSwiper={(swiper: any) => (mainSwiperRef.current = swiper)}
             preventInteractionOnTransition={true}
-            style={
-              {
-                // '--swiper-navigation-top-offset': 'calc(50% - 49px)',
-
-                /* ───────────── NORMAL BULLETS ───────────── */
-                '--slider-pagination-bullet-bg':
-                  paginationBulletsBackgroundColor || '#aeb0b1',
-                '--slider-pagination-bullet-size': `${
-                  paginationBulletsSize || 21
-                }px`,
-
-                '--slider-pagination-bullet-border': `${
-                  paginationBulletsBorder || 0
-                }px`,
-                '--slider-pagination-bullet-border-radius': `${paginationBulletsBorderRadius}px`,
-                '--slider-pagination-bullet-border-color':
-                  paginationBulletsBorderColor || '#ffffff',
-                /* ───────────── ACTIVE BULLET ───────────── */
-                '--slider-pagination-active-bullet-bg':
-                  paginationActiveBulletBackgroundColor || '#007aff',
-                '--slider-pagination-active-bullet-size': `${
-                  paginationActiveBulletSize || paginationBulletsSize || 21
-                }px`,
-
-                '--slider-pagination-active-bullet-border': `${
-                  paginationActiveBulletBorder || paginationBulletsBorder
-                }px`,
-                '--slider-pagination-active-bullet-border-radius': `${
-                  paginationActiveBulletBorderRadius ||
-                  paginationBulletsBorderRadius ||
-                  0
-                }px`,
-                '--slider-pagination-active-bullet-border-color':
-                  paginationActiveBulletBorderColor ||
-                  paginationBulletsBorderColor ||
-                  '#ffffff',
-              } as React.CSSProperties
-            }
             modules={[
               Navigation,
               Pagination,
@@ -273,12 +233,6 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
             }
             effect={effect as any}
             {...effectOptions}
-            className={clsx(
-              'slider__main-swiper',
-              pagination &&
-                !paginationDynamicBullets &&
-                `slider__pagination--${paginationPosition}`
-            )}
             loop={isInfinite}
             direction={direction || 'vertical'}
             speed={slideDuration}
@@ -290,7 +244,12 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
               >
                 {/* ABOVE */}
                 {hasTextAbove && (
-                  <SlideText ref={textRef} image={image} settings={settings!} />
+                  <SlideText
+                    ref={textRef}
+                    image={image}
+                    settings={settings!}
+                    variant={'main'}
+                  />
                 )}
 
                 <SliderSlideContent
@@ -302,7 +261,12 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
 
                 {/* BELOW */}
                 {hasTextBelow && (
-                  <SlideText ref={textRef} image={image} settings={settings!} />
+                  <SlideText
+                    ref={textRef}
+                    image={image}
+                    settings={settings!}
+                    variant={'main'}
+                  />
                 )}
               </SwiperSlide>
             ))}
@@ -314,6 +278,8 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
               swiperRef={mainSwiperRef}
               autoplay={autoplay}
               isSliderAllowed={isSliderAllowed}
+              isPlaying={isPlaying}
+              setIsPlaying={setIsPlaying}
             />
           </Swiper>
           {navigationButton && navigationPosition.includes('out-bottom') && (

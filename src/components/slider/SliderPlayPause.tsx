@@ -1,22 +1,24 @@
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import IconButton from '@mui/material/IconButton';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import type {Swiper as SwiperType} from 'swiper';
 
 interface SliderPlayPauseProps {
   swiperRef: React.MutableRefObject<SwiperType | null>;
   autoplay: boolean;
   isSliderAllowed: boolean;
+  isPlaying: boolean;
+  setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const SliderPlayPause: React.FC<SliderPlayPauseProps> = ({
   swiperRef,
   autoplay,
   isSliderAllowed,
+  isPlaying,
+  setIsPlaying,
 }) => {
-  const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
-
   const handlePlay = () => {
     const swiper = swiperRef.current;
     if (swiper?.autoplay) {

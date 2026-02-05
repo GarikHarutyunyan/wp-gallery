@@ -81,7 +81,9 @@ export const SliderSlideContent: FC<SliderSlideContentProps> = ({
         }}
       />
 
-      {showText && <SlideText image={image} settings={settings} />}
+      {showText && (
+        <SlideText variant={'main'} image={image} settings={settings} />
+      )}
     </div>
   );
 };
