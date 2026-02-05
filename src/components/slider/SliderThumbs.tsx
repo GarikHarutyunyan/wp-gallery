@@ -1,4 +1,4 @@
-import {IImageDTO, ISliderSettings} from 'data-structures';
+import {IImageDTO, ISliderSettings, SliderTextPosition} from 'data-structures';
 import {ReactElement} from 'react';
 import type {Swiper as SwiperType} from 'swiper';
 import {FreeMode, Thumbs} from 'swiper/modules';
@@ -6,6 +6,7 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 
 import 'swiper/css';
 import 'swiper/css/thumbs';
+import {SlideText} from './SlideText';
 
 interface ISliderThumbsProps {
   images: IImageDTO[];
@@ -23,6 +24,7 @@ const SliderThumbs = ({
   textHeight,
 }: ISliderThumbsProps): ReactElement => {
   const {
+    thumbnailsAlignment,
     thumbnailWidth,
     thumbnailHeight,
     thumbnailBorderRadius,
@@ -45,25 +47,37 @@ const SliderThumbs = ({
     thumbnailBarBorder,
     thumbnailBarBorderColor,
     thumbnailBarBorderRadius,
-    width,
-    widthType,
     height,
     heightType,
     thumbnailGap,
     activeThumbnailGap,
-    isInfinite,
+    thumbnailShowTitle,
+    thumbnailShowCaption,
+    thumbnailShowDescription,
+    thumbnailTextPosition,
   } = settings;
+  const hasTextAbove =
+    (thumbnailShowTitle || thumbnailShowDescription || thumbnailShowCaption) &&
+    thumbnailTextPosition === SliderTextPosition.ABOVE;
 
+  const hasTextBelow =
+    (thumbnailShowTitle || thumbnailShowDescription || thumbnailShowCaption) &&
+    thumbnailTextPosition === SliderTextPosition.BELOW;
+  const showTextAbsalute =
+    (thumbnailShowTitle || thumbnailShowDescription || thumbnailShowCaption) &&
+    thumbnailTextPosition !== SliderTextPosition.ABOVE &&
+    thumbnailTextPosition !== SliderTextPosition.BELOW;
   return (
     <div
       className="slider__thumbs"
       style={
         {
-          'width': direction === 'horizontal' ? `${width}${widthType}` : 'auto',
+          'width': direction === 'horizontal' ? '100%' : 'auto',
           'height':
             direction === 'vertical'
               ? `calc(${height}${heightType} + ${textHeight}px)`
               : 'auto',
+          '--slider-thumbs-align': thumbnailsAlignment || 'center',
           '--slider-thumbs-bar-bg': thumbnailBarBackgroundColor,
           '--slider-thumbs-bar-opacity': thumbnailBarOpacity,
           '--slider-thumbs-bar-padding': `${thumbnailBarPadding}px`,
@@ -115,10 +129,21 @@ const SliderThumbs = ({
               } as React.CSSProperties
             }
           >
-            {({isActive}) => (
-              <div className="slider__thumb-content">
-                <img src={image.original.url} alt="" />
-              </div>
+            {hasTextAbove && (
+              <SlideText image={image} settings={settings!} variant={'thumb'} />
+            )}
+            <div className="slider__thumb-content">
+              <img src={image.original.url} alt="" />
+              {showTextAbsalute && (
+                <SlideText
+                  image={image}
+                  settings={settings!}
+                  variant={'thumb'}
+                />
+              )}
+            </div>
+            {hasTextBelow && (
+              <SlideText image={image} settings={settings!} variant={'thumb'} />
             )}
           </SwiperSlide>
         ))}
