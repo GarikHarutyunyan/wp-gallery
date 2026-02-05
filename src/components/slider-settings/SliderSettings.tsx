@@ -23,6 +23,7 @@ import {
   SliderSlidesDesign,
   SliderSlidesDesignOptions,
   SliderTextPositionOptions,
+  TextsAlignmentOptions,
   TitleAlignmentOptions,
   TitleSourceOptions,
 } from 'data-structures';
@@ -64,6 +65,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     shadowType,
     shadowColor,
     thumbnailsPosition,
+    thumbnailsAlignment,
     thumbnailShowsOnHover,
     thumbnailWidth,
     thumbnailHeight,
@@ -90,6 +92,23 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     thumbnailBarBorderColor,
     thumbnailBarBorderRadius,
     thumbnailBarGap,
+    thumbnailTextPosition,
+    thumbnailTextFontFamily,
+    thumbnailTextColor,
+    thumbnailTextBackground,
+    thumbnailShowTitle,
+    thumbnailTitleFontSize,
+    thumbnailTitleAlignment,
+    thumbnailShowDescription,
+    thumbnailDescriptionFontSize,
+    thumbnailDescriptionMaxRowsCount,
+    thumbnailInvertTextColor,
+    thumbnailTitleSource,
+    thumbnailDescriptionSource,
+    thumbnailShowCaption,
+    thumbnailCaptionSource,
+    thumbnailCaptionFontSize,
+    thumbnailCaptionFontColor,
     backgroundColor,
     textPosition,
     textFontFamily,
@@ -305,6 +324,15 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
             {/* ───────────────── THUMBNAILS ───────────────── */}
             {thumbnailsPosition !== LightboxThumbnailsPosition.NONE && (
               <>
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                    id={'thumbnailsAlignment'}
+                    name={'Alignement'}
+                    value={thumbnailsAlignment}
+                    options={TextsAlignmentOptions}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id="thumbnailShowsOnHover"
@@ -640,6 +668,350 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                     </Filter>
                   </Grid>
                 </>
+              </>
+            )}
+          </Grid>
+        }
+        defaultExpanded={false}
+      />
+    );
+  };
+
+  const renderThumbnailTitleSection = (): ReactNode => {
+    return (
+      <Section
+        header={'Thumbnaik Text & Metadata'}
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'thumbnailShowTitle'}
+                    name={'Show title'}
+                    value={thumbnailShowTitle}
+                    tooltip={
+                      <p>
+                        The Caption must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {thumbnailShowTitle && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'thumbnailTitleSource'}
+                      name={'Source'}
+                      value={thumbnailTitleSource}
+                      options={TitleSourceOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {thumbnailShowTitle && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'thumbnailTitleFontSize'}
+                      name={'Font size'}
+                      value={thumbnailTitleFontSize}
+                      onChange={onInputValueChange}
+                      unit={'vw'}
+                      max={5}
+                      step={0.1}
+                    />
+                  </Filter>
+
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'thumbnailTitleAlignment'}
+                      name={'Alignement'}
+                      value={thumbnailTitleAlignment}
+                      options={TitleAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'thumbnailShowCaption'}
+                    name={'Show caption'}
+                    value={thumbnailShowCaption}
+                    pro={true}
+                    tooltip={
+                      <p>
+                        The Caption must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'show_caption',
+                            })
+                    }
+                  />
+                </Filter>
+                {thumbnailShowCaption && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'thumbnailCaptionSource'}
+                      name={'Source'}
+                      value={thumbnailCaptionSource}
+                      options={CaptionSourceOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {thumbnailShowCaption && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'thumbnailCaptionFontSize'}
+                      name={'Font size'}
+                      value={thumbnailCaptionFontSize}
+                      onChange={onInputValueChange}
+                      unit={'vw'}
+                      max={5}
+                      step={0.1}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'thumbnailCaptionFontColor'}
+                      name="Color"
+                      value={thumbnailCaptionFontColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'thumbnailShowDescription'}
+                    name={'Show description'}
+                    value={thumbnailShowDescription}
+                    tooltip={
+                      <p>
+                        The Caption must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {thumbnailShowDescription && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'thumbnailDescriptionSource'}
+                      name={'Source'}
+                      value={thumbnailDescriptionSource}
+                      options={DescriptionSourceOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {thumbnailShowDescription && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'thumbnailDescriptionFontSize'}
+                      name={'Font size'}
+                      value={thumbnailDescriptionFontSize}
+                      onChange={onInputValueChange}
+                      unit={'vw'}
+                      max={5}
+                      step={0.1}
+                    />
+                  </Filter>
+
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'thumbnailDescriptionMaxRowsCount'}
+                      name={'Max rows count'}
+                      value={thumbnailDescriptionMaxRowsCount}
+                      onChange={onInputValueChange}
+                      min={1}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            {(thumbnailShowTitle ||
+              thumbnailShowCaption ||
+              thumbnailShowDescription) && (
+              <>
+                <Grid
+                  sx={{marginLeft: 0, paddingTop: 2}}
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                >
+                  <Filter isLoading={isLoading}>
+                    <InputLabel shrink variant="filled">
+                      <LabelWithTooltip label={'Text'} tooltip={''} />
+                    </InputLabel>
+                  </Filter>
+                </Grid>
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'thumbnailTextPosition'}
+                      name={'Position'}
+                      value={thumbnailTextPosition}
+                      options={SliderTextPositionOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <FontControl
+                      id={'thumbnailTextFontFamily'}
+                      name={'Font family'}
+                      value={thumbnailTextFontFamily}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'thumbnailTextColor'}
+                      name="Color"
+                      value={thumbnailTextColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'thumbnailTextBackground'}
+                      name={'Text background'}
+                      value={thumbnailTextBackground}
+                      onChange={onInputValueChange}
+                      tooltip={
+                        <p>
+                          Set a background color for text displayed on the
+                          image.
+                        </p>
+                      }
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <SwitchControl
+                      id={'thumbnailInvertTextColor'}
+                      name={'Invert color'}
+                      pro={true}
+                      tooltip={
+                        <p>
+                          Enable this to invert the text color dynamically,
+                          ensuring it stays visible against any background.
+                        </p>
+                      }
+                      value={thumbnailInvertTextColor}
+                      onChange={
+                        isPro
+                          ? onInputValueChange
+                          : () =>
+                              (window as any).reacg_open_premium_offer_dialog({
+                                utm_medium: 'invert_color',
+                              })
+                      }
+                    />
+                  </Filter>
+                </Grid>
               </>
             )}
           </Grid>
@@ -1634,6 +2006,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
       {renderMainSettings()}
       {renderTitleSection()}
       {renderFilmstripSettings()}
+      {renderThumbnailTitleSection()}
       {renderNavigationSettings()}
       {renderPaginationSettings()}
       {renderAdvancedSettings()}
