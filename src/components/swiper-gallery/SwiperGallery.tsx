@@ -7,15 +7,21 @@ import {
   ICubeSettings,
   IImageDTO,
   ImageType,
+  SliderNavigation,
+  SliderNavigationPosition,
   ThumbnailTitlePosition,
 } from 'data-structures';
 import React, {useEffect, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import type {Swiper as SwiperType} from 'swiper';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/effect-cube';
 import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+import {Autoplay, Navigation, Pagination} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {handleSlideChange} from './imagePreloader';
 import './swiper-gallery.css';
@@ -77,7 +83,6 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const [paddingTop, setPaddingTop] = useState<number>(0);
   const key = effects.effect + 'Effect';
-  const prevIndexRef = useRef<number | null>(null);
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
@@ -130,52 +135,48 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
-  const handleOnChangeVideoAutoPlayAndPause = (
-    swiper: any,
-    shouldPausePrevious: boolean = true
-  ) => {
+  const handleOnChangeVideoAutoPlayAndPause = (swiper: SwiperType) => {
     if (!swiper) return;
 
-    const activeIndex = swiper.activeIndex;
-    const activeSlide = swiper.slides[activeIndex];
-    const activeVideo = activeSlide?.querySelector(
-      'video.swiper-gallery__video'
-    );
+    swiper.slides.forEach((slide: HTMLElement) => {
+      const video = slide.querySelector<HTMLVideoElement>(
+        'video.swiper-gallery__video'
+      );
 
-    if (shouldPausePrevious && prevIndexRef.current !== null) {
-      const prevSlide = swiper.slides[prevIndexRef.current];
-      const prevVideo = prevSlide?.querySelector('video.swiper-gallery__video');
+      if (!video) return;
 
-      if (prevVideo && prevVideo !== activeVideo && !prevVideo.paused) {
-        prevVideo.pause();
-      }
-    }
+      const isVisible = slide.classList.contains('swiper-slide-visible');
 
-    if (activeVideo) {
-      if (activeVideo.readyState >= 3) {
-        activeVideo
-          .play()
-          .catch((err: any) => console.warn('Autoplay blocked:', err));
+      if (isVisible) {
+        if (video.paused) {
+          if (video.readyState >= 3) {
+            video.play().catch((err) => console.warn('Autoplay blocked:', err));
+          } else {
+            const onCanPlay = () => {
+              video.removeEventListener('canplay', onCanPlay);
+              video
+                .play()
+                .catch((err) => console.warn('Autoplay blocked:', err));
+            };
+            video.addEventListener('canplay', onCanPlay);
+            video.load?.();
+          }
+        }
       } else {
-        const onCanPlay = () => {
-          activeVideo.removeEventListener('canplay', onCanPlay);
-          activeVideo
-            .play()
-            .catch((err: any) => console.warn('Autoplay blocked:', err));
-        };
-        activeVideo.addEventListener('canplay', onCanPlay);
-        // Optionally, force the video to load if it hasn't started.
-        activeVideo.load && activeVideo.load();
+        if (!video.paused) {
+          video.pause();
+        }
       }
-    }
-
-    prevIndexRef.current = activeIndex;
+    });
   };
+
+  const dynamicThreshold = 6;
 
   return (
     <Swiper
-      key={imagesCount || 0}
+      key={`${imagesCount}_${settings.dotsPosition}`}
       ref={swiperRef}
+      {...effects}
       autoplay={
         autoplay || isPlaying
           ? {
@@ -185,21 +186,54 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
             }
           : false
       }
+      navigation={
+        settings.navigation === SliderNavigation.ARROWS ||
+        settings.navigation === SliderNavigation.ARROWS_AND_DOTS
+      }
+      modules={[
+        Autoplay,
+        Pagination,
+        Navigation,
+        ...(effects.additionalModules || []),
+      ]}
+      pagination={
+        settings.navigation === SliderNavigation.DOTS ||
+        settings.navigation === SliderNavigation.ARROWS_AND_DOTS
+          ? {
+              clickable: true,
+              type: 'bullets',
+              dynamicBullets: images.length > dynamicThreshold,
+              dynamicMainBullets:
+                images.length > dynamicThreshold ? dynamicThreshold - 1 : 0,
+              ...(settings.dotsPosition ===
+                SliderNavigationPosition.OUTSIDE && {
+                el: '#swiper-pagination-external',
+              }),
+            }
+          : false
+      }
       grabCursor={allowTouchMove}
       allowTouchMove={allowTouchMove}
       loop={loop}
-      pagination={false}
       className={className}
       loopAdditionalSlides={0}
       breakpoints={breakpoints}
       onInit={() => {
         const swiper = swiperRef.current?.swiper;
-        handleOnChangeVideoAutoPlayAndPause(swiper, false); // Don't pause anything on init
+        if (settings.dotsPosition === SliderNavigationPosition.OUTSIDE) {
+          swiper.params.pagination.el = '#swiper-pagination-external';
+        }
+        handleOnChangeVideoAutoPlayAndPause(swiper);
       }}
-      onSlideChange={() => {
-        const swiper = swiperRef.current?.swiper;
-        handleOnChangeVideoAutoPlayAndPause(swiper, true); // Pause previous if needed
+      onSlideChange={(swiper: SwiperType) => {
+        handleOnChangeVideoAutoPlayAndPause(swiper);
         handleSlideChange(swiperRef, images, preLoadCount);
+      }}
+      onTransitionEnd={(swiper: SwiperType) => {
+        handleOnChangeVideoAutoPlayAndPause(swiper);
+      }}
+      onResize={(swiper: SwiperType) => {
+        handleOnChangeVideoAutoPlayAndPause(swiper);
       }}
       onTouchStart={() => {
         const videos = document.querySelectorAll('.swiper-gallery__video');
@@ -209,10 +243,15 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         const videos = document.querySelectorAll('.swiper-gallery__video');
         videos.forEach((v) => v.classList.remove('no-pointer'));
       }}
-      {...effects}
       style={{
-        '--swiper-navigation-size': '60px',
-        '--swiper-navigation-color': 'hsla(0, 0%, 100%, 0.8)',
+        '--swiper-pagination-bottom': '10px',
+        '--swiper-pagination-color': settings.activeDotColor,
+        '--swiper-pagination-bullet-size': settings.dotsSize + 'px',
+        '--swiper-pagination-bullet-inactive-color': settings.inactiveDotsColor,
+        '--swiper-pagination-bullet-inactive-opacity': '1',
+        '--swiper-pagination-bullet-horizontal-gap': settings.dotsGap + 'px',
+        '--swiper-navigation-size': settings.arrowsSize + 'px',
+        '--swiper-navigation-color': settings.arrowsColor,
         '--swiper-navigation-top-offset': `calc(50% + ${
           titleCaptionHeight &&
           ((settings.titlePosition === ThumbnailTitlePosition.ABOVE &&
@@ -308,7 +347,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
                     settings.titlePosition !== settings.captionPosition)
                 ? -titleCaptionHeight / 2
                 : 0)
-            }px - 20px)`,
+            }px - var(--swiper-navigation-size, 30px))`,
           }}
         >
           {isPlaying ? (
@@ -323,6 +362,4 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 };
 
 export {SwiperGallery};
-function uselayouteffect(arg0: () => void, arg1: any[]) {
-  throw new Error('Function not implemented.');
-}
+export default SwiperGallery;

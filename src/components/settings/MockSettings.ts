@@ -24,6 +24,8 @@ import {
   Position,
   SizeTypeHeight,
   SizeTypeWidth,
+  SliderNavigation,
+  SliderNavigationPosition,
   TextsAlignment,
   ThumbnailTitlePosition,
   TitleAlignment,
@@ -275,6 +277,7 @@ const cubeMockSettings: ICubeSettings = {
   padding: 0,
   isInfinite: false,
   autoplay: false,
+  playAndPauseAllowed: false,
   slideDuration: 3000,
   shadow: true,
   hoverEffect: HoverEffect.ZOOM_IN,
@@ -294,6 +297,15 @@ const cubeMockSettings: ICubeSettings = {
   captionPosition: ThumbnailTitlePosition.BOTTOM,
   captionFontSize: 18,
   captionFontColor: 'Grey',
+  navigation: SliderNavigation.NONE,
+  arrowsSize: 26,
+  arrowsColor: 'rgba(255, 255, 255, 0.8)',
+  dotsPosition: SliderNavigationPosition.OUTSIDE,
+  dotsSize: 15,
+  dotsGap: 4,
+  activeDotColor: 'rgba(0, 0, 0, 1)',
+  inactiveDotsColor: 'rgba(0, 0, 0, 0.5)',
+  showVideoControls: false,
 };
 
 const carouselMockSettings: ICarouselSettings = {
@@ -324,13 +336,21 @@ const carouselMockSettings: ICarouselSettings = {
   captionPosition: ThumbnailTitlePosition.BOTTOM,
   captionFontSize: 18,
   captionFontColor: 'Grey',
+  navigation: SliderNavigation.ARROWS,
+  arrowsSize: 26,
+  arrowsColor: 'rgba(255, 255, 255, 0.8)',
+  dotsPosition: SliderNavigationPosition.OUTSIDE,
+  dotsSize: 15,
+  dotsGap: 4,
+  activeDotColor: 'rgba(0, 0, 0, 1)',
+  inactiveDotsColor: 'rgba(0, 0, 0, 0.5)',
+  showVideoControls: false,
 };
 
 const cardsMockSettings: ICardsSettings = {
   width: 300,
   height: 300,
   perSlideOffset: 2,
-  navigationButton: false,
   playAndPauseAllowed: false,
   autoplay: false,
   slideDuration: 3000,
@@ -351,6 +371,15 @@ const cardsMockSettings: ICardsSettings = {
   captionPosition: ThumbnailTitlePosition.BOTTOM,
   captionFontSize: 18,
   captionFontColor: 'Grey',
+  navigation: SliderNavigation.ARROWS,
+  arrowsSize: 26,
+  arrowsColor: 'rgba(255, 255, 255, 0.8)',
+  dotsPosition: SliderNavigationPosition.OUTSIDE,
+  dotsSize: 15,
+  dotsGap: 4,
+  activeDotColor: 'rgba(0, 0, 0, 1)',
+  inactiveDotsColor: 'rgba(0, 0, 0, 0.5)',
+  showVideoControls: false,
 };
 
 const blogMockSettings: IBlogSettings = {

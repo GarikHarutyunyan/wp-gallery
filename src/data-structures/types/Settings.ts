@@ -13,6 +13,8 @@ import {
   Position,
   SizeTypeHeight,
   SizeTypeWidth,
+  SliderNavigation,
+  SliderNavigationPosition,
   TextsAlignment,
   ThumbnailTitlePosition,
   TitleAlignment,
@@ -179,6 +181,7 @@ export interface ICubeSettings {
   padding: number;
   isInfinite: boolean;
   autoplay: boolean;
+  playAndPauseAllowed: boolean;
   slideDuration: number;
   shadow: boolean;
   hoverEffect: HoverEffect;
@@ -198,6 +201,15 @@ export interface ICubeSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  navigation: SliderNavigation;
+  arrowsSize: number;
+  arrowsColor: string;
+  dotsPosition: SliderNavigationPosition;
+  dotsSize: number;
+  dotsGap: number;
+  activeDotColor: string;
+  inactiveDotsColor: string;
+  showVideoControls: boolean;
 }
 
 export interface ICarouselSettings {
@@ -228,13 +240,21 @@ export interface ICarouselSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  navigation: SliderNavigation;
+  arrowsSize: number;
+  arrowsColor: string;
+  dotsPosition: SliderNavigationPosition;
+  dotsSize: number;
+  dotsGap: number;
+  activeDotColor: string;
+  inactiveDotsColor: string;
+  showVideoControls: boolean;
 }
 
 export interface ICardsSettings {
   width: number;
   height: number;
   perSlideOffset: number;
-  navigationButton: boolean;
   playAndPauseAllowed: boolean;
   autoplay: boolean;
   slideDuration: number;
@@ -255,6 +275,15 @@ export interface ICardsSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  navigation: SliderNavigation;
+  arrowsSize: number;
+  arrowsColor: string;
+  dotsPosition: SliderNavigationPosition;
+  dotsSize: number;
+  dotsGap: number;
+  activeDotColor: string;
+  inactiveDotsColor: string;
+  showVideoControls: boolean;
 }
 
 export interface IBlogSettings {

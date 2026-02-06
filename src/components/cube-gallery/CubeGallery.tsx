@@ -1,10 +1,15 @@
 import Box from '@mui/material/Box';
+import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {SwiperGallery} from 'components/swiper-gallery/SwiperGallery';
-import {ICubeSettings} from 'data-structures';
+import {
+  ICubeSettings,
+  SliderNavigation,
+  SliderNavigationPosition,
+} from 'data-structures';
 import {useEffect, useRef, useState} from 'react';
-import {Autoplay, EffectCube} from 'swiper/modules';
+import {EffectCube} from 'swiper/modules';
 import './cube-gallery.css';
 
 const effects = {
@@ -16,7 +21,7 @@ const effects = {
     shadowOffset: 20,
     shadowScale: 0.94,
   },
-  modules: [EffectCube, Autoplay],
+  additionalModules: [EffectCube],
 };
 
 interface ICubeGalleryProps {
@@ -41,6 +46,12 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
     captionPosition,
     titleFontSize,
     captionFontSize,
+    navigation,
+    dotsPosition,
+    dotsSize,
+    dotsGap,
+    activeDotColor,
+    inactiveDotsColor,
   } = settings as ICubeSettings;
   const wrapper = wrapperRef.current;
   const [innerWidth, setInnerWidth] = useState<number>(
@@ -119,33 +130,64 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
     captionFontSize,
   ]);
 
+  const dynamicThreshold = 6;
+
   return (
-    <Box
-      ref={galleryRef}
-      sx={{
-        width: `${containerWidth}px`,
-        height: `${containerHeight + titleCaptionHeight}px`,
-        mx: 'auto',
-      }}
-    >
-      <SwiperGallery
-        key={+isInfinite}
-        effects={effects}
-        loop={isInfinite}
-        backgroundColor={backgroundColor || 'White'}
-        padding={padding}
-        images={images || []}
-        autoplay={autoplay}
-        delay={slideDuration}
-        size={Math.max(containerWidth, containerHeight)}
-        imagesCount={1}
-        preLoadCount={4}
-        allowTouchMove={true}
-        settings={settings as ICubeSettings}
-        titleCaptionHeight={titleCaptionHeight}
-        onClick={onClick}
-      />
-    </Box>
+    <>
+      <Box
+        ref={galleryRef}
+        sx={{
+          width: `${containerWidth}px`,
+          height: `${containerHeight + titleCaptionHeight}px`,
+          mx: 'auto',
+        }}
+      >
+        <SwiperGallery
+          key={+isInfinite}
+          effects={effects}
+          loop={isInfinite}
+          backgroundColor={backgroundColor || 'White'}
+          padding={padding}
+          images={images || []}
+          autoplay={autoplay}
+          delay={slideDuration}
+          size={Math.max(containerWidth, containerHeight)}
+          imagesCount={1}
+          preLoadCount={4}
+          allowTouchMove={true}
+          settings={settings as ICubeSettings}
+          titleCaptionHeight={titleCaptionHeight}
+          onClick={onClick}
+        />
+      </Box>
+      {(navigation === SliderNavigation.DOTS ||
+        navigation === SliderNavigation.ARROWS_AND_DOTS) &&
+        dotsPosition === SliderNavigationPosition.OUTSIDE && (
+          <div
+            id="swiper-pagination-external"
+            className={clsx(
+              'swiper-pagination-external',
+              'swiper-pagination',
+              'swiper-pagination-clickable',
+              'swiper-pagination-bullets',
+              'swiper-pagination-horizontal',
+              {
+                'swiper-pagination-bullets-dynamic':
+                  (images || []).length > dynamicThreshold,
+              }
+            )}
+            style={{
+              ['--swiper-pagination-color' as string]: activeDotColor,
+              ['--swiper-pagination-bullet-size' as string]: dotsSize + 'px',
+              ['--swiper-pagination-bullet-inactive-color' as string]:
+                inactiveDotsColor,
+              ['--swiper-pagination-bullet-inactive-opacity' as string]: '1',
+              ['--swiper-pagination-bullet-horizontal-gap' as string]:
+                dotsGap + 'px',
+            }}
+          />
+        )}
+    </>
   );
 };
 
