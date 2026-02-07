@@ -50,6 +50,7 @@ interface ISwiperGalleryProps {
   breakpoints?: any;
   titleCaptionHeight?: number;
   onClick?: (index: number) => void;
+  externalPaginationId?: string;
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
@@ -75,6 +76,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   breakpoints,
   titleCaptionHeight,
   onClick,
+  externalPaginationId,
 }) => {
   if (!padding) {
     padding = 0;
@@ -207,7 +209,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
                 images.length > dynamicThreshold ? dynamicThreshold - 1 : 0,
               ...(settings.dotsPosition ===
                 SliderNavigationPosition.OUTSIDE && {
-                el: '#swiper-pagination-external',
+                el: `#${externalPaginationId || '#swiper-pagination-external'}`,
               }),
             }
           : false
@@ -221,7 +223,9 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       onInit={() => {
         const swiper = swiperRef.current?.swiper;
         if (settings.dotsPosition === SliderNavigationPosition.OUTSIDE) {
-          swiper.params.pagination.el = '#swiper-pagination-external';
+          swiper.params.pagination.el = `#${
+            externalPaginationId || '#swiper-pagination-external'
+          }`;
         }
         handleOnChangeVideoAutoPlayAndPause(swiper);
       }}
@@ -252,6 +256,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         '--swiper-pagination-bullet-horizontal-gap': settings.dotsGap + 'px',
         '--swiper-navigation-size': settings.arrowsSize + 'px',
         '--swiper-navigation-color': settings.arrowsColor,
+        '--swiper-navigation-sides-offset': '20px',
         '--swiper-navigation-top-offset': `calc(50% + ${
           titleCaptionHeight &&
           ((settings.titlePosition === ThumbnailTitlePosition.ABOVE &&

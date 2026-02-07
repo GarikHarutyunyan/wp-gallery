@@ -139,6 +139,10 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
 
   const dynamicThreshold = 6;
 
+  const externalPaginationIdRef = React.useRef(
+    `swiper-pagination-external-${Math.random().toString(36).slice(2, 9)}`
+  );
+
   return (
     <>
       <Box
@@ -149,12 +153,19 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
           mx: 'auto',
           background: backgroundColor,
           padding: `${padding}px`,
+          paddingBottom:
+            (navigation === SliderNavigation.DOTS ||
+              navigation === SliderNavigation.ARROWS_AND_DOTS) &&
+            dotsPosition === SliderNavigationPosition.OUTSIDE
+              ? 0
+              : `${padding}px`,
           boxSizing: 'border-box',
         }}
       >
         {(images || []).length > 0 && (
           <SwiperGallery
             key={effects.id}
+            externalPaginationId={externalPaginationIdRef.current}
             effects={effects}
             loop={images.length > 1}
             backgroundColor={backgroundColor}
@@ -208,7 +219,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
         navigation === SliderNavigation.ARROWS_AND_DOTS) &&
         dotsPosition === SliderNavigationPosition.OUTSIDE && (
           <div
-            id="swiper-pagination-external"
+            id={externalPaginationIdRef.current}
             className={clsx(
               'swiper-pagination-external',
               'swiper-pagination',
@@ -228,6 +239,13 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
               ['--swiper-pagination-bullet-inactive-opacity' as string]: '1',
               ['--swiper-pagination-bullet-horizontal-gap' as string]:
                 dotsGap + 'px',
+              ['--swiper-external-pagination-padding' as string]: '10px',
+              ['--swiper-external-pagination-bottom-padding' as string]: padding
+                ? padding + 'px'
+                : 'var(--swiper-external-pagination-padding)',
+              width: `${containerWidth}px`,
+              background: backgroundColor,
+              margin: (images || []).length > dynamicThreshold ? 0 : '0 auto',
             }}
           />
         )}

@@ -8,7 +8,7 @@ import {
   SliderNavigation,
   SliderNavigationPosition,
 } from 'data-structures';
-import {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {EffectCube} from 'swiper/modules';
 import './cube-gallery.css';
 
@@ -132,6 +132,10 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
 
   const dynamicThreshold = 6;
 
+  const externalPaginationIdRef = React.useRef(
+    `swiper-pagination-external-${Math.random().toString(36).slice(2, 9)}`
+  );
+
   return (
     <>
       <Box
@@ -144,6 +148,7 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
       >
         <SwiperGallery
           key={+isInfinite}
+          externalPaginationId={externalPaginationIdRef.current}
           effects={effects}
           loop={isInfinite}
           backgroundColor={backgroundColor || 'White'}
@@ -164,7 +169,7 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
         navigation === SliderNavigation.ARROWS_AND_DOTS) &&
         dotsPosition === SliderNavigationPosition.OUTSIDE && (
           <div
-            id="swiper-pagination-external"
+            id={externalPaginationIdRef.current}
             className={clsx(
               'swiper-pagination-external',
               'swiper-pagination',
@@ -184,6 +189,8 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
               ['--swiper-pagination-bullet-inactive-opacity' as string]: '1',
               ['--swiper-pagination-bullet-horizontal-gap' as string]:
                 dotsGap + 'px',
+              ['--swiper-external-pagination-padding' as string]: '10px',
+              ['--swiper-external-pagination-bottom-padding' as string]: '10px',
             }}
           />
         )}

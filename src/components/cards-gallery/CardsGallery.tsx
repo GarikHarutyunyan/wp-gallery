@@ -138,6 +138,10 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
 
   const dynamicThreshold = 6;
 
+  const externalPaginationIdRef = React.useRef(
+    `swiper-pagination-external-${Math.random().toString(36).slice(2, 9)}`
+  );
+
   return (
     <>
       <Box
@@ -152,6 +156,7 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
       >
         <SwiperGallery
           key={effects.id}
+          externalPaginationId={externalPaginationIdRef.current}
           effects={effects}
           images={images || []}
           autoplay={autoplay}
@@ -171,7 +176,7 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
         navigation === SliderNavigation.ARROWS_AND_DOTS) &&
         dotsPosition === SliderNavigationPosition.OUTSIDE && (
           <div
-            id="swiper-pagination-external"
+            id={externalPaginationIdRef.current}
             className={clsx(
               'swiper-pagination-external',
               'swiper-pagination',
@@ -191,6 +196,8 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
               ['--swiper-pagination-bullet-inactive-opacity' as string]: '1',
               ['--swiper-pagination-bullet-horizontal-gap' as string]:
                 dotsGap + 'px',
+              ['--swiper-external-pagination-padding' as string]: '10px',
+              ['--swiper-external-pagination-bottom-padding' as string]: '10px',
             }}
           />
         )}

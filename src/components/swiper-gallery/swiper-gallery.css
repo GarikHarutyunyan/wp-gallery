@@ -134,21 +134,26 @@
 
 .reacg-gallery .swiper-container {
   display: flex;
-  align-items: center; /* Center slides vertically */
+  align-items: center;
 }
 
 .reacg-gallery .swiper-wrapper {
   display: flex;
-  align-items: center; /* Center slides vertically */
-  transition-timing-function: linear !important;
+  align-items: center;
+  transition-timing-function: linear;
 }
 .reacg-gallery .swiper-coverflow .swiper-wrapper {
   pointer-events: none;
 }
 
-.reacg-gallery .swiper-button-prev,
-.reacg-gallery .swiper-button-next {
-  background: none;
+.reacg-gallery {
+  button.playPauseButton,
+  button.playPauseButton:hover,
+  button.playPauseButton:focus,
+  button.playPauseButton:active {
+    background: none;
+    border: none;
+  }
 }
 
 .reacg-gallery button.playPauseButton {
@@ -171,8 +176,17 @@
 }
 
 .swiper-pagination-external {
-  --swiper-pagination-bottom: -10px;
+  --swiper-pagination-bottom: 0;
   position: relative;
+  padding: var(--swiper-external-pagination-padding) 0
+    var(--swiper-external-pagination-bottom-padding);
+}
+
+.reacg-gallery .swiper-button-next:after,
+.swiper-rtl .swiper-button-prev:after,
+.reacg-gallery .swiper-button-prev:after,
+.swiper-rtl .swiper-button-next:after {
+  font-weight: bolder;
 }
 
 @media (max-width: 768px) {
