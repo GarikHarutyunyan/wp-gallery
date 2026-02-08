@@ -1,6 +1,6 @@
 import {FormControl, InputLabel, Slider} from '@mui/material';
 import React, {ReactNode, useState} from 'react';
-import {LabelWithTooltip} from "./LabelWithTooltip";
+import {LabelWithTooltip} from './LabelWithTooltip';
 
 interface ISliderControlProps {
   id?: string;
@@ -12,6 +12,7 @@ interface ISliderControlProps {
   value: number;
   onChange: (value: number, id?: string) => void;
   disabled?: boolean;
+  pro?: boolean;
 }
 
 const SliderControl: React.FC<ISliderControlProps> = ({
@@ -24,6 +25,7 @@ const SliderControl: React.FC<ISliderControlProps> = ({
   value,
   onChange,
   disabled,
+  pro,
 }) => {
   const [focused, setFocused] = useState(false);
 
@@ -33,7 +35,7 @@ const SliderControl: React.FC<ISliderControlProps> = ({
   return (
     <FormControl margin="none" fullWidth>
       <InputLabel shrink variant="standard" focused={focused}>
-        <LabelWithTooltip label={name} tooltip={tooltip} />
+        <LabelWithTooltip label={name} tooltip={tooltip} pro={pro} />
       </InputLabel>
       <Slider
         min={min}

@@ -16,6 +16,8 @@ export * from './PaginationType';
 export * from './Position';
 export * from './SizeTypeHeight';
 export * from './SizeTypeWidth';
+export * from './SliderNavigation';
+export * from './SliderNavigationPosition';
 export * from './TextsAlignments';
 export * from './TitleAlignment';
 export * from './TitlePosition';
