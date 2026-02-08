@@ -219,6 +219,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
       loop={loop}
       className={className}
       loopAdditionalSlides={0}
+      speed={settings.animationSpeed}
       breakpoints={breakpoints}
       onInit={() => {
         const swiper = swiperRef.current?.swiper;
@@ -248,6 +249,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         videos.forEach((v) => v.classList.remove('no-pointer'));
       }}
       style={{
+        '--swiper-wrapper-transition-timing-function': 'ease-in-out',
         '--swiper-pagination-bottom': '10px',
         '--swiper-pagination-color': settings.activeDotColor,
         '--swiper-pagination-bullet-size': settings.dotsSize + 'px',

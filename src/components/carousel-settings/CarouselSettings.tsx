@@ -80,6 +80,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     activeDotColor,
     inactiveDotsColor,
     showVideoControls,
+    animationSpeed,
   } = value as ICarouselSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -221,7 +222,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                 <Filter isLoading={isLoading}>
                   <NumberControl
                     id={'slideDuration'}
-                    name={'Time interval'}
+                    name={'Autoplay speed'}
                     value={slideDuration}
                     onChange={onInputValueChange}
                     min={100}
@@ -229,6 +230,26 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   />
                 </Filter>
               )}
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'animationSpeed'}
+                  name={'Animation speed'}
+                  value={animationSpeed}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'animation_speed',
+                          })
+                  }
+                  min={100}
+                  step={100}
+                  max={1000}
+                  unit={'ms'}
+                />
+              </Filter>
               <Filter isLoading={isLoading}>
                 <SelectControl
                   id={'hoverEffect'}
