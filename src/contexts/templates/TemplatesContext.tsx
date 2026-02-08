@@ -138,7 +138,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   useLayoutEffect(() => {
     getTemplates();
-  }, []);
+  }, [showControls]);
 
   return (
     <TemplatesContext.Provider
