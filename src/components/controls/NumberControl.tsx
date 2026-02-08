@@ -1,7 +1,7 @@
 import {TextField} from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import React, {ReactNode} from 'react';
-import {LabelWithTooltip} from "./LabelWithTooltip";
+import {LabelWithTooltip} from './LabelWithTooltip';
 
 interface INumberControlProps {
   id?: string;
@@ -14,6 +14,7 @@ interface INumberControlProps {
   max?: number;
   unit?: string;
   step?: number;
+  pro?: boolean;
 }
 const numberInputOnWheelPreventChange = (e: any) => {
   e.target.blur();
@@ -35,6 +36,7 @@ const NumberControl: React.FC<INumberControlProps> = ({
   max,
   unit,
   step,
+  pro,
 }) => {
   const onValueChange = (event: any) => {
     const value: number | undefined =
@@ -46,7 +48,7 @@ const NumberControl: React.FC<INumberControlProps> = ({
   };
   return (
     <TextField
-      label={<LabelWithTooltip label={name} tooltip={tooltip} />}
+      label={<LabelWithTooltip label={name} tooltip={tooltip} pro={pro} />}
       variant={'standard'}
       margin={'none'}
       type={'number'}

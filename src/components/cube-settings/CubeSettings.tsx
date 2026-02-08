@@ -76,6 +76,7 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
     activeDotColor,
     inactiveDotsColor,
     showVideoControls,
+    animationSpeed,
   } = value as ICubeSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -187,7 +188,7 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                 <Filter isLoading={isLoading}>
                   <NumberControl
                     id={'slideDuration'}
-                    name={'Time interval'}
+                    name={'Autoplay speed'}
                     value={slideDuration}
                     onChange={onInputValueChange}
                     min={2000}
@@ -195,6 +196,26 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                   />
                 </Filter>
               )}
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'animationSpeed'}
+                  name={'Animation speed'}
+                  value={animationSpeed}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'animation_speed',
+                          })
+                  }
+                  min={100}
+                  step={100}
+                  max={1000}
+                  unit={'ms'}
+                />
+              </Filter>
               <Filter isLoading={isLoading}>
                 <SelectControl
                   id={'hoverEffect'}

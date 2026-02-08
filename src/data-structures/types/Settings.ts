@@ -210,6 +210,7 @@ export interface ICubeSettings {
   activeDotColor: string;
   inactiveDotsColor: string;
   showVideoControls: boolean;
+  animationSpeed: number;
 }
 
 export interface ICarouselSettings {
@@ -249,6 +250,7 @@ export interface ICarouselSettings {
   activeDotColor: string;
   inactiveDotsColor: string;
   showVideoControls: boolean;
+  animationSpeed: number;
 }
 
 export interface ICardsSettings {
@@ -284,6 +286,7 @@ export interface ICardsSettings {
   activeDotColor: string;
   inactiveDotsColor: string;
   showVideoControls: boolean;
+  animationSpeed: number;
 }
 
 export interface IBlogSettings {

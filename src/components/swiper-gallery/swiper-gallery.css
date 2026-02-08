@@ -140,7 +140,6 @@
 .reacg-gallery .swiper-wrapper {
   display: flex;
   align-items: center;
-  transition-timing-function: linear;
 }
 .reacg-gallery .swiper-coverflow .swiper-wrapper {
   pointer-events: none;

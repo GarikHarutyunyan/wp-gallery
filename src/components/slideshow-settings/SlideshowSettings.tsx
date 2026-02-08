@@ -140,7 +140,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                 <Filter isLoading={isLoading}>
                   <NumberControl
                     id={'slideDuration'}
-                    name={'Time interval'}
+                    name={'Autoplay speed'}
                     value={slideDuration}
                     onChange={onInputValueChange}
                     min={700}

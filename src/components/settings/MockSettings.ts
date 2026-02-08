@@ -306,6 +306,7 @@ const cubeMockSettings: ICubeSettings = {
   activeDotColor: 'rgba(0, 0, 0, 1)',
   inactiveDotsColor: 'rgba(0, 0, 0, 0.5)',
   showVideoControls: false,
+  animationSpeed: 500,
 };
 
 const carouselMockSettings: ICarouselSettings = {
@@ -345,6 +346,7 @@ const carouselMockSettings: ICarouselSettings = {
   activeDotColor: 'rgba(0, 0, 0, 1)',
   inactiveDotsColor: 'rgba(0, 0, 0, 0.5)',
   showVideoControls: false,
+  animationSpeed: 500,
 };
 
 const cardsMockSettings: ICardsSettings = {
@@ -380,6 +382,7 @@ const cardsMockSettings: ICardsSettings = {
   activeDotColor: 'rgba(0, 0, 0, 1)',
   inactiveDotsColor: 'rgba(0, 0, 0, 0.5)',
   showVideoControls: false,
+  animationSpeed: 500,
 };
 
 const blogMockSettings: IBlogSettings = {
