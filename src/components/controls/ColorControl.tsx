@@ -1,12 +1,13 @@
 import {MakedColorPicker} from 'core-components/color-picker/ColorPicker';
 import React, {ReactNode} from 'react';
-import {LabelWithTooltip} from "./LabelWithTooltip";
+import {LabelWithTooltip} from './LabelWithTooltip';
 
 interface IColorControlProps {
   id?: string;
   name: string;
   value: string;
   tooltip?: ReactNode;
+  pro?: boolean;
   onChange: (value: string, id?: string) => void;
 }
 
@@ -15,6 +16,7 @@ const ColorControl: React.FC<IColorControlProps> = ({
   name,
   value,
   tooltip,
+  pro,
   onChange,
 }) => {
   const onValueChange = (value: any) => {
@@ -23,7 +25,7 @@ const ColorControl: React.FC<IColorControlProps> = ({
 
   return (
     <MakedColorPicker
-      label={<LabelWithTooltip label={name} tooltip={tooltip} />}
+      label={<LabelWithTooltip label={name} tooltip={tooltip} pro={pro} />}
       variant="standard"
       margin="none"
       InputLabelProps={{

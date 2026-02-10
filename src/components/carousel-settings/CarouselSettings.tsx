@@ -18,6 +18,9 @@ import {
   CaptionSourceOptions,
   HoverEffectOptions,
   ICarouselSettings,
+  SliderNavigation,
+  SliderNavigationOptions,
+  SliderNavigationPositionOptions,
   ThumbnailTitlePosition,
   ThumbnailTitlePositionOptions,
   TitleAlignmentOptions,
@@ -68,6 +71,16 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     captionPosition,
     captionFontSize,
     captionFontColor,
+    navigation,
+    arrowsSize,
+    arrowsColor,
+    dotsPosition,
+    dotsSize,
+    dotsGap,
+    activeDotColor,
+    inactiveDotsColor,
+    showVideoControls,
+    animationSpeed,
   } = value as ICarouselSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -197,36 +210,46 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   unit={'px'}
                 />
               </Filter>
-              <>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'autoplay'}
+                  name={'Autoplay'}
+                  value={autoplay}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              {autoplay && (
                 <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'playAndPauseAllowed'}
-                    name={'Play / Pause'}
-                    value={playAndPauseAllowed}
+                  <NumberControl
+                    id={'slideDuration'}
+                    name={'Autoplay speed'}
+                    value={slideDuration}
                     onChange={onInputValueChange}
+                    min={100}
+                    unit={'ms'}
                   />
                 </Filter>
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'autoplay'}
-                    name={'Autoplay'}
-                    value={autoplay}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                {autoplay && (
-                  <Filter isLoading={isLoading}>
-                    <NumberControl
-                      id={'slideDuration'}
-                      name={'Time interval'}
-                      value={slideDuration}
-                      onChange={onInputValueChange}
-                      min={100}
-                      unit={'ms'}
-                    />
-                  </Filter>
-                )}
-              </>
+              )}
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'animationSpeed'}
+                  name={'Animation speed'}
+                  value={animationSpeed}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'animation_speed',
+                          })
+                  }
+                  min={100}
+                  step={100}
+                  max={1000}
+                  unit={'ms'}
+                />
+              </Filter>
               <Filter isLoading={isLoading}>
                 <SelectControl
                   id={'hoverEffect'}
@@ -577,10 +600,175 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const renderAdvancedSettings = (): ReactNode => {
+    return (
+      <Section
+        header={'Advanced'}
+        body={
+          <>
+            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+              <Filter isLoading={isLoading}>
+                <SelectControl
+                  id={'navigation'}
+                  name={'Navigation'}
+                  value={navigation}
+                  options={SliderNavigationOptions}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+            </Grid>
+            {(navigation === SliderNavigation.ARROWS ||
+              navigation === SliderNavigation.ARROWS_AND_DOTS) && (
+              <Grid container columns={24} columnSpacing={4} marginTop={2}>
+                <Filter isLoading={isLoading}>
+                  <SliderControl
+                    id={'arrowsSize'}
+                    name="Arrows size (px)"
+                    min={0}
+                    max={100}
+                    value={arrowsSize}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'dots_color',
+                            })
+                    }
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <ColorControl
+                    id={'arrowsColor'}
+                    name={'Arrows color'}
+                    value={arrowsColor}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'arrows_color',
+                            })
+                    }
+                  />
+                </Filter>
+              </Grid>
+            )}
+
+            {(navigation === SliderNavigation.DOTS ||
+              navigation === SliderNavigation.ARROWS_AND_DOTS) && (
+              <Grid container columns={24} columnSpacing={4} marginTop={2}>
+                <Filter isLoading={isLoading}>
+                  <SelectControl
+                    id={'dotsPosition'}
+                    name={'Dots position'}
+                    value={dotsPosition}
+                    options={SliderNavigationPositionOptions}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SliderControl
+                    id={'dotsSize'}
+                    name="Dots size (px)"
+                    min={0}
+                    max={100}
+                    value={dotsSize}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'dots_color',
+                            })
+                    }
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SliderControl
+                    id={'dotsGap'}
+                    name="Dots gap (px)"
+                    min={0}
+                    max={50}
+                    value={dotsGap}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'dots_color',
+                            })
+                    }
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <ColorControl
+                    id={'activeDotColor'}
+                    name={'Active dot color'}
+                    value={activeDotColor}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'active_dots_color',
+                            })
+                    }
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <ColorControl
+                    id={'inactiveDotsColor'}
+                    name={'Inactive dots color'}
+                    value={inactiveDotsColor}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'inactive_dots_color',
+                            })
+                    }
+                  />
+                </Filter>
+              </Grid>
+            )}
+            <Grid container columns={24} columnSpacing={4} marginTop={2}>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'playAndPauseAllowed'}
+                  name={'Show Play / Pause button'}
+                  value={playAndPauseAllowed}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'showVideoControls'}
+                  name={'Show video controls'}
+                  value={showVideoControls}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+            </Grid>
+          </>
+        }
+        defaultExpanded={false}
+      />
+    );
+  };
+
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderBasicSettings()}
       {renderTitleSection()}
+      {renderAdvancedSettings()}
     </Paper>
   );
 };

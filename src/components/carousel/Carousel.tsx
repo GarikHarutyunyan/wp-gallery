@@ -2,9 +2,13 @@ import Box from '@mui/material/Box';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
-import {ICarouselSettings} from 'data-structures';
+import {
+  ICarouselSettings,
+  SliderNavigation,
+  SliderNavigationPosition,
+} from 'data-structures';
 import React, {useEffect, useRef, useState} from 'react';
-import {Autoplay, EffectCoverflow, Navigation} from 'swiper/modules';
+import {EffectCoverflow} from 'swiper/modules';
 import {SwiperGallery} from '../swiper-gallery/SwiperGallery';
 import './carousel.css';
 
@@ -32,6 +36,12 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     captionPosition,
     titleFontSize,
     captionFontSize,
+    navigation,
+    dotsPosition,
+    dotsSize,
+    dotsGap,
+    activeDotColor,
+    inactiveDotsColor,
   } = settings as ICarouselSettings;
 
   const effects = {
@@ -48,8 +58,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
       slideShadows: false,
       stretch: 0,
     },
-    navigation: true,
-    modules: [EffectCoverflow, Autoplay, Navigation],
+    additionalModules: [EffectCoverflow],
   };
 
   const wrapper = wrapperRef.current;
@@ -63,8 +72,12 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const containerWidth: number = Math.min(innerWidth, contWidth);
   const containerHeight: number =
     innerWidth >= 480 ? containerWidth / ratio : height;
-  // This ensures that Swiper functions correctly in infinite loop mode when the total number of images is less than the number of visible slides
-  const shouldDuplicate = images.length > 1 && imagesCount * 2 > images.length;
+  // This ensures that Swiper functions correctly in infinite loop mode and disabled pagination when the total number of images is less than the number of visible slides
+  const shouldDuplicate =
+    navigation === SliderNavigation.DOTS ||
+    navigation === SliderNavigation.ARROWS_AND_DOTS
+      ? false
+      : images.length > 1 && imagesCount * 2 > images.length;
 
   const carouselImages = shouldDuplicate ? [...images, ...images] : images;
 
@@ -123,70 +136,120 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, [wrapper?.clientWidth]);
+
+  const dynamicThreshold = 6;
+
+  const externalPaginationIdRef = React.useRef(
+    `swiper-pagination-external-${Math.random().toString(36).slice(2, 9)}`
+  );
+
   return (
-    <Box
-      ref={galleryRef}
-      sx={{
-        width: `${containerWidth}px`,
-        height: `${containerHeight + titleCaptionHeight}px`,
-        mx: 'auto',
-        background: backgroundColor,
-        padding: `${padding}px`,
-        boxSizing: 'border-box',
-      }}
-    >
-      {(images || []).length > 0 && (
-        <SwiperGallery
-          key={effects.id}
-          effects={effects}
-          loop={images.length > 1}
-          backgroundColor={backgroundColor}
-          images={carouselImages}
-          autoplay={autoplay}
-          delay={slideDuration}
-          playAndPauseAllowed={playAndPauseAllowed}
-          width={containerWidth}
-          height={containerHeight + titleCaptionHeight}
-          size={Math.max(width, height)}
-          imagesCount={imagesCount}
-          preLoadCount={imagesCount + 2}
-          padding={padding}
-          scale={scale}
-          allowTouchMove={true}
-          onClick={onClick}
-          slideClassName={clsx({carousel__slide_clickable: !!onClick})}
-          settings={settings as ICarouselSettings}
-          breakpoints={{
-            // when window width is >= 0
-            0: {
-              slidesPerView: imagesCount > 1 ? 1 : imagesCount,
-              spaceBetween: spaceBetween < 0 ? spaceBetween : 0,
-            },
-            // when window width is >= 480px
-            480: {
-              slidesPerView: imagesCount > 2 ? 2 : imagesCount,
-              spaceBetween: spaceBetween < 20 ? spaceBetween : 20,
-            },
-            // when window width is >= 640px
-            640: {
-              slidesPerView: imagesCount > 3 ? 3 : imagesCount,
-              spaceBetween: spaceBetween < 30 ? spaceBetween : 30,
-            },
-            // when window width is >= 1024px
-            1024: {
-              slidesPerView: imagesCount > 4 ? 4 : imagesCount,
-              spaceBetween: spaceBetween < 40 ? spaceBetween : 40,
-            },
-            // when window width is >= 1280px
-            1280: {
-              slidesPerView: imagesCount,
-              spaceBetween: spaceBetween,
-            },
-          }}
-          titleCaptionHeight={titleCaptionHeight}
-        />
-      )}
-    </Box>
+    <>
+      <Box
+        ref={galleryRef}
+        sx={{
+          width: `${containerWidth}px`,
+          height: `${containerHeight + titleCaptionHeight}px`,
+          mx: 'auto',
+          background: backgroundColor,
+          padding: `${padding}px`,
+          paddingBottom:
+            (navigation === SliderNavigation.DOTS ||
+              navigation === SliderNavigation.ARROWS_AND_DOTS) &&
+            dotsPosition === SliderNavigationPosition.OUTSIDE
+              ? 0
+              : `${padding}px`,
+          boxSizing: 'border-box',
+        }}
+      >
+        {(images || []).length > 0 && (
+          <SwiperGallery
+            key={effects.id}
+            externalPaginationId={externalPaginationIdRef.current}
+            effects={effects}
+            loop={images.length > 1}
+            backgroundColor={backgroundColor}
+            images={carouselImages}
+            autoplay={autoplay}
+            delay={slideDuration}
+            playAndPauseAllowed={playAndPauseAllowed}
+            width={containerWidth}
+            height={containerHeight + titleCaptionHeight}
+            size={Math.max(width, height)}
+            imagesCount={imagesCount}
+            preLoadCount={imagesCount + 2}
+            padding={padding}
+            scale={scale}
+            allowTouchMove={true}
+            onClick={onClick}
+            slideClassName={clsx({carousel__slide_clickable: !!onClick})}
+            settings={settings as ICarouselSettings}
+            breakpoints={{
+              // when window width is >= 0
+              0: {
+                slidesPerView: imagesCount > 1 ? 1 : imagesCount,
+                spaceBetween: spaceBetween < 0 ? spaceBetween : 0,
+              },
+              // when window width is >= 480px
+              480: {
+                slidesPerView: imagesCount > 2 ? 2 : imagesCount,
+                spaceBetween: spaceBetween < 20 ? spaceBetween : 20,
+              },
+              // when window width is >= 640px
+              640: {
+                slidesPerView: imagesCount > 3 ? 3 : imagesCount,
+                spaceBetween: spaceBetween < 30 ? spaceBetween : 30,
+              },
+              // when window width is >= 1024px
+              1024: {
+                slidesPerView: imagesCount > 4 ? 4 : imagesCount,
+                spaceBetween: spaceBetween < 40 ? spaceBetween : 40,
+              },
+              // when window width is >= 1280px
+              1280: {
+                slidesPerView: imagesCount,
+                spaceBetween: spaceBetween,
+              },
+            }}
+            titleCaptionHeight={titleCaptionHeight}
+          />
+        )}
+      </Box>
+      {(navigation === SliderNavigation.DOTS ||
+        navigation === SliderNavigation.ARROWS_AND_DOTS) &&
+        dotsPosition === SliderNavigationPosition.OUTSIDE && (
+          <div
+            id={externalPaginationIdRef.current}
+            className={clsx(
+              'swiper-pagination-external',
+              'swiper-pagination',
+              'swiper-pagination-clickable',
+              'swiper-pagination-bullets',
+              'swiper-pagination-horizontal',
+              {
+                'swiper-pagination-bullets-dynamic':
+                  (images || []).length > dynamicThreshold,
+              }
+            )}
+            style={{
+              ['--swiper-pagination-color' as string]: activeDotColor,
+              ['--swiper-pagination-bullet-size' as string]: dotsSize + 'px',
+              ['--swiper-pagination-bullet-inactive-color' as string]:
+                inactiveDotsColor,
+              ['--swiper-pagination-bullet-inactive-opacity' as string]: '1',
+              ['--swiper-pagination-bullet-horizontal-gap' as string]:
+                dotsGap + 'px',
+              ['--swiper-external-pagination-padding' as string]: '10px',
+              ['--swiper-external-pagination-bottom-padding' as string]: padding
+                ? padding + 'px'
+                : 'var(--swiper-external-pagination-padding)',
+              width: `${containerWidth}px`,
+              background: backgroundColor,
+              margin: (images || []).length > dynamicThreshold ? 0 : '0 auto',
+            }}
+          />
+        )}
+    </>
   );
 };
 

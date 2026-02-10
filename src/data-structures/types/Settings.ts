@@ -15,7 +15,9 @@ import {
   SizeTypeWidth,
   SliderAnimation,
   SliderDirection,
+  SliderNavigation,
   SliderNavigationPosition,
+  SliderNavigationPositionV2,
   SliderNavigationType,
   SliderPaginationType,
   SliderShadowType,
@@ -188,6 +190,7 @@ export interface ICubeSettings {
   padding: number;
   isInfinite: boolean;
   autoplay: boolean;
+  playAndPauseAllowed: boolean;
   slideDuration: number;
   shadow: boolean;
   hoverEffect: HoverEffect;
@@ -207,6 +210,16 @@ export interface ICubeSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  navigation: SliderNavigation;
+  arrowsSize: number;
+  arrowsColor: string;
+  dotsPosition: SliderNavigationPosition;
+  dotsSize: number;
+  dotsGap: number;
+  activeDotColor: string;
+  inactiveDotsColor: string;
+  showVideoControls: boolean;
+  animationSpeed: number;
 }
 
 export interface ICarouselSettings {
@@ -237,13 +250,22 @@ export interface ICarouselSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  navigation: SliderNavigation;
+  arrowsSize: number;
+  arrowsColor: string;
+  dotsPosition: SliderNavigationPosition;
+  dotsSize: number;
+  dotsGap: number;
+  activeDotColor: string;
+  inactiveDotsColor: string;
+  showVideoControls: boolean;
+  animationSpeed: number;
 }
 
 export interface ICardsSettings {
   width: number;
   height: number;
   perSlideOffset: number;
-  navigationButton: boolean;
   playAndPauseAllowed: boolean;
   autoplay: boolean;
   slideDuration: number;
@@ -264,6 +286,16 @@ export interface ICardsSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  navigation: SliderNavigation;
+  arrowsSize: number;
+  arrowsColor: string;
+  dotsPosition: SliderNavigationPosition;
+  dotsSize: number;
+  dotsGap: number;
+  activeDotColor: string;
+  inactiveDotsColor: string;
+  showVideoControls: boolean;
+  animationSpeed: number;
 }
 
 export interface IBlogSettings {
@@ -387,7 +419,7 @@ export interface ISliderSettings {
   navigationshowsOnHover: boolean;
   navigationType: SliderNavigationType;
   navigationColor: string;
-  navigationPosition: SliderNavigationPosition;
+  navigationPosition: SliderNavigationPositionV2;
   navigationBackgroundColor: string;
   navigationSize: number;
   navigationPadding: number;

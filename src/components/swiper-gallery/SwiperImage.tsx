@@ -60,6 +60,7 @@ const SwiperImage = forwardRef(
       captionPosition,
       captionFontSize,
       captionFontColor,
+      showVideoControls,
     } = settings;
     const itemBorderRadius = 0;
     const borderRadius = 0;
@@ -295,7 +296,7 @@ const SwiperImage = forwardRef(
                 src={image.original.url}
                 poster={image.medium_large.url}
                 className={'swiper-gallery__video'}
-                controls
+                controls={showVideoControls}
                 muted
                 playsInline
                 loop

@@ -17,7 +17,7 @@ import {
   SizeTypeWidthOptions,
   SliderAnimationOptions,
   SliderDirectionOptions,
-  SliderNavigationPositionOptions,
+  SliderNavigationPositionV2Options,
   SliderNavigationTypeOptions,
   SliderPaginationType,
   SliderPaginationTypeOptions,
@@ -1419,7 +1419,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                     id="navigationPosition"
                     name="Position"
                     value={navigationPosition}
-                    options={SliderNavigationPositionOptions}
+                    options={SliderNavigationPositionV2Options}
                     onChange={onInputValueChange}
                   />
                 </Filter>
