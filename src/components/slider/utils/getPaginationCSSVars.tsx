@@ -7,12 +7,14 @@ export function getPaginationCSSVars(settings: ISliderSettings) {
     paginationBulletsBorder,
     paginationBulletsBorderRadius,
     paginationBulletsBorderColor,
-
     paginationActiveBulletBackgroundColor,
     paginationActiveBulletSize,
     paginationActiveBulletBorder,
     paginationActiveBulletBorderColor,
     paginationActiveBulletBorderRadius,
+    paginationFractionColor,
+    paginationFractionFontSize,
+    paginationFractionTextFontFamily,
   } = settings as ISliderSettings;
 
   return {
@@ -41,5 +43,13 @@ export function getPaginationCSSVars(settings: ISliderSettings) {
       paginationActiveBulletBorderColor ||
       paginationBulletsBorderColor ||
       '#ffffff',
+
+    /* ───────────── FRACTION ───────────── */
+    '--slider-pagination-fraction-color': paginationFractionColor || '#ffffff',
+    '--slider-pagination-fraction-font-size': `${
+      paginationFractionFontSize || 16
+    }px`,
+    '--slider-pagination-fraction-font-family':
+      paginationFractionTextFontFamily || 'inherit',
   } as React.CSSProperties;
 }

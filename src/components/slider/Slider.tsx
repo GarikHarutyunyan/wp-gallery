@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
-import {IImageDTO, ISliderSettings, SliderTextPosition} from 'data-structures';
+import {ISliderSettings, SliderTextPosition} from 'data-structures';
 import {useEffect, useMemo, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import type {Swiper as SwiperType} from 'swiper';
@@ -20,27 +20,12 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/parallax';
 import 'swiper/css/thumbs';
-import {
-  Autoplay,
-  Keyboard,
-  Mousewheel,
-  Navigation,
-  Pagination,
-  Parallax,
-  Thumbs,
-} from 'swiper/modules';
-
-import {Swiper, SwiperSlide} from 'swiper/react';
 
 import {useObservedTextHeight} from './hooks/useObservedTextHeight';
 import './slider.css';
+import SliderMain from './SliderMain';
 import {SliderNavigation} from './SliderNavigation';
-import {SliderPlayPause} from './SliderPlayPause';
-import {SliderSlideContent} from './SliderSlideContent';
 import SliderThumbs from './SliderThumbs';
-import {SlideText} from './SlideText';
-import {getPaginationCSSVars} from './utils/getPaginationCSSVars';
-import {getSwiperEffectOptions} from './utils/getSwiperEffects';
 import {
   getThumbnailsFlexDirection,
   hasThumbnails,
@@ -57,13 +42,7 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
   const {
     width,
     widthType,
-    height,
-    heightType,
     isInfinite,
-    isSliderAllowed,
-    autoplay,
-    slideDuration,
-    slideDelay,
     imageAnimation,
     thumbnailsPosition,
     thumbnailShowsOnHover,
@@ -74,9 +53,7 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     showCaption,
     navigationButton,
     navigationPosition,
-    pagination,
-    paginationPosition,
-    paginationDynamicBullets,
+    paginationType,
     paginationshowsOnHover,
     paginationBulletsImage,
     thumbnailBarGap,
@@ -87,15 +64,11 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     shadowType,
     shadowColor,
   } = settings as ISliderSettings;
-  const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
+
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
   const thumbsVertical = isThumbnailsVertical(thumbnailsPosition);
-  const {
-    effect,
-    modules: effectModules,
-    effectOptions,
-  } = getSwiperEffectOptions(imageAnimation, direction);
+
   const textRef = useRef<HTMLDivElement | null>(null);
   const hasThumbs = hasThumbnails(thumbnailsPosition);
   const hasTextAbove =
@@ -123,12 +96,12 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     hasThumbs,
     keyboard,
     mousewheel,
-    paginationDynamicBullets,
+    paginationType,
     paginationBulletsImage,
   ]);
   const staticKey = useMemo(
     () =>
-      `${direction}-${isInfinite}-${hasThumbs}-${imageAnimation}-${keyboard}-${mousewheel}-${paginationDynamicBullets}-${paginationBulletsImage}`,
+      `${direction}-${isInfinite}-${hasThumbs}-${imageAnimation}-${keyboard}-${mousewheel}-${paginationType}-${paginationBulletsImage}`,
     [
       direction,
       isInfinite,
@@ -136,7 +109,7 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
       hasThumbs,
       keyboard,
       mousewheel,
-      paginationDynamicBullets,
+      paginationType,
       paginationBulletsImage,
     ]
   );
@@ -168,120 +141,18 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
           {navigationButton && navigationPosition.includes('out-top') && (
             <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
           )}
-          <Swiper
+          <SliderMain
             key={`main-${staticKey}`}
-            className={clsx(
-              'slider__main-swiper',
-              pagination &&
-                !paginationDynamicBullets &&
-                `slider__pagination--${paginationPosition}`,
-              (imageAnimation === 'zoom' || imageAnimation === 'rotate') &&
-                'swiper-overflow-visible'
-            )}
-            style={{
-              height: `calc(${height}${heightType} + ${textHeight}px)`,
-              ...getPaginationCSSVars(settings!),
-            }}
-            onSwiper={(swiper: any) => (mainSwiperRef.current = swiper)}
-            preventInteractionOnTransition={true}
-            modules={[
-              Navigation,
-              Pagination,
-              Autoplay,
-              Parallax,
-              Thumbs,
-              Keyboard,
-              Mousewheel,
-              ...effectModules,
-            ]}
-            keyboard={{
-              enabled: keyboard,
-            }}
-            mousewheel={mousewheel}
-            autoplay={
-              autoplay || isPlaying
-                ? {
-                    delay: slideDelay,
-                    stopOnLastSlide: false,
-                  }
-                : false
-            }
-            slidesPerView={1}
-            spaceBetween={0}
-            parallax={true}
-            thumbs={{swiper: thumbsSwiper}}
-            pagination={
-              pagination
-                ? paginationBulletsImage
-                  ? {
-                      clickable: true,
-                      dynamicBullets: paginationDynamicBullets,
-                      renderBullet: (index: any, className: any) => {
-                        const src = images[index]?.original?.url;
-                        return `
-              <span class="${className} slider__pagination-bullet">
-                <img src="${src}" alt="" />
-              </span>
-            `;
-                      },
-                    }
-                  : {
-                      clickable: true,
-                      dynamicBullets: paginationDynamicBullets,
-                    }
-                : false
-            }
-            effect={effect as any}
-            {...effectOptions}
-            loop={isInfinite}
-            direction={direction || 'vertical'}
-            speed={slideDuration}
-          >
-            {images.map((image: IImageDTO, index) => (
-              <SwiperSlide
-                key={image.id ?? index}
-                onClick={() => onClick?.(index)}
-              >
-                {/* ABOVE */}
-                {hasTextAbove && (
-                  <SlideText
-                    ref={textRef}
-                    image={image}
-                    settings={settings!}
-                    variant={'main'}
-                  />
-                )}
-
-                <SliderSlideContent
-                  image={image}
-                  effect={effect}
-                  settings={settings!}
-                  textRef={textRef}
-                />
-
-                {/* BELOW */}
-                {hasTextBelow && (
-                  <SlideText
-                    ref={textRef}
-                    image={image}
-                    settings={settings!}
-                    variant={'main'}
-                  />
-                )}
-              </SwiperSlide>
-            ))}
-            {navigationButton && !navigationPosition.includes('out') && (
-              <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
-            )}
-
-            <SliderPlayPause
-              swiperRef={mainSwiperRef}
-              autoplay={autoplay}
-              isSliderAllowed={isSliderAllowed}
-              isPlaying={isPlaying}
-              setIsPlaying={setIsPlaying}
-            />
-          </Swiper>
+            images={images}
+            settings={settings!}
+            thumbsSwiper={thumbsSwiper}
+            mainSwiperRef={mainSwiperRef}
+            textRef={textRef}
+            textHeight={textHeight}
+            hasTextAbove={hasTextAbove}
+            hasTextBelow={hasTextBelow}
+            onClick={onClick}
+          />
           {navigationButton && navigationPosition.includes('out-bottom') && (
             <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
           )}

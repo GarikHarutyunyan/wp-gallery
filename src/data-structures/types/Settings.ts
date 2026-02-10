@@ -17,6 +17,7 @@ import {
   SliderDirection,
   SliderNavigationPosition,
   SliderNavigationType,
+  SliderPaginationType,
   SliderShadowType,
   SliderSlidesDesign,
   SliderTextPosition,
@@ -399,7 +400,7 @@ export interface ISliderSettings {
   navigationBackgroundColorHover: string;
   pagination: boolean;
   paginationPosition: SliderPaginationPosition;
-  paginationDynamicBullets: boolean;
+  paginationType: SliderPaginationType;
   paginationBulletsImage: boolean;
   paginationshowsOnHover: boolean;
   paginationBulletsBackgroundColor: string;
@@ -412,6 +413,9 @@ export interface ISliderSettings {
   paginationActiveBulletBorder: number;
   paginationActiveBulletBorderColor: string;
   paginationActiveBulletBorderRadius: number;
+  paginationFractionColor: string;
+  paginationFractionFontSize: number;
+  paginationFractionTextFontFamily: string;
   shadow: boolean;
   shadowType: SliderShadowType;
   shadowColor: string;

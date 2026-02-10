@@ -19,6 +19,8 @@ import {
   SliderDirectionOptions,
   SliderNavigationPositionOptions,
   SliderNavigationTypeOptions,
+  SliderPaginationType,
+  SliderPaginationTypeOptions,
   SliderShadowTypeOptions,
   SliderSlidesDesign,
   SliderSlidesDesignOptions,
@@ -145,7 +147,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     pagination,
     paginationPosition,
     paginationBulletsImage,
-    paginationDynamicBullets,
+    paginationType,
     paginationshowsOnHover,
     paginationBulletsBackgroundColor,
     paginationBulletsSize,
@@ -157,6 +159,9 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     paginationActiveBulletBorder,
     paginationActiveBulletBorderColor,
     paginationActiveBulletBorderRadius,
+    paginationFractionColor,
+    paginationFractionFontSize,
+    paginationFractionTextFontFamily,
     direction,
     keyboard,
     mousewheel,
@@ -170,7 +175,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
   };
   useEffect(() => {
     onChange({...value, paginationActiveBulletSize: 0});
-  }, [paginationDynamicBullets]);
+  }, [paginationType]);
   const renderMainSettings = (): ReactNode => {
     return (
       <Section
@@ -1572,10 +1577,12 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
             {pagination && (
               <>
                 <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id="paginationDynamicBullets"
-                    name="Dynamic bullets"
-                    value={paginationDynamicBullets}
+                  <SelectControl
+                    id={'paginationType'}
+                    name={'Type'}
+                    // pro={true}
+                    value={paginationType}
+                    options={SliderPaginationTypeOptions}
                     onChange={onInputValueChange}
                   />
                 </Filter>
@@ -1591,15 +1598,18 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                   />
                 </Filter>
 
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id="paginationBulletsImage"
-                    name="Image bullets"
-                    value={paginationBulletsImage}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                {!paginationDynamicBullets && (
+                {paginationType !== SliderPaginationType.FRACTION && (
+                  <Filter isLoading={isLoading}>
+                    <SwitchControl
+                      id="paginationBulletsImage"
+                      name="Image bullets"
+                      value={paginationBulletsImage}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                )}
+
+                {paginationType !== SliderPaginationType.DYNAMIC && (
                   <Filter isLoading={isLoading}>
                     <SelectControl
                       id={'paginationPosition'}
@@ -1618,162 +1628,223 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                   </Filter>
                 )}
                 {/* ───────────────── BULLETS ───────────────── */}
-                <>
-                  {/* LABEL */}
-                  <Grid
-                    sx={{marginLeft: 0, paddingTop: 2}}
-                    container
-                    columns={24}
-                    rowSpacing={2}
-                    columnSpacing={4}
-                  >
-                    <Filter isLoading={isLoading}>
-                      <InputLabel shrink variant="filled">
-                        <LabelWithTooltip label="Bullets" tooltip="" />
-                      </InputLabel>
-                    </Filter>
-                  </Grid>
 
-                  {/* CONTROLS */}
-                  <Grid
-                    container
-                    columns={24}
-                    rowSpacing={2}
-                    columnSpacing={4}
-                    className="reacg-section__container-inherit"
-                  >
-                    {!paginationBulletsImage && (
+                {paginationType !== SliderPaginationType.FRACTION && (
+                  <>
+                    {/* LABEL */}
+                    <Grid
+                      sx={{marginLeft: 0, paddingTop: 2}}
+                      container
+                      columns={24}
+                      rowSpacing={2}
+                      columnSpacing={4}
+                    >
                       <Filter isLoading={isLoading}>
-                        <ColorControl
-                          id="paginationBulletsBackgroundColor"
-                          name="Background color"
-                          value={paginationBulletsBackgroundColor}
-                          onChange={onInputValueChange}
-                        />
+                        <InputLabel shrink variant="filled">
+                          <LabelWithTooltip label="Bullets" tooltip="" />
+                        </InputLabel>
                       </Filter>
-                    )}
+                    </Grid>
 
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id="paginationBulletsSize"
-                        name="Size (px)"
-                        min={0}
-                        max={300}
-                        value={paginationBulletsSize}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
+                    {/* CONTROLS */}
+                    <Grid
+                      container
+                      columns={24}
+                      rowSpacing={2}
+                      columnSpacing={4}
+                      className="reacg-section__container-inherit"
+                    >
+                      {!paginationBulletsImage && (
+                        <Filter isLoading={isLoading}>
+                          <ColorControl
+                            id="paginationBulletsBackgroundColor"
+                            name="Background color"
+                            value={paginationBulletsBackgroundColor}
+                            onChange={onInputValueChange}
+                          />
+                        </Filter>
+                      )}
 
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id="paginationBulletsBorder"
-                        name="Border (px)"
-                        min={0}
-                        max={5}
-                        value={paginationBulletsBorder}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id="paginationBulletsBorderRadius"
-                        name="Border radius (%)"
-                        min={0}
-                        max={99}
-                        value={paginationBulletsBorderRadius}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id="paginationBulletsBorderColor"
-                        name="Border color"
-                        value={paginationBulletsBorderColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                  </Grid>
-                </>
-
-                {/* ─────────────── ACTIVE BULLET ─────────────── */}
-                <>
-                  {/* LABEL */}
-                  <Grid
-                    sx={{marginLeft: 0, paddingTop: 2}}
-                    container
-                    columns={24}
-                    rowSpacing={2}
-                    columnSpacing={4}
-                  >
-                    <Filter isLoading={isLoading}>
-                      <InputLabel shrink variant="filled">
-                        <LabelWithTooltip label="Active bullet" tooltip="" />
-                      </InputLabel>
-                    </Filter>
-                  </Grid>
-
-                  {/* CONTROLS */}
-                  <Grid
-                    container
-                    columns={24}
-                    rowSpacing={2}
-                    columnSpacing={4}
-                    className="reacg-section__container-inherit"
-                  >
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id="paginationActiveBulletBackgroundColor"
-                        name="Background color"
-                        value={paginationActiveBulletBackgroundColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id="paginationActiveBulletBorderColor"
-                        name="Border color"
-                        value={paginationActiveBulletBorderColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    {!paginationDynamicBullets && (
                       <Filter isLoading={isLoading}>
                         <SliderControl
-                          id="paginationActiveBulletSize"
+                          id="paginationBulletsSize"
                           name="Size (px)"
                           min={0}
                           max={300}
-                          value={paginationActiveBulletSize}
+                          value={paginationBulletsSize}
                           onChange={onInputValueChange}
                         />
                       </Filter>
-                    )}
 
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id="paginationActiveBulletBorder"
-                        name="Border (px)"
-                        min={0}
-                        max={5}
-                        value={paginationActiveBulletBorder}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id="paginationBulletsBorder"
+                          name="Border (px)"
+                          min={0}
+                          max={5}
+                          value={paginationBulletsBorder}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
 
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id="paginationActiveBulletBorderRadius"
-                        name="Border radius (%)"
-                        min={0}
-                        max={99}
-                        value={paginationActiveBulletBorderRadius}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                  </Grid>
-                </>
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id="paginationBulletsBorderRadius"
+                          name="Border radius (%)"
+                          min={0}
+                          max={99}
+                          value={paginationBulletsBorderRadius}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+
+                      <Filter isLoading={isLoading}>
+                        <ColorControl
+                          id="paginationBulletsBorderColor"
+                          name="Border color"
+                          value={paginationBulletsBorderColor}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                    </Grid>
+                  </>
+                )}
+                {/* ─────────────── ACTIVE BULLET ─────────────── */}
+                {paginationType !== SliderPaginationType.FRACTION && (
+                  <>
+                    {/* LABEL */}
+                    <Grid
+                      sx={{marginLeft: 0, paddingTop: 2}}
+                      container
+                      columns={24}
+                      rowSpacing={2}
+                      columnSpacing={4}
+                    >
+                      <Filter isLoading={isLoading}>
+                        <InputLabel shrink variant="filled">
+                          <LabelWithTooltip label="Active bullet" tooltip="" />
+                        </InputLabel>
+                      </Filter>
+                    </Grid>
+
+                    {/* CONTROLS */}
+                    <Grid
+                      container
+                      columns={24}
+                      rowSpacing={2}
+                      columnSpacing={4}
+                      className="reacg-section__container-inherit"
+                    >
+                      <Filter isLoading={isLoading}>
+                        <ColorControl
+                          id="paginationActiveBulletBackgroundColor"
+                          name="Background color"
+                          value={paginationActiveBulletBackgroundColor}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <ColorControl
+                          id="paginationActiveBulletBorderColor"
+                          name="Border color"
+                          value={paginationActiveBulletBorderColor}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      {paginationType !== SliderPaginationType.DYNAMIC && (
+                        <Filter isLoading={isLoading}>
+                          <SliderControl
+                            id="paginationActiveBulletSize"
+                            name="Size (px)"
+                            min={0}
+                            max={300}
+                            value={paginationActiveBulletSize}
+                            onChange={onInputValueChange}
+                          />
+                        </Filter>
+                      )}
+
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id="paginationActiveBulletBorder"
+                          name="Border (px)"
+                          min={0}
+                          max={5}
+                          value={paginationActiveBulletBorder}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id="paginationActiveBulletBorderRadius"
+                          name="Border radius (%)"
+                          min={0}
+                          max={99}
+                          value={paginationActiveBulletBorderRadius}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                    </Grid>
+                  </>
+                )}
+
+                {/* ─────────────── FRACTION ─────────────── */}
+                {paginationType === SliderPaginationType.FRACTION && (
+                  <>
+                    {/* LABEL */}
+                    <Grid
+                      sx={{marginLeft: 0, paddingTop: 2}}
+                      container
+                      columns={24}
+                      rowSpacing={2}
+                      columnSpacing={4}
+                    >
+                      <Filter isLoading={isLoading}>
+                        <InputLabel shrink variant="filled">
+                          <LabelWithTooltip label="Fraction" tooltip="" />
+                        </InputLabel>
+                      </Filter>
+                    </Grid>
+
+                    {/* CONTROLS */}
+                    <Grid
+                      container
+                      columns={24}
+                      rowSpacing={2}
+                      columnSpacing={4}
+                      className="reacg-section__container-inherit"
+                    ></Grid>
+                  </>
+                )}
+                <Filter isLoading={isLoading}>
+                  <ColorControl
+                    id={'paginationFractionColor'}
+                    name="Color"
+                    value={paginationFractionColor}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'paginationFractionFontSize'}
+                    name={'Font size'}
+                    value={paginationFractionFontSize}
+                    onChange={onInputValueChange}
+                    unit={'px'}
+                    max={200}
+                    step={1}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <FontControl
+                    id={'paginationFractionTextFontFamily'}
+                    name={'Font family'}
+                    value={paginationFractionTextFontFamily}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
               </>
             )}
           </Grid>

@@ -301,6 +301,14 @@
   overflow: hidden;
 }
 
+.reacg-gallery
+  .slider__layout
+  .slider__main-swiper
+  .swiper-pagination.swiper-pagination-fraction {
+  color: var(--slider-pagination-fraction-color);
+  font-size: var(--slider-pagination-fraction-font-size);
+  font-family: var(--slider-pagination-fraction-font-family);
+}
 /* ---------------- TOP ---------------- */
 .reacg-gallery
   .slider__layout
