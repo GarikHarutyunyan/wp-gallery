@@ -17,12 +17,18 @@ interface INumberControlProps {
   pro?: boolean;
 }
 const numberInputOnWheelPreventChange = (e: any) => {
-  e.target.blur();
-  e.stopPropagation();
+  const el = e.currentTarget;
+  const isFocused: boolean =
+    document.activeElement === el || el.contains(document.activeElement);
 
-  setTimeout(() => {
-    e.target.focus();
-  }, 0);
+  if (isFocused) {
+    e.target.blur();
+    e.stopPropagation();
+
+    setTimeout(() => {
+      e.target.focus({preventScroll: true});
+    }, 0);
+  }
 };
 
 const NumberControl: React.FC<INumberControlProps> = ({
