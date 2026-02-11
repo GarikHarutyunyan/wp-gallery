@@ -9,7 +9,7 @@ interface INumberControlProps {
   tooltip?: ReactNode;
   defaultValue?: number;
   value?: number;
-  onChange: (value: number | undefined, id?: string) => void;
+  onChange: (value: number | string, id?: string) => void;
   min?: number;
   max?: number;
   unit?: string;
@@ -39,10 +39,10 @@ const NumberControl: React.FC<INumberControlProps> = ({
   pro,
 }) => {
   const onValueChange = (event: any) => {
-    const value: number | undefined =
+    const value: number | string =
       event.target.value !== '' || !!event.target.value
         ? +event.target.value
-        : undefined;
+        : '';
 
     onChange(value, id);
   };
