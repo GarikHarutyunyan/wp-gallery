@@ -172,6 +172,7 @@ export interface IGeneralSettings {
   enableSearch: boolean;
   searchPlaceholderText: string;
   enableWhiteLabel: boolean;
+  enableRightClickProtection: boolean;
 }
 
 export interface ICubeSettings {

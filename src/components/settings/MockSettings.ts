@@ -224,6 +224,7 @@ const generalMockSettings: IGeneralSettings = {
   enableSearch: false,
   searchPlaceholderText: 'Search',
   enableWhiteLabel: false,
+  enableRightClickProtection: false,
 };
 
 const lightboxMockSettings: ILightboxSettings = {

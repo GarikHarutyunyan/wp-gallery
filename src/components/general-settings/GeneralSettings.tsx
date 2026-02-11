@@ -101,6 +101,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     watermarkPosition,
     enableSearch,
     searchPlaceholderText,
+    enableRightClickProtection,
   } = value as IGeneralSettings;
 
   const showOnlyGalleryOptions: boolean =
@@ -385,6 +386,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
               <SwitchControl
                 id={'enableWatermark'}
                 name={'Enable'}
+                pro={true}
                 tooltip={
                   <p>
                     Applies a non-destructive watermark overlay. The original
@@ -480,6 +482,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                   id={'enableSearch'}
                   name={'Enable Search'}
                   value={enableSearch}
+                  pro={true}
                   onChange={
                     isPro
                       ? onInputValueChange
@@ -516,11 +519,52 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const renderProtectionSettings = (): ReactNode => {
+    return (
+      <Section
+        header={
+          <>
+            Protection
+            <ProIcon />
+          </>
+        }
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'enableRightClickProtection'}
+                name={'Enable Right-Click Protection'}
+                pro={true}
+                value={enableRightClickProtection}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () =>
+                        (window as any).reacg_open_premium_offer_dialog({
+                          utm_medium: 'enable_right_click_protection',
+                        })
+                }
+                tooltip={
+                  <p>
+                    Disable right-click context menu on the gallery to prevent
+                    users from downloading or copying images.
+                  </p>
+                }
+              />
+            </Filter>
+          </Grid>
+        }
+        defaultExpanded={false}
+      />
+    );
+  };
+
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderSortingSettings()}
       {!showOnlyGalleryOptions ? renderMainSettings() : null}
       {renderSearchSettings()}
+      {renderProtectionSettings()}
       {renderWatermarkSettings()}
     </Paper>
   );

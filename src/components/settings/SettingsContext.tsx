@@ -407,12 +407,21 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const renderChildren = (): ReactNode => {
+    const handleContextMenu = (e: React.MouseEvent) => {
+      if (generalSettings?.enableRightClickProtection) {
+        e.preventDefault();
+      }
+    };
+
     return (
       <div
         ref={wrapperRef}
         className={clsx('reacg-gallery-wrapper', {
           'reacg-gallery-wrapper__margin-bottom': type === GalleryType.CUBE,
+          'reacg-gallery-wrapper--protected':
+            generalSettings?.enableRightClickProtection,
         })}
+        onContextMenu={handleContextMenu}
       >
         {children}
         {css !== '' && (

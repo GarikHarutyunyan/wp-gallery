@@ -15,6 +15,12 @@
   font-family: inherit !important;
 }
 
+.reacg-gallery-wrapper.reacg-gallery-wrapper--protected {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .reacg-gallery-wrapper .MuiGrid-container:has(> div:empty) {
   margin: 0 !important;
 }
