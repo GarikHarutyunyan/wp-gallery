@@ -7,7 +7,14 @@ interface IAlertProps {
 }
 
 const Alert = ({config}: IAlertProps) => {
-  const {image, description, errorMessage, buttonConfig, utm_medium} = config;
+  const {
+    image,
+    description,
+    additionalText,
+    errorMessage,
+    buttonConfig,
+    utm_medium,
+  } = config;
   const {label, backgroundColor, onClick} = buttonConfig;
 
   const handleClick = (utm_medium?: string) => {
@@ -91,6 +98,7 @@ const Alert = ({config}: IAlertProps) => {
           {label}
         </Button>
       </Box>
+      <div>{additionalText}</div>
     </Box>
   );
 };
