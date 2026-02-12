@@ -7,6 +7,7 @@ type ButtonConfig = {
 export type AlertConfig = {
   image: React.ReactNode;
   description: string | React.ReactNode;
+  additionalText?: string | React.ReactNode;
   buttonConfig: ButtonConfig;
   errorMessage?: string;
   onClose?: () => void;

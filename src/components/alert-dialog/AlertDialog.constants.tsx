@@ -1,4 +1,5 @@
 import {AlertConfig} from './AlertDialog.types';
+import {CopyableCode} from './CopyableCode';
 import {CustomerService} from './icons/CustomerServiceIcon';
 import {LigthBulbIcon} from './icons/LigthBulbIcon';
 import {ProIcon} from './icons/ProIcon';
@@ -178,32 +179,40 @@ export const specialOfferConfig: AlertConfig = {
   image: <SpecialOfferIcon width={180} height={90} />,
   description: (
     <>
-      <i>
-        You’re already building great galleries, unlock the Pro tools for less!
-      </i>
+      You’ve selected a Pro feature.
       <br />
       <br />
-      To help you take your galleries further, here’s a special{' '}
-      <strong>THANK-YOU OFFER</strong> just for you.
+      Unlock advanced gallery tools and full design control.
       <br />
       <br />
       <center>
         <strong style={{fontSize: 'x-large'}}>🔥 60% OFF Re Gallery Pro</strong>
       </center>
       <br />
-      Use your exclusive{' '}
-      <code style={{fontSize: 'large'}}>
-        <strong>DISCOUNT60</strong>
-      </code>{' '}
-      promo code to unlock advanced gallery features and upgrade in seconds.
+      Use your exclusive code <CopyableCode text="DISCOUNT60" /> - limited time
+      upgrade offer.
     </>
+  ),
+  additionalText: (
+    <center>
+      <a href={(window as any).reacg_global?.demo_url || ''} target="_blank">
+        <strong>View a Demo</strong>
+      </a>{' '}
+      |{' '}
+      <a
+        href={(window as any).reacg_global?.compare_plans_url || ''}
+        target="_blank"
+      >
+        <strong>See all Features</strong>
+      </a>
+    </center>
   ),
   buttonConfig: {
     label: 'Upgrade to Pro - Save 60%',
     backgroundColor: '#a7c957',
     onClick: (utm_medium?: string) => {
       let url =
-        (window as any).reacg_global?.upgrade?.url ||
+        (window as any).reacg_global?.upgrade?.discount_url ||
         'https://regallery.team/#pricing';
       if (utm_medium) {
         const urlQueryStringSeperator: string = url.includes('?') ? '&' : '?';
