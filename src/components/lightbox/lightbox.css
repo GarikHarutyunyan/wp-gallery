@@ -22,6 +22,9 @@
   right: auto;
   visibility: hidden;
 }
+html.react-lightbox--no-scroll {
+  height: auto;
+}
 .react-lightbox--no-scroll {
   overflow: hidden;
   overscroll-behavior: none;
