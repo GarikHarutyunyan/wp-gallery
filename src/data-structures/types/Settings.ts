@@ -226,6 +226,7 @@ export interface ICarouselSettings {
   playAndPauseAllowed: boolean;
   scale: number;
   imagesCount: number;
+  enableScrollByImagesCount: boolean;
   spaceBetween: number;
   hoverEffect: HoverEffect;
   showTitle: boolean;
