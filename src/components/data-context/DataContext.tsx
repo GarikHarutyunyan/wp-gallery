@@ -75,6 +75,33 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     blogSettings?.paginationType,
   ]);
 
+  const showAllItems: boolean = useMemo(() => {
+    if (type === GalleryType.MOSAIC) {
+      return mosaicSettings!.showAllItems;
+    }
+    if (type === GalleryType.JUSTIFIED) {
+      return justifiedSettings!.showAllItems;
+    }
+    if (type === GalleryType.THUMBNAILS) {
+      return thumbnailSettings!.showAllItems;
+    }
+    if (type === GalleryType.MASONRY) {
+      return masonrySettings!.showAllItems;
+    }
+    if (type === GalleryType.BLOG) {
+      return blogSettings!.showAllItems;
+    }
+
+    return true;
+  }, [
+    type,
+    mosaicSettings?.showAllItems,
+    justifiedSettings?.showAllItems,
+    thumbnailSettings?.showAllItems,
+    masonrySettings?.showAllItems,
+    blogSettings?.showAllItems,
+  ]);
+
   const {
     itemsPerPage = 1,
     orderBy = 'default',
@@ -119,7 +146,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   useUpdateEffect(() => {
     itemsPerPage > 0 && onReloadData();
-  }, [itemsPerPage, paginationType, orderBy, orderDirection]);
+  }, [itemsPerPage, paginationType, showAllItems, orderBy, orderDirection]);
 
   const loadAllLightboxImages = async (gid?: string): Promise<void> => {
     if (
@@ -269,7 +296,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       queryString += `&order=${orderDirection}`;
       queryString += `&s=${search}`;
       queryString += `&timestamp=${getGalleryTimestamp?.()}`;
-      if (paginationType !== PaginationType.NONE) {
+      if (paginationType !== PaginationType.NONE || !showAllItems) {
         queryString += `&page=${page}`;
         queryString += `&per_page=${itemsPerPage}`;
       }
