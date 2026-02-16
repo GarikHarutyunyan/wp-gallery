@@ -53,6 +53,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     playAndPauseAllowed,
     scale,
     imagesCount,
+    enableScrollByImagesCount,
     spaceBetween,
     hoverEffect,
     showTitle,
@@ -185,6 +186,19 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   min={1}
                   max={allImagesCount}
                   step={2}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'enableScrollByImagesCount'}
+                  name={'Scroll by images count'}
+                  value={enableScrollByImagesCount}
+                  onChange={onInputValueChange}
+                  tooltip={
+                    <p>
+                      Scrolls by visible images when enabled, otherwise by one.
+                    </p>
+                  }
                 />
               </Filter>
               <Filter isLoading={isLoading}>

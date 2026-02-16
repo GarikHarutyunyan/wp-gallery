@@ -324,6 +324,7 @@ const carouselMockSettings: ICarouselSettings = {
   playAndPauseAllowed: false,
   scale: 0.1,
   imagesCount: 3,
+  enableScrollByImagesCount: false,
   spaceBetween: -10,
   hoverEffect: HoverEffect.BLUR,
   showTitle: false,
