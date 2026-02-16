@@ -39,6 +39,7 @@ export interface IThumbnailSettings {
   paddingColor: string;
   borderRadius: number;
   paginationType: PaginationType;
+  showAllItems: boolean;
   hoverEffect: HoverEffect;
   showTitle: boolean;
   titleSource: TitleSource;
@@ -86,6 +87,7 @@ export interface IMasonrySettings {
   invertTextColor: boolean;
   hoverEffect: HoverEffect;
   paginationType: PaginationType;
+  showAllItems: boolean;
   showCaption: boolean;
   captionSource: CaptionSource;
   captionFontSize?: number | undefined;
@@ -321,6 +323,7 @@ export interface IBlogSettings {
   textHorizontalSpacing: number;
   textVerticalSpacing: number;
   paginationType: PaginationType;
+  showAllItems: boolean;
   descriptionMaxRowsCount: number | undefined;
   imagePosition: BlogViewImagePosition;
   showCaption: boolean;

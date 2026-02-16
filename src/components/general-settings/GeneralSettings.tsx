@@ -136,6 +136,33 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     blogSettings,
   ]);
 
+  const showAllItems: boolean = useMemo(() => {
+    if (type === GalleryType.MOSAIC) {
+      return mosaicSettings!.showAllItems;
+    }
+    if (type === GalleryType.JUSTIFIED) {
+      return justifiedSettings!.showAllItems;
+    }
+    if (type === GalleryType.THUMBNAILS) {
+      console.log(thumbnailSettings!.showAllItems);
+      return thumbnailSettings!.showAllItems;
+    }
+    if (type === GalleryType.MASONRY) {
+      return masonrySettings!.showAllItems;
+    }
+    if (type === GalleryType.BLOG) {
+      return blogSettings!.showAllItems;
+    }
+    return true;
+  }, [
+    type,
+    mosaicSettings,
+    justifiedSettings,
+    thumbnailSettings,
+    masonrySettings,
+    blogSettings,
+  ]);
+
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
     key && onChange({...value, [key]: inputValue});
@@ -195,17 +222,37 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                 }}
               />
             </Filter>
+            {paginationType === PaginationType.NONE && (
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'showAllItems'}
+                  name={'Show all items'}
+                  value={showAllItems}
+                  onChange={(inputValue: any) => {
+                    onPaginationTypeChange(inputValue, 'showAllItems');
+                  }}
+                  tooltip={
+                    <p>
+                      When enabled, all items will be displayed at once. Disable
+                      this option to specify how many items should be shown.
+                    </p>
+                  }
+                />
+              </Filter>
+            )}
+            {(paginationType !== PaginationType.NONE || !showAllItems) && (
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'itemsPerPage'}
+                  name={'Items per page'}
+                  defaultValue={itemsPerPage}
+                  onChange={Utils.debounce(onInputValueChange)}
+                  min={1}
+                />
+              </Filter>
+            )}
             {paginationType !== PaginationType.NONE ? (
               <>
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'itemsPerPage'}
-                    name={'Items per page'}
-                    defaultValue={itemsPerPage}
-                    onChange={Utils.debounce(onInputValueChange)}
-                    min={1}
-                  />
-                </Filter>
                 {[PaginationType.LOAD_MORE, PaginationType.SIMPLE].includes(
                   paginationType
                 ) ? (
