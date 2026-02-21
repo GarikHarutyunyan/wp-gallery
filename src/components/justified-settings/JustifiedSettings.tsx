@@ -61,6 +61,7 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
     showTitle,
     captionPosition,
     captionVisibility,
+    showVideoCover,
   } = value as IJustifiedSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -242,6 +243,20 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
                         onInputValueChange(inputValue, 'hoverEffect');
                       }
                     }}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showVideoCover'}
+                    name={'Show video cover'}
+                    value={showVideoCover}
+                    tooltip={
+                      <p>
+                        Enable this to display the cover image for video items,
+                        otherwise the video will be shown.
+                      </p>
+                    }
+                    onChange={onInputValueChange}
                   />
                 </Filter>
               </Grid>

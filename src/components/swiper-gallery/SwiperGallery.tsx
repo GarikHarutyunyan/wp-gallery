@@ -142,7 +142,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
     swiper.slides.forEach((slide: HTMLElement) => {
       const video = slide.querySelector<HTMLVideoElement>(
-        'video.swiper-gallery__video'
+        'video.gallery__video'
       );
 
       if (!video) return;
@@ -241,11 +241,11 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         handleOnChangeVideoAutoPlayAndPause(swiper);
       }}
       onTouchStart={() => {
-        const videos = document.querySelectorAll('.swiper-gallery__video');
+        const videos = document.querySelectorAll('.gallery__video');
         videos.forEach((v) => v.classList.add('no-pointer'));
       }}
       onTouchEnd={() => {
-        const videos = document.querySelectorAll('.swiper-gallery__video');
+        const videos = document.querySelectorAll('.gallery__video');
         videos.forEach((v) => v.classList.remove('no-pointer'));
       }}
       style={{

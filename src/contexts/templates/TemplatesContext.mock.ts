@@ -63,6 +63,7 @@ const thumbnailMockSettings: IThumbnailSettings = {
   descriptionFontSize: 18,
   descriptionFontColor: 'Black',
   descriptionMaxRowsCount: 3,
+  showVideoCover: true,
 };
 
 const generalMockSettings: IGeneralSettings = {
@@ -203,6 +204,7 @@ const masonryMockSettings: IMasonrySettings = {
   captionFontSize: 18,
   captionFontColor: 'Grey',
   showTitle: false,
+  showVideoCover: true,
 };
 
 const template1 = {

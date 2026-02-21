@@ -2,6 +2,7 @@ import {ImageListItem} from '@mui/material';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
 import ReImage from 'core-components/re-image/ReImage';
+import ReVideo from 'core-components/re-video/ReVideo';
 import {
   CaptionSource,
   DescriptionPosition,
@@ -13,14 +14,8 @@ import {
   TitleSource,
   TitleVisibility,
 } from 'data-structures';
-import {useMemo, useRef} from 'react';
+import {useRef} from 'react';
 import {Watermark} from 'utils/renderWatermark';
-import {createIcon} from 'yet-another-react-lightbox';
-
-const VideoThumbnailIcon = createIcon(
-  'VideoThumbnail',
-  <path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-);
 
 interface IThumbnailImageProps {
   image: IImageDTO;
@@ -57,6 +52,7 @@ interface IThumbnailImageProps {
   descriptionFontSize?: number | undefined;
   descriptionFontColor?: string | undefined;
   descriptionMaxRowsCount?: number | undefined;
+  showVideoCover: boolean;
 }
 
 const ThumbnailImage = ({
@@ -94,15 +90,11 @@ const ThumbnailImage = ({
   descriptionFontSize,
   descriptionFontColor,
   descriptionMaxRowsCount,
+  showVideoCover,
 }: IThumbnailImageProps) => {
   if (overlayTextBackground === '') {
     overlayTextBackground = 'unset';
   }
-  const videoThumbnailIconSize = useMemo<string>(() => {
-    const size: number = Math.min(width, height, 55) - 10;
-
-    return size > 0 ? `${size}px` : '0px';
-  }, [width, height]);
 
   if (itemBorder) {
     width = width - 2 * itemBorder;
@@ -319,6 +311,40 @@ const ThumbnailImage = ({
   };
 
   const wrapperRef = useRef(null);
+  const settings: any = {
+    width,
+    height,
+    itemBorder,
+    itemBackgroundColor,
+    itemBorderRadius,
+    backgroundColor,
+    borderRadius,
+    margin,
+    hoverEffect,
+    showTitle,
+    titleSource,
+    captionVisibility,
+    titlePosition,
+    titleVisibility,
+    titleFontSize,
+    titleColor,
+    titleAlignment,
+    titleFontFamily,
+    overlayTextBackground,
+    invertTextColor,
+    showCaption,
+    captionSource,
+    captionPosition,
+    captionFontSize,
+    captionFontColor,
+    showDescription,
+    descriptionSource,
+    descriptionPosition,
+    descriptionFontSize,
+    descriptionFontColor,
+    descriptionMaxRowsCount,
+    showVideoCover,
+  };
 
   return (
     <div
@@ -409,30 +435,43 @@ const ThumbnailImage = ({
               boxSizing: 'border-box',
             }}
           >
-            <ReImage
-              wrapperRef={wrapperRef}
-              className={clsx(
-                'thumbnail-gallery__image',
-                'MuiImageListItem-img'
-              )}
-              src={getImageSource(image)}
-              alt={image.alt}
-              loading="eager"
-              style={{
-                width: width + 'px',
-                height: height + 'px',
-              }}
-            />
-            <Watermark />
-            {image.type === ImageType.VIDEO && (
-              <VideoThumbnailIcon
+            {image.type === ImageType.IMAGE && (
+              <ReImage
+                wrapperRef={wrapperRef}
+                className={clsx(
+                  'thumbnail-gallery__image',
+                  'MuiImageListItem-img'
+                )}
+                src={getImageSource(image)}
+                alt={image.alt}
+                loading="eager"
                 style={{
-                  height: videoThumbnailIconSize,
-                  width: videoThumbnailIconSize,
+                  width: width + 'px',
+                  height: height + 'px',
                 }}
-                className={'thumbnail-gallery__video-icon'}
               />
             )}
+            {image.type === ImageType.VIDEO && (
+              <ReVideo
+                wrapperRef={wrapperRef}
+                item={image}
+                settings={settings}
+                coverImageProps={{
+                  className: clsx(
+                    'thumbnail-gallery__image',
+                    'MuiImageListItem-img'
+                  ),
+                  src: getImageSource(image),
+                  alt: image.alt,
+                  loading: 'eager',
+                  style: {
+                    width: width + 'px',
+                    height: height + 'px',
+                  },
+                }}
+              />
+            )}
+            <Watermark />
             {showTitle &&
               titlePosition !== ThumbnailTitlePosition.BELOW &&
               titlePosition !== ThumbnailTitlePosition.ABOVE &&
