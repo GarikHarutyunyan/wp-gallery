@@ -117,7 +117,7 @@ const TemplatesSelect: React.FC = () => {
                 arrow
                 enterDelay={500}
               >
-                <ProIcon />
+                <ProIcon height={20} width={34} style={{marginLeft: 5}} />
               </Tooltip>
             ) : null}
             {youtube_link ? (

@@ -20,7 +20,7 @@ export const LabelWithTooltip: React.FC<ILabelWithTooltipProps> = ({
     return (
       <>
         {label}
-        {pro && <ProIcon style={{marginBottom: '-10px'}} />}
+        {pro && <ProIcon style={{marginBottom: -5, marginLeft: 5}} />}
       </>
     );
   return (
@@ -32,7 +32,7 @@ export const LabelWithTooltip: React.FC<ILabelWithTooltipProps> = ({
           className={'seetings__cursor_pointer'}
         />
       </Tooltip>
-      {pro && <ProIcon style={{marginTop: '-2px'}} />}
+      {pro && <ProIcon />}
     </Aligner>
   );
 };
