@@ -1,6 +1,7 @@
 import {ImageListItemBar} from '@mui/material';
 import clsx from 'clsx';
 import ReImage from 'core-components/re-image/ReImage';
+import ReVideo from 'core-components/re-video/ReVideo';
 import {
   IImageDTO,
   IMasonrySettings,
@@ -10,19 +11,7 @@ import {
 } from 'data-structures';
 import React, {CSSProperties, ReactNode, useRef} from 'react';
 import {Watermark} from 'utils/renderWatermark';
-import {createIcon} from 'yet-another-react-lightbox';
 import './photo-album.css';
-
-const VideoThumbnailIcon = createIcon(
-  'VideoThumbnail',
-  <path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-);
-
-const getThumbnailIconSize = (width: number, height: number) => {
-  const size: number = Math.min(width, height, 55) - 10;
-
-  return size > 0 ? `${size}px` : '0px';
-};
 
 interface IPhotoAlbumItemProps extends React.PropsWithChildren {
   image: IImageDTO;
@@ -216,25 +205,33 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           borderRadius: `${imageBorderRadius}px`,
         }}
       >
-        <ReImage
-          wrapperRef={wrapperRef}
-          {...imageProps}
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'block',
-          }}
-        />
-        <Watermark />
-        {image.type === ImageType.VIDEO && (
-          <VideoThumbnailIcon
+        {image.type === ImageType.IMAGE && (
+          <ReImage
+            wrapperRef={wrapperRef}
+            {...imageProps}
             style={{
-              height: getThumbnailIconSize(width, height),
-              width: getThumbnailIconSize(width, height),
+              width: '100%',
+              height: '100%',
+              display: 'block',
             }}
-            className={'photo-album-item__video-icon'}
           />
         )}
+        {image.type === ImageType.VIDEO && (
+          <ReVideo
+            wrapperRef={wrapperRef}
+            item={image}
+            settings={settings}
+            coverImageProps={{
+              ...imageProps,
+              style: {
+                width: '100%',
+                height: '100%',
+                display: 'block',
+              },
+            }}
+          />
+        )}
+        <Watermark />
         {showTitle && renderTitle(image)}
         {showCaption &&
           (titlePosition != captionPosition || !showTitle) &&

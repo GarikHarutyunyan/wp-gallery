@@ -74,6 +74,7 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
     inactiveDotsColor,
     showVideoControls,
     animationSpeed,
+    showVideoCover,
   } = value as ICardsSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -689,12 +690,28 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
               </Filter>
               <Filter isLoading={isLoading}>
                 <SwitchControl
-                  id={'showVideoControls'}
-                  name={'Show video controls'}
-                  value={showVideoControls}
+                  id={'showVideoCover'}
+                  name={'Show video cover'}
+                  value={showVideoCover}
+                  tooltip={
+                    <p>
+                      Enable this to display the cover image for video items,
+                      otherwise the video will be shown.
+                    </p>
+                  }
                   onChange={onInputValueChange}
                 />
               </Filter>
+              {!showVideoCover && (
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showVideoControls'}
+                    name={'Show video controls'}
+                    value={showVideoControls}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+              )}
             </Grid>
           </>
         }

@@ -60,6 +60,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     descriptionFontSize,
     descriptionFontColor,
     descriptionMaxRowsCount,
+    showVideoCover,
   } = settings as IThumbnailSettings;
   const elementRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -257,6 +258,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
               descriptionFontSize={descriptionFontSize}
               descriptionFontColor={descriptionFontColor}
               descriptionMaxRowsCount={descriptionMaxRowsCount}
+              showVideoCover={showVideoCover}
             />
           )) || []}
         </ImageList>

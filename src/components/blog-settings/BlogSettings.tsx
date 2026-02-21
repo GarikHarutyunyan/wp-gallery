@@ -77,6 +77,7 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
     captionSource,
     captionFontSize,
     captionFontColor,
+    showVideoCover,
   } = value as IBlogSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -216,6 +217,20 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                     onInputValueChange(inputValue, 'hoverEffect');
                   }
                 }}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'showVideoCover'}
+                name={'Show video cover'}
+                value={showVideoCover}
+                tooltip={
+                  <p>
+                    Enable this to display the cover image for video items,
+                    otherwise the video will be shown.
+                  </p>
+                }
+                onChange={onInputValueChange}
               />
             </Filter>
           </Grid>

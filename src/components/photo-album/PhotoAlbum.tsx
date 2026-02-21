@@ -51,11 +51,18 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
   const photos = useMemo(() => {
     return images?.map((image: IImageDTO) => {
       const isVideo: boolean = image.type === ImageType.VIDEO;
-      const width = isVideo ? image.medium_large.width : image.original.width;
-      const height = isVideo
-        ? image.medium_large.height
-        : image.original.height;
-      const src = isVideo ? image.medium_large.url : image.original.url;
+      const width =
+        isVideo && settings.showVideoCover
+          ? image.medium_large.width
+          : image.original.width;
+      const height =
+        isVideo && settings.showVideoCover
+          ? image.medium_large.height
+          : image.original.height;
+      const src =
+        isVideo && settings.showVideoCover
+          ? image.medium_large.url
+          : image.original.url;
       const srcSet = [
         {
           src: image.large.url,
@@ -74,7 +81,7 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
         },
       ];
 
-      if (!isVideo) {
+      if (!isVideo || !settings.showVideoCover) {
         srcSet.unshift({
           src: image.original.url,
           width: image.original.width,
@@ -92,7 +99,7 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
         alt: image.alt,
       };
     });
-  }, [images]);
+  }, [images, settings.showVideoCover]);
 
   const onImageClick = useCallback(
     (index: number) => (onClick ? () => onClick(index) : undefined),

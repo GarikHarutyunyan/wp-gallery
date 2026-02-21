@@ -74,6 +74,7 @@ const thumbnailMockSettings: IThumbnailSettings = {
   descriptionFontSize: 18,
   descriptionFontColor: 'Black',
   descriptionMaxRowsCount: 3,
+  showVideoCover: true,
 };
 
 const mosaicMockSettings: IMosaicSettings = {
@@ -104,6 +105,7 @@ const mosaicMockSettings: IMosaicSettings = {
   captionFontSize: 18,
   captionFontColor: 'Grey',
   showTitle: false,
+  showVideoCover: true,
 };
 const justifiedMockSettings: IJustifiedSettings = {
   width: 70,
@@ -133,6 +135,7 @@ const justifiedMockSettings: IJustifiedSettings = {
   captionFontSize: 18,
   captionFontColor: 'Grey',
   showTitle: false,
+  showVideoCover: true,
 };
 
 const masonryMockSettings: IMasonrySettings = {
@@ -163,6 +166,7 @@ const masonryMockSettings: IMasonrySettings = {
   captionFontSize: 18,
   captionFontColor: 'Grey',
   showTitle: false,
+  showVideoCover: true,
 };
 
 const slideshowMockSettings: ISlideshowSettings = {
@@ -312,6 +316,7 @@ const cubeMockSettings: ICubeSettings = {
   inactiveDotsColor: 'rgba(0, 0, 0, 0.5)',
   showVideoControls: false,
   animationSpeed: 500,
+  showVideoCover: false,
 };
 
 const carouselMockSettings: ICarouselSettings = {
@@ -353,6 +358,7 @@ const carouselMockSettings: ICarouselSettings = {
   inactiveDotsColor: 'rgba(0, 0, 0, 0.5)',
   showVideoControls: false,
   animationSpeed: 500,
+  showVideoCover: false,
 };
 
 const cardsMockSettings: ICardsSettings = {
@@ -389,6 +395,7 @@ const cardsMockSettings: ICardsSettings = {
   inactiveDotsColor: 'rgba(0, 0, 0, 0.5)',
   showVideoControls: false,
   animationSpeed: 500,
+  showVideoCover: false,
 };
 
 const blogMockSettings: IBlogSettings = {
@@ -430,6 +437,7 @@ const blogMockSettings: IBlogSettings = {
   captionFontSize: 18,
   captionFontColor: 'Grey',
   buttonUrlSource: ActionURLSource.ACTIONURL,
+  showVideoCover: false,
 };
 
 export {
