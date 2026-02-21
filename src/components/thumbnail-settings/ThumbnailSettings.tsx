@@ -79,6 +79,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
     descriptionFontSize,
     descriptionFontColor,
     descriptionMaxRowsCount,
+    showVideoCover,
   } = value as IThumbnailSettings;
 
   const isThumbnailTitlePositionEditable: boolean = borderRadius <= 50;
@@ -498,6 +499,20 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                     min={0}
                     value={borderRadius}
                     max={50}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showVideoCover'}
+                    name={'Show video cover'}
+                    value={showVideoCover}
+                    tooltip={
+                      <p>
+                        Enable this to display the cover image for video items,
+                        otherwise the video will be shown.
+                      </p>
+                    }
                     onChange={onInputValueChange}
                   />
                 </Filter>

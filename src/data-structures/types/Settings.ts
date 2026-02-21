@@ -63,6 +63,7 @@ export interface IThumbnailSettings {
   descriptionFontSize?: number | undefined;
   descriptionFontColor: string;
   descriptionMaxRowsCount?: number | undefined;
+  showVideoCover: boolean;
 }
 
 export interface IMasonrySettings {
@@ -93,6 +94,7 @@ export interface IMasonrySettings {
   captionFontSize?: number | undefined;
   captionFontColor: string;
   showTitle: boolean;
+  showVideoCover: boolean;
 }
 
 export interface IMosaicSettings extends IMasonrySettings {}
@@ -214,6 +216,7 @@ export interface ICubeSettings {
   inactiveDotsColor: string;
   showVideoControls: boolean;
   animationSpeed: number;
+  showVideoCover: boolean;
 }
 
 export interface ICarouselSettings {
@@ -255,6 +258,7 @@ export interface ICarouselSettings {
   inactiveDotsColor: string;
   showVideoControls: boolean;
   animationSpeed: number;
+  showVideoCover: boolean;
 }
 
 export interface ICardsSettings {
@@ -291,6 +295,7 @@ export interface ICardsSettings {
   inactiveDotsColor: string;
   showVideoControls: boolean;
   animationSpeed: number;
+  showVideoCover: boolean;
 }
 
 export interface IBlogSettings {
@@ -332,6 +337,7 @@ export interface IBlogSettings {
   captionFontSize?: number | undefined;
   captionFontColor: string;
   buttonUrlSource: string;
+  showVideoCover: boolean;
 }
 
 export interface ISettingsDTO {
