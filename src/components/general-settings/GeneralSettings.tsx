@@ -564,7 +564,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
             <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'enableRightClickProtection'}
-                name={'Enable Right-Click Protection'}
+                name={'Right-Click Protection'}
                 pro={true}
                 value={enableRightClickProtection}
                 onChange={
