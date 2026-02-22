@@ -1,11 +1,12 @@
 type ButtonConfig = {
   label: string;
   backgroundColor: string;
+  width?: string;
   onClick: (utm_medium?: string) => void;
 };
 
 export type AlertConfig = {
-  image: React.ReactNode;
+  image?: React.ReactNode;
   description: string | React.ReactNode;
   additionalText?: string | React.ReactNode;
   buttonConfig: ButtonConfig;

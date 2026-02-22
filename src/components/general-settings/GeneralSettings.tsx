@@ -15,7 +15,6 @@ import {
 } from 'data-structures';
 import React, {ReactNode, useContext, useMemo} from 'react';
 import {Utils} from 'utils';
-import {ProIcon} from '../alert-dialog/icons/ProIcon';
 import {
   ColorControl,
   ISelectOption,
@@ -421,12 +420,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   const renderWatermarkSettings = (): ReactNode => {
     return (
       <Section
-        header={
-          <>
-            Watermark
-            <ProIcon />
-          </>
-        }
+        header={'Watermark'}
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
@@ -509,12 +503,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   const renderSearchSettings = (): ReactNode => {
     return (
       <Section
-        header={
-          <>
-            Filter
-            <ProIcon />
-          </>
-        }
+        header={'Filter'}
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Grid
@@ -569,12 +558,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   const renderProtectionSettings = (): ReactNode => {
     return (
       <Section
-        header={
-          <>
-            Protection
-            <ProIcon />
-          </>
-        }
+        header={'Protection'}
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>

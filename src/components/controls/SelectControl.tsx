@@ -85,7 +85,9 @@ const SelectControl: React.FC<ISelectControlProps> = forwardRef(
               disabled={isDisabled}
             >
               {render?.(value) || title}
-              {isPro && <ProIcon style={{width: 25, height: 25}} />}
+              {isPro && (
+                <ProIcon height={20} width={34} style={{marginLeft: 5}} />
+              )}
             </MenuItem>
           );
         })}

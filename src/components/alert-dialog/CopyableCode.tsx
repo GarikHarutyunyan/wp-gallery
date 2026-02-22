@@ -21,11 +21,11 @@ const CopyableCode: React.FC<ICopyableCodeProps> = ({text}) => {
   return (
     <code
       style={{
-        fontSize: 'large',
+        fontSize: '1rem',
         cursor: 'pointer',
         padding: '4px 8px',
         borderRadius: '4px',
-        backgroundColor: copied ? '#a7c957' : '#f0f0f0',
+        backgroundColor: copied ? '#8769ff' : '#f0f0f0',
         transition: 'background-color 0.2s',
         position: 'relative',
       }}
