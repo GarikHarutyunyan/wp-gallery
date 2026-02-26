@@ -1,6 +1,12 @@
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReImage from 'core-components/re-image/ReImage';
-import {ReactElement, useEffect, VideoHTMLAttributes} from 'react';
+import {
+  ReactElement,
+  SyntheticEvent,
+  useEffect,
+  useState,
+  VideoHTMLAttributes,
+} from 'react';
 
 interface IReVideoProps extends VideoHTMLAttributes<HTMLVideoElement> {
   wrapperRef?: any;
@@ -16,11 +22,26 @@ const ReVideo = ({
   coverImageProps,
   ...props
 }: IReVideoProps): ReactElement => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
     const wrapperElement = wrapperRef?.current;
 
     wrapperElement?.classList.add('re-image__wrapper');
   }, [wrapperRef]);
+
+  useEffect(() => {
+    setIsLoaded(false);
+  }, [item?.original?.url]);
+
+  const onLoadedData = (e: SyntheticEvent<HTMLVideoElement>) => {
+    props?.onLoadedData?.(e);
+    const videoElement = e.currentTarget;
+
+    videoElement.classList.add('re-image_loaded');
+    setIsLoaded(true);
+  };
+
   if (settings.showVideoCover) {
     return (
       <>
@@ -36,22 +57,26 @@ const ReVideo = ({
   }
 
   return (
-    <video
-      src={item.original.url}
-      poster={settings.showVideoCover ? item.medium_large.url : undefined}
-      {...props}
-      className={'gallery__video'}
-      autoPlay
-      muted
-      playsInline
-      loop
-      preload="auto"
-      controls={
-        typeof settings.showVideoControls === 'boolean'
-          ? settings.showVideoControls
-          : false
-      }
-    />
+    <>
+      {!isLoaded && <div className={'re-image__placeholder'} />}
+      <video
+        src={item.original.url}
+        poster={settings.showVideoCover ? item.medium_large.url : undefined}
+        {...props}
+        className={'gallery__video'}
+        autoPlay
+        muted
+        playsInline
+        loop
+        preload="auto"
+        controls={
+          typeof settings.showVideoControls === 'boolean'
+            ? settings.showVideoControls
+            : false
+        }
+        onLoadedData={onLoadedData}
+      />
+    </>
   );
 };
 

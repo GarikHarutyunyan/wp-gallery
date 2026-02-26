@@ -34,7 +34,7 @@ const ReImage = ({wrapperRef, ...props}: IReImageProps): ReactElement => {
 
   return (
     <>
-      {!isLoaded && <div className={'re-iamge__placeholder'} />}
+      {!isLoaded && <div className={'re-image__placeholder'} />}
       <img
         loading={'eager'}
         {...props}
