@@ -5,6 +5,7 @@ export enum SliderNavigationType {
   CARET = 'caret',
   CIRCLE = 'circle',
   CUSTOM = 'custom',
+  THINSTRAIGHTLEFT = 'thin_straight',
 }
 
 export const SliderNavigationTypeOptions = [
@@ -13,4 +14,5 @@ export const SliderNavigationTypeOptions = [
   {value: SliderNavigationType.BOLD, title: 'Bold'},
   {value: SliderNavigationType.CARET, title: 'Caret'},
   {value: SliderNavigationType.CIRCLE, title: 'Circle'},
+  {value: SliderNavigationType.THINSTRAIGHTLEFT, title: 'Thin Straight'},
 ];

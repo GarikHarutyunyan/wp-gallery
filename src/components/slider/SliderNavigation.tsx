@@ -9,6 +9,8 @@ import {ArrowCaretLeft} from 'components/alert-dialog/icons/arrows/ArrowCaretLef
 import {ArrowCaretRight} from 'components/alert-dialog/icons/arrows/ArrowCaretRight';
 import {ArrowCircleLeft} from 'components/alert-dialog/icons/arrows/ArrowCircleLeft';
 import {ArrowCircleRight} from 'components/alert-dialog/icons/arrows/ArrowCircleRight';
+import {ArrowThinStraightLeft} from 'components/alert-dialog/icons/arrows/ArrowThinStraightLeft';
+import {ArrowThinStraightRight} from 'components/alert-dialog/icons/arrows/ArrowThinStraightRight';
 import {ISliderSettings, SliderNavigationType} from 'data-structures';
 import {FC} from 'react';
 import SwiperInstance from 'swiper';
@@ -35,6 +37,7 @@ export const SliderNavigation: FC<SliderNavigationProps> = ({
     navigationBorderRadius,
     navigationColorHover,
     navigationBackgroundColorHover,
+    navigationHover,
   } = settings;
 
   let LeftIcon: React.FC = ArrowAngleLeft;
@@ -52,6 +55,10 @@ export const SliderNavigation: FC<SliderNavigationProps> = ({
     case SliderNavigationType.CARET:
       LeftIcon = ArrowCaretLeft;
       RightIcon = ArrowCaretRight;
+      break;
+    case SliderNavigationType.THINSTRAIGHTLEFT:
+      LeftIcon = ArrowThinStraightLeft;
+      RightIcon = ArrowThinStraightRight;
       break;
     case SliderNavigationType.CIRCLE:
       LeftIcon = ArrowCircleLeft;
@@ -73,15 +80,14 @@ export const SliderNavigation: FC<SliderNavigationProps> = ({
     e.stopPropagation(); // stop the click from triggering the slide
     mainRef?.current?.slideNext();
   };
-
+  console.log(navigationHover);
   return (
     <div
       className={clsx(
         'slider__navigation',
         `slider__navigation--${navigationPosition}`,
-        {
-          'slider__navigation--hover': navigationshowsOnHover,
-        }
+        {'slider__navigation-buttons--hover': navigationHover},
+        {'slider__navigation--hover': navigationshowsOnHover}
       )}
       style={
         {
