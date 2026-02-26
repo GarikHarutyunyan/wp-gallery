@@ -1,12 +1,19 @@
+import CircularProgress from '@mui/material/CircularProgress';
 import {
   IImageDTO,
   ISliderSettings,
+  SizeTypeWidth,
   SliderSlidesDesign,
   SliderTextPosition,
 } from 'data-structures';
-import {FC, RefObject} from 'react';
+import {FC, RefObject, useState} from 'react';
+import {clsx} from 'yet-another-react-lightbox';
 import {SlideText} from './SlideText';
 interface SliderSlideContentProps {
+  width: number;
+  widthType: SizeTypeWidth;
+  index: number;
+  prevIndex: number;
   image: IImageDTO;
   effect: string;
   settings: ISliderSettings;
@@ -14,6 +21,10 @@ interface SliderSlideContentProps {
 }
 
 export const SliderSlideContent: FC<SliderSlideContentProps> = ({
+  width,
+  widthType,
+  index,
+  prevIndex,
   image,
   effect,
   settings,
@@ -31,7 +42,8 @@ export const SliderSlideContent: FC<SliderSlideContentProps> = ({
     showDescription,
     textPosition,
   } = settings;
-
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const shouldLoadImage = index === 0 || index === prevIndex || index === 1;
   const isFitCreative =
     (slidesDesign === SliderSlidesDesign.FIT ||
       slidesDesign === SliderSlidesDesign.BLURFIT) &&
@@ -70,8 +82,16 @@ export const SliderSlideContent: FC<SliderSlideContentProps> = ({
       )}
 
       <img
-        src={image.original.url}
-        alt=""
+        src={shouldLoadImage ? image.original.url : undefined}
+        alt={image.alt}
+        srcSet={
+          shouldLoadImage
+            ? `${image.thumbnail.url} ${image.thumbnail.width}w, ${image.medium_large.url} ${image.medium_large.width}w, ${image.original.url} ${image.original.width}w`
+            : undefined
+        }
+        sizes={`${width}${widthType === '%' ? 'vw' : widthType}`}
+        loading={'eager'}
+        data-index={index}
         style={{
           width: isFill ? '100%' : 'auto',
           height: isFill ? '100%' : 'auto',
@@ -79,7 +99,20 @@ export const SliderSlideContent: FC<SliderSlideContentProps> = ({
           position: 'relative',
           zIndex: 1,
         }}
+        onLoad={() => {
+          setLoaded(true);
+        }}
       />
+
+      {!loaded && (
+        <div
+          className={clsx(
+            'gallery__loader  gallery__loader--logo slider__slide-load-logo'
+          )}
+        >
+          <CircularProgress sx={{color: 'black'}} size={50} />
+        </div>
+      )}
 
       {showText && (
         <SlideText variant={'main'} image={image} settings={settings} />
