@@ -94,8 +94,6 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
     if (totalAvailableImages !== 0) {
       let count = Math.min(imagesCount, totalAvailableImages);
 
-      if (count % 2 === 0) count--;
-
       if (count !== imagesCount) {
         onChange({...value, imagesCount: count});
       }
@@ -186,7 +184,7 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   onChange={onInputValueChange}
                   min={1}
                   max={allImagesCount}
-                  step={2}
+                  step={1}
                 />
               </Filter>
               <Filter isLoading={isLoading}>
