@@ -454,6 +454,14 @@ export interface ISliderSettings {
   direction: SliderDirection;
   keyboard: boolean;
   mousewheel: boolean;
+  showButton: boolean;
+  openInNewTab: boolean;
+  buttonText: string;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonUrlSource: string;
 }
 
 export interface ISettingsDTO {

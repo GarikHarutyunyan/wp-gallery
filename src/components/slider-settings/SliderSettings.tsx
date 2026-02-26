@@ -8,6 +8,7 @@ import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {
+  ActionURLSourceOptions,
   CaptionSourceOptions,
   DescriptionSourceOptions,
   ISliderSettings,
@@ -38,6 +39,7 @@ import {
   SelectControl,
   SliderControl,
   SwitchControl,
+  TextControl,
 } from '../controls';
 import {LabelWithTooltip} from '../controls/LabelWithTooltip';
 import {Filter} from '../settings/Filter';
@@ -167,6 +169,14 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     mousewheel,
     slidesDesign,
     backgroundBlur,
+    showButton,
+    openInNewTab,
+    buttonText,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonUrlSource,
   } = value as ISliderSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -1277,6 +1287,103 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                 </Grid>
               )}
             </Grid>
+
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showButton'}
+                    name={'Show button'}
+                    value={showButton}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {showButton && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'buttonUrlSource'}
+                      name={'URL source'}
+                      value={buttonUrlSource}
+                      options={ActionURLSourceOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {showButton && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <SwitchControl
+                      id={'openInNewTab'}
+                      name={'Open in new tab'}
+                      value={openInNewTab}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <TextControl
+                      id={'buttonText'}
+                      name="Button text"
+                      value={buttonText}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'buttonAlignment'}
+                      name={'Alignment'}
+                      value={buttonAlignment}
+                      options={TitleAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'buttonFontSize'}
+                      name={'Font size'}
+                      value={buttonFontSize}
+                      onChange={onInputValueChange}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonColor'}
+                      name="Button color"
+                      value={buttonColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonTextColor'}
+                      name="Text color"
+                      value={buttonTextColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+
             {(showTitle || showCaption || showDescription) && (
               <>
                 <Grid
@@ -1598,16 +1705,17 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                   />
                 </Filter>
 
-                {paginationType !== SliderPaginationType.FRACTION && (
-                  <Filter isLoading={isLoading}>
-                    <SwitchControl
-                      id="paginationBulletsImage"
-                      name="Image bullets"
-                      value={paginationBulletsImage}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                )}
+                {paginationType !== SliderPaginationType.FRACTION &&
+                  paginationType !== SliderPaginationType.NUMBERS && (
+                    <Filter isLoading={isLoading}>
+                      <SwitchControl
+                        id="paginationBulletsImage"
+                        name="Image bullets"
+                        value={paginationBulletsImage}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  )}
 
                 {paginationType !== SliderPaginationType.DYNAMIC && (
                   <Filter isLoading={isLoading}>
@@ -1789,8 +1897,9 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                   </>
                 )}
 
-                {/* ─────────────── FRACTION ─────────────── */}
-                {paginationType === SliderPaginationType.FRACTION && (
+                {/* ─────────────── FRACTION  NUMBER─────────────── */}
+                {(paginationType === SliderPaginationType.FRACTION ||
+                  paginationType === SliderPaginationType.NUMBERS) && (
                   <>
                     {/* LABEL */}
                     <Grid
@@ -1802,7 +1911,10 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                     >
                       <Filter isLoading={isLoading}>
                         <InputLabel shrink variant="filled">
-                          <LabelWithTooltip label="Fraction" tooltip="" />
+                          <LabelWithTooltip
+                            label="Fraction + Number"
+                            tooltip=""
+                          />
                         </InputLabel>
                       </Filter>
                     </Grid>
@@ -1814,37 +1926,39 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                       rowSpacing={2}
                       columnSpacing={4}
                       className="reacg-section__container-inherit"
-                    ></Grid>
+                    >
+                      <Filter isLoading={isLoading}>
+                        <ColorControl
+                          id={'paginationFractionColor'}
+                          name="Color"
+                          value={paginationFractionColor}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+
+                      <Filter isLoading={isLoading}>
+                        <NumberControl
+                          id={'paginationFractionFontSize'}
+                          name={'Font size'}
+                          value={paginationFractionFontSize}
+                          onChange={onInputValueChange}
+                          unit={'px'}
+                          max={200}
+                          step={1}
+                        />
+                      </Filter>
+
+                      <Filter isLoading={isLoading}>
+                        <FontControl
+                          id={'paginationFractionTextFontFamily'}
+                          name={'Font family'}
+                          value={paginationFractionTextFontFamily}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                    </Grid>
                   </>
                 )}
-                <Filter isLoading={isLoading}>
-                  <ColorControl
-                    id={'paginationFractionColor'}
-                    name="Color"
-                    value={paginationFractionColor}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'paginationFractionFontSize'}
-                    name={'Font size'}
-                    value={paginationFractionFontSize}
-                    onChange={onInputValueChange}
-                    unit={'px'}
-                    max={200}
-                    step={1}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <FontControl
-                    id={'paginationFractionTextFontFamily'}
-                    name={'Font family'}
-                    value={paginationFractionTextFontFamily}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
               </>
             )}
           </Grid>

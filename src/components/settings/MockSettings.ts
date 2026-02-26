@@ -551,6 +551,14 @@ const sliderMockSettings: ISliderSettings = {
   mousewheel: false,
   slidesDesign: SliderSlidesDesign.FILL,
   backgroundBlur: 7,
+  showButton: true,
+  openInNewTab: false,
+  buttonText: 'SEE MORE',
+  buttonAlignment: TitleAlignment.LEFT,
+  buttonColor: '#22eaaa',
+  buttonTextColor: '#fff',
+  buttonFontSize: 16,
+  buttonUrlSource: ActionURLSource.ACTIONURL,
 };
 
 export {

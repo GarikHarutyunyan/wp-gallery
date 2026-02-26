@@ -1,7 +1,7 @@
-import {IImageDTO, ISliderSettings} from 'data-structures';
+import {Button} from 'core-components/button';
+import {ActionURLSource, IImageDTO, ISliderSettings} from 'data-structures';
 import {forwardRef} from 'react';
 import {getTextVerticalPosition} from './utils/getTextVerticalPosition';
-
 interface SlideTextProps {
   image: IImageDTO;
   settings: ISliderSettings;
@@ -60,6 +60,24 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
     const descriptionMaxRowsCount = isThumb
       ? settings.thumbnailDescriptionMaxRowsCount
       : settings.descriptionMaxRowsCount;
+    const showButton = !isThumb && settings.showButton;
+    const buttonText = !isThumb ? settings.buttonText : undefined;
+    const buttonUrlSource = !isThumb ? settings.buttonUrlSource : undefined;
+    const buttonAlignment = !isThumb ? settings.buttonAlignment : undefined;
+    const buttonColor = !isThumb ? settings.buttonColor : undefined;
+    const buttonTextColor = !isThumb ? settings.buttonTextColor : undefined;
+    const buttonFontSize = !isThumb ? settings.buttonFontSize : undefined;
+    const openInNewTab = !isThumb ? settings.openInNewTab : undefined;
+
+    const onCustomActionToggle = (url: string) => {
+      if (!!url) {
+        if (openInNewTab) {
+          window?.open(url, '_blank')?.focus();
+        } else {
+          window?.open(url, '_self');
+        }
+      }
+    };
 
     return (
       <div
@@ -92,7 +110,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
               data-swiper-parallax={isThumb ? undefined : '-30%'}
               className="slider__slide-title"
               style={{
-                fontSize: `${titleFontSize}vw`,
+                fontSize: `clamp(16px, ${titleFontSize}vw, 42px)`,
                 textAlign: titleAlignment,
                 margin: 0,
                 whiteSpace: 'nowrap',
@@ -107,7 +125,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
                 <span
                   className="slider__slide-caption"
                   style={{
-                    fontSize: `${captionFontSize}vw`,
+                    fontSize: `clamp(13px, ${captionFontSize}vw, 22px)`,
                     marginLeft: 6,
                     color: captionFontColor,
                   }}
@@ -124,7 +142,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
               data-swiper-parallax={isThumb ? undefined : '-30%'}
               className="slider__slide-description"
               style={{
-                fontSize: `${descriptionFontSize}vw`,
+                fontSize: `clamp(12px, ${descriptionFontSize}vw, 18px)`,
                 textAlign: titleAlignment,
                 lineHeight: '1.5',
                 margin: 0,
@@ -136,6 +154,38 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
             >
               {image[descriptionSource]}
             </p>
+          )}
+          {showButton && !isThumb && (
+            <Button
+              data-swiper-parallax={isThumb ? undefined : '-30%'}
+              onClick={() =>
+                onCustomActionToggle(
+                  image?.[buttonUrlSource as ActionURLSource] || ''
+                )
+              }
+              className={'slider__slide-button'}
+              style={{
+                display: 'block',
+                backgroundColor: buttonColor,
+                color: buttonTextColor,
+                fontSize: `clamp(12px, ${buttonFontSize}vw, 16px)`,
+                textTransform: 'none',
+                marginLeft:
+                  buttonAlignment === 'center'
+                    ? 'auto'
+                    : buttonAlignment === 'right'
+                    ? 'auto'
+                    : '0',
+                marginRight:
+                  buttonAlignment === 'center'
+                    ? 'auto'
+                    : buttonAlignment === 'left'
+                    ? 'auto'
+                    : '0',
+              }}
+            >
+              {buttonText}
+            </Button>
           )}
         </div>
       </div>
