@@ -188,7 +188,6 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           : 'photo-album-item__image-wrapper_non_clickable'
       )}
       style={{
-        height: '100%',
         background: paddingColor,
         borderRadius: `${borderRadius}px`,
         ...style,
