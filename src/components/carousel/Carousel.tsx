@@ -28,6 +28,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     width,
     height,
     imagesCount,
+    enableScrollByImagesCount,
     spaceBetween,
     scale,
     showTitle,
@@ -48,6 +49,7 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     id: 1,
     spaceBetween: spaceBetween,
     slidesPerView: imagesCount,
+    slidesPerGroup: enableScrollByImagesCount ? imagesCount : 1,
     centeredSlides: false,
     effect: 'coverflow',
     coverflowEffect: {

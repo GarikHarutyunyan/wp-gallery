@@ -3,6 +3,7 @@ import {
   ReactElement,
   SyntheticEvent,
   useEffect,
+  useState,
 } from 'react';
 import './re-image.css';
 
@@ -11,25 +12,29 @@ interface IReImageProps extends ImgHTMLAttributes<HTMLImageElement> {
 }
 
 const ReImage = ({wrapperRef, ...props}: IReImageProps): ReactElement => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
     const wrapperElement = wrapperRef.current;
 
     wrapperElement?.classList.add('re-image__wrapper');
   }, []);
 
+  useEffect(() => {
+    setIsLoaded(false);
+  }, [props.src]);
+
   const onLoad = (e: SyntheticEvent) => {
     props?.onLoad?.(e as any);
     const img = e.currentTarget;
-    const wrapper = wrapperRef.current;
 
     img.classList.add('re-image_loaded');
-
-    wrapper?.querySelector('.re-iamge__placeholder')?.remove();
+    setIsLoaded(true);
   };
 
   return (
     <>
-      <div className={'re-iamge__placeholder'} />
+      {!isLoaded && <div className={'re-iamge__placeholder'} />}
       <img
         loading={'eager'}
         {...props}

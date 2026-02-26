@@ -53,6 +53,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     captionSource,
     captionFontSize,
     captionFontColor,
+    showVideoCover,
   } = settings as IBlogSettings;
   const isMobile: boolean = containerInnerWidth <= 720;
 
@@ -117,6 +118,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                 imageHeightType={imageHeightType}
                 imageRadius={imageRadius}
                 hoverEffect={hoverEffect}
+                showVideoCover={showVideoCover}
                 onClick={onClick}
               />
               <div

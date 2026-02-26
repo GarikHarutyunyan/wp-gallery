@@ -9,7 +9,14 @@ import {useData} from 'components/data-context/useData';
 import {TranslationsContext} from 'contexts/TranslationsContext';
 import {Button} from 'core-components/button';
 import {IGeneralSettings, PaginationType} from 'data-structures';
-import React, {ReactNode, useContext, useEffect, useState} from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {useInView} from 'react-intersection-observer';
 
 interface IPaginationProviderProps {
@@ -43,6 +50,47 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   const {isFullyLoaded, isLoading: isDataLoading} = useData();
   const {loadMoreText} = useContext(TranslationsContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [boundaryCount, setBoundaryCount] = useState<number>(1);
+  const [paginationSize, setPaginationSize] = useState<
+    typeof paginationButtonTextSize
+  >(paginationButtonTextSize);
+
+  const handleResize = useCallback((width: number) => {
+    if (width <= 520) {
+      setBoundaryCount(0);
+      setPaginationSize(Math.min(paginationButtonTextSize, 0.875));
+    } else {
+      setBoundaryCount(1);
+      setPaginationSize(paginationButtonTextSize);
+    }
+  }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    // initial measurement
+    handleResize(el.clientWidth);
+
+    // ResizeObserver for the container (if available)
+    let ro: ResizeObserver | null = null;
+    if ((window as any).ResizeObserver) {
+      ro = new (window as any).ResizeObserver((entries: any) => {
+        if (!entries || !entries.length) return;
+        handleResize(entries[0].contentRect.width);
+      });
+      ro?.observe(el);
+    }
+
+    // fallback to window resize
+    const onWinResize = () => el && handleResize(el.clientWidth);
+    window.addEventListener('resize', onWinResize);
+
+    return () => {
+      window.removeEventListener('resize', onWinResize);
+      if (ro && el) ro.unobserve(el);
+    };
+  }, [containerRef, handleResize]);
 
   useEffect(() => {
     if (inView && !isFullyLoaded && !isLoading && !isDataLoading) {
@@ -73,10 +121,13 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
     return pagesCount > 1 && !isDataLoading ? (
       <Pagination
         count={pagesCount}
+        boundaryCount={boundaryCount}
+        siblingCount={1}
+        hidePrevButton={page === 1}
+        hideNextButton={page === pagesCount}
         color={'primary'}
         style={{display: 'flex', margin: '10px 0', padding: 0}}
         onChange={onLoadData}
-        boundaryCount={2}
         page={page}
         renderItem={renderPaginationItem}
       />
@@ -101,13 +152,13 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
           borderWidth: `${paginationButtonBorderSize}px`,
           borderStyle: 'solid',
           borderColor: paginationButtonBorderColor,
-          fontSize: `${paginationButtonTextSize}rem`,
+          fontSize: `${paginationSize}rem`,
           backgroundColor: item.selected
             ? activeButtonColor
             : inactiveButtonColor,
           color: paginationTextColor,
-          width: `${paginationButtonTextSize + 1}rem`,
-          height: `${paginationButtonTextSize + 1}rem`,
+          width: `${paginationSize + 1}rem`,
+          height: `${paginationSize + 1}rem`,
           minWidth: '32px',
           minHeight: '32px',
         }}
@@ -160,6 +211,7 @@ const PaginationProvider: React.FC<IPaginationProviderProps> = ({
       alignItems="center"
       justifyContent="center"
       style={{margin: '15px 0'}}
+      ref={containerRef as any}
     >
       <Grid item xs={3}>
         {renderContent()}

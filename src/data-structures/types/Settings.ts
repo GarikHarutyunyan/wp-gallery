@@ -48,6 +48,7 @@ export interface IThumbnailSettings {
   paddingColor: string;
   borderRadius: number;
   paginationType: PaginationType;
+  showAllItems: boolean;
   hoverEffect: HoverEffect;
   showTitle: boolean;
   titleSource: TitleSource;
@@ -71,6 +72,7 @@ export interface IThumbnailSettings {
   descriptionFontSize?: number | undefined;
   descriptionFontColor: string;
   descriptionMaxRowsCount?: number | undefined;
+  showVideoCover: boolean;
 }
 
 export interface IMasonrySettings {
@@ -95,11 +97,13 @@ export interface IMasonrySettings {
   invertTextColor: boolean;
   hoverEffect: HoverEffect;
   paginationType: PaginationType;
+  showAllItems: boolean;
   showCaption: boolean;
   captionSource: CaptionSource;
   captionFontSize?: number | undefined;
   captionFontColor: string;
   showTitle: boolean;
+  showVideoCover: boolean;
 }
 
 export interface IMosaicSettings extends IMasonrySettings {}
@@ -181,6 +185,7 @@ export interface IGeneralSettings {
   enableSearch: boolean;
   searchPlaceholderText: string;
   enableWhiteLabel: boolean;
+  enableRightClickProtection: boolean;
 }
 
 export interface ICubeSettings {
@@ -220,6 +225,7 @@ export interface ICubeSettings {
   inactiveDotsColor: string;
   showVideoControls: boolean;
   animationSpeed: number;
+  showVideoCover: boolean;
 }
 
 export interface ICarouselSettings {
@@ -232,6 +238,7 @@ export interface ICarouselSettings {
   playAndPauseAllowed: boolean;
   scale: number;
   imagesCount: number;
+  enableScrollByImagesCount: boolean;
   spaceBetween: number;
   hoverEffect: HoverEffect;
   showTitle: boolean;
@@ -260,6 +267,7 @@ export interface ICarouselSettings {
   inactiveDotsColor: string;
   showVideoControls: boolean;
   animationSpeed: number;
+  showVideoCover: boolean;
 }
 
 export interface ICardsSettings {
@@ -296,6 +304,7 @@ export interface ICardsSettings {
   inactiveDotsColor: string;
   showVideoControls: boolean;
   animationSpeed: number;
+  showVideoCover: boolean;
 }
 
 export interface IBlogSettings {
@@ -329,6 +338,7 @@ export interface IBlogSettings {
   textHorizontalSpacing: number;
   textVerticalSpacing: number;
   paginationType: PaginationType;
+  showAllItems: boolean;
   descriptionMaxRowsCount: number | undefined;
   imagePosition: BlogViewImagePosition;
   showCaption: boolean;
@@ -336,6 +346,7 @@ export interface IBlogSettings {
   captionFontSize?: number | undefined;
   captionFontColor: string;
   buttonUrlSource: string;
+  showVideoCover: boolean;
 }
 
 export interface ISliderSettings {

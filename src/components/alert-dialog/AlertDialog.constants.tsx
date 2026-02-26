@@ -1,8 +1,8 @@
 import {AlertConfig} from './AlertDialog.types';
+import {CopyableCode} from './CopyableCode';
 import {CustomerService} from './icons/CustomerServiceIcon';
 import {LigthBulbIcon} from './icons/LigthBulbIcon';
 import {ProIcon} from './icons/ProIcon';
-import {SpecialOfferIcon} from './icons/SpecialOfferIcon';
 import {TroubleshoutingIcon} from './icons/TroubleshoutingIcon';
 
 export const premiumConfig: AlertConfig = {
@@ -175,35 +175,113 @@ export const errorConfig: AlertConfig = {
   },
 };
 export const specialOfferConfig: AlertConfig = {
-  image: <SpecialOfferIcon width={180} height={90} />,
   description: (
     <>
-      <i>
-        You’re already building great galleries, unlock the Pro tools for less!
-      </i>
-      <br />
-      <br />
-      To help you take your galleries further, here’s a special{' '}
-      <strong>THANK-YOU OFFER</strong> just for you.
-      <br />
-      <br />
-      <center>
-        <strong style={{fontSize: 'x-large'}}>🔥 60% OFF Re Gallery Pro</strong>
-      </center>
-      <br />
-      Use your exclusive{' '}
-      <code style={{fontSize: 'large'}}>
-        <strong>DISCOUNT60</strong>
-      </code>{' '}
-      promo code to unlock advanced gallery features and upgrade in seconds.
+      <div
+        style={{
+          fontSize: '0.8em',
+          color: '#8769ff',
+          textTransform: 'uppercase',
+          fontWeight: 600,
+        }}
+      >
+        Upgrade Now
+      </div>
+      <div
+        style={{
+          color: '#1d2327',
+          fontSize: '1.5em',
+          margin: '0 0 1em 0',
+          fontWeight: 600,
+        }}
+      >
+        Unlock PRO features
+      </div>
+      <div>
+        <div style={{margin: '5px 0'}}>
+          <span
+            className="dashicons dashicons-yes"
+            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+          ></span>
+          <span>Pre-Built Templates &amp; Template Library</span>
+        </div>
+        <div style={{margin: '5px 0'}}>
+          <span
+            className="dashicons dashicons-yes"
+            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+          ></span>
+          <span>AI Automation for Text &amp; Metadata</span>
+        </div>
+        <div style={{margin: '5px 0'}}>
+          <span
+            className="dashicons dashicons-yes"
+            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+          ></span>
+          <span>Advanced Lightbox Options</span>
+        </div>
+        <div style={{margin: '5px 0'}}>
+          <span
+            className="dashicons dashicons-yes"
+            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+          ></span>
+          <span>eCommerce &amp; Mixed Galleries</span>
+        </div>
+        <div style={{margin: '5px 0'}}>
+          <span
+            className="dashicons dashicons-yes"
+            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+          ></span>
+          <span>Branding, Watermarks &amp; White Labeling</span>
+        </div>
+        <div style={{margin: '5px 0'}}>
+          <span
+            className="dashicons dashicons-yes"
+            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+          ></span>
+          <span>Advanced Customization &amp; Premium Support</span>
+        </div>
+      </div>
+      <div style={{paddingTop: '18px', fontSize: '0.8rem'}}>
+        Use code <CopyableCode text="DISCOUNT60" /> to{' '}
+        <span
+          style={{
+            color: '#8769ff',
+            textTransform: 'uppercase',
+            fontWeight: 600,
+          }}
+        >
+          get 60% off
+        </span>{' '}
+        Re Gallery Pro - for a limited time only!
+      </div>
     </>
   ),
+  additionalText: (
+    <center>
+      <a
+        style={{color: 'black'}}
+        href={(window as any).reacg_global?.demo_url || ''}
+        target="_blank"
+      >
+        <strong>View a Demo</strong>
+      </a>{' '}
+      |{' '}
+      <a
+        style={{color: 'black'}}
+        href={(window as any).reacg_global?.compare_plans_url || ''}
+        target="_blank"
+      >
+        <strong>See all Features</strong>
+      </a>
+    </center>
+  ),
   buttonConfig: {
-    label: 'Upgrade to Pro - Save 60%',
-    backgroundColor: '#a7c957',
+    label: 'Upgrade',
+    backgroundColor: '#8769ff',
+    width: '100%',
     onClick: (utm_medium?: string) => {
       let url =
-        (window as any).reacg_global?.upgrade?.url ||
+        (window as any).reacg_global?.upgrade?.discount_url ||
         'https://regallery.team/#pricing';
       if (utm_medium) {
         const urlQueryStringSeperator: string = url.includes('?') ? '&' : '?';

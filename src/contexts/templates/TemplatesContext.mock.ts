@@ -52,6 +52,7 @@ const thumbnailMockSettings: IThumbnailSettings = {
   invertTextColor: false,
   hoverEffect: HoverEffect.BLUR,
   paginationType: PaginationType.SIMPLE,
+  showAllItems: true,
   showCaption: false,
   captionSource: CaptionSource.CAPTION,
   captionFontSize: 18,
@@ -62,6 +63,7 @@ const thumbnailMockSettings: IThumbnailSettings = {
   descriptionFontSize: 18,
   descriptionFontColor: 'Black',
   descriptionMaxRowsCount: 3,
+  showVideoCover: true,
 };
 
 const generalMockSettings: IGeneralSettings = {
@@ -89,6 +91,7 @@ const generalMockSettings: IGeneralSettings = {
   enableSearch: false,
   searchPlaceholderText: 'Search',
   enableWhiteLabel: false,
+  enableRightClickProtection: false,
 };
 
 const lightboxMockSettings: ILightboxSettings = {
@@ -195,11 +198,13 @@ const masonryMockSettings: IMasonrySettings = {
   invertTextColor: false,
   hoverEffect: HoverEffect.BLUR,
   paginationType: PaginationType.SIMPLE,
+  showAllItems: true,
   showCaption: false,
   captionSource: CaptionSource.CAPTION,
   captionFontSize: 18,
   captionFontColor: 'Grey',
   showTitle: false,
+  showVideoCover: true,
 };
 
 const template1 = {

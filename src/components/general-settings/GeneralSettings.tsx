@@ -15,7 +15,6 @@ import {
 } from 'data-structures';
 import React, {ReactNode, useContext, useMemo} from 'react';
 import {Utils} from 'utils';
-import {ProIcon} from '../alert-dialog/icons/ProIcon';
 import {
   ColorControl,
   ISelectOption,
@@ -101,6 +100,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     watermarkPosition,
     enableSearch,
     searchPlaceholderText,
+    enableRightClickProtection,
   } = value as IGeneralSettings;
 
   const showOnlyGalleryOptions: boolean =
@@ -126,6 +126,33 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
       return blogSettings!.paginationType;
     }
     return PaginationType.NONE;
+  }, [
+    type,
+    mosaicSettings,
+    justifiedSettings,
+    thumbnailSettings,
+    masonrySettings,
+    blogSettings,
+  ]);
+
+  const showAllItems: boolean = useMemo(() => {
+    if (type === GalleryType.MOSAIC) {
+      return mosaicSettings!.showAllItems;
+    }
+    if (type === GalleryType.JUSTIFIED) {
+      return justifiedSettings!.showAllItems;
+    }
+    if (type === GalleryType.THUMBNAILS) {
+      console.log(thumbnailSettings!.showAllItems);
+      return thumbnailSettings!.showAllItems;
+    }
+    if (type === GalleryType.MASONRY) {
+      return masonrySettings!.showAllItems;
+    }
+    if (type === GalleryType.BLOG) {
+      return blogSettings!.showAllItems;
+    }
+    return true;
   }, [
     type,
     mosaicSettings,
@@ -194,17 +221,37 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                 }}
               />
             </Filter>
+            {paginationType === PaginationType.NONE && (
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'showAllItems'}
+                  name={'Show all items'}
+                  value={showAllItems}
+                  onChange={(inputValue: any) => {
+                    onPaginationTypeChange(inputValue, 'showAllItems');
+                  }}
+                  tooltip={
+                    <p>
+                      When enabled, all items will be displayed at once. Disable
+                      this option to specify how many items should be shown.
+                    </p>
+                  }
+                />
+              </Filter>
+            )}
+            {(paginationType !== PaginationType.NONE || !showAllItems) && (
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'itemsPerPage'}
+                  name={'Items per page'}
+                  defaultValue={itemsPerPage}
+                  onChange={Utils.debounce(onInputValueChange)}
+                  min={1}
+                />
+              </Filter>
+            )}
             {paginationType !== PaginationType.NONE ? (
               <>
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'itemsPerPage'}
-                    name={'Items per page'}
-                    defaultValue={itemsPerPage}
-                    onChange={Utils.debounce(onInputValueChange)}
-                    min={1}
-                  />
-                </Filter>
                 {[PaginationType.LOAD_MORE, PaginationType.SIMPLE].includes(
                   paginationType
                 ) ? (
@@ -373,18 +420,14 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   const renderWatermarkSettings = (): ReactNode => {
     return (
       <Section
-        header={
-          <>
-            Watermark
-            <ProIcon />
-          </>
-        }
+        header={'Watermark'}
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'enableWatermark'}
                 name={'Enable'}
+                pro={true}
                 tooltip={
                   <p>
                     Applies a non-destructive watermark overlay. The original
@@ -460,12 +503,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
   const renderSearchSettings = (): ReactNode => {
     return (
       <Section
-        header={
-          <>
-            Filter
-            <ProIcon />
-          </>
-        }
+        header={'Filter'}
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Grid
@@ -480,6 +518,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                   id={'enableSearch'}
                   name={'Enable Search'}
                   value={enableSearch}
+                  pro={true}
                   onChange={
                     isPro
                       ? onInputValueChange
@@ -516,11 +555,47 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const renderProtectionSettings = (): ReactNode => {
+    return (
+      <Section
+        header={'Protection'}
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'enableRightClickProtection'}
+                name={'Right-Click Protection'}
+                pro={true}
+                value={enableRightClickProtection}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () =>
+                        (window as any).reacg_open_premium_offer_dialog({
+                          utm_medium: 'enable_right_click_protection',
+                        })
+                }
+                tooltip={
+                  <p>
+                    Disable right-click context menu on the gallery to prevent
+                    users from downloading or copying images.
+                  </p>
+                }
+              />
+            </Filter>
+          </Grid>
+        }
+        defaultExpanded={false}
+      />
+    );
+  };
+
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderSortingSettings()}
       {!showOnlyGalleryOptions ? renderMainSettings() : null}
       {renderSearchSettings()}
+      {renderProtectionSettings()}
       {renderWatermarkSettings()}
     </Paper>
   );

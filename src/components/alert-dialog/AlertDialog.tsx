@@ -31,7 +31,7 @@ const AlertDialog: React.FC<IAlertDialogProps> = () => {
   useEffect(() => {
     (window as any).reacg_open_premium_offer_dialog = (
       customConfig: AlertConfig
-    ) => handleOpen({...premiumConfig, ...customConfig});
+    ) => handleOpen({...specialOfferConfig, ...customConfig});
     (window as any).reacg_open_need_help_dialog = (customConfig: AlertConfig) =>
       handleOpen({...needHelpConfig, ...customConfig});
     (window as any).reacg_open_new_here_dialog = (customConfig: AlertConfig) =>

@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import ReImage from 'core-components/re-image/ReImage';
+import ReVideo from 'core-components/re-video/ReVideo';
 import {ImageType} from 'data-structures';
 import React from 'react';
 import {Watermark} from 'utils/renderWatermark';
@@ -15,8 +16,20 @@ const BlogImage = ({
   imageRadius,
   hoverEffect,
   onClick,
+  showVideoCover,
 }: any) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
+
+  const settings: any = {
+    containerInnerWidth,
+    imageWidth,
+    imageWidthType,
+    imageHeight,
+    imageHeightType,
+    imageRadius,
+    hoverEffect,
+    showVideoCover,
+  };
 
   return (
     <div
@@ -39,11 +52,7 @@ const BlogImage = ({
         height: `${imageHeight}${imageHeightType}`,
       }}
     >
-      {image.type === ImageType.VIDEO ? (
-        <video autoPlay muted loop playsInline>
-          <source src={image.original.url} type="video/mp4" />
-        </video>
-      ) : (
+      {image.type === ImageType.IMAGE && (
         <ReImage
           wrapperRef={wrapperRef}
           src={image.thumbnail.url}
@@ -53,6 +62,22 @@ const BlogImage = ({
                   ${image.original.url} ${image.original.width}w`}
           sizes={`${containerInnerWidth}px`}
           alt={image.alt}
+        />
+      )}
+      {image.type === ImageType.VIDEO && (
+        <ReVideo
+          wrapperRef={wrapperRef}
+          item={image}
+          settings={settings}
+          coverImageProps={{
+            src: image.thumbnail.url,
+            srcSet: `${image.thumbnail.url} ${image.thumbnail.width}w, 
+                  ${image.medium_large.url} ${image.medium_large.width}w, 
+                  ${image.large.url} ${image.large.width}w`,
+            alt: image.alt,
+            loading: 'eager',
+            sizes: `${containerInnerWidth}px`,
+          }}
         />
       )}
       <Watermark />

@@ -1,7 +1,6 @@
 import {InputLabel} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {ProIcon} from 'components/alert-dialog/icons/ProIcon';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
@@ -283,12 +282,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
   const renderFilmstripSettings = (): ReactNode => {
     return (
       <Section
-        header={
-          <>
-            Filmstrip
-            <ProIcon />
-          </>
-        }
+        header={'Filmstrip'}
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
@@ -297,6 +291,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 name={'Position'}
                 value={thumbnailsPosition}
                 options={LightboxThumbnailsPositionOptions}
+                pro={true}
                 onChange={
                   isPro
                     ? onInputValueChange

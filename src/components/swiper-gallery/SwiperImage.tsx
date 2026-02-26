@@ -1,6 +1,7 @@
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
 import ReImage from 'core-components/re-image/ReImage';
+import ReVideo from 'core-components/re-video/ReVideo';
 import {
   ICardsSettings,
   ICarouselSettings,
@@ -61,14 +62,13 @@ const SwiperImage = forwardRef(
       captionFontSize,
       captionFontColor,
       showVideoControls,
+      showVideoCover,
     } = settings;
     const itemBorderRadius = 0;
     const borderRadius = 0;
     const margin = padding || 0;
 
     const wrapperRef = useRef(null);
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const isVideo: boolean = image.type === ImageType.VIDEO;
     const shouldLoadImage =
       key === 'cardsEffect'
         ? index < (imagesCount || 0) + 1
@@ -263,7 +263,7 @@ const SwiperImage = forwardRef(
             height: `calc(100% - ${titleCaptionHeight}px)`,
           }}
         >
-          {!isVideo ? (
+          {image.type === ImageType.IMAGE && (
             <ReImage
               wrapperRef={wrapperRef}
               data-index={index}
@@ -276,33 +276,23 @@ const SwiperImage = forwardRef(
               }
               alt={image.alt}
             />
-          ) : (
-            <div
-              style={{position: 'absolute', width: '100%', height: '100%'}}
-              onClick={(e) => {
-                const video = videoRef?.current;
-
-                if (video) {
-                  if (video.paused) {
-                    video.play();
-                  } else {
-                    video.pause();
-                  }
-                }
+          )}
+          {image.type === ImageType.VIDEO && (
+            <ReVideo
+              wrapperRef={wrapperRef}
+              item={image}
+              settings={settings}
+              coverImageProps={{
+                dataIndex: index,
+                src: shouldLoadImage ? image.medium_large.url : undefined,
+                srcSet: shouldLoadImage
+                  ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w`
+                  : undefined,
+                alt: image.alt,
+                loading: 'eager',
+                sizes: `${size}px`,
               }}
-            >
-              <video
-                ref={videoRef}
-                src={image.original.url}
-                poster={image.medium_large.url}
-                className={'swiper-gallery__video'}
-                controls={showVideoControls}
-                muted
-                playsInline
-                loop
-                preload="auto"
-              />
-            </div>
+            />
           )}
           <Watermark />
           {showTitle &&
