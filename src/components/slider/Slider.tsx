@@ -21,11 +21,13 @@ import 'swiper/css/pagination';
 import 'swiper/css/parallax';
 import 'swiper/css/thumbs';
 
+import React from 'react';
 import {useObservedTextHeight} from './hooks/useObservedTextHeight';
 import './slider.css';
 import SliderMain from './SliderMain';
 import {SliderNavigation} from './SliderNavigation';
 import SliderThumbs from './SliderThumbs';
+import {getPaginationCSSVars} from './utils/getPaginationCSSVars';
 import {
   getThumbnailsFlexDirection,
   hasThumbnails,
@@ -63,12 +65,13 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     shadow,
     shadowType,
     shadowColor,
+    paginationPosition,
+    pagination,
   } = settings as ISliderSettings;
 
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
   const thumbsVertical = isThumbnailsVertical(thumbnailsPosition);
-
   const textRef = useRef<HTMLDivElement | null>(null);
   const hasThumbs = hasThumbnails(thumbnailsPosition);
   const hasTextAbove =
@@ -98,10 +101,11 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
     mousewheel,
     paginationType,
     paginationBulletsImage,
+    paginationPosition,
   ]);
   const staticKey = useMemo(
     () =>
-      `${direction}-${isInfinite}-${hasThumbs}-${imageAnimation}-${keyboard}-${mousewheel}-${paginationType}-${paginationBulletsImage}`,
+      `${direction}-${isInfinite}-${hasThumbs}-${imageAnimation}-${keyboard}-${mousewheel}-${paginationType}-${paginationBulletsImage}-${paginationPosition}`,
     [
       direction,
       isInfinite,
@@ -111,6 +115,7 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
       mousewheel,
       paginationType,
       paginationBulletsImage,
+      paginationPosition,
     ]
   );
   return (
@@ -123,24 +128,25 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
         })}
         style={{
           width: `${width}${widthType}`,
-          flexDirection: getThumbnailsFlexDirection(thumbnailsPosition),
-          gap: thumbnailBarGap,
-          backgroundColor: backgroundColor || 'transparent',
         }}
       >
+        {navigationButton && navigationPosition.includes('out-top') && (
+          <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
+        )}
         <div
           className={clsx('slider__main-swiper--wrapper', {
             [`slider__shadow--${shadowType}`]: shadow,
           })}
           style={{
+            display: 'flex',
+            flexDirection: getThumbnailsFlexDirection(thumbnailsPosition),
+            gap: thumbnailBarGap,
+            backgroundColor: backgroundColor || 'transparent',
             ...(shadow && shadowColor
               ? ({'--slider-shadow-color': shadowColor} as React.CSSProperties)
               : {}),
           }}
         >
-          {navigationButton && navigationPosition.includes('out-top') && (
-            <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
-          )}
           <SliderMain
             key={`main-${staticKey}`}
             images={images}
@@ -152,22 +158,34 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
             hasTextAbove={hasTextAbove}
             hasTextBelow={hasTextBelow}
             onClick={onClick}
+            paginationRef
           />
-          {navigationButton && navigationPosition.includes('out-bottom') && (
-            <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
+          {hasThumbs && (
+            <SliderThumbs
+              key={`thumbs-${staticKey}`}
+              images={images}
+              direction={thumbsVertical ? 'vertical' : 'horizontal'}
+              settings={settings!}
+              setThumbsSwiper={setThumbsSwiper}
+              textHeight={textHeight}
+            />
           )}
         </div>
         {/* THUMBNAILS (SEPARATE COMPONENT) */}
 
-        {hasThumbs && (
-          <SliderThumbs
-            key={`thumbs-${staticKey}`}
-            images={images}
-            direction={thumbsVertical ? 'vertical' : 'horizontal'}
-            settings={settings!}
-            setThumbsSwiper={setThumbsSwiper}
-            textHeight={textHeight}
-          />
+        {navigationButton && navigationPosition.includes('out-bottom') && (
+          <SliderNavigation mainRef={mainSwiperRef} settings={settings!} />
+        )}
+        {pagination && paginationPosition.includes('out') && (
+          <div
+            key={`pagination-${paginationType}-${images.length}`}
+            style={
+              {
+                ...getPaginationCSSVars(settings!),
+              } as React.CSSProperties
+            }
+            className="slider__pagination-external slider-pagination"
+          ></div>
         )}
       </div>
     </Box>

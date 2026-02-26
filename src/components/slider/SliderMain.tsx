@@ -21,6 +21,7 @@ import {SliderNavigation} from './SliderNavigation';
 import {SliderPlayPause} from './SliderPlayPause';
 import {SliderSlideContent} from './SliderSlideContent';
 import {SlideText} from './SlideText';
+import {getLazyLoadNearbySlides} from './utils/getLazyLoadNearbySlides';
 import {getPaginationCSSVars} from './utils/getPaginationCSSVars';
 import {getSwiperEffectOptions} from './utils/getSwiperEffects';
 
@@ -34,6 +35,7 @@ interface SliderMainProps {
   mainSwiperRef: React.MutableRefObject<SwiperType | null>;
   hasTextAbove: boolean;
   hasTextBelow: boolean;
+  paginationRef: any;
 }
 
 const SliderMain: React.FC<SliderMainProps> = ({
@@ -46,8 +48,11 @@ const SliderMain: React.FC<SliderMainProps> = ({
   mainSwiperRef,
   hasTextAbove,
   hasTextBelow,
+  paginationRef,
 }) => {
   const {
+    width,
+    widthType,
     height,
     heightType,
     pagination,
@@ -65,6 +70,8 @@ const SliderMain: React.FC<SliderMainProps> = ({
     navigationButton,
     navigationPosition,
     isSliderAllowed,
+    navigationSize,
+    navigationPadding,
   } = settings;
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const {
@@ -77,6 +84,17 @@ const SliderMain: React.FC<SliderMainProps> = ({
     ? paginationType === SliderPaginationType.FRACTION
       ? {
           type: 'fraction' as const,
+        }
+      : paginationType === SliderPaginationType.NUMBERS
+      ? {
+          clickable: true,
+          renderBullet: (index: number, className: string) => {
+            return `
+            <span class="${className} slider__pagination-number">
+              ${index + 1}
+            </span>
+          `;
+          },
         }
       : paginationBulletsImage
       ? {
@@ -97,6 +115,9 @@ const SliderMain: React.FC<SliderMainProps> = ({
         }
     : false;
 
+  const templateSlideWidth =
+    (Number(navigationSize) + Number(navigationPadding) * 2) * 2;
+
   return (
     <Swiper
       className={clsx(
@@ -107,10 +128,14 @@ const SliderMain: React.FC<SliderMainProps> = ({
         (imageAnimation === 'zoom' || imageAnimation === 'rotate') &&
           'swiper-overflow-visible'
       )}
-      style={{
-        height: `calc(${height}${heightType} + ${textHeight}px)`,
-        ...getPaginationCSSVars(settings!),
-      }}
+      style={
+        {
+          '--slider__template-total': `${templateSlideWidth}px`,
+          '--slider__height-without-text-height': `${height}${heightType}`,
+          '--slider__height-with-text-height': `calc(${height}${heightType} + ${textHeight}px)`,
+          ...getPaginationCSSVars(settings!),
+        } as React.CSSProperties
+      }
       onSwiper={(swiper: any) => (mainSwiperRef.current = swiper)}
       preventInteractionOnTransition={true}
       modules={[
@@ -121,6 +146,7 @@ const SliderMain: React.FC<SliderMainProps> = ({
         Thumbs,
         Keyboard,
         Mousewheel,
+
         ...effectModules,
       ]}
       keyboard={{
@@ -139,12 +165,27 @@ const SliderMain: React.FC<SliderMainProps> = ({
       spaceBetween={0}
       parallax={true}
       thumbs={{swiper: thumbsSwiper}}
-      pagination={paginationConfig}
+      pagination={
+        pagination && paginationPosition.includes('out')
+          ? {
+              el: '.slider__pagination-external',
+
+              ...paginationConfig,
+            }
+          : pagination
+          ? {
+              ...paginationConfig,
+            }
+          : false
+      }
       effect={effect as any}
       {...effectOptions}
       loop={isInfinite}
       direction={direction || 'vertical'}
       speed={slideDuration}
+      onSlideChange={(swiper: SwiperType) => {
+        getLazyLoadNearbySlides(swiper, images);
+      }}
     >
       {images.map((image: IImageDTO, index) => (
         <SwiperSlide key={image.id ?? index} onClick={() => onClick?.(index)}>
@@ -159,6 +200,10 @@ const SliderMain: React.FC<SliderMainProps> = ({
           )}
 
           <SliderSlideContent
+            width={width}
+            widthType={widthType}
+            prevIndex={images.length - 1}
+            index={index}
             image={image}
             effect={effect}
             settings={settings!}
