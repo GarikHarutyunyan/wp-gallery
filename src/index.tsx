@@ -10,14 +10,20 @@ const addApplication = (rootElement: HTMLElement) => {
   const isElementEmpty = !rootElement.hasChildNodes();
 
   if (!isElementEmpty) {
+    // If the element is not empty, unmount any existing React root
     rootMap.get(rootElement)?.unmount();
   }
 
   const root = ReactDOM.createRoot(rootElement);
+  // Store the root instance to manage unmounting later if needed
   rootMap.set(rootElement, root);
 
+  // Extract gallery-specific settings from root element data attributes
+  // Enables multiple galleries with different settings on the same page
   const galleryId: string | undefined =
     rootElement.getAttribute('data-gallery-id') || undefined;
+  const galleryInstanceId: string | undefined =
+    rootElement.getAttribute('id') || undefined;
   const showControls: boolean = !!+(
     rootElement.getAttribute('data-options-section') || 0
   );
@@ -30,16 +36,20 @@ const addApplication = (rootElement: HTMLElement) => {
   const optionsContainerSelector =
     rootElement.getAttribute('data-options-container') || '';
 
-  const baseUrl: string | undefined = (window as any).reacg_global?.rest_root;
-  const nonce: string | undefined = (window as any).reacg?.rest_nonce;
-  const pluginUrl: string | undefined = (window as any).reacg_global
-    ?.plugin_url;
-  const pluginAssetsUrl: string | undefined = (window as any).reacg_global
-    ?.plugin_assets_url;
+  // All non-gallery-specific settings are passed via global variables
+  // to avoid repetition and large inline scripts on each gallery container.
+  const reacgGlobal = (window as any).reacg_global;
+  const reacg = (window as any).reacg;
+
+  const baseUrl: string | undefined = reacgGlobal?.rest_root;
+  const nonce: string | undefined = reacg?.rest_nonce;
+  const pluginUrl: string | undefined = reacgGlobal?.plugin_url;
+  const pluginAssetsUrl: string | undefined = reacgGlobal?.plugin_assets_url;
 
   root.render(
     <React.StrictMode>
       <AppInfoProvider
+        galleryInstanceId={galleryInstanceId}
         galleryId={galleryId}
         showControls={showControls}
         baseUrl={baseUrl}

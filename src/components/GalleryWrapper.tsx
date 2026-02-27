@@ -1,9 +1,9 @@
 import {TemplatesProvider} from 'contexts';
-import React from 'react';
+import {ReactElement} from 'react';
 import {GalleryWithSettings} from './GalleryWithSettings';
 import {SettingsProvider} from './settings/SettingsContext';
 
-const GalleryWrapper: React.FC = () => {
+const GalleryWrapper = (): ReactElement => {
   return (
     <div
       style={{
