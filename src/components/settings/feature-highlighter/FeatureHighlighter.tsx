@@ -126,7 +126,11 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
           },
         }}
       >
-        <div ref={elementRef} className={'reacg-feature-highlighter__anchor'}>
+        <div
+          ref={elementRef}
+          className={'reacg-feature-highlighter__anchor'}
+          onClickCapture={isOpen ? handleClose : undefined}
+        >
           {children}
         </div>
       </Tooltip>
