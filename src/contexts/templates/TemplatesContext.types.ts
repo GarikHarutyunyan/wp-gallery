@@ -12,4 +12,7 @@ export interface ITemplateReference {
   paid: boolean;
   preview_url?: string;
   youtube_link?: string;
+  thumbnail?: string;
+  categories?: string[];
+  type?: string;
 }

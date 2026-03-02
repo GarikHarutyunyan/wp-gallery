@@ -9,7 +9,7 @@ const TemplatesContext = React.createContext<{
   preBuiltTemplates?: ITemplateReference[];
   myTemplates?: ITemplateReference[];
   template?: ITemplate;
-  changeTemplate?: (id: number, type: string) => void;
+  changeTemplate?: (id: number, type: string) => Promise<boolean>;
   resetTemplate?: () => void;
   initTemplate?: (id: number, title: string, type: string) => void;
   isLoading?: boolean;
@@ -31,7 +31,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       return;
     }
     const fetchUrl: string =
-      'https://regallery.team/core/wp-json/reacgcore/v2/templates';
+      'https://regallery.team/core/wp-json/reacgcore/v3/templates';
 
     try {
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
@@ -56,7 +56,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setMyTemplates(myTemplatesData);
   };
 
-  const getTemplate = async (id: number, type: string): Promise<void> => {
+  const getTemplate = async (id: number, type: string): Promise<boolean> => {
     const coreUrl: string = `https://regallery.team/core/wp-json/reacgcore/v2/template/${id}`;
     const coreUrlQueryStringSeperator: string = coreUrl.includes('?')
       ? '&'
@@ -84,6 +84,8 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           (window as any).reacg_open_premium_offer_dialog?.({
             utm_medium: 'select_template',
           });
+          setIsLoading(false);
+          return false;
         } else {
           const templateData: ITemplate = response.data;
           templateData.templateType = type;
@@ -92,12 +94,15 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           setTemplate(templateData);
         }
         setIsLoading(false);
+        return true;
       } catch (error: any) {
         console.error(error);
         setIsLoading(false);
+        return false;
       }
     } else {
       resetTemplate();
+      return false;
     }
   };
 
@@ -124,8 +129,8 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
-  const changeTemplate = (id: number, type: string) => {
-    getTemplate(id, type);
+  const changeTemplate = async (id: number, type: string) => {
+    return getTemplate(id, type);
   };
 
   const initTemplate = (id: number, title: string, type: string) => {
