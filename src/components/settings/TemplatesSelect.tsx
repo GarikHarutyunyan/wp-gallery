@@ -30,6 +30,7 @@ const showHighlighter: boolean = !!storageValue
   : true;
 const ALL_CATEGORY = 'All';
 const MY_TEMPLATES_CATEGORY = 'My templates';
+const FREE_CATEGORY = 'Free';
 const ALL_TYPES = 'Filter by layouts';
 
 const TemplatesSelect: React.FC = () => {
@@ -148,7 +149,19 @@ const TemplatesSelect: React.FC = () => {
       .flatMap((templateReference) => getTemplateCategories(templateReference))
       .filter((category, index, list) => list.indexOf(category) === index);
 
-    return [ALL_CATEGORY, ...allTemplateCategories, MY_TEMPLATES_CATEGORY];
+    const freeCategory = allTemplateCategories.find(
+      (category) => category.toLowerCase() === FREE_CATEGORY.toLowerCase()
+    );
+    const categoriesWithoutFree = allTemplateCategories.filter(
+      (category) => category.toLowerCase() !== FREE_CATEGORY.toLowerCase()
+    );
+
+    return [
+      ALL_CATEGORY,
+      ...(freeCategory ? [freeCategory] : []),
+      ...categoriesWithoutFree,
+      MY_TEMPLATES_CATEGORY,
+    ];
   }, [preBuiltTemplates]);
 
   const typeFilters = useMemo(() => {
@@ -184,6 +197,13 @@ const TemplatesSelect: React.FC = () => {
       return [];
     }
 
+    if (activeCategory === FREE_CATEGORY) {
+      return (preBuiltTemplates || []).filter(
+        (templateReference) =>
+          !templateReference.paid && matchesTemplateFilters(templateReference)
+      );
+    }
+
     return (preBuiltTemplates || []).filter(
       (templateReference) =>
         getTemplateCategories(templateReference).includes(activeCategory) &&
@@ -199,6 +219,10 @@ const TemplatesSelect: React.FC = () => {
       return (myTemplates || []).filter((templateReference) =>
         matchesTemplateFilters(templateReference)
       );
+    }
+
+    if (activeCategory === FREE_CATEGORY) {
+      return [];
     }
 
     return (myTemplates || []).filter(
