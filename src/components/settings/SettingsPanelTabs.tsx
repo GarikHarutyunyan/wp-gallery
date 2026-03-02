@@ -6,7 +6,6 @@ import {Box, Tab, Tabs, Tooltip} from '@mui/material';
 import clsx from 'clsx';
 import {Align, Aligner} from 'core-components/aligner';
 import React, {useState} from 'react';
-import {TemplatesSelect} from './TemplatesSelect';
 
 interface ISettingsPanelTabsProps {
   activeTab: string;
@@ -109,7 +108,6 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         </Tabs>
       </Box>
       <Aligner className="reacg-settings-panel__buttons" align={Align.END}>
-        <TemplatesSelect />
         <LoadingButton
           loading={isSaving}
           loadingPosition={'center'}
