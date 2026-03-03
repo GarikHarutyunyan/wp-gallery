@@ -1,5 +1,5 @@
-import {ClickAwayListener, Tooltip} from '@mui/material';
-import {Aligner} from 'core-components/aligner';
+import { ClickAwayListener, Tooltip } from '@mui/material';
+import { Aligner } from 'core-components/aligner';
 import React, {
   PropsWithChildren,
   ReactElement,
@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {BulbIcon} from './BulbIcon';
+import { BulbIcon } from './BulbIcon';
 import './feature-highlighter.css';
 
 interface IFeatureHighlighterProps extends PropsWithChildren {
@@ -108,7 +108,6 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
               width: '272px',
               color: '#FFF',
               borderRadius: '12px',
-              fontFamily: 'lexend',
               boxShadow:
                 'rgba(0, 0, 0, 0.2) 0px 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px, rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;',
             },
@@ -138,4 +137,5 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
   );
 };
 
-export {FeatureHighlighter};
+export { FeatureHighlighter };
+

@@ -7,8 +7,8 @@ import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
 import Tooltip from '@mui/material/Tooltip';
-import {useTemplates} from 'contexts';
-import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
+import { useTemplates } from 'contexts';
+import { ITemplateReference } from 'contexts/templates/TemplatesContext.types';
 import React, {
   ReactNode,
   SyntheticEvent,
@@ -16,11 +16,11 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {TypeUtils} from 'utils';
-import {ProIcon} from '../alert-dialog/icons/ProIcon';
-import {FeatureHighlighter} from './feature-highlighter/FeatureHighlighter';
+import { TypeUtils } from 'utils';
+import { ProIcon } from '../alert-dialog/icons/ProIcon';
+import { FeatureHighlighter } from './feature-highlighter/FeatureHighlighter';
 import './template-select.css';
-import {useSettings} from './useSettings';
+import { useSettings } from './useSettings';
 
 const storageValue: string | null = localStorage.getItem(
   'reacg-highlight-templates-select'
@@ -274,16 +274,23 @@ const TemplatesSelect: React.FC = () => {
     return (
       <div className={'reacg-template-card__overlay'}>
         <div className={'reacg-template-card__actions'}>
-          <Button
-            variant={'contained'}
-            size={'small'}
-            onClick={() => onTemplateSelect(templateReference.id, type)}
-            className={
-              'reacg-template-card__overlay-button reacg-template-card__import-button'
-            }
+          <Tooltip
+            title="Importing this template adds the layout only. Demo images won’t be imported. Add your own images to see the gallery."
+            placement="top"
+            arrow
+            enterDelay={500}
           >
-            Import
-          </Button>
+            <Button
+              variant={'contained'}
+              size={'small'}
+              onClick={() => onTemplateSelect(templateReference.id, type)}
+              className={
+                'reacg-template-card__overlay-button reacg-template-card__import-button'
+              }
+            >
+              Import
+            </Button>
+          </Tooltip>
           {youtube_link ? (
             <Tooltip title="View Video" placement="top" arrow enterDelay={500}>
               <IconButton
@@ -413,7 +420,7 @@ const TemplatesSelect: React.FC = () => {
       >
         <Box className={'reacg-templates-dialog__header'}>
           <div className={'reacg-templates-dialog__title'}>
-            Templates library
+            Template Library
           </div>
           <IconButton onClick={() => setIsTemplatesDialogOpen(false)}>
             <CloseIcon />
@@ -500,4 +507,5 @@ const TemplatesSelect: React.FC = () => {
   ) : null;
 };
 
-export {TemplatesSelect};
+export { TemplatesSelect };
+

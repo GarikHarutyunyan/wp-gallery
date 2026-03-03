@@ -186,6 +186,8 @@
   padding: 0 !important;
   min-width: 170px;
   width: 210px;
+  min-height: 46px;
+  line-height: 3.14285714;
 }
 
 .reacg-templates-select__container {

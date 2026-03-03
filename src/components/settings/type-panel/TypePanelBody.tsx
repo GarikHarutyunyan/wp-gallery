@@ -1,12 +1,12 @@
-import {Align, Aligner} from 'core-components/aligner';
-import {GalleryType} from 'data-structures';
+import { Align, Aligner } from 'core-components/aligner';
+import { GalleryType } from 'data-structures';
 import React from 'react';
-import {TemplatesSelect} from '../TemplatesSelect';
-import {useSettings} from '../useSettings';
-import {TypeOption} from './TypeOption';
-import {GalleryTypeOptions} from './TypePanel.utils';
-import {TypePanelSelect} from './TypePanelSelect';
-import {TemplateImage} from './images/TemplateImage';
+import { TemplatesSelect } from '../TemplatesSelect';
+import { useSettings } from '../useSettings';
+import { TypeOption } from './TypeOption';
+import { GalleryTypeOptions } from './TypePanel.utils';
+import { TypePanelSelect } from './TypePanelSelect';
+import { TemplateImage } from './images/TemplateImage';
 
 interface ITypePanelBodyProps {
   isMedium: boolean;
@@ -36,7 +36,7 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
           </div>
           <div className={'reacg-templates-library-row__description'}>
             <div className={'reacg-templates-library-row__title'}>
-              Templates Library
+              Template Library
             </div>
             <div className={'reacg-templates-library-row__subtitle'}>
               Choose from 45+ ready-made gallery designs.
@@ -67,4 +67,5 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
   );
 };
 
-export {TypePanelBody};
+export { TypePanelBody };
+
