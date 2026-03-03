@@ -157,6 +157,8 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
             textHeight={textHeight}
             hasTextAbove={hasTextAbove}
             hasTextBelow={hasTextBelow}
+            hasThumbs={hasThumbs}
+            thumbsVertical={thumbsVertical}
             onClick={onClick}
             paginationRef
           />

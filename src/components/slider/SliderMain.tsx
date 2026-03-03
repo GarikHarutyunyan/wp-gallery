@@ -7,7 +7,7 @@ import {
   ISliderSettings,
   SliderPaginationType,
 } from 'data-structures';
-import {useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {
   Autoplay,
   Keyboard,
@@ -35,7 +35,9 @@ interface SliderMainProps {
   mainSwiperRef: React.MutableRefObject<SwiperType | null>;
   hasTextAbove: boolean;
   hasTextBelow: boolean;
+  hasThumbs: boolean;
   paginationRef: any;
+  thumbsVertical: boolean;
 }
 
 const SliderMain: React.FC<SliderMainProps> = ({
@@ -48,7 +50,9 @@ const SliderMain: React.FC<SliderMainProps> = ({
   mainSwiperRef,
   hasTextAbove,
   hasTextBelow,
+  hasThumbs,
   paginationRef,
+  thumbsVertical,
 }) => {
   const {
     width,
@@ -72,13 +76,41 @@ const SliderMain: React.FC<SliderMainProps> = ({
     isSliderAllowed,
     navigationSize,
     navigationPadding,
+    autoplayProgress,
+    autoplayProgressColor,
+    autoplayProgressType,
   } = settings;
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
+  const circleRef = useRef<SVGSVGElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
   const {
     effect,
     modules: effectModules,
     effectOptions,
   } = getSwiperEffectOptions(imageAnimation, direction);
+
+  const onAutoplayTimeLeft = (s: any, time: any, progress: number) => {
+    if (autoplayProgressType === 'circle' && circleRef.current) {
+      circleRef.current?.style.setProperty('--progress', `${1 - progress}`);
+    } else if (autoplayProgressType === 'line' && lineRef.current) {
+      lineRef.current.style.width = `${(1 - progress) * 100}%`;
+    }
+  };
+
+  useEffect(() => {
+    const swiper = mainSwiperRef.current;
+
+    const isSameDirection =
+      (thumbsVertical && direction === 'vertical') ||
+      (!thumbsVertical && direction === 'horizontal');
+
+    const canStartAutoplay =
+      swiper && autoplay && hasThumbs && thumbsSwiper && !isSameDirection;
+
+    if (!canStartAutoplay) return;
+    console.log('yeh');
+    swiper.autoplay.start();
+  }, [thumbsSwiper, autoplay, hasThumbs, thumbsVertical, direction]);
 
   const paginationConfig = pagination
     ? paginationType === SliderPaginationType.FRACTION
@@ -117,7 +149,6 @@ const SliderMain: React.FC<SliderMainProps> = ({
 
   const templateSlideWidth =
     (Number(navigationSize) + Number(navigationPadding) * 2) * 2;
-
   return (
     <Swiper
       className={clsx(
@@ -136,7 +167,12 @@ const SliderMain: React.FC<SliderMainProps> = ({
           ...getPaginationCSSVars(settings!),
         } as React.CSSProperties
       }
-      onSwiper={(swiper: any) => (mainSwiperRef.current = swiper)}
+      onSwiper={(swiper: any) => {
+        mainSwiperRef.current = swiper;
+      }}
+      onSlideChange={(swiper: SwiperType) => {
+        getLazyLoadNearbySlides(swiper, images);
+      }}
       preventInteractionOnTransition={true}
       modules={[
         Navigation,
@@ -156,7 +192,7 @@ const SliderMain: React.FC<SliderMainProps> = ({
       autoplay={
         autoplay || isPlaying
           ? {
-              delay: slideDelay,
+              delay: Number(slideDelay) || 3000,
               stopOnLastSlide: false,
             }
           : false
@@ -183,9 +219,9 @@ const SliderMain: React.FC<SliderMainProps> = ({
       loop={isInfinite}
       direction={direction || 'vertical'}
       speed={slideDuration}
-      onSlideChange={(swiper: SwiperType) => {
-        getLazyLoadNearbySlides(swiper, images);
-      }}
+      {...(autoplay && autoplayProgress
+        ? {onAutoplayTimeLeft: onAutoplayTimeLeft}
+        : {})}
     >
       {images.map((image: IImageDTO, index) => (
         <SwiperSlide key={image.id ?? index} onClick={() => onClick?.(index)}>
@@ -232,6 +268,45 @@ const SliderMain: React.FC<SliderMainProps> = ({
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
       />
+      {/* Autoplay Progress Bar */}
+
+      {autoplay && autoplayProgress && (
+        <>
+          {autoplayProgressType === 'circle' ? (
+            <div
+              className="slider__autoplay-circle-progress"
+              slot="container-end"
+            >
+              <svg
+                className="slider__autoplay-circle-progress"
+                viewBox="0 0 48 48"
+                ref={circleRef}
+                style={
+                  {
+                    '--slider__autoplay-circle-progress-color':
+                      autoplayProgressColor,
+                  } as React.CSSProperties
+                }
+              >
+                <circle cx="24" cy="24" r="20" />
+              </svg>
+            </div>
+          ) : (
+            <div className="slider__autoplay-line-progress">
+              <div
+                className="slider__autoplay-line-fill"
+                ref={lineRef}
+                style={
+                  {
+                    '--slider__autoplay-line-progress-color':
+                      autoplayProgressColor,
+                  } as React.CSSProperties
+                }
+              />
+            </div>
+          )}
+        </>
+      )}
     </Swiper>
   );
 };
