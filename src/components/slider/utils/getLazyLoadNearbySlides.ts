@@ -11,11 +11,10 @@ export const getLazyLoadNearbySlides = (swiper: any, images: IImageDTO[]) => {
 
   const indexesToLoad = new Set([prevIndex, activeIndex, nextIndex]);
 
-  swiper.slides.forEach((slide: HTMLElement) => {
+  swiper.slides.forEach((slide: HTMLElement, i: number) => {
     const realIndexAttr = slide.getAttribute('data-swiper-slide-index');
-    if (!realIndexAttr) return;
 
-    const realIndex = Number(realIndexAttr);
+    const realIndex = realIndexAttr !== null ? Number(realIndexAttr) : i;
     if (!indexesToLoad.has(realIndex)) return;
 
     const image = images[realIndex];
