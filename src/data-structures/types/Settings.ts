@@ -14,6 +14,7 @@ import {
   SizeTypeHeight,
   SizeTypeWidth,
   SliderAnimation,
+  SliderAutoPlayProgressType,
   SliderDirection,
   SliderNavigation,
   SliderNavigationPosition,
@@ -473,6 +474,9 @@ export interface ISliderSettings {
   buttonTextColor: string;
   buttonFontSize: number;
   buttonUrlSource: string;
+  autoplayProgress: boolean;
+  autoplayProgressColor: string;
+  autoplayProgressType: SliderAutoPlayProgressType;
 }
 
 export interface ISettingsDTO {

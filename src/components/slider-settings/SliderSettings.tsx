@@ -17,6 +17,7 @@ import {
   SizeTypeHeightOptions,
   SizeTypeWidthOptions,
   SliderAnimationOptions,
+  SliderAutoPlayProgressTypeOptions,
   SliderDirectionOptions,
   SliderNavigationPositionV2Options,
   SliderNavigationTypeOptions,
@@ -177,6 +178,9 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     buttonTextColor,
     buttonFontSize,
     buttonUrlSource,
+    autoplayProgress,
+    autoplayProgressColor,
+    autoplayProgressType,
   } = value as ISliderSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -2021,6 +2025,53 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const renderProgress = (): ReactNode => {
+    return (
+      <Section
+        header={'Progress'}
+        body={
+          <>
+            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id="autoplayProgress"
+                  name="Progress"
+                  value={autoplayProgress}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+
+              {autoplayProgress && (
+                <>
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'autoplayProgressType'}
+                      name={'Type'}
+                      // pro={true}
+                      value={autoplayProgressType}
+                      options={SliderAutoPlayProgressTypeOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'autoplayProgressColor'}
+                      name="Color"
+                      value={autoplayProgressColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </>
+              )}
+            </Grid>
+          </>
+        }
+        defaultExpanded={false}
+      />
+    );
+  };
+
   const renderAdvancedSettings = (): ReactNode => {
     return (
       <Section
@@ -2195,6 +2246,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
       {renderNavigationSettings()}
       {renderPaginationSettings()}
       {renderAdvancedSettings()}
+      {renderProgress()}
       {renderShadowSettings()}
     </Paper>
   );

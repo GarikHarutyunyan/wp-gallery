@@ -26,6 +26,7 @@ import {
   SizeTypeHeight,
   SizeTypeWidth,
   SliderAnimation,
+  SliderAutoPlayProgressType,
   SliderDirection,
   SliderNavigation,
   SliderNavigationPosition,
@@ -574,6 +575,9 @@ const sliderMockSettings: ISliderSettings = {
   buttonTextColor: '#fff',
   buttonFontSize: 16,
   buttonUrlSource: ActionURLSource.ACTIONURL,
+  autoplayProgress: false,
+  autoplayProgressColor: '#fff',
+  autoplayProgressType: SliderAutoPlayProgressType.CIRCLE,
 };
 
 export {

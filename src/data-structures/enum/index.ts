@@ -17,6 +17,7 @@ export * from './Position';
 export * from './SizeTypeHeight';
 export * from './SizeTypeWidth';
 export * from './SliderAnimation';
+export * from './SliderAutoPlayProgressType';
 export * from './SliderDirection';
 export * from './SliderNavigation';
 export * from './SliderNavigationPosition';
