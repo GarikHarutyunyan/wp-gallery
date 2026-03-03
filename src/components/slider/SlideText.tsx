@@ -83,18 +83,22 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
       <div
         ref={ref}
         className="slider__slide-text-container"
-        style={{
-          position:
-            textPosition === 'above' || textPosition === 'below'
-              ? 'relative'
-              : 'absolute',
-          backgroundColor: textBackground || 'transparent',
-          color: textColor,
-          fontFamily: textFontFamily,
-          ...getTextVerticalPosition(textPosition),
-        }}
+        style={
+          {
+            'position':
+              textPosition === 'above' || textPosition === 'below'
+                ? 'relative'
+                : 'absolute',
+            '--slider__slide-text-bg-color': textBackground || 'transparent',
+            '--slider__slide-text-color': textColor,
+            '--slider__slide-caption-color': captionFontColor,
+            'fontFamily': textFontFamily,
+            ...getTextVerticalPosition(textPosition),
+          } as React.CSSProperties
+        }
       >
         <div
+          // data-swiper-parallax={isThumb ? undefined : '-30%'}
           className="slider__slide_text-wrapper"
           style={{
             display: 'flex',
@@ -107,7 +111,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
           {/* TITLE + CAPTION */}
           {showTitle && (
             <p
-              data-swiper-parallax={isThumb ? undefined : '-30%'}
+              // data-swiper-parallax={isThumb ? undefined : '-30%'}
               className="slider__slide-title"
               style={{
                 fontSize: `clamp(16px, ${titleFontSize}vw, 42px)`,
@@ -119,15 +123,13 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
                 fontWeight: 600,
               }}
             >
-              {image?.[titleSource]}
-
+              <span>{image?.[titleSource]}</span>
               {showCaption && image?.[captionSource] && (
                 <span
                   className="slider__slide-caption"
                   style={{
                     fontSize: `clamp(13px, ${captionFontSize}vw, 22px)`,
                     marginLeft: 6,
-                    color: captionFontColor,
                   }}
                 >
                   {image[captionSource]}
@@ -139,7 +141,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
           {/* DESCRIPTION */}
           {showDescription && image?.[descriptionSource] && (
             <p
-              data-swiper-parallax={isThumb ? undefined : '-30%'}
+              // data-swiper-parallax={isThumb ? undefined : '-30%'}
               className="slider__slide-description"
               style={{
                 fontSize: `clamp(12px, ${descriptionFontSize}vw, 18px)`,
@@ -157,7 +159,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
           )}
           {showButton && !isThumb && (
             <Button
-              data-swiper-parallax={isThumb ? undefined : '-30%'}
+              // data-swiper-parallax={isThumb ? undefined : '-30%'}
               onClick={() =>
                 onCustomActionToggle(
                   image?.[buttonUrlSource as ActionURLSource] || ''

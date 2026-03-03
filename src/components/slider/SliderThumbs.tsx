@@ -1,7 +1,7 @@
 import {IImageDTO, ISliderSettings, SliderTextPosition} from 'data-structures';
 import {ReactElement} from 'react';
 import type {Swiper as SwiperType} from 'swiper';
-import {FreeMode, Thumbs} from 'swiper/modules';
+import {FreeMode, Mousewheel, Thumbs} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
 
 import 'swiper/css';
@@ -67,6 +67,7 @@ const SliderThumbs = ({
     (thumbnailShowTitle || thumbnailShowDescription || thumbnailShowCaption) &&
     thumbnailTextPosition !== SliderTextPosition.ABOVE &&
     thumbnailTextPosition !== SliderTextPosition.BELOW;
+
   return (
     <div
       className="slider__thumbs"
@@ -89,9 +90,10 @@ const SliderThumbs = ({
       <Swiper
         onSwiper={setThumbsSwiper}
         slidesPerView={'auto'}
-        modules={[Thumbs, FreeMode]}
+        modules={[Thumbs, FreeMode, Mousewheel]}
         className="slider__thumbs-swiper"
         direction={direction}
+        mousewheel={direction === 'vertical'}
         freeMode={{
           enabled: true,
           momentum: true,
