@@ -43,6 +43,9 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     buttonColor,
     buttonFontSize,
     buttonTextColor,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
     textFontFamily,
     hoverEffect,
     openInNewTab,
@@ -177,25 +180,13 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         (window as any).reacg_global?.text?.view_more
                       }
                       className={'blog-gallery__button'}
-                      style={{
-                        display: 'block',
-                        backgroundColor: buttonColor,
-                        color: buttonTextColor,
-                        fontSize: buttonFontSize,
-                        textTransform: 'none',
-                        marginLeft:
-                          buttonAlignment === 'center'
-                            ? 'auto'
-                            : buttonAlignment === 'right'
-                            ? 'auto'
-                            : '0',
-                        marginRight:
-                          buttonAlignment === 'center'
-                            ? 'auto'
-                            : buttonAlignment === 'left'
-                            ? 'auto'
-                            : '0',
-                      }}
+                      alignment={buttonAlignment}
+                      backgroundColor={buttonColor}
+                      textColor={buttonTextColor}
+                      fontSize={buttonFontSize}
+                      borderSize={buttonBorderSize}
+                      borderColor={buttonBorderColor}
+                      borderRadius={buttonBorderRadius}
                     />
                   )}
                 </div>

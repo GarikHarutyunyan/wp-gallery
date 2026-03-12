@@ -384,6 +384,9 @@ export interface IBlogSettings {
   buttonColor: string;
   buttonTextColor: string;
   buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
   textFontFamily: string;
   imageHeightType: SizeTypeHeight;
   imageWidthType: SizeTypeWidth;
