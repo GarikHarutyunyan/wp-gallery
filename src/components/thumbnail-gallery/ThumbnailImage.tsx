@@ -212,7 +212,7 @@ const ThumbnailImage = ({
                   </span>
                 )}
               {titlePosition === buttonPosition && showButton && (
-                <span className="thumbnail-gallery__button-subtitle-wrap">
+                <span className="reacg-action-button-wrap">
                   <ActionButton
                     url={buttonUrl}
                     openInNewTab={openInNewTab}
@@ -322,7 +322,7 @@ const ThumbnailImage = ({
                 </span>
               )}
               {captionPosition === buttonPosition && showButton && (
-                <span className="thumbnail-gallery__button-subtitle-wrap">
+                <span className="reacg-action-button-wrap">
                   <ActionButton
                     url={buttonUrl}
                     openInNewTab={openInNewTab}
@@ -447,7 +447,7 @@ const ThumbnailImage = ({
           }}
           className={`thumbnail-gallery__title-content_${position}`}
           title={
-            <span className="thumbnail-gallery__button-subtitle-wrap">
+            <span className="reacg-action-button-wrap">
               <ActionButton
                 url={buttonUrl}
                 openInNewTab={openInNewTab}

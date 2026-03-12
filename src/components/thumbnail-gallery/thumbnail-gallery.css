@@ -189,7 +189,8 @@
 }
 
 .reacg-gallery .thumbnail-gallery__title .MuiImageListItemBar-titleWrap,
-.reacg-gallery .thumbnail-gallery__title .MuiImageListItemBar-title {
+.reacg-gallery .thumbnail-gallery__title .MuiImageListItemBar-title,
+.reacg-gallery .thumbnail-gallery__title .MuiImageListItemBar-subtitle {
   display: flex;
   flex-direction: column;
   gap: 10px;

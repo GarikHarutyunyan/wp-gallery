@@ -107,6 +107,19 @@ export interface IMasonrySettings {
   captionFontSize?: number | undefined;
   captionFontColor: string;
   showTitle: boolean;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: TitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
   showVideoCover: boolean;
 }
 

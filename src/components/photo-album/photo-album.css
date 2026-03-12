@@ -71,6 +71,14 @@
   overflow: hidden;
 }
 
+.reacg-gallery .photo-album-item__title .MuiImageListItemBar-titleWrap,
+.reacg-gallery .photo-album-item__title .MuiImageListItemBar-title,
+.reacg-gallery .photo-album-item__title .MuiImageListItemBar-subtitle {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 /* Zoom out */
 .reacg-gallery .photo-album-item__image-wrapper_zoom-out img,
 .reacg-gallery .photo-album-item__image-wrapper_zoom-out video {

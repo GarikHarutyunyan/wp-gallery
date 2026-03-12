@@ -7,6 +7,7 @@ import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {
+  ActionURLSourceOptions,
   CaptionSourceOptions,
   HoverEffectOptions,
   IJustifiedSettings,
@@ -23,6 +24,7 @@ import {
   SelectControl,
   SliderControl,
   SwitchControl,
+  TextControl,
 } from '../controls';
 import {LabelWithTooltip} from '../controls/LabelWithTooltip';
 import {Filter} from '../settings/Filter';
@@ -61,6 +63,19 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
     showTitle,
     captionPosition,
     captionVisibility,
+    showButton,
+    buttonText,
+    buttonVisibility,
+    buttonPosition,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
     showVideoCover,
   } = value as IJustifiedSettings;
 
@@ -494,6 +509,149 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
     );
   };
 
+  const renderButtonSettings = (): ReactNode => {
+    return (
+      <>
+        <Grid
+          sx={{marginLeft: 0, paddingTop: 2}}
+          container
+          columns={24}
+          rowSpacing={2}
+          columnSpacing={4}
+        >
+          <Filter isLoading={isLoading}>
+            <SwitchControl
+              id={'showButton'}
+              name={'Show button'}
+              value={showButton}
+              onChange={onInputValueChange}
+            />
+          </Filter>
+          {showButton && (
+            <>
+              <Filter isLoading={isLoading}>
+                <SelectControl
+                  id={'buttonUrlSource'}
+                  name={'URL source'}
+                  value={buttonUrlSource}
+                  options={ActionURLSourceOptions}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'openInNewTab'}
+                  name={'Open in new tab'}
+                  value={openInNewTab}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+            </>
+          )}
+        </Grid>
+        {showButton && (
+          <Grid
+            container
+            columns={24}
+            rowSpacing={2}
+            columnSpacing={4}
+            className="reacg-section__container-inherit"
+          >
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'buttonVisibility'}
+                name={'Visibility'}
+                value={buttonVisibility}
+                options={TitleVisibilityOptions}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'buttonPosition'}
+                name={'Position'}
+                value={buttonPosition}
+                options={TitlePositionOptions}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <NumberControl
+                id={'buttonFontSize'}
+                name={'Font size'}
+                value={buttonFontSize}
+                onChange={onInputValueChange}
+                unit={'px'}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <ColorControl
+                id={'buttonTextColor'}
+                name={'Text color'}
+                value={buttonTextColor}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'buttonAlignment'}
+                name={'Alignment'}
+                value={buttonAlignment}
+                options={TitleAlignmentOptions}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <ColorControl
+                id={'buttonColor'}
+                name={'Background'}
+                value={buttonColor}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <NumberControl
+                id={'buttonBorderSize'}
+                name={'Border'}
+                value={buttonBorderSize}
+                onChange={onInputValueChange}
+                min={0}
+                unit={'px'}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <ColorControl
+                id={'buttonBorderColor'}
+                name={'Border color'}
+                value={buttonBorderColor}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <NumberControl
+                id={'buttonBorderRadius'}
+                name={'Border radius'}
+                value={buttonBorderRadius}
+                onChange={onInputValueChange}
+                min={0}
+                unit={'px'}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <TextControl
+                id={'buttonText'}
+                name={'Button text'}
+                value={buttonText}
+                placeholder={(window as any).reacg_global?.text?.view_more}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+          </Grid>
+        )}
+      </>
+    );
+  };
+
   const renderTitleSection = (): ReactNode => {
     return (
       <Section
@@ -502,7 +660,8 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             {renderTitleSettings()}
             {renderCaptionSettings()}
-            {(showTitle || showCaption) && (
+            {renderButtonSettings()}
+            {(showTitle || showCaption || showButton) && (
               <>
                 <Grid
                   sx={{marginLeft: 0, paddingTop: 2}}
