@@ -920,8 +920,16 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
             <SwitchControl
               id={'showButton'}
               name={'Show button'}
+              pro={true}
               value={showButton}
-              onChange={onInputValueChange}
+              onChange={
+                isPro
+                  ? onInputValueChange
+                  : () =>
+                      (window as any).reacg_open_premium_offer_dialog({
+                        utm_medium: 'show_button',
+                      })
+              }
             />
           </Filter>
           {showButton && (
