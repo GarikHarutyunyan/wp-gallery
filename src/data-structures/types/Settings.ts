@@ -165,6 +165,17 @@ export interface ISlideshowSettings {
   captionSource: CaptionSource;
   captionFontSize: number;
   captionFontColor: string;
+  showButton: boolean;
+  buttonText: string;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
 }
 
 export interface ILightboxSettings extends ISlideshowSettings {

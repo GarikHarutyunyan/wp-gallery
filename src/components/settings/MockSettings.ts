@@ -257,6 +257,17 @@ const slideshowMockSettings: ISlideshowSettings = {
   captionSource: CaptionSource.CAPTION,
   captionFontSize: 18,
   captionFontColor: 'Grey',
+  showButton: false,
+  buttonText: 'SEE MORE',
+  buttonAlignment: TitleAlignment.LEFT,
+  buttonColor: '#22eaaa',
+  buttonTextColor: '#fff',
+  buttonFontSize: 16,
+  buttonBorderSize: 0,
+  buttonBorderColor: '#22eaaa',
+  buttonBorderRadius: 4,
+  buttonUrlSource: ActionURLSource.ACTIONURL,
+  openInNewTab: false,
 };
 
 const generalMockSettings: IGeneralSettings = {
@@ -329,6 +340,17 @@ const lightboxMockSettings: ILightboxSettings = {
   captionSource: CaptionSource.CAPTION,
   captionFontSize: 18,
   captionFontColor: 'Grey',
+  showButton: false,
+  buttonText: 'SEE MORE',
+  buttonAlignment: TitleAlignment.LEFT,
+  buttonColor: '#22eaaa',
+  buttonTextColor: '#fff',
+  buttonFontSize: 16,
+  buttonBorderSize: 0,
+  buttonBorderColor: '#22eaaa',
+  buttonBorderRadius: 4,
+  buttonUrlSource: ActionURLSource.ACTIONURL,
+  openInNewTab: false,
 };
 
 const cubeMockSettings: ICubeSettings = {

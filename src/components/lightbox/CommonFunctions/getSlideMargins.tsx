@@ -20,9 +20,12 @@ type GetSlideMarginsParams = {
   paddingAroundText: number;
   titleMargin: number;
   showCaption: boolean;
+  showButton: boolean;
   titleSource: TitleSource;
   captionSource: CaptionSource;
   descriptionSource: DescriptionSource;
+  buttonBorderSize: number;
+  buttonContainerHeight?: number;
 };
 
 export const getSlideMargins = ({
@@ -39,9 +42,12 @@ export const getSlideMargins = ({
   paddingAroundText,
   titleMargin,
   showCaption,
+  showButton,
   titleSource,
   captionSource,
   descriptionSource,
+  buttonBorderSize,
+  buttonContainerHeight,
 }: GetSlideMarginsParams) => {
   // Calculate extra margin applied around the title
   const titleMarginPx = 2 * titleMargin;
@@ -56,9 +62,10 @@ export const getSlideMargins = ({
   const descriptionSpace = !!(
     showDescription && images?.[index]?.[descriptionSource]
   );
+  const buttonSpace = !!showButton;
 
   // Check if there is any text content to account for
-  const hasCaptions = titleSpace || descriptionSpace;
+  const hasCaptions = titleSpace || descriptionSpace || buttonSpace;
 
   // Utility function to generate a responsive font size using CSS clamp()
   const getClampedSize = (fontSize: number) =>
@@ -81,6 +88,19 @@ export const getSlideMargins = ({
           descriptionMaxRowsCount || 1
         })`
       );
+    }
+    // Reserve space for action button when captions are rendered above/below image.
+    if (buttonSpace) {
+      if ((buttonContainerHeight || 0) > 0) {
+        parts.push(`${buttonContainerHeight}px`);
+      } else {
+        const buttonMinHeightPx = 36;
+        const buttonContainerTopGapPx = 10;
+        const buttonContainerHeightPx =
+          buttonMinHeightPx + Math.max(buttonBorderSize, 0) * 2;
+
+        parts.push(`${buttonContainerHeightPx + buttonContainerTopGapPx}px`);
+      }
     }
     // Add padding only if there is any text content
     if (parts.length > 0) {

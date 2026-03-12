@@ -4,7 +4,9 @@ import {useData} from 'components/data-context/useData';
 import {getSlideMargins} from 'components/lightbox/CommonFunctions/getSlideMargins';
 import {Captions} from 'components/lightbox/CustomCaptions/Captions';
 import {useSettings} from 'components/settings';
+import {ActionButton} from 'core-components/action-button';
 import {
+  ActionURLSource,
   IImageDTO,
   ISlideshowSettings,
   LightboxImageAnimation,
@@ -67,6 +69,17 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     captionSource,
     captionFontSize,
     captionFontColor,
+    showButton,
+    buttonText,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
   } = settings as ISlideshowSettings;
   const wrapper = wrapperRef.current;
   const [innerWidth, setInnerWidth] = useState<number>(
@@ -74,6 +87,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   );
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const [index, setIndex] = useState(0);
+  const [buttonContainerHeight, setButtonContainerHeight] = useState<number>(0);
 
   const slideshowRef = React.useRef<SlideshowRef>(null);
 
@@ -98,7 +112,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (showTitle || showCaption || showDescription) {
+    if (showTitle || showCaption || showDescription || showButton) {
       newPlugins.push(Captions as any);
     }
 
@@ -111,6 +125,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     showTitle,
     showCaption,
     showDescription,
+    showButton,
   ]);
 
   useEffect(() => {
@@ -129,6 +144,65 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
       slideshowRef.current?.pause();
     }
   }, [autoplay]);
+
+  useEffect(() => {
+    if (!showButton) {
+      setButtonContainerHeight(0);
+      return;
+    }
+
+    const measureButtonContainerHeight = () => {
+      const buttonContainer = slideshowRootRef.current?.querySelector(
+        '.yarl__slide_captions_container .reacg-slideshow-texts__button'
+      ) as HTMLElement | null;
+
+      if (!buttonContainer) {
+        return;
+      }
+
+      const rect = buttonContainer.getBoundingClientRect();
+      const styles = window.getComputedStyle(buttonContainer);
+      const marginTop = parseFloat(styles.marginTop || '0');
+      const marginBottom = parseFloat(styles.marginBottom || '0');
+      const nextHeight = Math.round(rect.height + marginTop + marginBottom);
+
+      setButtonContainerHeight((prevHeight) =>
+        prevHeight !== nextHeight ? nextHeight : prevHeight
+      );
+    };
+
+    measureButtonContainerHeight();
+    window.addEventListener('resize', measureButtonContainerHeight);
+
+    const mutationObserver = new MutationObserver(measureButtonContainerHeight);
+    if (slideshowRootRef.current) {
+      mutationObserver.observe(slideshowRootRef.current, {
+        childList: true,
+        subtree: true,
+      });
+    }
+
+    const resizeObserver = new ResizeObserver(measureButtonContainerHeight);
+    const buttonContainer = slideshowRootRef.current?.querySelector(
+      '.yarl__slide_captions_container .reacg-slideshow-texts__button'
+    ) as HTMLElement | null;
+    if (buttonContainer) {
+      resizeObserver.observe(buttonContainer);
+    }
+
+    return () => {
+      window.removeEventListener('resize', measureButtonContainerHeight);
+      mutationObserver.disconnect();
+      resizeObserver.disconnect();
+    };
+  }, [
+    showButton,
+    index,
+    buttonText,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderRadius,
+  ]);
 
   const slides = useMemo(() => {
     return images?.map((image: IImageDTO) => ({
@@ -185,6 +259,26 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
               {image[descriptionSource]}
             </p>
           )}
+          {showButton && (
+            <div className={'reacg-slideshow-texts__button'}>
+              <ActionButton
+                url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                openInNewTab={openInNewTab}
+                text={buttonText}
+                alignment={buttonAlignment}
+                backgroundColor={buttonColor}
+                textColor={buttonTextColor}
+                borderSize={buttonBorderSize}
+                borderColor={buttonBorderColor}
+                borderRadius={buttonBorderRadius}
+                style={{
+                  fontSize: `clamp(${
+                    buttonFontSize / minFactor
+                  }rem, ${buttonFontSize}vw, ${buttonFontSize * maxFactor}rem)`,
+                }}
+              />
+            </div>
+          )}
         </>
       ),
       type: image.type,
@@ -237,6 +331,17 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     captionSource,
     captionFontSize,
     captionFontColor,
+    showButton,
+    buttonText,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
   ]);
 
   const slideMargins = useMemo(() => {
@@ -254,9 +359,12 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
       paddingAroundText,
       titleMargin,
       showCaption,
+      showButton,
       titleSource,
       captionSource,
       descriptionSource,
+      buttonBorderSize,
+      buttonContainerHeight,
     });
   }, [
     images,
@@ -268,11 +376,14 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     descriptionFontSize,
     descriptionMaxRowsCount,
     showCaption,
+    showButton,
     captionSource,
     captionFontSize,
     captionFontColor,
     titleSource,
     descriptionSource,
+    buttonBorderSize,
+    buttonContainerHeight,
   ]);
 
   useEffect(() => {
@@ -400,7 +511,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           {
             // 'reacg-slideshow-control-buttons_hidden': !areControlButtonsShown,
             'reacg-slideshow-texts':
-              showTitle || showCaption || showDescription,
+              showTitle || showCaption || showDescription || showButton,
             'reacg-slideshow-texts_top': [
               LightboxTextPosition.TOP,
               LightboxTextPosition.ABOVE,
@@ -425,7 +536,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
               textBackground &&
               ((showTitle && images?.[index]?.title) ||
                 (showCaption && images?.[index]?.caption) ||
-                (showDescription && images?.[index]?.description))
+                (showDescription && images?.[index]?.description) ||
+                showButton)
                 ? `${textBackground}`
                 : `none`,
           },
