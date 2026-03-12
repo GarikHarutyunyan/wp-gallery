@@ -64,6 +64,19 @@ const thumbnailMockSettings: IThumbnailSettings = {
   descriptionFontColor: 'Black',
   descriptionMaxRowsCount: 3,
   showVideoCover: true,
+  showButton: false,
+  buttonText: 'SEE MORE',
+  buttonVisibility: TitleVisibility.ALWAYS_SHOWN,
+  buttonPosition: ThumbnailTitlePosition.BOTTOM,
+  buttonAlignment: TitleAlignment.LEFT,
+  buttonColor: '#22eaaa',
+  buttonTextColor: '#fff',
+  buttonFontSize: 16,
+  buttonBorderSize: 0,
+  buttonBorderColor: '#22eaaa',
+  buttonBorderRadius: 4,
+  buttonUrlSource: ActionURLSource.ACTIONURL,
+  openInNewTab: false,
 };
 
 const generalMockSettings: IGeneralSettings = {
@@ -244,5 +257,4 @@ const template5 = {
   name: 'None',
 };
 
-export { template1, template2, template3, template4, template5 };
-
+export {template1, template2, template3, template4, template5};

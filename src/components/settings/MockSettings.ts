@@ -74,6 +74,19 @@ const thumbnailMockSettings: IThumbnailSettings = {
   descriptionFontSize: 18,
   descriptionFontColor: 'Black',
   descriptionMaxRowsCount: 3,
+  showButton: false,
+  buttonText: 'SEE MORE',
+  buttonVisibility: TitleVisibility.ALWAYS_SHOWN,
+  buttonPosition: ThumbnailTitlePosition.BOTTOM,
+  buttonAlignment: TitleAlignment.LEFT,
+  buttonColor: '#22eaaa',
+  buttonTextColor: '#fff',
+  buttonFontSize: 16,
+  buttonBorderSize: 0,
+  buttonBorderColor: '#22eaaa',
+  buttonBorderRadius: 4,
+  buttonUrlSource: ActionURLSource.ACTIONURL,
+  openInNewTab: false,
   showVideoCover: true,
 };
 
@@ -451,6 +464,5 @@ export {
   masonryMockSettings,
   mosaicMockSettings,
   slideshowMockSettings,
-  thumbnailMockSettings
+  thumbnailMockSettings,
 };
-

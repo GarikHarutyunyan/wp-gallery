@@ -2,7 +2,12 @@ import ImageList from '@mui/material/ImageList';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {useAppInfo} from 'contexts';
-import {IImageDTO, IThumbnailSettings, ImageType} from 'data-structures';
+import {
+  ActionURLSource,
+  IImageDTO,
+  IThumbnailSettings,
+  ImageType,
+} from 'data-structures';
 import React, {
   useCallback,
   useEffect,
@@ -60,6 +65,19 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     descriptionFontSize,
     descriptionFontColor,
     descriptionMaxRowsCount,
+    showButton,
+    buttonText,
+    buttonVisibility,
+    buttonPosition,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
     showVideoCover,
   } = settings as IThumbnailSettings;
   const elementRef = useRef<HTMLDivElement | null>(null);
@@ -258,6 +276,19 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
               descriptionFontSize={descriptionFontSize}
               descriptionFontColor={descriptionFontColor}
               descriptionMaxRowsCount={descriptionMaxRowsCount}
+              showButton={showButton}
+              buttonText={buttonText}
+              buttonVisibility={buttonVisibility}
+              buttonPosition={buttonPosition}
+              buttonAlignment={buttonAlignment}
+              buttonColor={buttonColor}
+              buttonTextColor={buttonTextColor}
+              buttonFontSize={buttonFontSize}
+              buttonBorderSize={buttonBorderSize}
+              buttonBorderColor={buttonBorderColor}
+              buttonBorderRadius={buttonBorderRadius}
+              buttonUrl={image?.[buttonUrlSource as ActionURLSource] || ''}
+              openInNewTab={openInNewTab}
               showVideoCover={showVideoCover}
             />
           )) || []}

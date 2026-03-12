@@ -7,6 +7,7 @@ import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {
+  ActionURLSourceOptions,
   AspectRatioOptions,
   CaptionSourceOptions,
   DescriptionPositionOptions,
@@ -29,6 +30,7 @@ import {
   SelectControl,
   SliderControl,
   SwitchControl,
+  TextControl,
 } from '../controls';
 import {LabelWithTooltip} from '../controls/LabelWithTooltip';
 import {Filter} from '../settings/Filter';
@@ -79,6 +81,19 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
     descriptionFontSize,
     descriptionFontColor,
     descriptionMaxRowsCount,
+    showButton,
+    buttonText,
+    buttonVisibility,
+    buttonPosition,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
     showVideoCover,
   } = value as IThumbnailSettings;
 
@@ -118,6 +133,28 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
 
     return options;
   }, [titlePosition, titleVisibility, onChange, value]);
+
+  const buttonPositionOptions: ISelectOption[] = useMemo(() => {
+    let options = [...ThumbnailTitlePositionOptions];
+
+    if (buttonVisibility === TitleVisibility.ON_HOVER) {
+      options = options.filter(
+        (option) =>
+          option.value !== ThumbnailTitlePosition.BELOW &&
+          option.value !== ThumbnailTitlePosition.ABOVE
+      );
+
+      if (buttonPosition === ThumbnailTitlePosition.BELOW) {
+        onChange({...value, buttonPosition: ThumbnailTitlePosition.BOTTOM});
+      }
+
+      if (buttonPosition === ThumbnailTitlePosition.ABOVE) {
+        onChange({...value, buttonPosition: ThumbnailTitlePosition.TOP});
+      }
+    }
+
+    return options;
+  }, [buttonPosition, buttonVisibility, onChange, value]);
 
   const renderBasicSettings = (): ReactNode => {
     return (
@@ -203,6 +240,7 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
             {renderTitleSettings()}
             {renderCaptionSettings()}
             {renderDescriptionSettings()}
+            {renderButtonSettings()}
             {(showTitle || showCaption || showDescription) && (
               <>
                 <Grid
@@ -859,6 +897,151 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                 id={'descriptionFontColor'}
                 name="Color"
                 value={descriptionFontColor}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+          </Grid>
+        )}
+      </>
+    );
+  };
+
+  const renderButtonSettings = (): ReactNode => {
+    return (
+      <>
+        <Grid
+          sx={{marginLeft: 0, paddingTop: 2}}
+          container
+          columns={24}
+          rowSpacing={2}
+          columnSpacing={4}
+        >
+          <Filter isLoading={isLoading}>
+            <SwitchControl
+              id={'showButton'}
+              name={'Show button'}
+              value={showButton}
+              onChange={onInputValueChange}
+            />
+          </Filter>
+          {showButton && (
+            <>
+              <Filter isLoading={isLoading}>
+                <SelectControl
+                  id={'buttonUrlSource'}
+                  name={'URL source'}
+                  value={buttonUrlSource}
+                  options={ActionURLSourceOptions}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'openInNewTab'}
+                  name={'Open in new tab'}
+                  value={openInNewTab}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+            </>
+          )}
+        </Grid>
+        {showButton && (
+          <Grid
+            container
+            columns={24}
+            rowSpacing={2}
+            columnSpacing={4}
+            className="reacg-section__container-inherit"
+          >
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'buttonVisibility'}
+                name={'Visibility'}
+                value={buttonVisibility}
+                options={TitleVisibilityOptions}
+                onChange={onInputValueChange}
+                isDisabled={!isThumbnailTitlePositionEditable}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'buttonPosition'}
+                name={'Position'}
+                value={buttonPosition}
+                options={buttonPositionOptions}
+                onChange={onInputValueChange}
+                isDisabled={!isThumbnailTitlePositionEditable}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <NumberControl
+                id={'buttonFontSize'}
+                name={'Font size'}
+                value={buttonFontSize}
+                onChange={onInputValueChange}
+                unit={'px'}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <ColorControl
+                id={'buttonTextColor'}
+                name={'Text color'}
+                value={buttonTextColor}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <ColorControl
+                id={'buttonColor'}
+                name={'Button color'}
+                value={buttonColor}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <NumberControl
+                id={'buttonBorderSize'}
+                name={'Border'}
+                value={buttonBorderSize}
+                onChange={onInputValueChange}
+                min={0}
+                unit={'px'}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <ColorControl
+                id={'buttonBorderColor'}
+                name={'Border color'}
+                value={buttonBorderColor}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <NumberControl
+                id={'buttonBorderRadius'}
+                name={'Border radius'}
+                value={buttonBorderRadius}
+                onChange={onInputValueChange}
+                min={0}
+                unit={'px'}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'buttonAlignment'}
+                name={'Alignment'}
+                value={buttonAlignment}
+                options={TitleAlignmentOptions}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <TextControl
+                id={'buttonText'}
+                name={'Button text'}
+                value={buttonText}
+                placeholder={(window as any).reacg_global?.text?.view_more}
                 onChange={onInputValueChange}
               />
             </Filter>

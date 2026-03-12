@@ -32,6 +32,32 @@
   height: 300px;
 }
 
+.reacg-gallery .reacg-action-button {
+  transition: filter 0.3s ease;
+}
+
+.reacg-gallery .reacg-action-button_on-hover,
+.reacg-gallery .reacg-action-button-container_on-hover {
+  opacity: 0;
+  pointer-events: none;
+  -webkit-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.reacg-gallery
+  .reacg-action-button-hover-parent:hover
+  .reacg-action-button_on-hover,
+.reacg-gallery
+  .reacg-action-button-hover-parent:hover
+  .reacg-action-button-container_on-hover {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.reacg-gallery .reacg-action-button:hover {
+  filter: brightness(1.1);
+}
+
 .reacg-gallery .reacg-gallery__text-background-top-gradient > div,
 .reacg-slideshow-gallery__text-background-top-gradient
   .yarl__slide_description {

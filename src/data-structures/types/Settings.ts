@@ -63,6 +63,19 @@ export interface IThumbnailSettings {
   descriptionFontSize?: number | undefined;
   descriptionFontColor: string;
   descriptionMaxRowsCount?: number | undefined;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: ThumbnailTitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
   showVideoCover: boolean;
 }
 

@@ -592,6 +592,9 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                       id={'buttonText'}
                       name="Button text"
                       value={buttonText}
+                      placeholder={
+                        (window as any).reacg_global?.text?.view_more
+                      }
                       onChange={onInputValueChange}
                     />
                   </Filter>

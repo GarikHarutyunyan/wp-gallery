@@ -4,7 +4,7 @@ import {Box} from '@mui/material';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
-import {Button} from 'core-components/button';
+import {ActionButton} from 'core-components/action-button';
 import {ActionURLSource, IBlogSettings} from 'data-structures';
 import '../photo-album/photo-album.css';
 import './BlogGallery.css';
@@ -56,16 +56,6 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     showVideoCover,
   } = settings as IBlogSettings;
   const isMobile: boolean = containerInnerWidth <= 720;
-
-  const onCustomActionToggle = (url: string) => {
-    if (!!url) {
-      if (openInNewTab) {
-        window?.open(url, '_blank')?.focus();
-      } else {
-        window?.open(url, '_self');
-      }
-    }
-  };
 
   const updateContainerWidth = useCallback(() => {
     if (wrapperRef.current) {
@@ -179,11 +169,12 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                     </p>
                   )}
                   {showButton && (
-                    <Button
-                      onClick={() =>
-                        onCustomActionToggle(
-                          image?.[buttonUrlSource as ActionURLSource] || ''
-                        )
+                    <ActionButton
+                      url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                      openInNewTab={openInNewTab}
+                      text={
+                        buttonText ||
+                        (window as any).reacg_global?.text?.view_more
                       }
                       className={'blog-gallery__button'}
                       style={{
@@ -205,9 +196,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                             ? 'auto'
                             : '0',
                       }}
-                    >
-                      {buttonText}
-                    </Button>
+                    />
                   )}
                 </div>
               </div>

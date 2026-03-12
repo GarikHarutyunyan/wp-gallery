@@ -1,6 +1,7 @@
 import {ImageListItem} from '@mui/material';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
+import {ActionButton} from 'core-components/action-button';
 import ReImage from 'core-components/re-image/ReImage';
 import ReVideo from 'core-components/re-video/ReVideo';
 import {
@@ -52,6 +53,19 @@ interface IThumbnailImageProps {
   descriptionFontSize?: number | undefined;
   descriptionFontColor?: string | undefined;
   descriptionMaxRowsCount?: number | undefined;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: ThumbnailTitlePosition;
+  buttonAlignment?: TitleAlignment;
+  buttonColor?: string;
+  buttonTextColor?: string;
+  buttonFontSize?: number;
+  buttonBorderSize?: number;
+  buttonBorderColor?: string;
+  buttonBorderRadius?: number;
+  buttonUrl?: string;
+  openInNewTab?: boolean;
   showVideoCover: boolean;
 }
 
@@ -90,6 +104,19 @@ const ThumbnailImage = ({
   descriptionFontSize,
   descriptionFontColor,
   descriptionMaxRowsCount,
+  showButton,
+  buttonText,
+  buttonVisibility,
+  buttonPosition,
+  buttonAlignment,
+  buttonColor,
+  buttonTextColor,
+  buttonFontSize,
+  buttonBorderSize,
+  buttonBorderColor,
+  buttonBorderRadius,
+  buttonUrl,
+  openInNewTab,
   showVideoCover,
 }: IThumbnailImageProps) => {
   if (overlayTextBackground === '') {
@@ -176,13 +203,36 @@ const ThumbnailImage = ({
           className={`thumbnail-gallery__title-content_${titlePosition}`}
           title={<span>{image[titleSource] || <br />}</span>}
           subtitle={
-            titlePosition === captionPosition &&
-            showCaption &&
-            image[captionSource] && (
-              <span className="thumbnail-image__caption">
-                {image[captionSource]}
-              </span>
-            )
+            <>
+              {titlePosition === captionPosition &&
+                showCaption &&
+                image[captionSource] && (
+                  <span className="thumbnail-image__caption">
+                    {image[captionSource]}
+                  </span>
+                )}
+              {titlePosition === buttonPosition && showButton && (
+                <span className="thumbnail-gallery__button-subtitle-wrap">
+                  <ActionButton
+                    url={buttonUrl}
+                    openInNewTab={openInNewTab}
+                    text={buttonText}
+                    alignment={buttonAlignment}
+                    backgroundColor={buttonColor}
+                    textColor={buttonTextColor}
+                    fontSize={buttonFontSize}
+                    borderSize={buttonBorderSize}
+                    borderColor={buttonBorderColor}
+                    borderRadius={buttonBorderRadius}
+                    isOnHover={
+                      buttonVisibility === TitleVisibility.ON_HOVER &&
+                      buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+                      buttonPosition !== ThumbnailTitlePosition.BELOW
+                    }
+                  />
+                </span>
+              )}
+            </>
           }
           position={
             titlePosition === ThumbnailTitlePosition.CENTER
@@ -239,7 +289,7 @@ const ThumbnailImage = ({
       >
         <ImageListItemBar
           sx={{
-            '& .MuiImageListItemBar-subtitle': {
+            '& .MuiImageListItemBar-title': {
               fontSize: `${captionFontSize}px`,
               fontFamily: titleFontFamily,
               color: captionFontColor,
@@ -264,12 +314,35 @@ const ThumbnailImage = ({
                 : 'initial',
           }}
           className={`thumbnail-gallery__title-content_${captionPosition}`}
-          subtitle={
-            showCaption && (
-              <span className="thumbnail-image__caption">
-                {image[captionSource] || <br />}
-              </span>
-            )
+          title={
+            <>
+              {showCaption && (
+                <span className="thumbnail-image__caption">
+                  {image[captionSource] || <br />}
+                </span>
+              )}
+              {captionPosition === buttonPosition && showButton && (
+                <span className="thumbnail-gallery__button-subtitle-wrap">
+                  <ActionButton
+                    url={buttonUrl}
+                    openInNewTab={openInNewTab}
+                    text={buttonText}
+                    alignment={buttonAlignment}
+                    backgroundColor={buttonColor}
+                    textColor={buttonTextColor}
+                    fontSize={buttonFontSize}
+                    borderSize={buttonBorderSize}
+                    borderColor={buttonBorderColor}
+                    borderRadius={buttonBorderRadius}
+                    isOnHover={
+                      buttonVisibility === TitleVisibility.ON_HOVER &&
+                      buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+                      buttonPosition !== ThumbnailTitlePosition.BELOW
+                    }
+                  />
+                </span>
+              )}
+            </>
           }
           position={
             captionPosition === ThumbnailTitlePosition.CENTER
@@ -310,6 +383,102 @@ const ThumbnailImage = ({
     );
   };
 
+  const renderButton = (position: ThumbnailTitlePosition) => {
+    let itemPaddingText = '0';
+    let imagePaddingText = '0';
+    if (
+      position === ThumbnailTitlePosition.BELOW ||
+      position === ThumbnailTitlePosition.ABOVE
+    ) {
+      itemPaddingText = (itemBorderRadius || 0) / 2 + '%';
+      imagePaddingText = margin + 'px';
+    } else if (position !== ThumbnailTitlePosition.CENTER) {
+      imagePaddingText = (borderRadius || 0) / 2 + '%';
+    }
+
+    const isOutside =
+      position === ThumbnailTitlePosition.ABOVE ||
+      position === ThumbnailTitlePosition.BELOW;
+
+    return (
+      <div
+        className={clsx('thumbnail-gallery__title', {
+          'reacg-action-button-container_on-hover':
+            showButton && buttonVisibility === TitleVisibility.ON_HOVER,
+          'thumbnail-gallery__title_hidden': !showButton,
+          'thumbnail-gallery__item-outline': isOutside,
+          'reacg-gallery__text-background-top-gradient':
+            overlayTextBackground === 'unset' &&
+            position === ThumbnailTitlePosition.TOP,
+          'reacg-gallery__text-background-bottom-gradient':
+            overlayTextBackground === 'unset' &&
+            position === ThumbnailTitlePosition.BOTTOM,
+          'reacg-gallery__text-background-center-gradient':
+            overlayTextBackground === 'unset' &&
+            position === ThumbnailTitlePosition.CENTER,
+        })}
+        style={{
+          paddingLeft: itemPaddingText,
+          paddingRight: itemPaddingText,
+        }}
+      >
+        <ImageListItemBar
+          sx={{
+            '& .MuiImageListItemBar-title': {
+              fontFamily: titleFontFamily,
+              lineHeight: 'normal',
+            },
+          }}
+          style={{
+            paddingLeft: imagePaddingText,
+            paddingRight: imagePaddingText,
+            textAlign: buttonAlignment,
+            backgroundColor:
+              position !== ThumbnailTitlePosition.BELOW &&
+              position !== ThumbnailTitlePosition.ABOVE
+                ? overlayTextBackground
+                : 'initial',
+            mixBlendMode:
+              invertTextColor &&
+              position !== ThumbnailTitlePosition.BELOW &&
+              position !== ThumbnailTitlePosition.ABOVE
+                ? 'difference'
+                : 'initial',
+          }}
+          className={`thumbnail-gallery__title-content_${position}`}
+          title={
+            <span className="thumbnail-gallery__button-subtitle-wrap">
+              <ActionButton
+                url={buttonUrl}
+                openInNewTab={openInNewTab}
+                text={buttonText}
+                alignment={buttonAlignment}
+                backgroundColor={buttonColor}
+                textColor={buttonTextColor}
+                fontSize={buttonFontSize}
+                borderSize={buttonBorderSize}
+                borderColor={buttonBorderColor}
+                borderRadius={buttonBorderRadius}
+                isOnHover={
+                  buttonVisibility === TitleVisibility.ON_HOVER &&
+                  buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+                  buttonPosition !== ThumbnailTitlePosition.BELOW
+                }
+              />
+            </span>
+          }
+          position={
+            position === ThumbnailTitlePosition.CENTER
+              ? 'bottom'
+              : position === ThumbnailTitlePosition.ABOVE
+              ? 'below'
+              : position
+          }
+        />
+      </div>
+    );
+  };
+
   const wrapperRef = useRef(null);
   const settings: any = {
     width,
@@ -343,6 +512,19 @@ const ThumbnailImage = ({
     descriptionFontSize,
     descriptionFontColor,
     descriptionMaxRowsCount,
+    showButton,
+    buttonText,
+    buttonVisibility,
+    buttonPosition,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrl,
+    openInNewTab,
     showVideoCover,
   };
 
@@ -364,7 +546,9 @@ const ThumbnailImage = ({
           titlePosition === ThumbnailTitlePosition.BELOW ||
           titlePosition === ThumbnailTitlePosition.ABOVE ||
           captionPosition === ThumbnailTitlePosition.BELOW ||
-          captionPosition === ThumbnailTitlePosition.ABOVE
+          captionPosition === ThumbnailTitlePosition.ABOVE ||
+          buttonPosition === ThumbnailTitlePosition.BELOW ||
+          buttonPosition === ThumbnailTitlePosition.ABOVE
             ? 'hidden'
             : 'unset',
       }}
@@ -410,6 +594,12 @@ const ThumbnailImage = ({
         captionPosition === ThumbnailTitlePosition.ABOVE
           ? renderCaption(image)
           : null}
+        {showButton &&
+        (titlePosition != buttonPosition || !showTitle) &&
+        (captionPosition != buttonPosition || !showCaption) &&
+        buttonPosition === ThumbnailTitlePosition.ABOVE
+          ? renderButton(buttonPosition)
+          : null}
         {showDescription && descriptionPosition === DescriptionPosition.ABOVE
           ? renderDescription(image)
           : null}
@@ -424,6 +614,7 @@ const ThumbnailImage = ({
             ref={wrapperRef}
             className={clsx(
               'thumbnail-gallery__image-wrapper',
+              'reacg-action-button-hover-parent',
               'thumbnail-gallery__image-wrapper_overflow',
               'thumbnail-gallery__image-wrapper_' + hoverEffect
             )}
@@ -481,6 +672,12 @@ const ThumbnailImage = ({
               captionPosition !== ThumbnailTitlePosition.BELOW &&
               captionPosition !== ThumbnailTitlePosition.ABOVE &&
               renderCaption(image)}
+            {showButton &&
+              (titlePosition != buttonPosition || !showTitle) &&
+              (captionPosition != buttonPosition || !showCaption) &&
+              buttonPosition !== ThumbnailTitlePosition.BELOW &&
+              buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+              renderButton(buttonPosition)}
           </div>
         </div>
         {showTitle && titlePosition === ThumbnailTitlePosition.BELOW
@@ -490,6 +687,12 @@ const ThumbnailImage = ({
         (titlePosition != captionPosition || !showTitle) &&
         captionPosition === ThumbnailTitlePosition.BELOW
           ? renderCaption(image)
+          : null}
+        {showButton &&
+        (titlePosition != buttonPosition || !showTitle) &&
+        (captionPosition != buttonPosition || !showCaption) &&
+        buttonPosition === ThumbnailTitlePosition.BELOW
+          ? renderButton(buttonPosition)
           : null}
         {showDescription && descriptionPosition === DescriptionPosition.BELOW
           ? renderDescription(image)
