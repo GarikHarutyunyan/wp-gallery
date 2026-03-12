@@ -42,10 +42,15 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
     shadow,
     showTitle,
     showCaption,
+    showButton,
     titlePosition,
     captionPosition,
+    buttonPosition,
     titleFontSize,
+    playAndPauseAllowed,
     captionFontSize,
+    buttonFontSize,
+    buttonBorderSize,
     navigation,
     dotsPosition,
     dotsSize,
@@ -90,15 +95,19 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
 
     const measureTitleCaptionHeight = () => {
       const title = galleryRef.current?.querySelector(
-        '.swiper-gallery__title-caption.swiper-gallery__item-outline'
+        '.swiper-gallery__title-caption.swiper-gallery__item-outline:not(.swiper-gallery__button)'
       ) as HTMLElement;
       const caption = galleryRef.current?.querySelector(
         '.swiper-gallery__caption.swiper-gallery__item-outline'
+      ) as HTMLElement;
+      const button = galleryRef.current?.querySelector(
+        '.swiper-gallery__button.swiper-gallery__item-outline'
       ) as HTMLElement;
 
       let totalHeight = 0;
       if (title) totalHeight += title.offsetHeight;
       if (caption) totalHeight += caption.offsetHeight;
+      if (button) totalHeight += button.offsetHeight;
 
       setTitleCaptionHeight(totalHeight);
     };
@@ -124,10 +133,14 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
   }, [
     showTitle,
     showCaption,
+    showButton,
     titlePosition,
     captionPosition,
+    buttonPosition,
     titleFontSize,
     captionFontSize,
+    buttonFontSize,
+    buttonBorderSize,
   ]);
 
   const dynamicThreshold = 6;
@@ -151,6 +164,7 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
           externalPaginationId={externalPaginationIdRef.current}
           effects={effects}
           loop={isInfinite}
+          playAndPauseAllowed={playAndPauseAllowed}
           backgroundColor={backgroundColor || 'White'}
           padding={padding}
           images={images || []}

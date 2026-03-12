@@ -604,7 +604,7 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({isLoading}) => {
             <Filter isLoading={isLoading}>
               <ColorControl
                 id={'buttonColor'}
-                name={'Background'}
+                name={'Button color'}
                 value={buttonColor}
                 onChange={onInputValueChange}
               />

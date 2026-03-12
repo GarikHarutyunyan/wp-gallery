@@ -602,7 +602,7 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
             <Filter isLoading={isLoading}>
               <ColorControl
                 id={'buttonColor'}
-                name={'Background'}
+                name={'Button color'}
                 value={buttonColor}
                 onChange={onInputValueChange}
               />

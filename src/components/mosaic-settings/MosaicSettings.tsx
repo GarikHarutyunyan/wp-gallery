@@ -601,7 +601,7 @@ const MosaicSettings: React.FC<IMosaicSettingsProps> = ({isLoading}) => {
             <Filter isLoading={isLoading}>
               <ColorControl
                 id={'buttonColor'}
-                name={'Background'}
+                name={'Button color'}
                 value={buttonColor}
                 onChange={onInputValueChange}
               />

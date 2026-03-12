@@ -1,8 +1,10 @@
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
+import {ActionButton} from 'core-components/action-button';
 import ReImage from 'core-components/re-image/ReImage';
 import ReVideo from 'core-components/re-video/ReVideo';
 import {
+  ActionURLSource,
   ICardsSettings,
   ICarouselSettings,
   ICubeSettings,
@@ -61,6 +63,19 @@ const SwiperImage = forwardRef(
       captionPosition,
       captionFontSize,
       captionFontColor,
+      showButton,
+      buttonText,
+      buttonVisibility,
+      buttonPosition,
+      buttonAlignment,
+      buttonColor,
+      buttonTextColor,
+      buttonFontSize,
+      buttonBorderSize,
+      buttonBorderColor,
+      buttonBorderRadius,
+      buttonUrlSource,
+      openInNewTab,
       showVideoControls,
       showVideoCover,
     } = settings;
@@ -145,12 +160,34 @@ const SwiperImage = forwardRef(
             className={`swiper-gallery__title-content_${titlePosition}`}
             title={<span>{image[titleSource] || <br />}</span>}
             subtitle={
-              titlePosition === captionPosition &&
-              showCaption && (
-                <span className="thumbnail-image__caption">
-                  {image[captionSource] || <br />}
-                </span>
-              )
+              <>
+                {titlePosition === captionPosition && showCaption && (
+                  <span className="thumbnail-image__caption">
+                    {image[captionSource] || <br />}
+                  </span>
+                )}
+                {titlePosition === buttonPosition && showButton && (
+                  <span className="reacg-action-button-wrap">
+                    <ActionButton
+                      url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                      openInNewTab={openInNewTab}
+                      text={buttonText}
+                      alignment={buttonAlignment}
+                      backgroundColor={buttonColor}
+                      textColor={buttonTextColor}
+                      fontSize={buttonFontSize}
+                      borderSize={buttonBorderSize}
+                      borderColor={buttonBorderColor}
+                      borderRadius={buttonBorderRadius}
+                      isOnHover={
+                        buttonVisibility === TitleVisibility.ON_HOVER &&
+                        buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+                        buttonPosition !== ThumbnailTitlePosition.BELOW
+                      }
+                    />
+                  </span>
+                )}
+              </>
             }
             position={
               titlePosition === ThumbnailTitlePosition.CENTER
@@ -224,12 +261,35 @@ const SwiperImage = forwardRef(
               mixBlendMode: invertTextColor ? 'difference' : 'initial',
             }}
             className={`swiper-gallery__title-content_${captionPosition}`}
-            subtitle={
-              showCaption && (
-                <span className="swiper-image__caption">
-                  {image[captionSource] || <br />}
-                </span>
-              )
+            title={
+              <>
+                {showCaption && (
+                  <span className="swiper-image__caption">
+                    {image[captionSource] || <br />}
+                  </span>
+                )}
+                {captionPosition === buttonPosition && showButton && (
+                  <span className="reacg-action-button-wrap">
+                    <ActionButton
+                      url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                      openInNewTab={openInNewTab}
+                      text={buttonText}
+                      alignment={buttonAlignment}
+                      backgroundColor={buttonColor}
+                      textColor={buttonTextColor}
+                      fontSize={buttonFontSize}
+                      borderSize={buttonBorderSize}
+                      borderColor={buttonBorderColor}
+                      borderRadius={buttonBorderRadius}
+                      isOnHover={
+                        buttonVisibility === TitleVisibility.ON_HOVER &&
+                        buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+                        buttonPosition !== ThumbnailTitlePosition.BELOW
+                      }
+                    />
+                  </span>
+                )}
+              </>
             }
             position={
               captionPosition === ThumbnailTitlePosition.CENTER
@@ -237,6 +297,96 @@ const SwiperImage = forwardRef(
                 : captionPosition === ThumbnailTitlePosition.ABOVE
                 ? 'below'
                 : captionPosition
+            }
+          />
+        </div>
+      );
+    };
+
+    const renderButton = (
+      position: ThumbnailTitlePosition,
+      image: IImageDTO
+    ) => {
+      let itemPaddingText = '0';
+      let imagePaddingText = '6px';
+      if (
+        position === ThumbnailTitlePosition.BELOW ||
+        position === ThumbnailTitlePosition.ABOVE
+      ) {
+        itemPaddingText = (itemBorderRadius || 0) / 2 + '%';
+        imagePaddingText = margin + 'px';
+      } else if (position !== ThumbnailTitlePosition.CENTER) {
+        imagePaddingText = (borderRadius || 0) / 2 + '%';
+      }
+
+      const isOutside =
+        position === ThumbnailTitlePosition.ABOVE ||
+        position === ThumbnailTitlePosition.BELOW;
+
+      return (
+        <div
+          className={clsx('swiper-gallery__title', 'swiper-gallery__button', {
+            'reacg-action-button-container_on-hover':
+              showButton && buttonVisibility === TitleVisibility.ON_HOVER,
+            'swiper-gallery__item-outline': isOutside,
+            'reacg-gallery__text-background-top-gradient':
+              overlayTextBackground === '' &&
+              position === ThumbnailTitlePosition.TOP,
+            'reacg-gallery__text-background-bottom-gradient':
+              overlayTextBackground === '' &&
+              position === ThumbnailTitlePosition.BOTTOM,
+            'reacg-gallery__text-background-center-gradient':
+              overlayTextBackground === '' &&
+              position === ThumbnailTitlePosition.CENTER,
+          })}
+          style={{
+            paddingLeft: itemPaddingText,
+            paddingRight: itemPaddingText,
+          }}
+        >
+          <ImageListItemBar
+            style={{
+              paddingLeft: imagePaddingText,
+              paddingRight: imagePaddingText,
+              textAlign: buttonAlignment,
+              backgroundColor:
+                position !== ThumbnailTitlePosition.BELOW &&
+                position !== ThumbnailTitlePosition.ABOVE
+                  ? overlayTextBackground === ''
+                    ? 'unset'
+                    : overlayTextBackground
+                  : 'initial',
+              mixBlendMode:
+                invertTextColor &&
+                position !== ThumbnailTitlePosition.BELOW &&
+                position !== ThumbnailTitlePosition.ABOVE
+                  ? 'difference'
+                  : 'initial',
+            }}
+            className={`swiper-gallery__title-content_${position}`}
+            title={
+              <span className="reacg-action-button-wrap">
+                <ActionButton
+                  url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                  openInNewTab={openInNewTab}
+                  text={buttonText}
+                  alignment={buttonAlignment}
+                  backgroundColor={buttonColor}
+                  textColor={buttonTextColor}
+                  fontSize={buttonFontSize}
+                  borderSize={buttonBorderSize}
+                  borderColor={buttonBorderColor}
+                  borderRadius={buttonBorderRadius}
+                  isOnHover={!isOutside}
+                />
+              </span>
+            }
+            position={
+              position === ThumbnailTitlePosition.CENTER
+                ? 'bottom'
+                : position === ThumbnailTitlePosition.ABOVE
+                ? 'below'
+                : position
             }
           />
         </div>
@@ -252,10 +402,16 @@ const SwiperImage = forwardRef(
           (titlePosition != captionPosition || !showTitle) &&
           captionPosition === ThumbnailTitlePosition.ABOVE &&
           renderCaption(image)}
+        {showButton &&
+          (titlePosition != buttonPosition || !showTitle) &&
+          (captionPosition != buttonPosition || !showCaption) &&
+          buttonPosition === ThumbnailTitlePosition.ABOVE &&
+          renderButton(buttonPosition, image)}
         <div
           ref={wrapperRef}
           className={clsx(
             'swiper-gallery__image-wrapper',
+            'reacg-action-button-hover-parent',
             'swiper-gallery__image-wrapper_overflow',
             'swiper-gallery__image-wrapper_' + hoverEffect
           )}
@@ -304,6 +460,12 @@ const SwiperImage = forwardRef(
             captionPosition !== ThumbnailTitlePosition.BELOW &&
             captionPosition !== ThumbnailTitlePosition.ABOVE &&
             renderCaption(image)}
+          {showButton &&
+            (titlePosition != buttonPosition || !showTitle) &&
+            (captionPosition != buttonPosition || !showCaption) &&
+            buttonPosition !== ThumbnailTitlePosition.BELOW &&
+            buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+            renderButton(buttonPosition, image)}
         </div>
         {showTitle &&
           titlePosition === ThumbnailTitlePosition.BELOW &&
@@ -312,6 +474,11 @@ const SwiperImage = forwardRef(
           (titlePosition != captionPosition || !showTitle) &&
           captionPosition === ThumbnailTitlePosition.BELOW &&
           renderCaption(image)}
+        {showButton &&
+          (titlePosition != buttonPosition || !showTitle) &&
+          (captionPosition != buttonPosition || !showCaption) &&
+          buttonPosition === ThumbnailTitlePosition.BELOW &&
+          renderButton(buttonPosition, image)}
       </>
     );
   }
