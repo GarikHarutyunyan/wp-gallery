@@ -28,10 +28,13 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
     perSlideOffset,
     showTitle,
     showCaption,
+    showButton,
     titlePosition,
     captionPosition,
+    buttonPosition,
     titleFontSize,
     captionFontSize,
+    buttonFontSize,
     navigation,
     dotsPosition,
     dotsSize,
@@ -96,15 +99,19 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
 
     const measureTitleCaptionHeight = () => {
       const title = galleryRef.current?.querySelector(
-        '.swiper-gallery__title-caption.swiper-gallery__item-outline'
+        '.swiper-gallery__title-caption.swiper-gallery__item-outline:not(.swiper-gallery__button)'
       ) as HTMLElement;
       const caption = galleryRef.current?.querySelector(
         '.swiper-gallery__caption.swiper-gallery__item-outline'
+      ) as HTMLElement;
+      const button = galleryRef.current?.querySelector(
+        '.swiper-gallery__button.swiper-gallery__item-outline'
       ) as HTMLElement;
 
       let totalHeight = 0;
       if (title) totalHeight += title.offsetHeight;
       if (caption) totalHeight += caption.offsetHeight;
+      if (button) totalHeight += button.offsetHeight;
 
       setTitleCaptionHeight(totalHeight);
     };
@@ -130,10 +137,13 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
   }, [
     showTitle,
     showCaption,
+    showButton,
     titlePosition,
     captionPosition,
+    buttonPosition,
     titleFontSize,
     captionFontSize,
+    buttonFontSize,
   ]);
 
   const dynamicThreshold = 6;

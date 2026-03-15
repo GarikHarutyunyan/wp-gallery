@@ -164,11 +164,11 @@ html.react-lightbox--no-scroll {
   object-fit: cover;
 }
 
-.reacg-lightbox button,
-.reacg-lightbox button:hover,
-.reacg-lightbox button:focus,
-.reacg-lightbox button:active,
-.reacg-lightbox button:visited {
+.reacg-lightbox button:not(.reacg-action-button),
+.reacg-lightbox button:not(.reacg-action-button):hover,
+.reacg-lightbox button:not(.reacg-action-button):focus,
+.reacg-lightbox button:not(.reacg-action-button):active,
+.reacg-lightbox button:not(.reacg-action-button):visited {
   background: none !important;
   box-shadow: none !important;
   outline: none !important;
@@ -195,12 +195,21 @@ html.react-lightbox--no-scroll {
   padding: 0 !important;
 }
 
-.reacg-lightbox button:not(.yarl__thumbnails_thumbnail),
-.reacg-lightbox button:not(.yarl__thumbnails_thumbnail):hover,
-.reacg-lightbox button:not(.yarl__thumbnails_thumbnail):focus,
-.reacg-lightbox button:not(.yarl__thumbnails_thumbnail):active,
-.reacg-lightbox button:not(.yarl__thumbnails_thumbnail):visited {
+.reacg-lightbox
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button),
+.reacg-lightbox
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):hover,
+.reacg-lightbox
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):focus,
+.reacg-lightbox
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):active,
+.reacg-lightbox
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):visited {
   width: unset;
+}
+
+.reacg-lightbox-texts__button {
+  margin-top: 10px;
 }
 .reacg-lightbox
   .yarl__slide:not(.yarl__slide_current)

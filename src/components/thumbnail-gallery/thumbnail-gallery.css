@@ -4,6 +4,13 @@
   opacity: 1;
   pointer-events: none;
 }
+
+.reacg-gallery
+  .thumbnail-gallery__image-wrapper:hover
+  .reacg-action-button-container_on-hover {
+  opacity: 1;
+  pointer-events: auto;
+}
 .reacg-gallery
   .thumbnail-gallery__image-wrapper:hover
   .thumbnail-gallery__title_on-hover
@@ -179,6 +186,14 @@
 .reacg-gallery .thumbnail-gallery__title > div {
   -webkit-transition: background 0.3s ease-in-out;
   transition: background 0.3s ease-in-out;
+}
+
+.reacg-gallery .thumbnail-gallery__title .MuiImageListItemBar-titleWrap,
+.reacg-gallery .thumbnail-gallery__title .MuiImageListItemBar-title,
+.reacg-gallery .thumbnail-gallery__title .MuiImageListItemBar-subtitle {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .reacg-gallery
   [class*='thumbnail-gallery__image-wrapper_overlay']:hover

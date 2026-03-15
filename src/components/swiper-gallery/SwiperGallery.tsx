@@ -174,6 +174,25 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
   const dynamicThreshold = 6;
 
+  const aboveItemsCount = [
+    settings.titlePosition,
+    settings.captionPosition,
+    settings.buttonPosition,
+  ].filter((position) => position === ThumbnailTitlePosition.ABOVE).length;
+
+  const belowItemsCount = [
+    settings.titlePosition,
+    settings.captionPosition,
+    settings.buttonPosition,
+  ].filter((position) => position === ThumbnailTitlePosition.BELOW).length;
+
+  const navigationVerticalOffset =
+    titleCaptionHeight && aboveItemsCount > 0 && belowItemsCount === 0
+      ? titleCaptionHeight / 2
+      : titleCaptionHeight && belowItemsCount > 0 && aboveItemsCount === 0
+      ? -titleCaptionHeight / 2
+      : 0;
+
   return (
     <Swiper
       key={`${imagesCount}_${settings.dotsPosition}`}
@@ -259,26 +278,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
         '--swiper-navigation-size': settings.arrowsSize + 'px',
         '--swiper-navigation-color': settings.arrowsColor,
         '--swiper-navigation-sides-offset': '20px',
-        '--swiper-navigation-top-offset': `calc(50% + ${
-          titleCaptionHeight &&
-          ((settings.titlePosition === ThumbnailTitlePosition.ABOVE &&
-            settings.titlePosition === settings.captionPosition) ||
-          ((settings.titlePosition === ThumbnailTitlePosition.ABOVE ||
-            settings.captionPosition === ThumbnailTitlePosition.ABOVE) &&
-            settings.titlePosition !== ThumbnailTitlePosition.BELOW &&
-            settings.captionPosition !== ThumbnailTitlePosition.BELOW &&
-            settings.titlePosition !== settings.captionPosition)
-            ? titleCaptionHeight / 2
-            : (settings.titlePosition === ThumbnailTitlePosition.BELOW &&
-                settings.titlePosition === settings.captionPosition) ||
-              ((settings.titlePosition === ThumbnailTitlePosition.BELOW ||
-                settings.captionPosition === ThumbnailTitlePosition.BELOW) &&
-                settings.titlePosition !== ThumbnailTitlePosition.ABOVE &&
-                settings.captionPosition !== ThumbnailTitlePosition.ABOVE &&
-                settings.titlePosition !== settings.captionPosition)
-            ? -titleCaptionHeight / 2
-            : 0)
-        }px)`,
+        '--swiper-navigation-top-offset': `calc(50% + ${navigationVerticalOffset}px)`,
         ...(key === 'cardsEffect' || key === 'cubeEffect'
           ? {width, height}
           : key === 'coverflowEffect'
@@ -334,27 +334,7 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           aria-label={isPlaying ? 'pause' : 'play'}
           size="large"
           style={{
-            top: `calc(50% + ${
-              titleCaptionHeight &&
-              ((settings.titlePosition === ThumbnailTitlePosition.ABOVE &&
-                settings.titlePosition === settings.captionPosition) ||
-              ((settings.titlePosition === ThumbnailTitlePosition.ABOVE ||
-                settings.captionPosition === ThumbnailTitlePosition.ABOVE) &&
-                settings.titlePosition !== ThumbnailTitlePosition.BELOW &&
-                settings.captionPosition !== ThumbnailTitlePosition.BELOW &&
-                settings.titlePosition !== settings.captionPosition)
-                ? titleCaptionHeight / 2
-                : (settings.titlePosition === ThumbnailTitlePosition.BELOW &&
-                    settings.titlePosition === settings.captionPosition) ||
-                  ((settings.titlePosition === ThumbnailTitlePosition.BELOW ||
-                    settings.captionPosition ===
-                      ThumbnailTitlePosition.BELOW) &&
-                    settings.titlePosition !== ThumbnailTitlePosition.ABOVE &&
-                    settings.captionPosition !== ThumbnailTitlePosition.ABOVE &&
-                    settings.titlePosition !== settings.captionPosition)
-                ? -titleCaptionHeight / 2
-                : 0)
-            }px - var(--swiper-navigation-size, 30px))`,
+            top: `calc(50% + ${navigationVerticalOffset}px - var(--swiper-navigation-size, 30px))`,
           }}
         >
           {isPlaying ? (
