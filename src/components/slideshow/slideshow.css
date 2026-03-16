@@ -134,11 +134,11 @@
   object-fit: cover;
 }
 
-.reacg-slideshow button,
-.reacg-slideshow button:hover,
-.reacg-slideshow button:focus,
-.reacg-slideshow button:active,
-.reacg-slideshow button:visited {
+.reacg-slideshow button:not(.reacg-action-button),
+.reacg-slideshow button:not(.reacg-action-button):hover,
+.reacg-slideshow button:not(.reacg-action-button):focus,
+.reacg-slideshow button:not(.reacg-action-button):active,
+.reacg-slideshow button:not(.reacg-action-button):visited {
   box-shadow: none !important;
   background: none !important;
   outline: none !important;
@@ -165,12 +165,20 @@
   padding: 0 !important;
 }
 
-.reacg-slideshow button:not(.yarl__thumbnails_thumbnail),
-.reacg-slideshow button:not(.yarl__thumbnails_thumbnail):hover,
-.reacg-slideshow button:not(.yarl__thumbnails_thumbnail):focus,
-.reacg-slideshow button:not(.yarl__thumbnails_thumbnail):active,
-.reacg-slideshow button:not(.yarl__thumbnails_thumbnail):visited {
+.reacg-slideshow button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button),
+.reacg-slideshow
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):hover,
+.reacg-slideshow
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):focus,
+.reacg-slideshow
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):active,
+.reacg-slideshow
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):visited {
   width: unset;
+}
+
+.reacg-slideshow-texts__button {
+  margin-top: 10px;
 }
 
 .yarl__slide_captions:empty {

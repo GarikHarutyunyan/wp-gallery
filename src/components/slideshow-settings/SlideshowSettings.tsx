@@ -7,6 +7,7 @@ import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {
+  ActionURLSourceOptions,
   CaptionSourceOptions,
   DescriptionSourceOptions,
   ISlideshowSettings,
@@ -26,6 +27,7 @@ import {
   SelectControl,
   SliderControl,
   SwitchControl,
+  TextControl,
 } from '../controls';
 import {LabelWithTooltip} from '../controls/LabelWithTooltip';
 import {Filter} from '../settings/Filter';
@@ -76,6 +78,17 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
     captionSource,
     captionFontSize,
     captionFontColor,
+    showButton,
+    buttonText,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
   } = value as ISlideshowSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -600,7 +613,145 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                 </Grid>
               )}
             </Grid>
-            {(showTitle || showCaption || showDescription) && (
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showButton'}
+                    name={'Show button'}
+                    pro={true}
+                    value={showButton}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'show_button',
+                            })
+                    }
+                  />
+                </Filter>
+                {showButton && (
+                  <>
+                    <Filter isLoading={isLoading}>
+                      <SelectControl
+                        id={'buttonUrlSource'}
+                        name={'URL source'}
+                        value={buttonUrlSource}
+                        options={ActionURLSourceOptions}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SwitchControl
+                        id={'openInNewTab'}
+                        name={'Open in new tab'}
+                        value={openInNewTab}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </>
+                )}
+              </Grid>
+              {showButton && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'buttonAlignment'}
+                      name={'Alignment'}
+                      value={buttonAlignment}
+                      options={TitleAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonColor'}
+                      name="Button color"
+                      value={buttonColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'buttonFontSize'}
+                      name={'Font size'}
+                      value={buttonFontSize}
+                      onChange={onInputValueChange}
+                      unit={'vw'}
+                      max={5}
+                      step={0.1}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonTextColor'}
+                      name="Text color"
+                      value={buttonTextColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <TextControl
+                      id={'buttonText'}
+                      name="Button text"
+                      value={buttonText}
+                      placeholder={
+                        (window as any).reacg_global?.text?.view_more
+                      }
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'buttonBorderSize'}
+                      name={'Border'}
+                      value={buttonBorderSize}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonBorderColor'}
+                      name={'Border color'}
+                      value={buttonBorderColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'buttonBorderRadius'}
+                      name={'Border radius'}
+                      value={buttonBorderRadius}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            {(showTitle || showCaption || showDescription || showButton) && (
               <>
                 <Grid
                   sx={{marginLeft: 0, paddingTop: 2}}

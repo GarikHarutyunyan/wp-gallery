@@ -1,5 +1,7 @@
 import clsx from 'clsx';
+import {ActionButton} from 'core-components/action-button';
 import {
+  ActionURLSource,
   IImageDTO,
   ILightboxSettings,
   LightboxImageAnimation,
@@ -205,12 +207,24 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     captionSource,
     captionFontSize,
     captionFontColor,
+    showButton,
+    buttonText,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
   } = settings as ILightboxSettings;
   const lightboxId: string = useId();
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const [index, setIndex] = useState(0);
+  const [buttonContainerHeight, setButtonContainerHeight] = useState<number>(0);
   const {galleryId} = useAppInfo();
 
   const minFactor = 1.45;
@@ -241,7 +255,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (showTitle || showCaption || showDescription) {
+    if (showTitle || showCaption || showDescription || showButton) {
       newPlugins.push(Captions as any);
     }
 
@@ -259,6 +273,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     showTitle,
     showCaption,
     showDescription,
+    showButton,
   ]);
 
   const togglePageScroll = (open: boolean) => {
@@ -323,6 +338,60 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       observer.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (!showButton) {
+      setButtonContainerHeight(0);
+      return;
+    }
+
+    const measureButtonContainerHeight = () => {
+      const buttonContainer = document.querySelector(
+        '.reacg-lightbox .yarl__slide_captions_container .reacg-lightbox-texts__button'
+      ) as HTMLElement | null;
+
+      if (!buttonContainer) {
+        return;
+      }
+
+      const rect = buttonContainer.getBoundingClientRect();
+      const styles = window.getComputedStyle(buttonContainer);
+      const marginTop = parseFloat(styles.marginTop || '0');
+      const marginBottom = parseFloat(styles.marginBottom || '0');
+      const nextHeight = Math.round(rect.height + marginTop + marginBottom);
+
+      setButtonContainerHeight((prevHeight) =>
+        prevHeight !== nextHeight ? nextHeight : prevHeight
+      );
+    };
+
+    measureButtonContainerHeight();
+    window.addEventListener('resize', measureButtonContainerHeight);
+
+    const mutationObserver = new MutationObserver(measureButtonContainerHeight);
+    mutationObserver.observe(document.body, {childList: true, subtree: true});
+
+    const resizeObserver = new ResizeObserver(measureButtonContainerHeight);
+    const buttonContainer = document.querySelector(
+      '.reacg-lightbox .yarl__slide_captions_container .reacg-lightbox-texts__button'
+    ) as HTMLElement | null;
+    if (buttonContainer) {
+      resizeObserver.observe(buttonContainer);
+    }
+
+    return () => {
+      window.removeEventListener('resize', measureButtonContainerHeight);
+      mutationObserver.disconnect();
+      resizeObserver.disconnect();
+    };
+  }, [
+    showButton,
+    index,
+    buttonText,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderRadius,
+  ]);
 
   const updateURL = (index: number) => {
     if (window.location.protocol === 'blob:') return;
@@ -399,6 +468,26 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               {image[descriptionSource]}
             </p>
           )}
+          {showButton && (
+            <div className={'reacg-lightbox-texts__button'}>
+              <ActionButton
+                url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                openInNewTab={openInNewTab}
+                text={buttonText}
+                alignment={buttonAlignment}
+                backgroundColor={buttonColor}
+                textColor={buttonTextColor}
+                borderSize={buttonBorderSize}
+                borderColor={buttonBorderColor}
+                borderRadius={buttonBorderRadius}
+                style={{
+                  fontSize: `clamp(${
+                    buttonFontSize / minFactor
+                  }rem, ${buttonFontSize}vw, ${buttonFontSize * maxFactor}rem)`,
+                }}
+              />
+            </div>
+          )}
         </>
       ),
       type: image.type,
@@ -456,6 +545,17 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     captionSource,
     captionFontSize,
     captionFontColor,
+    showButton,
+    buttonText,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
   ]);
 
   const slideMargins = useMemo(() => {
@@ -473,9 +573,12 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       paddingAroundText,
       titleMargin,
       showCaption,
+      showButton,
       titleSource,
       captionSource,
       descriptionSource,
+      buttonBorderSize,
+      buttonContainerHeight,
     });
   }, [
     images,
@@ -487,11 +590,14 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     descriptionFontSize,
     descriptionMaxRowsCount,
     showCaption,
+    showButton,
     captionSource,
     captionFontSize,
     captionFontColor,
     titleSource,
     descriptionSource,
+    buttonBorderSize,
+    buttonContainerHeight,
   ]);
 
   const responsivePadding = useMemo(() => {
@@ -563,7 +669,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           'reacg-lightbox-animation-' + imageAnimation,
           {
             'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
-            'reacg-lightbox-texts': showTitle || showCaption || showDescription,
+            'reacg-lightbox-texts':
+              showTitle || showCaption || showDescription || showButton,
             'reacg-lightbox-texts_top': [
               LightboxTextPosition.TOP,
               LightboxTextPosition.ABOVE,
@@ -591,7 +698,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               textBackground &&
               ((showTitle && images?.[index]?.title) ||
                 (showCaption && images?.[index]?.caption) ||
-                (showDescription && images?.[index]?.description))
+                (showDescription && images?.[index]?.description) ||
+                showButton)
                 ? `${textBackground}`
                 : `none`,
           },

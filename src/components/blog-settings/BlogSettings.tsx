@@ -63,6 +63,9 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
     buttonColor,
     buttonTextColor,
     buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
     showTitle,
     titleAlignment,
     showDescription,
@@ -555,20 +558,38 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                   <SwitchControl
                     id={'showButton'}
                     name={'Show button'}
+                    pro={true}
                     value={showButton}
-                    onChange={onInputValueChange}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'show_button',
+                            })
+                    }
                   />
                 </Filter>
                 {showButton && (
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'buttonUrlSource'}
-                      name={'URL source'}
-                      value={buttonUrlSource}
-                      options={ActionURLSourceOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
+                  <>
+                    <Filter isLoading={isLoading}>
+                      <SelectControl
+                        id={'buttonUrlSource'}
+                        name={'URL source'}
+                        value={buttonUrlSource}
+                        options={ActionURLSourceOptions}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SwitchControl
+                        id={'openInNewTab'}
+                        name={'Open in new tab'}
+                        value={openInNewTab}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </>
                 )}
               </Grid>
               {showButton && (
@@ -580,27 +601,19 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                   className="reacg-section__container-inherit"
                 >
                   <Filter isLoading={isLoading}>
-                    <SwitchControl
-                      id={'openInNewTab'}
-                      name={'Open in new tab'}
-                      value={openInNewTab}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <TextControl
-                      id={'buttonText'}
-                      name="Button text"
-                      value={buttonText}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
                     <SelectControl
                       id={'buttonAlignment'}
                       name={'Alignment'}
                       value={buttonAlignment}
                       options={TitleAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonColor'}
+                      name="Button color"
+                      value={buttonColor}
                       onChange={onInputValueChange}
                     />
                   </Filter>
@@ -615,18 +628,49 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                   </Filter>
                   <Filter isLoading={isLoading}>
                     <ColorControl
-                      id={'buttonColor'}
-                      name="Button color"
-                      value={buttonColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
                       id={'buttonTextColor'}
                       name="Text color"
                       value={buttonTextColor}
                       onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <TextControl
+                      id={'buttonText'}
+                      name="Button text"
+                      value={buttonText}
+                      placeholder={
+                        (window as any).reacg_global?.text?.view_more
+                      }
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'buttonBorderSize'}
+                      name={'Border'}
+                      value={buttonBorderSize}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonBorderColor'}
+                      name={'Border color'}
+                      value={buttonBorderColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'buttonBorderRadius'}
+                      name={'Border radius'}
+                      value={buttonBorderRadius}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
                     />
                   </Filter>
                 </Grid>

@@ -74,6 +74,19 @@ export interface IThumbnailSettings {
   descriptionFontSize?: number | undefined;
   descriptionFontColor: string;
   descriptionMaxRowsCount?: number | undefined;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: ThumbnailTitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
   showVideoCover: boolean;
 }
 
@@ -105,6 +118,19 @@ export interface IMasonrySettings {
   captionFontSize?: number | undefined;
   captionFontColor: string;
   showTitle: boolean;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: TitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
   showVideoCover: boolean;
 }
 
@@ -150,6 +176,17 @@ export interface ISlideshowSettings {
   captionSource: CaptionSource;
   captionFontSize: number;
   captionFontColor: string;
+  showButton: boolean;
+  buttonText: string;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
 }
 
 export interface ILightboxSettings extends ISlideshowSettings {
@@ -217,6 +254,19 @@ export interface ICubeSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: ThumbnailTitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
   navigation: SliderNavigation;
   arrowsSize: number;
   arrowsColor: string;
@@ -259,6 +309,19 @@ export interface ICarouselSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: ThumbnailTitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
   navigation: SliderNavigation;
   arrowsSize: number;
   arrowsColor: string;
@@ -296,6 +359,19 @@ export interface ICardsSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: ThumbnailTitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
   navigation: SliderNavigation;
   arrowsSize: number;
   arrowsColor: string;
@@ -330,6 +406,9 @@ export interface IBlogSettings {
   buttonColor: string;
   buttonTextColor: string;
   buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
   textFontFamily: string;
   imageHeightType: SizeTypeHeight;
   imageWidthType: SizeTypeWidth;
