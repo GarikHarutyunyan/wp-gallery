@@ -4,6 +4,7 @@ export enum SliderShadowType {
   RIGHT = 'right',
   FLOAT = 'float',
   GLOW = 'glow',
+  SINEMA = 'sinema',
 }
 
 export const SliderShadowTypeOptions = [
@@ -12,4 +13,5 @@ export const SliderShadowTypeOptions = [
   {value: SliderShadowType.RIGHT, title: 'Right'},
   {value: SliderShadowType.FLOAT, title: 'Float'},
   {value: SliderShadowType.GLOW, title: 'Glow'},
+  {value: SliderShadowType.SINEMA, title: 'Sinema'},
 ];

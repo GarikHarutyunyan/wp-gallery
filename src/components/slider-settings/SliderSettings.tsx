@@ -14,6 +14,7 @@ import {
   ISliderSettings,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
+  PaddingTypetOptions,
   SizeTypeHeightOptions,
   SizeTypeWidthOptions,
   SliderAnimationOptions,
@@ -23,6 +24,7 @@ import {
   SliderNavigationTypeOptions,
   SliderPaginationType,
   SliderPaginationTypeOptions,
+  SliderShadowType,
   SliderShadowTypeOptions,
   SliderSlidesDesign,
   SliderSlidesDesignOptions,
@@ -61,6 +63,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     heightType,
     isInfinite,
     padding,
+    paddingType,
     isSliderAllowed,
     autoplay,
     slideDuration,
@@ -114,6 +117,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     thumbnailCaptionSource,
     thumbnailCaptionFontSize,
     thumbnailCaptionFontColor,
+    thumbnailDescriptionFontColor,
     backgroundColor,
     textPosition,
     textFontFamily,
@@ -128,6 +132,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     descriptionSource,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    descriptionFontColor,
     showCaption,
     captionSource,
     captionFontSize,
@@ -287,14 +292,25 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                 />
               </Filter>
               <Filter isLoading={isLoading}>
-                <SliderControl
-                  id={'padding'}
-                  name="Padding (px)"
-                  min={0}
-                  max={300}
-                  value={padding}
-                  onChange={onInputValueChange}
-                />
+                <div className="mixed-fields">
+                  <div style={{flexBasis: '80%'}}>
+                    <NumberControl
+                      id={'padding'}
+                      name={'Padding'}
+                      value={padding}
+                      onChange={onInputValueChange}
+                      min={0}
+                    />
+                  </div>
+                  <div style={{flexBasis: '20%'}}>
+                    <SelectControl
+                      id="paddingType"
+                      value={paddingType}
+                      options={PaddingTypetOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </div>
+                </div>
               </Filter>
               <Filter isLoading={isLoading}>
                 <ColorControl
@@ -942,6 +958,15 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                       min={1}
                     />
                   </Filter>
+
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'thumbnailDescriptionFontColor'}
+                      name="Color"
+                      value={thumbnailDescriptionFontColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
                 </Grid>
               )}
             </Grid>
@@ -1288,6 +1313,15 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                       min={1}
                     />
                   </Filter>
+
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'descriptionFontColor'}
+                      name="Color"
+                      value={descriptionFontColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
                 </Grid>
               )}
             </Grid>
@@ -1365,7 +1399,9 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                       name={'Font size'}
                       value={buttonFontSize}
                       onChange={onInputValueChange}
-                      unit={'px'}
+                      unit={'vw'}
+                      max={5}
+                      step={0.1}
                     />
                   </Filter>
                   <Filter isLoading={isLoading}>
@@ -2006,15 +2042,16 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                       }
                     />
                   </Filter>
-
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'shadowColor'}
-                      name="Color"
-                      value={shadowColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
+                  {shadowType !== SliderShadowType.SINEMA && (
+                    <Filter isLoading={isLoading}>
+                      <ColorControl
+                        id={'shadowColor'}
+                        name="Color"
+                        value={shadowColor}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  )}
                 </>
               )}
             </Grid>

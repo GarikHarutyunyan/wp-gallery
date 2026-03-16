@@ -60,6 +60,9 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
     const descriptionMaxRowsCount = isThumb
       ? settings.thumbnailDescriptionMaxRowsCount
       : settings.descriptionMaxRowsCount;
+    const descriptionFontColor = isThumb
+      ? settings.thumbnailDescriptionFontColor
+      : settings.descriptionFontColor;
     const showButton = !isThumb && settings.showButton;
     const buttonText = !isThumb ? settings.buttonText : undefined;
     const buttonUrlSource = !isThumb ? settings.buttonUrlSource : undefined;
@@ -92,13 +95,14 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
             '--slider__slide-text-bg-color': textBackground || 'transparent',
             '--slider__slide-text-color': textColor,
             '--slider__slide-caption-color': captionFontColor,
+            '--slider__slide-description-color': descriptionFontColor,
             'fontFamily': textFontFamily,
             ...getTextVerticalPosition(textPosition),
           } as React.CSSProperties
         }
       >
         <div
-          // data-swiper-parallax={isThumb ? undefined : '-30%'}
+          data-swiper-parallax={isThumb ? undefined : '-30%'}
           className="slider__slide_text-wrapper"
           style={{
             display: 'flex',
@@ -114,7 +118,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
               // data-swiper-parallax={isThumb ? undefined : '-30%'}
               className="slider__slide-title"
               style={{
-                fontSize: `clamp(16px, ${titleFontSize}vw, 42px)`,
+                fontSize: `clamp(14px, ${titleFontSize}vw, 42px)`,
                 textAlign: titleAlignment,
                 margin: 0,
                 whiteSpace: 'nowrap',
@@ -128,7 +132,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
                 <span
                   className="slider__slide-caption"
                   style={{
-                    fontSize: `clamp(13px, ${captionFontSize}vw, 22px)`,
+                    fontSize: `clamp(12px, ${captionFontSize}vw, 22px)`,
                     marginLeft: 6,
                   }}
                 >
@@ -154,7 +158,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
                 WebkitBoxOrient: 'vertical',
               }}
             >
-              {image[descriptionSource]}
+              <span>{image[descriptionSource]}</span>
             </p>
           )}
           {showButton && !isThumb && (
@@ -170,7 +174,7 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
                 display: 'block',
                 backgroundColor: buttonColor,
                 color: buttonTextColor,
-                fontSize: `clamp(12px, ${buttonFontSize}vw, 16px)`,
+                fontSize: `clamp(7px, ${buttonFontSize}vw, 16px)`,
                 textTransform: 'none',
                 marginLeft:
                   buttonAlignment === 'center'
