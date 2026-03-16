@@ -128,6 +128,7 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
         })}
         style={{
           width: `${width}${widthType}`,
+          ...getPaginationCSSVars(settings!),
         }}
       >
         {navigationButton && navigationPosition.includes('out-top') && (
@@ -181,11 +182,6 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
         {pagination && paginationPosition.includes('out') && (
           <div
             key={`pagination-${paginationType}-${images.length}`}
-            style={
-              {
-                ...getPaginationCSSVars(settings!),
-              } as React.CSSProperties
-            }
             className="slider__pagination-external slider-pagination"
           ></div>
         )}

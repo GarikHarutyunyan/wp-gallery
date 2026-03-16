@@ -22,7 +22,6 @@ import {SliderPlayPause} from './SliderPlayPause';
 import {SliderSlideContent} from './SliderSlideContent';
 import {SlideText} from './SlideText';
 import {getLazyLoadNearbySlides} from './utils/getLazyLoadNearbySlides';
-import {getPaginationCSSVars} from './utils/getPaginationCSSVars';
 import {getSwiperEffectOptions} from './utils/getSwiperEffects';
 
 interface SliderMainProps {
@@ -164,7 +163,6 @@ const SliderMain: React.FC<SliderMainProps> = ({
           '--slider__template-total': `${templateSlideWidth}px`,
           '--slider__height-without-text-height': `${height}${heightType}`,
           '--slider__height-with-text-height': `calc(${height}${heightType} + ${textHeight}px)`,
-          ...getPaginationCSSVars(settings!),
         } as React.CSSProperties
       }
       onSwiper={(swiper: any) => {
