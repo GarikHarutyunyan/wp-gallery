@@ -12,6 +12,7 @@ export * from './LightboxTextPosition';
 export * from './LightboxThumbnailsPosition';
 export * from './OrderBy';
 export * from './OrderDirection';
+export * from './PaddingType';
 export * from './PaginationType';
 export * from './Position';
 export * from './SizeTypeHeight';

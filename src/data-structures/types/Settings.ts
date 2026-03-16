@@ -9,6 +9,7 @@ import {
   LightboxImageAnimation,
   LightboxTextPosition,
   LightboxThumbnailsPosition,
+  PaddingType,
   PaginationType,
   Position,
   SizeTypeHeight,
@@ -356,6 +357,7 @@ export interface ISliderSettings {
   heightType: SizeTypeHeight;
   widthType: SizeTypeWidth;
   padding: number;
+  paddingType: PaddingType;
   autoplay: boolean;
   isInfinite: boolean;
   slideDuration: number;
@@ -408,6 +410,7 @@ export interface ISliderSettings {
   thumbnailDescriptionMaxRowsCount: number | undefined;
   thumbnailTitleSource: TitleSource;
   thumbnailDescriptionSource: DescriptionSource;
+  thumbnailDescriptionFontColor: string;
   thumbnailShowCaption: boolean;
   thumbnailCaptionSource: CaptionSource;
   thumbnailCaptionFontSize: number;
@@ -419,6 +422,7 @@ export interface ISliderSettings {
   showDescription: boolean;
   descriptionFontSize: number;
   descriptionMaxRowsCount: number | undefined;
+  descriptionFontColor: string;
   slidesDesign: SliderSlidesDesign;
   backgroundBlur: number;
   titleSource: TitleSource;

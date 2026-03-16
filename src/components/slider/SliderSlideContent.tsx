@@ -34,6 +34,7 @@ export const SliderSlideContent: FC<SliderSlideContentProps> = ({
     slidesDesign,
     backgroundColor,
     padding,
+    paddingType,
     height,
     heightType,
     backgroundBlur,
@@ -59,11 +60,13 @@ export const SliderSlideContent: FC<SliderSlideContentProps> = ({
   return (
     <div
       className="slider__slide-content"
-      style={{
-        backgroundColor: isFitCreative ? backgroundColor : '',
-        padding,
-        height: `${height}${heightType}`,
-      }}
+      style={
+        {
+          'backgroundColor': isFitCreative ? backgroundColor : '',
+          '--slider__slide-padding': `${padding}${paddingType}`,
+          'height': `${height}${heightType}`,
+        } as React.CSSProperties
+      }
     >
       {slidesDesign === SliderSlidesDesign.BLURFIT && (
         <div
