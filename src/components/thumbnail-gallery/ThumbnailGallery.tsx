@@ -83,8 +83,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   const elementRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [imageRatio, setImageRatio] = useState(1);
-  const [imageWidth, setImageWidth] = useState(0);
-  const [imageHeight, setImageHeight] = useState(0);
 
   // Get the width of the nearest gallery wrapper related to this instance
   const getWrapperWidth = (): number => {
@@ -95,6 +93,13 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     // Fallback to the current element's bounding box if wrapper not found
     return el?.getBoundingClientRect().width || 0;
   };
+
+  const currentWidth = getWrapperWidth();
+
+  const defaultWidth = fillContainer ? currentWidth / columns : width;
+  const [imageWidth, setImageWidth] = useState(defaultWidth);
+  const defaultHeight = fillContainer ? imageWidth / imageRatio : height;
+  const [imageHeight, setImageHeight] = useState(defaultHeight);
 
   useEffect(() => {
     if (fillContainer) {
@@ -181,6 +186,8 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   }, [imageWidth, getWidth, gap, columns, padding, validColumnsCount]);
 
   const getImageSource = (image: IImageDTO) => {
+    console.log('🚀 ~ getImageSource ~ imageWidth:', imageWidth);
+    console.log('🚀 ~ getImageSource ~ imageHeight:', imageHeight);
     if (
       imageWidth <= image.thumbnail.width &&
       imageHeight <= image.thumbnail.height
