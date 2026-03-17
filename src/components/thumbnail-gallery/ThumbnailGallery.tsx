@@ -185,24 +185,19 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     changeContainerWidth();
   }, [imageWidth, getWidth, gap, columns, padding, validColumnsCount]);
 
-  const getImageSource = (image: IImageDTO) => {
-    console.log('🚀 ~ getImageSource ~ imageWidth:', imageWidth);
-    console.log('🚀 ~ getImageSource ~ imageHeight:', imageHeight);
-    if (
-      imageWidth <= image.thumbnail.width &&
-      imageHeight <= image.thumbnail.height
-    ) {
+  const getImageSource = (image: IImageDTO, width: number, height: number) => {
+    if (width <= image.thumbnail.width && height <= image.thumbnail.height) {
       return `${image.thumbnail.url}`;
     }
     if (
-      imageWidth <= image.medium_large.width &&
-      imageHeight <= image.medium_large.height
+      width <= image.medium_large.width &&
+      height <= image.medium_large.height
     ) {
       return `${image.medium_large.url}`;
     }
 
     if (
-      (imageWidth <= image.large.width && imageHeight <= image.large.height) ||
+      (width <= image.large.width && height <= image.large.height) ||
       image.type === ImageType.VIDEO
     ) {
       return `${image.large.url}`;

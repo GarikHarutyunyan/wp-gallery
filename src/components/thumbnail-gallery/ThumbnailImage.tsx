@@ -23,7 +23,7 @@ interface IThumbnailImageProps {
   width: number;
   height: number;
   onClick?: () => void;
-  getImageSource: (image: IImageDTO) => string;
+  getImageSource: (image: IImageDTO, width: number, height: number) => string;
   itemBorder: number;
   itemBackgroundColor: string;
   itemBorderRadius: number;
@@ -633,7 +633,7 @@ const ThumbnailImage = ({
                   'thumbnail-gallery__image',
                   'MuiImageListItem-img'
                 )}
-                src={getImageSource(image)}
+                src={getImageSource(image, width, height)}
                 alt={image.alt}
                 loading="eager"
                 style={{
@@ -652,7 +652,7 @@ const ThumbnailImage = ({
                     'thumbnail-gallery__image',
                     'MuiImageListItem-img'
                   ),
-                  src: getImageSource(image),
+                  src: getImageSource(image, width, height),
                   alt: image.alt,
                   loading: 'eager',
                   style: {
