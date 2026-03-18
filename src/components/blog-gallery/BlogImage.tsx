@@ -3,6 +3,7 @@ import ReImage from 'core-components/re-image/ReImage';
 import ReVideo from 'core-components/re-video/ReVideo';
 import {ImageType} from 'data-structures';
 import React from 'react';
+import {buildImageSrcSetString} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
 
 const BlogImage = ({
@@ -56,10 +57,7 @@ const BlogImage = ({
         <ReImage
           wrapperRef={wrapperRef}
           src={image.thumbnail.url}
-          srcSet={`${image.thumbnail.url} ${image.thumbnail.width}w, 
-                  ${image.medium_large.url} ${image.medium_large.width}w, 
-                  ${image.large.url} ${image.large.width}w, 
-                  ${image.original.url} ${image.original.width}w`}
+          srcSet={buildImageSrcSetString(image)}
           sizes={`${containerInnerWidth}px`}
           alt={image.alt}
         />
@@ -71,9 +69,7 @@ const BlogImage = ({
           settings={settings}
           coverImageProps={{
             src: image.thumbnail.url,
-            srcSet: `${image.thumbnail.url} ${image.thumbnail.width}w, 
-                  ${image.medium_large.url} ${image.medium_large.width}w, 
-                  ${image.large.url} ${image.large.width}w`,
+                srcSet: buildImageSrcSetString(image, {includeOriginal: false}),
             alt: image.alt,
             loading: 'eager',
             sizes: `${containerInnerWidth}px`,

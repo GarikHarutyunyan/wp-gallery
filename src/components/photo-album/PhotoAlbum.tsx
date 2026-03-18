@@ -14,6 +14,7 @@ import React, {
   useState,
 } from 'react';
 import PhotoAlbum, {LayoutType} from 'react-photo-album';
+import {buildImageSrcSet} from 'utils/imageSrcSet';
 import {PhotoAlbumItem} from './PhotoAlbumItem';
 
 const initialContainerWidth = 1000; // Approximate container initial width in pxs.
@@ -63,31 +64,9 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
         isVideo && settings.showVideoCover
           ? image.medium_large.url
           : image.original.url;
-      const srcSet = [
-        {
-          src: image.large.url,
-          width: image.large.width,
-          height: image.large.height,
-        },
-        {
-          src: image.medium_large.url,
-          width: image.medium_large.width,
-          height: image.medium_large.height,
-        },
-        {
-          src: image.thumbnail.url,
-          width: image.thumbnail.width,
-          height: image.thumbnail.height,
-        },
-      ];
-
-      if (!isVideo || !settings.showVideoCover) {
-        srcSet.unshift({
-          src: image.original.url,
-          width: image.original.width,
-          height: image.original.height,
-        });
-      }
+      const srcSet = buildImageSrcSet(image, {
+        includeOriginal: !isVideo || !settings.showVideoCover,
+      });
 
       return {
         key: image.id,
@@ -185,9 +164,9 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
             },
           })}
           renderPhoto={renderPhoto}
-          sizes={{
-            size: galleryWidth + 'px',
-          }}
+          // sizes={{
+          //   size: galleryWidth + 'px',
+          // }}
         />
       </div>
     </Box>

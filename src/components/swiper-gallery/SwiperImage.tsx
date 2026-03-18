@@ -14,6 +14,7 @@ import {
   TitleVisibility,
 } from 'data-structures';
 import {forwardRef, useRef} from 'react';
+import {buildImageSrcSetString} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
 
 interface ISwiperImageProps {
@@ -427,7 +428,7 @@ const SwiperImage = forwardRef(
               sizes={`${size}px`}
               srcSet={
                 shouldLoadImage
-                  ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
+                  ? buildImageSrcSetString(images[index])
                   : undefined
               }
               alt={image.alt}
@@ -442,7 +443,7 @@ const SwiperImage = forwardRef(
                 dataIndex: index,
                 src: shouldLoadImage ? image.medium_large.url : undefined,
                 srcSet: shouldLoadImage
-                  ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w`
+                  ? buildImageSrcSetString(images[index], {includeOriginal: false})
                   : undefined,
                 alt: image.alt,
                 loading: 'eager',

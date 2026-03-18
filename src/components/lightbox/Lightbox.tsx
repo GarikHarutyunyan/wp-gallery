@@ -10,6 +10,7 @@ import {
 } from 'data-structures';
 import React, {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
+import {buildImageSrcSet} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
 import {Lightbox} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
@@ -505,28 +506,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         text: image.description,
       },
       alt: image.alt,
-      srcSet: [
-        {
-          src: image.original.url,
-          width: image.original.width,
-          height: image.original.height,
-        },
-        {
-          src: image.large.url,
-          width: image.large.width,
-          height: image.large.height,
-        },
-        {
-          src: image.medium_large.url,
-          width: image.medium_large.width,
-          height: image.medium_large.height,
-        },
-        {
-          src: image.thumbnail.url,
-          width: image.thumbnail.width,
-          height: image.thumbnail.height,
-        },
-      ],
+      srcSet: buildImageSrcSet(image),
       metadata: image.thumbnail.url,
     }));
   }, [

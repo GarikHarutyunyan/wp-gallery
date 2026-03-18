@@ -1,4 +1,5 @@
 import {IImageDTO} from 'data-structures';
+import {buildImageSrcSetString} from 'utils/imageSrcSet';
 
 const loadImagesInRange = (
   swiperRef: any,
@@ -26,12 +27,10 @@ const loadImagesInRange = (
       (!imgElement.src || imgElement.src === undefined)
     ) {
       imgElement.setAttribute('src', image.original.url);
-      imgElement.setAttribute(
-        'srcSet',
-        `${image.thumbnail.url} ${image.thumbnail.width}w, ` +
-          `${image.medium_large.url} ${image.medium_large.width}w, ` +
-          `${image.original.url} ${image.original.width}w`
-      );
+      const srcSet = buildImageSrcSetString(image);
+      if (srcSet) {
+        imgElement.setAttribute('srcSet', srcSet);
+      }
     }
   }
 };
