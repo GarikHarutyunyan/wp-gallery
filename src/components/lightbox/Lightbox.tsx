@@ -224,6 +224,10 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const [index, setIndex] = useState(0);
+  const [currentSlideContainerSize, setCurrentSlideContainerSize] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
   const [buttonContainerHeight, setButtonContainerHeight] = useState<number>(0);
   const {galleryId} = useAppInfo();
 
@@ -398,6 +402,103 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     window.history.replaceState({}, '', deepLink(index));
   };
 
+  const getEstimatedSlideWidth = (image: IImageDTO, slideIndex: number) => {
+    let containerWidth = isFullscreen
+      ? innerWidth
+      : Math.min(innerWidth, width);
+    let containerHeight = isFullscreen
+      ? innerHeight
+      : Math.min(innerHeight, height);
+
+    if (
+      slideIndex === index &&
+      currentSlideContainerSize &&
+      currentSlideContainerSize.width > 0 &&
+      currentSlideContainerSize.height > 0
+    ) {
+      containerWidth = currentSlideContainerSize.width;
+      containerHeight = currentSlideContainerSize.height;
+    }
+
+    if (!image?.original?.width || !image?.original?.height) {
+      return Math.max(1, Math.round(containerWidth));
+    }
+
+    const aspectRatio = image.original.width / image.original.height;
+    const fittedWidth = Math.min(containerWidth, containerHeight * aspectRatio);
+
+    return Math.max(1, Math.round(fittedWidth));
+  };
+
+  const getSlideImageSources = (image: IImageDTO, slideIndex: number) => {
+    const estimatedWidth = getEstimatedSlideWidth(image, slideIndex);
+    const allCandidates = [
+      {
+        src: image.thumbnail.url,
+        width: image.thumbnail.width,
+        height: image.thumbnail.height,
+      },
+      {
+        src: image.medium_large.url,
+        width: image.medium_large.width,
+        height: image.medium_large.height,
+      },
+      {
+        src: image.large.url,
+        width: image.large.width,
+        height: image.large.height,
+      },
+      {
+        src: image.original.url,
+        width: image.original.width,
+        height: image.original.height,
+      },
+    ]
+      .filter((candidate) => candidate.src && candidate.width > 0)
+      .sort((a, b) => a.width - b.width);
+
+    if (!allCandidates.length) {
+      return {
+        src: image.original.url,
+        width: image.original.width,
+        height: image.original.height,
+        srcSet: [],
+        sizes: `${estimatedWidth}px`,
+      };
+    }
+
+    const largestCandidate = allCandidates[allCandidates.length - 1];
+
+    let srcCandidate =
+      allCandidates.find((candidate) => candidate.width >= estimatedWidth) ||
+      largestCandidate;
+
+    const shouldUseLargestCandidate =
+      srcCandidate.width === largestCandidate.width &&
+      allCandidates.length > 1 &&
+      estimatedWidth >= allCandidates[allCandidates.length - 2].width * 1.15;
+
+    if (
+      srcCandidate.width === largestCandidate.width &&
+      !shouldUseLargestCandidate &&
+      allCandidates.length > 1
+    ) {
+      srcCandidate = allCandidates[allCandidates.length - 2];
+    }
+
+    const filteredSrcSet = allCandidates.filter(
+      (candidate) => candidate.width <= srcCandidate.width
+    );
+
+    return {
+      src: srcCandidate.src,
+      width: srcCandidate.width,
+      height: srcCandidate.height,
+      srcSet: filteredSrcSet,
+      sizes: `${estimatedWidth}px`,
+    };
+  };
+
   const deepLink = (index: number) => {
     const url = new URL(window.location.href);
     if (index >= 0) {
@@ -413,122 +514,148 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     return url.toString();
   };
 
+  useEffect(() => {
+    const measureCurrentSlideContainer = () => {
+      const slideContainer = document.querySelector(
+        '.reacg-lightbox .yarl__slide_current'
+      ) as HTMLElement | null;
+
+      if (!slideContainer) {
+        setCurrentSlideContainerSize(null);
+        return;
+      }
+
+      const rect = slideContainer.getBoundingClientRect();
+      const nextWidth = Math.round(rect.width);
+      const nextHeight = Math.round(rect.height);
+
+      setCurrentSlideContainerSize((prevSize) => {
+        if (prevSize?.width === nextWidth && prevSize?.height === nextHeight) {
+          return prevSize;
+        }
+
+        return {width: nextWidth, height: nextHeight};
+      });
+    };
+
+    measureCurrentSlideContainer();
+    const timeoutId = window.setTimeout(measureCurrentSlideContainer, 50);
+    window.addEventListener('resize', measureCurrentSlideContainer);
+
+    const observer = new MutationObserver(measureCurrentSlideContainer);
+    observer.observe(document.body, {childList: true, subtree: true});
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      window.removeEventListener('resize', measureCurrentSlideContainer);
+      observer.disconnect();
+    };
+  }, [activeIndex, index]);
+
   const slides = useMemo(() => {
-    return images?.map((image: IImageDTO, index: number) => ({
-      description: (
-        <>
-          {((showTitle && image[titleSource]) ||
-            (showCaption && image[captionSource])) && (
-            <p
-              className={'reacg-lightbox-texts__title'}
-              style={{
-                margin: `${titleMargin}px 0`,
-                color: textColor,
-                fontFamily: textFontFamily,
-                fontSize: `clamp(${
-                  titleFontSize / minFactor
-                }rem, ${titleFontSize}vw, ${titleFontSize * maxFactor}rem)`,
-                textAlign: titleAlignment,
-              }}
-            >
-              {showTitle && image[titleSource]}
-              {showCaption && image[captionSource] && (
-                <span
-                  className={'reacg-lightbox__caption'}
+    return images?.map((image: IImageDTO, index: number) => {
+      const imageSources = getSlideImageSources(image, index);
+
+      return {
+        description: (
+          <>
+            {((showTitle && image[titleSource]) ||
+              (showCaption && image[captionSource])) && (
+              <p
+                className={'reacg-lightbox-texts__title'}
+                style={{
+                  margin: `${titleMargin}px 0`,
+                  color: textColor,
+                  fontFamily: textFontFamily,
+                  fontSize: `clamp(${
+                    titleFontSize / minFactor
+                  }rem, ${titleFontSize}vw, ${titleFontSize * maxFactor}rem)`,
+                  textAlign: titleAlignment,
+                }}
+              >
+                {showTitle && image[titleSource]}
+                {showCaption && image[captionSource] && (
+                  <span
+                    className={'reacg-lightbox__caption'}
+                    style={{
+                      color: captionFontColor,
+                      fontSize: `clamp(${
+                        captionFontSize / minFactor
+                      }rem, ${captionFontSize}vw, ${
+                        captionFontSize * maxFactor
+                      }rem)`,
+                    }}
+                  >
+                    &nbsp;{image[captionSource]}
+                  </span>
+                )}
+              </p>
+            )}
+            {showDescription && image[descriptionSource] && (
+              <p
+                className={'reacg-lightbox-texts__description'}
+                style={{
+                  color: textColor,
+                  fontFamily: textFontFamily,
+                  fontSize: `clamp(${
+                    descriptionFontSize / minFactor
+                  }rem, ${descriptionFontSize}vw, ${
+                    descriptionFontSize * maxFactor
+                  }rem)`,
+                  WebkitLineClamp: descriptionMaxRowsCount,
+                  WebkitBoxOrient: 'vertical',
+                  display: '-webkit-box',
+                }}
+              >
+                {image[descriptionSource]}
+              </p>
+            )}
+            {showButton && (
+              <div className={'reacg-lightbox-texts__button'}>
+                <ActionButton
+                  url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                  openInNewTab={openInNewTab}
+                  text={buttonText}
+                  alignment={buttonAlignment}
+                  backgroundColor={buttonColor}
+                  textColor={buttonTextColor}
+                  borderSize={buttonBorderSize}
+                  borderColor={buttonBorderColor}
+                  borderRadius={buttonBorderRadius}
                   style={{
-                    color: captionFontColor,
                     fontSize: `clamp(${
-                      captionFontSize / minFactor
-                    }rem, ${captionFontSize}vw, ${
-                      captionFontSize * maxFactor
+                      buttonFontSize / minFactor
+                    }rem, ${buttonFontSize}vw, ${
+                      buttonFontSize * maxFactor
                     }rem)`,
                   }}
-                >
-                  &nbsp;{image[captionSource]}
-                </span>
-              )}
-            </p>
-          )}
-          {showDescription && image[descriptionSource] && (
-            <p
-              className={'reacg-lightbox-texts__description'}
-              style={{
-                color: textColor,
-                fontFamily: textFontFamily,
-                fontSize: `clamp(${
-                  descriptionFontSize / minFactor
-                }rem, ${descriptionFontSize}vw, ${
-                  descriptionFontSize * maxFactor
-                }rem)`,
-                WebkitLineClamp: descriptionMaxRowsCount,
-                WebkitBoxOrient: 'vertical',
-                display: '-webkit-box',
-              }}
-            >
-              {image[descriptionSource]}
-            </p>
-          )}
-          {showButton && (
-            <div className={'reacg-lightbox-texts__button'}>
-              <ActionButton
-                url={image?.[buttonUrlSource as ActionURLSource] || ''}
-                openInNewTab={openInNewTab}
-                text={buttonText}
-                alignment={buttonAlignment}
-                backgroundColor={buttonColor}
-                textColor={buttonTextColor}
-                borderSize={buttonBorderSize}
-                borderColor={buttonBorderColor}
-                borderRadius={buttonBorderRadius}
-                style={{
-                  fontSize: `clamp(${
-                    buttonFontSize / minFactor
-                  }rem, ${buttonFontSize}vw, ${buttonFontSize * maxFactor}rem)`,
-                }}
-              />
-            </div>
-          )}
-        </>
-      ),
-      type: image.type,
-      sources: [
-        {
-          src: image.original.url,
-          type: `video/${image.original.url.split('.').pop()}`,
+                />
+              </div>
+            )}
+          </>
+        ),
+        type: image.type,
+        sources: [
+          {
+            src: image.original.url,
+            type: `video/${image.original.url.split('.').pop()}`,
+          },
+        ],
+        poster: image.medium_large.url,
+        src: imageSources.src,
+        width: imageSources.width,
+        height: imageSources.height,
+        sizes: imageSources.sizes,
+        share: {
+          url: deepLink(index),
+          title: image.title,
+          text: image.description,
         },
-      ],
-      poster: image.medium_large.url,
-      src: image.original.url,
-      share: {
-        url: deepLink(index),
-        title: image.title,
-        text: image.description,
-      },
-      alt: image.alt,
-      srcSet: [
-        {
-          src: image.original.url,
-          width: image.original.width,
-          height: image.original.height,
-        },
-        {
-          src: image.large.url,
-          width: image.large.width,
-          height: image.large.height,
-        },
-        {
-          src: image.medium_large.url,
-          width: image.medium_large.width,
-          height: image.medium_large.height,
-        },
-        {
-          src: image.thumbnail.url,
-          width: image.thumbnail.width,
-          height: image.thumbnail.height,
-        },
-      ],
-      metadata: image.thumbnail.url,
-    }));
+        alt: image.alt,
+        srcSet: imageSources.srcSet,
+        metadata: image.thumbnail.url,
+      };
+    });
   }, [
     images,
     textColor,
@@ -556,6 +683,13 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     buttonBorderRadius,
     buttonUrlSource,
     openInNewTab,
+    currentSlideContainerSize,
+    activeIndex,
+    isFullscreen,
+    innerWidth,
+    innerHeight,
+    width,
+    height,
   ]);
 
   const slideMargins = useMemo(() => {
