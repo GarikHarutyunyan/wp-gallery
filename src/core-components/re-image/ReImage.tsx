@@ -3,6 +3,7 @@ import {
   ReactElement,
   SyntheticEvent,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import './re-image.css';
@@ -13,6 +14,7 @@ interface IReImageProps extends ImgHTMLAttributes<HTMLImageElement> {
 
 const ReImage = ({wrapperRef, ...props}: IReImageProps): ReactElement => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     const wrapperElement = wrapperRef.current;
@@ -21,6 +23,15 @@ const ReImage = ({wrapperRef, ...props}: IReImageProps): ReactElement => {
   }, []);
 
   useEffect(() => {
+    const imageElement = imageRef.current;
+
+    // Handle cached/already-complete images that may not trigger onLoad again.
+    if (imageElement?.complete && imageElement.naturalWidth > 0) {
+      imageElement.classList.add('re-image_loaded');
+      setIsLoaded(true);
+      return;
+    }
+
     setIsLoaded(false);
   }, [props.src]);
 
@@ -36,6 +47,7 @@ const ReImage = ({wrapperRef, ...props}: IReImageProps): ReactElement => {
     <>
       {!isLoaded && <div className={'re-image__placeholder'} />}
       <img
+        ref={imageRef}
         loading={'eager'}
         {...props}
         className={props.className}
