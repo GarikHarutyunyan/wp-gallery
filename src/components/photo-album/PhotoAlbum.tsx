@@ -14,7 +14,7 @@ import React, {
   useState,
 } from 'react';
 import PhotoAlbum, {LayoutType} from 'react-photo-album';
-import {buildImageSrcSet} from 'utils/imageSrcSet';
+import {buildImageSrcSet, buildSelectedImageSrcItem} from 'utils/imageSrcSet';
 import {PhotoAlbumItem} from './PhotoAlbumItem';
 
 const initialContainerWidth = 1000; // Approximate container initial width in pxs.
@@ -52,22 +52,22 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
   const photos = useMemo(() => {
     return images?.map((image: IImageDTO) => {
       const isVideo: boolean = image.type === ImageType.VIDEO;
+      const selectedImageSrcItem = buildSelectedImageSrcItem(image);
       const width =
         isVideo && settings.showVideoCover
           ? image.medium_large.width
-          : image.original.width;
+          : selectedImageSrcItem?.width || image.original.width;
       const height =
         isVideo && settings.showVideoCover
           ? image.medium_large.height
-          : image.original.height;
+          : selectedImageSrcItem?.height || image.original.height;
       const src =
         isVideo && settings.showVideoCover
           ? image.medium_large.url
-          : image.original.url;
+          : selectedImageSrcItem?.src || image.original.url;
       const srcSet = buildImageSrcSet(image, {
         includeOriginal: !isVideo || !settings.showVideoCover,
       });
-
       return {
         key: image.id,
         width,
@@ -164,9 +164,9 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
             },
           })}
           renderPhoto={renderPhoto}
-          // sizes={{
-          //   size: galleryWidth + 'px',
-          // }}
+          sizes={{
+            size: galleryWidth + 'px',
+          }}
         />
       </div>
     </Box>

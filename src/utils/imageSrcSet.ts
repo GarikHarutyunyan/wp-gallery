@@ -1,4 +1,4 @@
-import {IImageDTO} from 'data-structures';
+import { IImageDTO } from 'data-structures';
 
 export interface ISrcSetItem {
   src: string;
@@ -14,7 +14,7 @@ interface IBuildImageSrcSetOptions {
   maxDimension?: number;
 }
 
-const DEFAULT_MAX_DIMENSION = 2000;
+const DEFAULT_MAX_DIMENSION = 2304;
 
 const isValidSrcItem = (item: Partial<ISrcSetItem>): item is ISrcSetItem => {
   return Boolean(item.src) && Number(item.width) > 0 && Number(item.height) > 0;
@@ -90,18 +90,16 @@ export const buildImageSrcSet = (
     .filter((item) => getItemMaxDimension(item) <= maxDimension)
     .sort((a, b) => a.width - b.width);
 
-  if (allowed.length > 0) {
-    return allowed;
-  }
+  return allowed;
+};
 
-  // Fallback: if no downsized variant exists, keep the smallest available source.
-  const fallback = candidates.reduce((smallest, current) => {
-    return getItemMaxDimension(current) < getItemMaxDimension(smallest)
-      ? current
-      : smallest;
-  });
+export const buildSelectedImageSrcItem = (
+  image: IImageDTO,
+  options: IBuildImageSrcSetOptions = {}
+): ISrcSetItem | undefined => {
+  const srcSet = buildImageSrcSet(image, options);
 
-  return [fallback];
+  return srcSet[srcSet.length - 1];
 };
 
 export const buildImageSrcSetString = (

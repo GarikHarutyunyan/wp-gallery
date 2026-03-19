@@ -10,7 +10,7 @@ import {
 } from 'data-structures';
 import React, {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
-import {buildImageSrcSet} from 'utils/imageSrcSet';
+import {buildImageSrcSet, buildSelectedImageSrcItem} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
 import {Lightbox} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
@@ -499,7 +499,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         },
       ],
       poster: image.medium_large.url,
-      src: image.original.url,
+      src: buildSelectedImageSrcItem(image)?.src || image.original.url,
       share: {
         url: deepLink(index),
         title: image.title,
