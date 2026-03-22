@@ -14,6 +14,7 @@ import {
   LightboxThumbnailsPosition,
 } from 'data-structures';
 import React, {ReactElement, useEffect, useMemo, useState} from 'react';
+import {getLargestSrcItem, getSrcSet, ISrcSetItem} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
 import Lightbox, {SlideshowRef} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
@@ -205,116 +206,102 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   ]);
 
   const slides = useMemo(() => {
-    return images?.map((image: IImageDTO) => ({
-      description: (
-        <>
-          {((showTitle && image[titleSource]) ||
-            (showCaption && image[captionSource])) && (
-            <p
-              className={'reacg-slideshow-texts__title'}
-              style={{
-                margin: `${titleMargin}px 0`,
-                color: textColor,
-                fontFamily: textFontFamily,
-                fontSize: `clamp(${
-                  titleFontSize / minFactor
-                }rem, ${titleFontSize}vw, ${titleFontSize * maxFactor}rem)`,
-                textAlign: titleAlignment,
-              }}
-            >
-              {showTitle && image[titleSource]}
-              {showCaption && image[captionSource] && (
-                <span
-                  className={'reacg-slideshow__caption'}
+    return images?.map((image: IImageDTO) => {
+      const srcSet: ISrcSetItem[] = getSrcSet(image.sizes);
+      const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
+
+      return {
+        description: (
+          <>
+            {((showTitle && image[titleSource]) ||
+              (showCaption && image[captionSource])) && (
+              <p
+                className={'reacg-slideshow-texts__title'}
+                style={{
+                  margin: `${titleMargin}px 0`,
+                  color: textColor,
+                  fontFamily: textFontFamily,
+                  fontSize: `clamp(${
+                    titleFontSize / minFactor
+                  }rem, ${titleFontSize}vw, ${titleFontSize * maxFactor}rem)`,
+                  textAlign: titleAlignment,
+                }}
+              >
+                {showTitle && image[titleSource]}
+                {showCaption && image[captionSource] && (
+                  <span
+                    className={'reacg-slideshow__caption'}
+                    style={{
+                      color: captionFontColor,
+                      fontSize: `clamp(${
+                        captionFontSize / minFactor
+                      }rem, ${captionFontSize}vw, ${
+                        captionFontSize * maxFactor
+                      }rem)`,
+                    }}
+                  >
+                    &nbsp;{image[captionSource]}
+                  </span>
+                )}
+              </p>
+            )}
+            {showDescription && image[descriptionSource] && (
+              <p
+                className={'reacg-slideshow-texts__description'}
+                style={{
+                  color: textColor,
+                  fontFamily: textFontFamily,
+                  fontSize: `clamp(${
+                    descriptionFontSize / minFactor
+                  }rem,${descriptionFontSize}vw ,${
+                    descriptionFontSize * maxFactor
+                  }rem)`,
+                  WebkitLineClamp: descriptionMaxRowsCount,
+                  WebkitBoxOrient: 'vertical',
+                  display: '-webkit-box',
+                }}
+              >
+                {image[descriptionSource]}
+              </p>
+            )}
+            {showButton && (
+              <div className={'reacg-slideshow-texts__button'}>
+                <ActionButton
+                  url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                  openInNewTab={openInNewTab}
+                  text={buttonText}
+                  alignment={buttonAlignment}
+                  backgroundColor={buttonColor}
+                  textColor={buttonTextColor}
+                  borderSize={buttonBorderSize}
+                  borderColor={buttonBorderColor}
+                  borderRadius={buttonBorderRadius}
                   style={{
-                    color: captionFontColor,
                     fontSize: `clamp(${
-                      captionFontSize / minFactor
-                    }rem, ${captionFontSize}vw, ${
-                      captionFontSize * maxFactor
+                      buttonFontSize / minFactor
+                    }rem, ${buttonFontSize}vw, ${
+                      buttonFontSize * maxFactor
                     }rem)`,
                   }}
-                >
-                  &nbsp;{image[captionSource]}
-                </span>
-              )}
-            </p>
-          )}
-          {showDescription && image[descriptionSource] && (
-            <p
-              className={'reacg-slideshow-texts__description'}
-              style={{
-                color: textColor,
-                fontFamily: textFontFamily,
-                fontSize: `clamp(${
-                  descriptionFontSize / minFactor
-                }rem,${descriptionFontSize}vw ,${
-                  descriptionFontSize * maxFactor
-                }rem)`,
-                WebkitLineClamp: descriptionMaxRowsCount,
-                WebkitBoxOrient: 'vertical',
-                display: '-webkit-box',
-              }}
-            >
-              {image[descriptionSource]}
-            </p>
-          )}
-          {showButton && (
-            <div className={'reacg-slideshow-texts__button'}>
-              <ActionButton
-                url={image?.[buttonUrlSource as ActionURLSource] || ''}
-                openInNewTab={openInNewTab}
-                text={buttonText}
-                alignment={buttonAlignment}
-                backgroundColor={buttonColor}
-                textColor={buttonTextColor}
-                borderSize={buttonBorderSize}
-                borderColor={buttonBorderColor}
-                borderRadius={buttonBorderRadius}
-                style={{
-                  fontSize: `clamp(${
-                    buttonFontSize / minFactor
-                  }rem, ${buttonFontSize}vw, ${buttonFontSize * maxFactor}rem)`,
-                }}
-              />
-            </div>
-          )}
-        </>
-      ),
-      type: image.type,
-      sources: [
-        {
-          src: image.original.url,
-          type: `video/${image.original.url.split('.').pop()}`,
-        },
-      ],
-      poster: image.medium_large.url,
-      src: image.original.url,
-      alt: image.alt,
-      srcSet: [
-        {
-          src: image.original.url,
-          width: image.original.width,
-          height: image.original.height,
-        },
-        {
-          src: image.large.url,
-          width: image.large.width,
-          height: image.large.height,
-        },
-        {
-          src: image.medium_large.url,
-          width: image.medium_large.width,
-          height: image.medium_large.height,
-        },
-        {
-          src: image.thumbnail.url,
-          width: image.thumbnail.width,
-          height: image.thumbnail.height,
-        },
-      ],
-      metadata: image.thumbnail.url,
-    }));
+                />
+              </div>
+            )}
+          </>
+        ),
+        type: image.type,
+        sources: [
+          {
+            src: image.original.url,
+            type: `video/${image.original.url.split('.').pop()}`,
+          },
+        ],
+        poster: largestSrcItem.src,
+        src: largestSrcItem.src,
+        alt: image.alt,
+        srcSet: srcSet,
+        // metadata: image.thumbnail.url,
+      };
+    });
   }, [
     images,
     textColor,

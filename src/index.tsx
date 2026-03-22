@@ -2,6 +2,7 @@ import {AppInfoProvider} from 'contexts/AppInfoContext';
 import React from 'react';
 import ReactDOM2 from 'react-dom';
 import ReactDOM from 'react-dom/client';
+import 'utils/srcSetChecker';
 import App from './App';
 
 const rootMap: Map<HTMLElement, ReactDOM.Root> = new Map();

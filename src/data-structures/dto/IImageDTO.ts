@@ -1,6 +1,6 @@
-import {ReactElement} from "react";
+import {ReactElement} from 'react';
 
-interface IImageUrl {
+export interface IImageSizeObject {
   url: string;
   width: number;
   height: number;
@@ -10,6 +10,7 @@ export enum ImageType {
   IMAGE = 'image',
   VIDEO = 'video',
 }
+
 export interface IImageDTO {
   id: string;
   title: string;
@@ -21,12 +22,8 @@ export interface IImageDTO {
   author: string;
   date_created: string;
   exif: ReactElement;
-  width: number;
-  height: number;
-  original: IImageUrl;
-  large: IImageUrl;
-  medium_large: IImageUrl;
-  thumbnail: IImageUrl;
+  original: IImageSizeObject;
+  sizes: IImageSizeObject[];
   action_url: string;
   item_url: string;
   checkout_url: string;

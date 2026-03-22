@@ -2,12 +2,7 @@ import ImageList from '@mui/material/ImageList';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {useAppInfo} from 'contexts';
-import {
-  ActionURLSource,
-  IImageDTO,
-  IThumbnailSettings,
-  ImageType,
-} from 'data-structures';
+import {ActionURLSource, IThumbnailSettings} from 'data-structures';
 import React, {
   useCallback,
   useEffect,
@@ -185,27 +180,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     changeContainerWidth();
   }, [imageWidth, getWidth, gap, columns, padding, validColumnsCount]);
 
-  const getImageSource = (image: IImageDTO, width: number, height: number) => {
-    if (width <= image.thumbnail.width && height <= image.thumbnail.height) {
-      return `${image.thumbnail.url}`;
-    }
-    if (
-      width <= image.medium_large.width &&
-      height <= image.medium_large.height
-    ) {
-      return `${image.medium_large.url}`;
-    }
-
-    if (
-      (width <= image.large.width && height <= image.large.height) ||
-      image.type === ImageType.VIDEO
-    ) {
-      return `${image.large.url}`;
-    }
-
-    return `${image.original.url}`;
-  };
-
   const listRef = useRef<HTMLUListElement | null>(null);
   const onImageClick = useCallback(
     (index: number) => (onClick ? () => onClick(index) : undefined),
@@ -248,7 +222,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
               width={getWidth}
               height={getHeight}
               onClick={onImageClick(index)}
-              getImageSource={getImageSource}
               showTitle={showTitle}
               titleSource={titleSource}
               titlePosition={titlePosition}
