@@ -12,7 +12,7 @@ interface IReVideoProps extends VideoHTMLAttributes<HTMLVideoElement> {
   wrapperRef?: any;
   settings?: any;
   item: any;
-  coverImageProps?: any;
+  coverImageProps: any;
 }
 
 const ReVideo = ({
@@ -61,7 +61,7 @@ const ReVideo = ({
       {!isLoaded && <div className={'re-image__placeholder'} />}
       <video
         src={item.original.url}
-        poster={settings.showVideoCover ? item.medium_large.url : undefined}
+        poster={coverImageProps.src}
         {...props}
         className={'gallery__video'}
         autoPlay

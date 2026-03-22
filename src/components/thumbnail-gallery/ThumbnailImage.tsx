@@ -16,6 +16,11 @@ import {
   TitleVisibility,
 } from 'data-structures';
 import {useRef} from 'react';
+import {
+  getLargestSrcItem,
+  getSrcSetString,
+  ISrcSetItem,
+} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
 
 interface IThumbnailImageProps {
@@ -23,7 +28,6 @@ interface IThumbnailImageProps {
   width: number;
   height: number;
   onClick?: () => void;
-  getImageSource: (image: IImageDTO, width: number, height: number) => string;
   itemBorder: number;
   itemBackgroundColor: string;
   itemBorderRadius: number;
@@ -74,7 +78,6 @@ const ThumbnailImage = ({
   width,
   height,
   onClick,
-  getImageSource,
   itemBorder,
   itemBackgroundColor,
   itemBorderRadius,
@@ -527,6 +530,8 @@ const ThumbnailImage = ({
     openInNewTab,
     showVideoCover,
   };
+  const srcSetString: string = getSrcSetString(image.sizes);
+  const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
 
   return (
     <div
@@ -554,7 +559,7 @@ const ThumbnailImage = ({
       }}
     >
       <ImageListItem
-        key={image.thumbnail.url}
+        key={image.original.url}
         style={{
           justifyContent:
             ((titlePosition === ThumbnailTitlePosition.ABOVE ||
@@ -633,7 +638,9 @@ const ThumbnailImage = ({
                   'thumbnail-gallery__image',
                   'MuiImageListItem-img'
                 )}
-                src={getImageSource(image, width, height)}
+                src={largestSrcItem.src}
+                srcSet={srcSetString}
+                sizes={`${width}px`}
                 alt={image.alt}
                 loading="eager"
                 style={{
@@ -652,7 +659,9 @@ const ThumbnailImage = ({
                     'thumbnail-gallery__image',
                     'MuiImageListItem-img'
                   ),
-                  src: getImageSource(image, width, height),
+                  src: largestSrcItem.src,
+                  srcSet: srcSetString,
+                  sizes: `${width}px`,
                   alt: image.alt,
                   loading: 'eager',
                   style: {

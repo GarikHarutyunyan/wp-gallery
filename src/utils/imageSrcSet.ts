@@ -1,4 +1,4 @@
-import { IImageDTO } from 'data-structures';
+import {IImageSizeObject} from 'data-structures';
 
 export interface ISrcSetItem {
   src: string;
@@ -6,109 +6,37 @@ export interface ISrcSetItem {
   height: number;
 }
 
-interface IBuildImageSrcSetOptions {
-  includeThumbnail?: boolean;
-  includeMediumLarge?: boolean;
-  includeLarge?: boolean;
-  includeOriginal?: boolean;
-  maxDimension?: number;
-}
+export const getSrcSet = (sizes: IImageSizeObject[]): ISrcSetItem[] => {
+  const srcSetItems: ISrcSetItem[] = sizes.map((size) => ({
+    src: size.url,
+    width: size.width,
+    height: size.height,
+  }));
 
-const DEFAULT_MAX_DIMENSION = 2304;
-
-const isValidSrcItem = (item: Partial<ISrcSetItem>): item is ISrcSetItem => {
-  return Boolean(item.src) && Number(item.width) > 0 && Number(item.height) > 0;
+  return srcSetItems;
 };
 
-const getItemMaxDimension = (item: ISrcSetItem): number =>
-  Math.max(item.width, item.height);
-
-const deduplicateBySrc = (items: ISrcSetItem[]): ISrcSetItem[] => {
-  const map = new Map<string, ISrcSetItem>();
-
-  items.forEach((item) => {
-    if (!map.has(item.src)) {
-      map.set(item.src, item);
-    }
-  });
-
-  return Array.from(map.values());
-};
-
-export const buildImageSrcSet = (
-  image: IImageDTO,
-  options: IBuildImageSrcSetOptions = {}
-): ISrcSetItem[] => {
-  const {
-    includeThumbnail = true,
-    includeMediumLarge = true,
-    includeLarge = true,
-    includeOriginal = true,
-    maxDimension = DEFAULT_MAX_DIMENSION,
-  } = options;
-
-  const candidates = deduplicateBySrc(
-    [
-      includeThumbnail
-        ? {
-            src: image.thumbnail.url,
-            width: image.thumbnail.width,
-            height: image.thumbnail.height,
-          }
-        : null,
-      includeMediumLarge
-        ? {
-            src: image.medium_large.url,
-            width: image.medium_large.width,
-            height: image.medium_large.height,
-          }
-        : null,
-      includeLarge
-        ? {
-            src: image.large.url,
-            width: image.large.width,
-            height: image.large.height,
-          }
-        : null,
-      includeOriginal
-        ? {
-            src: image.original.url,
-            width: image.original.width,
-            height: image.original.height,
-          }
-        : null,
-    ].filter((item): item is ISrcSetItem =>
-      Boolean(item && isValidSrcItem(item))
-    )
-  );
-
-  if (candidates.length === 0) {
-    return [];
-  }
-
-  const allowed = candidates
-    .filter((item) => getItemMaxDimension(item) <= maxDimension)
-    .sort((a, b) => a.width - b.width);
-
-  return allowed;
-};
-
-export const buildSelectedImageSrcItem = (
-  image: IImageDTO,
-  options: IBuildImageSrcSetOptions = {}
-): ISrcSetItem | undefined => {
-  const srcSet = buildImageSrcSet(image, options);
-
-  return srcSet[srcSet.length - 1];
-};
-
-export const buildImageSrcSetString = (
-  image: IImageDTO,
-  options: IBuildImageSrcSetOptions = {}
-): string | undefined => {
-  const srcSet = buildImageSrcSet(image, options)
+export const getSrcSetString = (sizes: IImageSizeObject[]): string => {
+  const srcSet: string = getSrcSet(sizes)
     .map((item) => `${item.src} ${item.width}w`)
     .join(', ');
 
-  return srcSet || undefined;
+  return srcSet;
 };
+
+export const getLargestSrcItem = (sizes: IImageSizeObject[]): ISrcSetItem => {
+  const largest = sizes.reduce((max, current) => {
+    return current.width > max.width ? current : max;
+  }, sizes[0]);
+  const largestSrcItem: ISrcSetItem = getSrcItemFromImageSizeObject(largest);
+
+  return largestSrcItem;
+};
+
+export const getSrcItemFromImageSizeObject = (
+  sizeObj: IImageSizeObject
+): ISrcSetItem => ({
+  src: sizeObj.url,
+  width: sizeObj.width,
+  height: sizeObj.height,
+});

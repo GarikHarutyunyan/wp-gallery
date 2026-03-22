@@ -1,5 +1,5 @@
 import {IImageDTO} from 'data-structures';
-import {buildImageSrcSetString} from 'utils/imageSrcSet';
+import {getSrcSetString} from 'utils/imageSrcSet';
 
 const loadImagesInRange = (
   swiperRef: any,
@@ -27,7 +27,7 @@ const loadImagesInRange = (
       (!imgElement.src || imgElement.src === undefined)
     ) {
       imgElement.setAttribute('src', image.original.url);
-      const srcSet = buildImageSrcSetString(image);
+      const srcSet = getSrcSetString(image.sizes);
       if (srcSet) {
         imgElement.setAttribute('srcSet', srcSet);
       }

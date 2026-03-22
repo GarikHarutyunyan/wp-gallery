@@ -3,7 +3,11 @@ import ReImage from 'core-components/re-image/ReImage';
 import ReVideo from 'core-components/re-video/ReVideo';
 import {ImageType} from 'data-structures';
 import React from 'react';
-import {buildImageSrcSetString} from 'utils/imageSrcSet';
+import {
+  getLargestSrcItem,
+  getSrcSetString,
+  ISrcSetItem,
+} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
 
 const BlogImage = ({
@@ -31,6 +35,8 @@ const BlogImage = ({
     hoverEffect,
     showVideoCover,
   };
+  const srcSetString: string = getSrcSetString(image.sizes);
+  const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
 
   return (
     <div
@@ -56,8 +62,8 @@ const BlogImage = ({
       {image.type === ImageType.IMAGE && (
         <ReImage
           wrapperRef={wrapperRef}
-          src={image.thumbnail.url}
-          srcSet={buildImageSrcSetString(image)}
+          src={largestSrcItem.src}
+          srcSet={srcSetString}
           sizes={`${containerInnerWidth}px`}
           alt={image.alt}
         />
@@ -68,8 +74,8 @@ const BlogImage = ({
           item={image}
           settings={settings}
           coverImageProps={{
-            src: image.thumbnail.url,
-                srcSet: buildImageSrcSetString(image, {includeOriginal: false}),
+            src: largestSrcItem.src,
+            srcSet: srcSetString,
             alt: image.alt,
             loading: 'eager',
             sizes: `${containerInnerWidth}px`,

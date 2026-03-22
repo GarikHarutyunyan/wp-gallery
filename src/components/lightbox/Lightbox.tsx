@@ -10,7 +10,7 @@ import {
 } from 'data-structures';
 import React, {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
-import {buildImageSrcSet, buildSelectedImageSrcItem} from 'utils/imageSrcSet';
+import {getLargestSrcItem, getSrcSet, ISrcSetItem} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
 import {Lightbox} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
@@ -415,100 +415,107 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   };
 
   const slides = useMemo(() => {
-    return images?.map((image: IImageDTO, index: number) => ({
-      description: (
-        <>
-          {((showTitle && image[titleSource]) ||
-            (showCaption && image[captionSource])) && (
-            <p
-              className={'reacg-lightbox-texts__title'}
-              style={{
-                margin: `${titleMargin}px 0`,
-                color: textColor,
-                fontFamily: textFontFamily,
-                fontSize: `clamp(${
-                  titleFontSize / minFactor
-                }rem, ${titleFontSize}vw, ${titleFontSize * maxFactor}rem)`,
-                textAlign: titleAlignment,
-              }}
-            >
-              {showTitle && image[titleSource]}
-              {showCaption && image[captionSource] && (
-                <span
-                  className={'reacg-lightbox__caption'}
+    return images?.map((image: IImageDTO, index: number) => {
+      const srcSet: ISrcSetItem[] = getSrcSet(image.sizes);
+      const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
+
+      return {
+        description: (
+          <>
+            {((showTitle && image[titleSource]) ||
+              (showCaption && image[captionSource])) && (
+              <p
+                className={'reacg-lightbox-texts__title'}
+                style={{
+                  margin: `${titleMargin}px 0`,
+                  color: textColor,
+                  fontFamily: textFontFamily,
+                  fontSize: `clamp(${
+                    titleFontSize / minFactor
+                  }rem, ${titleFontSize}vw, ${titleFontSize * maxFactor}rem)`,
+                  textAlign: titleAlignment,
+                }}
+              >
+                {showTitle && image[titleSource]}
+                {showCaption && image[captionSource] && (
+                  <span
+                    className={'reacg-lightbox__caption'}
+                    style={{
+                      color: captionFontColor,
+                      fontSize: `clamp(${
+                        captionFontSize / minFactor
+                      }rem, ${captionFontSize}vw, ${
+                        captionFontSize * maxFactor
+                      }rem)`,
+                    }}
+                  >
+                    &nbsp;{image[captionSource]}
+                  </span>
+                )}
+              </p>
+            )}
+            {showDescription && image[descriptionSource] && (
+              <p
+                className={'reacg-lightbox-texts__description'}
+                style={{
+                  color: textColor,
+                  fontFamily: textFontFamily,
+                  fontSize: `clamp(${
+                    descriptionFontSize / minFactor
+                  }rem, ${descriptionFontSize}vw, ${
+                    descriptionFontSize * maxFactor
+                  }rem)`,
+                  WebkitLineClamp: descriptionMaxRowsCount,
+                  WebkitBoxOrient: 'vertical',
+                  display: '-webkit-box',
+                }}
+              >
+                {image[descriptionSource]}
+              </p>
+            )}
+            {showButton && (
+              <div className={'reacg-lightbox-texts__button'}>
+                <ActionButton
+                  url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                  openInNewTab={openInNewTab}
+                  text={buttonText}
+                  alignment={buttonAlignment}
+                  backgroundColor={buttonColor}
+                  textColor={buttonTextColor}
+                  borderSize={buttonBorderSize}
+                  borderColor={buttonBorderColor}
+                  borderRadius={buttonBorderRadius}
                   style={{
-                    color: captionFontColor,
                     fontSize: `clamp(${
-                      captionFontSize / minFactor
-                    }rem, ${captionFontSize}vw, ${
-                      captionFontSize * maxFactor
+                      buttonFontSize / minFactor
+                    }rem, ${buttonFontSize}vw, ${
+                      buttonFontSize * maxFactor
                     }rem)`,
                   }}
-                >
-                  &nbsp;{image[captionSource]}
-                </span>
-              )}
-            </p>
-          )}
-          {showDescription && image[descriptionSource] && (
-            <p
-              className={'reacg-lightbox-texts__description'}
-              style={{
-                color: textColor,
-                fontFamily: textFontFamily,
-                fontSize: `clamp(${
-                  descriptionFontSize / minFactor
-                }rem, ${descriptionFontSize}vw, ${
-                  descriptionFontSize * maxFactor
-                }rem)`,
-                WebkitLineClamp: descriptionMaxRowsCount,
-                WebkitBoxOrient: 'vertical',
-                display: '-webkit-box',
-              }}
-            >
-              {image[descriptionSource]}
-            </p>
-          )}
-          {showButton && (
-            <div className={'reacg-lightbox-texts__button'}>
-              <ActionButton
-                url={image?.[buttonUrlSource as ActionURLSource] || ''}
-                openInNewTab={openInNewTab}
-                text={buttonText}
-                alignment={buttonAlignment}
-                backgroundColor={buttonColor}
-                textColor={buttonTextColor}
-                borderSize={buttonBorderSize}
-                borderColor={buttonBorderColor}
-                borderRadius={buttonBorderRadius}
-                style={{
-                  fontSize: `clamp(${
-                    buttonFontSize / minFactor
-                  }rem, ${buttonFontSize}vw, ${buttonFontSize * maxFactor}rem)`,
-                }}
-              />
-            </div>
-          )}
-        </>
-      ),
-      type: image.type,
-      sources: [
-        {
-          src: image.original.url,
-          type: `video/${image.original.url.split('.').pop()}`,
+                />
+              </div>
+            )}
+          </>
+        ),
+        type: image.type,
+        sources: [
+          {
+            src: image.original.url,
+            type: `video/${image.original.url.split('.').pop()}`,
+          },
+        ],
+        poster: largestSrcItem.src,
+        src: largestSrcItem.src,
+        share: {
+          url: deepLink(index),
+          title: image.title,
+          text: image.description,
         },
-      ],
-      poster: image.medium_large.url,
-      src: buildSelectedImageSrcItem(image)?.src || image.original.url,
-      share: {
-        url: deepLink(index),
-        title: image.title,
-        text: image.description,
-      },
-      alt: image.alt,
-      srcSet: buildImageSrcSet(image),
-      metadata: image.thumbnail.url,
-    }));
+        alt: image.alt,
+        srcSet: srcSet,
+        // metadata: image.thumbnail.url,
+      };
+    });
   }, [
     images,
     textColor,

@@ -2,7 +2,6 @@ import {Box} from '@mui/material';
 import {
   IImageDTO,
   IMasonrySettings,
-  ImageType,
   WithStyleAndClassName,
 } from 'data-structures';
 import React, {
@@ -14,7 +13,7 @@ import React, {
   useState,
 } from 'react';
 import PhotoAlbum, {LayoutType} from 'react-photo-album';
-import {buildImageSrcSet, buildSelectedImageSrcItem} from 'utils/imageSrcSet';
+import {getLargestSrcItem, getSrcSet, ISrcSetItem} from 'utils/imageSrcSet';
 import {PhotoAlbumItem} from './PhotoAlbumItem';
 
 const initialContainerWidth = 1000; // Approximate container initial width in pxs.
@@ -51,34 +50,20 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
 
   const photos = useMemo(() => {
     return images?.map((image: IImageDTO) => {
-      const isVideo: boolean = image.type === ImageType.VIDEO;
-      const selectedImageSrcItem = buildSelectedImageSrcItem(image);
-      const width =
-        isVideo && settings.showVideoCover
-          ? image.medium_large.width
-          : selectedImageSrcItem?.width || image.original.width;
-      const height =
-        isVideo && settings.showVideoCover
-          ? image.medium_large.height
-          : selectedImageSrcItem?.height || image.original.height;
-      const src =
-        isVideo && settings.showVideoCover
-          ? image.medium_large.url
-          : selectedImageSrcItem?.src || image.original.url;
-      const srcSet = buildImageSrcSet(image, {
-        includeOriginal: !isVideo || !settings.showVideoCover,
-      });
+      const srcSet: ISrcSetItem[] = getSrcSet(image.sizes);
+      const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
+
       return {
         key: image.id,
-        width,
-        height,
-        src,
+        src: largestSrcItem.src,
+        width: largestSrcItem.width,
+        height: largestSrcItem.height,
         srcSet,
         id: image.id,
         alt: image.alt,
       };
     });
-  }, [images, settings.showVideoCover]);
+  }, [images]);
 
   const onImageClick = useCallback(
     (index: number) => (onClick ? () => onClick(index) : undefined),
