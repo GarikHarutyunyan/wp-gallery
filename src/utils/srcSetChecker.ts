@@ -54,10 +54,25 @@ const parseSrcset = (srcset: string | null): ISrcSetCandidate[] => {
     .filter(isSrcSetCandidate);
 };
 
-const getExpectedInfo = (
-  img: HTMLImageElement,
-  renderedWidth: number
-): IExpectedSrcInfo => {
+const resolveSizes = (img: HTMLImageElement): number => {
+  const sizes = img.getAttribute('sizes');
+  if (!sizes) return window.innerWidth;
+
+  const last = sizes.split(',').pop()?.trim();
+  if (!last) return window.innerWidth;
+
+  if (last.endsWith('vw')) {
+    return (window.innerWidth * parseFloat(last)) / 100;
+  }
+
+  if (last.endsWith('px')) {
+    return parseFloat(last);
+  }
+
+  return window.innerWidth;
+};
+
+const getExpectedInfo = (img: HTMLImageElement): IExpectedSrcInfo => {
   const srcset = parseSrcset(img.getAttribute('srcset'));
   const dpr = window.devicePixelRatio || 1;
 
@@ -87,7 +102,7 @@ const getExpectedInfo = (
     };
   }
 
-  const sourceSize = renderedWidth;
+  const sourceSize = resolveSizes(img);
   const neededWidth = sourceSize * dpr;
 
   return {
@@ -109,7 +124,7 @@ export const checkGallerySrcset = (
 
   images.forEach((img, index) => {
     const rect = img.getBoundingClientRect();
-    const info = getExpectedInfo(img, rect.width);
+    const info = getExpectedInfo(img);
     const actual = toAbs(img.currentSrc || img.src);
     const match = info.expected === actual;
 
