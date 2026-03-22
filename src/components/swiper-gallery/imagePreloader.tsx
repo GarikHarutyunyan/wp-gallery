@@ -1,5 +1,9 @@
 import {IImageDTO} from 'data-structures';
-import {getSrcSetString} from 'utils/imageSrcSet';
+import {
+  getLargestSrcItem,
+  getSrcSetString,
+  ISrcSetItem,
+} from 'utils/imageSrcSet';
 
 const loadImagesInRange = (
   swiperRef: any,
@@ -20,13 +24,14 @@ const loadImagesInRange = (
     }
     const image = images[realIndex];
     const imgElement = slide.querySelector('img') as HTMLImageElement;
+    const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
 
     if (
       imgElement &&
       image &&
       (!imgElement.src || imgElement.src === undefined)
     ) {
-      imgElement.setAttribute('src', image.original.url);
+      imgElement.setAttribute('src', largestSrcItem.src);
       const srcSet = getSrcSetString(image.sizes);
       if (srcSet) {
         imgElement.setAttribute('srcSet', srcSet);
