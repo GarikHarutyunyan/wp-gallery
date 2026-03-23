@@ -33,9 +33,7 @@ const loadImagesInRange = (
     ) {
       imgElement.setAttribute('src', largestSrcItem.src);
       const srcSet = getSrcSetString(image.sizes);
-      if (srcSet) {
-        imgElement.setAttribute('srcSet', srcSet);
-      }
+      imgElement.setAttribute('srcSet', srcSet);
     }
   }
 };
