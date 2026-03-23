@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import ReImage from 'core-components/re-image/ReImage';
 import ReVideo from 'core-components/re-video/ReVideo';
-import {ImageType} from 'data-structures';
+import {ImageType, SizeTypeWidth} from 'data-structures';
 import React from 'react';
 import {
   getLargestSrcItem,
@@ -24,6 +24,16 @@ const BlogImage = ({
   showVideoCover,
 }: any) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const isMobile = containerInnerWidth >= 1 && containerInnerWidth <= 720;
+  const imageWidthStyle = isMobile ? '100%' : `${imageWidth}${imageWidthType}`;
+
+  const isPercentWidth = imageWidthType === SizeTypeWidth.PERCENT;
+  const containerWidthPx = `${containerInnerWidth}px`;
+  const computedImageWidth = isPercentWidth
+    ? `${(containerInnerWidth * imageWidth) / 100}px`
+    : `${imageWidth}${imageWidthType}`;
+
+  const imageSizes = isMobile ? containerWidthPx : computedImageWidth;
 
   const settings: any = {
     containerInnerWidth,
@@ -50,11 +60,7 @@ const BlogImage = ({
           : 'blog-gallery__image_non_clickable'
       )}
       style={{
-        width: `${
-          containerInnerWidth >= 1 && containerInnerWidth <= 720
-            ? '100%'
-            : `${imageWidth}${imageWidthType}`
-        }`,
+        width: imageWidthStyle,
         borderRadius: `${imageRadius}%`,
         height: `${imageHeight}${imageHeightType}`,
       }}
@@ -64,7 +70,7 @@ const BlogImage = ({
           wrapperRef={wrapperRef}
           src={largestSrcItem.src}
           srcSet={srcSetString}
-          sizes={`${containerInnerWidth}px`}
+          sizes={imageSizes}
           alt={image.alt}
         />
       )}
@@ -78,7 +84,7 @@ const BlogImage = ({
             srcSet: srcSetString,
             alt: image.alt,
             loading: 'eager',
-            sizes: `${containerInnerWidth}px`,
+            sizes: imageSizes,
           }}
         />
       )}
