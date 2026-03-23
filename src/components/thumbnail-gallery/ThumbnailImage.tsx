@@ -530,6 +530,7 @@ const ThumbnailImage = ({
     openInNewTab,
     showVideoCover,
   };
+  const imageRequestSize = Math.max(width, height);
   const srcSetString: string = getSrcSetString(image.sizes);
   const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
 
@@ -640,7 +641,7 @@ const ThumbnailImage = ({
                 )}
                 src={largestSrcItem.src}
                 srcSet={srcSetString}
-                sizes={`${width}px`}
+                sizes={`${imageRequestSize}px`}
                 alt={image.alt}
                 loading="eager"
                 style={{
@@ -661,7 +662,7 @@ const ThumbnailImage = ({
                   ),
                   src: largestSrcItem.src,
                   srcSet: srcSetString,
-                  sizes: `${width}px`,
+                  sizes: `${imageRequestSize}px`,
                   alt: image.alt,
                   loading: 'eager',
                   style: {
