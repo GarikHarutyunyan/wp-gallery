@@ -299,7 +299,6 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
         src: largestSrcItem.src,
         alt: image.alt,
         srcSet: srcSet,
-        // metadata: image.thumbnail.url,
       };
     });
   }, [

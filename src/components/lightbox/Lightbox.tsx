@@ -514,7 +514,6 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         alt: image.alt,
         srcSet: srcSet,
         download: {url: image.original.url, filename: image.title},
-        // metadata: image.thumbnail.url,
       };
     });
   }, [
