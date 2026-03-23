@@ -194,6 +194,9 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             paddingLeft: paddingTitle,
             paddingRight: paddingTitle,
             color: captionFontColor,
+            backgroundColor:
+              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
+            mixBlendMode: invertTextColor ? 'difference' : 'initial',
           }}
           className={`photo-album-item__title-content_${captionPosition}`}
           title={
