@@ -33,6 +33,15 @@ export const getLargestSrcItem = (sizes: IImageSizeObject[]): ISrcSetItem => {
   return largestSrcItem;
 };
 
+export const getMedianSrcItem = (sizes: IImageSizeObject[]): ISrcSetItem => {
+  const sortedSizes = [...sizes].sort((a, b) => a.width - b.width);
+  const middleIndex = Math.floor((sortedSizes.length - 1) / 2);
+  const medianSize = sortedSizes[middleIndex];
+  const medianSrcItem: ISrcSetItem = getSrcItemFromImageSizeObject(medianSize);
+
+  return medianSrcItem;
+};
+
 export const getSrcItemFromImageSizeObject = (
   sizeObj: IImageSizeObject
 ): ISrcSetItem => ({
