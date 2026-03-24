@@ -14,6 +14,11 @@ import {
   TitleVisibility,
 } from 'data-structures';
 import {forwardRef, useRef} from 'react';
+import {
+  getLargestSrcItem,
+  getSrcSetString,
+  ISrcSetItem,
+} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
 
 interface ISwiperImageProps {
@@ -393,6 +398,9 @@ const SwiperImage = forwardRef(
       );
     };
 
+    const srcSetString: string = getSrcSetString(image.sizes);
+    const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
+
     return (
       <>
         {showTitle &&
@@ -423,13 +431,9 @@ const SwiperImage = forwardRef(
             <ReImage
               wrapperRef={wrapperRef}
               data-index={index}
-              src={shouldLoadImage ? image.original.url : undefined}
+              src={shouldLoadImage ? largestSrcItem.src : undefined}
               sizes={`${size}px`}
-              srcSet={
-                shouldLoadImage
-                  ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w, ${images[index].original.url} ${images[index].original.width}w`
-                  : undefined
-              }
+              srcSet={shouldLoadImage ? srcSetString : undefined}
               alt={image.alt}
             />
           )}
@@ -440,10 +444,8 @@ const SwiperImage = forwardRef(
               settings={settings}
               coverImageProps={{
                 dataIndex: index,
-                src: shouldLoadImage ? image.medium_large.url : undefined,
-                srcSet: shouldLoadImage
-                  ? `${images[index].thumbnail.url} ${images[index].thumbnail.width}w, ${images[index].medium_large.url} ${images[index].medium_large.width}w`
-                  : undefined,
+                src: shouldLoadImage ? largestSrcItem.src : undefined,
+                srcSet: shouldLoadImage ? srcSetString : undefined,
                 alt: image.alt,
                 loading: 'eager',
                 sizes: `${size}px`,

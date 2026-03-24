@@ -7,12 +7,13 @@ import {
   useState,
   VideoHTMLAttributes,
 } from 'react';
+import {getMedianSrcItem, ISrcSetItem} from 'utils/imageSrcSet';
 
 interface IReVideoProps extends VideoHTMLAttributes<HTMLVideoElement> {
   wrapperRef?: any;
   settings?: any;
   item: any;
-  coverImageProps?: any;
+  coverImageProps: any;
 }
 
 const ReVideo = ({
@@ -56,12 +57,15 @@ const ReVideo = ({
     );
   }
 
+  const medianSrcItem: ISrcSetItem = getMedianSrcItem(item.sizes);
+  const poster: string = medianSrcItem.src;
+
   return (
     <>
       {!isLoaded && <div className={'re-image__placeholder'} />}
       <video
         src={item.original.url}
-        poster={settings.showVideoCover ? item.medium_large.url : undefined}
+        poster={poster}
         {...props}
         className={'gallery__video'}
         autoPlay
