@@ -74,13 +74,14 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
     wrapper?.clientWidth || contWidth
   );
   const ratio: number = contWidth / height;
+  const imageRatio: number = width / height;
   const containerWidth: number = Math.min(innerWidth, contWidth);
   const containerHeight: number =
     innerWidth >= 480 ? containerWidth / ratio : height;
   const imageCorrectWidth =
     (containerWidth - (imagesCount - 1) * spaceBetween - 2 * padding) /
     imagesCount;
-  const imageCorrectHeight = Math.floor(containerHeight - 2 * padding);
+  const imageCorrectHeight = Math.floor(imageCorrectWidth / imageRatio);
   const imageRequestSize: number = Math.floor(
     Math.max(imageCorrectHeight, imageCorrectWidth)
   );
