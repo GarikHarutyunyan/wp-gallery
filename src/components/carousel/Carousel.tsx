@@ -77,7 +77,14 @@ const Carousel: React.FC<ITCarouselProps> = ({onClick}) => {
   const containerWidth: number = Math.min(innerWidth, contWidth);
   const containerHeight: number =
     innerWidth >= 480 ? containerWidth / ratio : height;
-  const imageRequestSize: number = Math.max(containerHeight, width);
+  const imageCorrectWidth =
+    (containerWidth - (imagesCount - 1) * spaceBetween - 2 * padding) /
+    imagesCount;
+  const imageCorrectHeight = imageCorrectWidth - 2 * padding;
+  const imageRequestSize: number = Math.max(
+    imageCorrectHeight,
+    imageCorrectWidth
+  );
   // This ensures that Swiper functions correctly in infinite loop mode and disabled pagination when the total number of images is less than the number of visible slides
   const shouldDuplicate =
     navigation === SliderNavigation.DOTS ||
