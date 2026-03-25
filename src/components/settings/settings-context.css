@@ -23,7 +23,7 @@
   }
 
   .type-option__active .type-option__title {
-    color: #155c92;
+    color: var(--reacg-primary-color, #155c92);
   }
 
   .type-option__image-container {
@@ -36,7 +36,7 @@
   }
 
   .type-option__active .type-option__image-container svg path {
-    fill: #155c92;
+    fill: var(--reacg-primary-color, #155c92);
   }
 
   .type-option__image-container svg path {
@@ -297,13 +297,13 @@
 .reacg-settings-panel-tabs .Mui-selected svg path,
 .Mui-selected .type-panel-select__body svg path,
 .MuiSelect-outlined .type-panel-select__body svg path {
-  fill: #155c92;
+  fill: var(--reacg-primary-color, #155c92);
 }
 
 .reacg-settings-panel-tabs .Mui-selected,
 .Mui-selected .type-panel-select__title,
 .MuiSelect-outlined .type-panel-select__title {
-  color: #155c92 !important;
+  color: var(--reacg-primary-color, #155c92) !important;
 }
 
 .reacg-section__body {
