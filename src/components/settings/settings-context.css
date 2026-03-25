@@ -338,6 +338,6 @@ ul.MuiMenu-list .reacg-templates-list-option {
 
 ul.MuiMenu-list .reacg-templates-list-option-group {
   opacity: 1;
-  color: #2271b1;
+  color: var(--reacg-primary-color, #155c92);
   font-weight: bold;
 }

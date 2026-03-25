@@ -104,12 +104,12 @@
 }
 
 .reacg-templates-dialog__category:hover {
-  border-color: #2271b1;
+  border-color: var(--reacg-primary-color, #155c92);
 }
 
 .reacg-templates-dialog__category--active {
-  border-color: #2271b1;
-  background-color: #2271b1;
+  border-color: var(--reacg-primary-color, #155c92);
+  background-color: var(--reacg-primary-color, #155c92);
   color: #fff;
 }
 
@@ -141,8 +141,8 @@
 }
 
 .reacg-template-card--selected {
-  border-color: #2271b1;
-  box-shadow: inset 0 0 0 1px #2271b1;
+  border-color: var(--reacg-primary-color, #155c92);
+  box-shadow: inset 0 0 0 1px var(--reacg-primary-color, #155c92);
 }
 
 .reacg-template-card__image-wrapper {
