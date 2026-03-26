@@ -5,6 +5,22 @@ import {LigthBulbIcon} from './icons/LigthBulbIcon';
 import {ProIcon} from './icons/ProIcon';
 import {TroubleshoutingIcon} from './icons/TroubleshoutingIcon';
 
+const appendUtmMedium = (url: string, utm_medium?: string) => {
+  if (!url || !utm_medium) {
+    return url;
+  }
+
+  const urlQueryStringSeperator: string = url.includes('?') ? '&' : '?';
+  const utmQuery = `${urlQueryStringSeperator}utm_medium=${utm_medium}`;
+
+  if (url.includes('#')) {
+    const [base, hash] = url.split('#');
+    return `${base}${utmQuery}#${hash}`;
+  }
+
+  return `${url}${utmQuery}`;
+};
+
 export const premiumConfig: AlertConfig = {
   image: (
     <ProIcon
@@ -37,20 +53,10 @@ export const premiumConfig: AlertConfig = {
     label: (window as any).reacg_global?.upgrade?.text || 'GET STARTED',
     backgroundColor: '#a7c957',
     onClick: (utm_medium?: string) => {
-      let url =
+      const url =
         (window as any).reacg_global?.upgrade?.url ||
         'https://regallery.team/#pricing';
-      if (utm_medium) {
-        const urlQueryStringSeperator: string = url.includes('?') ? '&' : '?';
-        utm_medium = urlQueryStringSeperator + 'utm_medium=' + utm_medium;
-        if (url.includes('#')) {
-          const [base, hash] = url.split('#');
-          url = base + utm_medium + '#' + hash;
-        } else {
-          url = url + utm_medium;
-        }
-      }
-      window.open(url, '_blank');
+      window.open(appendUtmMedium(url, utm_medium), '_blank');
     },
   },
 };
@@ -63,29 +69,39 @@ export const needHelpConfig: AlertConfig = {
       style={{background: '#d1dae8', borderRadius: '50%', padding: '12px'}}
     />
   ),
-  description: (
-    <>
-      Need help? We’re here 24/7. Reach out to us and we’ll get back to you
-      promptly.
-      <br />
-      <br />
-      You can also{' '}
-      <a href={(window as any).reacg_global?.demo_url || ''} target="_blank">
-        <strong>View a Demo</strong>
-      </a>{' '}
-      to see the features in action, or{' '}
+  title: 'Need Help?',
+  utm_medium: 'need_help_dialog',
+  description:
+    'We’re here 24/7. Reach out to us and we’ll get back to you promptly.',
+  additionalText: (utm_medium?: string) => (
+    <center>
       <a
-        href={(window as any).reacg_global?.compare_plans_url || ''}
+        style={{color: 'black'}}
+        href={appendUtmMedium(
+          (window as any).reacg_global?.demo_url || '',
+          utm_medium
+        )}
         target="_blank"
       >
-        <strong>Compare Pro Plans</strong>
+        <strong>View a Demo</strong>
       </a>{' '}
-      to choose the best option for you.
-    </>
+      |{' '}
+      <a
+        style={{color: 'black'}}
+        href={appendUtmMedium(
+          (window as any).reacg_global?.compare_plans_url || '',
+          utm_medium
+        )}
+        target="_blank"
+      >
+        <strong>See all Features</strong>
+      </a>
+    </center>
   ),
   buttonConfig: {
     label: 'CONTACT US',
     backgroundColor: '#2540cc',
+    width: '70%',
     onClick: () => {
       const url = (window as any).reacg_global?.support_url || null;
       if (url) {
@@ -103,29 +119,39 @@ export const newHereConfig: AlertConfig = {
       style={{background: '#d1dae8', borderRadius: '50%', padding: '12px'}}
     />
   ),
-  description: (
-    <>
-      Need a little help? If things feel unclear, no worries, our team is here
-      to guide you step by step.
-      <br />
-      <br />
-      You can also{' '}
-      <a href={(window as any).reacg_global?.demo_url || ''} target="_blank">
-        <strong>View a Demo</strong>
-      </a>{' '}
-      to see the features in action, or{' '}
+  title: 'Need a little help?',
+  description:
+    'If things feel unclear, no worries, our team is here to guide you step by step.',
+  utm_medium: 'new_here_dialog',
+  additionalText: (utm_medium?: string) => (
+    <center>
       <a
-        href={(window as any).reacg_global?.compare_plans_url || ''}
+        style={{color: 'black'}}
+        href={appendUtmMedium(
+          (window as any).reacg_global?.demo_url || '',
+          utm_medium
+        )}
         target="_blank"
       >
-        <strong>Compare Pro Plans</strong>
+        <strong>View a Demo</strong>
       </a>{' '}
-      to choose the best option for you.
-    </>
+      |{' '}
+      <a
+        style={{color: 'black'}}
+        href={appendUtmMedium(
+          (window as any).reacg_global?.compare_plans_url || '',
+          utm_medium
+        )}
+        target="_blank"
+      >
+        <strong>See all Features</strong>
+      </a>
+    </center>
   ),
   buttonConfig: {
     label: 'CONTACT US',
     backgroundColor: '#2540cc',
+    width: '70%',
     onClick: () => {
       const url = (window as any).reacg_global?.support_url || null;
       if (url) {
@@ -147,25 +173,38 @@ export const errorConfig: AlertConfig = {
     <>
       Oops! Something went wrong. Just ping us, our support team is available
       24/7 and happy to help.
-      <br />
-      <br />
-      Meanwhile,{' '}
-      <a href={(window as any).reacg_global?.demo_url || ''} target="_blank">
-        <strong>View a Demo</strong>
-      </a>{' '}
-      to see the features in action, or{' '}
+    </>
+  ),
+  utm_medium: 'error_dialog',
+  additionalText: (utm_medium?: string) => (
+    <center>
       <a
-        href={(window as any).reacg_global?.compare_plans_url || ''}
+        style={{color: 'black'}}
+        href={appendUtmMedium(
+          (window as any).reacg_global?.demo_url || '',
+          utm_medium
+        )}
         target="_blank"
       >
-        <strong>Compare Pro Plans</strong>
+        <strong>View a Demo</strong>
       </a>{' '}
-      to choose the best option for you.
-    </>
+      |{' '}
+      <a
+        style={{color: 'black'}}
+        href={appendUtmMedium(
+          (window as any).reacg_global?.compare_plans_url || '',
+          utm_medium
+        )}
+        target="_blank"
+      >
+        <strong>See all Features</strong>
+      </a>
+    </center>
   ),
   buttonConfig: {
     label: 'CONTACT US',
     backgroundColor: '#2540cc',
+    width: '70%',
     onClick: () => {
       const url = (window as any).reacg_global?.support_url || null;
       if (url) {
@@ -256,11 +295,14 @@ export const specialOfferConfig: AlertConfig = {
       </div>
     </>
   ),
-  additionalText: (
+  additionalText: (utm_medium?: string) => (
     <center>
       <a
         style={{color: 'black'}}
-        href={(window as any).reacg_global?.demo_url || ''}
+        href={appendUtmMedium(
+          (window as any).reacg_global?.demo_url || '',
+          utm_medium
+        )}
         target="_blank"
       >
         <strong>View a Demo</strong>
@@ -268,7 +310,10 @@ export const specialOfferConfig: AlertConfig = {
       |{' '}
       <a
         style={{color: 'black'}}
-        href={(window as any).reacg_global?.compare_plans_url || ''}
+        href={appendUtmMedium(
+          (window as any).reacg_global?.compare_plans_url || '',
+          utm_medium
+        )}
         target="_blank"
       >
         <strong>See all Features</strong>
@@ -280,20 +325,10 @@ export const specialOfferConfig: AlertConfig = {
     backgroundColor: '#8769ff',
     width: '100%',
     onClick: (utm_medium?: string) => {
-      let url =
+      const url =
         (window as any).reacg_global?.upgrade?.discount_url ||
         'https://regallery.team/#pricing';
-      if (utm_medium) {
-        const urlQueryStringSeperator: string = url.includes('?') ? '&' : '?';
-        utm_medium = urlQueryStringSeperator + 'utm_medium=' + utm_medium;
-        if (url.includes('#')) {
-          const [base, hash] = url.split('#');
-          url = base + utm_medium + '#' + hash;
-        } else {
-          url = url + utm_medium;
-        }
-      }
-      window.open(url, '_blank');
+      window.open(appendUtmMedium(url, utm_medium), '_blank');
     },
   },
 };
