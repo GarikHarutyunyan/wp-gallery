@@ -96,6 +96,14 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
             '--slider__slide-text-color': textColor,
             '--slider__slide-caption-color': captionFontColor,
             '--slider__slide-description-color': descriptionFontColor,
+            '--slider__slide-title-font-size': `${titleFontSize}vw`,
+            '--slider__slide-caption-font-size': `${captionFontSize}vw`,
+            '--slider__slide-description-font-size': `${descriptionFontSize}vw`,
+            '--slider__slide-description-max-rows': descriptionMaxRowsCount,
+            '--slider__slide-button-font-size': `${buttonFontSize}vw`,
+            '--slider__slide-button-color': buttonColor,
+            '--slider__slide-button-text-color': buttonTextColor,
+            '--slider__slide-text-alignment': titleAlignment,
             'fontFamily': textFontFamily,
             ...getTextVerticalPosition(textPosition),
           } as React.CSSProperties
@@ -104,35 +112,18 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
         <div
           data-swiper-parallax={isThumb ? undefined : '-30%'}
           className="slider__slide_text-wrapper"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 4,
-            flex: 1,
-            overflow: 'hidden',
-          }}
         >
           {/* TITLE + CAPTION */}
           {showTitle && (
             <p
               // data-swiper-parallax={isThumb ? undefined : '-30%'}
               className="slider__slide-title"
-              style={{
-                fontSize: `clamp(14px, ${titleFontSize}vw, 42px)`,
-                textAlign: titleAlignment,
-                margin: 0,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                fontWeight: 600,
-              }}
             >
               <span>{image?.[titleSource]}</span>
               {showCaption && image?.[captionSource] && (
                 <span
                   className="slider__slide-caption"
                   style={{
-                    fontSize: `clamp(12px, ${captionFontSize}vw, 22px)`,
                     marginLeft: 6,
                   }}
                 >
@@ -147,16 +138,6 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
             <p
               // data-swiper-parallax={isThumb ? undefined : '-30%'}
               className="slider__slide-description"
-              style={{
-                fontSize: `clamp(12px, ${descriptionFontSize}vw, 18px)`,
-                textAlign: titleAlignment,
-                lineHeight: '1.5',
-                margin: 0,
-                overflow: 'hidden',
-                display: '-webkit-box',
-                WebkitLineClamp: descriptionMaxRowsCount,
-                WebkitBoxOrient: 'vertical',
-              }}
             >
               <span>{image[descriptionSource]}</span>
             </p>
@@ -171,11 +152,6 @@ export const SlideText = forwardRef<HTMLDivElement, SlideTextProps>(
               }
               className={'slider__slide-button'}
               style={{
-                display: 'block',
-                backgroundColor: buttonColor,
-                color: buttonTextColor,
-                fontSize: `clamp(7px, ${buttonFontSize}vw, 16px)`,
-                textTransform: 'none',
                 marginLeft:
                   buttonAlignment === 'center'
                     ? 'auto'

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {ISliderSettings, SliderTextPosition} from 'data-structures';
-import {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import type {Swiper as SwiperType} from 'swiper';
 import 'swiper/css';
@@ -20,10 +20,9 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/parallax';
 import 'swiper/css/thumbs';
-
-import React from 'react';
 import {useObservedTextHeight} from './hooks/useObservedTextHeight';
 import './slider.css';
+
 import SliderMain from './SliderMain';
 import {SliderNavigation} from './SliderNavigation';
 import SliderThumbs from './SliderThumbs';
@@ -74,13 +73,10 @@ const Slider: React.FC<ISliderProps> = ({onClick}) => {
   const thumbsVertical = isThumbnailsVertical(thumbnailsPosition);
   const textRef = useRef<HTMLDivElement | null>(null);
   const hasThumbs = hasThumbnails(thumbnailsPosition);
-  const hasTextAbove =
-    (showTitle || showDescription || showCaption) &&
-    textPosition === SliderTextPosition.ABOVE;
+  const hasText = showTitle || showDescription || showCaption;
+  const hasTextAbove = hasText && textPosition === SliderTextPosition.ABOVE;
 
-  const hasTextBelow =
-    (showTitle || showDescription || showCaption) &&
-    textPosition === SliderTextPosition.BELOW;
+  const hasTextBelow = hasText && textPosition === SliderTextPosition.BELOW;
   const observedTextHeight = useObservedTextHeight(
     textRef,
     showTitle,

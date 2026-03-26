@@ -28,7 +28,6 @@ export const SliderSlideContent: FC<SliderSlideContentProps> = ({
   image,
   effect,
   settings,
-  textRef,
 }) => {
   const {
     slidesDesign,

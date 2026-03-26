@@ -107,7 +107,7 @@ const SliderMain: React.FC<SliderMainProps> = ({
       swiper && autoplay && hasThumbs && thumbsSwiper && !isSameDirection;
 
     if (!canStartAutoplay) return;
-    console.log('yeh');
+
     swiper.autoplay.start();
   }, [thumbsSwiper, autoplay, hasThumbs, thumbsVertical, direction]);
 
@@ -196,7 +196,6 @@ const SliderMain: React.FC<SliderMainProps> = ({
           : false
       }
       slidesPerView={1}
-      spaceBetween={0}
       parallax={true}
       thumbs={{swiper: thumbsSwiper}}
       pagination={
