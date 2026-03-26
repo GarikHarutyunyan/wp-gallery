@@ -1,13 +1,13 @@
 import clsx from 'clsx';
-import type {Swiper as SwiperType} from 'swiper';
-import {Swiper, SwiperSlide} from 'swiper/react';
+import type { Swiper as SwiperType } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import {
   IImageDTO,
   ISliderSettings,
   SliderPaginationType,
 } from 'data-structures';
-import {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Autoplay,
   Keyboard,
@@ -17,12 +17,12 @@ import {
   Parallax,
   Thumbs,
 } from 'swiper/modules';
-import {SliderNavigation} from './SliderNavigation';
-import {SliderPlayPause} from './SliderPlayPause';
-import {SliderSlideContent} from './SliderSlideContent';
-import {SlideText} from './SlideText';
-import {getLazyLoadNearbySlides} from './utils/getLazyLoadNearbySlides';
-import {getSwiperEffectOptions} from './utils/getSwiperEffects';
+import { SliderNavigation } from './SliderNavigation';
+import { SliderPlayPause } from './SliderPlayPause';
+import { SliderSlideContent } from './SliderSlideContent';
+import { SlideText } from './SlideText';
+import { getLazyLoadNearbySlides } from './utils/getLazyLoadNearbySlides';
+import { getSwiperEffectOptions } from './utils/getSwiperEffects';
 
 interface SliderMainProps {
   images: IImageDTO[];
@@ -107,7 +107,6 @@ const SliderMain: React.FC<SliderMainProps> = ({
       swiper && autoplay && hasThumbs && thumbsSwiper && !isSameDirection;
 
     if (!canStartAutoplay) return;
-
     swiper.autoplay.start();
   }, [thumbsSwiper, autoplay, hasThumbs, thumbsVertical, direction]);
 
