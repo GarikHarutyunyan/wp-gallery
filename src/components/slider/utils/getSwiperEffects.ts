@@ -1,4 +1,9 @@
-import {EffectCreative, EffectFade, EffectFlip} from 'swiper/modules';
+import {
+  EffectCoverflow,
+  EffectCreative,
+  EffectFade,
+  EffectFlip,
+} from 'swiper/modules';
 
 export const getSwiperEffectOptions = (
   animation: string,
@@ -84,6 +89,19 @@ export const getSwiperEffectOptions = (
             },
             scale: 1,
             limitProgress: 2, // allow zoom beyond 1
+          },
+        },
+      };
+    case 'coverflow':
+      return {
+        effect: 'coverflow',
+        modules: [EffectCoverflow],
+        effectOptions: {
+          coverflowEffect: {
+            rotate: 0,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
           },
         },
       };

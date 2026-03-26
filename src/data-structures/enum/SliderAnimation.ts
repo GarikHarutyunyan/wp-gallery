@@ -4,9 +4,8 @@ export enum SliderAnimation {
   FLIP = 'flip',
   ROTATE = 'rotate',
   ZOOM = 'zoom',
-  //   ZOOM = 'zoom',
   CREATIVE = 'creative',
-  //   ROTATE = 'rotate',
+  COVERFLOW = 'coverflow',
 }
 
 export const SliderAnimationOptions = [
@@ -15,6 +14,7 @@ export const SliderAnimationOptions = [
   {value: SliderAnimation.SLIDE, title: 'Slide'},
   {value: SliderAnimation.ROTATE, title: 'Rotate'},
   {value: SliderAnimation.ZOOM, title: 'Zoom'},
+  {value: SliderAnimation.COVERFLOW, title: 'Coverflow'},
   //   {value: SliderAnimation.BLUR, title: 'Blur'},
   //   {value: SliderAnimation.SLIDEV, title: 'Slide Vertical'},
   //   {value: SliderAnimation.ZOOM, title: 'Zoom'},
