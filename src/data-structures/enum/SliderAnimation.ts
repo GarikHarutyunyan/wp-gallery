@@ -15,9 +15,5 @@ export const SliderAnimationOptions = [
   {value: SliderAnimation.ROTATE, title: 'Rotate'},
   {value: SliderAnimation.ZOOM, title: 'Zoom'},
   {value: SliderAnimation.COVERFLOW, title: 'Coverflow'},
-  //   {value: SliderAnimation.BLUR, title: 'Blur'},
-  //   {value: SliderAnimation.SLIDEV, title: 'Slide Vertical'},
-  //   {value: SliderAnimation.ZOOM, title: 'Zoom'},
-
   {value: SliderAnimation.CREATIVE, title: 'Creative'},
 ];
