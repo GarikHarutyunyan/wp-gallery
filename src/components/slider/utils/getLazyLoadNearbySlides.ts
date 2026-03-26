@@ -1,5 +1,5 @@
 import {IImageDTO} from 'data-structures';
-
+import {getLargestSrcItem, getSrcSetString} from 'utils/imageSrcSet';
 export const getLazyLoadNearbySlides = (swiper: any, images: IImageDTO[]) => {
   if (!images?.length) return;
 
@@ -22,11 +22,11 @@ export const getLazyLoadNearbySlides = (swiper: any, images: IImageDTO[]) => {
 
     const img = slide.querySelector('img') as HTMLImageElement | null;
     if (img && !img.src) {
-      img.src = image.original.url;
-      img.srcset =
-        `${image.thumbnail.url} ${image.thumbnail.width}w, ` +
-        `${image.medium_large.url} ${image.medium_large.width}w, ` +
-        `${image.original.url} ${image.original.width}w`;
+      const largest = getLargestSrcItem(image.sizes);
+      const srcSet = getSrcSetString(image.sizes);
+
+      img.src = largest.src;
+      img.srcset = srcSet;
     }
   });
 };

@@ -7,6 +7,11 @@ import {
   SliderTextPosition,
 } from 'data-structures';
 import {FC, RefObject, useState} from 'react';
+import {
+  getLargestSrcItem,
+  getSrcSetString,
+  ISrcSetItem,
+} from 'utils/imageSrcSet';
 import {clsx} from 'yet-another-react-lightbox';
 import {SlideText} from './SlideText';
 interface SliderSlideContentProps {
@@ -19,7 +24,6 @@ interface SliderSlideContentProps {
   settings: ISliderSettings;
   textRef?: RefObject<HTMLDivElement>;
 }
-
 export const SliderSlideContent: FC<SliderSlideContentProps> = ({
   width,
   widthType,
@@ -43,6 +47,8 @@ export const SliderSlideContent: FC<SliderSlideContentProps> = ({
     textPosition,
   } = settings;
   const [loaded, setLoaded] = useState<boolean>(false);
+  const srcSetString: string = getSrcSetString(image.sizes);
+  const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
   const shouldLoadImage = index === 0 || index === prevIndex || index === 1;
   const isFitCreative =
     (slidesDesign === SliderSlidesDesign.FIT ||
@@ -72,7 +78,7 @@ export const SliderSlideContent: FC<SliderSlideContentProps> = ({
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: `url(${image.original.url})`,
+            backgroundImage: `url(${largestSrcItem.src})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
@@ -84,13 +90,9 @@ export const SliderSlideContent: FC<SliderSlideContentProps> = ({
       )}
 
       <img
-        src={shouldLoadImage ? image.original.url : undefined}
+        src={shouldLoadImage ? largestSrcItem.src : undefined}
         alt={image.alt}
-        srcSet={
-          shouldLoadImage
-            ? `${image.thumbnail.url} ${image.thumbnail.width}w, ${image.medium_large.url} ${image.medium_large.width}w, ${image.original.url} ${image.original.width}w`
-            : undefined
-        }
+        srcSet={shouldLoadImage ? srcSetString : undefined}
         sizes={`${width}${widthType === '%' ? 'vw' : widthType}`}
         loading={'eager'}
         data-index={index}
