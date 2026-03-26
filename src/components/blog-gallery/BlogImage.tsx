@@ -1,8 +1,13 @@
 import clsx from 'clsx';
 import ReImage from 'core-components/re-image/ReImage';
 import ReVideo from 'core-components/re-video/ReVideo';
-import {ImageType} from 'data-structures';
+import {ImageType, SizeTypeWidth} from 'data-structures';
 import React from 'react';
+import {
+  getLargestSrcItem,
+  getSrcSetString,
+  ISrcSetItem,
+} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
 
 const BlogImage = ({
@@ -19,6 +24,16 @@ const BlogImage = ({
   showVideoCover,
 }: any) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const isMobile = containerInnerWidth >= 1 && containerInnerWidth <= 720;
+  const imageWidthStyle = isMobile ? '100%' : `${imageWidth}${imageWidthType}`;
+
+  const isPercentWidth = imageWidthType === SizeTypeWidth.PERCENT;
+  const containerWidthPx = `${containerInnerWidth}px`;
+  const computedImageWidth = isPercentWidth
+    ? `${(containerInnerWidth * imageWidth) / 100}px`
+    : `${imageWidth}${imageWidthType}`;
+
+  const imageSizes = isMobile ? containerWidthPx : computedImageWidth;
 
   const settings: any = {
     containerInnerWidth,
@@ -30,6 +45,8 @@ const BlogImage = ({
     hoverEffect,
     showVideoCover,
   };
+  const srcSetString: string = getSrcSetString(image.sizes);
+  const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
 
   return (
     <div
@@ -43,11 +60,7 @@ const BlogImage = ({
           : 'blog-gallery__image_non_clickable'
       )}
       style={{
-        width: `${
-          containerInnerWidth >= 1 && containerInnerWidth <= 720
-            ? '100%'
-            : `${imageWidth}${imageWidthType}`
-        }`,
+        width: imageWidthStyle,
         borderRadius: `${imageRadius}%`,
         height: `${imageHeight}${imageHeightType}`,
       }}
@@ -55,12 +68,9 @@ const BlogImage = ({
       {image.type === ImageType.IMAGE && (
         <ReImage
           wrapperRef={wrapperRef}
-          src={image.thumbnail.url}
-          srcSet={`${image.thumbnail.url} ${image.thumbnail.width}w, 
-                  ${image.medium_large.url} ${image.medium_large.width}w, 
-                  ${image.large.url} ${image.large.width}w, 
-                  ${image.original.url} ${image.original.width}w`}
-          sizes={`${containerInnerWidth}px`}
+          src={largestSrcItem.src}
+          srcSet={srcSetString}
+          sizes={imageSizes}
           alt={image.alt}
         />
       )}
@@ -70,13 +80,11 @@ const BlogImage = ({
           item={image}
           settings={settings}
           coverImageProps={{
-            src: image.thumbnail.url,
-            srcSet: `${image.thumbnail.url} ${image.thumbnail.width}w, 
-                  ${image.medium_large.url} ${image.medium_large.width}w, 
-                  ${image.large.url} ${image.large.width}w`,
+            src: largestSrcItem.src,
+            srcSet: srcSetString,
             alt: image.alt,
             loading: 'eager',
-            sizes: `${containerInnerWidth}px`,
+            sizes: imageSizes,
           }}
         />
       )}

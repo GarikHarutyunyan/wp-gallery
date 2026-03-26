@@ -2,12 +2,7 @@ import ImageList from '@mui/material/ImageList';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {useAppInfo} from 'contexts';
-import {
-  ActionURLSource,
-  IImageDTO,
-  IThumbnailSettings,
-  ImageType,
-} from 'data-structures';
+import {ActionURLSource, IThumbnailSettings} from 'data-structures';
 import React, {
   useCallback,
   useEffect,
@@ -83,8 +78,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   const elementRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [imageRatio, setImageRatio] = useState(1);
-  const [imageWidth, setImageWidth] = useState(0);
-  const [imageHeight, setImageHeight] = useState(0);
 
   // Get the width of the nearest gallery wrapper related to this instance
   const getWrapperWidth = (): number => {
@@ -95,6 +88,13 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     // Fallback to the current element's bounding box if wrapper not found
     return el?.getBoundingClientRect().width || 0;
   };
+
+  const currentWidth = getWrapperWidth();
+
+  const defaultWidth = fillContainer ? currentWidth / columns : width;
+  const [imageWidth, setImageWidth] = useState(defaultWidth);
+  const defaultHeight = fillContainer ? imageWidth / imageRatio : height;
+  const [imageHeight, setImageHeight] = useState(defaultHeight);
 
   useEffect(() => {
     if (fillContainer) {
@@ -180,30 +180,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     changeContainerWidth();
   }, [imageWidth, getWidth, gap, columns, padding, validColumnsCount]);
 
-  const getImageSource = (image: IImageDTO) => {
-    if (
-      imageWidth <= image.thumbnail.width &&
-      imageHeight <= image.thumbnail.height
-    ) {
-      return `${image.thumbnail.url}`;
-    }
-    if (
-      imageWidth <= image.medium_large.width &&
-      imageHeight <= image.medium_large.height
-    ) {
-      return `${image.medium_large.url}`;
-    }
-
-    if (
-      (imageWidth <= image.large.width && imageHeight <= image.large.height) ||
-      image.type === ImageType.VIDEO
-    ) {
-      return `${image.large.url}`;
-    }
-
-    return `${image.original.url}`;
-  };
-
   const listRef = useRef<HTMLUListElement | null>(null);
   const onImageClick = useCallback(
     (index: number) => (onClick ? () => onClick(index) : undefined),
@@ -246,7 +222,6 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
               width={getWidth}
               height={getHeight}
               onClick={onImageClick(index)}
-              getImageSource={getImageSource}
               showTitle={showTitle}
               titleSource={titleSource}
               titlePosition={titlePosition}
