@@ -64,6 +64,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     isInfinite,
     padding,
     paddingType,
+    spaceBetween,
     isSliderAllowed,
     autoplay,
     slideDuration,
@@ -311,6 +312,15 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                     />
                   </div>
                 </div>
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'spaceBetween'}
+                  name={'Space between'}
+                  value={spaceBetween}
+                  onChange={onInputValueChange}
+                  min={0}
+                />
               </Filter>
               <Filter isLoading={isLoading}>
                 <ColorControl

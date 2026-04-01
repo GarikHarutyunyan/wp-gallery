@@ -576,6 +576,7 @@ const sliderMockSettings: ISliderSettings = {
   isInfinite: false,
   padding: 15,
   paddingType: PaddingType.PIXEL,
+  spaceBetween: 0,
   autoplay: false,
   slideDuration: 300,
   slideDelay: 3000,

@@ -437,6 +437,7 @@ export interface ISliderSettings {
   widthType: SizeTypeWidth;
   padding: number;
   paddingType: PaddingType;
+  spaceBetween: number;
   autoplay: boolean;
   isInfinite: boolean;
   slideDuration: number;
