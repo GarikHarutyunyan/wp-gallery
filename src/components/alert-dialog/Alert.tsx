@@ -9,6 +9,7 @@ interface IAlertProps {
 const Alert = ({config}: IAlertProps) => {
   const {
     image,
+    title,
     description,
     additionalText,
     errorMessage,
@@ -19,6 +20,14 @@ const Alert = ({config}: IAlertProps) => {
 
   const handleClick = (utm_medium?: string) => {
     onClick(utm_medium);
+  };
+
+  const renderAdditionalText = () => {
+    if (typeof additionalText === 'function') {
+      return additionalText(utm_medium);
+    }
+
+    return additionalText;
   };
 
   const renderErrorMessage = () => {
@@ -61,6 +70,23 @@ const Alert = ({config}: IAlertProps) => {
     <Box className={'alert'}>
       <Box sx={{display: 'flex', justifyContent: 'center'}}>{image}</Box>
       {renderErrorMessage()}
+      {title && (
+        <Typography
+          variant={'h6'}
+          component={'div'}
+          sx={{
+            color: 'black',
+            fontWeight: 600,
+            fontSize: '1.2rem',
+            lineHeight: 1.4,
+            textAlign: 'center',
+            padding: '20px 8px 0',
+            fontFamily: 'inherit',
+          }}
+        >
+          {title}
+        </Typography>
+      )}
       <Typography
         variant={'h6'}
         component={'div'}
@@ -73,7 +99,7 @@ const Alert = ({config}: IAlertProps) => {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'left',
-          padding: '25px 8px',
+          padding: title ? '12px 8px 25px' : '25px 8px',
           fontFamily: 'inherit',
           whiteSpace: 'pre-line',
         }}
@@ -99,7 +125,7 @@ const Alert = ({config}: IAlertProps) => {
           {label}
         </Button>
       </Box>
-      <div>{additionalText}</div>
+      <div>{renderAdditionalText()}</div>
     </Box>
   );
 };
