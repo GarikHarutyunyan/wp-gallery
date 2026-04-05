@@ -292,7 +292,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
         sources: [
           {
             src: image.original.url,
-            type: `video/${image.original.url.split('.').pop()}`,
+            type: ``,
           },
         ],
         poster: largestSrcItem.src,

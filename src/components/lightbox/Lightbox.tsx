@@ -501,7 +501,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         sources: [
           {
             src: image.original.url,
-            type: `video/${image.original.url.split('.').pop()}`,
+            type: ``,
           },
         ],
         poster: largestSrcItem.src,
