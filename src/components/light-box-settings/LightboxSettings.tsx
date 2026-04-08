@@ -188,7 +188,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'isSlideshowAllowed'}
-                    name={'Play / Pause'}
+                    name={'Play / Pause button'}
                     value={isSlideshowAllowed}
                     onChange={onInputValueChange}
                   />
@@ -197,7 +197,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'isFullscreenAllowed'}
-                    name={'Fullscreen'}
+                    name={'Fullscreen button'}
                     value={isFullscreenAllowed}
                     onChange={onInputValueChange}
                   />
@@ -205,7 +205,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'canShare'}
-                    name={'Share'}
+                    name={'Share button'}
                     pro={true}
                     value={canShare}
                     onChange={
@@ -221,7 +221,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'canDownload'}
-                    name={'Download'}
+                    name={'Download button'}
                     pro={true}
                     value={canDownload}
                     onChange={
@@ -237,7 +237,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'canZoom'}
-                    name={'Zoom'}
+                    name={'Zoom button'}
                     value={canZoom}
                     onChange={onInputValueChange}
                   />
