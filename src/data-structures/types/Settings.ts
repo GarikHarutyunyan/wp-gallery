@@ -140,7 +140,7 @@ export interface ISlideshowSettings {
   canShare: boolean;
   canDownload: boolean;
   canZoom: boolean;
-  isFullscreenAllowed: boolean;
+  canFullscreen: boolean;
   imageAnimation: LightboxImageAnimation;
   backgroundColor: string;
   textPosition: LightboxTextPosition;

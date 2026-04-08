@@ -54,7 +54,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
     autoplay,
     slideDuration,
     imageAnimation,
-    isFullscreenAllowed,
+    canFullscreen,
     thumbnailsPosition,
     thumbnailWidth,
     thumbnailHeight,
@@ -196,9 +196,9 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
 
                 <Filter isLoading={isLoading}>
                   <SwitchControl
-                    id={'isFullscreenAllowed'}
+                    id={'canFullscreen'}
                     name={'Fullscreen button'}
-                    value={isFullscreenAllowed}
+                    value={canFullscreen}
                     onChange={onInputValueChange}
                   />
                 </Filter>

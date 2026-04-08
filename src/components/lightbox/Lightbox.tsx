@@ -181,7 +181,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     autoplay,
     slideDuration,
     imageAnimation,
-    isFullscreenAllowed,
+    canFullscreen,
     thumbnailsPosition,
     thumbnailWidth,
     thumbnailHeight,
@@ -250,7 +250,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     if (isSlideshowAllowed || autoplay) {
       newPlugins.push(Slideshow as any);
     }
-    if (isFullscreenAllowed) {
+    if (canFullscreen) {
       newPlugins.push(Fullscreen as any);
     }
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
@@ -268,7 +268,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     canZoom,
     isSlideshowAllowed,
     autoplay,
-    isFullscreenAllowed,
+    canFullscreen,
     thumbnailsPosition,
     textPosition,
     showTitle,

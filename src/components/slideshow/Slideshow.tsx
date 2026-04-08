@@ -1,10 +1,10 @@
 import Box from '@mui/material/Box';
 import clsx from 'clsx';
-import { useData } from 'components/data-context/useData';
-import { getSlideMargins } from 'components/lightbox/CommonFunctions/getSlideMargins';
-import { Captions } from 'components/lightbox/CustomCaptions/Captions';
-import { useSettings } from 'components/settings';
-import { ActionButton } from 'core-components/action-button';
+import {useData} from 'components/data-context/useData';
+import {getSlideMargins} from 'components/lightbox/CommonFunctions/getSlideMargins';
+import {Captions} from 'components/lightbox/CustomCaptions/Captions';
+import {useSettings} from 'components/settings';
+import {ActionButton} from 'core-components/action-button';
 import {
   ActionURLSource,
   IImageDTO,
@@ -13,16 +13,16 @@ import {
   LightboxTextPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
-import React, { ReactElement, useEffect, useMemo, useState } from 'react';
-import { getLargestSrcItem, getSrcSet, ISrcSetItem } from 'utils/imageSrcSet';
-import { Watermark } from 'utils/renderWatermark';
-import Lightbox, { SlideshowRef } from 'yet-another-react-lightbox';
+import React, {ReactElement, useEffect, useMemo, useState} from 'react';
+import {getLargestSrcItem, getSrcSet, ISrcSetItem} from 'utils/imageSrcSet';
+import {Watermark} from 'utils/renderWatermark';
+import Lightbox, {SlideshowRef} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Inline from 'yet-another-react-lightbox/plugins/inline';
 import YARLSlideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 
-import { useAppInfo } from 'contexts/AppInfoContext';
+import {useAppInfo} from 'contexts/AppInfoContext';
 import Counter from 'yet-another-react-lightbox/plugins/counter';
 import 'yet-another-react-lightbox/plugins/counter.css';
 import Download from 'yet-another-react-lightbox/plugins/download';
@@ -50,7 +50,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     canShare,
     canDownload,
     canZoom,
-    isFullscreenAllowed,
+    canFullscreen,
     isSlideshowAllowed,
     autoplay,
     slideDuration,
@@ -132,7 +132,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     if (canZoom) {
       newPlugins.push(Zoom as any);
     }
-    if (isFullscreenAllowed) {
+    if (canFullscreen) {
       newPlugins.push(Fullscreen as any);
     }
     if (isSlideshowAllowed || autoplay) {
@@ -151,7 +151,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     canShare,
     canDownload,
     canZoom,
-    isFullscreenAllowed,
+    canFullscreen,
     isSlideshowAllowed,
     autoplay,
     thumbnailsPosition,
@@ -544,7 +544,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
               canShare ||
               canDownload ||
               canZoom ||
-              isFullscreenAllowed
+              canFullscreen
             ),
             'reacg-slideshow-texts':
               showTitle || showCaption || showDescription || showButton,
@@ -627,5 +627,5 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   );
 };
 
-export { Slideshow };
+export {Slideshow};
 export default Slideshow;

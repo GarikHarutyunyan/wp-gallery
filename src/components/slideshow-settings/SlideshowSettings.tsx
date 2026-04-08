@@ -49,7 +49,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
     canShare,
     canDownload,
     canZoom,
-    isFullscreenAllowed,
+    canFullscreen,
     isSlideshowAllowed,
     autoplay,
     slideDuration,
@@ -200,9 +200,9 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
               </Filter>
               <Filter isLoading={isLoading}>
                 <SwitchControl
-                  id={'isFullscreenAllowed'}
+                  id={'canFullscreen'}
                   name={'Fullscreen button'}
-                  value={isFullscreenAllowed}
+                  value={canFullscreen}
                   pro={true}
                   onChange={
                     isPro
