@@ -1,10 +1,10 @@
 import Box from '@mui/material/Box';
 import clsx from 'clsx';
-import {useData} from 'components/data-context/useData';
-import {getSlideMargins} from 'components/lightbox/CommonFunctions/getSlideMargins';
-import {Captions} from 'components/lightbox/CustomCaptions/Captions';
-import {useSettings} from 'components/settings';
-import {ActionButton} from 'core-components/action-button';
+import { useData } from 'components/data-context/useData';
+import { getSlideMargins } from 'components/lightbox/CommonFunctions/getSlideMargins';
+import { Captions } from 'components/lightbox/CustomCaptions/Captions';
+import { useSettings } from 'components/settings';
+import { ActionButton } from 'core-components/action-button';
 import {
   ActionURLSource,
   IImageDTO,
@@ -13,17 +13,24 @@ import {
   LightboxTextPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
-import React, {ReactElement, useEffect, useMemo, useState} from 'react';
-import {getLargestSrcItem, getSrcSet, ISrcSetItem} from 'utils/imageSrcSet';
-import {Watermark} from 'utils/renderWatermark';
-import Lightbox, {SlideshowRef} from 'yet-another-react-lightbox';
+import React, { ReactElement, useEffect, useMemo, useState } from 'react';
+import { getLargestSrcItem, getSrcSet, ISrcSetItem } from 'utils/imageSrcSet';
+import { Watermark } from 'utils/renderWatermark';
+import Lightbox, { SlideshowRef } from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Inline from 'yet-another-react-lightbox/plugins/inline';
 import YARLSlideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 
+import { useAppInfo } from 'contexts/AppInfoContext';
+import Counter from 'yet-another-react-lightbox/plugins/counter';
+import 'yet-another-react-lightbox/plugins/counter.css';
+import Download from 'yet-another-react-lightbox/plugins/download';
+import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
+import Share from 'yet-another-react-lightbox/plugins/share';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Video from 'yet-another-react-lightbox/plugins/video';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
 import './slideshow.css';
 
@@ -39,6 +46,11 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     height,
     isInfinite,
     padding,
+    showCounter,
+    canShare,
+    canDownload,
+    canZoom,
+    isFullscreenAllowed,
     isSlideshowAllowed,
     autoplay,
     slideDuration,
@@ -89,6 +101,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const [index, setIndex] = useState(0);
   const [buttonContainerHeight, setButtonContainerHeight] = useState<number>(0);
+  const {galleryId} = useAppInfo();
 
   const slideshowRef = React.useRef<SlideshowRef>(null);
 
@@ -107,6 +120,21 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
 
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Inline, Video];
+    if (showCounter) {
+      newPlugins.push(Counter as any);
+    }
+    if (canShare) {
+      newPlugins.push(Share as any);
+    }
+    if (canDownload) {
+      newPlugins.push(Download as any);
+    }
+    if (canZoom) {
+      newPlugins.push(Zoom as any);
+    }
+    if (isFullscreenAllowed) {
+      newPlugins.push(Fullscreen as any);
+    }
     if (isSlideshowAllowed || autoplay) {
       newPlugins.push(YARLSlideshow as any);
     }
@@ -119,6 +147,11 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
 
     return newPlugins;
   }, [
+    showCounter,
+    canShare,
+    canDownload,
+    canZoom,
+    isFullscreenAllowed,
     isSlideshowAllowed,
     autoplay,
     thumbnailsPosition,
@@ -204,6 +237,12 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     buttonBorderSize,
     buttonBorderRadius,
   ]);
+
+  const deepLink = () => {
+    const url = new URL(window.location.href);
+
+    return url.toString();
+  };
 
   const slides = useMemo(() => {
     return images?.map((image: IImageDTO) => {
@@ -297,8 +336,14 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
         ],
         poster: largestSrcItem.src,
         src: largestSrcItem.src,
+        share: {
+          url: deepLink(),
+          title: image.title,
+          text: image.description,
+        },
         alt: image.alt,
         srcSet: srcSet,
+        download: {url: image.original.url, filename: image.title},
       };
     });
   }, [
@@ -495,7 +540,12 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           'reacg-slideshow',
           'reacg-slideshow-animation-' + imageAnimation,
           {
-            // 'reacg-slideshow-control-buttons_hidden': !areControlButtonsShown,
+            'reacg-slideshow-control-buttons_play-button-centered': !(
+              canShare ||
+              canDownload ||
+              canZoom ||
+              isFullscreenAllowed
+            ),
             'reacg-slideshow-texts':
               showTitle || showCaption || showDescription || showButton,
             'reacg-slideshow-texts_top': [
@@ -577,5 +627,5 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   );
 };
 
-export {Slideshow};
+export { Slideshow };
 export default Slideshow;

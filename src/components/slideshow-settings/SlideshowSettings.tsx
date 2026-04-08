@@ -41,12 +41,15 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
   const {slideshowSettings: value, changeSlideshowSettings: onChange} =
     useSettings();
   const {
-    // isFullscreen,
     width,
     height,
-    // areControlButtonsShown,
     isInfinite,
     padding,
+    showCounter,
+    canShare,
+    canDownload,
+    canZoom,
+    isFullscreenAllowed,
     isSlideshowAllowed,
     autoplay,
     slideDuration,
@@ -182,7 +185,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
               <Filter isLoading={isLoading}>
                 <SwitchControl
                   id={'isSlideshowAllowed'}
-                  name={'Play / Pause'}
+                  name={'Play / Pause button'}
                   value={isSlideshowAllowed}
                   onChange={onInputValueChange}
                 />
@@ -193,6 +196,86 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                   name={'Loop'}
                   value={isInfinite}
                   onChange={onInputValueChange}
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'isFullscreenAllowed'}
+                  name={'Fullscreen button'}
+                  value={isFullscreenAllowed}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'lightbox_download',
+                          })
+                  }
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'canShare'}
+                  name={'Share button'}
+                  value={canShare}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'lightbox_download',
+                          })
+                  }
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'canDownload'}
+                  name={'Download button'}
+                  value={canDownload}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'lightbox_download',
+                          })
+                  }
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'canZoom'}
+                  name={'Zoom button'}
+                  value={canZoom}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'lightbox_download',
+                          })
+                  }
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'showCounter'}
+                  name={'Counter'}
+                  pro={true}
+                  value={showCounter}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'lightbox_counter',
+                          })
+                  }
                 />
               </Filter>
               <Filter isLoading={isLoading}>

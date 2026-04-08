@@ -136,6 +136,11 @@ export interface ISlideshowSettings {
   autoplay: boolean;
   isInfinite: boolean;
   slideDuration: number;
+  showCounter: boolean;
+  canShare: boolean;
+  canDownload: boolean;
+  canZoom: boolean;
+  isFullscreenAllowed: boolean;
   imageAnimation: LightboxImageAnimation;
   backgroundColor: string;
   textPosition: LightboxTextPosition;
@@ -179,13 +184,8 @@ export interface ISlideshowSettings {
 }
 
 export interface ILightboxSettings extends ISlideshowSettings {
-  isFullscreen: boolean;
   areControlButtonsShown: boolean;
-  showCounter: boolean;
-  canShare: boolean;
-  canDownload: boolean;
-  canZoom: boolean;
-  isFullscreenAllowed: boolean;
+  isFullscreen: boolean;
 }
 
 export interface IGeneralSettings {
