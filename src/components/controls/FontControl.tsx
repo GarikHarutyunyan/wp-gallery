@@ -1,11 +1,13 @@
 import {MenuItem, TextField} from '@mui/material';
 import {GoogleFontsContext} from 'contexts/GoogleFontsContext';
-import React, {useContext} from 'react';
+import React, {ReactNode, useContext} from 'react';
+import {LabelWithTooltip} from "./LabelWithTooltip";
 
 interface IFontControlProps {
   id?: string;
   name: string;
   value: string;
+  tooltip?: ReactNode;
   onChange: any;
   isDisabled?: boolean;
 }
@@ -14,6 +16,7 @@ const FontControl: React.FC<IFontControlProps> = ({
   id,
   name,
   value,
+  tooltip,
   onChange,
   isDisabled,
 }) => {
@@ -27,7 +30,7 @@ const FontControl: React.FC<IFontControlProps> = ({
     <TextField
       select
       fullWidth
-      label={name}
+      label={<LabelWithTooltip label={name} tooltip={tooltip} />}
       variant="standard"
       margin="none"
       value={value}

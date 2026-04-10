@@ -1,9 +1,9 @@
-import {ISettingsDTO} from 'data-structures';
+import { ISettingsDTO } from 'data-structures';
 
 export interface ITemplate extends Partial<ISettingsDTO> {
-  template_id: string;
+  template_id: number;
   title: string;
-  template: boolean;
+  templateType: string;
 }
 
 export interface ITemplateReference {
@@ -12,4 +12,7 @@ export interface ITemplateReference {
   paid: boolean;
   preview_url?: string;
   youtube_link?: string;
+  thumbnail?: string;
+  categories?: string[];
+  type?: string;
 }

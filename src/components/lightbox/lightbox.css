@@ -1,6 +1,6 @@
 .react-lightbox__background {
   position: fixed;
-  width: 100vw;/* or 100% + padding(which is added to the <body> to compensate for the missing scrollbar to avoid layout shift.) */
+  width: 100vw; /* or 100% + padding(which is added to the <body> to compensate for the missing scrollbar to avoid layout shift.) */
   height: 100%;
   top: 0;
   left: 0;
@@ -12,25 +12,16 @@
   z-index: 1;
 }
 
-.reacg-slideshow .yarl__toolbar {
-  z-index: 1;
-  top: auto;
-  right: auto;
-  visibility: hidden;
+.reacg-lightbox .yarl__counter {
+  font-size: 16px;
 }
 
-.reacg-slideshow:hover .yarl__toolbar {
-  visibility: unset;
+html.react-lightbox--no-scroll {
+  height: auto;
 }
-
-.reacg-slideshow .yarl__icon {
-  width: 50px;
-  height: 50px;
-  visibility: hidden;
-}
-
-.reacg-slideshow:hover .yarl__icon {
-  visibility: unset;
+.react-lightbox--no-scroll {
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 .reacg-lightbox-control-buttons_hidden
@@ -40,8 +31,10 @@
 }
 
 .yarl__slide_captions_container {
-  padding-left: 18px;
-  padding-right: 18px;
+  padding: 0;
+}
+.yarl__slide_captions_container .yarl__slide_description {
+  padding: 10px 18px;
 }
 
 .reacg-lightbox-texts_top {
@@ -56,12 +49,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 600;
+  line-height: 1.5;
 }
 
 .reacg-lightbox-texts__description {
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.5;
 }
 
 /* Fade */
@@ -150,11 +145,11 @@
   object-fit: cover;
 }
 
-.reacg-lightbox button,
-.reacg-lightbox button:hover,
-.reacg-lightbox button:focus,
-.reacg-lightbox button:active,
-.reacg-lightbox button:visited {
+.reacg-lightbox button:not(.reacg-action-button),
+.reacg-lightbox button:not(.reacg-action-button):hover,
+.reacg-lightbox button:not(.reacg-action-button):focus,
+.reacg-lightbox button:not(.reacg-action-button):active,
+.reacg-lightbox button:not(.reacg-action-button):visited {
   background: none !important;
   box-shadow: none !important;
   outline: none !important;
@@ -181,10 +176,27 @@
   padding: 0 !important;
 }
 
-.reacg-lightbox button:not(.yarl__thumbnails_thumbnail),
-.reacg-lightbox button:not(.yarl__thumbnails_thumbnail):hover,
-.reacg-lightbox button:not(.yarl__thumbnails_thumbnail):focus,
-.reacg-lightbox button:not(.yarl__thumbnails_thumbnail):active,
-.reacg-lightbox button:not(.yarl__thumbnails_thumbnail):visited {
+.reacg-lightbox
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button),
+.reacg-lightbox
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):hover,
+.reacg-lightbox
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):focus,
+.reacg-lightbox
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):active,
+.reacg-lightbox
+  button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):visited {
   width: unset;
+}
+
+.reacg-lightbox-texts__button {
+  margin-top: 10px;
+}
+.reacg-lightbox
+  .yarl__slide:not(.yarl__slide_current)
+  .react-watermark-overlay {
+  opacity: 0 !important;
+}
+.reacg-lightbox.reacg-invert-captions .yarl__slide_captions_container {
+  mix-blend-mode: difference;
 }

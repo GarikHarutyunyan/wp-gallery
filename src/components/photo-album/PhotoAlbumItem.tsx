@@ -1,27 +1,20 @@
 import {ImageListItemBar} from '@mui/material';
 import clsx from 'clsx';
+import {ActionButton} from 'core-components/action-button';
 import ReImage from 'core-components/re-image/ReImage';
+import ReVideo from 'core-components/re-video/ReVideo';
 import {
+  ActionURLSource,
   IImageDTO,
   IMasonrySettings,
   ImageType,
+  TitleAlignment,
   TitlePosition,
   TitleVisibility,
 } from 'data-structures';
 import React, {CSSProperties, ReactNode, useRef} from 'react';
-import {createIcon} from 'yet-another-react-lightbox';
+import {Watermark} from 'utils/renderWatermark';
 import './photo-album.css';
-
-const VideoThumbnailIcon = createIcon(
-  'VideoThumbnail',
-  <path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-);
-
-const getThumbnailIconSize = (width: number, height: number) => {
-  const size: number = Math.min(width, height, 55) - 10;
-
-  return size > 0 ? `${size}px` : '0px';
-};
 
 interface IPhotoAlbumItemProps extends React.PropsWithChildren {
   image: IImageDTO;
@@ -47,62 +40,274 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
     padding,
     paddingColor,
     borderRadius,
+    titleSource,
     titleVisibility,
+    captionVisibility,
     titleAlignment,
     titlePosition,
+    captionPosition,
     titleColor,
     titleFontFamily,
     titleFontSize,
+    overlayTextBackground,
+    invertTextColor,
     hoverEffect,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
+    showTitle,
+    showButton,
+    buttonText,
+    buttonVisibility,
+    buttonPosition,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
   } = settings;
   const imageBorderRadius =
     padding < borderRadius / 2 ? borderRadius - padding : borderRadius / 2;
 
-  const renderTitle = (): ReactNode => {
-    return image ? (
+  const renderTitle = (image: IImageDTO): ReactNode => {
+    const paddingTitle =
+      titlePosition !== TitlePosition.CENTER
+        ? imageBorderRadius / 2 + 'px'
+        : '0';
+
+    return (
       <div
         className={clsx('photo-album-item__title', {
           'photo-album-item__title_on-hover':
-            titleVisibility === TitleVisibility.ON_HOVER,
-          'photo-album-item__title_hidden':
-            titleVisibility === TitleVisibility.NONE,
+            showTitle && titleVisibility === TitleVisibility.ON_HOVER,
+          'photo-album-item__title_hidden': !showTitle,
+          'reacg-gallery__text-background-top-gradient':
+            overlayTextBackground === '' && titlePosition === TitlePosition.TOP,
+          'reacg-gallery__text-background-bottom-gradient':
+            overlayTextBackground === '' &&
+            titlePosition === TitlePosition.BOTTOM,
+          'reacg-gallery__text-background-center-gradient':
+            overlayTextBackground === '' &&
+            titlePosition === TitlePosition.CENTER,
         })}
-        key={image.id}
       >
         <ImageListItemBar
           sx={{
-            '& .MuiImageListItemBar-title,.MuiImageListItemBar-subtitle': {
+            '& .MuiImageListItemBar-title': {
               fontSize: `${titleFontSize}px`,
               fontFamily: titleFontFamily,
+              lineHeight: 'normal',
+            },
+            '& .MuiImageListItemBar-subtitle': {
+              fontSize: `${captionFontSize}px`,
+              fontFamily: titleFontFamily,
+              color: captionFontColor,
               lineHeight: 'normal',
             },
           }}
           style={{
             textAlign: titleAlignment,
+            paddingLeft: paddingTitle,
+            paddingRight: paddingTitle,
             color: titleColor,
+            backgroundColor:
+              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
+            mixBlendMode: invertTextColor ? 'difference' : 'initial',
           }}
-          className={clsx({
-            'photo-album-item__title-content_center':
-              titlePosition === TitlePosition.CENTER,
-          })}
-          title={<span>{image.title || <br />}</span>}
+          className={`photo-album-item__title-content_${titlePosition}`}
+          title={showTitle && <span>{image?.[titleSource] || <br />}</span>}
           subtitle={
-            image.caption && (
-              <span className="photo-album-item__caption">{image.caption}</span>
-            )
+            <>
+              {titlePosition === captionPosition &&
+                showCaption &&
+                image[captionSource] && (
+                  <span className="photo-album-item__caption">
+                    {image[captionSource]}
+                  </span>
+                )}
+              {titlePosition === buttonPosition && showButton && (
+                <span className="reacg-action-button-wrap">
+                  <ActionButton
+                    url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                    openInNewTab={openInNewTab}
+                    text={buttonText}
+                    alignment={buttonAlignment as TitleAlignment}
+                    backgroundColor={buttonColor}
+                    textColor={buttonTextColor}
+                    fontSize={buttonFontSize}
+                    borderSize={buttonBorderSize}
+                    borderColor={buttonBorderColor}
+                    borderRadius={buttonBorderRadius}
+                    isOnHover={buttonVisibility === TitleVisibility.ON_HOVER}
+                  />
+                </span>
+              )}
+            </>
           }
           position={
             titlePosition !== TitlePosition.CENTER ? titlePosition : 'bottom'
           }
         />
       </div>
-    ) : null;
+    );
+  };
+
+  const renderCaption = (image: IImageDTO): ReactNode => {
+    const paddingTitle =
+      titlePosition !== TitlePosition.CENTER
+        ? imageBorderRadius / 2 + 'px'
+        : '0';
+
+    return (
+      <div
+        className={clsx('photo-album-item__title', {
+          'photo-album-item__title_on-hover':
+            showCaption && captionVisibility === TitleVisibility.ON_HOVER,
+          'photo-album-item__title_hidden': !showCaption,
+          'reacg-gallery__text-background-top-gradient':
+            overlayTextBackground === '' &&
+            captionPosition === TitlePosition.TOP,
+          'reacg-gallery__text-background-bottom-gradient':
+            overlayTextBackground === '' &&
+            captionPosition === TitlePosition.BOTTOM,
+          'reacg-gallery__text-background-center-gradient':
+            overlayTextBackground === '' &&
+            captionPosition === TitlePosition.CENTER,
+        })}
+      >
+        <ImageListItemBar
+          sx={{
+            '& .MuiImageListItemBar-subtitle': {
+              fontSize: `${captionFontSize}px`,
+              fontFamily: titleFontFamily,
+              color: captionFontColor,
+              lineHeight: 'normal',
+            },
+          }}
+          style={{
+            textAlign: titleAlignment,
+            paddingLeft: paddingTitle,
+            paddingRight: paddingTitle,
+            color: captionFontColor,
+            backgroundColor:
+              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
+            mixBlendMode: invertTextColor ? 'difference' : 'initial',
+          }}
+          className={`photo-album-item__title-content_${captionPosition}`}
+          title={
+            <>
+              {showCaption && (
+                <span className="photo-album-item__caption">
+                  {image[captionSource] || <br />}
+                </span>
+              )}
+              {captionPosition === buttonPosition && showButton && (
+                <span className="reacg-action-button-wrap">
+                  <ActionButton
+                    url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                    openInNewTab={openInNewTab}
+                    text={buttonText}
+                    alignment={buttonAlignment as TitleAlignment}
+                    backgroundColor={buttonColor}
+                    textColor={buttonTextColor}
+                    fontSize={buttonFontSize}
+                    borderSize={buttonBorderSize}
+                    borderColor={buttonBorderColor}
+                    borderRadius={buttonBorderRadius}
+                    isOnHover={buttonVisibility === TitleVisibility.ON_HOVER}
+                  />
+                </span>
+              )}
+            </>
+          }
+          position={
+            captionPosition !== TitlePosition.CENTER
+              ? captionPosition
+              : 'bottom'
+          }
+        />
+      </div>
+    );
   };
 
   const wrapperRef = useRef(null);
 
+  const renderButton = (image: IImageDTO): ReactNode => {
+    const paddingTitle =
+      buttonPosition !== TitlePosition.CENTER
+        ? imageBorderRadius / 2 + 'px'
+        : '0';
+
+    return (
+      <div
+        className={clsx('photo-album-item__title', {
+          'reacg-action-button-container_on-hover':
+            showButton && buttonVisibility === TitleVisibility.ON_HOVER,
+          'photo-album-item__title_hidden': !showButton,
+          'reacg-gallery__text-background-top-gradient':
+            overlayTextBackground === '' &&
+            buttonPosition === TitlePosition.TOP,
+          'reacg-gallery__text-background-bottom-gradient':
+            overlayTextBackground === '' &&
+            buttonPosition === TitlePosition.BOTTOM,
+          'reacg-gallery__text-background-center-gradient':
+            overlayTextBackground === '' &&
+            buttonPosition === TitlePosition.CENTER,
+        })}
+      >
+        <ImageListItemBar
+          sx={{
+            '& .MuiImageListItemBar-title': {
+              fontFamily: titleFontFamily,
+              lineHeight: 'normal',
+            },
+          }}
+          style={{
+            textAlign: buttonAlignment,
+            paddingLeft: paddingTitle,
+            paddingRight: paddingTitle,
+            backgroundColor:
+              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
+            mixBlendMode: invertTextColor ? 'difference' : 'initial',
+          }}
+          className={`photo-album-item__title-content_${buttonPosition}`}
+          title={
+            <span className="reacg-action-button-wrap">
+              <ActionButton
+                url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                openInNewTab={openInNewTab}
+                text={buttonText}
+                alignment={buttonAlignment as TitleAlignment}
+                backgroundColor={buttonColor}
+                textColor={buttonTextColor}
+                fontSize={buttonFontSize}
+                borderSize={buttonBorderSize}
+                borderColor={buttonBorderColor}
+                borderRadius={buttonBorderRadius}
+                isOnHover={buttonVisibility === TitleVisibility.ON_HOVER}
+              />
+            </span>
+          }
+          position={
+            buttonPosition !== TitlePosition.CENTER ? buttonPosition : 'bottom'
+          }
+        />
+      </div>
+    );
+  };
+
   return (
     <div
+      className={clsx(
+        !!onClick
+          ? 'photo-album-item__image-wrapper_clickable'
+          : 'photo-album-item__image-wrapper_non_clickable'
+      )}
       style={{
         background: paddingColor,
         borderRadius: `${borderRadius}px`,
@@ -114,35 +319,49 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
         ref={wrapperRef}
         className={clsx(
           'photo-album-item__image-wrapper',
+          'reacg-action-button-hover-parent',
           'photo-album-item__image-wrapper_overflow',
-          'photo-album-item__image-wrapper_' + hoverEffect,
-          {'photo-album-item__image-wrapper_clickable': !!onClick}
+          'photo-album-item__image-wrapper_' + hoverEffect
         )}
         style={{
           borderRadius: `${imageBorderRadius}px`,
         }}
       >
-        <ReImage
-          wrapperRef={wrapperRef}
-          {...imageProps}
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'block',
-          }}
-        />
-        {image.type === ImageType.VIDEO && (
-          <VideoThumbnailIcon
+        {image.type === ImageType.IMAGE && (
+          <ReImage
+            wrapperRef={wrapperRef}
+            {...imageProps}
             style={{
-              height: getThumbnailIconSize(width, height),
-              width: getThumbnailIconSize(width, height),
+              width: '100%',
+              height: '100%',
+              display: 'block',
             }}
-            className={clsx('photo-album-item__video-icon', {
-              'photo-album-item__image-wrapper_clickable': !!onClick,
-            })}
           />
         )}
-        {renderTitle()}
+        {image.type === ImageType.VIDEO && (
+          <ReVideo
+            wrapperRef={wrapperRef}
+            item={image}
+            settings={settings}
+            coverImageProps={{
+              ...imageProps,
+              style: {
+                width: '100%',
+                height: '100%',
+                display: 'block',
+              },
+            }}
+          />
+        )}
+        <Watermark />
+        {showTitle && renderTitle(image)}
+        {showCaption &&
+          (titlePosition != captionPosition || !showTitle) &&
+          renderCaption(image)}
+        {showButton &&
+          (titlePosition != buttonPosition || !showTitle) &&
+          (captionPosition != buttonPosition || !showCaption) &&
+          renderButton(image)}
       </div>
     </div>
   );

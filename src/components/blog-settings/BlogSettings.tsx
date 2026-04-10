@@ -1,3 +1,4 @@
+import {InputLabel} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
@@ -5,15 +6,21 @@ import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section';
 import {
+  ActionURLSourceOptions,
   BlogViewImagePositionOptions,
+  CaptionSourceOptions,
+  DescriptionSourceOptions,
   HoverEffectOptions,
   IBlogSettings,
   SizeTypeHeightOptions,
   SizeTypeWidthOptions,
   TextsAlignmentOptions,
   TitleAlignmentOptions,
+  TitleSourceOptions,
 } from 'data-structures';
+import {LabelWithTooltip} from '../controls/LabelWithTooltip';
 
+import {usePro} from 'contexts/ProContext';
 import React, {ReactNode} from 'react';
 import {
   ColorControl,
@@ -45,6 +52,8 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
     textFontFamily,
     titleColor,
     descriptionColor,
+    titleSource,
+    descriptionSource,
     titleFontSize,
     descriptionFontSize,
     imageHeightType,
@@ -54,15 +63,24 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
     buttonColor,
     buttonTextColor,
     buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
     showTitle,
     titleAlignment,
     showDescription,
     showButton,
     openInNewTab,
+    buttonUrlSource,
     textHorizontalSpacing,
     textVerticalSpacing,
     descriptionMaxRowsCount,
     imagePosition,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
+    showVideoCover,
   } = value as IBlogSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -128,209 +146,6 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                   onChange={onInputValueChange}
                 />
               </Filter>
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'showTitle'}
-                    name={'Show title'}
-                    value={showTitle}
-                    info={
-                      <p>
-                        The Title must be set by editing each image from
-                        "Images" section.{' '}
-                        <a
-                          className="seetings__see-more-link"
-                          href="https://youtu.be/ziAG16MADbY"
-                          target="_blank"
-                        >
-                          See more
-                        </a>
-                      </p>
-                    }
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                {showTitle && (
-                  <>
-                    <Filter isLoading={isLoading}>
-                      <NumberControl
-                        id={'titleFontSize'}
-                        name={'Title font size'}
-                        value={titleFontSize}
-                        onChange={onInputValueChange}
-                        unit={'px'}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'titleColor'}
-                        name="Title color"
-                        value={titleColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <SelectControl
-                        id={'titleAlignment'}
-                        name={'Title alignment'}
-                        value={titleAlignment}
-                        options={TitleAlignmentOptions}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                  </>
-                )}
-              </Grid>
-
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'showDescription'}
-                    name={'Show description'}
-                    value={showDescription}
-                    info={
-                      <p>
-                        The Description must be set by editing each image from
-                        "Images" section.{' '}
-                        <a
-                          className="seetings__see-more-link"
-                          href="https://youtu.be/ziAG16MADbY"
-                          target="_blank"
-                        >
-                          See more
-                        </a>
-                      </p>
-                    }
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                {showDescription && (
-                  <>
-                    <Filter isLoading={isLoading}>
-                      <NumberControl
-                        id={'descriptionFontSize'}
-                        name={'Description font size'}
-                        value={descriptionFontSize}
-                        onChange={onInputValueChange}
-                        unit={'px'}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'descriptionColor'}
-                        name="Description color"
-                        value={descriptionColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-
-                    <Filter isLoading={isLoading}>
-                      <NumberControl
-                        id={'descriptionMaxRowsCount'}
-                        name={'Description max rows count'}
-                        value={descriptionMaxRowsCount}
-                        onChange={onInputValueChange}
-                        min={1}
-                      />
-                    </Filter>
-                  </>
-                )}
-              </Grid>
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'showButton'}
-                    name={'Show button'}
-                    value={showButton}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                {showButton && (
-                  <>
-                    <Filter isLoading={isLoading}>
-                      <SwitchControl
-                        id={'openInNewTab'}
-                        name={'Open in new tab'}
-                        value={openInNewTab}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <TextControl
-                        id={'buttonText'}
-                        name="Button text"
-                        value={buttonText}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <SelectControl
-                        id={'buttonAlignment'}
-                        name={'Button alignment'}
-                        value={buttonAlignment}
-                        options={TitleAlignmentOptions}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <NumberControl
-                        id={'buttonFontSize'}
-                        name={'Button font size'}
-                        value={buttonFontSize}
-                        onChange={onInputValueChange}
-                        unit={'px'}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'buttonColor'}
-                        name="Button color"
-                        value={buttonColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'buttonTextColor'}
-                        name="Button text color"
-                        value={buttonTextColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                  </>
-                )}
-              </Grid>
-              {(showTitle || showButton || showDescription) && (
-                <>
-                  <Filter isLoading={isLoading}>
-                    <FontControl
-                      id={'textFontFamily'}
-                      name={'Text font family'}
-                      value={textFontFamily}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  {renderTextsSettings()}
-                </>
-              )}
             </Grid>
             <ClickActionSettings isLoading={isLoading} />
           </>
@@ -338,6 +153,8 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
       />
     );
   };
+
+  const {isPro} = usePro();
 
   const renderAdvancedSettings = (): ReactNode => {
     return (
@@ -389,6 +206,33 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
                 name={'Hover effect'}
                 value={hoverEffect}
                 options={HoverEffectOptions}
+                onChange={(inputValue: any) => {
+                  if (
+                    !isPro &&
+                    HoverEffectOptions.find(
+                      (option) => option.value === inputValue
+                    )?.isPro
+                  ) {
+                    (window as any).reacg_open_premium_offer_dialog({
+                      utm_medium: 'hoverEffect',
+                    });
+                  } else {
+                    onInputValueChange(inputValue, 'hoverEffect');
+                  }
+                }}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'showVideoCover'}
+                name={'Show video cover'}
+                value={showVideoCover}
+                tooltip={
+                  <p>
+                    Enable this to display the cover image for video items,
+                    otherwise the video will be shown.
+                  </p>
+                }
                 onChange={onInputValueChange}
               />
             </Filter>
@@ -399,45 +243,512 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({isLoading}) => {
     );
   };
 
-  const renderTextsSettings = (): ReactNode => {
+  const renderTitleSection = (): ReactNode => {
     return (
-      <>
-        <Filter isLoading={isLoading}>
-          <SelectControl
-            id={'textVerticalAlignment'}
-            name={'Text vertical alignment'}
-            value={textVerticalAlignment}
-            options={TextsAlignmentOptions}
-            onChange={onInputValueChange}
-          />
-        </Filter>
-        <Filter isLoading={isLoading}>
-          <NumberControl
-            id={'textHorizontalSpacing'}
-            name={'Text horizontal spacing'}
-            value={textHorizontalSpacing}
-            onChange={onInputValueChange}
-            min={0}
-            unit={'px'}
-          />
-        </Filter>
-        <Filter isLoading={isLoading}>
-          <NumberControl
-            id={'textVerticalSpacing'}
-            name={'Text vertical spacing'}
-            value={textVerticalSpacing}
-            onChange={onInputValueChange}
-            min={0}
-            unit={'px'}
-          />
-        </Filter>
-      </>
+      <Section
+        header={'Text & Metadata'}
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showTitle'}
+                    name={'Show title'}
+                    value={showTitle}
+                    tooltip={
+                      <p>
+                        The Title must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {showTitle && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'titleSource'}
+                      name={'Source'}
+                      value={titleSource}
+                      options={TitleSourceOptions}
+                      onChange={(inputValue: any) => {
+                        if (
+                          !isPro &&
+                          TitleSourceOptions.find(
+                            (option) => option.value === inputValue
+                          )?.isPro
+                        ) {
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'titleSource',
+                          });
+                        } else {
+                          onInputValueChange(inputValue, 'titleSource');
+                        }
+                      }}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {showTitle && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'titleFontSize'}
+                      name={'Font size'}
+                      value={titleFontSize}
+                      onChange={onInputValueChange}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'titleColor'}
+                      name="Color"
+                      value={titleColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'titleAlignment'}
+                      name={'Alignment'}
+                      value={titleAlignment}
+                      options={TitleAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showCaption'}
+                    name={'Show caption'}
+                    value={showCaption}
+                    pro={true}
+                    tooltip={
+                      <p>
+                        The Caption must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'show_caption',
+                            })
+                    }
+                  />
+                </Filter>
+                {showCaption && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'captionSource'}
+                      name={'Source'}
+                      value={captionSource}
+                      options={CaptionSourceOptions}
+                      onChange={(inputValue: any) => {
+                        if (
+                          !isPro &&
+                          CaptionSourceOptions.find(
+                            (option) => option.value === inputValue
+                          )?.isPro
+                        ) {
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'captionSource',
+                          });
+                        } else {
+                          onInputValueChange(inputValue, 'captionSource');
+                        }
+                      }}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {showCaption && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'captionFontSize'}
+                      name={'Font size'}
+                      value={captionFontSize}
+                      onChange={onInputValueChange}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'captionFontColor'}
+                      name="Color"
+                      value={captionFontColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showDescription'}
+                    name={'Show description'}
+                    value={showDescription}
+                    tooltip={
+                      <p>
+                        The Description must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {showDescription && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'descriptionSource'}
+                      name={'Source'}
+                      value={descriptionSource}
+                      options={DescriptionSourceOptions}
+                      onChange={(inputValue: any) => {
+                        if (
+                          !isPro &&
+                          DescriptionSourceOptions.find(
+                            (option) => option.value === inputValue
+                          )?.isPro
+                        ) {
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'descriptionSource',
+                          });
+                        } else {
+                          onInputValueChange(inputValue, 'descriptionSource');
+                        }
+                      }}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {showDescription && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'descriptionFontSize'}
+                      name={'Font size'}
+                      value={descriptionFontSize}
+                      onChange={onInputValueChange}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'descriptionColor'}
+                      name="Color"
+                      value={descriptionColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'descriptionMaxRowsCount'}
+                      name={'Max rows count'}
+                      value={descriptionMaxRowsCount}
+                      onChange={onInputValueChange}
+                      min={1}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showButton'}
+                    name={'Show button'}
+                    pro={true}
+                    value={showButton}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'show_button',
+                            })
+                    }
+                  />
+                </Filter>
+                {showButton && (
+                  <>
+                    <Filter isLoading={isLoading}>
+                      <SelectControl
+                        id={'buttonUrlSource'}
+                        name={'URL source'}
+                        value={buttonUrlSource}
+                        options={ActionURLSourceOptions}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SwitchControl
+                        id={'openInNewTab'}
+                        name={'Open in new tab'}
+                        value={openInNewTab}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </>
+                )}
+              </Grid>
+              {showButton && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'buttonAlignment'}
+                      name={'Alignment'}
+                      value={buttonAlignment}
+                      options={TitleAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonColor'}
+                      name="Button color"
+                      value={buttonColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'buttonFontSize'}
+                      name={'Font size'}
+                      value={buttonFontSize}
+                      onChange={onInputValueChange}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonTextColor'}
+                      name="Text color"
+                      value={buttonTextColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <TextControl
+                      id={'buttonText'}
+                      name="Button text"
+                      value={buttonText}
+                      placeholder={
+                        (window as any).reacg_global?.text?.view_more
+                      }
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'buttonBorderSize'}
+                      name={'Border'}
+                      value={buttonBorderSize}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonBorderColor'}
+                      name={'Border color'}
+                      value={buttonBorderColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'buttonBorderRadius'}
+                      name={'Border radius'}
+                      value={buttonBorderRadius}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            {(showTitle || showCaption || showDescription || showButton) && (
+              <>
+                <Grid
+                  sx={{marginLeft: 0, paddingTop: 2}}
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                >
+                  <Filter isLoading={isLoading}>
+                    <InputLabel shrink variant="filled">
+                      <LabelWithTooltip label={'Text'} tooltip={''} />
+                    </InputLabel>
+                  </Filter>
+                </Grid>
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <FontControl
+                      id={'textFontFamily'}
+                      name={'Font family'}
+                      value={textFontFamily}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'textVerticalAlignment'}
+                      name={'Vertical alignment'}
+                      value={textVerticalAlignment}
+                      options={TextsAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'textHorizontalSpacing'}
+                      name={'Horizontal spacing'}
+                      value={textHorizontalSpacing}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'textVerticalSpacing'}
+                      name={'Vertical spacing'}
+                      value={textVerticalSpacing}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                </Grid>
+              </>
+            )}
+          </Grid>
+        }
+        defaultExpanded={false}
+      />
     );
   };
 
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderBasicSettings()}
+      {renderTitleSection()}
       {renderAdvancedSettings()}
     </Paper>
   );

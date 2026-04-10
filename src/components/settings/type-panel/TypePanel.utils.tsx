@@ -11,7 +11,7 @@ import {ThumbnailsImage} from './images/ThumbnailsImage';
 export const GalleryTypeOptions = [
   {
     value: GalleryType.THUMBNAILS,
-    title: 'Thumbnails',
+    title: 'Grid',
     image: <ThumbnailsImage />,
   },
   {
@@ -31,7 +31,7 @@ export const GalleryTypeOptions = [
   },
   {
     value: GalleryType.SLIDESHOW,
-    title: 'Slideshow',
+    title: 'Slider',
     image: <SlideshowImage />,
   },
   {

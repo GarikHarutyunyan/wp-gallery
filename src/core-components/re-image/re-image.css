@@ -1,4 +1,4 @@
-.reacg-gallery .re-image__wrapper {
+.re-image__wrapper {
   position: relative;
   width: 100%;
   height: 100%;
@@ -32,10 +32,32 @@
 
 .re-image__placeholder {
   position: absolute;
+}
+.re-image__wrapper img,
+.re-image__wrapper video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.re-image__wrapper .re-image_loaded {
+  opacity: 1;
+}
+
+.re-image__placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: #ccc;
   animation: pulse 1.5s infinite;
+  z-index: 1;
 }
 
 @keyframes pulse {

@@ -1,16 +1,21 @@
+import {InputLabel} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
+import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {
+  ActionURLSourceOptions,
+  CaptionSourceOptions,
+  DescriptionSourceOptions,
   ILightboxSettings,
   LightboxImageAnimationOptions,
-  LightboxTextPosition,
   LightboxTextPositionOptions,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
   TitleAlignmentOptions,
+  TitleSourceOptions,
 } from 'data-structures';
 import React, {ReactNode} from 'react';
 import {
@@ -20,7 +25,9 @@ import {
   SelectControl,
   SliderControl,
   SwitchControl,
+  TextControl,
 } from '../controls';
+import {LabelWithTooltip} from '../controls/LabelWithTooltip';
 import {Filter} from '../settings/Filter';
 
 interface ILightboxSettingsProps {
@@ -39,13 +46,15 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
     areControlButtonsShown,
     isInfinite,
     padding,
+    showCounter,
+    canShare,
     canDownload,
     canZoom,
     isSlideshowAllowed,
     autoplay,
     slideDuration,
     imageAnimation,
-    isFullscreenAllowed,
+    canFullscreen,
     thumbnailsPosition,
     thumbnailWidth,
     thumbnailHeight,
@@ -58,12 +67,31 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
     textPosition,
     textFontFamily,
     textColor,
+    textBackground,
+    invertTextColor,
     showTitle,
+    titleSource,
     titleFontSize,
     titleAlignment,
     showDescription,
+    descriptionSource,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
+    showButton,
+    buttonText,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
   } = value as ILightboxSettings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
@@ -121,7 +149,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
               <Filter isLoading={isLoading}>
                 <NumberControl
                   id={'slideDuration'}
-                  name={'Time interval'}
+                  name={'Autoplay speed'}
                   value={slideDuration}
                   onChange={onInputValueChange}
                   min={700}
@@ -133,9 +161,17 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
               <SelectControl
                 id={'imageAnimation'}
                 name={'Animation'}
+                pro={true}
                 value={imageAnimation}
                 options={LightboxImageAnimationOptions}
-                onChange={onInputValueChange}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () =>
+                        (window as any).reacg_open_premium_offer_dialog({
+                          utm_medium: 'animation',
+                        })
+                }
               />
             </Filter>
             <Filter isLoading={isLoading}>
@@ -152,7 +188,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'isSlideshowAllowed'}
-                    name={'Play / Pause'}
+                    name={'Play / Pause button'}
                     value={isSlideshowAllowed}
                     onChange={onInputValueChange}
                   />
@@ -160,24 +196,48 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
 
                 <Filter isLoading={isLoading}>
                   <SwitchControl
-                    id={'isFullscreenAllowed'}
-                    name={'Fullscreen'}
-                    value={isFullscreenAllowed}
+                    id={'canFullscreen'}
+                    name={'Fullscreen button'}
+                    value={canFullscreen}
                     onChange={onInputValueChange}
+                  />
+                </Filter>
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'canShare'}
+                    name={'Share button'}
+                    pro={true}
+                    value={canShare}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'lightbox_share',
+                            })
+                    }
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'canDownload'}
-                    name={'Download'}
+                    name={'Download button'}
+                    pro={true}
                     value={canDownload}
-                    onChange={onInputValueChange}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'lightbox_download',
+                            })
+                    }
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'canZoom'}
-                    name={'Zoom'}
+                    name={'Zoom button'}
                     value={canZoom}
                     onChange={onInputValueChange}
                   />
@@ -190,6 +250,22 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 name={'Loop'}
                 value={isInfinite}
                 onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'showCounter'}
+                name={'Counter'}
+                pro={true}
+                value={showCounter}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () =>
+                        (window as any).reacg_open_premium_offer_dialog({
+                          utm_medium: 'lightbox_counter',
+                        })
+                }
               />
             </Filter>
             <Filter isLoading={isLoading}>
@@ -210,130 +286,6 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 onChange={onInputValueChange}
               />
             </Filter>
-            <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
-              container
-              columns={24}
-              rowSpacing={2}
-              columnSpacing={4}
-            >
-              <Filter isLoading={isLoading}>
-                <SelectControl
-                  id={'textPosition'}
-                  name={'Text position'}
-                  value={textPosition}
-                  options={LightboxTextPositionOptions}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-              {textPosition !== LightboxTextPosition.NONE && (
-                <>
-                  <Filter isLoading={isLoading}>
-                    <FontControl
-                      id={'textFontFamily'}
-                      name={'Text font family'}
-                      value={textFontFamily}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'textColor'}
-                      name="Text color"
-                      value={textColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                </>
-              )}
-            </Grid>
-
-            {textPosition !== LightboxTextPosition.NONE && (
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'showTitle'}
-                    name={'Show title'}
-                    value={showTitle}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                {showTitle && (
-                  <>
-                    <Filter isLoading={isLoading}>
-                      <NumberControl
-                        id={'titleFontSize'}
-                        name={'Title font size'}
-                        value={titleFontSize}
-                        onChange={onInputValueChange}
-                        unit={'vw'}
-                        max={5}
-                        step={0.1}
-                      />
-                    </Filter>
-
-                    <Filter isLoading={isLoading}>
-                      <SelectControl
-                        id={'titleAlignment'}
-                        name={'Title alignement'}
-                        value={titleAlignment}
-                        options={TitleAlignmentOptions}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                  </>
-                )}
-              </Grid>
-            )}
-            {textPosition !== LightboxTextPosition.NONE && (
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'showDescription'}
-                    name={'Show description'}
-                    value={showDescription}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                {showDescription && (
-                  <>
-                    <Filter isLoading={isLoading}>
-                      <NumberControl
-                        id={'descriptionFontSize'}
-                        name={'Description font size'}
-                        value={descriptionFontSize}
-                        onChange={onInputValueChange}
-                        unit={'vw'}
-                        max={5}
-                        step={0.1}
-                      />
-                    </Filter>
-
-                    <Filter isLoading={isLoading}>
-                      <NumberControl
-                        id={'descriptionMaxRowsCount'}
-                        name={'Description max rows count'}
-                        value={descriptionMaxRowsCount}
-                        onChange={onInputValueChange}
-                        min={1}
-                      />
-                    </Filter>
-                  </>
-                )}
-              </Grid>
-            )}
           </Grid>
         }
       />
@@ -352,7 +304,15 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 name={'Position'}
                 value={thumbnailsPosition}
                 options={LightboxThumbnailsPositionOptions}
-                onChange={onInputValueChange}
+                pro={true}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () =>
+                        (window as any).reacg_open_premium_offer_dialog({
+                          utm_medium: 'enable_filmstrip',
+                        })
+                }
               />
             </Filter>
             {thumbnailsPosition !== LightboxThumbnailsPosition.NONE && (
@@ -429,6 +389,528 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
             )}
           </Grid>
         }
+        defaultExpanded={false}
+      />
+    );
+  };
+
+  const {isPro} = usePro();
+
+  const renderTitleSection = (): ReactNode => {
+    return (
+      <Section
+        header={'Text & Metadata'}
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showTitle'}
+                    name={'Show title'}
+                    value={showTitle}
+                    tooltip={
+                      <p>
+                        The Caption must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {showTitle && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'titleSource'}
+                      name={'Source'}
+                      value={titleSource}
+                      options={TitleSourceOptions}
+                      onChange={(inputValue: any) => {
+                        if (
+                          !isPro &&
+                          TitleSourceOptions.find(
+                            (option) => option.value === inputValue
+                          )?.isPro
+                        ) {
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'titleSource',
+                          });
+                        } else {
+                          onInputValueChange(inputValue, 'titleSource');
+                        }
+                      }}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {showTitle && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'titleFontSize'}
+                      name={'Font size'}
+                      value={titleFontSize}
+                      onChange={onInputValueChange}
+                      unit={'vw'}
+                      max={5}
+                      step={0.1}
+                    />
+                  </Filter>
+
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'titleAlignment'}
+                      name={'Alignement'}
+                      value={titleAlignment}
+                      options={TitleAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showCaption'}
+                    name={'Show caption'}
+                    value={showCaption}
+                    pro={true}
+                    tooltip={
+                      <p>
+                        The Caption must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'show_caption',
+                            })
+                    }
+                  />
+                </Filter>
+                {showCaption && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'captionSource'}
+                      name={'Source'}
+                      value={captionSource}
+                      options={CaptionSourceOptions}
+                      onChange={(inputValue: any) => {
+                        if (
+                          !isPro &&
+                          CaptionSourceOptions.find(
+                            (option) => option.value === inputValue
+                          )?.isPro
+                        ) {
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'captionSource',
+                          });
+                        } else {
+                          onInputValueChange(inputValue, 'captionSource');
+                        }
+                      }}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {showCaption && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'captionFontSize'}
+                      name={'Font size'}
+                      value={captionFontSize}
+                      onChange={onInputValueChange}
+                      unit={'vw'}
+                      max={5}
+                      step={0.1}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'captionFontColor'}
+                      name="Color"
+                      value={captionFontColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showDescription'}
+                    name={'Show description'}
+                    value={showDescription}
+                    tooltip={
+                      <p>
+                        The Caption must be set by editing each image from
+                        "Images" section.{' '}
+                        <a
+                          className="seetings__see-more-link"
+                          href="https://youtu.be/ziAG16MADbY"
+                          target="_blank"
+                        >
+                          See more
+                        </a>
+                      </p>
+                    }
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {showDescription && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'descriptionSource'}
+                      name={'Source'}
+                      value={descriptionSource}
+                      options={DescriptionSourceOptions}
+                      onChange={(inputValue: any) => {
+                        if (
+                          !isPro &&
+                          DescriptionSourceOptions.find(
+                            (option) => option.value === inputValue
+                          )?.isPro
+                        ) {
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'descriptionSource',
+                          });
+                        } else {
+                          onInputValueChange(inputValue, 'descriptionSource');
+                        }
+                      }}
+                    />
+                  </Filter>
+                )}
+              </Grid>
+              {showDescription && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'descriptionFontSize'}
+                      name={'Font size'}
+                      value={descriptionFontSize}
+                      onChange={onInputValueChange}
+                      unit={'vw'}
+                      max={5}
+                      step={0.1}
+                    />
+                  </Filter>
+
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'descriptionMaxRowsCount'}
+                      name={'Max rows count'}
+                      value={descriptionMaxRowsCount}
+                      onChange={onInputValueChange}
+                      min={1}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            <Grid
+              sx={{marginLeft: 0, paddingTop: 2}}
+              container
+              columns={24}
+              rowSpacing={2}
+              columnSpacing={4}
+            >
+              <Grid
+                sx={{marginLeft: 0, paddingTop: 2}}
+                container
+                columns={24}
+                rowSpacing={2}
+                columnSpacing={4}
+              >
+                <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'showButton'}
+                    name={'Show button'}
+                    pro={true}
+                    value={showButton}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'show_button',
+                            })
+                    }
+                  />
+                </Filter>
+                {showButton && (
+                  <>
+                    <Filter isLoading={isLoading}>
+                      <SelectControl
+                        id={'buttonUrlSource'}
+                        name={'URL source'}
+                        value={buttonUrlSource}
+                        options={ActionURLSourceOptions}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                    <Filter isLoading={isLoading}>
+                      <SwitchControl
+                        id={'openInNewTab'}
+                        name={'Open in new tab'}
+                        value={openInNewTab}
+                        onChange={onInputValueChange}
+                      />
+                    </Filter>
+                  </>
+                )}
+              </Grid>
+              {showButton && (
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'buttonAlignment'}
+                      name={'Alignment'}
+                      value={buttonAlignment}
+                      options={TitleAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonColor'}
+                      name="Button color"
+                      value={buttonColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'buttonFontSize'}
+                      name={'Font size'}
+                      value={buttonFontSize}
+                      onChange={onInputValueChange}
+                      unit={'vw'}
+                      max={5}
+                      step={0.1}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonTextColor'}
+                      name="Text color"
+                      value={buttonTextColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <TextControl
+                      id={'buttonText'}
+                      name="Button text"
+                      value={buttonText}
+                      placeholder={
+                        (window as any).reacg_global?.text?.view_more
+                      }
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'buttonBorderSize'}
+                      name={'Border'}
+                      value={buttonBorderSize}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'buttonBorderColor'}
+                      name={'Border color'}
+                      value={buttonBorderColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'buttonBorderRadius'}
+                      name={'Border radius'}
+                      value={buttonBorderRadius}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                </Grid>
+              )}
+            </Grid>
+            {(showTitle || showCaption || showDescription || showButton) && (
+              <>
+                <Grid
+                  sx={{marginLeft: 0, paddingTop: 2}}
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                >
+                  <Filter isLoading={isLoading}>
+                    <InputLabel shrink variant="filled">
+                      <LabelWithTooltip label={'Text'} tooltip={''} />
+                    </InputLabel>
+                  </Filter>
+                </Grid>
+                <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
+                  className="reacg-section__container-inherit"
+                >
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'textPosition'}
+                      name={'Position'}
+                      value={textPosition}
+                      options={LightboxTextPositionOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <FontControl
+                      id={'textFontFamily'}
+                      name={'Font family'}
+                      value={textFontFamily}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'textColor'}
+                      name="Color"
+                      value={textColor}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <ColorControl
+                      id={'textBackground'}
+                      name={'Text background'}
+                      value={textBackground}
+                      onChange={onInputValueChange}
+                      tooltip={
+                        <p>
+                          Set a background color for text displayed on the
+                          image.
+                        </p>
+                      }
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <SwitchControl
+                      id={'invertTextColor'}
+                      name={'Invert color'}
+                      pro={true}
+                      tooltip={
+                        <p>
+                          Enable this to invert the text color dynamically,
+                          ensuring it stays visible against any background.
+                        </p>
+                      }
+                      value={invertTextColor}
+                      onChange={
+                        isPro
+                          ? onInputValueChange
+                          : () =>
+                              (window as any).reacg_open_premium_offer_dialog({
+                                utm_medium: 'invert_color',
+                              })
+                      }
+                    />
+                  </Filter>
+                </Grid>
+              </>
+            )}
+          </Grid>
+        }
+        defaultExpanded={false}
       />
     );
   };
@@ -436,6 +918,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderMainSettings()}
+      {renderTitleSection()}
       {renderFilmstripSettings()}
     </Paper>
   );

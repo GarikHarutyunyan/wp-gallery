@@ -2,8 +2,9 @@ import ImageList from '@mui/material/ImageList';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {useAppInfo} from 'contexts';
-import {IImageDTO, IThumbnailSettings, ImageType} from 'data-structures';
+import {ActionURLSource, IThumbnailSettings} from 'data-structures';
 import React, {
+  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -22,30 +23,94 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   const {thumbnailSettings: settings} = useSettings();
   const {images} = useData();
   const {
+    fillContainer,
+    aspectRatio,
     width = 1,
     height = 1,
     columns = 1,
     gap,
     backgroundColor,
     containerPadding,
+    itemBorder,
+    itemBackgroundColor,
+    itemBorderRadius,
     padding,
     paddingColor,
     borderRadius,
+    showTitle,
+    titleSource,
     titlePosition,
+    captionPosition,
     titleAlignment,
+    captionVisibility,
     titleVisibility,
     titleFontFamily,
     titleColor,
     titleFontSize = 1,
+    overlayTextBackground,
+    invertTextColor,
     hoverEffect,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
+    showDescription,
+    descriptionSource,
+    descriptionPosition,
+    descriptionFontSize,
+    descriptionFontColor,
+    descriptionMaxRowsCount,
+    showButton,
+    buttonText,
+    buttonVisibility,
+    buttonPosition,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
+    showVideoCover,
   } = settings as IThumbnailSettings;
-  const elementRef = useRef();
+  const elementRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  const ratio: number = width / height;
+  const [imageRatio, setImageRatio] = useState(1);
+
+  // Get the width of the nearest gallery wrapper related to this instance
+  const getWrapperWidth = (): number => {
+    const el = elementRef?.current as HTMLElement | null;
+    // Prefer the closest ancestor with the wrapper class to avoid cross-instance collisions
+    const wrapper = el?.closest('.reacg-gallery-wrapper') as HTMLElement | null;
+    if (wrapper && wrapper.clientWidth) return wrapper.clientWidth;
+    // Fallback to the current element's bounding box if wrapper not found
+    return el?.getBoundingClientRect().width || 0;
+  };
+
+  const currentWidth = getWrapperWidth();
+
+  const defaultWidth = fillContainer ? currentWidth / columns : width;
+  const [imageWidth, setImageWidth] = useState(defaultWidth);
+  const defaultHeight = fillContainer ? imageWidth / imageRatio : height;
+  const [imageHeight, setImageHeight] = useState(defaultHeight);
+
+  useEffect(() => {
+    if (fillContainer) {
+      setImageRatio(Number(aspectRatio));
+      const currentWidth = getWrapperWidth();
+      setImageWidth(currentWidth / columns);
+      setImageHeight(imageWidth / imageRatio);
+    } else {
+      setImageRatio(width / height);
+      setImageWidth(width);
+      setImageHeight(height);
+    }
+  }, [fillContainer, aspectRatio, columns, height, width]);
 
   const changeContainerWidth = () => {
     const divElement = elementRef?.current;
-
     setContainerWidth((divElement as any)?.getBoundingClientRect().width);
   };
 
@@ -61,7 +126,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   }, [gap, galleryId]);
 
   const getValidColumnsCount = (): number => {
-    const containerBox: number = +width + 2 * padding;
+    const containerBox: number = +imageWidth + 2 * padding;
 
     if (!containerWidth || !containerBox) {
       return columns;
@@ -81,7 +146,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   };
 
   const validColumnsCount = useMemo(getValidColumnsCount, [
-    width,
+    imageWidth,
     gap,
     columns,
     padding,
@@ -97,60 +162,45 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
       return freeWidth / validColumnsCount;
     }
 
-    return width;
+    return imageWidth;
   }, [
     containerWidth,
     containerPadding,
-    width,
+    imageWidth,
     gap,
-    columns,
     padding,
     validColumnsCount,
   ]);
 
   const getHeight = useMemo<number>(() => {
-    return getWidth * (1 / ratio);
-  }, [getWidth, ratio]);
+    return getWidth * (1 / imageRatio);
+  }, [getWidth, imageRatio]);
 
   useLayoutEffect(() => {
     changeContainerWidth();
-  }, [width, getWidth, gap, columns, padding, validColumnsCount]);
-
-  const getImageSource = (image: IImageDTO) => {
-    if (width <= image.thumbnail.width && height <= image.thumbnail.height) {
-      return `${image.thumbnail.url}`;
-    }
-    if (
-      width <= image.medium_large.width &&
-      height <= image.medium_large.height
-    ) {
-      return `${image.medium_large.url}`;
-    }
-
-    if (
-      (width <= image.large.width && height <= image.large.height) ||
-      image.type === ImageType.VIDEO
-    ) {
-      return `${image.large.url}`;
-    }
-
-    return `${image.original.url}`;
-  };
+  }, [imageWidth, getWidth, gap, columns, padding, validColumnsCount]);
 
   const listRef = useRef<HTMLUListElement | null>(null);
+  const onImageClick = useCallback(
+    (index: number) => (onClick ? () => onClick(index) : undefined),
+    [onClick]
+  );
 
   return (
     <div
       style={{
         width:
-          width * columns + (columns - 1) * gap + columns * 2 * padding + 'px',
+          imageWidth * columns +
+          (columns - 1) * gap +
+          columns * 2 * padding +
+          'px',
         margin: '0 auto',
         overflow: 'hidden',
         maxWidth: '100%',
       }}
     >
       <div
-        ref={elementRef as any}
+        ref={elementRef}
         style={{
           overflow: 'hidden',
           maxWidth: '100%',
@@ -165,26 +215,58 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
           style={{margin: '0 auto'}}
           ref={listRef}
         >
-          {images!.map((image, index) => (
+          {images?.map((image, index) => (
             <ThumbnailImage
               key={image.original.url + index}
               image={image}
               width={getWidth}
               height={getHeight}
-              onClick={() => onClick?.(index)}
-              getImageSource={getImageSource}
+              onClick={onImageClick(index)}
+              showTitle={showTitle}
+              titleSource={titleSource}
               titlePosition={titlePosition}
+              captionPosition={captionPosition}
               titleAlignment={titleAlignment}
+              captionVisibility={captionVisibility}
               titleVisibility={titleVisibility}
               titleFontFamily={titleFontFamily}
               titleColor={titleColor}
               titleFontSize={titleFontSize}
+              overlayTextBackground={overlayTextBackground}
+              invertTextColor={invertTextColor}
+              itemBorder={itemBorder}
+              itemBackgroundColor={itemBackgroundColor}
+              itemBorderRadius={itemBorderRadius}
               backgroundColor={paddingColor}
               borderRadius={borderRadius}
               margin={padding}
               hoverEffect={hoverEffect}
+              showCaption={showCaption}
+              captionSource={captionSource}
+              captionFontSize={captionFontSize}
+              captionFontColor={captionFontColor}
+              showDescription={showDescription}
+              descriptionSource={descriptionSource}
+              descriptionPosition={descriptionPosition}
+              descriptionFontSize={descriptionFontSize}
+              descriptionFontColor={descriptionFontColor}
+              descriptionMaxRowsCount={descriptionMaxRowsCount}
+              showButton={showButton}
+              buttonText={buttonText}
+              buttonVisibility={buttonVisibility}
+              buttonPosition={buttonPosition}
+              buttonAlignment={buttonAlignment}
+              buttonColor={buttonColor}
+              buttonTextColor={buttonTextColor}
+              buttonFontSize={buttonFontSize}
+              buttonBorderSize={buttonBorderSize}
+              buttonBorderColor={buttonBorderColor}
+              buttonBorderRadius={buttonBorderRadius}
+              buttonUrl={image?.[buttonUrlSource as ActionURLSource] || ''}
+              openInNewTab={openInNewTab}
+              showVideoCover={showVideoCover}
             />
-          ))}
+          )) || []}
         </ImageList>
       </div>
     </div>

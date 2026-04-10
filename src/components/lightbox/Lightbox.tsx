@@ -1,5 +1,7 @@
 import clsx from 'clsx';
+import {ActionButton} from 'core-components/action-button';
 import {
+  ActionURLSource,
   IImageDTO,
   ILightboxSettings,
   LightboxImageAnimation,
@@ -8,16 +10,22 @@ import {
 } from 'data-structures';
 import React, {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
-import Lightbox from 'yet-another-react-lightbox';
+import {getLargestSrcItem, getSrcSet, ISrcSetItem} from 'utils/imageSrcSet';
+import {Watermark} from 'utils/renderWatermark';
+import {Lightbox} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
+import Counter from 'yet-another-react-lightbox/plugins/counter';
+import 'yet-another-react-lightbox/plugins/counter.css';
 import Download from 'yet-another-react-lightbox/plugins/download';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
+import Share from 'yet-another-react-lightbox/plugins/share';
 import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Video from 'yet-another-react-lightbox/plugins/video';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
+import {useAppInfo} from '../../contexts';
 import {useData} from '../data-context/useData';
 import {useSettings} from '../settings/useSettings';
 import {getSlideMargins} from './CommonFunctions/getSlideMargins';
@@ -88,6 +96,69 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   );
 };
 
+const WatermarkOverlay: React.FC = () => {
+  const [rect, setRect] = useState<{
+    width: number;
+    height: number;
+    left: number;
+    top: number;
+  } | null>(null);
+  useEffect(() => {
+    function updateRect() {
+      const media = document.querySelector(
+        '.reacg-lightbox .yarl__slide_current img, .reacg-lightbox .yarl__slide_current video'
+      );
+      if (media) {
+        const r = (media as HTMLElement).getBoundingClientRect();
+        // Find the slide container to get its position
+        const slide = media.closest('.yarl__slide');
+        if (slide) {
+          const slideRect = (slide as HTMLElement).getBoundingClientRect();
+          setRect({
+            width: r.width,
+            height: r.height,
+            left: r.left - slideRect.left,
+            top: r.top - slideRect.top,
+          });
+        } else {
+          setRect({width: r.width, height: r.height, left: 0, top: 0});
+        }
+      } else {
+        setRect(null);
+      }
+    }
+    updateRect();
+    window.addEventListener('resize', updateRect);
+    const observer = new MutationObserver(updateRect);
+    observer.observe(document.body, {childList: true, subtree: true});
+    return () => {
+      window.removeEventListener('resize', updateRect);
+      observer.disconnect();
+    };
+  }, []);
+  if (!rect) return null;
+  return (
+    <div
+      className={'react-watermark-overlay'}
+      style={{
+        position: 'absolute',
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height,
+        pointerEvents: 'none',
+        zIndex: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: 1,
+      }}
+    >
+      <Watermark />
+    </div>
+  );
+};
+
 const VLightbox: React.FC<ILightboxProviderProps> = ({
   activeIndex,
   onClose,
@@ -102,13 +173,15 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     areControlButtonsShown,
     isInfinite,
     padding,
+    showCounter,
+    canShare,
     canDownload,
     canZoom,
     isSlideshowAllowed,
     autoplay,
     slideDuration,
     imageAnimation,
-    isFullscreenAllowed,
+    canFullscreen,
     thumbnailsPosition,
     thumbnailWidth,
     thumbnailHeight,
@@ -121,18 +194,39 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     textPosition,
     textFontFamily,
     textColor,
+    textBackground,
+    invertTextColor,
     showTitle,
     titleFontSize,
     titleAlignment,
     showDescription,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    titleSource,
+    descriptionSource,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
+    showButton,
+    buttonText,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
   } = settings as ILightboxSettings;
   const lightboxId: string = useId();
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const [index, setIndex] = useState(0);
+  const [buttonContainerHeight, setButtonContainerHeight] = useState<number>(0);
+  const {galleryId} = useAppInfo();
 
   const minFactor = 1.45;
   const maxFactor = 1.25;
@@ -141,6 +235,12 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
 
   const plugins = useMemo<any[]>(() => {
     const newPlugins: any[] = [Video];
+    if (showCounter) {
+      newPlugins.push(Counter as any);
+    }
+    if (canShare) {
+      newPlugins.push(Share as any);
+    }
     if (canDownload) {
       newPlugins.push(Download as any);
     }
@@ -150,45 +250,63 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     if (isSlideshowAllowed || autoplay) {
       newPlugins.push(Slideshow as any);
     }
-    if (isFullscreenAllowed) {
+    if (canFullscreen) {
       newPlugins.push(Fullscreen as any);
     }
     if (thumbnailsPosition !== LightboxThumbnailsPosition.NONE) {
       newPlugins.push(Thumbnails as any);
     }
-    if (textPosition !== LightboxTextPosition.NONE) {
+    if (showTitle || showCaption || showDescription || showButton) {
       newPlugins.push(Captions as any);
     }
 
     return newPlugins;
   }, [
+    showCounter,
+    canShare,
     canDownload,
     canZoom,
     isSlideshowAllowed,
     autoplay,
-    isFullscreenAllowed,
+    canFullscreen,
     thumbnailsPosition,
     textPosition,
+    showTitle,
+    showCaption,
+    showDescription,
+    showButton,
   ]);
 
-  const togglePageScroll = (open:boolean) => {
-    // Scroll is toggled on <body> by default; <html> should be handled as well.
+  const togglePageScroll = (open: boolean) => {
+    // Toggle scroll by the custom class to avoid toggle height with .yarl__no_scroll
     const html = document.documentElement;
+    const body = document.body;
 
     if (open) {
-      html.classList.add("yarl__no_scroll");
+      if (html) {
+        html.classList.add('react-lightbox--no-scroll');
+      }
+      if (body) {
+        body.classList.add('react-lightbox--no-scroll');
+      }
     } else {
-      html.classList.remove("yarl__no_scroll");
+      if (html) {
+        html.classList.remove('react-lightbox--no-scroll');
+      }
+      if (body) {
+        body.classList.remove('react-lightbox--no-scroll');
+      }
     }
   };
 
   const handleClose = () => {
     onClose();
     togglePageScroll(false);
-  }
+    updateURL(-1);
+  };
   const handleOpen = () => {
     togglePageScroll(true);
-  }
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -222,86 +340,182 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (!showButton) {
+      setButtonContainerHeight(0);
+      return;
+    }
+
+    const measureButtonContainerHeight = () => {
+      const buttonContainer = document.querySelector(
+        '.reacg-lightbox .yarl__slide_captions_container .reacg-lightbox-texts__button'
+      ) as HTMLElement | null;
+
+      if (!buttonContainer) {
+        return;
+      }
+
+      const rect = buttonContainer.getBoundingClientRect();
+      const styles = window.getComputedStyle(buttonContainer);
+      const marginTop = parseFloat(styles.marginTop || '0');
+      const marginBottom = parseFloat(styles.marginBottom || '0');
+      const nextHeight = Math.round(rect.height + marginTop + marginBottom);
+
+      setButtonContainerHeight((prevHeight) =>
+        prevHeight !== nextHeight ? nextHeight : prevHeight
+      );
+    };
+
+    measureButtonContainerHeight();
+    window.addEventListener('resize', measureButtonContainerHeight);
+
+    const mutationObserver = new MutationObserver(measureButtonContainerHeight);
+    mutationObserver.observe(document.body, {childList: true, subtree: true});
+
+    const resizeObserver = new ResizeObserver(measureButtonContainerHeight);
+    const buttonContainer = document.querySelector(
+      '.reacg-lightbox .yarl__slide_captions_container .reacg-lightbox-texts__button'
+    ) as HTMLElement | null;
+    if (buttonContainer) {
+      resizeObserver.observe(buttonContainer);
+    }
+
+    return () => {
+      window.removeEventListener('resize', measureButtonContainerHeight);
+      mutationObserver.disconnect();
+      resizeObserver.disconnect();
+    };
+  }, [
+    showButton,
+    index,
+    buttonText,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderRadius,
+  ]);
+
+  const updateURL = (index: number) => {
+    if (window.location.protocol === 'blob:') return;
+    window.history.replaceState({}, '', deepLink(index));
+  };
+
+  const deepLink = (index: number) => {
+    const url = new URL(window.location.href);
+    if (index >= 0) {
+      if (galleryId) {
+        url.searchParams.set('gid', galleryId);
+      }
+      url.searchParams.set('sid', index.toString());
+    } else {
+      url.searchParams.delete('gid');
+      url.searchParams.delete('sid');
+    }
+
+    return url.toString();
+  };
+
   const slides = useMemo(() => {
-    return images!.map((image: IImageDTO) => ({
-      description: (
-        <>
-          {showTitle && image.title && (
-            <p
-              className={'reacg-lightbox-texts__title'}
-              style={{
-                margin: `${titleMargin}px 0`,
-                color: textColor,
-                fontFamily: textFontFamily,
-                fontSize: `clamp(${
-                  titleFontSize / minFactor
-                }rem, ${titleFontSize}vw, ${titleFontSize * maxFactor}rem)`,
-                textAlign: titleAlignment,
-              }}
-            >
-              {image.title}
-	      {image.caption && (
-              <span className={'reacg-lightbox__caption'}>
-                &nbsp;{image.caption}
-              </span>
+    return images?.map((image: IImageDTO, index: number) => {
+      const srcSet: ISrcSetItem[] = getSrcSet(image.sizes);
+      const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
+
+      return {
+        description: (
+          <>
+            {((showTitle && image[titleSource]) ||
+              (showCaption && image[captionSource])) && (
+              <p
+                className={'reacg-lightbox-texts__title'}
+                style={{
+                  margin: `${titleMargin}px 0`,
+                  color: textColor,
+                  fontFamily: textFontFamily,
+                  fontSize: `clamp(${
+                    titleFontSize / minFactor
+                  }rem, ${titleFontSize}vw, ${titleFontSize * maxFactor}rem)`,
+                  textAlign: titleAlignment,
+                }}
+              >
+                {showTitle && image[titleSource]}
+                {showCaption && image[captionSource] && (
+                  <span
+                    className={'reacg-lightbox__caption'}
+                    style={{
+                      color: captionFontColor,
+                      fontSize: `clamp(${
+                        captionFontSize / minFactor
+                      }rem, ${captionFontSize}vw, ${
+                        captionFontSize * maxFactor
+                      }rem)`,
+                    }}
+                  >
+                    &nbsp;{image[captionSource]}
+                  </span>
+                )}
+              </p>
             )}
-            </p>
-          )}
-          {showDescription && image.description && (
-            <p
-              className={'reacg-lightbox-texts__description'}
-              style={{
-                color: textColor,
-                fontFamily: textFontFamily,
-                fontSize: `clamp(${
-                  descriptionFontSize / minFactor
-                }rem, ${descriptionFontSize}vw, ${
-                  descriptionFontSize * maxFactor
-                }rem)`,
-                WebkitLineClamp: descriptionMaxRowsCount,
-                WebkitBoxOrient: 'vertical',
-                display: '-webkit-box',
-              }}
-            >
-              {image.description}
-            </p>
-          )}
-        </>
-      ),
-      type: image.type,
-      sources: [
-        {
-          src: image.original.url,
-          type: `video/${image.original.url.split('.').pop()}`,
+            {showDescription && image[descriptionSource] && (
+              <p
+                className={'reacg-lightbox-texts__description'}
+                style={{
+                  color: textColor,
+                  fontFamily: textFontFamily,
+                  fontSize: `clamp(${
+                    descriptionFontSize / minFactor
+                  }rem, ${descriptionFontSize}vw, ${
+                    descriptionFontSize * maxFactor
+                  }rem)`,
+                  WebkitLineClamp: descriptionMaxRowsCount,
+                  WebkitBoxOrient: 'vertical',
+                  display: '-webkit-box',
+                }}
+              >
+                {image[descriptionSource]}
+              </p>
+            )}
+            {showButton && (
+              <div className={'reacg-lightbox-texts__button'}>
+                <ActionButton
+                  url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                  openInNewTab={openInNewTab}
+                  text={buttonText}
+                  alignment={buttonAlignment}
+                  backgroundColor={buttonColor}
+                  textColor={buttonTextColor}
+                  borderSize={buttonBorderSize}
+                  borderColor={buttonBorderColor}
+                  borderRadius={buttonBorderRadius}
+                  style={{
+                    fontSize: `clamp(${
+                      buttonFontSize / minFactor
+                    }rem, ${buttonFontSize}vw, ${
+                      buttonFontSize * maxFactor
+                    }rem)`,
+                  }}
+                />
+              </div>
+            )}
+          </>
+        ),
+        type: image.type,
+        sources: [
+          {
+            src: image.original.url,
+            type: ``,
+          },
+        ],
+        poster: largestSrcItem.src,
+        src: largestSrcItem.src,
+        share: {
+          url: deepLink(index),
+          title: image.title,
+          text: image.description,
         },
-      ],
-      poster: image.medium_large.url,
-      src: image.original.url,
-      alt: image.alt,
-      srcSet: [
-        {
-          src: image.original.url,
-          width: image.original.width,
-          height: image.original.height,
-        },
-        {
-          src: image.large.url,
-          width: image.large.width,
-          height: image.large.height,
-        },
-        {
-          src: image.medium_large.url,
-          width: image.medium_large.width,
-          height: image.medium_large.height,
-        },
-        {
-          src: image.thumbnail.url,
-          width: image.thumbnail.width,
-          height: image.thumbnail.height,
-        },
-      ],
-      metadata: image.thumbnail.url,
-    }));
+        alt: image.alt,
+        srcSet: srcSet,
+        download: {url: image.original.url, filename: image.title},
+      };
+    });
   }, [
     images,
     textColor,
@@ -312,6 +526,23 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     showDescription,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    titleSource,
+    descriptionSource,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
+    showButton,
+    buttonText,
+    buttonAlignment,
+    buttonColor,
+    buttonTextColor,
+    buttonFontSize,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
+    buttonUrlSource,
+    openInNewTab,
   ]);
 
   const slideMargins = useMemo(() => {
@@ -328,6 +559,13 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       maxFactor,
       paddingAroundText,
       titleMargin,
+      showCaption,
+      showButton,
+      titleSource,
+      captionSource,
+      descriptionSource,
+      buttonBorderSize,
+      buttonContainerHeight,
     });
   }, [
     images,
@@ -338,7 +576,23 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     titleFontSize,
     descriptionFontSize,
     descriptionMaxRowsCount,
+    showCaption,
+    showButton,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
+    titleSource,
+    descriptionSource,
+    buttonBorderSize,
+    buttonContainerHeight,
   ]);
+
+  const responsivePadding = useMemo(() => {
+    if (innerWidth <= 768 || innerHeight <= 576) {
+      return padding / 10;
+    }
+    return padding;
+  }, [innerWidth, innerHeight, padding]);
 
   const renderLighbox = () => {
     return (
@@ -350,19 +604,40 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
         controller={{closeOnBackdropClick: !drag}}
+        noScroll={{
+          disabled: true,
+        }}
+        counter={{
+          separator: '/',
+          container: {
+            style: {
+              top:
+                textPosition === LightboxTextPosition.TOP ||
+                textPosition === LightboxTextPosition.ABOVE
+                  ? 'unset'
+                  : 0,
+              bottom:
+                textPosition === LightboxTextPosition.TOP ||
+                textPosition === LightboxTextPosition.ABOVE
+                  ? 0
+                  : 'unset',
+            },
+          },
+        }}
         animation={{
           swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
           easing: {swipe: 'ease-out', navigation: 'ease-in-out'},
         }}
         render={{
           buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
+          slideFooter: () => <WatermarkOverlay />,
         }}
         carousel={{
+          spacing: 0,
           preload: 5,
           finite: !isInfinite,
-          padding,
+          padding: responsivePadding,
         }}
-        // #TODO add generic validation mechanism to avoid this kind of checkings
         thumbnails={{
           position: thumbnailsPosition as any,
           width: thumbnailWidth > 0 ? thumbnailWidth : 10,
@@ -381,11 +656,19 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           'reacg-lightbox-animation-' + imageAnimation,
           {
             'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
-            'reacg-lightbox-texts': textPosition !== LightboxTextPosition.NONE,
+            'reacg-lightbox-texts':
+              showTitle || showCaption || showDescription || showButton,
             'reacg-lightbox-texts_top': [
               LightboxTextPosition.TOP,
               LightboxTextPosition.ABOVE,
             ].includes(textPosition),
+            'reacg-invert-captions': invertTextColor,
+            'reacg-slideshow-gallery__text-background-top-gradient':
+              textBackground === '' &&
+              textPosition === LightboxTextPosition.TOP,
+            'reacg-slideshow-gallery__text-background-bottom-gradient':
+              textBackground === '' &&
+              textPosition === LightboxTextPosition.BOTTOM,
           }
         )}
         styles={{
@@ -399,9 +682,12 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
             '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
             '--yarl__slide_captions_container_background':
-              (showTitle && images![index]?.title) ||
-              (showDescription && images![index]?.description)
-                ? `${backgroundColor}80`
+              textBackground &&
+              ((showTitle && images?.[index]?.title) ||
+                (showCaption && images?.[index]?.caption) ||
+                (showDescription && images?.[index]?.description) ||
+                showButton)
+                ? `${textBackground}`
                 : `none`,
           },
           thumbnail: {
@@ -447,7 +733,10 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           slideshowStop: () => {
             if (videoAutoplay) setVideoAutoplay(false);
           },
-          view: ({index: currentIndex}) => setIndex(currentIndex),
+          view: ({index: currentIndex}) => {
+            setIndex(currentIndex);
+            updateURL(currentIndex);
+          },
           entering: handleOpen,
         }}
       />

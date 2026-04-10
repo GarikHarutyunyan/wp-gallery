@@ -1,37 +1,34 @@
 import React, {useContext} from 'react';
 
-const AppInfoContext = React.createContext<{
+interface IAppInfo {
   galleryId?: string;
   showControls?: boolean;
   baseUrl?: string;
   nonce?: string;
   pluginUrl?: string;
+  pluginAssetsUrl?: string;
   pluginVersion?: string;
   getGalleryTimestamp?: () => string;
   getOptionsTimestamp?: () => string;
-}>({});
-
-interface IAppInfoProviderProps extends React.PropsWithChildren {
-  galleryId?: string;
-  showControls?: boolean;
-  baseUrl?: string;
-  nonce?: string;
-  pluginUrl?: string;
-  pluginVersion?: string;
-  getGalleryTimestamp?: () => string;
-  getOptionsTimestamp?: () => string;
+  optionsContainerSelector: string;
 }
 
-const AppInfoProvider: React.FC<IAppInfoProviderProps> = ({
+const AppInfoContext = React.createContext<IAppInfo>({} as IAppInfo);
+
+type AppInfoProviderProps = React.PropsWithChildren & IAppInfo;
+
+const AppInfoProvider: React.FC<AppInfoProviderProps> = ({
   galleryId,
   showControls,
   baseUrl,
   nonce,
   pluginUrl,
+  pluginAssetsUrl,
   pluginVersion,
   children,
   getGalleryTimestamp,
   getOptionsTimestamp,
+  optionsContainerSelector,
 }) => {
   return (
     <AppInfoContext.Provider
@@ -41,9 +38,11 @@ const AppInfoProvider: React.FC<IAppInfoProviderProps> = ({
         baseUrl,
         nonce,
         pluginUrl,
+        pluginAssetsUrl,
         pluginVersion,
         getGalleryTimestamp,
         getOptionsTimestamp,
+        optionsContainerSelector,
       }}
     >
       {children}

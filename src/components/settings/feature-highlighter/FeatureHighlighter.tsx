@@ -1,5 +1,5 @@
-import {ClickAwayListener, Tooltip} from '@mui/material';
-import {Aligner} from 'core-components/aligner';
+import { ClickAwayListener, Tooltip } from '@mui/material';
+import { Aligner } from 'core-components/aligner';
 import React, {
   PropsWithChildren,
   ReactElement,
@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {BulbIcon} from './BulbIcon';
+import { BulbIcon } from './BulbIcon';
 import './feature-highlighter.css';
 
 interface IFeatureHighlighterProps extends PropsWithChildren {
@@ -19,21 +19,40 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
   children,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const elementRef = useRef<HTMLElement>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
   const skipChecking = useRef<boolean>(false);
 
   useEffect(() => {
-    const highlightFeature = (e: any) => {
+    const highlightFeature = () => {
       if (!skipChecking.current) {
-        const handleScrollend = (evt: any) => setIsOpen(true);
+        const handleScrollend = () => {
+          window.clearTimeout(fallbackOpenTimeout);
+          setIsOpen(true);
+        };
+        const fallbackOpenTimeout = window.setTimeout(handleScrollend, 500);
 
         window.addEventListener('scrollend', handleScrollend, {
           once: true,
         });
-        (elementRef?.current as any)?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
+        const targetElement = elementRef.current;
+        if (targetElement) {
+          const rect = targetElement.getBoundingClientRect();
+          const viewportHeight = window.innerHeight;
+          const isMostlyVisible =
+            rect.top >= viewportHeight * 0.15 &&
+            rect.bottom <= viewportHeight * 0.85;
+
+          if (!isMostlyVisible) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+              inline: 'nearest',
+            });
+          } else {
+            window.clearTimeout(fallbackOpenTimeout);
+            setIsOpen(true);
+          }
+        }
         if (document.activeElement) {
           // blur active element if exist to avoid scrolling to focused element after backdrop cancelation
           (document.activeElement as any).blur?.();
@@ -51,10 +70,6 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
     return () =>
       window.removeEventListener('highlight-template-select', highlightFeature);
   }, []);
-
-  const renderChildren = () => {
-    return React.cloneElement(children as ReactElement);
-  };
 
   const handleClose = (): void => {
     setIsOpen(false);
@@ -76,7 +91,6 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
     <ClickAwayListener onClickAway={isOpen ? handleClose : () => {}}>
       <Tooltip
         classes={{popper: 'reacg-feature-highlighter'}}
-        ref={elementRef}
         title={renderTitle()}
         open={isOpen}
         placement={'left'}
@@ -87,21 +101,20 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
               marginLeft: '-10px',
               padding: '16px',
               overflow: 'visible',
-              backgroundColor: ' #1A76D2',
+              backgroundColor: '#5A558C',
               fontSize: '0.875rem',
               lineHeight: '1.43',
               letterSpacing: '0.01071em',
               width: '272px',
               color: '#FFF',
               borderRadius: '12px',
-              fontFamily: 'lexend',
               boxShadow:
                 'rgba(0, 0, 0, 0.2) 0px 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px, rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;',
             },
           },
           arrow: {
             sx: {
-              color: ' #1A76D2',
+              color: '#5A558C',
               width: '15px !important',
               height: '24px !important',
               marginRight: '-12px !important',
@@ -112,10 +125,17 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
           },
         }}
       >
-        {renderChildren()}
+        <div
+          ref={elementRef}
+          className={'reacg-feature-highlighter__anchor'}
+          onClickCapture={isOpen ? handleClose : undefined}
+        >
+          {children}
+        </div>
       </Tooltip>
     </ClickAwayListener>
   );
 };
 
-export {FeatureHighlighter};
+export { FeatureHighlighter };
+

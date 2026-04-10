@@ -32,6 +32,9 @@
 .blog-gallery__image_clickable {
   cursor: pointer;
 }
+.blog-gallery__image_non_clickable {
+  cursor: default;
+}
 .blog-gallery__text-container {
   flex: 1;
   display: flex;

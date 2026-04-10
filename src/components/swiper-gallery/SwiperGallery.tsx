@@ -1,15 +1,29 @@
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import IconButton from '@mui/material/IconButton';
-import {IImageDTO, ImageType} from 'data-structures';
+import {
+  ICardsSettings,
+  ICarouselSettings,
+  ICubeSettings,
+  IImageDTO,
+  ImageType,
+  SliderNavigation,
+  SliderNavigationPosition,
+  ThumbnailTitlePosition,
+} from 'data-structures';
 import React, {useEffect, useRef, useState} from 'react';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import type {Swiper as SwiperType} from 'swiper';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/effect-cube';
 import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+import {Autoplay, Navigation, Pagination} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
+import {handleSlideChange} from './imagePreloader';
 import './swiper-gallery.css';
 import SwiperImage from './SwiperImage';
 
@@ -32,7 +46,11 @@ interface ISwiperGalleryProps {
   scale?: any;
   allowTouchMove: boolean;
   perSlideOffset?: any;
+  settings: ICubeSettings | ICardsSettings | ICarouselSettings;
+  breakpoints?: any;
+  titleCaptionHeight?: number;
   onClick?: (index: number) => void;
+  externalPaginationId?: string;
 }
 
 const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
@@ -54,15 +72,19 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   scale,
   allowTouchMove,
   perSlideOffset,
+  settings,
+  breakpoints,
+  titleCaptionHeight,
   onClick,
+  externalPaginationId,
 }) => {
+  if (!padding) {
+    padding = 0;
+  }
   const swiperRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const [paddingTop, setPaddingTop] = useState<number>(0);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const isDragging = useRef<boolean>(false);
   const key = effects.effect + 'Effect';
-  const previousIndex = useRef<number>(-1);
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
@@ -115,91 +137,67 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
     }
   };
 
-  const onMouseDown = () => {
-    isDragging.current = true;
-  };
+  const handleOnChangeVideoAutoPlayAndPause = (swiper: SwiperType) => {
+    if (!swiper) return;
 
-  useEffect(() => {
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    swiper.slides.forEach((slide: HTMLElement) => {
+      const video = slide.querySelector<HTMLVideoElement>(
+        'video.gallery__video'
+      );
 
-    return () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-  }, []);
+      if (!video) return;
 
-  const onMouseMove = () => {
-    if (isDragging.current && videoRef.current) {
-      (videoRef.current as HTMLVideoElement).controls = false;
-    }
-  };
+      const isVisible = slide.classList.contains('swiper-slide-visible');
 
-  const onMouseUp = () => {
-    isDragging.current = false;
-    if (videoRef.current) {
-      (videoRef.current as HTMLVideoElement).controls = true;
-    }
-  };
-
-  const loadImagesInRange = (startIndex: number, endIndex: number) => {
-    for (let i = startIndex; i <= endIndex; i++) {
-      const swiper = swiperRef?.current?.swiper;
-      const imgElement = swiper?.slides[i]?.querySelector(
-        'img'
-      ) as HTMLImageElement;
-
-      if (
-        imgElement &&
-        images &&
-        (!imgElement.src || imgElement.src === undefined)
-      ) {
-        imgElement.setAttribute('src', images[i].original.url);
-        imgElement.setAttribute(
-          'srcSet',
-          `${images[i].thumbnail.url} ${images[i].thumbnail.width}w, ${images[i].medium_large.url} ${images[i].medium_large.width}w, ${images[i].original.url} ${images[i].original.width}w`
-        );
-      }
-    }
-  };
-
-  const handleSlideChange = (
-    previousIndex: any,
-    swiperRef: any,
-    imagesCount: number,
-    preLoadCount: number
-  ) => {
-    const swiper = swiperRef.current?.swiper;
-    const activeIndex = parseInt(swiper.realIndex);
-
-    if (images && previousIndex.current !== -1) {
-      var loadStartIndex, loadEndIndex;
-      if (activeIndex > previousIndex.current) {
-        loadStartIndex = activeIndex;
-        loadEndIndex = Math.min(
-          imagesCount + activeIndex + preLoadCount,
-          images.length
-        );
+      if (isVisible) {
+        if (video.paused) {
+          if (video.readyState >= 3) {
+            video.play().catch((err) => console.warn('Autoplay blocked:', err));
+          } else {
+            const onCanPlay = () => {
+              video.removeEventListener('canplay', onCanPlay);
+              video
+                .play()
+                .catch((err) => console.warn('Autoplay blocked:', err));
+            };
+            video.addEventListener('canplay', onCanPlay);
+            video.load?.();
+          }
+        }
       } else {
-        loadStartIndex = activeIndex
-          ? Math.max(
-              activeIndex -
-                (imagesCount !== undefined ? imagesCount : 0) -
-                preLoadCount,
-              0
-            )
-          : 0;
-        loadEndIndex = activeIndex;
+        if (!video.paused) {
+          video.pause();
+        }
       }
-      loadImagesInRange(loadStartIndex, loadEndIndex);
-    }
-    previousIndex.current = activeIndex;
+    });
   };
+
+  const dynamicThreshold = 6;
+
+  const aboveItemsCount = [
+    settings.titlePosition,
+    settings.captionPosition,
+    settings.buttonPosition,
+  ].filter((position) => position === ThumbnailTitlePosition.ABOVE).length;
+
+  const belowItemsCount = [
+    settings.titlePosition,
+    settings.captionPosition,
+    settings.buttonPosition,
+  ].filter((position) => position === ThumbnailTitlePosition.BELOW).length;
+
+  const navigationVerticalOffset =
+    titleCaptionHeight && aboveItemsCount > 0 && belowItemsCount === 0
+      ? titleCaptionHeight / 2
+      : titleCaptionHeight && belowItemsCount > 0 && aboveItemsCount === 0
+      ? -titleCaptionHeight / 2
+      : 0;
 
   return (
     <Swiper
-      key={imagesCount || 0}
+      key={`${imagesCount}_${settings.dotsPosition}`}
       ref={swiperRef}
+      {...effects}
       autoplay={
         autoplay || isPlaying
           ? {
@@ -209,45 +207,109 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
             }
           : false
       }
+      navigation={
+        settings.navigation === SliderNavigation.ARROWS ||
+        settings.navigation === SliderNavigation.ARROWS_AND_DOTS
+      }
+      modules={[
+        Autoplay,
+        Pagination,
+        Navigation,
+        ...(effects.additionalModules || []),
+      ]}
+      pagination={
+        settings.navigation === SliderNavigation.DOTS ||
+        settings.navigation === SliderNavigation.ARROWS_AND_DOTS
+          ? {
+              clickable: true,
+              type: 'bullets',
+              dynamicBullets: images.length > dynamicThreshold,
+              dynamicMainBullets:
+                images.length > dynamicThreshold ? dynamicThreshold - 1 : 0,
+              ...(settings.dotsPosition ===
+                SliderNavigationPosition.OUTSIDE && {
+                el: `#${externalPaginationId || '#swiper-pagination-external'}`,
+              }),
+            }
+          : false
+      }
       grabCursor={allowTouchMove}
       allowTouchMove={allowTouchMove}
       loop={loop}
-      pagination={false}
       className={className}
       loopAdditionalSlides={0}
-      onSlideChange={() => {
-        if (handleSlideChange) {
-          handleSlideChange(
-            previousIndex,
-            swiperRef,
-            imagesCount,
-            preLoadCount
-          );
+      speed={settings.animationSpeed}
+      breakpoints={breakpoints}
+      onInit={() => {
+        const swiper = swiperRef.current?.swiper;
+        if (settings.dotsPosition === SliderNavigationPosition.OUTSIDE) {
+          swiper.params.pagination.el = `#${
+            externalPaginationId || '#swiper-pagination-external'
+          }`;
         }
+        handleOnChangeVideoAutoPlayAndPause(swiper);
       }}
-      {...effects}
-      style={
-        key === 'cardsEffect' || key === 'cubeEffect'
-          ? {
-              width,
-              height,
-            }
+      onSlideChange={(swiper: SwiperType) => {
+        handleOnChangeVideoAutoPlayAndPause(swiper);
+        handleSlideChange(swiperRef, images, preLoadCount);
+      }}
+      onTransitionEnd={(swiper: SwiperType) => {
+        handleOnChangeVideoAutoPlayAndPause(swiper);
+      }}
+      onResize={(swiper: SwiperType) => {
+        handleOnChangeVideoAutoPlayAndPause(swiper);
+      }}
+      onTouchStart={() => {
+        const videos = document.querySelectorAll('.gallery__video');
+        videos.forEach((v) => v.classList.add('no-pointer'));
+      }}
+      onTouchEnd={() => {
+        const videos = document.querySelectorAll('.gallery__video');
+        videos.forEach((v) => v.classList.remove('no-pointer'));
+      }}
+      style={{
+        '--swiper-wrapper-transition-timing-function': 'ease-in-out',
+        '--swiper-pagination-bottom': '10px',
+        '--swiper-pagination-color': settings.activeDotColor,
+        '--swiper-pagination-bullet-size': settings.dotsSize + 'px',
+        '--swiper-pagination-bullet-inactive-color': settings.inactiveDotsColor,
+        '--swiper-pagination-bullet-inactive-opacity': '1',
+        '--swiper-pagination-bullet-horizontal-gap': settings.dotsGap + 'px',
+        '--swiper-navigation-size': settings.arrowsSize + 'px',
+        '--swiper-navigation-color': settings.arrowsColor,
+        '--swiper-navigation-sides-offset': '20px',
+        '--swiper-navigation-top-offset': `calc(50% + ${navigationVerticalOffset}px)`,
+        ...(key === 'cardsEffect' || key === 'cubeEffect'
+          ? {width, height}
           : key === 'coverflowEffect'
           ? {
               paddingTop: `${paddingTop}px`,
               paddingBottom: `${paddingTop}px`,
             }
-          : {}
-      }
+          : {}),
+      }}
     >
       {images?.map((image: IImageDTO, index) => {
         const isVideo: boolean = image.type === ImageType.VIDEO;
-
+        const coverflowOriginalIndex = images.findIndex(
+          (img) => img.id === image.id
+        );
         return (
           <SwiperSlide
             key={index}
-            onClick={() => onClick?.(index)}
+            onClick={() => {
+              /*The normalizedIndex is used to control the lightbox behavior accurately when using coverflowEffect.
+                In this mode, I intentionally create duplicate slides for visual  purposes. However, these duplicates can lead to issues if they share the same index - such as breaking navigation.
+                To prevent this, I use coverflowOriginalIndex that take the first origial image id  from 2 the same images*/
+              const normalizedIndex =
+                key === 'coverflowEffect' ? coverflowOriginalIndex : index;
+              onClick?.(normalizedIndex);
+            }}
             className={slideClassName}
+            style={{
+              backgroundColor: key !== 'coverflowEffect' ? backgroundColor : '',
+              padding: key !== 'coverflowEffect' ? padding + 'px' : 0,
+            }}
           >
             <SwiperImage
               key={index}
@@ -258,9 +320,9 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
               backgroundColor={backgroundColor}
               padding={padding}
               size={size}
-              videoRef={videoRef}
-              onMouseDown={onMouseDown}
               galleryKey={key}
+              settings={settings}
+              titleCaptionHeight={titleCaptionHeight}
             />
           </SwiperSlide>
         );
@@ -271,6 +333,9 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           onClick={isPlaying ? handlePause : handlePlay}
           aria-label={isPlaying ? 'pause' : 'play'}
           size="large"
+          style={{
+            top: `calc(50% + ${navigationVerticalOffset}px - var(--swiper-navigation-size, 30px))`,
+          }}
         >
           {isPlaying ? (
             <PauseIcon fontSize="inherit" />
@@ -284,6 +349,4 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 };
 
 export {SwiperGallery};
-function uselayouteffect(arg0: () => void, arg1: any[]) {
-  throw new Error('Function not implemented.');
-}
+export default SwiperGallery;

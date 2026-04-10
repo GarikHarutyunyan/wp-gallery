@@ -1,9 +1,9 @@
-.reacg-gallery .reacg-feature-highlighter {
-    z-index: 99998;
+.reacg-wrapper .reacg-feature-highlighter {
+  z-index: 99998;
 }
 
 @media screen and (max-width: 775px) {
-    .reacg-gallery .reacg-feature-highlighter {
-        display: none;
-    }
+  .reacg-wrapper .reacg-feature-highlighter {
+    display: none;
+  }
 }

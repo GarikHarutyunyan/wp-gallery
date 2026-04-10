@@ -1,40 +1,82 @@
 import {
   BlogViewImagePosition,
+  CaptionSource,
+  DescriptionPosition,
+  DescriptionSource,
   GalleryType,
   HoverEffect,
   ImageClickAction,
   LightboxImageAnimation,
   LightboxTextPosition,
   LightboxThumbnailsPosition,
-  PaginationButtonShape,
   PaginationType,
+  Position,
   SizeTypeHeight,
   SizeTypeWidth,
+  SliderNavigation,
+  SliderNavigationPosition,
   TextsAlignment,
   ThumbnailTitlePosition,
   TitleAlignment,
   TitlePosition,
+  TitleSource,
   TitleVisibility,
 } from 'data-structures';
 
 export interface IThumbnailSettings {
+  fillContainer: boolean;
+  aspectRatio: string;
   width?: number | undefined;
   height?: number | undefined;
   columns?: number | undefined;
   gap: number;
+  itemBorder: number;
+  itemBackgroundColor: string;
+  itemBorderRadius: number;
   backgroundColor: string;
   containerPadding: number;
   padding: number;
   paddingColor: string;
   borderRadius: number;
-  titlePosition: ThumbnailTitlePosition;
-  titleAlignment: TitleAlignment;
-  titleVisibility: TitleVisibility;
-  titleFontFamily: string;
-  titleColor: string;
-  titleFontSize?: number | undefined;
-  hoverEffect: HoverEffect;
   paginationType: PaginationType;
+  showAllItems: boolean;
+  hoverEffect: HoverEffect;
+  showTitle: boolean;
+  titleSource: TitleSource;
+  titleVisibility: TitleVisibility;
+  titlePosition: ThumbnailTitlePosition;
+  titleFontSize?: number | undefined;
+  titleColor: string;
+  titleAlignment: TitleAlignment;
+  titleFontFamily: string;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionVisibility: TitleVisibility;
+  captionPosition: ThumbnailTitlePosition;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
+  showDescription: boolean;
+  descriptionSource: DescriptionSource;
+  descriptionPosition: DescriptionPosition;
+  descriptionFontSize?: number | undefined;
+  descriptionFontColor: string;
+  descriptionMaxRowsCount?: number | undefined;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: ThumbnailTitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
+  showVideoCover: boolean;
 }
 
 export interface IMasonrySettings {
@@ -46,14 +88,39 @@ export interface IMasonrySettings {
   paddingColor: string;
   columns?: number | undefined;
   borderRadius: number;
+  titleSource: TitleSource;
   titlePosition: TitlePosition;
   titleAlignment: TitleAlignment;
   titleVisibility: TitleVisibility;
+  captionVisibility: TitleVisibility;
+  captionPosition: TitlePosition;
   titleFontFamily: string;
   titleColor: string;
   titleFontSize?: number | undefined;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
   hoverEffect: HoverEffect;
   paginationType: PaginationType;
+  showAllItems: boolean;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
+  showTitle: boolean;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: TitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
+  showVideoCover: boolean;
 }
 
 export interface IMosaicSettings extends IMasonrySettings {}
@@ -69,11 +136,18 @@ export interface ISlideshowSettings {
   autoplay: boolean;
   isInfinite: boolean;
   slideDuration: number;
+  showCounter: boolean;
+  canShare: boolean;
+  canDownload: boolean;
+  canZoom: boolean;
+  canFullscreen: boolean;
   imageAnimation: LightboxImageAnimation;
   backgroundColor: string;
   textPosition: LightboxTextPosition;
   textFontFamily: string;
   textColor: string;
+  textBackground: string;
+  invertTextColor: boolean;
   thumbnailsPosition: LightboxThumbnailsPosition;
   thumbnailWidth: number;
   thumbnailHeight: number;
@@ -90,14 +164,28 @@ export interface ISlideshowSettings {
   descriptionFontSize: number;
   descriptionMaxRowsCount: number | undefined;
   isFullCoverImage?: boolean;
+  titleSource: TitleSource;
+  descriptionSource: DescriptionSource;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionFontSize: number;
+  captionFontColor: string;
+  showButton: boolean;
+  buttonText: string;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
 }
 
 export interface ILightboxSettings extends ISlideshowSettings {
-  isFullscreen: boolean;
   areControlButtonsShown: boolean;
-  canDownload: boolean;
-  canZoom: boolean;
-  isFullscreenAllowed: boolean;
+  isFullscreen: boolean;
 }
 
 export interface IGeneralSettings {
@@ -106,13 +194,26 @@ export interface IGeneralSettings {
   itemsPerPage: number | undefined;
   activeButtonColor: string;
   inactiveButtonColor: string;
-  paginationButtonShape: PaginationButtonShape;
   loadMoreButtonColor: string;
   paginationTextColor: string;
+  paginationButtonTextSize: number;
+  paginationButtonBorderRadius: number;
+  paginationButtonBorderSize: number;
+  paginationButtonBorderColor: string;
+  loadMoreButtonText: string;
+  paginationButtonClass: string;
   clickAction: ImageClickAction;
   openUrlInNewTab: boolean;
-  showSearchField: boolean;
-  searchFieldPlaceholder: string;
+  actionUrlSource: string;
+  enableWatermark: boolean;
+  watermarkImageURL: string;
+  watermarkTransparency: number;
+  watermarkSize: number;
+  watermarkPosition: Position;
+  enableSearch: boolean;
+  searchPlaceholderText: string;
+  enableWhiteLabel: boolean;
+  enableRightClickProtection: boolean;
 }
 
 export interface ICubeSettings {
@@ -122,8 +223,50 @@ export interface ICubeSettings {
   padding: number;
   isInfinite: boolean;
   autoplay: boolean;
+  playAndPauseAllowed: boolean;
   slideDuration: number;
   shadow: boolean;
+  hoverEffect: HoverEffect;
+  showTitle: boolean;
+  titleSource: TitleSource;
+  titleVisibility: TitleVisibility;
+  titlePosition: ThumbnailTitlePosition;
+  titleFontSize?: number | undefined;
+  titleColor: string;
+  titleAlignment: TitleAlignment;
+  titleFontFamily: string;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionVisibility: TitleVisibility;
+  captionPosition: ThumbnailTitlePosition;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: ThumbnailTitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
+  navigation: SliderNavigation;
+  arrowsSize: number;
+  arrowsColor: string;
+  dotsPosition: SliderNavigationPosition;
+  dotsSize: number;
+  dotsGap: number;
+  activeDotColor: string;
+  inactiveDotsColor: string;
+  showVideoControls: boolean;
+  animationSpeed: number;
+  showVideoCover: boolean;
 }
 
 export interface ICarouselSettings {
@@ -136,17 +279,99 @@ export interface ICarouselSettings {
   playAndPauseAllowed: boolean;
   scale: number;
   imagesCount: number;
+  enableScrollByImagesCount: boolean;
   spaceBetween: number;
+  hoverEffect: HoverEffect;
+  showTitle: boolean;
+  titleSource: TitleSource;
+  titleVisibility: TitleVisibility;
+  titlePosition: ThumbnailTitlePosition;
+  titleFontSize?: number | undefined;
+  titleColor: string;
+  titleAlignment: TitleAlignment;
+  titleFontFamily: string;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionVisibility: TitleVisibility;
+  captionPosition: ThumbnailTitlePosition;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: ThumbnailTitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
+  navigation: SliderNavigation;
+  arrowsSize: number;
+  arrowsColor: string;
+  dotsPosition: SliderNavigationPosition;
+  dotsSize: number;
+  dotsGap: number;
+  activeDotColor: string;
+  inactiveDotsColor: string;
+  showVideoControls: boolean;
+  animationSpeed: number;
+  showVideoCover: boolean;
 }
 
 export interface ICardsSettings {
   width: number;
   height: number;
   perSlideOffset: number;
-  navigationButton: boolean;
   playAndPauseAllowed: boolean;
   autoplay: boolean;
   slideDuration: number;
+  hoverEffect: HoverEffect;
+  showTitle: boolean;
+  titleSource: TitleSource;
+  titleVisibility: TitleVisibility;
+  titlePosition: ThumbnailTitlePosition;
+  titleFontSize?: number | undefined;
+  titleColor: string;
+  titleAlignment: TitleAlignment;
+  titleFontFamily: string;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionVisibility: TitleVisibility;
+  captionPosition: ThumbnailTitlePosition;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: ThumbnailTitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
+  navigation: SliderNavigation;
+  arrowsSize: number;
+  arrowsColor: string;
+  dotsPosition: SliderNavigationPosition;
+  dotsSize: number;
+  dotsGap: number;
+  activeDotColor: string;
+  inactiveDotsColor: string;
+  showVideoControls: boolean;
+  animationSpeed: number;
+  showVideoCover: boolean;
 }
 
 export interface IBlogSettings {
@@ -161,6 +386,8 @@ export interface IBlogSettings {
   titleAlignment: TitleAlignment;
   titleColor: string;
   descriptionColor: string;
+  titleSource: TitleSource;
+  descriptionSource: DescriptionSource;
   titleFontSize: number;
   descriptionFontSize: number;
   buttonText: string;
@@ -168,6 +395,9 @@ export interface IBlogSettings {
   buttonColor: string;
   buttonTextColor: string;
   buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
   textFontFamily: string;
   imageHeightType: SizeTypeHeight;
   imageWidthType: SizeTypeWidth;
@@ -178,8 +408,15 @@ export interface IBlogSettings {
   textHorizontalSpacing: number;
   textVerticalSpacing: number;
   paginationType: PaginationType;
+  showAllItems: boolean;
   descriptionMaxRowsCount: number | undefined;
   imagePosition: BlogViewImagePosition;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
+  buttonUrlSource: string;
+  showVideoCover: boolean;
 }
 
 export interface ISettingsDTO {
@@ -195,7 +432,8 @@ export interface ISettingsDTO {
   carousel: ICarouselSettings;
   cards: ICardsSettings;
   blog: IBlogSettings;
-  template_id?: number | string;
+  template_id?: number;
+  templateType?: string;
   title?: string;
   css?: string;
   custom_css?: string;

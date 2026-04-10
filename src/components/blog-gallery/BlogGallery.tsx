@@ -4,8 +4,8 @@ import {Box} from '@mui/material';
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
-import {Button} from 'core-components/button';
-import {IBlogSettings} from 'data-structures';
+import {ActionButton} from 'core-components/action-button';
+import {ActionURLSource, IBlogSettings} from 'data-structures';
 import '../photo-album/photo-album.css';
 import './BlogGallery.css';
 import BlogImage from './BlogImage';
@@ -31,6 +31,8 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     textVerticalAlignment,
     textHorizontalSpacing,
     textVerticalSpacing,
+    titleSource,
+    descriptionSource,
     titleAlignment,
     titleFontSize,
     titleColor,
@@ -41,23 +43,22 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     buttonColor,
     buttonFontSize,
     buttonTextColor,
+    buttonBorderSize,
+    buttonBorderColor,
+    buttonBorderRadius,
     textFontFamily,
     hoverEffect,
     openInNewTab,
+    buttonUrlSource,
     descriptionMaxRowsCount,
     imagePosition,
+    showCaption,
+    captionSource,
+    captionFontSize,
+    captionFontColor,
+    showVideoCover,
   } = settings as IBlogSettings;
   const isMobile: boolean = containerInnerWidth <= 720;
-
-  const onCustomActionToggle = (url: string) => {
-    if (!!url) {
-      if (openInNewTab) {
-        window?.open(url, '_blank')?.focus();
-      } else {
-        window?.open(url, '_self');
-      }
-    }
-  };
 
   const updateContainerWidth = useCallback(() => {
     if (wrapperRef.current) {
@@ -87,7 +88,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
         }}
         className="blog-gallery"
       >
-        {images!.map((image, index) => {
+        {images?.map((image, index) => {
           return (
             <div
               key={image.original.url}
@@ -110,6 +111,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                 imageHeightType={imageHeightType}
                 imageRadius={imageRadius}
                 hoverEffect={hoverEffect}
+                showVideoCover={showVideoCover}
                 onClick={onClick}
               />
               <div
@@ -121,7 +123,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                 }}
               >
                 <div className="blog-gallery__text-container-content">
-                  {showTitle && image.title && (
+                  {showTitle && image[titleSource] && (
                     <h1
                       style={{
                         fontSize: titleFontSize,
@@ -129,32 +131,35 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         textAlign: titleAlignment,
                         margin: 0,
                         padding:
-                          showButton && !image.caption && (!showDescription || !image.description)
+                          showButton &&
+                          (!showCaption || !image[captionSource]) &&
+                          (!showDescription || !image[descriptionSource])
                             ? '0px 0px 15px'
                             : 0,
                       }}
                     >
-                      {image.title}
+                      {image[titleSource]}
                     </h1>
                   )}
-                  {showTitle && image.caption && (
+                  {showCaption && image[captionSource] && (
                     <p
                       className="blog-gallery__text-container-content-caption"
                       style={{
                         textAlign: titleAlignment,
-                        fontSize: titleFontSize,
-                        color: titleColor,
+                        fontSize: captionFontSize,
+                        color: captionFontColor,
                         margin: 0,
                         padding:
-                            showButton && (!showDescription || !image.description)
-                                ? '0px 0px 15px'
-                                : 0,
+                          showButton &&
+                          (!showDescription || !image[descriptionSource])
+                            ? '0px 0px 15px'
+                            : 0,
                       }}
                     >
-                      {image.caption}
+                      {image[captionSource]}
                     </p>
                   )}
-                  {showDescription && image.description && (
+                  {showDescription && image[descriptionSource] && (
                     <p
                       className="blog-gallery__text-container-content-description"
                       style={{
@@ -163,37 +168,26 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         color: descriptionColor,
                       }}
                     >
-                      {image.description}
+                      {image[descriptionSource]}
                     </p>
                   )}
                   {showButton && (
-                    <Button
-                      onClick={() =>
-                        onCustomActionToggle(image.action_url || '')
+                    <ActionButton
+                      url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                      openInNewTab={openInNewTab}
+                      text={
+                        buttonText ||
+                        (window as any).reacg_global?.text?.view_more
                       }
                       className={'blog-gallery__button'}
-                      style={{
-                        display: 'block',
-                        backgroundColor: buttonColor,
-                        color: buttonTextColor,
-                        fontSize: buttonFontSize,
-                        textTransform: 'none',
-                        marginLeft:
-                          buttonAlignment === 'center'
-                            ? 'auto'
-                            : buttonAlignment === 'right'
-                            ? 'auto'
-                            : '0',
-                        marginRight:
-                          buttonAlignment === 'center'
-                            ? 'auto'
-                            : buttonAlignment === 'left'
-                            ? 'auto'
-                            : '0',
-                      }}
-                    >
-                      {buttonText}
-                    </Button>
+                      alignment={buttonAlignment}
+                      backgroundColor={buttonColor}
+                      textColor={buttonTextColor}
+                      fontSize={buttonFontSize}
+                      borderSize={buttonBorderSize}
+                      borderColor={buttonBorderColor}
+                      borderRadius={buttonBorderRadius}
+                    />
                   )}
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import {Paper, Typography} from '@mui/material';
-import axios from 'axios';
+import axios, {CancelTokenSource} from 'axios';
 import {useAppInfo} from 'contexts/AppInfoContext';
 import {TranslationsContext} from 'contexts/TranslationsContext';
 import {
@@ -75,6 +75,33 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     blogSettings?.paginationType,
   ]);
 
+  const showAllItems: boolean = useMemo(() => {
+    if (type === GalleryType.MOSAIC) {
+      return mosaicSettings!.showAllItems;
+    }
+    if (type === GalleryType.JUSTIFIED) {
+      return justifiedSettings!.showAllItems;
+    }
+    if (type === GalleryType.THUMBNAILS) {
+      return thumbnailSettings!.showAllItems;
+    }
+    if (type === GalleryType.MASONRY) {
+      return masonrySettings!.showAllItems;
+    }
+    if (type === GalleryType.BLOG) {
+      return blogSettings!.showAllItems;
+    }
+
+    return true;
+  }, [
+    type,
+    mosaicSettings?.showAllItems,
+    justifiedSettings?.showAllItems,
+    thumbnailSettings?.showAllItems,
+    masonrySettings?.showAllItems,
+    blogSettings?.showAllItems,
+  ]);
+
   const {
     itemsPerPage = 1,
     orderBy = 'default',
@@ -94,7 +121,12 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const pagesCount: number =
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
   const isFullyLoaded: boolean = currentPage >= pagesCount;
-  const isFetchingRef = useRef(false);
+  const cancelTokenSourceRef = useRef<CancelTokenSource | null>(null);
+  const lastRequestRef = useRef<{
+    page: number;
+    search: string;
+    itemsPerPage: number;
+  } | null>(null);
   useEffect(() => {
     changeImagesCount?.(0);
     setLightboxImages([]);
@@ -114,13 +146,17 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
   useUpdateEffect(() => {
     itemsPerPage > 0 && onReloadData();
-  }, [itemsPerPage, paginationType, orderBy, orderDirection]);
-  const loadAllLightboxImages = async (): Promise<void> => {
+  }, [itemsPerPage, paginationType, showAllItems, orderBy, orderDirection]);
+
+  const loadAllLightboxImages = async (gid?: string): Promise<void> => {
     if (
-      (!lightboxImages || lightboxImages.length < imageCount) &&
-      images.length < imageCount
+      gid ||
+      ((!lightboxImages || lightboxImages.length < imageCount) &&
+        images.length < imageCount)
     ) {
-      const newLightboxImages: IImageDTO[] = await (getAllData as Function)();
+      const newLightboxImages: IImageDTO[] = await (getAllData as Function)(
+        gid
+      );
 
       setLightboxImages(newLightboxImages);
     } else if (images.length == imageCount) {
@@ -128,11 +164,10 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
-  const getAllData = async (): Promise<IImageDTO[]> => {
+  const getAllData = async (gid?: string): Promise<IImageDTO[]> => {
     const fetchUrl: string | undefined = baseUrl
-      ? baseUrl + 'gallery/' + galleryId + '/images'
+      ? baseUrl + 'gallery/' + (gid || galleryId) + '/images'
       : undefined;
-
     if (fetchUrl) {
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
@@ -147,16 +182,29 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         id: data.id,
         type: data.type,
         original: data.original,
+        sizes: data.sizes.length ? data.sizes : [data.original],
         width: data.width,
         height: data.height,
-        large: data.large,
-        medium_large: data.medium_large,
-        thumbnail: data.thumbnail,
         title: data.title,
         description: data.description,
+        author: data.author,
+        date_created: data.date_created,
+        exif: (
+          <>
+            {data.exif.split('\n').map((line: string) => (
+              <>
+                {line}
+                <br />
+              </>
+            ))}
+          </>
+        ),
         caption: data.caption,
+        price: data.price,
         alt: data.alt,
         action_url: data.action_url,
+        item_url: data.item_url,
+        checkout_url: data.checkout_url,
       }));
 
       return newImages;
@@ -174,16 +222,29 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       id: data.id,
       type: data.type,
       original: data.original,
+      sizes: data.sizes.length ? data.sizes : [data.original],
       width: data.width,
       height: data.height,
-      large: data.large,
-      medium_large: data.medium_large,
-      thumbnail: data.thumbnail,
       title: data.title,
       caption: data.caption,
+      price: data.price,
       alt: data.alt,
       description: data.description,
+      author: data.author,
+      date_created: data.date_created,
+      exif: (
+        <>
+          {data.exif.split('\n').map((line: string) => (
+            <>
+              {line}
+              <br />
+            </>
+          ))}
+        </>
+      ),
       action_url: data.action_url,
+      item_url: data.item_url,
+      checkout_url: data.checkout_url,
     }));
 
     const loadMoreText: string | undefined =
@@ -204,10 +265,16 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const getData = async (page: number, search: string = '') => {
-    if (isFetchingRef.current) {
-      return;
+    if (cancelTokenSourceRef.current) {
+      cancelTokenSourceRef.current.cancel(
+        'Operation canceled due to new request.'
+      );
     }
-    isFetchingRef.current = true;
+
+    const newCancelTokenSource = axios.CancelToken.source();
+    cancelTokenSourceRef.current = newCancelTokenSource;
+    lastRequestRef.current = {page, search, itemsPerPage};
+
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'gallery/' + galleryId + '/images'
       : undefined;
@@ -218,58 +285,80 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       if (page === 1) {
         setImages([]);
       }
+
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
       queryString += `order_by=${orderBy}`;
       queryString += `&order=${orderDirection}`;
       queryString += `&s=${search}`;
       queryString += `&timestamp=${getGalleryTimestamp?.()}`;
-
-      if (paginationType !== PaginationType.NONE) {
+      if (paginationType !== PaginationType.NONE || !showAllItems) {
         queryString += `&page=${page}`;
         queryString += `&per_page=${itemsPerPage}`;
       }
-      const response: any = await axios.get(`${fetchUrl}${queryString}`);
-      const imgData: any[] = response.data;
-      const headers: any = response.headers;
-      const newImages: IImageDTO[] = imgData.map((data: any) => ({
-        id: data.id,
-        type: data.type,
-        original: data.original,
-        width: data.width,
-        height: data.height,
-        large: data.large,
-        medium_large: data.medium_large,
-        thumbnail: data.thumbnail,
-        title: data.title,
-        caption: data.caption,
-        alt: data.alt,
-        description: data.description,
-        action_url: data.action_url,
-      }));
-      const newImageCount: number = headers?.['x-images-count'];
-      const loadMoreText: string | undefined =
-        (window as any).reacg_global?.text?.load_more || undefined;
-      const noDataText: string | undefined =
-        (window as any).reacg_global?.text?.no_data || undefined;
-      const searchPlaceHolder: string | undefined =
-        (window as any).reacg_global?.text?.search || undefined;
-      loadMoreText && setLoadMoreText?.(loadMoreText);
-      noDataText && setNoDataText?.(noDataText);
-      searchPlaceHolder && setSearchPlaceholder?.(searchPlaceHolder);
-      setImageCount(newImageCount);
+      try {
+        const response = await axios.get(`${fetchUrl}${queryString}`, {
+          cancelToken: newCancelTokenSource.token,
+        });
+        const imgData: any[] = response.data;
+        const headers: any = response.headers;
+        const newImages: IImageDTO[] = imgData.map((data: any) => ({
+          id: data.id,
+          type: data.type,
+          original: data.original,
+          sizes: data.sizes.length ? data.sizes : [data.original],
+          width: data.width,
+          height: data.height,
+          title: data.title,
+          caption: data.caption,
+          price: data.price,
+          alt: data.alt,
+          description: data.description,
+          author: data.author,
+          date_created: data.date_created,
+          exif: (
+            <>
+              {data.exif.split('\n').map((line: string) => (
+                <>
+                  {line}
+                  <br />
+                </>
+              ))}
+            </>
+          ),
+          action_url: data.action_url,
+          item_url: data.item_url,
+          checkout_url: data.checkout_url,
+        }));
+        const newImageCount: number = headers?.['x-images-count'];
+        const loadMoreText: string | undefined =
+          (window as any).reacg_global?.text?.load_more || undefined;
+        const noDataText: string | undefined =
+          (window as any).reacg_global?.text?.no_data || undefined;
+        const searchPlaceHolder: string | undefined =
+          (window as any).reacg_global?.text?.search || undefined;
+        loadMoreText && setLoadMoreText?.(loadMoreText);
+        noDataText && setNoDataText?.(noDataText);
+        searchPlaceHolder && setSearchPlaceholder?.(searchPlaceHolder);
+        setImageCount(newImageCount);
 
-      if (paginationType === PaginationType.SIMPLE) {
-        setImages(newImages);
-        changeImagesCount?.(newImages.length);
-      } else {
-        setImages((prevImages) => [...prevImages, ...newImages]);
-        changeImagesCount?.(newImages.length);
+        if (paginationType === PaginationType.SIMPLE) {
+          setImages(newImages);
+          changeImagesCount?.(newImages.length);
+        } else {
+          setImages((prevImages) => [...prevImages, ...newImages]);
+          changeImagesCount?.(newImages.length);
+        }
+        setCurrentPage(page);
+        setIsLoading(false);
+        setLightboxImages(newImages);
+      } catch (error: any) {
+        if (axios.isCancel(error)) {
+          console.log('Request canceled:', error.message);
+        } else {
+          console.error('Error loading images:', error);
+        }
       }
-      setCurrentPage(page);
-      setIsLoading(false);
-      isFetchingRef.current = false;
-      setLightboxImages(newImages);
     } else {
       setImages(propsImages);
       changeImagesCount?.(propsImages.length);
@@ -281,13 +370,15 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     _event?: any,
     newPage: number = currentPage + 1
   ): Promise<void> => {
-    getData(newPage, searchTerm);
+    await getData(newPage, searchTerm);
   };
+
   const onSearch = async (newSearchTerm: string = ''): Promise<void> => {
     setCurrentPage(0);
     setSearchTerm(newSearchTerm);
     getData(1, newSearchTerm);
   };
+
   const onReloadData = async () => {
     changeImagesCount?.(0);
     setLightboxImages([]);

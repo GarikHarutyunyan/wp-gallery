@@ -1,0 +1,133 @@
+import {Box, Typography} from '@mui/material';
+import {Button} from 'core-components/button';
+import {AlertConfig} from './AlertDialog.types';
+
+interface IAlertProps {
+  config: AlertConfig;
+}
+
+const Alert = ({config}: IAlertProps) => {
+  const {
+    image,
+    title,
+    description,
+    additionalText,
+    errorMessage,
+    buttonConfig,
+    utm_medium,
+  } = config;
+  const {label, backgroundColor, width, onClick} = buttonConfig;
+
+  const handleClick = (utm_medium?: string) => {
+    onClick(utm_medium);
+  };
+
+  const renderAdditionalText = () => {
+    if (typeof additionalText === 'function') {
+      return additionalText(utm_medium);
+    }
+
+    return additionalText;
+  };
+
+  const renderErrorMessage = () => {
+    if (errorMessage) {
+      return (
+        <Box
+          sx={{
+            backgroundColor: '#f9f2f4',
+            padding: '8px 12px',
+            borderRadius: '6px',
+            display: 'inline-block',
+            marginTop: '16px',
+            width: '93%',
+          }}
+        >
+          <Typography
+            variant={'body2'}
+            color={'#c7254e'}
+            sx={{
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              overflowWrap: 'break-word',
+              display: '-webkit-box',
+              WebkitLineClamp: 5,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              fontWeight: 600,
+            }}
+          >
+            {`Error: ${errorMessage}`}
+          </Typography>
+        </Box>
+      );
+    }
+
+    return null;
+  };
+
+  return (
+    <Box className={'alert'}>
+      <Box sx={{display: 'flex', justifyContent: 'center'}}>{image}</Box>
+      {renderErrorMessage()}
+      {title && (
+        <Typography
+          variant={'h6'}
+          component={'div'}
+          sx={{
+            color: 'black',
+            fontWeight: 600,
+            fontSize: '1.2rem',
+            lineHeight: 1.4,
+            textAlign: 'center',
+            padding: '20px 8px 0',
+            fontFamily: 'inherit',
+          }}
+        >
+          {title}
+        </Typography>
+      )}
+      <Typography
+        variant={'h6'}
+        component={'div'}
+        sx={{
+          color: 'black',
+          fontWeight: 400,
+          fontSize: '1rem',
+          lineHeight: 1.4,
+          gap: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'left',
+          padding: title ? '12px 8px 25px' : '25px 8px',
+          fontFamily: 'inherit',
+          whiteSpace: 'pre-line',
+        }}
+      >
+        {description}
+      </Typography>
+      <Box
+        sx={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}
+      >
+        <Button
+          onClick={() => handleClick(utm_medium)}
+          style={{
+            background: backgroundColor,
+            width: width,
+            color: 'white',
+            padding: '6px 40px',
+            fontSize: 'large',
+            boxShadow: 'unset',
+            fontWeight: 600,
+            fontFamily: 'inherit',
+          }}
+        >
+          {label}
+        </Button>
+      </Box>
+      <div>{renderAdditionalText()}</div>
+    </Box>
+  );
+};
+
+export {Alert};

@@ -1,10 +1,15 @@
 import Box from '@mui/material/Box';
+import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {SwiperGallery} from 'components/swiper-gallery/SwiperGallery';
-import {ICardsSettings} from 'data-structures';
-import React, {useEffect, useState} from 'react';
-import {Autoplay, EffectCards, Navigation} from 'swiper/modules';
+import {
+  ICardsSettings,
+  SliderNavigation,
+  SliderNavigationPosition,
+} from 'data-structures';
+import React, {useEffect, useRef, useState} from 'react';
+import {EffectCards} from 'swiper/modules';
 import './cards-gallery.css';
 import {getContainerWidth, getMargin} from './getWidthAllCards';
 interface ITCardsProps {
@@ -20,15 +25,28 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
     playAndPauseAllowed,
     width,
     height,
-    navigationButton,
     perSlideOffset,
+    showTitle,
+    showCaption,
+    showButton,
+    titlePosition,
+    captionPosition,
+    buttonPosition,
+    titleFontSize,
+    captionFontSize,
+    buttonFontSize,
+    navigation,
+    dotsPosition,
+    dotsSize,
+    dotsGap,
+    activeDotColor,
+    inactiveDotsColor,
   } = settings as ICardsSettings;
 
   const effects = {
     id: 3,
     effect: 'cards',
-    modules: [EffectCards, Autoplay, Navigation],
-    navigation: navigationButton,
+    additionalModules: [EffectCards],
     cardsEffect: {
       rotate: true,
       perSlideRotate: 5,
@@ -73,31 +91,127 @@ const CardsGallery: React.FC<ITCardsProps> = ({onClick}) => {
     return () => window.removeEventListener('resize', handleResize);
   }, [width, height, perSlideOffset]);
 
+  const [titleCaptionHeight, setTitleCaptionHeight] = useState(0);
+  const galleryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!galleryRef.current) return;
+
+    const measureTitleCaptionHeight = () => {
+      const title = galleryRef.current?.querySelector(
+        '.swiper-gallery__title-caption.swiper-gallery__item-outline:not(.swiper-gallery__button)'
+      ) as HTMLElement;
+      const caption = galleryRef.current?.querySelector(
+        '.swiper-gallery__caption.swiper-gallery__item-outline'
+      ) as HTMLElement;
+      const button = galleryRef.current?.querySelector(
+        '.swiper-gallery__button.swiper-gallery__item-outline'
+      ) as HTMLElement;
+
+      let totalHeight = 0;
+      if (title) totalHeight += title.offsetHeight;
+      if (caption) totalHeight += caption.offsetHeight;
+      if (button) totalHeight += button.offsetHeight;
+
+      setTitleCaptionHeight(totalHeight);
+    };
+
+    // Initial measurement
+    measureTitleCaptionHeight();
+
+    // Watch for changes using ResizeObserver
+    const resizeObserver = new ResizeObserver(() => {
+      measureTitleCaptionHeight();
+    });
+
+    const swiperSlide = galleryRef.current.querySelector(
+      '.swiper-slide'
+    ) as HTMLElement;
+    if (swiperSlide) {
+      resizeObserver.observe(swiperSlide);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [
+    showTitle,
+    showCaption,
+    showButton,
+    titlePosition,
+    captionPosition,
+    buttonPosition,
+    titleFontSize,
+    captionFontSize,
+    buttonFontSize,
+  ]);
+
+  const dynamicThreshold = 6;
+
+  const externalPaginationIdRef = React.useRef(
+    `swiper-pagination-external-${Math.random().toString(36).slice(2, 9)}`
+  );
+
   return (
-    <Box
-      sx={{
-        width: `${innerWidth}px`,
-        height: `${innerHeight}px`,
-        marginTop: `${marginTop}px`,
-        marginBottom: `${marginBottom}px`,
-        mx: 'auto',
-      }}
-    >
-      <SwiperGallery
-        key={effects.id}
-        effects={effects}
-        images={images || []}
-        autoplay={autoplay}
-        delay={slideDuration}
-        playAndPauseAllowed={playAndPauseAllowed}
-        size={Math.max(innerWidth, innerHeight)}
-        imagesCount={5}
-        preLoadCount={1}
-        allowTouchMove={true}
-        perSlideOffset={perSlideOffset}
-        onClick={onClick}
-      />
-    </Box>
+    <>
+      <Box
+        ref={galleryRef}
+        sx={{
+          width: `${innerWidth}px`,
+          height: `${innerHeight + titleCaptionHeight}px`,
+          marginTop: `${marginTop}px`,
+          marginBottom: `${marginBottom}px`,
+          mx: 'auto',
+        }}
+      >
+        <SwiperGallery
+          key={effects.id}
+          externalPaginationId={externalPaginationIdRef.current}
+          effects={effects}
+          images={images || []}
+          autoplay={autoplay}
+          delay={slideDuration}
+          playAndPauseAllowed={playAndPauseAllowed}
+          size={Math.max(innerWidth, innerHeight)}
+          imagesCount={5}
+          preLoadCount={9}
+          allowTouchMove={true}
+          perSlideOffset={perSlideOffset}
+          settings={settings as ICardsSettings}
+          titleCaptionHeight={titleCaptionHeight}
+          onClick={onClick}
+        />
+      </Box>
+      {(navigation === SliderNavigation.DOTS ||
+        navigation === SliderNavigation.ARROWS_AND_DOTS) &&
+        dotsPosition === SliderNavigationPosition.OUTSIDE && (
+          <div
+            id={externalPaginationIdRef.current}
+            className={clsx(
+              'swiper-pagination-external',
+              'swiper-pagination',
+              'swiper-pagination-clickable',
+              'swiper-pagination-bullets',
+              'swiper-pagination-horizontal',
+              {
+                'swiper-pagination-bullets-dynamic':
+                  (images || []).length > dynamicThreshold,
+              }
+            )}
+            style={{
+              ['--swiper-pagination-color' as string]: activeDotColor,
+              ['--swiper-pagination-bullet-size' as string]: dotsSize + 'px',
+              ['--swiper-pagination-bullet-inactive-color' as string]:
+                inactiveDotsColor,
+              ['--swiper-pagination-bullet-inactive-opacity' as string]: '1',
+              ['--swiper-pagination-bullet-horizontal-gap' as string]:
+                dotsGap + 'px',
+              ['--swiper-external-pagination-padding' as string]: '10px',
+              ['--swiper-external-pagination-bottom-padding' as string]: '10px',
+            }}
+          />
+        )}
+    </>
   );
 };
 

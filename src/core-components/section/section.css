@@ -7,7 +7,8 @@
   align-items: center;
 }
 
-.reacg-section__header_clickable {
+.reacg-section__header_clickable,
+.seetings__cursor_pointer {
   cursor: pointer;
   -moz-user-select: none;
   -webkit-user-select: none;
@@ -18,6 +19,15 @@
 .reacg-section__title {
   padding: 10px 20px;
   margin: 0 !important;
+  display: inline-flex;
+  align-items: center;
+}
+
+.reacg-section__body {
+  .reacg-section__title {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
 }
 
 .reacg-section__expand-more {
@@ -36,11 +46,20 @@
   margin: 0 14px 14px;
 }
 
-.mixed-fields {
+.reacg-section .mixed-fields {
   display: flex;
   align-items: flex-end;
 }
 
 .seetings__see-more-link {
   color: #42abff;
+}
+
+/* Mui-override */
+.reacg-section .MuiSelect-select:focus {
+  background-color: unset !important;
+}
+
+.reacg-section .MuiSwitch-input {
+  height: 100%;
 }

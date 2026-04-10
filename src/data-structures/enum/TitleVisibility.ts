@@ -1,13 +1,11 @@
-import {ISelectOption} from 'components/controls/SelectControl';
+import { ISelectOption } from 'components/controls/SelectControl';
 
 export enum TitleVisibility {
   ALWAYS_SHOWN = 'alwaysShown',
   ON_HOVER = 'onHover',
-  NONE = 'none',
 }
 
 export const TitleVisibilityOptions: ISelectOption[] = [
-  {value: TitleVisibility.ALWAYS_SHOWN, title: 'Always'},
-  {value: TitleVisibility.ON_HOVER, title: 'Hover'},
-  {value: TitleVisibility.NONE, title: 'None'},
+  {value: TitleVisibility.ALWAYS_SHOWN, title: 'Always Show'},
+  {value: TitleVisibility.ON_HOVER, title: 'Show on Hover'},
 ];

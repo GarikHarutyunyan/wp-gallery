@@ -1,3 +1,4 @@
+export * from './action-button';
 export * from './aligner';
 export * from './button';
 export * from './color-picker';

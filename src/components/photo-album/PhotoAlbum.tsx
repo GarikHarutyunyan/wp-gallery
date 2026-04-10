@@ -2,11 +2,18 @@ import {Box} from '@mui/material';
 import {
   IImageDTO,
   IMasonrySettings,
-  ImageType,
   WithStyleAndClassName,
 } from 'data-structures';
-import React, {ReactNode, useCallback, useMemo, useState} from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import PhotoAlbum, {LayoutType} from 'react-photo-album';
+import {getLargestSrcItem, getSrcSet, ISrcSetItem} from 'utils/imageSrcSet';
 import {PhotoAlbumItem} from './PhotoAlbumItem';
 
 const initialContainerWidth = 1000; // Approximate container initial width in pxs.
@@ -42,44 +49,15 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
   const initialColumnsCount = columns || 4;
 
   const photos = useMemo(() => {
-    return images!.map((image: IImageDTO) => {
-      const isVideo: boolean = image.type === ImageType.VIDEO;
-      const width = isVideo ? image.medium_large.width : image.original.width;
-      const height = isVideo
-        ? image.medium_large.height
-        : image.original.height;
-      const src = isVideo ? image.medium_large.url : image.original.url;
-      const srcSet = [
-        {
-          src: image.large.url,
-          width: image.large.width,
-          height: image.large.height,
-        },
-        {
-          src: image.medium_large.url,
-          width: image.medium_large.width,
-          height: image.medium_large.height,
-        },
-        {
-          src: image.thumbnail.url,
-          width: image.thumbnail.width,
-          height: image.thumbnail.height,
-        },
-      ];
-
-      if (!isVideo) {
-        srcSet.unshift({
-          src: image.original.url,
-          width: image.original.width,
-          height: image.original.height,
-        });
-      }
+    return images?.map((image: IImageDTO) => {
+      const srcSet: ISrcSetItem[] = getSrcSet(image.sizes);
+      const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
 
       return {
         key: image.id,
-        width,
-        height,
-        src,
+        src: largestSrcItem.src,
+        width: largestSrcItem.width,
+        height: largestSrcItem.height,
         srcSet,
         id: image.id,
         alt: image.alt,
@@ -131,29 +109,51 @@ const ReacgPhotoAlbum: React.FC<IPhotoAlbumProps> = ({
     [initialColumnsCount]
   );
 
+  // Ensure parent flex lines compute correct height by syncing wrapper minHeight
+  const wrapperBoxRef = useRef<HTMLDivElement | null>(null);
+  const albumRootRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const albumEl = albumRootRef.current;
+    const boxEl = wrapperBoxRef.current;
+    if (!albumEl || !boxEl || typeof ResizeObserver === 'undefined') return;
+
+    const ro = new ResizeObserver(() => {
+      const h = albumEl.offsetHeight;
+      // Only set when we have a non-zero height to avoid layout thrash
+      if (h > 0) boxEl.style.minHeight = h + 'px';
+    });
+    ro.observe(albumEl);
+    return () => ro.disconnect();
+  }, []);
+
   return (
-    <Box sx={{width: `${width}%`, mx: 'auto'}}>
-      <PhotoAlbum
-        layout={layout}
-        columns={getColumnsCount}
-        spacing={gap}
-        padding={padding}
-        targetRowHeight={rowHeight}
-        photos={photos}
-        componentsProps={(containerWidth) => ({
-          containerProps: {
-            style: {
-              background: backgroundColor,
-              padding: containerPadding + 'px',
+    <Box sx={{width: `${width}%`, mx: 'auto'}} ref={wrapperBoxRef}>
+      <div ref={albumRootRef} style={{width: '100%'}}>
+        <PhotoAlbum
+          layout={layout}
+          columns={getColumnsCount}
+          spacing={gap}
+          padding={padding}
+          targetRowHeight={rowHeight}
+          photos={photos}
+          componentsProps={(containerWidth) => ({
+            containerProps: {
+              style: {
+                background: backgroundColor,
+                padding: containerPadding + 'px',
+              },
             },
-          },
-          imageProps: {loading: (containerWidth || 0) > 500 ? 'eager' : 'lazy'},
-        })}
-        renderPhoto={renderPhoto}
-        sizes={{
-          size: galleryWidth + 'px',
-        }}
-      />
+            imageProps: {
+              loading: (containerWidth || 0) > 500 ? 'eager' : 'lazy',
+            },
+          })}
+          renderPhoto={renderPhoto}
+          sizes={{
+            size: galleryWidth + 'px',
+          }}
+        />
+      </div>
     </Box>
   );
 };
