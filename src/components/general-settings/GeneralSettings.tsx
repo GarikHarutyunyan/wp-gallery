@@ -269,7 +269,18 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                             id={'loadMoreButtonColor'}
                             name="Button color"
                             value={loadMoreButtonColor}
-                            onChange={onInputValueChange}
+                            pro={true}
+                            onChange={
+                              isPro
+                                ? onInputValueChange
+                                : () =>
+                                    (
+                                      window as any
+                                    ).reacg_open_premium_offer_dialog({
+                                      utm_medium:
+                                        'pagination_load_more_button_color',
+                                    })
+                            }
                           />
                         </Filter>
                       </>
@@ -281,7 +292,18 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                             id={'activeButtonColor'}
                             name="Active button color"
                             value={activeButtonColor}
-                            onChange={onInputValueChange}
+                            pro={true}
+                            onChange={
+                              isPro
+                                ? onInputValueChange
+                                : () =>
+                                    (
+                                      window as any
+                                    ).reacg_open_premium_offer_dialog({
+                                      utm_medium:
+                                        'pagination_active_button_color',
+                                    })
+                            }
                           />
                         </Filter>
                       </>
@@ -291,10 +313,21 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                         id={'paginationButtonBorderRadius'}
                         name={'Button border radius'}
                         value={paginationButtonBorderRadius}
-                        onChange={onInputValueChange}
                         unit={'px'}
                         max={50}
                         step={1}
+                        pro={true}
+                        onChange={
+                          isPro
+                            ? onInputValueChange
+                            : () =>
+                                (window as any).reacg_open_premium_offer_dialog(
+                                  {
+                                    utm_medium:
+                                      'pagination_button_border_radius',
+                                  }
+                                )
+                        }
                       />
                     </Filter>
                     <Filter isLoading={isLoading}>
@@ -302,7 +335,17 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                         id={'paginationButtonBorderSize'}
                         name={'Button border size'}
                         value={paginationButtonBorderSize}
-                        onChange={onInputValueChange}
+                        pro={true}
+                        onChange={
+                          isPro
+                            ? onInputValueChange
+                            : () =>
+                                (window as any).reacg_open_premium_offer_dialog(
+                                  {
+                                    utm_medium: 'pagination_button_border_size',
+                                  }
+                                )
+                        }
                         unit={'px'}
                         max={20}
                         step={1}
@@ -313,7 +356,18 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                         id={'paginationButtonBorderColor'}
                         name={'Button border color'}
                         value={paginationButtonBorderColor}
-                        onChange={onInputValueChange}
+                        pro={true}
+                        onChange={
+                          isPro
+                            ? onInputValueChange
+                            : () =>
+                                (window as any).reacg_open_premium_offer_dialog(
+                                  {
+                                    utm_medium:
+                                      'pagination_button_border_color',
+                                  }
+                                )
+                        }
                       />
                     </Filter>
 
@@ -324,7 +378,18 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                             id={'inactiveButtonColor'}
                             name="Inactive button color"
                             value={inactiveButtonColor}
-                            onChange={onInputValueChange}
+                            pro={true}
+                            onChange={
+                              isPro
+                                ? onInputValueChange
+                                : () =>
+                                    (
+                                      window as any
+                                    ).reacg_open_premium_offer_dialog({
+                                      utm_medium:
+                                        'pagination_inactive_button_color',
+                                    })
+                            }
                           />
                         </Filter>
                       </>
@@ -334,7 +399,17 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                         id={'paginationTextColor'}
                         name="Button text color"
                         value={paginationTextColor}
-                        onChange={onInputValueChange}
+                        pro={true}
+                        onChange={
+                          isPro
+                            ? onInputValueChange
+                            : () =>
+                                (window as any).reacg_open_premium_offer_dialog(
+                                  {
+                                    utm_medium: 'pagination_button_text_color',
+                                  }
+                                )
+                        }
                       />
                     </Filter>
                     <Filter isLoading={isLoading}>
@@ -342,10 +417,20 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                         id={'paginationButtonTextSize'}
                         name={'Button text size'}
                         value={paginationButtonTextSize}
-                        onChange={onInputValueChange}
                         unit={'rem'}
                         max={3}
                         step={0.025}
+                        pro={true}
+                        onChange={
+                          isPro
+                            ? onInputValueChange
+                            : () =>
+                                (window as any).reacg_open_premium_offer_dialog(
+                                  {
+                                    utm_medium: 'pagination_button_text_size',
+                                  }
+                                )
+                        }
                       />
                     </Filter>
                     {paginationType === PaginationType.LOAD_MORE ? (
@@ -372,7 +457,17 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                           </p>
                         }
                         value={paginationButtonClass}
-                        onChange={onInputValueChange}
+                        pro={true}
+                        onChange={
+                          isPro
+                            ? onInputValueChange
+                            : () =>
+                                (window as any).reacg_open_premium_offer_dialog(
+                                  {
+                                    utm_medium: 'lightbox_download',
+                                  }
+                                )
+                        }
                       />
                     </Filter>
                   </Grid>
@@ -397,7 +492,15 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                 name={'Order by'}
                 value={orderBy}
                 options={OrderByOptions}
-                onChange={onInputValueChange}
+                pro={true}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () =>
+                        (window as any).reacg_open_premium_offer_dialog({
+                          utm_medium: 'order_by',
+                        })
+                }
               />
             </Filter>
             <Filter isLoading={isLoading}>
@@ -406,7 +509,15 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
                 name={'Order direction'}
                 value={orderDirection}
                 options={OrderDirectionOptions}
-                onChange={onInputValueChange}
+                pro={true}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () =>
+                        (window as any).reacg_open_premium_offer_dialog({
+                          utm_medium: 'order_direction',
+                        })
+                }
               />
             </Filter>
           </Grid>
@@ -592,8 +703,8 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
 
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
-      {renderSortingSettings()}
       {!showOnlyGalleryOptions ? renderMainSettings() : null}
+      {renderSortingSettings()}
       {renderSearchSettings()}
       {renderProtectionSettings()}
       {renderWatermarkSettings()}

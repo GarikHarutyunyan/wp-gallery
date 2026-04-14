@@ -229,11 +229,19 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   id={'enableScrollByImagesCount'}
                   name={'Scroll by images count'}
                   value={enableScrollByImagesCount}
-                  onChange={onInputValueChange}
                   tooltip={
                     <p>
                       Scrolls by visible images when enabled, otherwise by one.
                     </p>
+                  }
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'carousel_scroll_by_images_count',
+                          })
                   }
                 />
               </Filter>
@@ -947,7 +955,15 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                   id={'playAndPauseAllowed'}
                   name={'Show Play / Pause button'}
                   value={playAndPauseAllowed}
-                  onChange={onInputValueChange}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'carousel_play_pause_button',
+                          })
+                  }
                 />
               </Filter>
               <Filter isLoading={isLoading}>
@@ -970,7 +986,15 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({isLoading}) => {
                     id={'showVideoControls'}
                     name={'Show video controls'}
                     value={showVideoControls}
-                    onChange={onInputValueChange}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'carousel_video_controls',
+                            })
+                    }
                   />
                 </Filter>
               )}

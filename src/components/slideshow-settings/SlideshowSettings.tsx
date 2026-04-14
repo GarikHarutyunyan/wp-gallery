@@ -134,35 +134,22 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
                   unit={'px'}
                 />
               </Filter>
-
               <Filter isLoading={isLoading}>
                 <SwitchControl
                   id={'isFullCoverImage'}
                   name={'Full cover image'}
                   value={isFullCoverImage ?? false}
-                  onChange={onInputValueChange}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'slider_full_cover',
+                          })
+                  }
                 />
               </Filter>
-              <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id={'autoplay'}
-                  name={'Autoplay'}
-                  value={autoplay}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-              {autoplay || isSlideshowAllowed ? (
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'slideDuration'}
-                    name={'Autoplay speed'}
-                    value={slideDuration}
-                    onChange={onInputValueChange}
-                    min={700}
-                    unit={'ms'}
-                  />
-                </Filter>
-              ) : null}
               <Filter isLoading={isLoading}>
                 <SelectControl
                   id={'imageAnimation'}
@@ -192,10 +179,38 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({isLoading}) => {
               </Filter>
               <Filter isLoading={isLoading}>
                 <SwitchControl
+                  id={'autoplay'}
+                  name={'Autoplay'}
+                  value={autoplay}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              {autoplay || isSlideshowAllowed ? (
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'slideDuration'}
+                    name={'Autoplay speed'}
+                    value={slideDuration}
+                    onChange={onInputValueChange}
+                    min={700}
+                    unit={'ms'}
+                  />
+                </Filter>
+              ) : null}
+              <Filter isLoading={isLoading}>
+                <SwitchControl
                   id={'isInfinite'}
                   name={'Loop'}
                   value={isInfinite}
-                  onChange={onInputValueChange}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'slideshow_loop',
+                          })
+                  }
                 />
               </Filter>
               <Filter isLoading={isLoading}>

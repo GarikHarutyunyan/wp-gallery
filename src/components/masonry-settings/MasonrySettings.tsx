@@ -215,7 +215,15 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
                     min={0}
                     max={100}
                     value={padding}
-                    onChange={onInputValueChange}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'image_border',
+                            })
+                    }
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>
@@ -223,7 +231,15 @@ const MasonrySettings: React.FC<IMasonrySettingsProps> = ({isLoading}) => {
                     id={'paddingColor'}
                     name="Border color"
                     value={paddingColor}
-                    onChange={onInputValueChange}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'image_border_color',
+                            })
+                    }
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>
