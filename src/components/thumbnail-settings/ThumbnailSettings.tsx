@@ -440,7 +440,15 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                     min={0}
                     max={100}
                     value={itemBorder}
-                    onChange={onInputValueChange}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'item_border',
+                            })
+                    }
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>
@@ -448,7 +456,15 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                     id={'itemBackgroundColor'}
                     name="Background color"
                     value={itemBackgroundColor}
-                    onChange={onInputValueChange}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'item_background_color',
+                            })
+                    }
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>
@@ -458,7 +474,15 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                     min={0}
                     value={itemBorderRadius}
                     max={50}
-                    onChange={onInputValueChange}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'item_border_radius',
+                            })
+                    }
                   />
                 </Filter>
               </Grid>
@@ -519,7 +543,15 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                     min={0}
                     max={100}
                     value={padding}
-                    onChange={onInputValueChange}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'image_border',
+                            })
+                    }
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>
@@ -527,7 +559,15 @@ const ThumbnailSettings: React.FC<IThumbnailSettingsProps> = ({isLoading}) => {
                     id={'paddingColor'}
                     name="Border color"
                     value={paddingColor}
-                    onChange={onInputValueChange}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'image_border_color',
+                            })
+                    }
                   />
                 </Filter>
                 <Filter isLoading={isLoading}>

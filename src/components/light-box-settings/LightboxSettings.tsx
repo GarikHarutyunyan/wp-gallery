@@ -138,6 +138,31 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
               </>
             )}
             <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'imageAnimation'}
+                name={'Animation'}
+                pro={true}
+                value={imageAnimation}
+                options={LightboxImageAnimationOptions}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () =>
+                        (window as any).reacg_open_premium_offer_dialog({
+                          utm_medium: 'animation',
+                        })
+                }
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'isSlideshowAllowed'}
+                name={'Play / Pause button'}
+                value={isSlideshowAllowed}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'autoplay'}
                 name={'Autoplay'}
@@ -158,23 +183,6 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
               </Filter>
             )}
             <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'imageAnimation'}
-                name={'Animation'}
-                pro={true}
-                value={imageAnimation}
-                options={LightboxImageAnimationOptions}
-                onChange={
-                  isPro
-                    ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'animation',
-                        })
-                }
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'areControlButtonsShown'}
                 name={'Show control buttons'}
@@ -185,15 +193,6 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
 
             {areControlButtonsShown && (
               <>
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'isSlideshowAllowed'}
-                    name={'Play / Pause button'}
-                    value={isSlideshowAllowed}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'canFullscreen'}
@@ -239,7 +238,15 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                     id={'canZoom'}
                     name={'Zoom button'}
                     value={canZoom}
-                    onChange={onInputValueChange}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'lightbox_zoom',
+                            })
+                    }
                   />
                 </Filter>
               </>
@@ -249,7 +256,15 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 id={'isInfinite'}
                 name={'Loop'}
                 value={isInfinite}
-                onChange={onInputValueChange}
+                pro={true}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () =>
+                        (window as any).reacg_open_premium_offer_dialog({
+                          utm_medium: 'lightbox_loop',
+                        })
+                }
               />
             </Filter>
             <Filter isLoading={isLoading}>
@@ -532,7 +547,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                         ? onInputValueChange
                         : () =>
                             (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'show_caption',
+                              utm_medium: 'lightbox_caption',
                             })
                     }
                   />
@@ -624,7 +639,15 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                         </a>
                       </p>
                     }
-                    onChange={onInputValueChange}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'lightbox_description',
+                            })
+                    }
                   />
                 </Filter>
                 {showDescription && (

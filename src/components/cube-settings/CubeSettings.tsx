@@ -185,7 +185,15 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                   id={'shadow'}
                   name={'Shadow'}
                   value={shadow}
-                  onChange={onInputValueChange}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'cube_shadow',
+                          })
+                  }
                 />
               </Filter>
               <Filter isLoading={isLoading}>
@@ -193,7 +201,15 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                   id={'backgroundColor'}
                   name={'Background color'}
                   value={backgroundColor}
-                  onChange={onInputValueChange}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'cube_background_color',
+                          })
+                  }
                 />
               </Filter>
               <Filter isLoading={isLoading}>
@@ -211,7 +227,15 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                   id={'isInfinite'}
                   name={'Loop'}
                   value={isInfinite}
-                  onChange={onInputValueChange}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'cube_loop',
+                          })
+                  }
                 />
               </Filter>
               <Filter isLoading={isLoading}>
@@ -900,7 +924,15 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                   id={'playAndPauseAllowed'}
                   name={'Show Play / Pause button'}
                   value={playAndPauseAllowed}
-                  onChange={onInputValueChange}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'carousel_play_pause_button',
+                          })
+                  }
                 />
               </Filter>
               <Filter isLoading={isLoading}>
@@ -923,7 +955,15 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({isLoading}) => {
                     id={'showVideoControls'}
                     name={'Show video controls'}
                     value={showVideoControls}
-                    onChange={onInputValueChange}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'cube_video_controls',
+                            })
+                    }
                   />
                 </Filter>
               )}

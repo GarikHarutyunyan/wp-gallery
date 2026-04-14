@@ -1,6 +1,6 @@
 import {TextField} from '@mui/material';
 import React, {ReactNode} from 'react';
-import {LabelWithTooltip} from "./LabelWithTooltip";
+import {LabelWithTooltip} from './LabelWithTooltip';
 
 interface ITextControlProps {
   id: string;
@@ -9,6 +9,7 @@ interface ITextControlProps {
   tooltip?: ReactNode;
   value: string;
   onChange: any;
+  pro?: boolean;
 }
 
 const TextControl: React.FC<ITextControlProps> = ({
@@ -18,6 +19,7 @@ const TextControl: React.FC<ITextControlProps> = ({
   tooltip,
   value,
   onChange,
+  pro,
 }) => {
   const onValueChange = (event: any) => {
     onChange(event.target.value, id);
@@ -25,7 +27,7 @@ const TextControl: React.FC<ITextControlProps> = ({
 
   return (
     <TextField
-      label={<LabelWithTooltip label={name} tooltip={tooltip} />}
+      label={<LabelWithTooltip label={name} tooltip={tooltip} pro={pro} />}
       placeholder={placeholder}
       variant="standard"
       margin="none"

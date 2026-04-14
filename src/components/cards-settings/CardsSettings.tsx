@@ -182,9 +182,17 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
                   id={'perSlideOffset'}
                   name={'Per slide offset %'}
                   value={perSlideOffset}
-                  onChange={onInputValueChange}
                   min={2}
                   max={40}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'cards_per_slide_offset',
+                          })
+                  }
                 />
               </Filter>
               <Filter isLoading={isLoading}>
@@ -874,7 +882,15 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
                   id={'playAndPauseAllowed'}
                   name={'Show Play / Pause button'}
                   value={playAndPauseAllowed}
-                  onChange={onInputValueChange}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () =>
+                          (window as any).reacg_open_premium_offer_dialog({
+                            utm_medium: 'carousel_play_pause_button',
+                          })
+                  }
                 />
               </Filter>
               <Filter isLoading={isLoading}>
@@ -897,7 +913,15 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({isLoading}) => {
                     id={'showVideoControls'}
                     name={'Show video controls'}
                     value={showVideoControls}
-                    onChange={onInputValueChange}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () =>
+                            (window as any).reacg_open_premium_offer_dialog({
+                              utm_medium: 'cards_video_controls',
+                            })
+                    }
                   />
                 </Filter>
               )}
