@@ -324,6 +324,59 @@ export interface ICarouselSettings {
   showVideoCover: boolean;
 }
 
+export interface ICoverflowSettings {
+  width: number;
+  height: number;
+  backgroundColor: string;
+  padding: number;
+  autoplay: boolean;
+  slideDuration: number;
+  playAndPauseAllowed: boolean;
+  rotate: number;
+  imagesCount: number;
+  hoverEffect: HoverEffect;
+  showTitle: boolean;
+  titleSource: TitleSource;
+  titleVisibility: TitleVisibility;
+  titlePosition: ThumbnailTitlePosition;
+  titleFontSize?: number | undefined;
+  titleColor: string;
+  titleAlignment: TitleAlignment;
+  titleFontFamily: string;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionVisibility: TitleVisibility;
+  captionPosition: ThumbnailTitlePosition;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: ThumbnailTitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
+  navigation: SliderNavigation;
+  arrowsSize: number;
+  arrowsColor: string;
+  dotsPosition: SliderNavigationPosition;
+  dotsSize: number;
+  dotsGap: number;
+  activeDotColor: string;
+  inactiveDotsColor: string;
+  showVideoControls: boolean;
+  animationSpeed: number;
+  showVideoCover: boolean;
+}
+
 export interface ICardsSettings {
   width: number;
   height: number;
@@ -430,6 +483,7 @@ export interface ISettingsDTO {
   lightbox: ILightboxSettings;
   cube: ICubeSettings;
   carousel: ICarouselSettings;
+  coverflow: ICoverflowSettings;
   cards: ICardsSettings;
   blog: IBlogSettings;
   template_id?: number;

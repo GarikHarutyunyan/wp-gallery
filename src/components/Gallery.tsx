@@ -33,6 +33,7 @@ const CubeGallery = lazy(() => import('./cube-gallery/CubeGallery'));
 const CardsGallery = lazy(() => import('./cards-gallery/CardsGallery'));
 const BlogGallery = lazy(() => import('./blog-gallery/BlogGallery'));
 const Carousel = lazy(() => import('./carousel/Carousel'));
+const Coverflow = lazy(() => import('./coverflow/Coverflow'));
 const Lightbox = lazy(() => import('./lightbox/Lightbox'));
 const Slideshow = lazy(() => import('./slideshow/Slideshow'));
 const PaginationProvider = lazy(
@@ -168,6 +169,11 @@ const Gallery: React.FC = () => {
       case GalleryType.BLOG:
         gallery = (
           <BlogGallery onClick={isClickable ? onImageClick : undefined} />
+        );
+        break;
+      case GalleryType.COVERFLOW:
+        gallery = (
+          <Coverflow onClick={isClickable ? onImageClick : undefined} />
         );
         break;
     }
