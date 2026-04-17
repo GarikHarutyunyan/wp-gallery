@@ -122,32 +122,37 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           className={`photo-album-item__title-content_${titlePosition}`}
           title={showTitle && <span>{image?.[titleSource] || <br />}</span>}
           subtitle={
-            <>
-              {titlePosition === captionPosition &&
-                showCaption &&
-                image[captionSource] && (
-                  <span className="photo-album-item__caption">
-                    {image[captionSource]}
+            (titlePosition === captionPosition &&
+              showCaption &&
+              image[captionSource]) ||
+            (titlePosition === buttonPosition && showButton) ? (
+              <>
+                {titlePosition === captionPosition &&
+                  showCaption &&
+                  image[captionSource] && (
+                    <span className="photo-album-item__caption">
+                      {image[captionSource]}
+                    </span>
+                  )}
+                {titlePosition === buttonPosition && showButton && (
+                  <span className="reacg-action-button-wrap">
+                    <ActionButton
+                      url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                      openInNewTab={openInNewTab}
+                      text={buttonText}
+                      alignment={buttonAlignment as TitleAlignment}
+                      backgroundColor={buttonColor}
+                      textColor={buttonTextColor}
+                      fontSize={buttonFontSize}
+                      borderSize={buttonBorderSize}
+                      borderColor={buttonBorderColor}
+                      borderRadius={buttonBorderRadius}
+                      isOnHover={buttonVisibility === TitleVisibility.ON_HOVER}
+                    />
                   </span>
                 )}
-              {titlePosition === buttonPosition && showButton && (
-                <span className="reacg-action-button-wrap">
-                  <ActionButton
-                    url={image?.[buttonUrlSource as ActionURLSource] || ''}
-                    openInNewTab={openInNewTab}
-                    text={buttonText}
-                    alignment={buttonAlignment as TitleAlignment}
-                    backgroundColor={buttonColor}
-                    textColor={buttonTextColor}
-                    fontSize={buttonFontSize}
-                    borderSize={buttonBorderSize}
-                    borderColor={buttonBorderColor}
-                    borderRadius={buttonBorderRadius}
-                    isOnHover={buttonVisibility === TitleVisibility.ON_HOVER}
-                  />
-                </span>
-              )}
-            </>
+              </>
+            ) : null
           }
           position={
             titlePosition !== TitlePosition.CENTER ? titlePosition : 'bottom'
@@ -200,30 +205,33 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           }}
           className={`photo-album-item__title-content_${captionPosition}`}
           title={
-            <>
-              {showCaption && (
-                <span className="photo-album-item__caption">
-                  {image[captionSource] || <br />}
-                </span>
-              )}
-              {captionPosition === buttonPosition && showButton && (
-                <span className="reacg-action-button-wrap">
-                  <ActionButton
-                    url={image?.[buttonUrlSource as ActionURLSource] || ''}
-                    openInNewTab={openInNewTab}
-                    text={buttonText}
-                    alignment={buttonAlignment as TitleAlignment}
-                    backgroundColor={buttonColor}
-                    textColor={buttonTextColor}
-                    fontSize={buttonFontSize}
-                    borderSize={buttonBorderSize}
-                    borderColor={buttonBorderColor}
-                    borderRadius={buttonBorderRadius}
-                    isOnHover={buttonVisibility === TitleVisibility.ON_HOVER}
-                  />
-                </span>
-              )}
-            </>
+            (showCaption && image[captionSource]) ||
+            (captionPosition === buttonPosition && showButton) ? (
+              <>
+                {showCaption && image[captionSource] && (
+                  <span className="photo-album-item__caption">
+                    {image[captionSource]}
+                  </span>
+                )}
+                {captionPosition === buttonPosition && showButton && (
+                  <span className="reacg-action-button-wrap">
+                    <ActionButton
+                      url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                      openInNewTab={openInNewTab}
+                      text={buttonText}
+                      alignment={buttonAlignment as TitleAlignment}
+                      backgroundColor={buttonColor}
+                      textColor={buttonTextColor}
+                      fontSize={buttonFontSize}
+                      borderSize={buttonBorderSize}
+                      borderColor={buttonBorderColor}
+                      borderRadius={buttonBorderRadius}
+                      isOnHover={buttonVisibility === TitleVisibility.ON_HOVER}
+                    />
+                  </span>
+                )}
+              </>
+            ) : null
           }
           position={
             captionPosition !== TitlePosition.CENTER
