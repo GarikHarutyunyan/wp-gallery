@@ -27,20 +27,36 @@
   }
 
   .type-option__image-container {
+    position: relative;
     margin: 0 12px;
   }
 
-  .type-option__image-container svg {
+  .type-option__image-container > svg {
     width: 100%;
     height: 100%;
   }
 
-  .type-option__active .type-option__image-container svg path {
+  .type-option__active .type-option__image-container > svg path {
     fill: var(--reacg-primary-color, #155c92);
   }
 
-  .type-option__image-container svg path {
+  .type-option__image-container > svg path {
     fill: #85a3b8;
+  }
+
+  .type-option__pro-badge {
+    position: absolute;
+    top: clamp(-8px, -0.8vw, -4px);
+    right: clamp(-8px, -0.8vw, -4px);
+    z-index: 2;
+    pointer-events: none;
+    transform-origin: top right;
+  }
+
+  .type-option__pro-badge svg {
+    width: clamp(24px, 2.4vw, 38px) !important;
+    height: auto !important;
+    filter: drop-shadow(0 3px 8px rgba(26, 45, 89, 0.28));
   }
 }
 
@@ -75,11 +91,24 @@
   display: flex;
   align-items: center;
   width: 100%;
-  svg {
+  > svg {
     width: 28px;
     height: 28px;
     max-width: 100%;
   }
+}
+
+.type-panel-select__pro-badge {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+}
+
+.type-panel-select__pro-badge svg {
+  width: 38px !important;
+  height: 22px !important;
+  filter: drop-shadow(0 3px 8px rgba(26, 45, 89, 0.28));
 }
 .reacg-settings-panel {
   flex-direction: row;
@@ -295,8 +324,8 @@
 }
 
 .reacg-settings-panel-tabs .Mui-selected svg path,
-.Mui-selected .type-panel-select__body svg path,
-.MuiSelect-outlined .type-panel-select__body svg path {
+.Mui-selected .type-panel-select__body > svg path,
+.MuiSelect-outlined .type-panel-select__body > svg path {
   fill: var(--reacg-primary-color, #155c92);
 }
 

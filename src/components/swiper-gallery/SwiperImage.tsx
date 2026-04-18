@@ -7,6 +7,7 @@ import {
   ActionURLSource,
   ICardsSettings,
   ICarouselSettings,
+  ICoverflowSettings,
   ICubeSettings,
   IImageDTO,
   ImageType,
@@ -30,7 +31,11 @@ interface ISwiperImageProps {
   backgroundColor?: string;
   padding?: number;
   size?: number;
-  settings: ICubeSettings | ICardsSettings | ICarouselSettings;
+  settings:
+    | ICubeSettings
+    | ICardsSettings
+    | ICarouselSettings
+    | ICoverflowSettings;
   titleCaptionHeight?: number;
 }
 

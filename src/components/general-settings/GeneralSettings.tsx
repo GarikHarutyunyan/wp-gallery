@@ -107,6 +107,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({isLoading}) => {
     type === GalleryType.SLIDESHOW ||
     type === GalleryType.CUBE ||
     type === GalleryType.CAROUSEL ||
+    type === GalleryType.COVERFLOW ||
     type === GalleryType.CARDS;
 
   const paginationType: PaginationType = useMemo(() => {

@@ -3,6 +3,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import {BlogSettings} from 'components/blog-settings';
 import {CardsSettings} from 'components/cards-settings/CardsSettings';
 import {CarouselSettings} from 'components/carousel-settings';
+import {CoverflowSettings} from 'components/coverflow-settings/CoverflowSettings';
 import {CubeSettings} from 'components/cube-settings/CubeSettings';
 import {GeneralSettings} from 'components/general-settings';
 import {JustifiedSettings} from 'components/justified-settings';
@@ -36,6 +37,7 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     slideshowSettings,
     cubeSettings,
     carouselSettings,
+    coverflowSettings,
     cardsSettings,
     generalSettings,
     blogSettings,
@@ -79,6 +81,9 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
       case GalleryType.BLOG:
         galleryOprions = renderBlogSettings();
         break;
+      case GalleryType.COVERFLOW:
+        galleryOprions = renderCoverflowSettings();
+        break;
     }
     return galleryOprions;
   };
@@ -109,6 +114,11 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   const renderCarouselSettings = (): ReactNode => {
     return carouselSettings && <CarouselSettings isLoading={isLoading} />;
   };
+
+  const renderCoverflowSettings = (): ReactNode => {
+    return coverflowSettings && <CoverflowSettings isLoading={isLoading} />;
+  };
+
   const renderCardsSettings = (): ReactNode => {
     return cardsSettings && <CardsSettings isLoading={isLoading} />;
   };

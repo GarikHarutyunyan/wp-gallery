@@ -9,9 +9,9 @@ interface IProIconProps {
 }
 
 const ProIcon: React.FC<IProIconProps> = ({width = 38, height = 22, style}) => {
-  const {isPro} = usePro();
+  const {isPro, isLoaded} = usePro();
 
-  if (isPro) {
+  if (!isLoaded || isPro) {
     return null;
   }
   return (
