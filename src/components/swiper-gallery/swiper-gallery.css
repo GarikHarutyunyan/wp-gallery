@@ -65,6 +65,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  box-sizing: border-box;
 }
 .reacg-gallery
   [class*='swiper-gallery__image-wrapper_overlay']:hover
