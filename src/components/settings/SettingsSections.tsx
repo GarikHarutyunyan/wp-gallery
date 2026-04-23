@@ -1,7 +1,9 @@
+import createCache, {EmotionCache} from '@emotion/cache';
+import {CacheProvider} from '@emotion/react';
 import {Divider} from '@mui/material';
 import {useAppInfo} from 'contexts';
 import {Section} from 'core-components/section';
-import React, {ReactElement, useEffect, useRef, useState} from 'react';
+import React, {ReactElement, useEffect, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {clsx} from 'yet-another-react-lightbox';
 import {OptionsPanelBody} from './OptionsPanelBody';
@@ -25,6 +27,9 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   const {hasChanges} = useSettings();
   const {optionsContainerSelector} = useAppInfo();
 
+  // Wrapper used to find the nearest .reacg-wrapper ancestor instead of querying the whole document
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const beforeUnloadCallback = (event: any) => {
       if (hasChanges) {
@@ -41,16 +46,15 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
   const [isMedium, setIsMedium] = useState(false);
   const [isSmall, setIsSmall] = useState(false);
   const [isExtraSmall, setIsExtraSmall] = useState(false);
+
   useEffect(() => {
     const resize = () => {
-      // Prefer the nearest .reacg-wrapper ancestor to support multiple previews on the page
       const parentElement =
         (wrapperRef.current?.closest('.reacg-wrapper') as HTMLElement | null) ??
-        document.querySelector('.reacg-wrapper');
+        (document.querySelector('.reacg-wrapper') as HTMLElement | null);
+
       if (parentElement) {
-        const parentWidth = (
-          parentElement as HTMLElement
-        ).getBoundingClientRect().width;
+        const parentWidth = parentElement.getBoundingClientRect().width;
         setIsMedium(parentWidth > 480 && parentWidth < 730);
         setIsSmall(parentWidth > 340 && parentWidth <= 480);
         setIsExtraSmall(parentWidth <= 340);
@@ -85,11 +89,8 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
     };
   }, []);
 
-  // Wrapper used to find the nearest .reacg-wrapper ancestor instead of querying the whole document
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
-
   const content: ReactElement = (
-    <div ref={wrapperRef}>
+    <div ref={wrapperRef} className={'reacg-settings__wrapper-selector'}>
       <TypePanel
         isMedium={isMedium}
         isSmall={isSmall}
@@ -116,12 +117,57 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
     </div>
   );
 
-  if (optionsContainerSelector) {
-    const containerElement = document.querySelector(optionsContainerSelector);
+  // 1) Find container (same logic you already have)
+  const containerElement = useMemo<HTMLElement | null>(() => {
+    if (!optionsContainerSelector) return null;
 
-    if (containerElement) {
-      return createPortal(content, containerElement);
-    }
+    const docElement = document.querySelector(
+      optionsContainerSelector
+    ) as HTMLElement | null;
+    // eslint-disable-next-line no-restricted-globals
+    const parentElement = parent?.document.querySelector(
+      optionsContainerSelector
+    ) as HTMLElement | null;
+
+    const newContainerElement = docElement || parentElement || null;
+
+    document
+      .querySelectorAll('.reacg-settings__wrapper-selector')
+      .forEach((el) => {
+        if (el.parentElement === newContainerElement) {
+          newContainerElement?.removeChild(el);
+        }
+      });
+    // eslint-disable-next-line no-restricted-globals
+    parent?.document
+      .querySelectorAll('.reacg-settings__wrapper-selector')
+      .forEach((el) => {
+        if (el.parentElement === newContainerElement) {
+          newContainerElement?.removeChild(el);
+        }
+      });
+
+    return newContainerElement || null;
+  }, [optionsContainerSelector]);
+
+  // 3) Emotion cache should point to container (where style tags will be injected)
+  const cache = useMemo<EmotionCache | null>(() => {
+    if (!containerElement) return null;
+    const container: HTMLElement = containerElement.ownerDocument.head;
+
+    return createCache({
+      key: 'reacg-settings',
+      container,
+      prepend: true,
+    });
+  }, [containerElement]);
+
+  // 4) Portal into the mount node
+  if (containerElement && cache) {
+    return createPortal(
+      <CacheProvider value={cache}>{content}</CacheProvider>,
+      containerElement
+    );
   }
 
   return content;
