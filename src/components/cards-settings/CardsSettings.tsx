@@ -48,7 +48,7 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({
   const renderBasicSettings = (): ReactNode => {
     return (
       <Section
-        header={'Basic'}
+        header={'Layout Settings'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -118,9 +118,13 @@ const CardsSettings: React.FC<ICardsSettingProps> = ({
   };
 
   const renderAdvancedSettings = (): ReactNode => {
+    return renderImagesSettings();
+  };
+
+  const renderImagesSettings = (): ReactNode => {
     return (
       <Section
-        header={'Basic'}
+        header={'Media'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>

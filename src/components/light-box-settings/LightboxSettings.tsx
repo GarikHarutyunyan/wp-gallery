@@ -100,7 +100,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
   const renderMainSettings = (): ReactNode => {
     return (
       <Section
-        header={'Basic'}
+        header={'Layout Settings'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -309,7 +309,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
   const renderFilmstripSettings = (): ReactNode => {
     return (
       <Section
-        header={'Filmstrip'}
+        header={'Thumbnails'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -832,7 +832,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
   const renderTextSection = (): ReactNode => {
     return (
       <Section
-        header={'Text styles'}
+        header={'Typography'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>

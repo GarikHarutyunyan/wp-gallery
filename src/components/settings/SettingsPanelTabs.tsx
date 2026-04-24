@@ -56,8 +56,8 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
       },
       {
         value: 'text-metadata',
-        label: 'Text & Metadata',
-        menuLabel: 'Text & Metadata',
+        label: 'Content',
+        menuLabel: 'Content',
         icon: <TextFieldsOutlined />,
       },
       {

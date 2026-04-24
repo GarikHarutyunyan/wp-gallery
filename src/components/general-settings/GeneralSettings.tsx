@@ -278,7 +278,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
             <Filter isLoading={isLoading}>
               <SelectControl
                 id={'paginationType'}
-                name={'Pagination type'}
+                name={'Type'}
                 value={paginationType}
                 options={filteredPaginationTypeOptions}
                 onChange={(inputValue: any) => {
@@ -630,7 +630,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
 
       return (
         <Section
-          header={'Navigation'}
+          header={'Controls'}
           className="reacg-tab-section"
           body={
             <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -720,7 +720,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
 
       return (
         <Section
-          header={'Navigation'}
+          header={'Controls'}
           className="reacg-tab-section"
           body={
             <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -806,7 +806,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
                 <Filter isLoading={isLoading}>
                   <SelectControl
                     id={'navigation'}
-                    name={'Navigation'}
+                    name={'Navigation type'}
                     value={sliderNavigation}
                     options={SliderNavigationOptions}
                     onChange={onSliderNavigationChange}
@@ -1039,7 +1039,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
   const renderSearchSettings = (): ReactNode => {
     return (
       <Section
-        header={'Filter'}
+        header={'Filtering'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -1086,7 +1086,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
   const renderProtectionSettings = (): ReactNode => {
     return (
       <Section
-        header={'Protection'}
+        header={'Access Control'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>

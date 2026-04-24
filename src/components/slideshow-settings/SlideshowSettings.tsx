@@ -69,7 +69,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({
   const renderMainSettings = (): ReactNode => {
     return (
       <Section
-        header={'Basic'}
+        header={'Layout Settings'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -199,7 +199,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({
   const renderAdvancedSettings = (): ReactNode => {
     return (
       <Section
-        header={'Basic'}
+        header={'Container'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -249,7 +249,7 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({
   const renderFilmstripSettings = (): ReactNode => {
     return (
       <Section
-        header={'Filmstrip'}
+        header={'Thumbnails'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>

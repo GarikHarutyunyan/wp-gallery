@@ -61,7 +61,7 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({
   const renderBasicSettings = (): ReactNode => {
     return (
       <Section
-        header={'Basic'}
+        header={'Layout Settings'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -125,8 +125,17 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({
 
   const renderAdvancedSettings = (): ReactNode => {
     return (
+      <>
+        {renderContainerSettings()}
+        {renderImagesSettings()}
+      </>
+    );
+  };
+
+  const renderContainerSettings = (): ReactNode => {
+    return (
       <Section
-        header={'Basic'}
+        header={'Container'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -148,6 +157,19 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({
                 onChange={onInputValueChange}
               />
             </Filter>
+          </Grid>
+        }
+      />
+    );
+  };
+
+  const renderImagesSettings = (): ReactNode => {
+    return (
+      <Section
+        header={'Media'}
+        className="reacg-tab-section"
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
               <SliderControl
                 id={'spacing'}
@@ -161,7 +183,7 @@ const BlogSettings: React.FC<IBlogSettingsProps> = ({
             <Filter isLoading={isLoading}>
               <SliderControl
                 id={'imageRadius'}
-                name="Image radius (%)"
+                name="Radius (%)"
                 min={0}
                 value={imageRadius}
                 max={50}

@@ -40,7 +40,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
           }
         </p>
         <p>
-          <b>{'Action URL:'}</b>
+          <b>{'Open Link:'}</b>
           {
             ' Clicking an image redirects to a specified URL. The URL must be set by editing each image from "Images" section. '
           }
@@ -70,7 +70,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
       <Filter isLoading={isLoading}>
         <SelectControl
           id={'clickAction'}
-          name={'Image click'}
+          name={'Click Action'}
           tooltip={renderClickActionInfo()}
           value={clickAction}
           options={ImageClickActionOptions}
@@ -95,7 +95,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
           <Filter isLoading={isLoading}>
             <SwitchControl
               id={'openUrlInNewTab'}
-              name={'Open URL in new tab'}
+              name={'Open link in new tab'}
               value={openUrlInNewTab}
               onChange={onActionValueChange}
             />
@@ -103,7 +103,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
           <Filter isLoading={isLoading}>
             <SelectControl
               id={'actionUrlSource'}
-              name={'URL source'}
+              name={'Link source'}
               value={actionUrlSource}
               options={ActionURLSourceOptions}
               onChange={onActionValueChange}

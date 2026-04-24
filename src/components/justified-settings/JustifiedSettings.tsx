@@ -54,7 +54,7 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({
   const renderBasicSettings = (): ReactNode => {
     return (
       <Section
-        header={'Basic'}
+        header={'Layout Settings'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -128,7 +128,7 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({
   const renderImagesSettings = (): ReactNode => {
     return (
       <Section
-        header={'Images'}
+        header={'Media'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>

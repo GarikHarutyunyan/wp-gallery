@@ -51,7 +51,7 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({
   const renderBasicSettings = (): ReactNode => {
     return (
       <Section
-        header={'Basic'}
+        header={'Layout Settings'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -104,8 +104,17 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({
 
   const renderAdvancedSettings = (): ReactNode => {
     return (
+      <>
+        {renderContainerSettings()}
+        {renderImagesSettings()}
+      </>
+    );
+  };
+
+  const renderContainerSettings = (): ReactNode => {
+    return (
       <Section
-        header={'Basic'}
+        header={'Container'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
@@ -151,6 +160,19 @@ const CubeSettings: React.FC<ICubeSettingsProps> = ({
                 onChange={onInputValueChange}
               />
             </Filter>
+          </Grid>
+        }
+      />
+    );
+  };
+
+  const renderImagesSettings = (): ReactNode => {
+    return (
+      <Section
+        header={'Media'}
+        className="reacg-tab-section"
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
             <Filter isLoading={isLoading}>
               <SelectControl
                 id={'hoverEffect'}

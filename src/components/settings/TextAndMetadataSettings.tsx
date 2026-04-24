@@ -765,7 +765,7 @@ export const TextAndMetadataSettings: React.FC<
 
     return (
       <Section
-        header={'Text styles'}
+        header={'Typography'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
