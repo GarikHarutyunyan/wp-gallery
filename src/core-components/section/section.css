@@ -1,8 +1,11 @@
 .reacg-tab-section {
-  border: 1px solid #eee !important;
-  border-radius: 0 0 6px 6px !important;
+  border: 1px solid #eceaf8 !important;
+  /* border-radius: 0 0 6px 6px !important;
   border-top: none !important;
-  background: linear-gradient(to bottom, #ffffff, #fafafa) !important;
+  background: linear-gradient(to bottom, #ffffff, #f3f2fb) !important; */
+  border-radius: 6px !important;
+  background: #f6f6fb !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
   margin: 0 !important;
   margin-bottom: 15px !important;
   &:last-child {
@@ -13,17 +16,32 @@
     box-shadow: none !important;
   }
   .reacg-section__title {
-    font-size: 1rem !important;
-    font-weight: 500 !important;
-    color: rgba(0, 0, 0, 0.6) !important;
-    padding: 0 12px !important;
-    line-height: normal !important;
-  }
-  hr {
-    display: none !important;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0 12px;
+    margin: 0;
+    line-height: normal;
   }
   .reacg-section__body {
     padding-top: 5px !important;
+  }
+  input[type='color'],
+  input[type='date'],
+  input[type='datetime-local'],
+  input[type='datetime'],
+  input[type='email'],
+  input[type='month'],
+  input[type='number'],
+  input[type='password'],
+  input[type='search'],
+  input[type='tel'],
+  input[type='text'],
+  input[type='time'],
+  input[type='url'],
+  input[type='week'],
+  select,
+  textarea {
+    background: transparent !important;
   }
 }
 
@@ -44,20 +62,6 @@
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-
-.reacg-section__title {
-  padding: 10px 20px;
-  margin: 0 !important;
-  display: inline-flex;
-  align-items: center;
-}
-
-.reacg-section__body {
-  .reacg-section__title {
-    font-size: 1.05rem;
-    font-weight: 600;
-  }
 }
 
 .reacg-section__expand-more {

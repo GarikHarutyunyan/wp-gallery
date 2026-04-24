@@ -94,6 +94,9 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         menuLabel: 'Lightbox',
         icon: <Fullscreen />,
         isDisabled: hideLightboxOptions,
+        tooltip: hideLightboxOptions
+          ? 'To enable Lightbox, change the Image Click Action from Gallery settings.'
+          : undefined,
       },
     ],
     [hideLightboxOptions]
@@ -344,21 +347,30 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         }}
       >
         {overflowTabs.map((tab) => (
-          <MenuItem
-            key={tab.value}
-            selected={activeTab === tab.value}
-            disabled={tab.isDisabled}
-            className="reacg-settings-panel-tabs__menu-item"
-            onClick={() => {
-              onActiveTabChange(null, tab.value);
-              setOverflowMenuAnchor(null);
-            }}
-          >
-            <span className="reacg-settings-panel-tabs__menu-item-icon">
-              {tab.icon}
+          <Tooltip key={tab.value} title={tab.tooltip ?? ''} placement="left">
+            <span>
+              <MenuItem
+                selected={activeTab === tab.value}
+                aria-disabled={Boolean(tab.isDisabled)}
+                className={clsx('reacg-settings-panel-tabs__menu-item', {
+                  'Mui-disabled': tab.isDisabled,
+                })}
+                onClick={() => {
+                  if (tab.isDisabled) {
+                    return;
+                  }
+
+                  onActiveTabChange(null, tab.value);
+                  setOverflowMenuAnchor(null);
+                }}
+              >
+                <span className="reacg-settings-panel-tabs__menu-item-icon">
+                  {tab.icon}
+                </span>
+                {tab.menuLabel}
+              </MenuItem>
             </span>
-            {tab.menuLabel}
-          </MenuItem>
+          </Tooltip>
         ))}
       </Menu>
     </Aligner>

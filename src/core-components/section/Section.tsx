@@ -1,4 +1,4 @@
-import {Collapse, Divider, Paper, Typography} from '@mui/material';
+import {Collapse, Paper, Typography} from '@mui/material';
 import clsx from 'clsx';
 import {Aligner} from 'core-components/aligner';
 import {ExpandMore} from 'core-components/expand-more';
@@ -74,9 +74,6 @@ const Section: React.FC<ISectionProps> = ({
       )}
     >
       {header && renderHeader()}
-      {header && (isExpanded || !outlined) ? (
-        <Divider variant={'middle'} />
-      ) : null}
       {renderBody()}
     </Paper>
   );
