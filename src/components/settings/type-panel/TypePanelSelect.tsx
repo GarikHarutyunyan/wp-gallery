@@ -37,8 +37,12 @@ const TypePanelSelect: React.FC<ITypePanelSelectProps> = ({
   };
 
   return (
-    <Box sx={{margin: '6px'}}>
-      <Select onChange={handleChange} value={activeValue} sx={{width: '100%'}}>
+    <Box>
+      <Select
+        onChange={handleChange}
+        value={activeValue}
+        sx={{width: '100%', borderRadius: '6px'}}
+      >
         {GalleryTypeOptions.map(({value, title, image, isPro: requiresPro}) => {
           return (
             <MenuItem key={value} value={value}>

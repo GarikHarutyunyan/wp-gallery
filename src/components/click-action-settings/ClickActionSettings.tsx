@@ -60,7 +60,13 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
   const {isPro} = usePro();
 
   return (
-    <Grid container columns={24} columnSpacing={4} marginTop={2}>
+    <Grid
+      sx={{marginLeft: 0, paddingTop: 2}}
+      container
+      columns={24}
+      rowSpacing={2}
+      columnSpacing={4}
+    >
       <Filter isLoading={isLoading}>
         <SelectControl
           id={'clickAction'}
