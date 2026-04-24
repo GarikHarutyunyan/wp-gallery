@@ -7,7 +7,7 @@
   background: #f6f6fb !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
   margin: 0 !important;
-  margin-bottom: 15px !important;
+  margin-bottom: 12px !important;
   &:last-child {
     margin-bottom: 0 !important;
   }
@@ -50,6 +50,10 @@
   margin-top: 5px;
 }
 
+.reacg-settings:last-child {
+  margin-bottom: 0px;
+}
+
 .reacg-section__header {
   display: flex;
   align-items: center;
@@ -72,7 +76,7 @@
   padding: 5px 10px;
 }
 .inside .reacg-section__body {
-  padding: 5px 0;
+  padding: 5px 0 0;
 }
 
 .reacg-section_outlined .reacg-section__body {

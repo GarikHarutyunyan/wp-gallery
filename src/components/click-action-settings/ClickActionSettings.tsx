@@ -70,7 +70,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
       <Filter isLoading={isLoading}>
         <SelectControl
           id={'clickAction'}
-          name={'Click Action'}
+          name={'Click action'}
           tooltip={renderClickActionInfo()}
           value={clickAction}
           options={ImageClickActionOptions}

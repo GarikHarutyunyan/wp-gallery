@@ -83,9 +83,14 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         label: (
           <Tooltip
             title={
-              hideLightboxOptions
-                ? 'To enable Lightbox, change the Image Click Action from Gallery settings.'
-                : ''
+              hideLightboxOptions ? (
+                <p>
+                  To enable Lightbox, change the <strong>Click action</strong>{' '}
+                  from <strong>Layout Settings</strong>.
+                </p>
+              ) : (
+                ''
+              )
             }
           >
             <span>Lightbox</span>
@@ -94,9 +99,12 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         menuLabel: 'Lightbox',
         icon: <Fullscreen />,
         isDisabled: hideLightboxOptions,
-        tooltip: hideLightboxOptions
-          ? 'To enable Lightbox, change the Image Click Action from Gallery settings.'
-          : undefined,
+        tooltip: hideLightboxOptions ? (
+          <p>
+            To enable Lightbox, change the <strong>Click action</strong> from{' '}
+            <strong>Layout Settings</strong>.
+          </p>
+        ) : undefined,
       },
     ],
     [hideLightboxOptions]
