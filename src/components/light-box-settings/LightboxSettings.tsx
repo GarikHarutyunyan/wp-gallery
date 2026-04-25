@@ -92,9 +92,9 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
     openInNewTab,
   } = value as ILightboxSettings;
 
-  const onInputValueChange = (inputValue: any, key?: string) => {
+  const onInputValueChange = (inputValue: unknown, key?: string) => {
     resetTemplate?.();
-    key && onChange({...value, [key]: inputValue});
+    key && onChange?.({...value, [key]: inputValue} as any);
   };
 
   const renderMainSettings = (): ReactNode => {

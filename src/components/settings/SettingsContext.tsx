@@ -74,7 +74,7 @@ const SettingsContext = React.createContext<{
   changeCardsSettings?: (settings: ICardsSettings) => void;
   changeBlogSettings?: (settings: IBlogSettings) => void;
   changeCss?: (css: string) => void;
-  wrapperRef?: React.RefObject<HTMLDivElement>;
+  wrapperRef?: any;
   imagesCount?: number;
   changeImagesCount?: (count: number) => void;
 }>({});

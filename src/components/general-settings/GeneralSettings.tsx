@@ -193,26 +193,36 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
-    key && onChange({...value, [key]: inputValue});
+    key && onChange?.({...value, [key]: inputValue} as any);
   };
 
   const {isPro} = usePro();
 
   const onPaginationTypeChange = (inputValue: any, key?: string) => {
     if (type === GalleryType.MOSAIC) {
-      key && changeMosaicSettings({...mosaicSettings, [key]: inputValue});
+      key &&
+        changeMosaicSettings?.({...mosaicSettings, [key]: inputValue} as any);
     }
     if (type === GalleryType.JUSTIFIED) {
-      key && changeJustifiedSettings({...justifiedSettings, [key]: inputValue});
+      key &&
+        changeJustifiedSettings?.({
+          ...justifiedSettings,
+          [key]: inputValue,
+        } as any);
     }
     if (type === GalleryType.THUMBNAILS) {
-      key && changeThumbnailSettings({...thumbnailSettings, [key]: inputValue});
+      key &&
+        changeThumbnailSettings?.({
+          ...thumbnailSettings,
+          [key]: inputValue,
+        } as any);
     }
     if (type === GalleryType.MASONRY) {
-      key && changeMasonrySettings({...masonrySettings, [key]: inputValue});
+      key &&
+        changeMasonrySettings?.({...masonrySettings, [key]: inputValue} as any);
     }
     if (type === GalleryType.BLOG) {
-      key && changeBlogSettings({...blogSettings, [key]: inputValue});
+      key && changeBlogSettings?.({...blogSettings, [key]: inputValue} as any);
     }
 
     resetTemplate?.();
@@ -616,7 +626,7 @@ const GeneralSettings: React.FC<IGeneralSettingsProps> = ({
       sliderNavigationSettings.onChange({
         ...sliderNavigationSettings.settings,
         [key]: inputValue,
-      });
+      } as any);
   };
 
   const renderSliderNavigationSettings = (): ReactNode => {

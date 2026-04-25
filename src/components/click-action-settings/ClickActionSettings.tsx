@@ -27,7 +27,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
 
   const onActionValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
-    key && onActionChange({...generalSettings, [key]: inputValue});
+    key && onActionChange?.({...generalSettings, [key]: inputValue} as any);
   };
 
   const renderClickActionInfo = (): ReactElement => {

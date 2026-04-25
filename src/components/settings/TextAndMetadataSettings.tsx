@@ -197,9 +197,9 @@ export const TextAndMetadataSettings: React.FC<
 
   const fontUnit = usesLightboxTextLayout ? 'vw' : 'px';
 
-  const onInputValueChange = (inputValue: any, key?: string) => {
+  const onInputValueChange = (inputValue: unknown, key?: string) => {
     resetTemplate?.();
-    key && onChange({...value, [key]: inputValue});
+    key && onChange?.({...value, [key]: inputValue} as any);
   };
 
   const renderTitleControls = () => (

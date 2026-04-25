@@ -96,19 +96,19 @@ const TemplatesSelect: React.FC = () => {
       if (activeType !== type && !!template.template_id) {
         type && changeType!(type);
       }
-      general && changeGeneralSettings(general);
-      lightbox && changeLightboxSettings(lightbox);
-      masonry && changeMasonrySettings(masonry);
-      mosaic && changeMosaicSettings(mosaic);
-      justified && changeJustifiedSettings(justified);
-      slideshow && changeSlideshowSettings(slideshow);
-      thumbnails && changeThumbnailSettings(thumbnails);
-      cube && changeCubeSettings(cube);
-      carousel && changeCarouselSettings(carousel);
-      coverflow && changeCoverflowSettings(coverflow);
-      cards && changeCardsSettings(cards);
-      blog && changeBlogSettings(blog);
-      TypeUtils.isString(css) && changeCss(css);
+      general && changeGeneralSettings?.(general);
+      lightbox && changeLightboxSettings?.(lightbox);
+      masonry && changeMasonrySettings?.(masonry);
+      mosaic && changeMosaicSettings?.(mosaic);
+      justified && changeJustifiedSettings?.(justified);
+      slideshow && changeSlideshowSettings?.(slideshow);
+      thumbnails && changeThumbnailSettings?.(thumbnails);
+      cube && changeCubeSettings?.(cube);
+      carousel && changeCarouselSettings?.(carousel);
+      coverflow && changeCoverflowSettings?.(coverflow);
+      cards && changeCardsSettings?.(cards);
+      blog && changeBlogSettings?.(blog);
+      TypeUtils.isString(css) && changeCss?.(css as any);
     }
   }, [template?.template_id]);
 
