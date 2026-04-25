@@ -1,71 +1,57 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
-import {
-  ColorControl,
-  NumberControl,
-  SelectControl,
-  SliderControl,
-  SwitchControl,
-} from 'components/controls';
+import {NumberControl, SliderControl, SwitchControl} from 'components/controls';
 import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
-import {HoverEffectOptions, ICarouselSettings} from 'data-structures';
-import React, {ReactNode, useEffect} from 'react';
-import {Filter} from '../settings/Filter';
+import {ICarouselSettings} from 'data-structures';
+import {useEffect} from 'react';
+import {Filter} from '../Filter';
+
 interface ICarouselSettingsProps {
-  isLoading?: boolean;
-  sections?: 'all' | 'basic' | 'advanced';
+  settings: ICarouselSettings;
+  onSettingsChange: (settings: ICarouselSettings) => void;
+  isLoading: boolean;
 }
 
-const CarouselSettings: React.FC<ICarouselSettingsProps> = ({
+const CarouselSettings = ({
+  settings,
+  onSettingsChange,
   isLoading,
-  sections = 'all',
-}) => {
+}: ICarouselSettingsProps) => {
   const {resetTemplate} = useTemplates();
-  const {
-    carouselSettings: value,
-    changeCarouselSettings: onChange,
-    imagesCount: allImagesCount,
-  } = useSettings();
+  const {imagesCount: allImagesCount} = useSettings();
   const {
     width,
     height,
-    backgroundColor,
-    padding,
     scale,
     imagesCount,
     enableScrollByImagesCount,
     spaceBetween,
-    hoverEffect,
     animationSpeed,
-    showVideoCover,
-  } = value as ICarouselSettings;
+  } = settings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
-    key && onChange({...value, [key]: inputValue});
+    key && onSettingsChange({...settings, [key]: inputValue});
   };
+
   useEffect(() => {
     const totalAvailableImages = allImagesCount ?? 0;
     if (totalAvailableImages !== 0) {
-      let count = Math.min(imagesCount, totalAvailableImages);
-
+      const count = Math.min(imagesCount, totalAvailableImages);
       if (count !== imagesCount) {
-        onChange({...value, imagesCount: count});
+        onSettingsChange({...settings, imagesCount: count});
       }
     }
   }, [allImagesCount, imagesCount]);
 
-  const showBasic = sections === 'all' || sections === 'basic';
-  const showAdvanced = sections === 'all' || sections === 'advanced';
-
   const {isPro} = usePro();
 
-  const renderBasicSettings = (): ReactNode => {
-    return (
+  return (
+    <Paper elevation={0} sx={{textAlign: 'left'}}>
       <Section
         header={'Layout Settings'}
         className="reacg-tab-section"
@@ -134,7 +120,6 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({
                 step={0.1}
               />
             </Filter>
-
             <Filter isLoading={isLoading}>
               <NumberControl
                 id={'spaceBetween'}
@@ -170,105 +155,8 @@ const CarouselSettings: React.FC<ICarouselSettingsProps> = ({
           </Grid>
         }
       />
-    );
-  };
-
-  const renderAdvancedSettings = (): ReactNode => {
-    return (
-      <>
-        {renderContainerSettings()}
-        {renderImagesSettings()}
-      </>
-    );
-  };
-
-  const renderContainerSettings = (): ReactNode => {
-    return (
-      <Section
-        header={'Container'}
-        className="reacg-tab-section"
-        body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <ColorControl
-                id={'backgroundColor'}
-                name={'Background color'}
-                value={backgroundColor}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'padding'}
-                name={'Padding'}
-                value={padding}
-                onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
-              />
-            </Filter>
-          </Grid>
-        }
-      />
-    );
-  };
-
-  const renderImagesSettings = (): ReactNode => {
-    return (
-      <Section
-        header={'Media'}
-        className="reacg-tab-section"
-        body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'hoverEffect'}
-                name={'Hover effect'}
-                value={hoverEffect}
-                options={HoverEffectOptions}
-                onChange={(inputValue: any) => {
-                  if (
-                    !isPro &&
-                    HoverEffectOptions.find(
-                      (option) => option.value === inputValue
-                    )?.isPro
-                  ) {
-                    (window as any).reacg_open_premium_offer_dialog({
-                      utm_medium: 'hoverEffect',
-                    });
-                  } else {
-                    onInputValueChange(inputValue, 'hoverEffect');
-                  }
-                }}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'showVideoCover'}
-                name={'Show video cover'}
-                value={showVideoCover}
-                tooltip={
-                  <p>
-                    Enable this to display the cover image for video items,
-                    otherwise the video will be shown.
-                  </p>
-                }
-                onChange={onInputValueChange}
-              />
-            </Filter>
-          </Grid>
-        }
-      />
-    );
-  };
-
-  return (
-    <Paper elevation={0} sx={{textAlign: 'left'}}>
-      {showBasic ? renderBasicSettings() : null}
-      {showAdvanced ? renderAdvancedSettings() : null}
     </Paper>
   );
 };
 
 export {CarouselSettings};
-export default CarouselSettings;

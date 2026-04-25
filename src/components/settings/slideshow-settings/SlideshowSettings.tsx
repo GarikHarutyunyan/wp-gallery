@@ -1,49 +1,43 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
-import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {
   ISlideshowSettings,
-  LightboxImageAnimation,
-  LightboxImageAnimationOptions,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
 } from 'data-structures';
-import React, {ReactNode} from 'react';
 import {
   ColorControl,
   NumberControl,
   SelectControl,
   SliderControl,
   SwitchControl,
-} from '../controls';
-import {Filter} from '../settings/Filter';
+} from '../../controls';
+import {Filter} from '../Filter';
 
 interface ISlideshowSettingsProps {
-  isLoading?: boolean;
-  sections?: 'all' | 'basic' | 'advanced';
+  settings: ISlideshowSettings;
+  onSettingsChange: (settings: ISlideshowSettings) => void;
+  isLoading: boolean;
 }
 
-const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({
+const SlideshowSettings = ({
+  settings,
+  onSettingsChange,
   isLoading,
-  sections = 'all',
-}) => {
+}: ISlideshowSettingsProps) => {
   const {resetTemplate} = useTemplates();
-  const {slideshowSettings: value, changeSlideshowSettings: onChange} =
-    useSettings();
   const {
     width,
     height,
-    padding,
     showCounter,
     canShare,
     canDownload,
     canZoom,
     canFullscreen,
-    imageAnimation,
     thumbnailsPosition,
     thumbnailWidth,
     thumbnailHeight,
@@ -52,22 +46,18 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({
     thumbnailBorderRadius,
     thumbnailPadding,
     thumbnailGap,
-    backgroundColor,
     isFullCoverImage,
-  } = value as ISlideshowSettings;
+  } = settings;
 
-  const onInputValueChange = (inputValue: any, key?: string) => {
+  const onInputValueChange = (inputValue: unknown, key?: string) => {
     resetTemplate?.();
-    key && onChange({...value, [key]: inputValue});
+    key && onSettingsChange({...settings, [key]: inputValue});
   };
-
-  const showBasic = sections === 'all' || sections === 'basic';
-  const showAdvanced = sections === 'all' || sections === 'advanced';
 
   const {isPro} = usePro();
 
-  const renderMainSettings = (): ReactNode => {
-    return (
+  return (
+    <Paper elevation={0} sx={{textAlign: 'left'}}>
       <Section
         header={'Layout Settings'}
         className="reacg-tab-section"
@@ -193,61 +183,6 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({
           </Grid>
         }
       />
-    );
-  };
-
-  const renderAdvancedSettings = (): ReactNode => {
-    return (
-      <Section
-        header={'Container'}
-        className="reacg-tab-section"
-        body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'imageAnimation'}
-                name={'Animation'}
-                pro={true}
-                value={imageAnimation}
-                options={LightboxImageAnimationOptions.filter(
-                  (option) => option.value !== LightboxImageAnimation.SLIDEV
-                )}
-                onChange={
-                  isPro
-                    ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'animation',
-                        })
-                }
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <SliderControl
-                id={'padding'}
-                name="Padding (px)"
-                min={0}
-                max={300}
-                value={padding}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <ColorControl
-                id={'backgroundColor'}
-                name="Background color"
-                value={backgroundColor}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-          </Grid>
-        }
-      />
-    );
-  };
-
-  const renderFilmstripSettings = (): ReactNode => {
-    return (
       <Section
         header={'Thumbnails'}
         className="reacg-tab-section"
@@ -345,14 +280,6 @@ const SlideshowSettings: React.FC<ISlideshowSettingsProps> = ({
           </Grid>
         }
       />
-    );
-  };
-
-  return (
-    <Paper elevation={0} sx={{textAlign: 'left'}}>
-      {showBasic ? renderMainSettings() : null}
-      {showBasic ? renderFilmstripSettings() : null}
-      {showAdvanced ? renderAdvancedSettings() : null}
     </Paper>
   );
 };

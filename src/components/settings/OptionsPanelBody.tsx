@@ -1,26 +1,32 @@
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import {BlogSettings} from 'components/blog-settings';
-import {CardsSettings} from 'components/cards-settings/CardsSettings';
-import {CarouselSettings} from 'components/carousel-settings';
-import {CoverflowSettings} from 'components/coverflow-settings/CoverflowSettings';
-import {CubeSettings} from 'components/cube-settings/CubeSettings';
 import {GeneralSettings} from 'components/general-settings';
-import {JustifiedSettings} from 'components/justified-settings';
 import {LightboxSettings} from 'components/light-box-settings';
-import {MasonrySettings} from 'components/masonry-settings';
-import {SlideshowSettings} from 'components/slideshow-settings';
 import {GalleryType, ImageClickAction} from 'data-structures';
 import {ReactNode, useState} from 'react';
+import {BlogAppearanceSettings} from './blog-settings/BlogAppearanceSettings';
+import {BlogSettings} from './blog-settings/BlogSettings';
+import {CardsAppearanceSettings} from './cards-settings/CardsAppearanceSettings';
+import {CardsSettings} from './cards-settings/CardsSettings';
+import {CarouselAppearanceSettings} from './carousel-settings/CarouselAppearanceSettings';
+import {CarouselSettings} from './carousel-settings/CarouselSettings';
+import {CoverflowAppearanceSettings} from './coverflow-settings/CoverflowAppearanceSettings';
+import {CoverflowSettings} from './coverflow-settings/CoverflowSettings';
+import {CubeAppearanceSettings} from './cube-settings/CubeAppearanceSettings';
+import {CubeSettings} from './cube-settings/CubeSettings';
 import {GridAdvancedSettings} from './gird-settings/GridAdvancedSettings';
 import {GridSettings} from './gird-settings/GridSettings';
+import {JustifiedAppearanceSettings} from './justified-settings/JustifiedAppearanceSettings';
+import {JustifiedSettings} from './justified-settings/JustifiedSettings';
+import {MasonryAppearanceSettings} from './masonry-settings/MasonryAppearanceSettings';
+import {MasonrySettings} from './masonry-settings/MasonrySettings';
 import {MosaicAppearanceSettings} from './mosaic-settings/MosaicAppearanceSettings';
 import {MosaicSettings} from './mosaic-settings/MosaicSettings';
 import {SettingsPanelTabs} from './SettingsPanelTabs';
+import {SlideshowAppearanceSettings} from './slideshow-settings/SlideshowAppearanceSettings';
+import {SlideshowSettings} from './slideshow-settings/SlideshowSettings';
 import {TextAndMetadataSettings} from './TextAndMetadataSettings';
 import {useSettings} from './useSettings';
-
-type LayoutSections = 'all' | 'basic' | 'advanced';
 
 interface IOptionsPanelBodyProps {
   isLoading: boolean;
@@ -42,14 +48,22 @@ const OptionsPanelBody = ({
     mosaicSettings,
     changeMosaicSettings,
     justifiedSettings,
+    changeJustifiedSettings,
     masonrySettings,
+    changeMasonrySettings,
     slideshowSettings,
+    changeSlideshowSettings,
     cubeSettings,
+    changeCubeSettings,
     carouselSettings,
+    changeCarouselSettings,
     coverflowSettings,
+    changeCoverflowSettings,
     cardsSettings,
+    changeCardsSettings,
     generalSettings,
     blogSettings,
+    changeBlogSettings,
   } = useSettings();
   const clickAction = generalSettings?.clickAction;
   const [activeTab, setActiveTab] = useState<string>('gallery');
@@ -82,28 +96,76 @@ const OptionsPanelBody = ({
         );
         break;
       case GalleryType.JUSTIFIED:
-        galleryOprions = renderJustifiedSettings('basic');
+        galleryOprions = justifiedSettings && (
+          <JustifiedSettings
+            settings={justifiedSettings}
+            onSettingsChange={changeJustifiedSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.MASONRY:
-        galleryOprions = renderMasonrySettings('basic');
+        galleryOprions = masonrySettings && (
+          <MasonrySettings
+            settings={masonrySettings}
+            onSettingsChange={changeMasonrySettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.SLIDESHOW:
-        galleryOprions = renderSlideshowSettings('basic');
+        galleryOprions = slideshowSettings && (
+          <SlideshowSettings
+            settings={slideshowSettings}
+            onSettingsChange={changeSlideshowSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.CUBE:
-        galleryOprions = renderCubeSettings('basic');
+        galleryOprions = cubeSettings && (
+          <CubeSettings
+            settings={cubeSettings}
+            onSettingsChange={changeCubeSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.CAROUSEL:
-        galleryOprions = renderCarouselSettings('basic');
+        galleryOprions = carouselSettings && (
+          <CarouselSettings
+            settings={carouselSettings}
+            onSettingsChange={changeCarouselSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.CARDS:
-        galleryOprions = renderCardsSettings('basic');
+        galleryOprions = cardsSettings && (
+          <CardsSettings
+            settings={cardsSettings}
+            onSettingsChange={changeCardsSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.BLOG:
-        galleryOprions = renderBlogSettings('basic');
+        galleryOprions = blogSettings && (
+          <BlogSettings
+            settings={blogSettings}
+            onSettingsChange={changeBlogSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.COVERFLOW:
-        galleryOprions = renderCoverflowSettings('basic');
+        galleryOprions = coverflowSettings && (
+          <CoverflowSettings
+            settings={coverflowSettings}
+            onSettingsChange={changeCoverflowSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
     }
     return galleryOprions;
@@ -128,100 +190,79 @@ const OptionsPanelBody = ({
         );
         break;
       case GalleryType.JUSTIFIED:
-        appearanceOptions = renderJustifiedSettings('advanced');
+        appearanceOptions = justifiedSettings && (
+          <JustifiedAppearanceSettings
+            settings={justifiedSettings}
+            onSettingsChange={changeJustifiedSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.MASONRY:
-        appearanceOptions = renderMasonrySettings('advanced');
+        appearanceOptions = masonrySettings && (
+          <MasonryAppearanceSettings
+            settings={masonrySettings}
+            onSettingsChange={changeMasonrySettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.SLIDESHOW:
-        appearanceOptions = renderSlideshowSettings('advanced');
+        appearanceOptions = slideshowSettings && (
+          <SlideshowAppearanceSettings
+            settings={slideshowSettings}
+            onSettingsChange={changeSlideshowSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.CUBE:
-        appearanceOptions = renderCubeSettings('advanced');
+        appearanceOptions = cubeSettings && (
+          <CubeAppearanceSettings
+            settings={cubeSettings}
+            onSettingsChange={changeCubeSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.CAROUSEL:
-        appearanceOptions = renderCarouselSettings('advanced');
+        appearanceOptions = carouselSettings && (
+          <CarouselAppearanceSettings
+            settings={carouselSettings}
+            onSettingsChange={changeCarouselSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.CARDS:
-        appearanceOptions = renderCardsSettings('advanced');
+        appearanceOptions = cardsSettings && (
+          <CardsAppearanceSettings
+            settings={cardsSettings}
+            onSettingsChange={changeCardsSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.BLOG:
-        appearanceOptions = renderBlogSettings('advanced');
+        appearanceOptions = blogSettings && (
+          <BlogAppearanceSettings
+            settings={blogSettings}
+            onSettingsChange={changeBlogSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
       case GalleryType.COVERFLOW:
-        appearanceOptions = renderCoverflowSettings('advanced');
+        appearanceOptions = coverflowSettings && (
+          <CoverflowAppearanceSettings
+            settings={coverflowSettings}
+            onSettingsChange={changeCoverflowSettings!}
+            isLoading={isLoading}
+          />
+        );
         break;
     }
     return appearanceOptions;
-  };
-
-  const renderJustifiedSettings = (
-    sections: LayoutSections = 'all'
-  ): ReactNode => {
-    return (
-      justifiedSettings && (
-        <JustifiedSettings isLoading={isLoading} sections={sections} />
-      )
-    );
-  };
-
-  const renderMasonrySettings = (
-    sections: LayoutSections = 'all'
-  ): ReactNode => {
-    return (
-      masonrySettings && (
-        <MasonrySettings isLoading={isLoading} sections={sections} />
-      )
-    );
-  };
-
-  const renderSlideshowSettings = (
-    sections: LayoutSections = 'all'
-  ): ReactNode => {
-    return (
-      slideshowSettings && (
-        <SlideshowSettings isLoading={isLoading} sections={sections} />
-      )
-    );
-  };
-
-  const renderCubeSettings = (sections: LayoutSections = 'all'): ReactNode => {
-    return (
-      cubeSettings && <CubeSettings isLoading={isLoading} sections={sections} />
-    );
-  };
-
-  const renderCarouselSettings = (
-    sections: LayoutSections = 'all'
-  ): ReactNode => {
-    return (
-      carouselSettings && (
-        <CarouselSettings isLoading={isLoading} sections={sections} />
-      )
-    );
-  };
-
-  const renderCoverflowSettings = (
-    sections: LayoutSections = 'all'
-  ): ReactNode => {
-    return (
-      coverflowSettings && (
-        <CoverflowSettings isLoading={isLoading} sections={sections} />
-      )
-    );
-  };
-
-  const renderCardsSettings = (sections: LayoutSections = 'all'): ReactNode => {
-    return (
-      cardsSettings && (
-        <CardsSettings isLoading={isLoading} sections={sections} />
-      )
-    );
-  };
-  const renderBlogSettings = (sections: LayoutSections = 'all'): ReactNode => {
-    return (
-      blogSettings && <BlogSettings isLoading={isLoading} sections={sections} />
-    );
   };
 
   return (

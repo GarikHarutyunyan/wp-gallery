@@ -1,101 +1,49 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
-import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {HoverEffectOptions, IJustifiedSettings} from 'data-structures';
-import React, {ReactNode} from 'react';
 import {
   ColorControl,
-  NumberControl,
   SelectControl,
   SliderControl,
   SwitchControl,
-} from '../controls';
-import {Filter} from '../settings/Filter';
+} from '../../controls';
+import {Filter} from '../Filter';
 
-interface IJustifiedSettingsProps {
-  isLoading?: boolean;
-  sections?: 'all' | 'basic' | 'advanced';
+interface IJustifiedAppearanceSettingsProps {
+  settings: IJustifiedSettings;
+  onSettingsChange: (settings: IJustifiedSettings) => void;
+  isLoading: boolean;
 }
 
-const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({
+const JustifiedAppearanceSettings = ({
+  settings,
+  onSettingsChange,
   isLoading,
-  sections = 'all',
-}) => {
+}: IJustifiedAppearanceSettingsProps) => {
   const {resetTemplate} = useTemplates();
-  const {justifiedSettings: value, changeJustifiedSettings: onChange} =
-    useSettings();
   const {
-    width,
     gap,
     backgroundColor,
     containerPadding,
     padding,
     paddingColor,
-    rowHeight,
     borderRadius,
     hoverEffect,
     showVideoCover,
-  } = value as IJustifiedSettings;
+  } = settings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
-    key && onChange({...value, [key]: inputValue});
+    key && onSettingsChange?.({...settings, [key]: inputValue});
   };
-
-  const showBasic = sections === 'all' || sections === 'basic';
-  const showAdvanced = sections === 'all' || sections === 'advanced';
 
   const {isPro} = usePro();
 
-  const renderBasicSettings = (): ReactNode => {
-    return (
-      <Section
-        header={'Layout Settings'}
-        className="reacg-tab-section"
-        body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <SliderControl
-                id={'width'}
-                name="Width (%)"
-                min={10}
-                max={100}
-                value={width}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'rowHeight'}
-                name={'Row height'}
-                value={rowHeight}
-                onChange={onInputValueChange}
-                min={0}
-                unit={'px'}
-              />
-            </Filter>
-            <ClickActionSettings isLoading={isLoading} />
-          </Grid>
-        }
-      />
-    );
-  };
-
-  const renderAdvancedSettings = (): ReactNode => {
-    return (
-      <>
-        {renderContainerSettings()}
-        {renderImagesSettings()}
-      </>
-    );
-  };
-
-  const renderContainerSettings = (): ReactNode => {
-    return (
+  return (
+    <Paper elevation={0} sx={{textAlign: 'left'}}>
       <Section
         header={'Container'}
         className="reacg-tab-section"
@@ -122,11 +70,6 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({
           </Grid>
         }
       />
-    );
-  };
-
-  const renderImagesSettings = (): ReactNode => {
-    return (
       <Section
         header={'Media'}
         className="reacg-tab-section"
@@ -225,15 +168,8 @@ const JustifiedSettings: React.FC<IJustifiedSettingsProps> = ({
           </Grid>
         }
       />
-    );
-  };
-
-  return (
-    <Paper elevation={0} sx={{textAlign: 'left'}}>
-      {showBasic ? renderBasicSettings() : null}
-      {showAdvanced ? renderAdvancedSettings() : null}
     </Paper>
   );
 };
 
-export {JustifiedSettings};
+export {JustifiedAppearanceSettings};
