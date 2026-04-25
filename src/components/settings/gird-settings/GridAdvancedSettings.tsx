@@ -12,17 +12,17 @@ import {
 } from '../../controls';
 import {Filter} from '../Filter';
 
-interface IThumbnailAdvancedSettingsProps {
+interface IGridAdvancedSettingsProps {
   settings: IThumbnailSettings;
   onSettingsChange: (settings: IThumbnailSettings) => void;
   isLoading?: boolean;
 }
 
-const ThumbnailAdvancedSettings = ({
+const GridAdvancedSettings = ({
   settings,
   onSettingsChange,
   isLoading,
-}: IThumbnailAdvancedSettingsProps) => {
+}: IGridAdvancedSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {
     gap,
@@ -239,4 +239,4 @@ const ThumbnailAdvancedSettings = ({
   );
 };
 
-export {ThumbnailAdvancedSettings};
+export {GridAdvancedSettings};

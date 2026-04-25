@@ -12,12 +12,12 @@ import {MasonrySettings} from 'components/masonry-settings';
 import {SlideshowSettings} from 'components/slideshow-settings';
 import {GalleryType, ImageClickAction} from 'data-structures';
 import {ReactNode, useState} from 'react';
+import {GridAdvancedSettings} from './gird-settings/GridAdvancedSettings';
+import {GridSettings} from './gird-settings/GridSettings';
 import {MosaicAppearanceSettings} from './mosaic-settings/MosaicAppearanceSettings';
 import {MosaicSettings} from './mosaic-settings/MosaicSettings';
 import {SettingsPanelTabs} from './SettingsPanelTabs';
 import {TextAndMetadataSettings} from './TextAndMetadataSettings';
-import {ThumbnailAdvancedSettings} from './thumbnail-settings/ThumbnailAdvancedSettings';
-import {ThumbnailSettings} from './thumbnail-settings/ThumbnailSettings';
 import {useSettings} from './useSettings';
 
 type LayoutSections = 'all' | 'basic' | 'advanced';
@@ -65,7 +65,7 @@ const OptionsPanelBody = ({
 
   const renderGalleryOptions = (): ReactNode => {
     let galleryOprions: ReactNode = thumbnailSettings && (
-      <ThumbnailSettings
+      <GridSettings
         isLoading={isLoading}
         settings={thumbnailSettings}
         onSettingsChange={changeThumbnailSettings!}
@@ -111,7 +111,7 @@ const OptionsPanelBody = ({
 
   const renderAppearanceOptions = (): ReactNode => {
     let appearanceOptions: ReactNode = thumbnailSettings && (
-      <ThumbnailAdvancedSettings
+      <GridAdvancedSettings
         isLoading={isLoading}
         settings={thumbnailSettings}
         onSettingsChange={changeThumbnailSettings!}

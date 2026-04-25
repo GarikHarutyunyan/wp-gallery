@@ -7,17 +7,17 @@ import {AspectRatioOptions, IThumbnailSettings} from 'data-structures';
 import {NumberControl, SelectControl, SwitchControl} from '../../controls';
 import {Filter} from '../Filter';
 
-interface IThumbnailSettingsProps {
+interface IGridSettingsProps {
   settings: IThumbnailSettings;
   onSettingsChange: (settings: IThumbnailSettings) => void;
   isLoading?: boolean;
 }
 
-const ThumbnailSettings = ({
+const GridSettings = ({
   settings,
   onSettingsChange,
   isLoading,
-}: IThumbnailSettingsProps) => {
+}: IGridSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {fillContainer, aspectRatio, width, height, columns} = settings;
 
@@ -102,4 +102,4 @@ const ThumbnailSettings = ({
   );
 };
 
-export {ThumbnailSettings};
+export {GridSettings};
