@@ -11,11 +11,12 @@ import {LightboxSettings} from 'components/light-box-settings';
 import {MasonrySettings} from 'components/masonry-settings';
 import {MosaicSettings} from 'components/mosaic-settings';
 import {SlideshowSettings} from 'components/slideshow-settings';
-import {ThumbnailSettings} from 'components/thumbnail-settings';
 import {GalleryType, ImageClickAction} from 'data-structures';
 import React, {ReactNode, useState} from 'react';
 import {SettingsPanelTabs} from './SettingsPanelTabs';
 import {TextAndMetadataSettings} from './TextAndMetadataSettings';
+import {ThumbnailAdvancedSettings} from './thumbnail-settings/ThumbnailAdvancedSettings';
+import {ThumbnailSettings} from './thumbnail-settings/ThumbnailSettings';
 import {useSettings} from './useSettings';
 
 interface IOptionsPanelBodyProps {
@@ -36,6 +37,7 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   const {
     type,
     thumbnailSettings,
+    changeThumbnailSettings,
     mosaicSettings,
     justifiedSettings,
     masonrySettings,
@@ -60,7 +62,13 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   };
 
   const renderGalleryOptions = (): ReactNode => {
-    let galleryOprions = renderThumbnailSettings('basic');
+    let galleryOprions: ReactNode = thumbnailSettings && (
+      <ThumbnailSettings
+        isLoading={isLoading}
+        settings={thumbnailSettings}
+        onSettingsChange={changeThumbnailSettings}
+      />
+    );
     switch (type) {
       case GalleryType.MOSAIC:
         galleryOprions = renderMosaicSettings('basic');
@@ -94,7 +102,13 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
   };
 
   const renderAppearanceOptions = (): ReactNode => {
-    let appearanceOptions = renderThumbnailSettings('advanced');
+    let appearanceOptions: ReactNode = thumbnailSettings && (
+      <ThumbnailAdvancedSettings
+        isLoading={isLoading}
+        settings={thumbnailSettings}
+        onSettingsChange={changeThumbnailSettings}
+      />
+    );
     switch (type) {
       case GalleryType.MOSAIC:
         appearanceOptions = renderMosaicSettings('advanced');
@@ -125,16 +139,6 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
         break;
     }
     return appearanceOptions;
-  };
-
-  const renderThumbnailSettings = (
-    sections: LayoutSections = 'all'
-  ): ReactNode => {
-    return (
-      thumbnailSettings && (
-        <ThumbnailSettings isLoading={isLoading} sections={sections} />
-      )
-    );
   };
 
   const renderMosaicSettings = (
