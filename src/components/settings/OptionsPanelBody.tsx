@@ -3,7 +3,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import {GeneralSettings} from 'components/general-settings';
 import {LightboxSettings} from 'components/light-box-settings';
 import {GalleryType, ImageClickAction} from 'data-structures';
-import {ReactNode, useState} from 'react';
+import {useState} from 'react';
 import {BlogAppearanceSettings} from './blog-settings/BlogAppearanceSettings';
 import {BlogSettings} from './blog-settings/BlogSettings';
 import {CardsAppearanceSettings} from './cards-settings/CardsAppearanceSettings';
@@ -14,7 +14,7 @@ import {CoverflowAppearanceSettings} from './coverflow-settings/CoverflowAppeara
 import {CoverflowSettings} from './coverflow-settings/CoverflowSettings';
 import {CubeAppearanceSettings} from './cube-settings/CubeAppearanceSettings';
 import {CubeSettings} from './cube-settings/CubeSettings';
-import {GridAdvancedSettings} from './gird-settings/GridAdvancedSettings';
+import {GridAppearanceSettings} from './gird-settings/GridAppearanceSettings';
 import {GridSettings} from './gird-settings/GridSettings';
 import {JustifiedAppearanceSettings} from './justified-settings/JustifiedAppearanceSettings';
 import {JustifiedSettings} from './justified-settings/JustifiedSettings';
@@ -77,193 +77,16 @@ const OptionsPanelBody = ({
     setActiveTab(newActiveTab);
   };
 
-  const renderGalleryOptions = (): ReactNode => {
-    let galleryOprions: ReactNode = thumbnailSettings && (
-      <GridSettings
-        isLoading={isLoading}
-        settings={thumbnailSettings}
-        onSettingsChange={changeThumbnailSettings!}
-      />
-    );
-    switch (type) {
-      case GalleryType.MOSAIC:
-        galleryOprions = mosaicSettings && (
-          <MosaicSettings
-            settings={mosaicSettings}
-            onSettingsChange={changeMosaicSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.JUSTIFIED:
-        galleryOprions = justifiedSettings && (
-          <JustifiedSettings
-            settings={justifiedSettings}
-            onSettingsChange={changeJustifiedSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.MASONRY:
-        galleryOprions = masonrySettings && (
-          <MasonrySettings
-            settings={masonrySettings}
-            onSettingsChange={changeMasonrySettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.SLIDESHOW:
-        galleryOprions = slideshowSettings && (
-          <SlideshowSettings
-            settings={slideshowSettings}
-            onSettingsChange={changeSlideshowSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.CUBE:
-        galleryOprions = cubeSettings && (
-          <CubeSettings
-            settings={cubeSettings}
-            onSettingsChange={changeCubeSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.CAROUSEL:
-        galleryOprions = carouselSettings && (
-          <CarouselSettings
-            settings={carouselSettings}
-            onSettingsChange={changeCarouselSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.CARDS:
-        galleryOprions = cardsSettings && (
-          <CardsSettings
-            settings={cardsSettings}
-            onSettingsChange={changeCardsSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.BLOG:
-        galleryOprions = blogSettings && (
-          <BlogSettings
-            settings={blogSettings}
-            onSettingsChange={changeBlogSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.COVERFLOW:
-        galleryOprions = coverflowSettings && (
-          <CoverflowSettings
-            settings={coverflowSettings}
-            onSettingsChange={changeCoverflowSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-    }
-    return galleryOprions;
-  };
-
-  const renderAppearanceOptions = (): ReactNode => {
-    let appearanceOptions: ReactNode = thumbnailSettings && (
-      <GridAdvancedSettings
-        isLoading={isLoading}
-        settings={thumbnailSettings}
-        onSettingsChange={changeThumbnailSettings!}
-      />
-    );
-    switch (type) {
-      case GalleryType.MOSAIC:
-        appearanceOptions = mosaicSettings && (
-          <MosaicAppearanceSettings
-            settings={mosaicSettings}
-            onSettingsChange={changeMosaicSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.JUSTIFIED:
-        appearanceOptions = justifiedSettings && (
-          <JustifiedAppearanceSettings
-            settings={justifiedSettings}
-            onSettingsChange={changeJustifiedSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.MASONRY:
-        appearanceOptions = masonrySettings && (
-          <MasonryAppearanceSettings
-            settings={masonrySettings}
-            onSettingsChange={changeMasonrySettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.SLIDESHOW:
-        appearanceOptions = slideshowSettings && (
-          <SlideshowAppearanceSettings
-            settings={slideshowSettings}
-            onSettingsChange={changeSlideshowSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.CUBE:
-        appearanceOptions = cubeSettings && (
-          <CubeAppearanceSettings
-            settings={cubeSettings}
-            onSettingsChange={changeCubeSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.CAROUSEL:
-        appearanceOptions = carouselSettings && (
-          <CarouselAppearanceSettings
-            settings={carouselSettings}
-            onSettingsChange={changeCarouselSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.CARDS:
-        appearanceOptions = cardsSettings && (
-          <CardsAppearanceSettings
-            settings={cardsSettings}
-            onSettingsChange={changeCardsSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.BLOG:
-        appearanceOptions = blogSettings && (
-          <BlogAppearanceSettings
-            settings={blogSettings}
-            onSettingsChange={changeBlogSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-      case GalleryType.COVERFLOW:
-        appearanceOptions = coverflowSettings && (
-          <CoverflowAppearanceSettings
-            settings={coverflowSettings}
-            onSettingsChange={changeCoverflowSettings!}
-            isLoading={isLoading}
-          />
-        );
-        break;
-    }
-    return appearanceOptions;
-  };
+  const isGrid: boolean = type === GalleryType.THUMBNAILS;
+  const isMosaic: boolean = type === GalleryType.MOSAIC;
+  const isJustified: boolean = type === GalleryType.JUSTIFIED;
+  const isMasonry: boolean = type === GalleryType.MASONRY;
+  const isSlideshow: boolean = type === GalleryType.SLIDESHOW;
+  const isCube: boolean = type === GalleryType.CUBE;
+  const isCarousel: boolean = type === GalleryType.CAROUSEL;
+  const isCards: boolean = type === GalleryType.CARDS;
+  const isBlog: boolean = type === GalleryType.BLOG;
+  const isCoverflow: boolean = type === GalleryType.COVERFLOW;
 
   return (
     <TabContext value={activeTab}>
@@ -276,10 +99,148 @@ const OptionsPanelBody = ({
         isSmall={isSmall}
       />
       <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
-        {renderGalleryOptions()}
+        {isGrid && thumbnailSettings && (
+          <GridSettings
+            isLoading={isLoading}
+            settings={thumbnailSettings}
+            onSettingsChange={changeThumbnailSettings!}
+          />
+        )}
+        {isMosaic && mosaicSettings && (
+          <MosaicSettings
+            settings={mosaicSettings}
+            onSettingsChange={changeMosaicSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isJustified && justifiedSettings && (
+          <JustifiedSettings
+            settings={justifiedSettings}
+            onSettingsChange={changeJustifiedSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isMasonry && masonrySettings && (
+          <MasonrySettings
+            settings={masonrySettings}
+            onSettingsChange={changeMasonrySettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isSlideshow && slideshowSettings && (
+          <SlideshowSettings
+            settings={slideshowSettings}
+            onSettingsChange={changeSlideshowSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isCube && cubeSettings && (
+          <CubeSettings
+            settings={cubeSettings}
+            onSettingsChange={changeCubeSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isCarousel && carouselSettings && (
+          <CarouselSettings
+            settings={carouselSettings}
+            onSettingsChange={changeCarouselSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isCards && cardsSettings && (
+          <CardsSettings
+            settings={cardsSettings}
+            onSettingsChange={changeCardsSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isBlog && blogSettings && (
+          <BlogSettings
+            settings={blogSettings}
+            onSettingsChange={changeBlogSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isCoverflow && coverflowSettings && (
+          <CoverflowSettings
+            settings={coverflowSettings}
+            onSettingsChange={changeCoverflowSettings!}
+            isLoading={isLoading}
+          />
+        )}
       </TabPanel>
       <TabPanel value={'appearance'} className={'reacg-tab-panel'}>
-        {renderAppearanceOptions()}
+        {isGrid && thumbnailSettings && (
+          <GridAppearanceSettings
+            settings={thumbnailSettings}
+            onSettingsChange={changeThumbnailSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isMosaic && mosaicSettings && (
+          <MosaicAppearanceSettings
+            settings={mosaicSettings}
+            onSettingsChange={changeMosaicSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isJustified && justifiedSettings && (
+          <JustifiedAppearanceSettings
+            settings={justifiedSettings}
+            onSettingsChange={changeJustifiedSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isMasonry && masonrySettings && (
+          <MasonryAppearanceSettings
+            settings={masonrySettings}
+            onSettingsChange={changeMasonrySettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isSlideshow && slideshowSettings && (
+          <SlideshowAppearanceSettings
+            settings={slideshowSettings}
+            onSettingsChange={changeSlideshowSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isCube && cubeSettings && (
+          <CubeAppearanceSettings
+            settings={cubeSettings}
+            onSettingsChange={changeCubeSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isCarousel && carouselSettings && (
+          <CarouselAppearanceSettings
+            settings={carouselSettings}
+            onSettingsChange={changeCarouselSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isCards && cardsSettings && (
+          <CardsAppearanceSettings
+            settings={cardsSettings}
+            onSettingsChange={changeCardsSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isBlog && blogSettings && (
+          <BlogAppearanceSettings
+            settings={blogSettings}
+            onSettingsChange={changeBlogSettings!}
+            isLoading={isLoading}
+          />
+        )}
+        {isCoverflow && coverflowSettings && (
+          <CoverflowAppearanceSettings
+            settings={coverflowSettings}
+            onSettingsChange={changeCoverflowSettings!}
+            isLoading={isLoading}
+          />
+        )}
       </TabPanel>
       <TabPanel value={'general'} className={'reacg-tab-panel'}>
         <GeneralSettings isLoading={isLoading} sections={'main'} />

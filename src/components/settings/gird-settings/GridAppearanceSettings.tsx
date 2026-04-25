@@ -12,17 +12,17 @@ import {
 } from '../../controls';
 import {Filter} from '../Filter';
 
-interface IGridAdvancedSettingsProps {
+interface IGridAppearanceSettingsProps {
   settings: IThumbnailSettings;
   onSettingsChange: (settings: IThumbnailSettings) => void;
   isLoading?: boolean;
 }
 
-const GridAdvancedSettings = ({
+const GridAppearanceSettings = ({
   settings,
   onSettingsChange,
   isLoading,
-}: IGridAdvancedSettingsProps) => {
+}: IGridAppearanceSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {
     gap,
@@ -239,4 +239,4 @@ const GridAdvancedSettings = ({
   );
 };
 
-export {GridAdvancedSettings};
+export {GridAppearanceSettings};
