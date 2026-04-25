@@ -3,11 +3,12 @@ import {
   ILightboxSettings,
   IThumbnailSettings,
 } from 'data-structures';
+import {ReactNode} from 'react';
 import {Gallery} from './Gallery';
 import {DataProvider} from './data-context/DataContext';
 import {useSettings} from './settings';
 
-const GalleryWithSettings = () => {
+const GalleryWithSettings = (): ReactNode => {
   const {
     generalSettings,
     thumbnailSettings,
