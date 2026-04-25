@@ -21,7 +21,7 @@ const MosaicSettings = ({
   const {resetTemplate} = useTemplates();
   const {width, columns} = settings;
 
-  const onInputValueChange = (inputValue: any, key?: string) => {
+  const onInputValueChange = (inputValue: unknown, key?: string) => {
     resetTemplate?.();
     key && onSettingsChange({...settings, [key]: inputValue});
   };
