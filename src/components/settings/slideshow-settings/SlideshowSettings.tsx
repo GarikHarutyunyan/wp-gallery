@@ -22,12 +22,14 @@ interface ISlideshowSettingsProps {
   settings: ISlideshowSettings;
   onSettingsChange: (settings: ISlideshowSettings) => void;
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const SlideshowSettings = ({
   settings,
   onSettingsChange,
   isLoading,
+  onProFeatureClick,
 }: ISlideshowSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {
@@ -92,10 +94,7 @@ const SlideshowSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'slider_full_cover',
-                        })
+                    : () => onProFeatureClick('slider_full_cover')
                 }
               />
             </Filter>
@@ -108,10 +107,7 @@ const SlideshowSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'lightbox_download',
-                        })
+                    : () => onProFeatureClick('lightbox_download')
                 }
               />
             </Filter>
@@ -124,10 +120,7 @@ const SlideshowSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'lightbox_download',
-                        })
+                    : () => onProFeatureClick('lightbox_download')
                 }
               />
             </Filter>
@@ -140,10 +133,7 @@ const SlideshowSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'lightbox_download',
-                        })
+                    : () => onProFeatureClick('lightbox_download')
                 }
               />
             </Filter>
@@ -156,10 +146,7 @@ const SlideshowSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'lightbox_download',
-                        })
+                    : () => onProFeatureClick('lightbox_download')
                 }
               />
             </Filter>
@@ -172,10 +159,7 @@ const SlideshowSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'lightbox_counter',
-                        })
+                    : () => onProFeatureClick('lightbox_counter')
                 }
               />
             </Filter>
@@ -198,10 +182,7 @@ const SlideshowSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'enable_filmstrip',
-                        })
+                    : () => onProFeatureClick('enable_filmstrip')
                 }
               />
             </Filter>

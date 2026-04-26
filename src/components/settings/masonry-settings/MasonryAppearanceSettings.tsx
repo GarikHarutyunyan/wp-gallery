@@ -15,12 +15,14 @@ import {Filter} from '../Filter';
 interface IMasonryAppearanceSettingsProps {
   settings: IMasonrySettings;
   onSettingsChange: (settings: IMasonrySettings) => void;
+  onProFeatureClick: (feature: string) => void;
   isLoading: boolean;
 }
 
 const MasonryAppearanceSettings = ({
   settings,
   onSettingsChange,
+  onProFeatureClick,
   isLoading,
 }: IMasonryAppearanceSettingsProps) => {
   const {resetTemplate} = useTemplates();
@@ -96,10 +98,7 @@ const MasonryAppearanceSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'image_border',
-                        })
+                    : () => onProFeatureClick('image_border')
                 }
               />
             </Filter>
@@ -112,10 +111,7 @@ const MasonryAppearanceSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'image_border_color',
-                        })
+                    : () => onProFeatureClick('image_border_color')
                 }
               />
             </Filter>
@@ -142,9 +138,7 @@ const MasonryAppearanceSettings = ({
                       (option) => option.value === inputValue
                     )?.isPro
                   ) {
-                    (window as any).reacg_open_premium_offer_dialog({
-                      utm_medium: 'hoverEffect',
-                    });
+                    onProFeatureClick('hoverEffect');
                   } else {
                     onInputValueChange(inputValue, 'hoverEffect');
                   }

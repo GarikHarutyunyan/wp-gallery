@@ -16,12 +16,14 @@ interface ICoverflowAppearanceSettingsProps {
   settings: ICoverflowSettings;
   onSettingsChange: (settings: ICoverflowSettings) => void;
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const CoverflowAppearanceSettings = ({
   settings,
   onSettingsChange,
   isLoading,
+  onProFeatureClick,
 }: ICoverflowAppearanceSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {backgroundColor, padding, hoverEffect, showVideoCover} = settings;
@@ -79,9 +81,7 @@ const CoverflowAppearanceSettings = ({
                       (option) => option.value === inputValue
                     )?.isPro
                   ) {
-                    (window as any).reacg_open_premium_offer_dialog({
-                      utm_medium: 'hoverEffect',
-                    });
+                    onProFeatureClick('hoverEffect');
                   } else {
                     onInputValueChange(inputValue, 'hoverEffect');
                   }

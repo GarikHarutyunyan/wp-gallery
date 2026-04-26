@@ -16,12 +16,14 @@ interface ICubeAppearanceSettingsProps {
   settings: ICubeSettings;
   onSettingsChange: (settings: ICubeSettings) => void;
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const CubeAppearanceSettings = ({
   settings,
   onSettingsChange,
   isLoading,
+  onProFeatureClick,
 }: ICubeAppearanceSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {backgroundColor, padding, shadow, hoverEffect, showVideoCover} =
@@ -50,10 +52,7 @@ const CubeAppearanceSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'cube_shadow',
-                        })
+                    : () => onProFeatureClick('cube_shadow')
                 }
               />
             </Filter>
@@ -66,10 +65,7 @@ const CubeAppearanceSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'cube_background_color',
-                        })
+                    : () => onProFeatureClick('cube_background_color')
                 }
               />
             </Filter>
@@ -104,9 +100,7 @@ const CubeAppearanceSettings = ({
                       (option) => option.value === inputValue
                     )?.isPro
                   ) {
-                    (window as any).reacg_open_premium_offer_dialog({
-                      utm_medium: 'hoverEffect',
-                    });
+                    onProFeatureClick('hoverEffect');
                   } else {
                     onInputValueChange(inputValue, 'hoverEffect');
                   }

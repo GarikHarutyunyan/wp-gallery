@@ -16,12 +16,14 @@ interface ICarouselAppearanceSettingsProps {
   settings: ICarouselSettings;
   onSettingsChange: (settings: ICarouselSettings) => void;
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const CarouselAppearanceSettings = ({
   settings,
   onSettingsChange,
   isLoading,
+  onProFeatureClick,
 }: ICarouselAppearanceSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {backgroundColor, padding, hoverEffect, showVideoCover} = settings;
@@ -79,9 +81,7 @@ const CarouselAppearanceSettings = ({
                       (option) => option.value === inputValue
                     )?.isPro
                   ) {
-                    (window as any).reacg_open_premium_offer_dialog({
-                      utm_medium: 'hoverEffect',
-                    });
+                    onProFeatureClick('hoverEffect');
                   } else {
                     onInputValueChange(inputValue, 'hoverEffect');
                   }

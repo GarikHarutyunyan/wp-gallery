@@ -11,12 +11,14 @@ interface ICardsAppearanceSettingsProps {
   settings: ICardsSettings;
   onSettingsChange: (settings: ICardsSettings) => void;
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const CardsAppearanceSettings = ({
   settings,
   onSettingsChange,
   isLoading,
+  onProFeatureClick,
 }: ICardsAppearanceSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {hoverEffect, showVideoCover} = settings;
@@ -48,9 +50,7 @@ const CardsAppearanceSettings = ({
                       (option) => option.value === inputValue
                     )?.isPro
                   ) {
-                    (window as any).reacg_open_premium_offer_dialog({
-                      utm_medium: 'hoverEffect',
-                    });
+                    onProFeatureClick('hoverEffect');
                   } else {
                     onInputValueChange(inputValue, 'hoverEffect');
                   }

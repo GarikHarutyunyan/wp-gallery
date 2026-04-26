@@ -37,6 +37,12 @@ const OptionsPanelBody = ({
     setActiveTab(newActiveTab);
   };
 
+  const onProFeatureClick = (utmMedium: string) => {
+    (window as any).reacg_open_premium_offer_dialog({
+      utm_medium: utmMedium,
+    });
+  };
+
   return (
     <TabContext value={activeTab}>
       <SettingsPanelTabs
@@ -48,20 +54,31 @@ const OptionsPanelBody = ({
         isSmall={isSmall}
       />
       <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
-        <OptionsPanelGalleryTab isLoading={isLoading} />
+        <OptionsPanelGalleryTab
+          isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
+        />
       </TabPanel>
       <TabPanel value={'text-metadata'} className={'reacg-tab-panel'}>
         {type ? (
-          <TextAndMetadataSettings isLoading={isLoading} galleryType={type} />
+          <TextAndMetadataSettings
+            isLoading={isLoading}
+            galleryType={type}
+            onProFeatureClick={onProFeatureClick}
+          />
         ) : null}
       </TabPanel>
       <TabPanel value={'appearance'} className={'reacg-tab-panel'}>
-        <OptionsPanelAppearanceTab isLoading={isLoading} />
+        <OptionsPanelAppearanceTab
+          isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
+        />
       </TabPanel>
       <TabPanel value={'navigation'} className={'reacg-tab-panel'}>
         <NavigationSettings
           settings={generalSettings!}
           onSettingsChange={changeGeneralSettings!}
+          onProFeatureClick={onProFeatureClick}
           isLoading={isLoading}
         />
       </TabPanel>
@@ -69,6 +86,7 @@ const OptionsPanelBody = ({
         <ProtectionSettings
           settings={generalSettings!}
           onSettingsChange={changeGeneralSettings!}
+          onProFeatureClick={onProFeatureClick}
           isLoading={isLoading}
         />
       </TabPanel>

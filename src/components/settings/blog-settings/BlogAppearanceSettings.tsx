@@ -16,12 +16,14 @@ interface IBlogAppearanceSettingsProps {
   settings: IBlogSettings;
   onSettingsChange: (settings: IBlogSettings) => void;
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const BlogAppearanceSettings = ({
   settings,
   onSettingsChange,
   isLoading,
+  onProFeatureClick,
 }: IBlogAppearanceSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {
@@ -106,9 +108,7 @@ const BlogAppearanceSettings = ({
                       (option) => option.value === inputValue
                     )?.isPro
                   ) {
-                    (window as any).reacg_open_premium_offer_dialog({
-                      utm_medium: 'hoverEffect',
-                    });
+                    onProFeatureClick('hoverEffect');
                   } else {
                     onInputValueChange(inputValue, 'hoverEffect');
                   }

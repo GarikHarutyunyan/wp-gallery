@@ -13,12 +13,14 @@ interface ICoverflowSettingsProps {
   settings: ICoverflowSettings;
   onSettingsChange: (settings: ICoverflowSettings) => void;
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const CoverflowSettings = ({
   settings,
   onSettingsChange,
   isLoading,
+  onProFeatureClick,
 }: ICoverflowSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {width, height, rotate, imagesCount, animationSpeed} = settings;
@@ -96,10 +98,7 @@ const CoverflowSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'animation_speed',
-                        })
+                    : () => onProFeatureClick('animation_speed')
                 }
                 min={100}
                 step={100}

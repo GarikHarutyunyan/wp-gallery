@@ -263,10 +263,7 @@ const ControlsSection = ({
                   onChange={
                     isPro
                       ? onSliderNavigationChange
-                      : () =>
-                          (window as any).reacg_open_premium_offer_dialog({
-                            utm_medium: 'cube_loop',
-                          })
+                      : () => onProFeatureClick('cube_loop')
                   }
                 />
               </Filter>

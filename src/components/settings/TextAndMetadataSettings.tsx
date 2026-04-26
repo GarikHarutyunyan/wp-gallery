@@ -35,11 +35,12 @@ import {useSettings} from './useSettings';
 interface TextAndMetadataSettingsProps {
   isLoading: boolean;
   galleryType: GalleryType;
+  onProFeatureClick: (feature: string) => void;
 }
 
 export const TextAndMetadataSettings: React.FC<
   TextAndMetadataSettingsProps
-> = ({isLoading, galleryType}) => {
+> = ({isLoading, galleryType, onProFeatureClick}) => {
   const settingsContext = useSettings();
   const {isPro} = usePro();
   const {resetTemplate} = useTemplates();
@@ -243,9 +244,7 @@ export const TextAndMetadataSettings: React.FC<
                       (option) => option.value === inputValue
                     )?.isPro
                   ) {
-                    (window as any).reacg_open_premium_offer_dialog({
-                      utm_medium: 'titleSource',
-                    });
+                    onProFeatureClick('titleSource');
                   } else {
                     onInputValueChange(inputValue, 'titleSource');
                   }
@@ -345,10 +344,7 @@ export const TextAndMetadataSettings: React.FC<
               onChange={
                 isPro
                   ? onInputValueChange
-                  : () =>
-                      (window as any).reacg_open_premium_offer_dialog({
-                        utm_medium: 'show_caption',
-                      })
+                  : () => onProFeatureClick('show_caption')
               }
             />
           </Filter>
@@ -366,9 +362,7 @@ export const TextAndMetadataSettings: React.FC<
                       (option) => option.value === inputValue
                     )?.isPro
                   ) {
-                    (window as any).reacg_open_premium_offer_dialog({
-                      utm_medium: 'captionSource',
-                    });
+                    onProFeatureClick('captionSource');
                   } else {
                     onInputValueChange(inputValue, 'captionSource');
                   }
@@ -477,10 +471,7 @@ export const TextAndMetadataSettings: React.FC<
               onChange={
                 isPro
                   ? onInputValueChange
-                  : () =>
-                      (window as any).reacg_open_premium_offer_dialog({
-                        utm_medium: 'show_description',
-                      })
+                  : () => onProFeatureClick('show_description')
               }
             />
           </Filter>
@@ -498,9 +489,7 @@ export const TextAndMetadataSettings: React.FC<
                       (option) => option.value === inputValue
                     )?.isPro
                   ) {
-                    (window as any).reacg_open_premium_offer_dialog({
-                      utm_medium: 'descriptionSource',
-                    });
+                    onProFeatureClick('descriptionSource');
                   } else {
                     onInputValueChange(inputValue, 'descriptionSource');
                   }
@@ -594,10 +583,7 @@ export const TextAndMetadataSettings: React.FC<
               onChange={
                 isPro
                   ? onInputValueChange
-                  : () =>
-                      (window as any).reacg_open_premium_offer_dialog({
-                        utm_medium: 'show_button',
-                      })
+                  : () => onProFeatureClick('show_button')
               }
             />
           </Filter>
@@ -903,9 +889,7 @@ export const TextAndMetadataSettings: React.FC<
                     isPro
                       ? onInputValueChange
                       : () =>
-                          (window as any).reacg_open_premium_offer_dialog({
-                            utm_medium: 'invert_color',
-                          })
+                        onProFeatureClick('invert_color')
                   }
                 />
               </Filter>

@@ -15,12 +15,14 @@ import {Filter} from '../Filter';
 interface IGridAppearanceSettingsProps {
   settings: IThumbnailSettings;
   onSettingsChange: (settings: IThumbnailSettings) => void;
+  onProFeatureClick: (feature: string) => void;
   isLoading?: boolean;
 }
 
 const GridAppearanceSettings = ({
   settings,
   onSettingsChange,
+  onProFeatureClick,
   isLoading,
 }: IGridAppearanceSettingsProps) => {
   const {resetTemplate} = useTemplates();
@@ -102,10 +104,7 @@ const GridAppearanceSettings = ({
                   onChange={
                     isPro
                       ? onInputValueChange
-                      : () =>
-                          (window as any).reacg_open_premium_offer_dialog({
-                            utm_medium: 'item_border',
-                          })
+                      : () => onProFeatureClick('image_border')
                   }
                 />
               </Filter>
@@ -118,10 +117,7 @@ const GridAppearanceSettings = ({
                   onChange={
                     isPro
                       ? onInputValueChange
-                      : () =>
-                          (window as any).reacg_open_premium_offer_dialog({
-                            utm_medium: 'item_background_color',
-                          })
+                      : () => onProFeatureClick('item_background_color')
                   }
                 />
               </Filter>
@@ -136,10 +132,7 @@ const GridAppearanceSettings = ({
                   onChange={
                     isPro
                       ? onInputValueChange
-                      : () =>
-                          (window as any).reacg_open_premium_offer_dialog({
-                            utm_medium: 'item_border_radius',
-                          })
+                      : () => onProFeatureClick('image_border_radius')
                   }
                 />
               </Filter>
@@ -164,9 +157,7 @@ const GridAppearanceSettings = ({
                         (option) => option.value === inputValue
                       )?.isPro
                     ) {
-                      (window as any).reacg_open_premium_offer_dialog({
-                        utm_medium: 'hoverEffect',
-                      });
+                      onProFeatureClick('hoverEffect');
                     } else {
                       onInputValueChange(inputValue, 'hoverEffect');
                     }
@@ -184,10 +175,7 @@ const GridAppearanceSettings = ({
                   onChange={
                     isPro
                       ? onInputValueChange
-                      : () =>
-                          (window as any).reacg_open_premium_offer_dialog({
-                            utm_medium: 'image_border',
-                          })
+                      : () => onProFeatureClick('image_border')
                   }
                 />
               </Filter>
@@ -200,10 +188,7 @@ const GridAppearanceSettings = ({
                   onChange={
                     isPro
                       ? onInputValueChange
-                      : () =>
-                          (window as any).reacg_open_premium_offer_dialog({
-                            utm_medium: 'image_border_color',
-                          })
+                      : () => onProFeatureClick('image_border_color')
                   }
                 />
               </Filter>

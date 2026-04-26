@@ -12,12 +12,14 @@ interface ICardsSettingsProps {
   settings: ICardsSettings;
   onSettingsChange: (settings: ICardsSettings) => void;
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const CardsSettings = ({
   settings,
   onSettingsChange,
   isLoading,
+  onProFeatureClick,
 }: ICardsSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {width, height, perSlideOffset, animationSpeed} = settings;
@@ -67,10 +69,7 @@ const CardsSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'cards_per_slide_offset',
-                        })
+                    : () => onProFeatureClick('cards_per_slide_offset')
                 }
               />
             </Filter>
@@ -83,10 +82,7 @@ const CardsSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'animation_speed',
-                        })
+                    : () => onProFeatureClick('animation_speed')
                 }
                 min={100}
                 step={100}

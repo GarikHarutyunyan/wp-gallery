@@ -14,12 +14,14 @@ interface ICarouselSettingsProps {
   settings: ICarouselSettings;
   onSettingsChange: (settings: ICarouselSettings) => void;
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const CarouselSettings = ({
   settings,
   onSettingsChange,
   isLoading,
+  onProFeatureClick,
 }: ICarouselSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {imagesCount: allImagesCount} = useSettings();
@@ -102,10 +104,7 @@ const CarouselSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'carousel_scroll_by_images_count',
-                        })
+                    : () => onProFeatureClick('carousel_scroll_by_images_count')
                 }
               />
             </Filter>
@@ -140,10 +139,7 @@ const CarouselSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'animation_speed',
-                        })
+                    : () => onProFeatureClick('animation_speed')
                 }
                 min={100}
                 step={100}

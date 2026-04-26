@@ -14,10 +14,12 @@ import {useSettings} from './useSettings';
 
 interface IOptionsPanelGalleryTabProps {
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const OptionsPanelGalleryTab = ({
   isLoading,
+  onProFeatureClick,
 }: IOptionsPanelGalleryTabProps): ReactElement => {
   const {
     type,
@@ -89,6 +91,7 @@ const OptionsPanelGalleryTab = ({
           settings={slideshowSettings}
           onSettingsChange={changeSlideshowSettings!}
           isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
         />
       )}
       {isCube && cubeSettings && (
@@ -96,6 +99,7 @@ const OptionsPanelGalleryTab = ({
           settings={cubeSettings}
           onSettingsChange={changeCubeSettings!}
           isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
         />
       )}
       {isCarousel && carouselSettings && (
@@ -103,6 +107,7 @@ const OptionsPanelGalleryTab = ({
           settings={carouselSettings}
           onSettingsChange={changeCarouselSettings!}
           isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
         />
       )}
       {isCards && cardsSettings && (
@@ -110,6 +115,7 @@ const OptionsPanelGalleryTab = ({
           settings={cardsSettings}
           onSettingsChange={changeCardsSettings!}
           isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
         />
       )}
       {isBlog && blogSettings && (
@@ -124,6 +130,7 @@ const OptionsPanelGalleryTab = ({
           settings={coverflowSettings}
           onSettingsChange={changeCoverflowSettings!}
           isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
         />
       )}
     </>

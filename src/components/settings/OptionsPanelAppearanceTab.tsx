@@ -14,10 +14,12 @@ import {useSettings} from './useSettings';
 
 interface IOptionsPanelAppearanceTabProps {
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const OptionsPanelAppearanceTab = ({
   isLoading,
+  onProFeatureClick,
 }: IOptionsPanelAppearanceTabProps): ReactElement => {
   const {
     type,
@@ -60,6 +62,7 @@ const OptionsPanelAppearanceTab = ({
         <GridAppearanceSettings
           settings={thumbnailSettings}
           onSettingsChange={changeThumbnailSettings!}
+          onProFeatureClick={onProFeatureClick}
           isLoading={isLoading}
         />
       )}
@@ -67,6 +70,7 @@ const OptionsPanelAppearanceTab = ({
         <MosaicAppearanceSettings
           settings={mosaicSettings}
           onSettingsChange={changeMosaicSettings!}
+          onProFeatureClick={onProFeatureClick}
           isLoading={isLoading}
         />
       )}
@@ -74,6 +78,7 @@ const OptionsPanelAppearanceTab = ({
         <JustifiedAppearanceSettings
           settings={justifiedSettings}
           onSettingsChange={changeJustifiedSettings!}
+          onProFeatureClick={onProFeatureClick}
           isLoading={isLoading}
         />
       )}
@@ -81,6 +86,7 @@ const OptionsPanelAppearanceTab = ({
         <MasonryAppearanceSettings
           settings={masonrySettings}
           onSettingsChange={changeMasonrySettings!}
+          onProFeatureClick={onProFeatureClick}
           isLoading={isLoading}
         />
       )}
@@ -89,6 +95,7 @@ const OptionsPanelAppearanceTab = ({
           settings={slideshowSettings}
           onSettingsChange={changeSlideshowSettings!}
           isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
         />
       )}
       {isCube && cubeSettings && (
@@ -96,6 +103,7 @@ const OptionsPanelAppearanceTab = ({
           settings={cubeSettings}
           onSettingsChange={changeCubeSettings!}
           isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
         />
       )}
       {isCarousel && carouselSettings && (
@@ -103,6 +111,7 @@ const OptionsPanelAppearanceTab = ({
           settings={carouselSettings}
           onSettingsChange={changeCarouselSettings!}
           isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
         />
       )}
       {isCards && cardsSettings && (
@@ -110,6 +119,7 @@ const OptionsPanelAppearanceTab = ({
           settings={cardsSettings}
           onSettingsChange={changeCardsSettings!}
           isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
         />
       )}
       {isBlog && blogSettings && (
@@ -117,6 +127,7 @@ const OptionsPanelAppearanceTab = ({
           settings={blogSettings}
           onSettingsChange={changeBlogSettings!}
           isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
         />
       )}
       {isCoverflow && coverflowSettings && (
@@ -124,6 +135,7 @@ const OptionsPanelAppearanceTab = ({
           settings={coverflowSettings}
           onSettingsChange={changeCoverflowSettings!}
           isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
         />
       )}
     </>

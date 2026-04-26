@@ -15,12 +15,14 @@ import {Filter} from '../Filter';
 interface IMosaicAppearanceSettingsProps {
   settings: IMosaicSettings;
   onSettingsChange: (settings: IMosaicSettings) => void;
+  onProFeatureClick: (feature: string) => void;
   isLoading: boolean;
 }
 
 const MosaicAppearanceSettings = ({
   settings,
   onSettingsChange,
+  onProFeatureClick,
   isLoading,
 }: IMosaicAppearanceSettingsProps) => {
   const {resetTemplate} = useTemplates();
@@ -96,10 +98,7 @@ const MosaicAppearanceSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'image_border',
-                        })
+                    : () => onProFeatureClick('image_border')
                 }
               />
             </Filter>
@@ -112,10 +111,7 @@ const MosaicAppearanceSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'image_border_color',
-                        })
+                    : () => onProFeatureClick('image_border_color')
                 }
               />
             </Filter>
@@ -142,9 +138,7 @@ const MosaicAppearanceSettings = ({
                       (option) => option.value === inputValue
                     )?.isPro
                   ) {
-                    (window as any).reacg_open_premium_offer_dialog({
-                      utm_medium: 'hoverEffect',
-                    });
+                    onProFeatureClick('hoverEffect');
                   } else {
                     onInputValueChange(inputValue, 'hoverEffect');
                   }

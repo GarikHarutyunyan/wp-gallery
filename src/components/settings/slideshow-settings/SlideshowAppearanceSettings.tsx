@@ -15,12 +15,14 @@ interface ISlideshowAppearanceSettingsProps {
   settings: ISlideshowSettings;
   onSettingsChange: (settings: ISlideshowSettings) => void;
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const SlideshowAppearanceSettings = ({
   settings,
   onSettingsChange,
   isLoading,
+  onProFeatureClick,
 }: ISlideshowAppearanceSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {imageAnimation, padding, backgroundColor} = settings;
@@ -51,10 +53,7 @@ const SlideshowAppearanceSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'animation',
-                        })
+                    : () => onProFeatureClick('animation')
                 }
               />
             </Filter>

@@ -15,12 +15,14 @@ import {Filter} from '../Filter';
 interface IProtectionSettingsProps {
   settings: IGeneralSettings;
   onSettingsChange: (settings: IGeneralSettings) => void;
+  onProFeatureClick: (feature: string) => void;
   isLoading: boolean;
 }
 
 const ProtectionSettings = ({
   settings,
   onSettingsChange,
+  onProFeatureClick,
   isLoading,
 }: IProtectionSettingsProps) => {
   const {resetTemplate} = useTemplates();
@@ -56,10 +58,7 @@ const ProtectionSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'enable_right_click_protection',
-                        })
+                    : () => onProFeatureClick('enable_right_click_protection')
                 }
                 tooltip={
                   <p>
@@ -92,10 +91,7 @@ const ProtectionSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'enable_watermark',
-                        })
+                    : () => onProFeatureClick('enable_watermark')
                 }
               />
             </Filter>

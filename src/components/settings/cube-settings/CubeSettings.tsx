@@ -12,12 +12,14 @@ interface ICubeSettingsProps {
   settings: ICubeSettings;
   onSettingsChange: (settings: ICubeSettings) => void;
   isLoading: boolean;
+  onProFeatureClick: (feature: string) => void;
 }
 
 const CubeSettings = ({
   settings,
   onSettingsChange,
   isLoading,
+  onProFeatureClick,
 }: ICubeSettingsProps) => {
   const {resetTemplate} = useTemplates();
   const {width, height, animationSpeed} = settings;
@@ -65,10 +67,7 @@ const CubeSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'animation_speed',
-                        })
+                    : () => onProFeatureClick('animation_speed')
                 }
                 min={100}
                 step={100}

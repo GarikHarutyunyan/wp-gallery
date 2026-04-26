@@ -19,12 +19,14 @@ import {PaginationSection} from './pagination-section/PaginationSection';
 interface INavigationSettingsProps {
   settings: IGeneralSettings;
   onSettingsChange: (settings: IGeneralSettings) => void;
+  onProFeatureClick: (feature: string) => void;
   isLoading: boolean;
 }
 
 const NavigationSettings = ({
   settings,
   onSettingsChange,
+  onProFeatureClick,
   isLoading,
 }: INavigationSettingsProps) => {
   const {resetTemplate} = useTemplates();
@@ -44,12 +46,6 @@ const NavigationSettings = ({
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
     key && onSettingsChange?.({...settings, [key]: inputValue} as any);
-  };
-
-  const onProFeatureClick = (utmMedium: string) => {
-    (window as any).reacg_open_premium_offer_dialog({
-      utm_medium: utmMedium,
-    });
   };
 
   return (
