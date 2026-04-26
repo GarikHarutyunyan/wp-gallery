@@ -56,7 +56,7 @@
   .type-option__pro-badge svg {
     width: clamp(24px, 2.4vw, 38px) !important;
     height: auto !important;
-    filter: drop-shadow(0 3px 8px rgba(26, 45, 89, 0.28));
+    filter: drop-shadow(0 2px 3px rgba(26, 45, 89, 0.28));
   }
 }
 
