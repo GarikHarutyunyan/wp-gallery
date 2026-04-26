@@ -49,6 +49,11 @@ const OptionsPanelBody = ({
       <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
         <OptionsPanelGalleryTab isLoading={isLoading} />
       </TabPanel>
+      <TabPanel value={'text-metadata'} className={'reacg-tab-panel'}>
+        {type ? (
+          <TextAndMetadataSettings isLoading={isLoading} galleryType={type} />
+        ) : null}
+      </TabPanel>
       <TabPanel value={'appearance'} className={'reacg-tab-panel'}>
         <OptionsPanelAppearanceTab isLoading={isLoading} />
       </TabPanel>
@@ -57,11 +62,6 @@ const OptionsPanelBody = ({
       </TabPanel>
       <TabPanel value={'protection'} className={'reacg-tab-panel'}>
         <GeneralSettings isLoading={isLoading} sections={'protection'} />
-      </TabPanel>
-      <TabPanel value={'text-metadata'} className={'reacg-tab-panel'}>
-        {type ? (
-          <TextAndMetadataSettings isLoading={isLoading} galleryType={type} />
-        ) : null}
       </TabPanel>
       {!hideLightboxOptions ? (
         <TabPanel value={'lightbox'} className={'reacg-tab-panel'}>
