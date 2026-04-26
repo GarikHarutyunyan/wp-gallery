@@ -58,7 +58,7 @@ const OptionsPanelBody = ({
       <TabPanel value={'appearance'} className={'reacg-tab-panel'}>
         <OptionsPanelAppearanceTab isLoading={isLoading} />
       </TabPanel>
-      <TabPanel value={'general'} className={'reacg-tab-panel'}>
+      <TabPanel value={'navigation'} className={'reacg-tab-panel'}>
         <NavigationSettings
           settings={generalSettings!}
           onSettingsChange={changeGeneralSettings!}

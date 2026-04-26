@@ -67,7 +67,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         icon: <PaletteOutlined />,
       },
       {
-        value: 'general',
+        value: 'navigation',
         label: 'Navigation',
         menuLabel: 'Navigation',
         icon: <OpenWith />,
