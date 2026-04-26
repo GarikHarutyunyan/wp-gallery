@@ -14,7 +14,7 @@ import {
   SliderNavigationOptions,
   SliderNavigationPositionOptions,
 } from 'data-structures';
-import {useMemo} from 'react';
+import {ReactElement, useMemo} from 'react';
 import {useSettings} from '../..';
 import {Filter} from '../../Filter';
 
@@ -28,7 +28,7 @@ const ControlsSection = ({
   onProFeatureClick,
   isLoading,
   isPro,
-}: IControlsSectionProps) => {
+}: IControlsSectionProps): ReactElement | null => {
   const {resetTemplate} = useTemplates();
   const {
     type,
@@ -405,6 +405,8 @@ const ControlsSection = ({
       />
     );
   }
+
+  return null;
 };
 
 export {ControlsSection};
