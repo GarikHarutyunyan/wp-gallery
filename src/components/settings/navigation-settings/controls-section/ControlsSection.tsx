@@ -121,7 +121,7 @@ const ControlsSection = ({
             <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'isSlideshowAllowed'}
-                name={'Play / Pause button'}
+                name={'Show Play / Pause button'}
                 value={isSlideshowAllowed}
                 onChange={onSliderNavigationChange}
               />
@@ -155,7 +155,7 @@ const ControlsSection = ({
                 onChange={
                   isPro
                     ? onSliderNavigationChange
-                    : () => onProFeatureClick('slideshow_loop')
+                    : () => onProFeatureClick('loop')
                 }
               />
             </Filter>
@@ -188,43 +188,12 @@ const ControlsSection = ({
       isInfinite,
     } = sliderNavigationSettings.settings as any;
 
-    const playPauseUtmMedium =
-      type === GalleryType.COVERFLOW
-        ? 'coverflow_play_pause_button'
-        : 'carousel_play_pause_button';
-    const videoControlsUtmMedium =
-      type === GalleryType.CARDS
-        ? 'cards_video_controls'
-        : type === GalleryType.COVERFLOW
-        ? 'coverflow_video_controls'
-        : 'carousel_video_controls';
-
     return (
       <Section
         header={'Controls'}
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'autoplay'}
-                name={'Autoplay'}
-                value={autoplay}
-                onChange={onSliderNavigationChange}
-              />
-            </Filter>
-            {autoplay ? (
-              <Filter isLoading={isLoading}>
-                <NumberControl
-                  id={'slideDuration'}
-                  name={'Autoplay speed'}
-                  value={slideDuration}
-                  onChange={onSliderNavigationChange}
-                  min={2000}
-                  unit={'ms'}
-                />
-              </Filter>
-            ) : null}
             <Filter isLoading={isLoading}>
               <SwitchControl
                 id={'playAndPauseAllowed'}
@@ -234,22 +203,27 @@ const ControlsSection = ({
                 onChange={
                   isPro
                     ? onSliderNavigationChange
-                    : () => onProFeatureClick(playPauseUtmMedium)
+                    : () => onProFeatureClick('play_pause_button')
                 }
               />
             </Filter>
-            {!showVideoCover ? (
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'autoplay'}
+                name={'Autoplay'}
+                value={autoplay}
+                onChange={onSliderNavigationChange}
+              />
+            </Filter>
+            {autoplay || playAndPauseAllowed ? (
               <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id={'showVideoControls'}
-                  name={'Show video controls'}
-                  value={showVideoControls}
-                  pro={true}
-                  onChange={
-                    isPro
-                      ? onSliderNavigationChange
-                      : () => onProFeatureClick(videoControlsUtmMedium)
-                  }
+                <NumberControl
+                  id={'slideDuration'}
+                  name={'Autoplay speed'}
+                  value={slideDuration}
+                  onChange={onSliderNavigationChange}
+                  min={2000}
+                  unit={'ms'}
                 />
               </Filter>
             ) : null}
@@ -263,7 +237,22 @@ const ControlsSection = ({
                   onChange={
                     isPro
                       ? onSliderNavigationChange
-                      : () => onProFeatureClick('cube_loop')
+                      : () => onProFeatureClick('loop')
+                  }
+                />
+              </Filter>
+            ) : null}
+            {!showVideoCover ? (
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'showVideoControls'}
+                  name={'Show video controls'}
+                  value={showVideoControls}
+                  pro={true}
+                  onChange={
+                    isPro
+                      ? onSliderNavigationChange
+                      : () => onProFeatureClick('video_controls')
                   }
                 />
               </Filter>
@@ -305,7 +294,7 @@ const ControlsSection = ({
                     onChange={
                       isPro
                         ? onSliderNavigationChange
-                        : () => onProFeatureClick('dots_color')
+                        : () => onProFeatureClick('arrows_size')
                     }
                   />
                 </Filter>

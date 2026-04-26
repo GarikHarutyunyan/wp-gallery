@@ -67,18 +67,6 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         icon: <PaletteOutlined />,
       },
       {
-        value: 'navigation',
-        label: 'Navigation',
-        menuLabel: 'Navigation',
-        icon: <OpenWith />,
-      },
-      {
-        value: 'protection',
-        label: 'Protection',
-        menuLabel: 'Protection',
-        icon: <LockOutlined />,
-      },
-      {
         value: 'lightbox',
         label: (
           <Tooltip
@@ -86,7 +74,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
               hideLightboxOptions ? (
                 <p>
                   To enable Lightbox, change the <strong>Click action</strong>{' '}
-                  from <strong>Layout Settings</strong>.
+                  from <strong>Gallery Layout Settings</strong>.
                 </p>
               ) : (
                 ''
@@ -102,9 +90,21 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         tooltip: hideLightboxOptions ? (
           <p>
             To enable Lightbox, change the <strong>Click action</strong> from{' '}
-            <strong>Layout Settings</strong>.
+            <strong>Gallery Layout Settings</strong>.
           </p>
         ) : undefined,
+      },
+      {
+        value: 'navigation',
+        label: 'Navigation',
+        menuLabel: 'Navigation',
+        icon: <OpenWith />,
+      },
+      {
+        value: 'protection',
+        label: 'Protection',
+        menuLabel: 'Protection',
+        icon: <LockOutlined />,
       },
     ],
     [hideLightboxOptions]
