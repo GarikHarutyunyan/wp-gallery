@@ -19,11 +19,16 @@ import {useSettings} from '../..';
 import {Filter} from '../../Filter';
 
 interface IControlsSectionProps {
+  onProFeatureClick: (utmMedium: string) => void;
   isLoading: boolean;
   isPro: boolean;
 }
 
-const ControlsSection = ({isLoading, isPro}: IControlsSectionProps) => {
+const ControlsSection = ({
+  onProFeatureClick,
+  isLoading,
+  isPro,
+}: IControlsSectionProps) => {
   const {resetTemplate} = useTemplates();
   const {
     type,
@@ -150,10 +155,7 @@ const ControlsSection = ({isLoading, isPro}: IControlsSectionProps) => {
                 onChange={
                   isPro
                     ? onSliderNavigationChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'slideshow_loop',
-                        })
+                    : () => onProFeatureClick('slideshow_loop')
                 }
               />
             </Filter>
@@ -232,10 +234,7 @@ const ControlsSection = ({isLoading, isPro}: IControlsSectionProps) => {
                 onChange={
                   isPro
                     ? onSliderNavigationChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: playPauseUtmMedium,
-                        })
+                    : () => onProFeatureClick(playPauseUtmMedium)
                 }
               />
             </Filter>
@@ -249,10 +248,7 @@ const ControlsSection = ({isLoading, isPro}: IControlsSectionProps) => {
                   onChange={
                     isPro
                       ? onSliderNavigationChange
-                      : () =>
-                          (window as any).reacg_open_premium_offer_dialog({
-                            utm_medium: videoControlsUtmMedium,
-                          })
+                      : () => onProFeatureClick(videoControlsUtmMedium)
                   }
                 />
               </Filter>
@@ -312,10 +308,7 @@ const ControlsSection = ({isLoading, isPro}: IControlsSectionProps) => {
                     onChange={
                       isPro
                         ? onSliderNavigationChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'dots_color',
-                            })
+                        : () => onProFeatureClick('dots_color')
                     }
                   />
                 </Filter>
@@ -328,10 +321,7 @@ const ControlsSection = ({isLoading, isPro}: IControlsSectionProps) => {
                     onChange={
                       isPro
                         ? onSliderNavigationChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'arrows_color',
-                            })
+                        : () => onProFeatureClick('arrows_color')
                     }
                   />
                 </Filter>
@@ -366,10 +356,7 @@ const ControlsSection = ({isLoading, isPro}: IControlsSectionProps) => {
                     onChange={
                       isPro
                         ? onSliderNavigationChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'dots_color',
-                            })
+                        : () => onProFeatureClick('dots_size')
                     }
                   />
                 </Filter>
@@ -384,10 +371,7 @@ const ControlsSection = ({isLoading, isPro}: IControlsSectionProps) => {
                     onChange={
                       isPro
                         ? onSliderNavigationChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'dots_color',
-                            })
+                        : () => onProFeatureClick('dots_gap')
                     }
                   />
                 </Filter>
@@ -400,10 +384,7 @@ const ControlsSection = ({isLoading, isPro}: IControlsSectionProps) => {
                     onChange={
                       isPro
                         ? onSliderNavigationChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'active_dots_color',
-                            })
+                        : () => onProFeatureClick('active_dot_color')
                     }
                   />
                 </Filter>
@@ -416,10 +397,7 @@ const ControlsSection = ({isLoading, isPro}: IControlsSectionProps) => {
                     onChange={
                       isPro
                         ? onSliderNavigationChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'inactive_dots_color',
-                            })
+                        : () => onProFeatureClick('inactive_dots_color')
                     }
                   />
                 </Filter>

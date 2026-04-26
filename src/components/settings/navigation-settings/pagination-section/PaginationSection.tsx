@@ -55,12 +55,14 @@ const getPaginationTypeOptions = (type: GalleryType) => {
 interface IPaginationSectionProps {
   settings: IGeneralSettings;
   onSettingsChange: (settings: IGeneralSettings) => void;
+  onProFeatureClick: (utmMedium: string) => void;
   isLoading: boolean;
 }
 
 const PaginationSection = ({
   settings,
   onSettingsChange,
+  onProFeatureClick,
   isLoading,
 }: IPaginationSectionProps) => {
   const {resetTemplate} = useTemplates();
@@ -203,9 +205,7 @@ const PaginationSection = ({
                     (option) => option.value === inputValue
                   )?.isPro
                 ) {
-                  (window as any).reacg_open_premium_offer_dialog({
-                    utm_medium: 'paginationType',
-                  });
+                  onProFeatureClick('paginationType');
                 } else {
                   onPaginationTypeChange(inputValue, 'paginationType');
                 }
@@ -265,12 +265,9 @@ const PaginationSection = ({
                             isPro
                               ? onInputValueChange
                               : () =>
-                                  (
-                                    window as any
-                                  ).reacg_open_premium_offer_dialog({
-                                    utm_medium:
-                                      'pagination_load_more_button_color',
-                                  })
+                                  onProFeatureClick(
+                                    'pagination_load_more_button_color'
+                                  )
                           }
                         />
                       </Filter>
@@ -288,12 +285,9 @@ const PaginationSection = ({
                             isPro
                               ? onInputValueChange
                               : () =>
-                                  (
-                                    window as any
-                                  ).reacg_open_premium_offer_dialog({
-                                    utm_medium:
-                                      'pagination_active_button_color',
-                                  })
+                                  onProFeatureClick(
+                                    'pagination_active_button_color'
+                                  )
                           }
                         />
                       </Filter>
@@ -312,9 +306,9 @@ const PaginationSection = ({
                         isPro
                           ? onInputValueChange
                           : () =>
-                              (window as any).reacg_open_premium_offer_dialog({
-                                utm_medium: 'pagination_button_border_radius',
-                              })
+                              onProFeatureClick(
+                                'pagination_button_border_radius'
+                              )
                       }
                     />
                   </Filter>
@@ -328,9 +322,7 @@ const PaginationSection = ({
                         isPro
                           ? onInputValueChange
                           : () =>
-                              (window as any).reacg_open_premium_offer_dialog({
-                                utm_medium: 'pagination_button_border_size',
-                              })
+                              onProFeatureClick('pagination_button_border_size')
                       }
                       unit={'px'}
                       max={20}
@@ -347,9 +339,9 @@ const PaginationSection = ({
                         isPro
                           ? onInputValueChange
                           : () =>
-                              (window as any).reacg_open_premium_offer_dialog({
-                                utm_medium: 'pagination_button_border_color',
-                              })
+                              onProFeatureClick(
+                                'pagination_button_border_color'
+                              )
                       }
                     />
                   </Filter>
@@ -366,12 +358,9 @@ const PaginationSection = ({
                             isPro
                               ? onInputValueChange
                               : () =>
-                                  (
-                                    window as any
-                                  ).reacg_open_premium_offer_dialog({
-                                    utm_medium:
-                                      'pagination_inactive_button_color',
-                                  })
+                                  onProFeatureClick(
+                                    'pagination_inactive_button_color'
+                                  )
                           }
                         />
                       </Filter>
@@ -387,9 +376,7 @@ const PaginationSection = ({
                         isPro
                           ? onInputValueChange
                           : () =>
-                              (window as any).reacg_open_premium_offer_dialog({
-                                utm_medium: 'pagination_button_text_color',
-                              })
+                              onProFeatureClick('pagination_button_text_color')
                       }
                     />
                   </Filter>
@@ -406,9 +393,7 @@ const PaginationSection = ({
                         isPro
                           ? onInputValueChange
                           : () =>
-                              (window as any).reacg_open_premium_offer_dialog({
-                                utm_medium: 'pagination_button_text_size',
-                              })
+                              onProFeatureClick('pagination_button_text_size')
                       }
                     />
                   </Filter>
@@ -440,10 +425,7 @@ const PaginationSection = ({
                       onChange={
                         isPro
                           ? onInputValueChange
-                          : () =>
-                              (window as any).reacg_open_premium_offer_dialog({
-                                utm_medium: 'lightbox_download',
-                              })
+                          : () => onProFeatureClick('pagination_button_class')
                       }
                     />
                   </Filter>

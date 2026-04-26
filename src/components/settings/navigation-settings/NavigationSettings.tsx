@@ -31,15 +31,10 @@ const NavigationSettings = ({
   const {type} = useSettings();
   const {orderBy, orderDirection, enableSearch, searchPlaceholderText} =
     settings;
+  const {isPro} = usePro();
+  const {searchPlaceholder} = useContext(TranslationsContext);
 
-  const showOnlyGalleryOptions: boolean =
-    type === GalleryType.SLIDESHOW ||
-    type === GalleryType.CUBE ||
-    type === GalleryType.CAROUSEL ||
-    type === GalleryType.COVERFLOW ||
-    type === GalleryType.CARDS;
-
-  const hasSliderNavigationSettings: boolean =
+  const isSliderLikeGallery: boolean =
     type === GalleryType.SLIDESHOW ||
     type === GalleryType.CUBE ||
     type === GalleryType.CAROUSEL ||
@@ -51,21 +46,28 @@ const NavigationSettings = ({
     key && onSettingsChange?.({...settings, [key]: inputValue} as any);
   };
 
-  const {isPro} = usePro();
-
-  const {searchPlaceholder} = useContext(TranslationsContext);
+  const onProFeatureClick = (utmMedium: string) => {
+    (window as any).reacg_open_premium_offer_dialog({
+      utm_medium: utmMedium,
+    });
+  };
 
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
-      {!showOnlyGalleryOptions && (
+      {!isSliderLikeGallery && (
         <PaginationSection
           settings={settings}
           onSettingsChange={onSettingsChange}
+          onProFeatureClick={onProFeatureClick}
           isLoading={isLoading}
         />
       )}
-      {hasSliderNavigationSettings && (
-        <ControlsSection isLoading={isLoading} isPro={isPro} />
+      {isSliderLikeGallery && (
+        <ControlsSection
+          onProFeatureClick={onProFeatureClick}
+          isLoading={isLoading}
+          isPro={isPro}
+        />
       )}
       <Section
         header={'Sorting'}
@@ -82,10 +84,7 @@ const NavigationSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'order_by',
-                        })
+                    : () => onProFeatureClick('order_by')
                 }
               />
             </Filter>
@@ -99,10 +98,7 @@ const NavigationSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'order_direction',
-                        })
+                    : () => onProFeatureClick('order_direction')
                 }
               />
             </Filter>
@@ -123,10 +119,7 @@ const NavigationSettings = ({
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'enable_search',
-                        })
+                    : () => onProFeatureClick('enable_search')
                 }
                 tooltip={
                   <p>
