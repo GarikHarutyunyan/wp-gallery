@@ -41,7 +41,7 @@ const PaginationProvider = lazy(
 );
 const FilterProvider = lazy(() => import('./filter-provider/FilterProvider'));
 
-const Gallery = (): ReactNode => {
+const Gallery = (): ReactElement => {
   const {
     type,
     generalSettings,
