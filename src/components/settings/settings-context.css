@@ -56,7 +56,7 @@
   .type-option__pro-badge svg {
     width: clamp(24px, 2.4vw, 38px) !important;
     height: auto !important;
-    filter: drop-shadow(0 3px 8px rgba(26, 45, 89, 0.28));
+    filter: drop-shadow(0 2px 3px rgba(26, 45, 89, 0.28));
   }
 }
 
@@ -84,7 +84,7 @@
 }
 
 .reacg-tab-panel {
-  padding: 15px 5px !important;
+  padding: 12px 0 0 !important;
 }
 
 .type-panel-select__body {
@@ -112,9 +112,205 @@
 }
 .reacg-settings-panel {
   flex-direction: row;
+  gap: 5px;
 }
-.reacg-settings-panel__buttons {
-  flex-direction: row;
+
+.reacg-settings-panel-tabs {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 6px;
+  border: 1px solid #eceaf8;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #f6f5fd 0%, #f3f2fb 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.reacg-settings-panel-tabs__tabs {
+  min-height: 50px !important;
+}
+
+.reacg-settings-panel-tabs__nav {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.reacg-settings-panel-tabs__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.reacg-settings-panel-tabs__actions_outside {
+  width: 100%;
+  justify-content: flex-end;
+  margin-bottom: 4px;
+}
+
+.reacg-settings-panel-tabs__tabs .MuiTabs-flexContainer {
+  flex-wrap: nowrap;
+}
+
+.reacg-settings-panel-tabs__tabs .MuiTabs-indicator {
+  display: none;
+}
+
+.reacg-settings-panel-tabs__tabs .MuiTabs-scroller {
+  overflow: visible !important;
+}
+
+.reacg-settings-panel-tabs__tab {
+  min-height: 50px !important;
+  min-width: auto !important;
+  padding: 0 8px !important;
+  border-radius: 6px !important;
+  flex-shrink: 0;
+  color: #67738f !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  transition:
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease !important;
+}
+
+.reacg-settings-panel-tabs__more-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.reacg-settings-panel-tabs__more-button svg {
+  font-size: 18px;
+}
+
+.reacg-settings-panel-tabs__more-button_active {
+  color: var(--reacg-primary-color, #155c92) !important;
+  background: #ffffff;
+  box-shadow:
+    0 8px 18px -16px rgba(18, 35, 78, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.reacg-settings-panel-tabs__measure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  height: 0;
+  overflow: hidden;
+}
+
+.reacg-settings-panel-tabs__menu-paper {
+  margin-top: 8px;
+  border: 1px solid #eceaf8;
+  border-radius: 6px !important;
+  background: linear-gradient(180deg, #f6f5fd 0%, #f3f2fb 100%) !important;
+  box-shadow:
+    0 16px 36px -24px rgba(18, 35, 78, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+.reacg-settings-panel-tabs__menu-list {
+  padding: 8px !important;
+}
+
+.reacg-settings-panel-tabs__menu-item {
+  min-height: 50px !important;
+  gap: 10px;
+  padding: 0 8px !important;
+  border-radius: 6px !important;
+  color: #67738f !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase;
+}
+
+.reacg-settings-panel-tabs__menu-item:hover,
+.reacg-settings-panel-tabs__menu-item.Mui-focusVisible {
+  background: rgba(255, 255, 255, 0.72) !important;
+}
+
+.reacg-settings-panel-tabs__menu-item.Mui-selected {
+  color: var(--reacg-primary-color, #155c92) !important;
+  background: #ffffff !important;
+  box-shadow:
+    0 8px 18px -16px rgba(18, 35, 78, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.reacg-settings-panel-tabs__menu-item.Mui-selected:hover {
+  background: #ffffff !important;
+}
+
+.reacg-settings-panel-tabs__menu-item.Mui-disabled,
+.reacg-settings-panel-tabs__tab.Mui-disabled {
+  opacity: 0.5;
+  pointer-events: unset !important;
+}
+
+.reacg-settings-panel-tabs__menu-item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.reacg-settings-panel-tabs__menu-item-icon .MuiSvgIcon-root {
+  font-size: 18px;
+}
+
+.reacg-settings-panel-tabs__tab .MuiTab-iconWrapper {
+  margin-right: 5px !important;
+  margin-bottom: 0 !important;
+  font-size: 18px;
+}
+
+.reacg-settings-panel-tabs__tab.Mui-selected {
+  color: var(--reacg-primary-color, #155c92) !important;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(21, 92, 146, 0.12);
+}
+
+.reacg-settings-panel-tabs__action-button {
+  min-width: 46px !important;
+  width: 46px;
+  height: 46px;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 6px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.reacg-settings-panel-tabs__action-button_text {
+  width: auto;
+  min-width: 132px !important;
+  padding: 0 14px !important;
+}
+
+.reacg-settings-panel-tabs__action-button .MuiSvgIcon-root {
+  font-size: 20px;
+}
+
+.reacg-settings-panel-tabs__action-button_save {
+  box-shadow: none !important;
 }
 
 .reacg-templates-library-row {
@@ -124,19 +320,10 @@
   gap: 16px;
   margin-bottom: 14px;
   padding: 15px;
-  border: 1px solid #d5d0ef;
+  border: 1px solid #eceaf8;
   border-radius: 6px;
-  background: radial-gradient(
-      circle at 5% 85%,
-      rgba(255, 255, 255, 0.85) 0,
-      rgba(255, 255, 255, 0) 38%
-    ),
-    radial-gradient(
-      circle at 97% 8%,
-      rgba(255, 255, 255, 0.6) 0,
-      rgba(255, 255, 255, 0) 22%
-    ),
-    linear-gradient(90deg, #f3f0fb 0%, #f0eff5 100%);
+  background: linear-gradient(180deg, #f6f5fd 0%, #f3f2fb 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
 .reacg-templates-library-row__left {
@@ -216,7 +403,7 @@
   min-width: 170px;
   width: 210px;
   min-height: 46px;
-  line-height: 3.14285714;
+  line-height: 3 !important;
 }
 
 .reacg-templates-select__container {
@@ -229,7 +416,7 @@
 .reacg-settings--s,
 .reacg-settings--xs {
   .reacg-settings-panel {
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
   .type-option__title {
     font-size: 0.7rem;
@@ -275,36 +462,18 @@
 }
 
 .reacg-settings--xs {
-  .reacg-settings-panel-tabs {
-    button {
-      min-width: unset;
-      font-size: 0.6rem;
-    }
-    .MuiTab-iconWrapper {
-      font-size: 13px;
-      margin-right: 2px;
-    }
+  .reacg-settings-panel-tabs__tab {
+    font-size: 13px !important;
+    flex-direction: column;
+    gap: 5px;
   }
   .reacg-section__body {
     .MuiGrid-container {
       flex-direction: column;
+      width: 100%;
     }
     .MuiGrid-item {
       max-width: 100%;
-    }
-    .MuiGrid-container .MuiGrid-container .MuiGrid-item {
-      max-width: calc(100% - 64px);
-    }
-    .MuiGrid-container
-      .MuiGrid-container.reacg-section__container-inherit
-      .MuiGrid-item {
-      max-width: 100%;
-    }
-    .MuiGrid-container
-      .MuiGrid-container
-      .MuiGrid-container.reacg-section__container-inherit {
-      width: calc(100% - 64px);
-      margin-top: 16px;
     }
   }
 }
@@ -333,32 +502,6 @@
 .Mui-selected .type-panel-select__title,
 .MuiSelect-outlined .type-panel-select__title {
   color: var(--reacg-primary-color, #155c92) !important;
-}
-
-.reacg-section__body {
-  .reacg-section__header {
-    background: linear-gradient(to top, #ffffff, #f5f5f5);
-    border-radius: 4px;
-    box-shadow: 0px 14px 10px -10px #ccc;
-  }
-  .reacg-section__container-inherit {
-    width: calc(100% - 32px);
-    margin-left: 32px;
-    border: 1px solid #eee;
-    border-radius: 0 0 4px 4px;
-    border-top: none;
-    padding-bottom: 16px;
-    padding-right: 16px;
-    padding-top: 16px;
-    background: linear-gradient(to bottom, #ffffff, #fafafa);
-  }
-  .reacg-section__container-inherit .MuiInput-input {
-    background: transparent;
-  }
-  .reacg-section__container-inherit .MuiGrid-item {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
 }
 
 ul.MuiMenu-list .reacg-templates-list-option {

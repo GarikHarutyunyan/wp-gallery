@@ -61,19 +61,19 @@ const SettingsContext = React.createContext<{
   coverflowSettings?: ICoverflowSettings;
   cardsSettings?: ICardsSettings;
   blogSettings?: IBlogSettings;
-  changeGeneralSettings?: any;
-  changeThumbnailSettings?: any;
-  changeMosaicSettings?: any;
-  changeJustifiedSettings?: any;
-  changeMasonrySettings?: any;
-  changeSlideshowSettings?: any;
-  changeLightboxSettings?: any;
-  changeCubeSettings?: any;
-  changeCarouselSettings?: any;
-  changeCoverflowSettings?: any;
-  changeCardsSettings?: any;
-  changeBlogSettings?: any;
-  changeCss?: any;
+  changeGeneralSettings?: (settings: IGeneralSettings) => void;
+  changeThumbnailSettings?: (settings: IThumbnailSettings) => void;
+  changeMosaicSettings?: (settings: IMosaicSettings) => void;
+  changeJustifiedSettings?: (settings: IJustifiedSettings) => void;
+  changeMasonrySettings?: (settings: IMasonrySettings) => void;
+  changeSlideshowSettings?: (settings: ISlideshowSettings) => void;
+  changeLightboxSettings?: (settings: ILightboxSettings) => void;
+  changeCubeSettings?: (settings: ICubeSettings) => void;
+  changeCarouselSettings?: (settings: ICarouselSettings) => void;
+  changeCoverflowSettings?: (settings: ICoverflowSettings) => void;
+  changeCardsSettings?: (settings: ICardsSettings) => void;
+  changeBlogSettings?: (settings: IBlogSettings) => void;
+  changeCss?: (css: string) => void;
   wrapperRef?: any;
   imagesCount?: number;
   changeImagesCount?: (count: number) => void;
@@ -446,12 +446,15 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     );
   };
 
-  const createOnChange =
-    (callback: any) =>
-    (...params: any[]) => {
+  const createOnChange = <
+    TCallback extends (...args: Parameters<TCallback>) => ReturnType<TCallback>,
+  >(
+    callback: TCallback
+  ): TCallback =>
+    ((...args: Parameters<TCallback>): ReturnType<TCallback> => {
       setHasChanges(true);
-      callback?.(...params);
-    };
+      return callback(...args);
+    }) as TCallback;
 
   return (
     <SettingsContext.Provider

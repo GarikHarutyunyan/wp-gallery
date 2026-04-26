@@ -21,14 +21,14 @@ export enum HoverEffect {
 }
 
 export const HoverEffectOptions: ISelectOption[] = [
-  {value: HoverEffect.ZOOM_IN, title: 'Zoom in'},
-  {value: HoverEffect.ZOOM_OUT, title: 'Zoom out'},
+  {value: HoverEffect.ZOOM_IN, title: 'Zoom In'},
+  {value: HoverEffect.ZOOM_OUT, title: 'Zoom Out'},
   {value: HoverEffect.SLIDE, title: 'Slide'},
   {value: HoverEffect.ROTATE, title: 'Rotate'},
   {value: HoverEffect.CIRCLE, title: 'Circle'},
   {value: HoverEffect.SEPIA, title: 'Sepia'},
   {value: HoverEffect.OVERLAY, title: 'Overlay'},
-  {value: HoverEffect.SOFT_LIGHT, title: 'Soft light', isPro: true},
+  {value: HoverEffect.SOFT_LIGHT, title: 'Soft Light', isPro: true},
   {value: HoverEffect.FLASH, title: 'Flash', isPro: true},
   {value: HoverEffect.SHINE, title: 'Shine', isPro: true},
   {value: HoverEffect.BLUR, title: 'Blur', isPro: true},

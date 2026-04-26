@@ -1,4 +1,4 @@
-import { ISelectOption } from 'components/controls';
+import {ISelectOption} from 'components/controls';
 
 export enum ImageClickAction {
   NONE = 'none',
@@ -7,7 +7,7 @@ export enum ImageClickAction {
 }
 
 export const ImageClickActionOptions: ISelectOption[] = [
-  {value: ImageClickAction.LIGHTBOX, title: 'Open lightbox'},
-  {value: ImageClickAction.URL, title: 'Action URL', isPro: true},
+  {value: ImageClickAction.LIGHTBOX, title: 'Open Lightbox'},
+  {value: ImageClickAction.URL, title: 'Open Link'},
   {value: ImageClickAction.NONE, title: 'None'},
 ];

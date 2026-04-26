@@ -1,47 +1,30 @@
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import {BlogSettings} from 'components/blog-settings';
-import {CardsSettings} from 'components/cards-settings/CardsSettings';
-import {CarouselSettings} from 'components/carousel-settings';
-import {CoverflowSettings} from 'components/coverflow-settings/CoverflowSettings';
-import {CubeSettings} from 'components/cube-settings/CubeSettings';
-import {GeneralSettings} from 'components/general-settings';
-import {JustifiedSettings} from 'components/justified-settings';
 import {LightboxSettings} from 'components/light-box-settings';
-import {MasonrySettings} from 'components/masonry-settings';
-import {MosaicSettings} from 'components/mosaic-settings';
-import {SlideshowSettings} from 'components/slideshow-settings';
-import {ThumbnailSettings} from 'components/thumbnail-settings';
-import {GalleryType, ImageClickAction} from 'data-structures';
-import React, {ReactNode, useState} from 'react';
+import {ImageClickAction} from 'data-structures';
+import {useState} from 'react';
+import {NavigationSettings} from './navigation-settings/NavigationSettings';
+import {OptionsPanelAppearanceTab} from './OptionsPanelAppearanceTab';
+import {OptionsPanelGalleryTab} from './OptionsPanelGalleryTab';
+import {ProtectionSettings} from './protection-settings/ProtectionSettings';
 import {SettingsPanelTabs} from './SettingsPanelTabs';
+import {TextAndMetadataSettings} from './TextAndMetadataSettings';
 import {useSettings} from './useSettings';
 
 interface IOptionsPanelBodyProps {
   isLoading: boolean;
+  isSmall: boolean;
   onSave: () => Promise<void>;
   onReset: () => Promise<void>;
 }
 
-const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
+const OptionsPanelBody = ({
   isLoading,
+  isSmall,
   onSave,
   onReset,
-}) => {
-  const {
-    type,
-    thumbnailSettings,
-    mosaicSettings,
-    justifiedSettings,
-    masonrySettings,
-    slideshowSettings,
-    cubeSettings,
-    carouselSettings,
-    coverflowSettings,
-    cardsSettings,
-    generalSettings,
-    blogSettings,
-  } = useSettings();
+}: IOptionsPanelBodyProps) => {
+  const {type, generalSettings, changeGeneralSettings} = useSettings();
   const clickAction = generalSettings?.clickAction;
   const [activeTab, setActiveTab] = useState<string>('gallery');
   const showLightbox: boolean = clickAction === ImageClickAction.LIGHTBOX;
@@ -54,76 +37,10 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
     setActiveTab(newActiveTab);
   };
 
-  const renderGalleryOptions = (): ReactNode => {
-    let galleryOprions = renderThumbnailSettings();
-    switch (type) {
-      case GalleryType.MOSAIC:
-        galleryOprions = renderMosaicSettings();
-        break;
-      case GalleryType.JUSTIFIED:
-        galleryOprions = renderJustifiedSettings();
-        break;
-      case GalleryType.MASONRY:
-        galleryOprions = renderMasonrySettings();
-        break;
-      case GalleryType.SLIDESHOW:
-        galleryOprions = renderSlideshowSettings();
-        break;
-      case GalleryType.CUBE:
-        galleryOprions = renderCubeSettings();
-        break;
-      case GalleryType.CAROUSEL:
-        galleryOprions = renderCarouselSettings();
-        break;
-      case GalleryType.CARDS:
-        galleryOprions = renderCardsSettings();
-        break;
-      case GalleryType.BLOG:
-        galleryOprions = renderBlogSettings();
-        break;
-      case GalleryType.COVERFLOW:
-        galleryOprions = renderCoverflowSettings();
-        break;
-    }
-    return galleryOprions;
-  };
-
-  const renderThumbnailSettings = (): ReactNode => {
-    return thumbnailSettings && <ThumbnailSettings isLoading={isLoading} />;
-  };
-
-  const renderMosaicSettings = (): ReactNode => {
-    return mosaicSettings && <MosaicSettings isLoading={isLoading} />;
-  };
-  const renderJustifiedSettings = (): ReactNode => {
-    return justifiedSettings && <JustifiedSettings isLoading={isLoading} />;
-  };
-
-  const renderMasonrySettings = (): ReactNode => {
-    return masonrySettings && <MasonrySettings isLoading={isLoading} />;
-  };
-
-  const renderSlideshowSettings = (): ReactNode => {
-    return slideshowSettings && <SlideshowSettings isLoading={isLoading} />;
-  };
-
-  const renderCubeSettings = (): ReactNode => {
-    return cubeSettings && <CubeSettings isLoading={isLoading} />;
-  };
-
-  const renderCarouselSettings = (): ReactNode => {
-    return carouselSettings && <CarouselSettings isLoading={isLoading} />;
-  };
-
-  const renderCoverflowSettings = (): ReactNode => {
-    return coverflowSettings && <CoverflowSettings isLoading={isLoading} />;
-  };
-
-  const renderCardsSettings = (): ReactNode => {
-    return cardsSettings && <CardsSettings isLoading={isLoading} />;
-  };
-  const renderBlogSettings = (): ReactNode => {
-    return blogSettings && <BlogSettings isLoading={isLoading} />;
+  const onProFeatureClick = (utmMedium: string) => {
+    (window as any).reacg_open_premium_offer_dialog({
+      utm_medium: utmMedium,
+    });
   };
 
   return (
@@ -134,12 +51,44 @@ const OptionsPanelBody: React.FC<IOptionsPanelBodyProps> = ({
         onSave={onSave}
         onReset={onReset}
         hideLightboxOptions={hideLightboxOptions}
+        isSmall={isSmall}
       />
       <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
-        {renderGalleryOptions()}
+        <OptionsPanelGalleryTab
+          isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
+        />
       </TabPanel>
-      <TabPanel value={'general'} className={'reacg-tab-panel'}>
-        <GeneralSettings isLoading={isLoading} />
+      <TabPanel value={'text-metadata'} className={'reacg-tab-panel'}>
+        {type ? (
+          <TextAndMetadataSettings
+            isLoading={isLoading}
+            galleryType={type}
+            onProFeatureClick={onProFeatureClick}
+          />
+        ) : null}
+      </TabPanel>
+      <TabPanel value={'appearance'} className={'reacg-tab-panel'}>
+        <OptionsPanelAppearanceTab
+          isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
+        />
+      </TabPanel>
+      <TabPanel value={'navigation'} className={'reacg-tab-panel'}>
+        <NavigationSettings
+          settings={generalSettings!}
+          onSettingsChange={changeGeneralSettings!}
+          onProFeatureClick={onProFeatureClick}
+          isLoading={isLoading}
+        />
+      </TabPanel>
+      <TabPanel value={'protection'} className={'reacg-tab-panel'}>
+        <ProtectionSettings
+          settings={generalSettings!}
+          onSettingsChange={changeGeneralSettings!}
+          onProFeatureClick={onProFeatureClick}
+          isLoading={isLoading}
+        />
       </TabPanel>
       {!hideLightboxOptions ? (
         <TabPanel value={'lightbox'} className={'reacg-tab-panel'}>

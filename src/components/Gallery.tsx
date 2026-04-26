@@ -7,7 +7,7 @@ import {
   ImageClickAction,
   PaginationType,
 } from 'data-structures';
-import React, {
+import {
   lazy,
   ReactElement,
   ReactNode,
@@ -41,7 +41,7 @@ const PaginationProvider = lazy(
 );
 const FilterProvider = lazy(() => import('./filter-provider/FilterProvider'));
 
-const Gallery: React.FC = () => {
+const Gallery = (): ReactElement => {
   const {
     type,
     generalSettings,
