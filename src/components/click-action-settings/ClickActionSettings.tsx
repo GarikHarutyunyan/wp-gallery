@@ -74,20 +74,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
           tooltip={renderClickActionInfo()}
           value={clickAction}
           options={ImageClickActionOptions}
-          onChange={(inputValue: any) => {
-            if (
-              !isPro &&
-              ImageClickActionOptions.find(
-                (option) => option.value === inputValue
-              )?.isPro
-            ) {
-              (window as any).reacg_open_premium_offer_dialog({
-                utm_medium: 'clickAction',
-              });
-            } else {
-              onActionValueChange(inputValue, 'clickAction');
-            }
-          }}
+          onChange={onActionValueChange}
         />
       </Filter>
       {isClickActionUrl ? (

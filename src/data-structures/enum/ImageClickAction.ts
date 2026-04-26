@@ -8,6 +8,6 @@ export enum ImageClickAction {
 
 export const ImageClickActionOptions: ISelectOption[] = [
   {value: ImageClickAction.LIGHTBOX, title: 'Open Lightbox'},
-  {value: ImageClickAction.URL, title: 'Open Link', isPro: true},
+  {value: ImageClickAction.URL, title: 'Open Link'},
   {value: ImageClickAction.NONE, title: 'None'},
 ];
