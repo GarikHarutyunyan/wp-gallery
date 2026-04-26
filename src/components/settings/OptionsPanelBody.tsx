@@ -1,9 +1,9 @@
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import {GeneralSettings} from 'components/general-settings';
 import {LightboxSettings} from 'components/light-box-settings';
 import {ImageClickAction} from 'data-structures';
 import {useState} from 'react';
+import {NavigationSettings} from './navigation-settings/NavigationSettings';
 import {OptionsPanelAppearanceTab} from './OptionsPanelAppearanceTab';
 import {OptionsPanelGalleryTab} from './OptionsPanelGalleryTab';
 import {ProtectionSettings} from './protection-settings/ProtectionSettings';
@@ -59,7 +59,11 @@ const OptionsPanelBody = ({
         <OptionsPanelAppearanceTab isLoading={isLoading} />
       </TabPanel>
       <TabPanel value={'general'} className={'reacg-tab-panel'}>
-        <GeneralSettings isLoading={isLoading} sections={'main'} />
+        <NavigationSettings
+          settings={generalSettings!}
+          onSettingsChange={changeGeneralSettings!}
+          isLoading={isLoading}
+        />
       </TabPanel>
       <TabPanel value={'protection'} className={'reacg-tab-panel'}>
         <ProtectionSettings
