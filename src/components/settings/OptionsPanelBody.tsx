@@ -6,6 +6,7 @@ import {ImageClickAction} from 'data-structures';
 import {useState} from 'react';
 import {OptionsPanelAppearanceTab} from './OptionsPanelAppearanceTab';
 import {OptionsPanelGalleryTab} from './OptionsPanelGalleryTab';
+import {ProtectionSettings} from './protection-settings/ProtectionSettings';
 import {SettingsPanelTabs} from './SettingsPanelTabs';
 import {TextAndMetadataSettings} from './TextAndMetadataSettings';
 import {useSettings} from './useSettings';
@@ -23,7 +24,7 @@ const OptionsPanelBody = ({
   onSave,
   onReset,
 }: IOptionsPanelBodyProps) => {
-  const {type, generalSettings} = useSettings();
+  const {type, generalSettings, changeGeneralSettings} = useSettings();
   const clickAction = generalSettings?.clickAction;
   const [activeTab, setActiveTab] = useState<string>('gallery');
   const showLightbox: boolean = clickAction === ImageClickAction.LIGHTBOX;
@@ -61,7 +62,11 @@ const OptionsPanelBody = ({
         <GeneralSettings isLoading={isLoading} sections={'main'} />
       </TabPanel>
       <TabPanel value={'protection'} className={'reacg-tab-panel'}>
-        <GeneralSettings isLoading={isLoading} sections={'protection'} />
+        <ProtectionSettings
+          settings={generalSettings!}
+          onSettingsChange={changeGeneralSettings!}
+          isLoading={isLoading}
+        />
       </TabPanel>
       {!hideLightboxOptions ? (
         <TabPanel value={'lightbox'} className={'reacg-tab-panel'}>
