@@ -234,6 +234,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
             variant={'outlined'}
             onClick={save}
             className={clsx(
+              'save-settings-button',
               'button',
               'button-large',
               'button-primary',
