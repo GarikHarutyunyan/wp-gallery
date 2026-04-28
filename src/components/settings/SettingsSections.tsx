@@ -101,6 +101,7 @@ const SettingsSections: React.FC<ISettingsSectionsProps> = ({
         body={
           <OptionsPanelBody
             isLoading={isLoading}
+            isSmall={isSmall || isExtraSmall}
             onSave={onSave}
             onReset={onReset}
           />
