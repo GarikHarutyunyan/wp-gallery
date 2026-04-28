@@ -9,6 +9,7 @@ import {GridSettings} from './gird-settings/GridSettings';
 import {JustifiedSettings} from './justified-settings/JustifiedSettings';
 import {MasonrySettings} from './masonry-settings/MasonrySettings';
 import {MosaicSettings} from './mosaic-settings/MosaicSettings';
+import {ScrollerSettings} from './scroller-settings/ScrollerSettings';
 import {SlideshowSettings} from './slideshow-settings/SlideshowSettings';
 import {useSettings} from './useSettings';
 
@@ -43,6 +44,8 @@ const OptionsPanelGalleryTab = ({
     changeCardsSettings,
     blogSettings,
     changeBlogSettings,
+    scrollerSettings,
+    changeScrollerSettings,
   } = useSettings();
 
   const isGrid: boolean = type === GalleryType.THUMBNAILS;
@@ -55,6 +58,7 @@ const OptionsPanelGalleryTab = ({
   const isCards: boolean = type === GalleryType.CARDS;
   const isBlog: boolean = type === GalleryType.BLOG;
   const isCoverflow: boolean = type === GalleryType.COVERFLOW;
+  const isScroller: boolean = type === GalleryType.SCROLLER;
 
   return (
     <>
@@ -129,6 +133,14 @@ const OptionsPanelGalleryTab = ({
         <CoverflowSettings
           settings={coverflowSettings}
           onSettingsChange={changeCoverflowSettings!}
+          isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
+        />
+      )}
+      {isScroller && scrollerSettings && (
+        <ScrollerSettings
+          settings={scrollerSettings}
+          onSettingsChange={changeScrollerSettings!}
           isLoading={isLoading}
           onProFeatureClick={onProFeatureClick}
         />

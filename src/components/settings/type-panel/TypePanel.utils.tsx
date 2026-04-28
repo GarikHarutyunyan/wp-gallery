@@ -7,6 +7,7 @@ import {CubeImage} from './images/CubeImage';
 import {JustifiedImage} from './images/JustifiedImage';
 import {MasonryImage} from './images/MasonryImage';
 import {MosaicImage} from './images/MosaicImage';
+import {ScrollerImage} from './images/ScrollerImage';
 import {SlideshowImage} from './images/SlideshowImage';
 import {ThumbnailsImage} from './images/ThumbnailsImage';
 export const GalleryTypeOptions = [
@@ -60,5 +61,10 @@ export const GalleryTypeOptions = [
     title: 'Coverflow',
     image: <CoverflowImage />,
     isPro: true,
+  },
+  {
+    value: GalleryType.SCROLLER,
+    title: 'Scroller',
+    image: <ScrollerImage />,
   },
 ];

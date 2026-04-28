@@ -14,6 +14,7 @@ export * from './OrderBy';
 export * from './OrderDirection';
 export * from './PaginationType';
 export * from './Position';
+export * from './ScrollerDirection';
 export * from './SizeTypeHeight';
 export * from './SizeTypeWidth';
 export * from './SliderNavigation';

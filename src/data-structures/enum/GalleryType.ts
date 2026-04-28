@@ -9,4 +9,5 @@ export enum GalleryType {
   CARDS = 'cards',
   BLOG = 'blog',
   COVERFLOW = 'coverflow',
+  SCROLLER = 'scroller',
 }

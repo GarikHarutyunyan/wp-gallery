@@ -87,6 +87,10 @@ export const TextAndMetadataSettings: React.FC<
       value: settingsContext.coverflowSettings,
       onChange: settingsContext.changeCoverflowSettings,
     },
+    [GalleryType.SCROLLER]: {
+      value: settingsContext.scrollerSettings,
+      onChange: settingsContext.changeScrollerSettings,
+    },
   };
 
   const selectedSettings = settingsMap[galleryType];
@@ -122,6 +126,7 @@ export const TextAndMetadataSettings: React.FC<
     GalleryType.CAROUSEL,
     GalleryType.CARDS,
     GalleryType.COVERFLOW,
+    GalleryType.SCROLLER,
   ].includes(galleryType);
 
   const titlePositionOptions = usesLightboxTextLayout
