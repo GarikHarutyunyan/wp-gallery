@@ -437,10 +437,18 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       >
         {children}
         {css !== '' && (
-          <style>{'#reacg-root' + galleryId + '{' + css + '}'}</style>
+          <style>
+            {'.reacg-gallery[data-gallery-id="' + galleryId + '"]{' + css + '}'}
+          </style>
         )}
         {customCss !== '' && (
-          <style>{'#reacg-root' + galleryId + '{' + customCss + '}'}</style>
+          <style>
+            {'.reacg-gallery[data-gallery-id="' +
+              galleryId +
+              '"]{' +
+              customCss +
+              '}'}
+          </style>
         )}
       </div>
     );
