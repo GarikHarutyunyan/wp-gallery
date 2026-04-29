@@ -37,6 +37,8 @@ interface IScrollerItem {
 interface IScrollerMediaProps {
   item: IScrollerItem;
   showVideoCover: boolean;
+  size: number;
+  wrapperRef: React.RefObject<HTMLDivElement>;
 }
 
 type IScrollerMetaPosition =
@@ -47,20 +49,23 @@ type IScrollerMetaPosition =
 const ScrollerMedia: React.FC<IScrollerMediaProps> = ({
   item,
   showVideoCover,
+  size,
+  wrapperRef,
 }) => {
-  const mediaWrapperRef = useRef<HTMLDivElement>(null);
+  const srcSetString = getSrcSetString(item.image.sizes);
 
   if (item.image.type === ImageType.VIDEO) {
     return (
       <ReVideo
-        wrapperRef={mediaWrapperRef}
+        wrapperRef={wrapperRef}
         item={item.image}
         settings={{showVideoCover, showVideoControls: false}}
         coverImageProps={{
           src: item.src,
+          srcSet: srcSetString,
+          sizes: `${size}px`,
           alt: item.image.alt || item.image.title,
-          width: item.width,
-          height: item.height,
+          loading: 'eager',
           className: 'reacg-scroller__media',
         }}
         className="reacg-scroller__media"
@@ -70,12 +75,12 @@ const ScrollerMedia: React.FC<IScrollerMediaProps> = ({
 
   return (
     <ReImage
-      wrapperRef={mediaWrapperRef}
+      wrapperRef={wrapperRef}
       src={item.src}
-      srcSet={getSrcSetString(item.image.sizes)}
+      srcSet={srcSetString}
+      sizes={`${size}px`}
       alt={item.image.alt || item.image.title}
-      width={item.width}
-      height={item.height}
+      loading="eager"
       className="reacg-scroller__media"
     />
   );
@@ -150,7 +155,7 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
 
   const overlayBackground = overlayTextBackground || undefined;
   const textMixBlendMode = invertTextColor ? 'difference' : 'initial';
-  const titleValue = item.image[titleSource as keyof IImageDTO];
+  const titleValue = item.image[titleSource as keyof IImageDTO] || <br />;
   const captionValue = item.image[captionSource as keyof IImageDTO];
   const descriptionValue = item.image[descriptionSource as keyof IImageDTO];
   const buttonUrl = item.image?.[buttonUrlSource as ActionURLSource] || '';
@@ -169,25 +174,47 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
   };
 
   const getMetaClasses = (isOnHover: boolean) =>
-    clsx('reacg-scroller__meta-block', {
-      'reacg-scroller__meta-block_on-hover': isOnHover,
+    clsx('swiper-gallery__title', {
+      'swiper-gallery__title_on-hover': isOnHover,
     });
+
+  const renderButtonContent = (isOnHover: boolean) => (
+    <span className="reacg-action-button-wrap">
+      <ActionButton
+        url={buttonUrl}
+        openInNewTab={openInNewTab}
+        text={buttonText || (window as any).reacg_global?.text?.view_more}
+        alignment={buttonAlignment}
+        backgroundColor={buttonColor}
+        textColor={buttonTextColor}
+        fontSize={buttonFontSize}
+        borderSize={buttonBorderSize}
+        borderColor={buttonBorderColor}
+        borderRadius={buttonBorderRadius}
+        isOnHover={isOnHover}
+      />
+    </span>
+  );
 
   const renderTextBar = ({
     key,
     text,
+    subtitle,
     color,
     fontSize,
     position,
     visibility,
     isCaption = false,
+    type,
   }: {
     key: string;
     text: React.ReactNode;
+    subtitle?: React.ReactNode;
     color: string;
     fontSize: number;
     position: ThumbnailTitlePosition;
     visibility: TitleVisibility;
+    type: 'title' | 'caption';
     isCaption?: boolean;
   }) => {
     if (!text) return null;
@@ -195,7 +222,25 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
     const node = (
       <div
         key={key}
-        className={getMetaClasses(visibility === TitleVisibility.ON_HOVER)}
+        className={clsx(
+          getMetaClasses(visibility === TitleVisibility.ON_HOVER),
+          {
+            'swiper-gallery__title-caption': type === 'title',
+            'swiper-gallery__caption': type === 'caption',
+            'swiper-gallery__item-outline':
+              position === ThumbnailTitlePosition.ABOVE ||
+              position === ThumbnailTitlePosition.BELOW,
+            'reacg-gallery__text-background-top-gradient':
+              overlayTextBackground === '' &&
+              position === ThumbnailTitlePosition.TOP,
+            'reacg-gallery__text-background-bottom-gradient':
+              overlayTextBackground === '' &&
+              position === ThumbnailTitlePosition.BOTTOM,
+            'reacg-gallery__text-background-center-gradient':
+              overlayTextBackground === '' &&
+              position === ThumbnailTitlePosition.CENTER,
+          }
+        )}
       >
         <ImageListItemBar
           sx={{
@@ -205,35 +250,32 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
               color,
               lineHeight: 'normal',
             },
+            '& .MuiImageListItemBar-subtitle': {
+              fontSize: `${captionFontSize}px`,
+              fontFamily: titleFontFamily,
+              color: captionFontColor,
+              lineHeight: 'normal',
+            },
           }}
           style={{
+            paddingLeft: '6px',
+            paddingRight: '6px',
             textAlign: titleAlignment,
             color,
             backgroundColor:
               position === ThumbnailTitlePosition.ABOVE ||
               position === ThumbnailTitlePosition.BELOW
                 ? 'initial'
-                : overlayBackground,
+                : overlayTextBackground === ''
+                ? 'unset'
+                : overlayTextBackground,
             mixBlendMode:
               position === ThumbnailTitlePosition.ABOVE ||
               position === ThumbnailTitlePosition.BELOW
                 ? 'initial'
                 : textMixBlendMode,
           }}
-          className={clsx(
-            'reacg-scroller__title-content',
-            `reacg-scroller__title-content_${position}`,
-            {
-              'reacg-scroller__title-content_gradient-top':
-                !overlayBackground && position === ThumbnailTitlePosition.TOP,
-              'reacg-scroller__title-content_gradient-bottom':
-                !overlayBackground &&
-                position === ThumbnailTitlePosition.BOTTOM,
-              'reacg-scroller__title-content_gradient-center':
-                !overlayBackground &&
-                position === ThumbnailTitlePosition.CENTER,
-            }
-          )}
+          className={clsx(`swiper-gallery__title-content_${position}`)}
           title={
             <span
               className={clsx({
@@ -243,6 +285,7 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
               {text}
             </span>
           }
+          subtitle={subtitle}
           position={
             position === ThumbnailTitlePosition.CENTER
               ? 'bottom'
@@ -269,57 +312,52 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
     const node = (
       <div
         key="button"
-        className={getMetaClasses(
-          buttonVisibility === TitleVisibility.ON_HOVER
+        className={clsx(
+          getMetaClasses(buttonVisibility === TitleVisibility.ON_HOVER),
+          'swiper-gallery__button',
+          {
+            'reacg-action-button-container_on-hover':
+              buttonVisibility === TitleVisibility.ON_HOVER,
+            'swiper-gallery__item-outline':
+              buttonPosition === ThumbnailTitlePosition.ABOVE ||
+              buttonPosition === ThumbnailTitlePosition.BELOW,
+          }
         )}
       >
         <ImageListItemBar
           style={{
+            paddingLeft: '6px',
+            paddingRight: '6px',
             textAlign: buttonAlignment,
             backgroundColor:
               buttonPosition === ThumbnailTitlePosition.ABOVE ||
               buttonPosition === ThumbnailTitlePosition.BELOW
                 ? 'initial'
-                : overlayBackground,
+                : overlayTextBackground === ''
+                ? 'unset'
+                : overlayTextBackground,
             mixBlendMode:
               buttonPosition === ThumbnailTitlePosition.ABOVE ||
               buttonPosition === ThumbnailTitlePosition.BELOW
                 ? 'initial'
                 : textMixBlendMode,
           }}
-          className={clsx(
-            'reacg-scroller__title-content',
-            `reacg-scroller__title-content_${buttonPosition}`,
-            {
-              'reacg-scroller__title-content_gradient-top':
-                !overlayBackground &&
-                buttonPosition === ThumbnailTitlePosition.TOP,
-              'reacg-scroller__title-content_gradient-bottom':
-                !overlayBackground &&
-                buttonPosition === ThumbnailTitlePosition.BOTTOM,
-              'reacg-scroller__title-content_gradient-center':
-                !overlayBackground &&
-                buttonPosition === ThumbnailTitlePosition.CENTER,
-            }
+          className={clsx(`swiper-gallery__title-content_${buttonPosition}`, {
+            'reacg-gallery__text-background-top-gradient':
+              overlayTextBackground === '' &&
+              buttonPosition === ThumbnailTitlePosition.TOP,
+            'reacg-gallery__text-background-bottom-gradient':
+              overlayTextBackground === '' &&
+              buttonPosition === ThumbnailTitlePosition.BOTTOM,
+            'reacg-gallery__text-background-center-gradient':
+              overlayTextBackground === '' &&
+              buttonPosition === ThumbnailTitlePosition.CENTER,
+          })}
+          title={renderButtonContent(
+            buttonVisibility === TitleVisibility.ON_HOVER &&
+              buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+              buttonPosition !== ThumbnailTitlePosition.BELOW
           )}
-          title={
-            <span className="reacg-action-button-wrap">
-              <ActionButton
-                url={buttonUrl}
-                openInNewTab={openInNewTab}
-                text={
-                  buttonText || (window as any).reacg_global?.text?.view_more
-                }
-                alignment={buttonAlignment}
-                backgroundColor={buttonColor}
-                textColor={buttonTextColor}
-                fontSize={buttonFontSize}
-                borderSize={buttonBorderSize}
-                borderColor={buttonBorderColor}
-                borderRadius={buttonBorderRadius}
-              />
-            </span>
-          }
           position={
             buttonPosition === ThumbnailTitlePosition.CENTER
               ? 'bottom'
@@ -344,21 +382,64 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
     renderTextBar({
       key: 'title',
       text: titleValue as React.ReactNode,
+      subtitle:
+        (titlePosition === captionPosition && showCaption && captionValue) ||
+        (titlePosition === buttonPosition && showButton) ? (
+          <>
+            {titlePosition === captionPosition &&
+              showCaption &&
+              captionValue && (
+                <span className="thumbnail-image__caption">
+                  {captionValue as React.ReactNode}
+                </span>
+              )}
+            {titlePosition === buttonPosition &&
+              showButton &&
+              renderButtonContent(
+                buttonVisibility === TitleVisibility.ON_HOVER &&
+                  buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+                  buttonPosition !== ThumbnailTitlePosition.BELOW
+              )}
+          </>
+        ) : null,
       color: titleColor,
       fontSize: titleFontSize,
       position: titlePosition,
       visibility: titleVisibility,
+      type: 'title',
     });
   }
 
-  if (showCaption && captionValue) {
+  if (
+    showCaption &&
+    (titlePosition != captionPosition || !showTitle) &&
+    (captionValue || (captionPosition === buttonPosition && showButton))
+  ) {
     renderTextBar({
       key: 'caption',
-      text: captionValue as React.ReactNode,
+      text:
+        (showCaption && captionValue) ||
+        (captionPosition === buttonPosition && showButton) ? (
+          <>
+            {showCaption && captionValue && (
+              <span className="swiper-image__caption">
+                {captionValue as React.ReactNode}
+              </span>
+            )}
+            {captionPosition === buttonPosition &&
+              showButton &&
+              renderButtonContent(
+                buttonVisibility === TitleVisibility.ON_HOVER &&
+                  buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+                  buttonPosition !== ThumbnailTitlePosition.BELOW
+              )}
+          </>
+        ) : null,
       color: captionFontColor,
       fontSize: captionFontSize,
       position: captionPosition,
       visibility: captionVisibility,
+      type: 'caption',
       isCaption: true,
     });
   }
@@ -387,7 +468,15 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
     }
   }
 
-  renderButtonBar();
+  if (
+    showButton &&
+    (titlePosition != buttonPosition || !showTitle) &&
+    (captionPosition != buttonPosition || !showCaption)
+  ) {
+    renderButtonBar();
+  }
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const imageRequestSize = Math.max(item.width, imageHeight);
 
   return (
     <div className="reacg-scroller__item-card" style={{width: item.width}}>
@@ -408,8 +497,10 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
         }}
       >
         <div
+          ref={wrapperRef}
           className={clsx(
             'reacg-scroller__image-wrapper',
+            'swiper-gallery__image-wrapper',
             'reacg-action-button-hover-parent',
             'reacg-scroller__image-wrapper_overflow',
             `reacg-scroller__image-wrapper_${hoverEffect}`,
@@ -420,7 +511,12 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
           style={{height: '100%', borderRadius: `${borderRadius}px`}}
           onClick={() => onClick?.(item.originalIndex)}
         >
-          <ScrollerMedia item={item} showVideoCover={showVideoCover} />
+          <ScrollerMedia
+            item={item}
+            showVideoCover={showVideoCover}
+            size={imageRequestSize}
+            wrapperRef={wrapperRef}
+          />
           <Watermark />
           {overlayTop.length > 0 && (
             <div className="reacg-scroller__overlay reacg-scroller__overlay_top">
