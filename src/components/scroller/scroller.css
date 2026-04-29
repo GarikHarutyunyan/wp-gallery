@@ -139,26 +139,67 @@
   opacity: 1;
 }
 
-.reacg-scroller__title-content > div {
-  padding: 8px 12px;
+.reacg-gallery
+  .scroller-gallery__image-wrapper:hover
+  .scroller-gallery__title_on-hover {
+  opacity: 1;
+  pointer-events: none;
+}
+.reacg-gallery
+  .scroller-gallery__image-wrapper:hover
+  .scroller-gallery__title_on-hover
+  > div {
+  -webkit-transform: translate3d(0, 0px, 0);
+  transform: translate3d(0, 0px, 0);
+}
+.reacg-gallery .scroller-gallery__title_on-hover {
+  opacity: 0;
+  -webkit-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 }
 
-.reacg-gallery .reacg-scroller__title-content > div {
+.reacg-gallery
+  .scroller-gallery__title_on-hover
+  .scroller-gallery__title-content_bottom {
+  -webkit-transform: translate3d(0, 50%, 0);
+  transform: translate3d(0, 50%, 0);
+  -webkit-transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
+}
+
+.reacg-gallery
+  .scroller-gallery__title_on-hover
+  .scroller-gallery__title-content_top {
+  -webkit-transform: translate3d(0, -50%, 0);
+  transform: translate3d(0, -50%, 0);
+  -webkit-transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
+}
+
+.reacg-gallery .scroller-gallery__title_hidden {
+  display: none;
+}
+
+.reacg-gallery .scroller-gallery__title-content_center {
+  text-align: center;
+  height: 100%;
+}
+.reacg-gallery .scroller-gallery__title > div {
+  -webkit-transition: background 0.3s ease-in-out;
   transition: background 0.3s ease-in-out;
 }
-
-.reacg-gallery .reacg-scroller__title-content .MuiImageListItemBar-titleWrap {
+.reacg-gallery .scroller-gallery__title .MuiImageListItemBar-titleWrap {
   display: flex;
   flex-direction: column;
   gap: 10px;
   min-width: 0;
   overflow: hidden;
-  color: inherit;
 }
 
-.reacg-gallery .reacg-scroller__title-content .MuiImageListItemBar-title,
-.reacg-gallery .reacg-scroller__title-content .MuiImageListItemBar-subtitle,
-.reacg-gallery .reacg-scroller__caption-text {
+.reacg-gallery .scroller-gallery__title .MuiImageListItemBar-title,
+.reacg-gallery .scroller-gallery__title .MuiImageListItemBar-subtitle,
+.reacg-gallery .scroller-image__caption,
+.reacg-gallery .thumbnail-image__caption {
   display: block;
   width: 100%;
   min-width: 0;
@@ -167,39 +208,42 @@
   white-space: nowrap;
   box-sizing: border-box;
 }
-
-.reacg-scroller__title-content_center > div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100%;
+.reacg-gallery
+  [class*='scroller-gallery__image-wrapper_overlay']:hover
+  .scroller-gallery__title
+  > div,
+.reacg-gallery
+  [class*='scroller-gallery__image-wrapper_overlay']
+  .scroller-gallery__title_on-hover
+  > div {
+  background: none !important;
 }
-
-.reacg-scroller__title-content_gradient-top > div {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), transparent);
+.reacg-gallery
+  .scroller-gallery__image-wrapper_overlay:hover
+  .scroller-gallery__title
+  > div {
+  background: none;
 }
-
-.reacg-scroller__title-content_gradient-bottom > div {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
+.reacg-gallery
+  [class*='scroller-gallery__image-wrapper_overlay-icon']:hover
+  .scroller-gallery__title_on-hover {
+  display: unset;
 }
-
-.reacg-scroller__title-content_gradient-center > div {
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.4),
-    rgba(0, 0, 0, 0.2)
-  );
+.reacg-gallery
+  [class*='scroller-gallery__image-wrapper_overlay-icon']:hover
+  .scroller-gallery__title-content_center
+  > div {
+  margin-top: 80px;
 }
-
-.reacg-scroller__caption-text,
-.reacg-scroller__description {
-  line-height: normal;
+.reacg-gallery
+  [class*='scroller-gallery__image-wrapper_overlay-icon']
+  .scroller-gallery__title-content_center
+  > div {
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
-
-.reacg-scroller__description {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.reacg-gallery .scroller-gallery__title .MuiImageListItemBar-titleWrap {
+  color: inherit;
 }
 
 .reacg-gallery .reacg-scroller__image-wrapper img,

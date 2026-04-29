@@ -126,12 +126,6 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
     captionPosition = ThumbnailTitlePosition.BOTTOM,
     captionFontSize = 18,
     captionFontColor = 'Grey',
-    showDescription = false,
-    descriptionSource = 'description',
-    descriptionPosition = DescriptionPosition.BELOW,
-    descriptionFontSize = 16,
-    descriptionFontColor = 'Black',
-    descriptionMaxRowsCount = 3,
     showButton = false,
     buttonText,
     buttonVisibility = TitleVisibility.ALWAYS_SHOWN,
@@ -147,109 +141,167 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
     openInNewTab = false,
   } = settings;
 
-  const outsideAbove: React.ReactNode[] = [];
-  const outsideBelow: React.ReactNode[] = [];
-  const overlayTop: React.ReactNode[] = [];
-  const overlayCenter: React.ReactNode[] = [];
-  const overlayBottom: React.ReactNode[] = [];
-
-  const overlayBackground = overlayTextBackground || undefined;
-  const textMixBlendMode = invertTextColor ? 'difference' : 'initial';
-  const titleValue = item.image[titleSource as keyof IImageDTO] || <br />;
-  const captionValue = item.image[captionSource as keyof IImageDTO];
-  const descriptionValue = item.image[descriptionSource as keyof IImageDTO];
-  const buttonUrl = item.image?.[buttonUrlSource as ActionURLSource] || '';
-
-  const pushOverlay = (
-    position: IScrollerMetaPosition,
-    node: React.ReactNode
-  ) => {
-    if (position === ThumbnailTitlePosition.TOP) {
-      overlayTop.push(node);
-    } else if (position === ThumbnailTitlePosition.CENTER) {
-      overlayCenter.push(node);
-    } else {
-      overlayBottom.push(node);
+  const renderTitle = (image: IImageDTO) => {
+    let itemPaddingText = '0';
+    let imagePaddingText = '0';
+    if (
+      titlePosition === ThumbnailTitlePosition.BELOW ||
+      titlePosition === ThumbnailTitlePosition.ABOVE
+    ) {
+      itemPaddingText = (borderRadius || 0) / 2 + '%';
+      imagePaddingText = padding + 'px';
+    } else if (titlePosition !== ThumbnailTitlePosition.CENTER) {
+      imagePaddingText = (borderRadius || 0) / 2 + '%';
     }
-  };
 
-  const getMetaClasses = (isOnHover: boolean) =>
-    clsx('swiper-gallery__title', {
-      'swiper-gallery__title_on-hover': isOnHover,
-    });
-
-  const renderButtonContent = (isOnHover: boolean) => (
-    <span className="reacg-action-button-wrap">
-      <ActionButton
-        url={buttonUrl}
-        openInNewTab={openInNewTab}
-        text={buttonText || (window as any).reacg_global?.text?.view_more}
-        alignment={buttonAlignment}
-        backgroundColor={buttonColor}
-        textColor={buttonTextColor}
-        fontSize={buttonFontSize}
-        borderSize={buttonBorderSize}
-        borderColor={buttonBorderColor}
-        borderRadius={buttonBorderRadius}
-        isOnHover={isOnHover}
-      />
-    </span>
-  );
-
-  const renderTextBar = ({
-    key,
-    text,
-    subtitle,
-    color,
-    fontSize,
-    position,
-    visibility,
-    isCaption = false,
-    type,
-  }: {
-    key: string;
-    text: React.ReactNode;
-    subtitle?: React.ReactNode;
-    color: string;
-    fontSize: number;
-    position: ThumbnailTitlePosition;
-    visibility: TitleVisibility;
-    type: 'title' | 'caption';
-    isCaption?: boolean;
-  }) => {
-    if (!text) return null;
-
-    const node = (
+    return (
       <div
-        key={key}
         className={clsx(
-          getMetaClasses(visibility === TitleVisibility.ON_HOVER),
+          'scroller-gallery__title scroller-gallery__title-caption',
           {
-            'swiper-gallery__title-caption': type === 'title',
-            'swiper-gallery__caption': type === 'caption',
-            'swiper-gallery__item-outline':
-              position === ThumbnailTitlePosition.ABOVE ||
-              position === ThumbnailTitlePosition.BELOW,
+            'scroller-gallery__title_on-hover':
+              showTitle &&
+              titleVisibility === TitleVisibility.ON_HOVER &&
+              titlePosition !== ThumbnailTitlePosition.BELOW &&
+              titlePosition !== ThumbnailTitlePosition.ABOVE,
+            'scroller-gallery__title_hidden': !showTitle,
+            'scroller-gallery__item-outline':
+              showTitle &&
+              (titlePosition === ThumbnailTitlePosition.BELOW ||
+                titlePosition === ThumbnailTitlePosition.ABOVE),
             'reacg-gallery__text-background-top-gradient':
               overlayTextBackground === '' &&
-              position === ThumbnailTitlePosition.TOP,
+              titlePosition === ThumbnailTitlePosition.TOP,
             'reacg-gallery__text-background-bottom-gradient':
               overlayTextBackground === '' &&
-              position === ThumbnailTitlePosition.BOTTOM,
+              titlePosition === ThumbnailTitlePosition.BOTTOM,
             'reacg-gallery__text-background-center-gradient':
               overlayTextBackground === '' &&
-              position === ThumbnailTitlePosition.CENTER,
+              titlePosition === ThumbnailTitlePosition.CENTER,
           }
         )}
+        style={{
+          paddingLeft: itemPaddingText,
+          paddingRight: itemPaddingText,
+        }}
       >
         <ImageListItemBar
           sx={{
-            '& .MuiImageListItemBar-title': {
-              fontSize: `${fontSize}px`,
+            '& .MuiImageListItemBar-subtitle': {
+              fontSize: `${captionFontSize}px`,
               fontFamily: titleFontFamily,
-              color,
+              color: captionFontColor,
               lineHeight: 'normal',
             },
+            '& .MuiImageListItemBar-title': {
+              fontSize: `${titleFontSize}px`,
+              fontFamily: titleFontFamily,
+              lineHeight: 'normal',
+            },
+          }}
+          style={{
+            paddingLeft: '6px',
+            paddingRight: '6px',
+            textAlign: titleAlignment,
+            color: titleColor,
+            backgroundColor:
+              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
+            mixBlendMode: invertTextColor ? 'difference' : 'initial',
+          }}
+          className={`scroller-gallery__title-content_${titlePosition}`}
+          title={<span>{image[titleSource] || <br />}</span>}
+          subtitle={
+            (titlePosition === captionPosition &&
+              showCaption &&
+              image[captionSource]) ||
+            (titlePosition === buttonPosition && showButton) ? (
+              <>
+                {titlePosition === captionPosition &&
+                  showCaption &&
+                  image[captionSource] && (
+                    <span className="thumbnail-image__caption">
+                      {image[captionSource]}
+                    </span>
+                  )}
+                {titlePosition === buttonPosition && showButton && (
+                  <span className="reacg-action-button-wrap">
+                    <ActionButton
+                      url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                      openInNewTab={openInNewTab}
+                      text={buttonText}
+                      alignment={buttonAlignment}
+                      backgroundColor={buttonColor}
+                      textColor={buttonTextColor}
+                      fontSize={buttonFontSize}
+                      borderSize={buttonBorderSize}
+                      borderColor={buttonBorderColor}
+                      borderRadius={buttonBorderRadius}
+                      isOnHover={
+                        buttonVisibility === TitleVisibility.ON_HOVER &&
+                        buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+                        buttonPosition !== ThumbnailTitlePosition.BELOW
+                      }
+                    />
+                  </span>
+                )}
+              </>
+            ) : null
+          }
+          position={
+            titlePosition === ThumbnailTitlePosition.CENTER
+              ? 'bottom'
+              : titlePosition === ThumbnailTitlePosition.ABOVE
+              ? 'below'
+              : titlePosition
+          }
+        />
+      </div>
+    );
+  };
+
+  const renderCaption = (image: IImageDTO) => {
+    let itemPaddingText = '0';
+    let imagePaddingText = '0';
+    if (
+      captionPosition === ThumbnailTitlePosition.BELOW ||
+      captionPosition === ThumbnailTitlePosition.ABOVE
+    ) {
+      itemPaddingText = (borderRadius || 0) / 2 + '%';
+      imagePaddingText = padding + 'px';
+    } else if (captionPosition !== ThumbnailTitlePosition.CENTER) {
+      imagePaddingText = (borderRadius || 0) / 2 + '%';
+    }
+
+    return (
+      <div
+        className={clsx('scroller-gallery__title scroller-gallery__caption', {
+          'scroller-gallery__title_on-hover':
+            showCaption &&
+            captionVisibility === TitleVisibility.ON_HOVER &&
+            captionPosition !== ThumbnailTitlePosition.BELOW &&
+            captionPosition !== ThumbnailTitlePosition.ABOVE,
+          'scroller-gallery__title_hidden': !showCaption,
+          'scroller-gallery__item-outline':
+            showCaption &&
+            (captionPosition === ThumbnailTitlePosition.BELOW ||
+              captionPosition === ThumbnailTitlePosition.ABOVE),
+          'reacg-gallery__text-background-top-gradient':
+            overlayTextBackground === '' &&
+            captionPosition === ThumbnailTitlePosition.TOP,
+          'reacg-gallery__text-background-bottom-gradient':
+            overlayTextBackground === '' &&
+            captionPosition === ThumbnailTitlePosition.BOTTOM,
+          'reacg-gallery__text-background-center-gradient':
+            overlayTextBackground === '' &&
+            captionPosition === ThumbnailTitlePosition.CENTER,
+        })}
+        style={{
+          paddingLeft: itemPaddingText,
+          paddingRight: itemPaddingText,
+        }}
+      >
+        <ImageListItemBar
+          sx={{
             '& .MuiImageListItemBar-subtitle': {
               fontSize: `${captionFontSize}px`,
               fontFamily: titleFontFamily,
@@ -261,31 +313,132 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
             paddingLeft: '6px',
             paddingRight: '6px',
             textAlign: titleAlignment,
-            color,
+            color: captionFontColor,
             backgroundColor:
-              position === ThumbnailTitlePosition.ABOVE ||
-              position === ThumbnailTitlePosition.BELOW
-                ? 'initial'
-                : overlayTextBackground === ''
-                ? 'unset'
-                : overlayTextBackground,
-            mixBlendMode:
-              position === ThumbnailTitlePosition.ABOVE ||
-              position === ThumbnailTitlePosition.BELOW
-                ? 'initial'
-                : textMixBlendMode,
+              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
+            mixBlendMode: invertTextColor ? 'difference' : 'initial',
           }}
-          className={clsx(`swiper-gallery__title-content_${position}`)}
+          className={`scroller-gallery__title-content_${captionPosition}`}
           title={
-            <span
-              className={clsx({
-                'reacg-scroller__caption-text': isCaption,
-              })}
-            >
-              {text}
+            (showCaption && image[captionSource]) ||
+            (captionPosition === buttonPosition && showButton) ? (
+              <>
+                {showCaption && image[captionSource] && (
+                  <span className="scroller-image__caption">
+                    {image[captionSource]}
+                  </span>
+                )}
+                {captionPosition === buttonPosition && showButton && (
+                  <span className="reacg-action-button-wrap">
+                    <ActionButton
+                      url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                      openInNewTab={openInNewTab}
+                      text={buttonText}
+                      alignment={buttonAlignment}
+                      backgroundColor={buttonColor}
+                      textColor={buttonTextColor}
+                      fontSize={buttonFontSize}
+                      borderSize={buttonBorderSize}
+                      borderColor={buttonBorderColor}
+                      borderRadius={buttonBorderRadius}
+                      isOnHover={
+                        buttonVisibility === TitleVisibility.ON_HOVER &&
+                        buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+                        buttonPosition !== ThumbnailTitlePosition.BELOW
+                      }
+                    />
+                  </span>
+                )}
+              </>
+            ) : null
+          }
+          position={
+            captionPosition === ThumbnailTitlePosition.CENTER
+              ? 'bottom'
+              : captionPosition === ThumbnailTitlePosition.ABOVE
+              ? 'below'
+              : captionPosition
+          }
+        />
+      </div>
+    );
+  };
+
+  const renderButton = (position: ThumbnailTitlePosition, image: IImageDTO) => {
+    let itemPaddingText = '0';
+    let imagePaddingText = '6px';
+    if (
+      position === ThumbnailTitlePosition.BELOW ||
+      position === ThumbnailTitlePosition.ABOVE
+    ) {
+      itemPaddingText = (borderRadius || 0) / 2 + '%';
+      imagePaddingText = padding + 'px';
+    } else if (position !== ThumbnailTitlePosition.CENTER) {
+      imagePaddingText = (borderRadius || 0) / 2 + '%';
+    }
+
+    const isOutside =
+      position === ThumbnailTitlePosition.ABOVE ||
+      position === ThumbnailTitlePosition.BELOW;
+
+    return (
+      <div
+        className={clsx('scroller-gallery__title', 'scroller-gallery__button', {
+          'reacg-action-button-container_on-hover':
+            showButton && buttonVisibility === TitleVisibility.ON_HOVER,
+          'scroller-gallery__item-outline': isOutside,
+          'reacg-gallery__text-background-top-gradient':
+            overlayTextBackground === '' &&
+            position === ThumbnailTitlePosition.TOP,
+          'reacg-gallery__text-background-bottom-gradient':
+            overlayTextBackground === '' &&
+            position === ThumbnailTitlePosition.BOTTOM,
+          'reacg-gallery__text-background-center-gradient':
+            overlayTextBackground === '' &&
+            position === ThumbnailTitlePosition.CENTER,
+        })}
+        style={{
+          paddingLeft: itemPaddingText,
+          paddingRight: itemPaddingText,
+        }}
+      >
+        <ImageListItemBar
+          style={{
+            paddingLeft: imagePaddingText,
+            paddingRight: imagePaddingText,
+            textAlign: buttonAlignment,
+            backgroundColor:
+              position !== ThumbnailTitlePosition.BELOW &&
+              position !== ThumbnailTitlePosition.ABOVE
+                ? overlayTextBackground === ''
+                  ? 'unset'
+                  : overlayTextBackground
+                : 'initial',
+            mixBlendMode:
+              invertTextColor &&
+              position !== ThumbnailTitlePosition.BELOW &&
+              position !== ThumbnailTitlePosition.ABOVE
+                ? 'difference'
+                : 'initial',
+          }}
+          className={`scroller-gallery__title-content_${position}`}
+          title={
+            <span className="reacg-action-button-wrap">
+              <ActionButton
+                url={image?.[buttonUrlSource as ActionURLSource] || ''}
+                openInNewTab={openInNewTab}
+                text={buttonText}
+                alignment={buttonAlignment}
+                backgroundColor={buttonColor}
+                textColor={buttonTextColor}
+                fontSize={buttonFontSize}
+                borderSize={buttonBorderSize}
+                borderColor={buttonBorderColor}
+                borderRadius={buttonBorderRadius}
+                isOnHover={!isOutside}
+              />
             </span>
           }
-          subtitle={subtitle}
           position={
             position === ThumbnailTitlePosition.CENTER
               ? 'bottom'
@@ -296,195 +449,25 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
         />
       </div>
     );
-
-    if (position === ThumbnailTitlePosition.ABOVE) {
-      outsideAbove.push(node);
-    } else if (position === ThumbnailTitlePosition.BELOW) {
-      outsideBelow.push(node);
-    } else {
-      pushOverlay(position as IScrollerMetaPosition, node);
-    }
   };
 
-  const renderButtonBar = () => {
-    if (!showButton) return;
-
-    const node = (
-      <div
-        key="button"
-        className={clsx(
-          getMetaClasses(buttonVisibility === TitleVisibility.ON_HOVER),
-          'swiper-gallery__button',
-          {
-            'reacg-action-button-container_on-hover':
-              buttonVisibility === TitleVisibility.ON_HOVER,
-            'swiper-gallery__item-outline':
-              buttonPosition === ThumbnailTitlePosition.ABOVE ||
-              buttonPosition === ThumbnailTitlePosition.BELOW,
-          }
-        )}
-      >
-        <ImageListItemBar
-          style={{
-            paddingLeft: '6px',
-            paddingRight: '6px',
-            textAlign: buttonAlignment,
-            backgroundColor:
-              buttonPosition === ThumbnailTitlePosition.ABOVE ||
-              buttonPosition === ThumbnailTitlePosition.BELOW
-                ? 'initial'
-                : overlayTextBackground === ''
-                ? 'unset'
-                : overlayTextBackground,
-            mixBlendMode:
-              buttonPosition === ThumbnailTitlePosition.ABOVE ||
-              buttonPosition === ThumbnailTitlePosition.BELOW
-                ? 'initial'
-                : textMixBlendMode,
-          }}
-          className={clsx(`swiper-gallery__title-content_${buttonPosition}`, {
-            'reacg-gallery__text-background-top-gradient':
-              overlayTextBackground === '' &&
-              buttonPosition === ThumbnailTitlePosition.TOP,
-            'reacg-gallery__text-background-bottom-gradient':
-              overlayTextBackground === '' &&
-              buttonPosition === ThumbnailTitlePosition.BOTTOM,
-            'reacg-gallery__text-background-center-gradient':
-              overlayTextBackground === '' &&
-              buttonPosition === ThumbnailTitlePosition.CENTER,
-          })}
-          title={renderButtonContent(
-            buttonVisibility === TitleVisibility.ON_HOVER &&
-              buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-              buttonPosition !== ThumbnailTitlePosition.BELOW
-          )}
-          position={
-            buttonPosition === ThumbnailTitlePosition.CENTER
-              ? 'bottom'
-              : buttonPosition === ThumbnailTitlePosition.ABOVE
-              ? 'below'
-              : buttonPosition
-          }
-        />
-      </div>
-    );
-
-    if (buttonPosition === ThumbnailTitlePosition.ABOVE) {
-      outsideAbove.push(node);
-    } else if (buttonPosition === ThumbnailTitlePosition.BELOW) {
-      outsideBelow.push(node);
-    } else {
-      pushOverlay(buttonPosition as IScrollerMetaPosition, node);
-    }
-  };
-
-  if (showTitle && titleValue) {
-    renderTextBar({
-      key: 'title',
-      text: titleValue as React.ReactNode,
-      subtitle:
-        (titlePosition === captionPosition && showCaption && captionValue) ||
-        (titlePosition === buttonPosition && showButton) ? (
-          <>
-            {titlePosition === captionPosition &&
-              showCaption &&
-              captionValue && (
-                <span className="thumbnail-image__caption">
-                  {captionValue as React.ReactNode}
-                </span>
-              )}
-            {titlePosition === buttonPosition &&
-              showButton &&
-              renderButtonContent(
-                buttonVisibility === TitleVisibility.ON_HOVER &&
-                  buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-                  buttonPosition !== ThumbnailTitlePosition.BELOW
-              )}
-          </>
-        ) : null,
-      color: titleColor,
-      fontSize: titleFontSize,
-      position: titlePosition,
-      visibility: titleVisibility,
-      type: 'title',
-    });
-  }
-
-  if (
-    showCaption &&
-    (titlePosition != captionPosition || !showTitle) &&
-    (captionValue || (captionPosition === buttonPosition && showButton))
-  ) {
-    renderTextBar({
-      key: 'caption',
-      text:
-        (showCaption && captionValue) ||
-        (captionPosition === buttonPosition && showButton) ? (
-          <>
-            {showCaption && captionValue && (
-              <span className="swiper-image__caption">
-                {captionValue as React.ReactNode}
-              </span>
-            )}
-            {captionPosition === buttonPosition &&
-              showButton &&
-              renderButtonContent(
-                buttonVisibility === TitleVisibility.ON_HOVER &&
-                  buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-                  buttonPosition !== ThumbnailTitlePosition.BELOW
-              )}
-          </>
-        ) : null,
-      color: captionFontColor,
-      fontSize: captionFontSize,
-      position: captionPosition,
-      visibility: captionVisibility,
-      type: 'caption',
-      isCaption: true,
-    });
-  }
-
-  if (showDescription && descriptionValue) {
-    const descriptionNode = (
-      <div
-        key="description"
-        className="reacg-scroller__description"
-        style={{
-          WebkitLineClamp: descriptionMaxRowsCount,
-          fontSize: `${descriptionFontSize}px`,
-          color: descriptionFontColor,
-          fontFamily: titleFontFamily,
-          textAlign: titleAlignment,
-        }}
-      >
-        {descriptionValue as React.ReactNode}
-      </div>
-    );
-
-    if (descriptionPosition === DescriptionPosition.ABOVE) {
-      outsideAbove.push(descriptionNode);
-    } else {
-      outsideBelow.push(descriptionNode);
-    }
-  }
-
-  if (
-    showButton &&
-    (titlePosition != buttonPosition || !showTitle) &&
-    (captionPosition != buttonPosition || !showCaption)
-  ) {
-    renderButtonBar();
-  }
   const wrapperRef = useRef<HTMLDivElement>(null);
   const imageRequestSize = Math.max(item.width, imageHeight);
 
   return (
     <div className="reacg-scroller__item-card" style={{width: item.width}}>
-      {outsideAbove.length > 0 && (
-        <div className="reacg-scroller__meta-stack reacg-scroller__meta-stack_above">
-          {outsideAbove}
-        </div>
-      )}
+      {showTitle &&
+        titlePosition === ThumbnailTitlePosition.ABOVE &&
+        renderTitle(item.image)}
+      {showCaption &&
+        (titlePosition != captionPosition || !showTitle) &&
+        captionPosition === ThumbnailTitlePosition.ABOVE &&
+        renderCaption(item.image)}
+      {showButton &&
+        (titlePosition != buttonPosition || !showTitle) &&
+        (captionPosition != buttonPosition || !showCaption) &&
+        buttonPosition === ThumbnailTitlePosition.ABOVE &&
+        renderButton(buttonPosition, item.image)}
       <div
         className="reacg-scroller__media-shell"
         style={{
@@ -500,7 +483,7 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
           ref={wrapperRef}
           className={clsx(
             'reacg-scroller__image-wrapper',
-            'swiper-gallery__image-wrapper',
+            'scroller-gallery__image-wrapper',
             'reacg-action-button-hover-parent',
             'reacg-scroller__image-wrapper_overflow',
             `reacg-scroller__image-wrapper_${hoverEffect}`,
@@ -518,28 +501,35 @@ const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
             wrapperRef={wrapperRef}
           />
           <Watermark />
-          {overlayTop.length > 0 && (
-            <div className="reacg-scroller__overlay reacg-scroller__overlay_top">
-              {overlayTop}
-            </div>
-          )}
-          {overlayCenter.length > 0 && (
-            <div className="reacg-scroller__overlay reacg-scroller__overlay_center">
-              {overlayCenter}
-            </div>
-          )}
-          {overlayBottom.length > 0 && (
-            <div className="reacg-scroller__overlay reacg-scroller__overlay_bottom">
-              {overlayBottom}
-            </div>
-          )}
+          {showTitle &&
+            titlePosition !== ThumbnailTitlePosition.BELOW &&
+            titlePosition !== ThumbnailTitlePosition.ABOVE &&
+            renderTitle(item.image)}
+          {showCaption &&
+            (titlePosition != captionPosition || !showTitle) &&
+            captionPosition !== ThumbnailTitlePosition.BELOW &&
+            captionPosition !== ThumbnailTitlePosition.ABOVE &&
+            renderCaption(item.image)}
+          {showButton &&
+            (titlePosition != buttonPosition || !showTitle) &&
+            (captionPosition != buttonPosition || !showCaption) &&
+            buttonPosition !== ThumbnailTitlePosition.BELOW &&
+            buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+            renderButton(buttonPosition, item.image)}
         </div>
       </div>
-      {outsideBelow.length > 0 && (
-        <div className="reacg-scroller__meta-stack reacg-scroller__meta-stack_below">
-          {outsideBelow}
-        </div>
-      )}
+      {showTitle &&
+        titlePosition === ThumbnailTitlePosition.BELOW &&
+        renderTitle(item.image)}
+      {showCaption &&
+        (titlePosition != captionPosition || !showTitle) &&
+        captionPosition === ThumbnailTitlePosition.BELOW &&
+        renderCaption(item.image)}
+      {showButton &&
+        (titlePosition != buttonPosition || !showTitle) &&
+        (captionPosition != buttonPosition || !showCaption) &&
+        buttonPosition === ThumbnailTitlePosition.BELOW &&
+        renderButton(buttonPosition, item.image)}
     </div>
   );
 };
@@ -563,6 +553,8 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
     captionPosition = ThumbnailTitlePosition.BOTTOM,
     showDescription = false,
     descriptionPosition = DescriptionPosition.BELOW,
+    showButton = false,
+    buttonPosition = ThumbnailTitlePosition.BOTTOM,
     showVideoCover,
     gap,
     backgroundColor,
@@ -662,6 +654,9 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
     (showCaption &&
       (captionPosition === ThumbnailTitlePosition.ABOVE ||
         captionPosition === ThumbnailTitlePosition.BELOW)) ||
+    (showButton &&
+      (buttonPosition === ThumbnailTitlePosition.ABOVE ||
+        buttonPosition === ThumbnailTitlePosition.BELOW)) ||
     showDescription ||
     false;
 

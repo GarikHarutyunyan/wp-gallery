@@ -433,7 +433,6 @@ const ControlsSection = ({
                 min={0}
                 max={400}
                 step={10}
-                tooltip={<p>Pixels per second the track scrolls.</p>}
               />
             </Filter>
             <Filter isLoading={isLoading}>

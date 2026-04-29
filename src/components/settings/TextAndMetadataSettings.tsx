@@ -139,7 +139,12 @@ export const TextAndMetadataSettings: React.FC<
     if (
       !value ||
       !onChange ||
-      galleryType !== GalleryType.THUMBNAILS ||
+      (galleryType !== GalleryType.THUMBNAILS &&
+        galleryType !== GalleryType.CUBE &&
+        galleryType !== GalleryType.CAROUSEL &&
+        galleryType !== GalleryType.CARDS &&
+        galleryType !== GalleryType.COVERFLOW &&
+        galleryType !== GalleryType.SCROLLER) ||
       !('titleVisibility' in value) ||
       !('titlePosition' in value)
     ) {
@@ -893,8 +898,7 @@ export const TextAndMetadataSettings: React.FC<
                   onChange={
                     isPro
                       ? onInputValueChange
-                      : () =>
-                        onProFeatureClick('invert_color')
+                      : () => onProFeatureClick('invert_color')
                   }
                 />
               </Filter>
