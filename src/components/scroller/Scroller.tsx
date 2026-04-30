@@ -541,6 +541,7 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
     equalHeight,
     width: configuredWidth = 300,
     equalWidth = false,
+    rowCount = 1,
     scrollDirection,
     animationSpeed,
     pauseOnHover,
@@ -624,63 +625,85 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
   const responsiveScale = getResponsiveScale(effectiveContainerWidth);
   const responsiveHeight = Math.max(50, Math.round(height * responsiveScale));
 
-  const baseItems: IScrollerItem[] = images.map((image, originalIndex) => {
-    const srcItem = getLargestSrcItem(image.sizes);
-    const naturalRatio = srcItem ? srcItem.width / srcItem.height : 1;
-    let width: number;
-    let itemHeight: number;
+  const normalizedRowCount = Math.max(1, Math.min(6, Math.round(rowCount || 1)));
+  const sourceItems = images.map((image, originalIndex) => ({image, originalIndex}));
+  const rowSources: Array<Array<{image: IImageDTO; originalIndex: number}>> = [];
+  const basePerRow = Math.floor(sourceItems.length / normalizedRowCount);
+  const remainder = sourceItems.length % normalizedRowCount;
+  let offset = 0;
 
-    if (equalWidth && equalHeight) {
-      width = itemWidth;
-      itemHeight = responsiveHeight;
-    } else if (equalWidth) {
-      width = itemWidth;
-      itemHeight = Math.min(responsiveHeight, itemWidth / naturalRatio);
-    } else if (equalHeight) {
-      itemHeight = responsiveHeight;
-      width = responsiveHeight * naturalRatio;
-    } else {
-      // Use configured width/height as max bounds and preserve natural ratio.
-      const maxWidth = itemWidth;
-      const widthByHeight = responsiveHeight * naturalRatio;
-      if (widthByHeight <= maxWidth) {
-        width = widthByHeight;
-        itemHeight = responsiveHeight;
-      } else {
-        width = maxWidth;
-        itemHeight = maxWidth / naturalRatio;
-      }
-    }
-
-    const src = srcItem?.src || image.original?.url;
-
-    return {image, originalIndex, src, width, height: itemHeight};
-  });
-
-  const totalBaseWidth =
-    baseItems.reduce((sum, item) => sum + item.width, 0) +
-    Math.max(0, baseItems.length - 1) * (gap || 0);
-
-  // One set contains available images only. Duplicate within set only if it is narrower than viewport.
-  const setRepeat =
-    totalBaseWidth > 0 && totalBaseWidth < effectiveContainerWidth
-      ? Math.ceil(effectiveContainerWidth / totalBaseWidth)
-      : 1;
-
-  const setItems: IScrollerItem[] = [];
-  for (let i = 0; i < setRepeat; i++) {
-    baseItems.forEach((item) => {
-      setItems.push(item);
-    });
+  for (let rowIndex = 0; rowIndex < normalizedRowCount; rowIndex++) {
+    const rowSize = basePerRow + (rowIndex < remainder ? 1 : 0);
+    rowSources.push(sourceItems.slice(offset, offset + rowSize));
+    offset += rowSize;
   }
 
-  // Width of all items inside one set (without the trailing set boundary gap).
-  const singleSetContentWidth =
-    setItems.reduce((sum, item) => sum + item.width, 0) +
-    Math.max(0, setItems.length - 1) * (gap || 0);
-  // Span from start of one set to start of the cloned set.
-  const setSpanWidth = singleSetContentWidth + (gap || 0);
-  const duration = setSpanWidth / Math.max(animationSpeed || 1, 1);
+  const rowData = rowSources
+    .filter((row) => row.length > 0)
+    .map((row) => {
+      const baseItems: IScrollerItem[] = row.map(({image, originalIndex}) => {
+        const srcItem = getLargestSrcItem(image.sizes);
+        const naturalRatio = srcItem ? srcItem.width / srcItem.height : 1;
+        let width: number;
+        let itemHeight: number;
+
+        if (equalWidth && equalHeight) {
+          width = itemWidth;
+          itemHeight = responsiveHeight;
+        } else if (equalWidth) {
+          width = itemWidth;
+          itemHeight = Math.min(responsiveHeight, itemWidth / naturalRatio);
+        } else if (equalHeight) {
+          itemHeight = responsiveHeight;
+          width = responsiveHeight * naturalRatio;
+        } else {
+          // Use configured width/height as max bounds and preserve natural ratio.
+          const maxWidth = itemWidth;
+          const widthByHeight = responsiveHeight * naturalRatio;
+          if (widthByHeight <= maxWidth) {
+            width = widthByHeight;
+            itemHeight = responsiveHeight;
+          } else {
+            width = maxWidth;
+            itemHeight = maxWidth / naturalRatio;
+          }
+        }
+
+        const src = srcItem?.src || image.original?.url;
+
+        return {image, originalIndex, src, width, height: itemHeight};
+      });
+
+      const totalBaseWidth =
+        baseItems.reduce((sum, item) => sum + item.width, 0) +
+        Math.max(0, baseItems.length - 1) * (gap || 0);
+
+      // One set contains available images only. Duplicate within set only if it is narrower than viewport.
+      const setRepeat =
+        totalBaseWidth > 0 && totalBaseWidth < effectiveContainerWidth
+          ? Math.ceil(effectiveContainerWidth / totalBaseWidth)
+          : 1;
+
+      const setItems: IScrollerItem[] = [];
+      for (let i = 0; i < setRepeat; i++) {
+        baseItems.forEach((item) => {
+          setItems.push(item);
+        });
+      }
+
+      // Width of all items inside one set (without the trailing set boundary gap).
+      const singleSetContentWidth =
+        setItems.reduce((sum, item) => sum + item.width, 0) +
+        Math.max(0, setItems.length - 1) * (gap || 0);
+      // Span from start of one set to start of the cloned set.
+      const setSpanWidth = singleSetContentWidth + (gap || 0);
+
+      return {
+        setItems,
+        setSpanWidth,
+        duration: setSpanWidth / Math.max(animationSpeed || 1, 1),
+      };
+    });
   const hasOutsideMetadata =
     (showTitle &&
       (titlePosition === ThumbnailTitlePosition.ABOVE ||
@@ -701,58 +724,75 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
         backgroundColor: backgroundColor || undefined,
         paddingTop: containerPadding,
         paddingBottom: containerPadding,
+        display: 'flex',
+        flexDirection: 'column',
+        rowGap: `${gap || 0}px`,
       }}
     >
-      <div
-        className={clsx(
-          'reacg-scroller__track',
-          'reacg-scroller__track--animating',
-          {
-            [`reacg-scroller__track--${scrollDirection || 'left'}`]: true,
-            'reacg-scroller__track--paused': isPaused,
-            'reacg-scroller__track--mixed-height': !equalHeight,
-          }
-        )}
-        style={{
-          animationDuration: `${duration}s`,
-          height:
-            !equalHeight && !hasOutsideMetadata ? responsiveHeight : undefined,
-          ['--reacg-shift-px' as string]: `${setSpanWidth}px`,
-          ['--reacg-gap' as string]: `${gap || 0}px`,
-        }}
-        onMouseEnter={() => pauseOnHover && setIsPaused(true)}
-        onMouseLeave={() => pauseOnHover && setIsPaused(false)}
-      >
-        {[0, 1].map((setIndex) => (
+      {rowData.map((row, rowIndex) => {
+        const rowDirection =
+          rowIndex % 2 === 0
+            ? scrollDirection || 'left'
+            : (scrollDirection || 'left') === 'left'
+            ? 'right'
+            : 'left';
+
+        return (
           <div
-            key={`set-${setIndex}`}
-            className="reacg-scroller__set"
-            aria-hidden={setIndex === 1}
+            key={`row-${rowIndex}`}
+            className={clsx(
+              'reacg-scroller__track',
+              'reacg-scroller__track--animating',
+              {
+                [`reacg-scroller__track--${rowDirection}`]: true,
+                'reacg-scroller__track--paused': isPaused,
+                'reacg-scroller__track--mixed-height': !equalHeight,
+              }
+            )}
+            style={{
+              animationDuration: `${row.duration}s`,
+              height:
+                !equalHeight && !hasOutsideMetadata
+                  ? responsiveHeight
+                  : undefined,
+              ['--reacg-shift-px' as string]: `${row.setSpanWidth}px`,
+              ['--reacg-gap' as string]: `${gap || 0}px`,
+            }}
+            onMouseEnter={() => pauseOnHover && setIsPaused(true)}
+            onMouseLeave={() => pauseOnHover && setIsPaused(false)}
           >
-            {setItems.map((item, i) => (
+            {[0, 1].map((setIndex) => (
               <div
-                key={`${setIndex}-${i}-${item.image.id}`}
-                className="reacg-scroller__item"
-                style={{
-                  width: item.width,
-                }}
+                key={`set-${rowIndex}-${setIndex}`}
+                className="reacg-scroller__set"
+                aria-hidden={setIndex === 1}
               >
-                <ScrollerItemCard
-                  item={item}
-                  imageHeight={item.height}
-                  hoverEffect={hoverEffect}
-                  padding={padding}
-                  paddingColor={paddingColor}
-                  borderRadius={borderRadius}
-                  showVideoCover={showVideoCover}
-                  onClick={onClick}
-                  settings={settings as IScrollerSettings}
-                />
+                {row.setItems.map((item, i) => (
+                  <div
+                    key={`${rowIndex}-${setIndex}-${i}-${item.image.id}`}
+                    className="reacg-scroller__item"
+                    style={{
+                      width: item.width,
+                    }}
+                  >
+                    <ScrollerItemCard
+                      item={item}
+                      imageHeight={item.height}
+                      hoverEffect={hoverEffect}
+                      padding={padding}
+                      paddingColor={paddingColor}
+                      borderRadius={borderRadius}
+                      showVideoCover={showVideoCover}
+                      onClick={onClick}
+                      settings={settings as IScrollerSettings}
+                    />
+                  </div>
+                ))}
               </div>
             ))}
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 };

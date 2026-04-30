@@ -20,7 +20,7 @@ const ScrollerSettings = ({
   isLoading,
 }: IScrollerSettingsProps) => {
   const {resetTemplate} = useTemplates();
-  const {height, equalHeight, width, equalWidth} = settings;
+  const {height, equalHeight, width, equalWidth, rowCount} = settings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
@@ -62,6 +62,23 @@ const ScrollerSettings = ({
                   onChange={onInputValueChange}
                   tooltip={
                     <p>Sets the maximum row height for scroller items.</p>
+                  }
+                />
+              </Filter>
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'rowCount'}
+                  name={'Rows'}
+                  value={rowCount}
+                  onChange={onInputValueChange}
+                  min={1}
+                  max={6}
+                  step={1}
+                  tooltip={
+                    <p>
+                      Available images are automatically divided between rows,
+                      and adjacent rows scroll in opposite directions.
+                    </p>
                   }
                 />
               </Filter>

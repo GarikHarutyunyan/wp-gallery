@@ -478,6 +478,7 @@ export interface IScrollerSettings {
   equalHeight: boolean;
   width: number;
   equalWidth: boolean;
+  rowCount: number;
   scrollDirection: ScrollerDirection;
   animationSpeed: number;
   pauseOnHover: boolean;

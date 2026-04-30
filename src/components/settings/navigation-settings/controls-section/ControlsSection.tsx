@@ -422,6 +422,13 @@ const ControlsSection = ({
                 value={scrollDirection}
                 options={ScrollerDirectionOptions}
                 onChange={onSliderNavigationChange}
+                tooltip={
+                  <p>
+                    Set the scrolling direction of the first row. Each
+                    additional row automatically moves in the opposite direction
+                    of the previous row.
+                  </p>
+                }
               />
             </Filter>
             <Filter isLoading={isLoading}>

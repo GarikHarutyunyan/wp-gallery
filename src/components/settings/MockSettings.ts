@@ -622,6 +622,7 @@ const scrollerMockSettings: IScrollerSettings = {
   equalHeight: false,
   width: 300,
   equalWidth: false,
+  rowCount: 1,
   scrollDirection: ScrollerDirection.LEFT,
   animationSpeed: 40,
   pauseOnHover: true,
