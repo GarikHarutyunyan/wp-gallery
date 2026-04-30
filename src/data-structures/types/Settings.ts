@@ -476,7 +476,8 @@ export interface IBlogSettings {
 export interface IScrollerSettings {
   height: number;
   equalHeight: boolean;
-  imagesCount: number | null;
+  width: number;
+  equalWidth: boolean;
   scrollDirection: ScrollerDirection;
   animationSpeed: number;
   pauseOnHover: boolean;

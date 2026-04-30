@@ -3,7 +3,6 @@ import {SelectControl, SwitchControl} from 'components/controls';
 import {useSettings} from 'components/settings';
 import {Filter} from 'components/settings/Filter';
 import {useTemplates} from 'contexts';
-import {usePro} from 'contexts/ProContext';
 import {
   ActionURLSourceOptions,
   IGeneralSettings,
@@ -56,8 +55,6 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
       </>
     );
   };
-
-  const {isPro} = usePro();
 
   return (
     <Grid

@@ -1,13 +1,12 @@
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
-import {useData} from 'components/data-context/useData';
-import {useSettings} from 'components/settings';
-import {ActionButton} from 'core-components/action-button';
+import { useData } from 'components/data-context/useData';
+import { useSettings } from 'components/settings';
+import { ActionButton } from 'core-components/action-button';
 import ReImage from 'core-components/re-image/ReImage';
 import ReVideo from 'core-components/re-video/ReVideo';
 import {
   ActionURLSource,
-  DescriptionPosition,
   HoverEffect,
   IImageDTO,
   ImageType,
@@ -17,9 +16,9 @@ import {
   TitleSource,
   TitleVisibility,
 } from 'data-structures';
-import React, {useEffect, useRef, useState} from 'react';
-import {getLargestSrcItem, getSrcSetString} from 'utils/imageSrcSet';
-import {Watermark} from 'utils/renderWatermark';
+import React, { useEffect, useRef, useState } from 'react';
+import { getLargestSrcItem, getSrcSetString } from 'utils/imageSrcSet';
+import { Watermark } from 'utils/renderWatermark';
 import './scroller.css';
 
 interface IScrollerProps {
@@ -540,7 +539,8 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
   const {
     height,
     equalHeight,
-    imagesCount,
+    width: configuredWidth = 300,
+    equalWidth = false,
     scrollDirection,
     animationSpeed,
     pauseOnHover,
@@ -551,8 +551,6 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
     titlePosition = ThumbnailTitlePosition.BOTTOM,
     showCaption = false,
     captionPosition = ThumbnailTitlePosition.BOTTOM,
-    showDescription = false,
-    descriptionPosition = DescriptionPosition.BELOW,
     showButton = false,
     buttonPosition = ThumbnailTitlePosition.BOTTOM,
     showVideoCover,
@@ -561,63 +559,99 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
     containerPadding,
     borderRadius,
   } = settings as IScrollerSettings;
+  const hasConfiguredWidth =
+    typeof (settings as any)?.width === 'number' &&
+    Number((settings as any)?.width) > 0;
+  const legacyImagesCount = (settings as any)?.imagesCount as
+    | number
+    | null
+    | undefined;
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [itemWidth, setItemWidth] = useState<number>(200);
+  const [containerWidth, setContainerWidth] = useState<number>(0);
+
+  const getResponsiveScale = (currentWidth: number) => {
+    if (currentWidth < 480) return 0.62;
+    if (currentWidth < 768) return 0.8;
+    return 1;
+  };
 
   useEffect(() => {
     if (!wrapperRef.current || !images.length) return;
 
-    const containerWidth = wrapperRef.current.clientWidth;
+    const updateLayout = (currentWidth: number) => {
+      setContainerWidth(currentWidth);
+      const scale = getResponsiveScale(currentWidth);
+      const scaledConfiguredWidth = Math.max(
+        50,
+        Math.round(configuredWidth * scale)
+      );
 
-    if (imagesCount && imagesCount > 0) {
-      const totalSpacing = (imagesCount - 1) * (gap || 0);
-      setItemWidth((containerWidth - totalSpacing) / imagesCount);
-    } else {
-      // Auto: derive width from image aspect ratios to fill viewport
-      const avgRatio =
-        images.reduce((sum, img) => {
-          const src = getLargestSrcItem(img.sizes);
-          return sum + (src ? src.width / src.height : 1);
-        }, 0) / images.length;
-      setItemWidth(height * avgRatio);
-    }
+      if (hasConfiguredWidth) {
+        setItemWidth(scaledConfiguredWidth);
+      } else if (legacyImagesCount && legacyImagesCount > 0) {
+        // Backward compatibility for galleries saved before width/equalWidth.
+        const totalSpacing = (legacyImagesCount - 1) * (gap || 0);
+        setItemWidth((currentWidth - totalSpacing) / legacyImagesCount);
+      } else {
+        setItemWidth(Math.max(50, Math.round(300 * scale)));
+      }
+    };
+
+    updateLayout(wrapperRef.current.clientWidth);
+
+    const observer = new ResizeObserver((entries) => {
+      updateLayout(entries[0].contentRect.width);
+    });
+
+    observer.observe(wrapperRef.current);
+
+    return () => observer.disconnect();
   }, [
-    wrapperRef.current?.clientWidth,
     images.length,
-    imagesCount,
-    height,
+    configuredWidth,
+    hasConfiguredWidth,
+    legacyImagesCount,
     gap,
   ]);
 
   if (!images.length) return null;
 
-  const containerWidth = wrapperRef.current?.clientWidth || 800;
-  const targetItemWidth =
-    imagesCount && imagesCount > 0
-      ? (containerWidth - (imagesCount - 1) * (gap || 0)) / imagesCount
-      : undefined;
-  const averageRatio =
-    images.reduce((sum, image) => {
-      const srcItem = getLargestSrcItem(image.sizes);
-      return sum + (srcItem ? srcItem.width / srcItem.height : 1);
-    }, 0) / images.length;
-  const avgWidthAtRowHeight = height * averageRatio;
-  const equalHeightScale =
-    equalHeight && targetItemWidth && avgWidthAtRowHeight > 0
-      ? targetItemWidth / avgWidthAtRowHeight
-      : 1;
+  const effectiveContainerWidth =
+    containerWidth || wrapperRef.current?.clientWidth || 800;
+  const responsiveScale = getResponsiveScale(effectiveContainerWidth);
+  const responsiveHeight = Math.max(50, Math.round(height * responsiveScale));
 
   const baseItems: IScrollerItem[] = images.map((image, originalIndex) => {
     const srcItem = getLargestSrcItem(image.sizes);
     const naturalRatio = srcItem ? srcItem.width / srcItem.height : 1;
-    const width = equalHeight
-      ? height * naturalRatio * equalHeightScale
-      : itemWidth;
-    const itemHeight = equalHeight
-      ? height
-      : Math.min(height, itemWidth / naturalRatio);
+    let width: number;
+    let itemHeight: number;
+
+    if (equalWidth && equalHeight) {
+      width = itemWidth;
+      itemHeight = responsiveHeight;
+    } else if (equalWidth) {
+      width = itemWidth;
+      itemHeight = Math.min(responsiveHeight, itemWidth / naturalRatio);
+    } else if (equalHeight) {
+      itemHeight = responsiveHeight;
+      width = responsiveHeight * naturalRatio;
+    } else {
+      // Use configured width/height as max bounds and preserve natural ratio.
+      const maxWidth = itemWidth;
+      const widthByHeight = responsiveHeight * naturalRatio;
+      if (widthByHeight <= maxWidth) {
+        width = widthByHeight;
+        itemHeight = responsiveHeight;
+      } else {
+        width = maxWidth;
+        itemHeight = maxWidth / naturalRatio;
+      }
+    }
+
     const src = srcItem?.src || image.original?.url;
 
     return {image, originalIndex, src, width, height: itemHeight};
@@ -629,8 +663,8 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
 
   // One set contains available images only. Duplicate within set only if it is narrower than viewport.
   const setRepeat =
-    totalBaseWidth > 0 && totalBaseWidth < containerWidth
-      ? Math.ceil(containerWidth / totalBaseWidth)
+    totalBaseWidth > 0 && totalBaseWidth < effectiveContainerWidth
+      ? Math.ceil(effectiveContainerWidth / totalBaseWidth)
       : 1;
 
   const setItems: IScrollerItem[] = [];
@@ -657,7 +691,6 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
     (showButton &&
       (buttonPosition === ThumbnailTitlePosition.ABOVE ||
         buttonPosition === ThumbnailTitlePosition.BELOW)) ||
-    showDescription ||
     false;
 
   return (
@@ -682,7 +715,8 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
         )}
         style={{
           animationDuration: `${duration}s`,
-          height: !equalHeight && !hasOutsideMetadata ? height : undefined,
+          height:
+            !equalHeight && !hasOutsideMetadata ? responsiveHeight : undefined,
           ['--reacg-shift-px' as string]: `${setSpanWidth}px`,
           ['--reacg-gap' as string]: `${gap || 0}px`,
         }}
@@ -723,5 +757,5 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
   );
 };
 
-export {Scroller};
+export { Scroller };
 export default Scroller;

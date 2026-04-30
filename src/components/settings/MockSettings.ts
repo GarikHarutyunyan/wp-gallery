@@ -618,9 +618,10 @@ const blogMockSettings: IBlogSettings = {
 };
 
 const scrollerMockSettings: IScrollerSettings = {
-  height: 300,
-  equalHeight: true,
-  imagesCount: 1,
+  height: 200,
+  equalHeight: false,
+  width: 300,
+  equalWidth: false,
   scrollDirection: ScrollerDirection.LEFT,
   animationSpeed: 40,
   pauseOnHover: true,
