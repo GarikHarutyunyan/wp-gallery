@@ -139,12 +139,7 @@ export const TextAndMetadataSettings: React.FC<
     if (
       !value ||
       !onChange ||
-      (galleryType !== GalleryType.THUMBNAILS &&
-        galleryType !== GalleryType.CUBE &&
-        galleryType !== GalleryType.CAROUSEL &&
-        galleryType !== GalleryType.CARDS &&
-        galleryType !== GalleryType.COVERFLOW &&
-        galleryType !== GalleryType.SCROLLER) ||
+      !usesThumbnailPositionLayout ||
       !('titleVisibility' in value) ||
       !('titlePosition' in value)
     ) {
@@ -170,13 +165,45 @@ export const TextAndMetadataSettings: React.FC<
     }
 
     return options;
-  }, [galleryType, onChange, titlePositionOptions, value]);
+  }, [usesThumbnailPositionLayout, onChange, titlePositionOptions, value]);
+
+  const thumbnailCaptionPositionOptions: ISelectOption[] = useMemo(() => {
+    if (
+      !value ||
+      !onChange ||
+      !usesThumbnailPositionLayout ||
+      !('captionVisibility' in value) ||
+      !('captionPosition' in value)
+    ) {
+      return titlePositionOptions;
+    }
+
+    let options = [...ThumbnailTitlePositionOptions];
+
+    if (value.captionVisibility === TitleVisibility.ON_HOVER) {
+      options = options.filter(
+        (option) =>
+          option.value !== ThumbnailTitlePosition.BELOW &&
+          option.value !== ThumbnailTitlePosition.ABOVE
+      );
+
+      if (value.captionPosition === ThumbnailTitlePosition.BELOW) {
+        onChange({...value, captionPosition: ThumbnailTitlePosition.BOTTOM});
+      }
+
+      if (value.captionPosition === ThumbnailTitlePosition.ABOVE) {
+        onChange({...value, captionPosition: ThumbnailTitlePosition.TOP});
+      }
+    }
+
+    return options;
+  }, [usesThumbnailPositionLayout, onChange, titlePositionOptions, value]);
 
   const thumbnailButtonPositionOptions: ISelectOption[] = useMemo(() => {
     if (
       !value ||
       !onChange ||
-      galleryType !== GalleryType.THUMBNAILS ||
+      !usesThumbnailPositionLayout ||
       !('buttonVisibility' in value) ||
       !('buttonPosition' in value)
     ) {
@@ -202,7 +229,7 @@ export const TextAndMetadataSettings: React.FC<
     }
 
     return options;
-  }, [galleryType, onChange, titlePositionOptions, value]);
+  }, [usesThumbnailPositionLayout, onChange, titlePositionOptions, value]);
 
   if (!value || !onChange) return null;
 
@@ -406,7 +433,7 @@ export const TextAndMetadataSettings: React.FC<
                     id={'captionPosition'}
                     name={'Position'}
                     value={value.captionPosition}
-                    options={titlePositionOptions}
+                    options={thumbnailCaptionPositionOptions}
                     onChange={onInputValueChange}
                     isDisabled={
                       hasVisibilityControls

@@ -1,537 +1,20 @@
-import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
-import { useData } from 'components/data-context/useData';
-import { useSettings } from 'components/settings';
-import { ActionButton } from 'core-components/action-button';
-import ReImage from 'core-components/re-image/ReImage';
-import ReVideo from 'core-components/re-video/ReVideo';
+import {useData} from 'components/data-context/useData';
+import {useSettings} from 'components/settings';
 import {
-  ActionURLSource,
   HoverEffect,
   IImageDTO,
-  ImageType,
   IScrollerSettings,
   ThumbnailTitlePosition,
-  TitleAlignment,
-  TitleSource,
-  TitleVisibility,
 } from 'data-structures';
-import React, { useEffect, useRef, useState } from 'react';
-import { getLargestSrcItem, getSrcSetString } from 'utils/imageSrcSet';
-import { Watermark } from 'utils/renderWatermark';
+import React, {useEffect, useRef, useState} from 'react';
+import {getLargestSrcItem} from 'utils/imageSrcSet';
 import './scroller.css';
+import {IScrollerItem, ScrollerItem} from './ScrollerItem';
 
 interface IScrollerProps {
   onClick?: (index: number) => void;
 }
-
-interface IScrollerItem {
-  image: IImageDTO;
-  originalIndex: number;
-  src: string;
-  width: number;
-  height: number;
-}
-
-interface IScrollerMediaProps {
-  item: IScrollerItem;
-  showVideoCover: boolean;
-  size: number;
-  wrapperRef: React.RefObject<HTMLDivElement>;
-}
-
-type IScrollerMetaPosition =
-  | ThumbnailTitlePosition.TOP
-  | ThumbnailTitlePosition.BOTTOM
-  | ThumbnailTitlePosition.CENTER;
-
-const ScrollerMedia: React.FC<IScrollerMediaProps> = ({
-  item,
-  showVideoCover,
-  size,
-  wrapperRef,
-}) => {
-  const srcSetString = getSrcSetString(item.image.sizes);
-
-  if (item.image.type === ImageType.VIDEO) {
-    return (
-      <ReVideo
-        wrapperRef={wrapperRef}
-        item={item.image}
-        settings={{showVideoCover, showVideoControls: false}}
-        coverImageProps={{
-          src: item.src,
-          srcSet: srcSetString,
-          sizes: `${size}px`,
-          alt: item.image.alt || item.image.title,
-          loading: 'eager',
-          className: 'reacg-scroller__media',
-        }}
-        className="reacg-scroller__media"
-      />
-    );
-  }
-
-  return (
-    <ReImage
-      wrapperRef={wrapperRef}
-      src={item.src}
-      srcSet={srcSetString}
-      sizes={`${size}px`}
-      alt={item.image.alt || item.image.title}
-      loading="eager"
-      className="reacg-scroller__media"
-    />
-  );
-};
-
-interface IScrollerItemCardProps {
-  item: IScrollerItem;
-  imageHeight: number;
-  hoverEffect: string;
-  padding: number;
-  paddingColor: string;
-  borderRadius: number;
-  showVideoCover: boolean;
-  onClick?: (index: number) => void;
-  settings: IScrollerSettings;
-}
-
-const ScrollerItemCard: React.FC<IScrollerItemCardProps> = ({
-  item,
-  imageHeight,
-  hoverEffect,
-  padding,
-  paddingColor,
-  borderRadius,
-  showVideoCover,
-  onClick,
-  settings,
-}) => {
-  const {
-    showTitle = false,
-    titleSource = TitleSource.TITLE,
-    titleVisibility = TitleVisibility.ALWAYS_SHOWN,
-    titlePosition = ThumbnailTitlePosition.BOTTOM,
-    titleFontSize = 20,
-    titleColor = 'Black',
-    titleAlignment = TitleAlignment.LEFT,
-    titleFontFamily = 'Roboto',
-    overlayTextBackground = 'rgba(0, 0, 0, 0.5)',
-    invertTextColor = false,
-    showCaption = false,
-    captionSource = 'caption',
-    captionVisibility = TitleVisibility.ALWAYS_SHOWN,
-    captionPosition = ThumbnailTitlePosition.BOTTOM,
-    captionFontSize = 18,
-    captionFontColor = 'Grey',
-    showButton = false,
-    buttonText,
-    buttonVisibility = TitleVisibility.ALWAYS_SHOWN,
-    buttonPosition = ThumbnailTitlePosition.BOTTOM,
-    buttonAlignment = TitleAlignment.LEFT,
-    buttonColor = '#22eaaa',
-    buttonTextColor = '#fff',
-    buttonFontSize = 16,
-    buttonBorderSize = 0,
-    buttonBorderColor = '#22eaaa',
-    buttonBorderRadius = 4,
-    buttonUrlSource,
-    openInNewTab = false,
-  } = settings;
-
-  const renderTitle = (image: IImageDTO) => {
-    let itemPaddingText = '0';
-    let imagePaddingText = '0';
-    if (
-      titlePosition === ThumbnailTitlePosition.BELOW ||
-      titlePosition === ThumbnailTitlePosition.ABOVE
-    ) {
-      itemPaddingText = (borderRadius || 0) / 2 + '%';
-      imagePaddingText = padding + 'px';
-    } else if (titlePosition !== ThumbnailTitlePosition.CENTER) {
-      imagePaddingText = (borderRadius || 0) / 2 + '%';
-    }
-
-    return (
-      <div
-        className={clsx(
-          'scroller-gallery__title scroller-gallery__title-caption',
-          {
-            'scroller-gallery__title_on-hover':
-              showTitle &&
-              titleVisibility === TitleVisibility.ON_HOVER &&
-              titlePosition !== ThumbnailTitlePosition.BELOW &&
-              titlePosition !== ThumbnailTitlePosition.ABOVE,
-            'scroller-gallery__title_hidden': !showTitle,
-            'scroller-gallery__item-outline':
-              showTitle &&
-              (titlePosition === ThumbnailTitlePosition.BELOW ||
-                titlePosition === ThumbnailTitlePosition.ABOVE),
-            'reacg-gallery__text-background-top-gradient':
-              overlayTextBackground === '' &&
-              titlePosition === ThumbnailTitlePosition.TOP,
-            'reacg-gallery__text-background-bottom-gradient':
-              overlayTextBackground === '' &&
-              titlePosition === ThumbnailTitlePosition.BOTTOM,
-            'reacg-gallery__text-background-center-gradient':
-              overlayTextBackground === '' &&
-              titlePosition === ThumbnailTitlePosition.CENTER,
-          }
-        )}
-        style={{
-          paddingLeft: itemPaddingText,
-          paddingRight: itemPaddingText,
-        }}
-      >
-        <ImageListItemBar
-          sx={{
-            '& .MuiImageListItemBar-subtitle': {
-              fontSize: `${captionFontSize}px`,
-              fontFamily: titleFontFamily,
-              color: captionFontColor,
-              lineHeight: 'normal',
-            },
-            '& .MuiImageListItemBar-title': {
-              fontSize: `${titleFontSize}px`,
-              fontFamily: titleFontFamily,
-              lineHeight: 'normal',
-            },
-          }}
-          style={{
-            paddingLeft: '6px',
-            paddingRight: '6px',
-            textAlign: titleAlignment,
-            color: titleColor,
-            backgroundColor:
-              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
-            mixBlendMode: invertTextColor ? 'difference' : 'initial',
-          }}
-          className={`scroller-gallery__title-content_${titlePosition}`}
-          title={<span>{image[titleSource] || <br />}</span>}
-          subtitle={
-            (titlePosition === captionPosition &&
-              showCaption &&
-              image[captionSource]) ||
-            (titlePosition === buttonPosition && showButton) ? (
-              <>
-                {titlePosition === captionPosition &&
-                  showCaption &&
-                  image[captionSource] && (
-                    <span className="thumbnail-image__caption">
-                      {image[captionSource]}
-                    </span>
-                  )}
-                {titlePosition === buttonPosition && showButton && (
-                  <span className="reacg-action-button-wrap">
-                    <ActionButton
-                      url={image?.[buttonUrlSource as ActionURLSource] || ''}
-                      openInNewTab={openInNewTab}
-                      text={buttonText}
-                      alignment={buttonAlignment}
-                      backgroundColor={buttonColor}
-                      textColor={buttonTextColor}
-                      fontSize={buttonFontSize}
-                      borderSize={buttonBorderSize}
-                      borderColor={buttonBorderColor}
-                      borderRadius={buttonBorderRadius}
-                      isOnHover={
-                        buttonVisibility === TitleVisibility.ON_HOVER &&
-                        buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-                        buttonPosition !== ThumbnailTitlePosition.BELOW
-                      }
-                    />
-                  </span>
-                )}
-              </>
-            ) : null
-          }
-          position={
-            titlePosition === ThumbnailTitlePosition.CENTER
-              ? 'bottom'
-              : titlePosition === ThumbnailTitlePosition.ABOVE
-              ? 'below'
-              : titlePosition
-          }
-        />
-      </div>
-    );
-  };
-
-  const renderCaption = (image: IImageDTO) => {
-    let itemPaddingText = '0';
-    let imagePaddingText = '0';
-    if (
-      captionPosition === ThumbnailTitlePosition.BELOW ||
-      captionPosition === ThumbnailTitlePosition.ABOVE
-    ) {
-      itemPaddingText = (borderRadius || 0) / 2 + '%';
-      imagePaddingText = padding + 'px';
-    } else if (captionPosition !== ThumbnailTitlePosition.CENTER) {
-      imagePaddingText = (borderRadius || 0) / 2 + '%';
-    }
-
-    return (
-      <div
-        className={clsx('scroller-gallery__title scroller-gallery__caption', {
-          'scroller-gallery__title_on-hover':
-            showCaption &&
-            captionVisibility === TitleVisibility.ON_HOVER &&
-            captionPosition !== ThumbnailTitlePosition.BELOW &&
-            captionPosition !== ThumbnailTitlePosition.ABOVE,
-          'scroller-gallery__title_hidden': !showCaption,
-          'scroller-gallery__item-outline':
-            showCaption &&
-            (captionPosition === ThumbnailTitlePosition.BELOW ||
-              captionPosition === ThumbnailTitlePosition.ABOVE),
-          'reacg-gallery__text-background-top-gradient':
-            overlayTextBackground === '' &&
-            captionPosition === ThumbnailTitlePosition.TOP,
-          'reacg-gallery__text-background-bottom-gradient':
-            overlayTextBackground === '' &&
-            captionPosition === ThumbnailTitlePosition.BOTTOM,
-          'reacg-gallery__text-background-center-gradient':
-            overlayTextBackground === '' &&
-            captionPosition === ThumbnailTitlePosition.CENTER,
-        })}
-        style={{
-          paddingLeft: itemPaddingText,
-          paddingRight: itemPaddingText,
-        }}
-      >
-        <ImageListItemBar
-          sx={{
-            '& .MuiImageListItemBar-subtitle': {
-              fontSize: `${captionFontSize}px`,
-              fontFamily: titleFontFamily,
-              color: captionFontColor,
-              lineHeight: 'normal',
-            },
-          }}
-          style={{
-            paddingLeft: '6px',
-            paddingRight: '6px',
-            textAlign: titleAlignment,
-            color: captionFontColor,
-            backgroundColor:
-              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
-            mixBlendMode: invertTextColor ? 'difference' : 'initial',
-          }}
-          className={`scroller-gallery__title-content_${captionPosition}`}
-          title={
-            (showCaption && image[captionSource]) ||
-            (captionPosition === buttonPosition && showButton) ? (
-              <>
-                {showCaption && image[captionSource] && (
-                  <span className="scroller-image__caption">
-                    {image[captionSource]}
-                  </span>
-                )}
-                {captionPosition === buttonPosition && showButton && (
-                  <span className="reacg-action-button-wrap">
-                    <ActionButton
-                      url={image?.[buttonUrlSource as ActionURLSource] || ''}
-                      openInNewTab={openInNewTab}
-                      text={buttonText}
-                      alignment={buttonAlignment}
-                      backgroundColor={buttonColor}
-                      textColor={buttonTextColor}
-                      fontSize={buttonFontSize}
-                      borderSize={buttonBorderSize}
-                      borderColor={buttonBorderColor}
-                      borderRadius={buttonBorderRadius}
-                      isOnHover={
-                        buttonVisibility === TitleVisibility.ON_HOVER &&
-                        buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-                        buttonPosition !== ThumbnailTitlePosition.BELOW
-                      }
-                    />
-                  </span>
-                )}
-              </>
-            ) : null
-          }
-          position={
-            captionPosition === ThumbnailTitlePosition.CENTER
-              ? 'bottom'
-              : captionPosition === ThumbnailTitlePosition.ABOVE
-              ? 'below'
-              : captionPosition
-          }
-        />
-      </div>
-    );
-  };
-
-  const renderButton = (position: ThumbnailTitlePosition, image: IImageDTO) => {
-    let itemPaddingText = '0';
-    let imagePaddingText = '6px';
-    if (
-      position === ThumbnailTitlePosition.BELOW ||
-      position === ThumbnailTitlePosition.ABOVE
-    ) {
-      itemPaddingText = (borderRadius || 0) / 2 + '%';
-      imagePaddingText = padding + 'px';
-    } else if (position !== ThumbnailTitlePosition.CENTER) {
-      imagePaddingText = (borderRadius || 0) / 2 + '%';
-    }
-
-    const isOutside =
-      position === ThumbnailTitlePosition.ABOVE ||
-      position === ThumbnailTitlePosition.BELOW;
-
-    return (
-      <div
-        className={clsx('scroller-gallery__title', 'scroller-gallery__button', {
-          'reacg-action-button-container_on-hover':
-            showButton && buttonVisibility === TitleVisibility.ON_HOVER,
-          'scroller-gallery__item-outline': isOutside,
-          'reacg-gallery__text-background-top-gradient':
-            overlayTextBackground === '' &&
-            position === ThumbnailTitlePosition.TOP,
-          'reacg-gallery__text-background-bottom-gradient':
-            overlayTextBackground === '' &&
-            position === ThumbnailTitlePosition.BOTTOM,
-          'reacg-gallery__text-background-center-gradient':
-            overlayTextBackground === '' &&
-            position === ThumbnailTitlePosition.CENTER,
-        })}
-        style={{
-          paddingLeft: itemPaddingText,
-          paddingRight: itemPaddingText,
-        }}
-      >
-        <ImageListItemBar
-          style={{
-            paddingLeft: imagePaddingText,
-            paddingRight: imagePaddingText,
-            textAlign: buttonAlignment,
-            backgroundColor:
-              position !== ThumbnailTitlePosition.BELOW &&
-              position !== ThumbnailTitlePosition.ABOVE
-                ? overlayTextBackground === ''
-                  ? 'unset'
-                  : overlayTextBackground
-                : 'initial',
-            mixBlendMode:
-              invertTextColor &&
-              position !== ThumbnailTitlePosition.BELOW &&
-              position !== ThumbnailTitlePosition.ABOVE
-                ? 'difference'
-                : 'initial',
-          }}
-          className={`scroller-gallery__title-content_${position}`}
-          title={
-            <span className="reacg-action-button-wrap">
-              <ActionButton
-                url={image?.[buttonUrlSource as ActionURLSource] || ''}
-                openInNewTab={openInNewTab}
-                text={buttonText}
-                alignment={buttonAlignment}
-                backgroundColor={buttonColor}
-                textColor={buttonTextColor}
-                fontSize={buttonFontSize}
-                borderSize={buttonBorderSize}
-                borderColor={buttonBorderColor}
-                borderRadius={buttonBorderRadius}
-                isOnHover={!isOutside}
-              />
-            </span>
-          }
-          position={
-            position === ThumbnailTitlePosition.CENTER
-              ? 'bottom'
-              : position === ThumbnailTitlePosition.ABOVE
-              ? 'below'
-              : position
-          }
-        />
-      </div>
-    );
-  };
-
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const imageRequestSize = Math.max(item.width, imageHeight);
-
-  return (
-    <div className="reacg-scroller__item-card" style={{width: item.width}}>
-      {showTitle &&
-        titlePosition === ThumbnailTitlePosition.ABOVE &&
-        renderTitle(item.image)}
-      {showCaption &&
-        (titlePosition != captionPosition || !showTitle) &&
-        captionPosition === ThumbnailTitlePosition.ABOVE &&
-        renderCaption(item.image)}
-      {showButton &&
-        (titlePosition != buttonPosition || !showTitle) &&
-        (captionPosition != buttonPosition || !showCaption) &&
-        buttonPosition === ThumbnailTitlePosition.ABOVE &&
-        renderButton(buttonPosition, item.image)}
-      <div
-        className="reacg-scroller__media-shell"
-        style={{
-          width: '100%',
-          height: imageHeight,
-          padding: padding,
-          background: paddingColor,
-          borderRadius: `${borderRadius}px`,
-          boxSizing: 'border-box',
-        }}
-      >
-        <div
-          ref={wrapperRef}
-          className={clsx(
-            'reacg-scroller__image-wrapper',
-            'scroller-gallery__image-wrapper',
-            'reacg-action-button-hover-parent',
-            'reacg-scroller__image-wrapper_overflow',
-            `reacg-scroller__image-wrapper_${hoverEffect}`,
-            !!onClick
-              ? 'reacg-scroller__image-wrapper_clickable'
-              : 'reacg-scroller__image-wrapper_non_clickable'
-          )}
-          style={{height: '100%', borderRadius: `${borderRadius}px`}}
-          onClick={() => onClick?.(item.originalIndex)}
-        >
-          <ScrollerMedia
-            item={item}
-            showVideoCover={showVideoCover}
-            size={imageRequestSize}
-            wrapperRef={wrapperRef}
-          />
-          <Watermark />
-          {showTitle &&
-            titlePosition !== ThumbnailTitlePosition.BELOW &&
-            titlePosition !== ThumbnailTitlePosition.ABOVE &&
-            renderTitle(item.image)}
-          {showCaption &&
-            (titlePosition != captionPosition || !showTitle) &&
-            captionPosition !== ThumbnailTitlePosition.BELOW &&
-            captionPosition !== ThumbnailTitlePosition.ABOVE &&
-            renderCaption(item.image)}
-          {showButton &&
-            (titlePosition != buttonPosition || !showTitle) &&
-            (captionPosition != buttonPosition || !showCaption) &&
-            buttonPosition !== ThumbnailTitlePosition.BELOW &&
-            buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-            renderButton(buttonPosition, item.image)}
-        </div>
-      </div>
-      {showTitle &&
-        titlePosition === ThumbnailTitlePosition.BELOW &&
-        renderTitle(item.image)}
-      {showCaption &&
-        (titlePosition != captionPosition || !showTitle) &&
-        captionPosition === ThumbnailTitlePosition.BELOW &&
-        renderCaption(item.image)}
-      {showButton &&
-        (titlePosition != buttonPosition || !showTitle) &&
-        (captionPosition != buttonPosition || !showCaption) &&
-        buttonPosition === ThumbnailTitlePosition.BELOW &&
-        renderButton(buttonPosition, item.image)}
-    </div>
-  );
-};
 
 const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
   const {images = []} = useData();
@@ -539,7 +22,7 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
   const {
     height,
     equalHeight,
-    width: configuredWidth = 300,
+    width,
     equalWidth = false,
     rowCount = 1,
     scrollDirection,
@@ -560,13 +43,6 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
     containerPadding,
     borderRadius,
   } = settings as IScrollerSettings;
-  const hasConfiguredWidth =
-    typeof (settings as any)?.width === 'number' &&
-    Number((settings as any)?.width) > 0;
-  const legacyImagesCount = (settings as any)?.imagesCount as
-    | number
-    | null
-    | undefined;
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -585,20 +61,9 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
     const updateLayout = (currentWidth: number) => {
       setContainerWidth(currentWidth);
       const scale = getResponsiveScale(currentWidth);
-      const scaledConfiguredWidth = Math.max(
-        50,
-        Math.round(configuredWidth * scale)
-      );
+      const scaledConfiguredWidth = Math.max(50, Math.round(width * scale));
 
-      if (hasConfiguredWidth) {
-        setItemWidth(scaledConfiguredWidth);
-      } else if (legacyImagesCount && legacyImagesCount > 0) {
-        // Backward compatibility for galleries saved before width/equalWidth.
-        const totalSpacing = (legacyImagesCount - 1) * (gap || 0);
-        setItemWidth((currentWidth - totalSpacing) / legacyImagesCount);
-      } else {
-        setItemWidth(Math.max(50, Math.round(300 * scale)));
-      }
+      setItemWidth(scaledConfiguredWidth);
     };
 
     updateLayout(wrapperRef.current.clientWidth);
@@ -610,13 +75,7 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
     observer.observe(wrapperRef.current);
 
     return () => observer.disconnect();
-  }, [
-    images.length,
-    configuredWidth,
-    hasConfiguredWidth,
-    legacyImagesCount,
-    gap,
-  ]);
+  }, [images.length, width, gap]);
 
   if (!images.length) return null;
 
@@ -625,9 +84,13 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
   const responsiveScale = getResponsiveScale(effectiveContainerWidth);
   const responsiveHeight = Math.max(50, Math.round(height * responsiveScale));
 
-  const normalizedRowCount = Math.max(1, Math.min(6, Math.round(rowCount || 1)));
-  const sourceItems = images.map((image, originalIndex) => ({image, originalIndex}));
-  const rowSources: Array<Array<{image: IImageDTO; originalIndex: number}>> = [];
+  const normalizedRowCount = Math.max(1, Math.min(6, Math.round(rowCount)));
+  const sourceItems = images.map((image, originalIndex) => ({
+    image,
+    originalIndex,
+  }));
+  const rowSources: Array<Array<{image: IImageDTO; originalIndex: number}>> =
+    [];
   const basePerRow = Math.floor(sourceItems.length / normalizedRowCount);
   const remainder = sourceItems.length % normalizedRowCount;
   let offset = 0;
@@ -679,29 +142,29 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
         Math.max(0, baseItems.length - 1) * (gap || 0);
 
       // One set contains available images only. Duplicate within set only if it is narrower than viewport.
-      const setRepeat =
+      const repeat =
         totalBaseWidth > 0 && totalBaseWidth < effectiveContainerWidth
           ? Math.ceil(effectiveContainerWidth / totalBaseWidth)
           : 1;
 
-      const setItems: IScrollerItem[] = [];
-      for (let i = 0; i < setRepeat; i++) {
+      const itemsInSet: IScrollerItem[] = [];
+      for (let i = 0; i < repeat; i++) {
         baseItems.forEach((item) => {
-          setItems.push(item);
+          itemsInSet.push(item);
         });
       }
 
       // Width of all items inside one set (without the trailing set boundary gap).
       const singleSetContentWidth =
-        setItems.reduce((sum, item) => sum + item.width, 0) +
-        Math.max(0, setItems.length - 1) * (gap || 0);
+        itemsInSet.reduce((sum, item) => sum + item.width, 0) +
+        Math.max(0, itemsInSet.length - 1) * (gap || 0);
       // Span from start of one set to start of the cloned set.
-      const setSpanWidth = singleSetContentWidth + (gap || 0);
+      const spanWidth = singleSetContentWidth + gap;
 
       return {
-        setItems,
-        setSpanWidth,
-        duration: setSpanWidth / Math.max(animationSpeed || 1, 1),
+        itemsInSet,
+        spanWidth,
+        duration: spanWidth / Math.max(animationSpeed, 1),
       };
     });
   const hasOutsideMetadata =
@@ -730,12 +193,10 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
       }}
     >
       {rowData.map((row, rowIndex) => {
+        const reverseScrollDirection =
+          scrollDirection === 'left' ? 'right' : 'left';
         const rowDirection =
-          rowIndex % 2 === 0
-            ? scrollDirection || 'left'
-            : (scrollDirection || 'left') === 'left'
-            ? 'right'
-            : 'left';
+          rowIndex % 2 === 0 ? scrollDirection : reverseScrollDirection;
 
         return (
           <div
@@ -755,7 +216,7 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
                 !equalHeight && !hasOutsideMetadata
                   ? responsiveHeight
                   : undefined,
-              ['--reacg-shift-px' as string]: `${row.setSpanWidth}px`,
+              ['--reacg-shift-px' as string]: `${row.spanWidth}px`,
               ['--reacg-gap' as string]: `${gap || 0}px`,
             }}
             onMouseEnter={() => pauseOnHover && setIsPaused(true)}
@@ -767,7 +228,7 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
                 className="reacg-scroller__set"
                 aria-hidden={setIndex === 1}
               >
-                {row.setItems.map((item, i) => (
+                {row.itemsInSet.map((item, i) => (
                   <div
                     key={`${rowIndex}-${setIndex}-${i}-${item.image.id}`}
                     className="reacg-scroller__item"
@@ -775,7 +236,7 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
                       width: item.width,
                     }}
                   >
-                    <ScrollerItemCard
+                    <ScrollerItem
                       item={item}
                       imageHeight={item.height}
                       hoverEffect={hoverEffect}
@@ -797,5 +258,5 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
   );
 };
 
-export { Scroller };
+export {Scroller};
 export default Scroller;
