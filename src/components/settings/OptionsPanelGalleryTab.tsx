@@ -1,4 +1,3 @@
-import {SliderSettings} from 'components/slider-settings';
 import {GalleryType} from 'data-structures';
 import {ReactElement} from 'react';
 import {BlogSettings} from './blog-settings/BlogSettings';
@@ -10,6 +9,7 @@ import {GridSettings} from './gird-settings/GridSettings';
 import {JustifiedSettings} from './justified-settings/JustifiedSettings';
 import {MasonrySettings} from './masonry-settings/MasonrySettings';
 import {MosaicSettings} from './mosaic-settings/MosaicSettings';
+import {SliderSettings} from './slider-settings/SliderSettings';
 import {SlideshowSettings} from './slideshow-settings/SlideshowSettings';
 import {useSettings} from './useSettings';
 

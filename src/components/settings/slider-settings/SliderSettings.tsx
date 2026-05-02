@@ -42,9 +42,9 @@ import {
   SliderControl,
   SwitchControl,
   TextControl,
-} from '../controls';
-import {LabelWithTooltip} from '../controls/LabelWithTooltip';
-import {Filter} from '../settings/Filter';
+} from '../../controls';
+import {LabelWithTooltip} from '../../controls/LabelWithTooltip';
+import {Filter} from '../Filter';
 
 interface ISliderSettingsProps {
   settings: ISliderSettings;
@@ -199,9 +199,11 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
     resetTemplate?.();
     key && onSettingsChange({...settings, [key]: inputValue});
   };
+
   useEffect(() => {
     onSettingsChange({...settings, paginationActiveBulletSize: 0});
   }, [paginationType]);
+
   const renderMainSettings = (): ReactNode => {
     return (
       <Section
