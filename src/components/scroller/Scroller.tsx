@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
-import {useSettings} from 'components/settings';
 import {
   HoverEffect,
   IImageDTO,
@@ -10,15 +9,16 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {getLargestSrcItem} from 'utils/imageSrcSet';
 import './scroller.css';
+import {getResponsiveScale} from './Scroller.utils';
 import {IScrollerItem, ScrollerItem} from './ScrollerItem';
 
 interface IScrollerProps {
+  settings: IScrollerSettings;
   onClick?: (index: number) => void;
 }
 
-const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
+const Scroller: React.FC<IScrollerProps> = ({settings, onClick}) => {
   const {images = []} = useData();
-  const {scrollerSettings: settings} = useSettings();
   const {
     height,
     equalHeight,
@@ -42,18 +42,12 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
     backgroundColor,
     containerPadding,
     borderRadius,
-  } = settings as IScrollerSettings;
+  } = settings;
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [itemWidth, setItemWidth] = useState<number>(200);
   const [containerWidth, setContainerWidth] = useState<number>(0);
-
-  const getResponsiveScale = (currentWidth: number) => {
-    if (currentWidth < 480) return 0.62;
-    if (currentWidth < 768) return 0.8;
-    return 1;
-  };
 
   useEffect(() => {
     if (!wrapperRef.current || !images.length) return;
@@ -245,7 +239,7 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
                       borderRadius={borderRadius}
                       showVideoCover={showVideoCover}
                       onClick={onClick}
-                      settings={settings as IScrollerSettings}
+                      settings={settings}
                     />
                   </div>
                 ))}
