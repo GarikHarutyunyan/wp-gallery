@@ -12,7 +12,7 @@ import {
 } from 'data-structures';
 import React, {useRef} from 'react';
 import {Watermark} from 'utils/renderWatermark';
-import {ScrollerMedia} from './ScrollerMedia';
+import {ScrollerMedia} from './scroller-media/ScrollerMedia';
 
 export interface IScrollerItem {
   image: IImageDTO;
