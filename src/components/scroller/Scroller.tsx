@@ -184,6 +184,18 @@ const Scroller: React.FC<IScrollerProps> = ({settings, onClick}) => {
   const hasOutsideMetadata: boolean =
     hasOutsideTitle || hasOutsideCaption || hasOutsideButton;
 
+  const handleMouseEnter = () => {
+    if (pauseOnHover) {
+      setIsPaused(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (pauseOnHover) {
+      setIsPaused(false);
+    }
+  };
+
   return (
     <div
       ref={wrapperRef}
@@ -200,6 +212,12 @@ const Scroller: React.FC<IScrollerProps> = ({settings, onClick}) => {
       {rowData.map((row, rowIndex) => {
         const rowDirection: ScrollerDirection =
           rowIndex % 2 === 0 ? scrollDirection : reverseScrollDirection;
+        const rowHeight =
+          !equalHeight && !hasOutsideMetadata ? responsiveHeight : undefined;
+        const isLeftScroll: boolean = rowDirection === ScrollerDirection.LEFT;
+        const animationDurationString: string = `${row.duration}s`;
+        const shiftPxString: string = `${row.spanWidth}px`;
+        const gapString: string = `${gap || 0}px`;
 
         return (
           <div
@@ -208,22 +226,20 @@ const Scroller: React.FC<IScrollerProps> = ({settings, onClick}) => {
               'reacg-scroller__track',
               'reacg-scroller__track--animating',
               {
-                [`reacg-scroller__track--${rowDirection}`]: true,
+                'reacg-scroller__track--left': isLeftScroll,
+                'reacg-scroller__track--right': !isLeftScroll,
                 'reacg-scroller__track--paused': isPaused,
                 'reacg-scroller__track--mixed-height': !equalHeight,
               }
             )}
             style={{
-              animationDuration: `${row.duration}s`,
-              height:
-                !equalHeight && !hasOutsideMetadata
-                  ? responsiveHeight
-                  : undefined,
-              ['--reacg-shift-px' as string]: `${row.spanWidth}px`,
-              ['--reacg-gap' as string]: `${gap || 0}px`,
+              animationDuration: animationDurationString,
+              height: rowHeight,
+              ['--reacg-shift-px' as string]: shiftPxString,
+              ['--reacg-gap' as string]: gapString,
             }}
-            onMouseEnter={() => pauseOnHover && setIsPaused(true)}
-            onMouseLeave={() => pauseOnHover && setIsPaused(false)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
           >
             {[0, 1].map((setIndex) => (
               <div
