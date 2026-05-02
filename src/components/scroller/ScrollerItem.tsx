@@ -77,14 +77,34 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
     openInNewTab = false,
   } = settings;
 
+  const isTitleAbove: boolean = titlePosition === ThumbnailTitlePosition.ABOVE;
+  const isTitleBelow: boolean = titlePosition === ThumbnailTitlePosition.BELOW;
+  const isTitleTop: boolean = titlePosition === ThumbnailTitlePosition.TOP;
+  const isTitleBottom: boolean =
+    titlePosition === ThumbnailTitlePosition.BOTTOM;
+  const isTitleCenter: boolean =
+    titlePosition === ThumbnailTitlePosition.CENTER;
+  const isCaptionAbove: boolean =
+    captionPosition === ThumbnailTitlePosition.ABOVE;
+  const isCaptionBelow: boolean =
+    captionPosition === ThumbnailTitlePosition.BELOW;
+  const isCaptionTop: boolean = captionPosition === ThumbnailTitlePosition.TOP;
+  const isCaptionBottom: boolean =
+    captionPosition === ThumbnailTitlePosition.BOTTOM;
+  const isCaptionCenter: boolean =
+    captionPosition === ThumbnailTitlePosition.CENTER;
+
   const renderTitle = (image: IImageDTO) => {
     let itemPaddingText = '0';
-    if (
-      titlePosition === ThumbnailTitlePosition.BELOW ||
-      titlePosition === ThumbnailTitlePosition.ABOVE
-    ) {
+    if (isTitleBelow || isTitleAbove) {
       itemPaddingText = (borderRadius || 0) / 2 + '%';
     }
+
+    const isHoverAllowed: boolean =
+      showTitle &&
+      titleVisibility === TitleVisibility.ON_HOVER &&
+      !isTitleBelow &&
+      !isTitleAbove;
 
     return (
       <div
@@ -92,25 +112,16 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
           'scroller-gallery__title',
           'scroller-gallery__title-caption',
           {
-            'scroller-gallery__title_on-hover':
-              showTitle &&
-              titleVisibility === TitleVisibility.ON_HOVER &&
-              titlePosition !== ThumbnailTitlePosition.BELOW &&
-              titlePosition !== ThumbnailTitlePosition.ABOVE,
+            'scroller-gallery__title_on-hover': isHoverAllowed,
             'scroller-gallery__title_hidden': !showTitle,
             'scroller-gallery__item-outline':
-              showTitle &&
-              (titlePosition === ThumbnailTitlePosition.BELOW ||
-                titlePosition === ThumbnailTitlePosition.ABOVE),
+              showTitle && (isTitleBelow || isTitleAbove),
             'reacg-gallery__text-background-top-gradient':
-              overlayTextBackground === '' &&
-              titlePosition === ThumbnailTitlePosition.TOP,
+              overlayTextBackground === '' && isTitleTop,
             'reacg-gallery__text-background-bottom-gradient':
-              overlayTextBackground === '' &&
-              titlePosition === ThumbnailTitlePosition.BOTTOM,
+              overlayTextBackground === '' && isTitleBottom,
             'reacg-gallery__text-background-center-gradient':
-              overlayTextBackground === '' &&
-              titlePosition === ThumbnailTitlePosition.CENTER,
+              overlayTextBackground === '' && isTitleCenter,
           }
         )}
         style={{
@@ -192,10 +203,7 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
 
   const renderCaption = (image: IImageDTO) => {
     let itemPaddingText = '0';
-    if (
-      captionPosition === ThumbnailTitlePosition.BELOW ||
-      captionPosition === ThumbnailTitlePosition.ABOVE
-    ) {
+    if (isCaptionBelow || isCaptionAbove) {
       itemPaddingText = (borderRadius || 0) / 2 + '%';
     }
 
@@ -208,22 +216,17 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
             'scroller-gallery__title_on-hover':
               showCaption &&
               captionVisibility === TitleVisibility.ON_HOVER &&
-              captionPosition !== ThumbnailTitlePosition.BELOW &&
-              captionPosition !== ThumbnailTitlePosition.ABOVE,
+              !isCaptionBelow &&
+              !isCaptionAbove,
             'scroller-gallery__title_hidden': !showCaption,
             'scroller-gallery__item-outline':
-              showCaption &&
-              (captionPosition === ThumbnailTitlePosition.BELOW ||
-                captionPosition === ThumbnailTitlePosition.ABOVE),
+              showCaption && (isCaptionBelow || isCaptionAbove),
             'reacg-gallery__text-background-top-gradient':
-              overlayTextBackground === '' &&
-              captionPosition === ThumbnailTitlePosition.TOP,
+              overlayTextBackground === '' && isCaptionTop,
             'reacg-gallery__text-background-bottom-gradient':
-              overlayTextBackground === '' &&
-              captionPosition === ThumbnailTitlePosition.BOTTOM,
+              overlayTextBackground === '' && isCaptionBottom,
             'reacg-gallery__text-background-center-gradient':
-              overlayTextBackground === '' &&
-              captionPosition === ThumbnailTitlePosition.CENTER,
+              overlayTextBackground === '' && isCaptionCenter,
           }
         )}
         style={{
@@ -381,12 +384,10 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
 
   return (
     <div className="reacg-scroller__item-card" style={{width: item.width}}>
-      {showTitle &&
-        titlePosition === ThumbnailTitlePosition.ABOVE &&
-        renderTitle(item.image)}
+      {showTitle && isTitleAbove && renderTitle(item.image)}
       {showCaption &&
         (titlePosition != captionPosition || !showTitle) &&
-        captionPosition === ThumbnailTitlePosition.ABOVE &&
+        isCaptionAbove &&
         renderCaption(item.image)}
       {showButton &&
         (titlePosition != buttonPosition || !showTitle) &&
@@ -412,9 +413,8 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
             'reacg-action-button-hover-parent',
             'reacg-scroller__image-wrapper_overflow',
             `reacg-scroller__image-wrapper_${hoverEffect}`,
-            !!onClick
-              ? 'reacg-scroller__image-wrapper_clickable'
-              : 'reacg-scroller__image-wrapper_non_clickable'
+            {'reacg-scroller__image-wrapper_clickable': !!onClick},
+            {'reacg-scroller__image-wrapper_non_clickable': !onClick}
           )}
           style={{height: '100%', borderRadius: `${borderRadius}px`}}
           onClick={() => onClick?.(item.originalIndex)}
@@ -427,8 +427,8 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
           />
           <Watermark />
           {showTitle &&
-            titlePosition !== ThumbnailTitlePosition.BELOW &&
-            titlePosition !== ThumbnailTitlePosition.ABOVE &&
+            !isTitleBelow &&
+            !isTitleAbove &&
             renderTitle(item.image)}
           {showCaption &&
             (titlePosition != captionPosition || !showTitle) &&
@@ -443,9 +443,7 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
             renderButton(buttonPosition, item.image)}
         </div>
       </div>
-      {showTitle &&
-        titlePosition === ThumbnailTitlePosition.BELOW &&
-        renderTitle(item.image)}
+      {showTitle && isTitleBelow && renderTitle(item.image)}
       {showCaption &&
         (titlePosition != captionPosition || !showTitle) &&
         captionPosition === ThumbnailTitlePosition.BELOW &&
