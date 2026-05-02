@@ -61,7 +61,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
   const isMobile: boolean = containerInnerWidth <= 720;
 
   const updateContainerWidth = useCallback(() => {
-    if (wrapperRef.current) {
+    if (wrapperRef?.current) {
       setContainerInnerWidth(wrapperRef.current.clientWidth);
     }
   }, []);
@@ -69,7 +69,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
   useEffect(() => {
     const observer = new ResizeObserver(() => updateContainerWidth());
 
-    if (wrapperRef.current) {
+    if (wrapperRef?.current) {
       observer.observe(wrapperRef.current);
       updateContainerWidth();
     }

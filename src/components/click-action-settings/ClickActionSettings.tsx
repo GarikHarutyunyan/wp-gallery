@@ -27,7 +27,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
 
   const onActionValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
-    key && onActionChange({...generalSettings, [key]: inputValue});
+    key && onActionChange?.({...generalSettings, [key]: inputValue} as any);
   };
 
   const renderClickActionInfo = (): ReactElement => {
@@ -40,7 +40,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
           }
         </p>
         <p>
-          <b>{'Action URL:'}</b>
+          <b>{'Open Link:'}</b>
           {
             ' Clicking an image redirects to a specified URL. The URL must be set by editing each image from "Images" section. '
           }
@@ -60,28 +60,21 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
   const {isPro} = usePro();
 
   return (
-    <Grid container columns={24} columnSpacing={4} marginTop={2}>
+    <Grid
+      sx={{marginLeft: 0, paddingTop: 2}}
+      container
+      columns={24}
+      rowSpacing={2}
+      columnSpacing={4}
+    >
       <Filter isLoading={isLoading}>
         <SelectControl
           id={'clickAction'}
-          name={'Image click'}
+          name={'Click action'}
           tooltip={renderClickActionInfo()}
           value={clickAction}
           options={ImageClickActionOptions}
-          onChange={(inputValue: any) => {
-            if (
-              !isPro &&
-              ImageClickActionOptions.find(
-                (option) => option.value === inputValue
-              )?.isPro
-            ) {
-              (window as any).reacg_open_premium_offer_dialog({
-                utm_medium: 'clickAction',
-              });
-            } else {
-              onActionValueChange(inputValue, 'clickAction');
-            }
-          }}
+          onChange={onActionValueChange}
         />
       </Filter>
       {isClickActionUrl ? (
@@ -89,7 +82,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
           <Filter isLoading={isLoading}>
             <SwitchControl
               id={'openUrlInNewTab'}
-              name={'Open URL in new tab'}
+              name={'Open link in new tab'}
               value={openUrlInNewTab}
               onChange={onActionValueChange}
             />
@@ -97,7 +90,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
           <Filter isLoading={isLoading}>
             <SelectControl
               id={'actionUrlSource'}
-              name={'URL source'}
+              name={'Link source'}
               value={actionUrlSource}
               options={ActionURLSourceOptions}
               onChange={onActionValueChange}

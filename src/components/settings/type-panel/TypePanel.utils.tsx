@@ -2,6 +2,7 @@ import {GalleryType} from 'data-structures';
 import {BlogImage} from './images/BlogImage';
 import {CardsImage} from './images/CardsImage';
 import {CarouselImage} from './images/CarouselImage';
+import {CoverflowImage} from './images/CoverflowImage';
 import {CubeImage} from './images/CubeImage';
 import {JustifiedImage} from './images/JustifiedImage';
 import {MasonryImage} from './images/MasonryImage';
@@ -59,5 +60,11 @@ export const GalleryTypeOptions = [
     value: GalleryType.SLIDER,
     title: 'Slider',
     image: <SliderImage />,
+  },
+  {
+    value: GalleryType.COVERFLOW,
+    title: 'Coverflow',
+    image: <CoverflowImage />,
+    isPro: true,
   },
 ];

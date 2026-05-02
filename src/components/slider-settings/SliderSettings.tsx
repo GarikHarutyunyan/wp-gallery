@@ -3,7 +3,6 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {ProIcon} from 'components/alert-dialog/icons/ProIcon';
 import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
-import {useSettings} from 'components/settings';
 import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
@@ -48,12 +47,19 @@ import {LabelWithTooltip} from '../controls/LabelWithTooltip';
 import {Filter} from '../settings/Filter';
 
 interface ISliderSettingsProps {
+  settings: ISliderSettings;
+  onSettingsChange: (settings: ISliderSettings) => void;
+  onProFeatureClick: (feature: string) => void;
   isLoading?: boolean;
 }
 
-const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
+const SliderSettings: React.FC<ISliderSettingsProps> = ({
+  settings,
+  onSettingsChange,
+  onProFeatureClick,
+  isLoading,
+}) => {
   const {resetTemplate} = useTemplates();
-  const {sliderSettings: value, changeSliderSettings: onChange} = useSettings();
   const {
     // isFullscreen,
     width,
@@ -187,14 +193,14 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
     autoplayProgress,
     autoplayProgressColor,
     autoplayProgressType,
-  } = value as ISliderSettings;
+  } = settings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
-    key && onChange({...value, [key]: inputValue});
+    key && onSettingsChange({...settings, [key]: inputValue});
   };
   useEffect(() => {
-    onChange({...value, paginationActiveBulletSize: 0});
+    onSettingsChange({...settings, paginationActiveBulletSize: 0});
   }, [paginationType]);
   const renderMainSettings = (): ReactNode => {
     return (
@@ -358,10 +364,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'enable_filmstrip',
-                        })
+                    : () => onProFeatureClick('enable_filmstrip')
                 }
               />
             </Filter>
@@ -843,10 +846,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                     onChange={
                       isPro
                         ? onInputValueChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'show_caption',
-                            })
+                        : () => onProFeatureClick('show_caption')
                     }
                   />
                 </Filter>
@@ -1058,10 +1058,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                       onChange={
                         isPro
                           ? onInputValueChange
-                          : () =>
-                              (window as any).reacg_open_premium_offer_dialog({
-                                utm_medium: 'invert_color',
-                              })
+                          : () => onProFeatureClick('invert_color')
                       }
                     />
                   </Filter>
@@ -1198,10 +1195,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                     onChange={
                       isPro
                         ? onInputValueChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'show_caption',
-                            })
+                        : () => onProFeatureClick('show_caption')
                     }
                   />
                 </Filter>
@@ -1510,10 +1504,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                       onChange={
                         isPro
                           ? onInputValueChange
-                          : () =>
-                              (window as any).reacg_open_premium_offer_dialog({
-                                utm_medium: 'invert_color',
-                              })
+                          : () => onProFeatureClick('invert_color')
                       }
                     />
                   </Filter>
@@ -1564,10 +1555,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                     onChange={
                       isPro
                         ? onInputValueChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'enable_filmstrip',
-                            })
+                        : () => onProFeatureClick('enable_filmstrip')
                     }
                   />
                 </Filter>
@@ -1777,10 +1765,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                       onChange={
                         isPro
                           ? onInputValueChange
-                          : () =>
-                              (window as any).reacg_open_premium_offer_dialog({
-                                utm_medium: 'enable_filmstrip',
-                              })
+                          : () => onProFeatureClick('enable_filmstrip')
                       }
                     />
                   </Filter>
@@ -2045,10 +2030,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                       onChange={
                         isPro
                           ? onInputValueChange
-                          : () =>
-                              (window as any).reacg_open_premium_offer_dialog({
-                                utm_medium: 'enable_filmstrip',
-                              })
+                          : () => onProFeatureClick('enable_filmstrip')
                       }
                     />
                   </Filter>
@@ -2236,10 +2218,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({isLoading}) => {
                     onChange={
                       isPro
                         ? onInputValueChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'animation',
-                            })
+                        : () => onProFeatureClick('animation')
                     }
                   />
                 </Filter>

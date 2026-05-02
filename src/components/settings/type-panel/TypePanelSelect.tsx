@@ -1,11 +1,9 @@
 import {Box, MenuItem, Select, Typography} from '@mui/material';
-import {useAppInfo} from 'contexts/AppInfoContext';
+import {ProIcon} from 'components/alert-dialog/icons/ProIcon';
+import {usePro} from 'contexts/ProContext';
 import {GalleryType} from 'data-structures';
 import React from 'react';
 import {GalleryTypeOptions} from './TypePanel.utils';
-
-const activeColor: string = '#135C92';
-const inactiveColor: string = '#86A3B8';
 
 interface ITypePanelSelectProps {
   onChange: (type: GalleryType) => void;
@@ -16,25 +14,48 @@ const TypePanelSelect: React.FC<ITypePanelSelectProps> = ({
   value: activeValue,
   onChange,
 }) => {
-  const {pluginUrl} = useAppInfo();
+  const {isPro, isLoaded} = usePro();
+
+  const handleChange = (event: any) => {
+    const nextValue = event.target.value as GalleryType;
+    const selectedOption = GalleryTypeOptions.find(
+      ({value}) => value === nextValue
+    );
+
+    if (selectedOption?.isPro && !isLoaded) {
+      return;
+    }
+
+    if (selectedOption?.isPro && !isPro) {
+      (window as any).reacg_open_premium_offer_dialog?.({
+        utm_medium: `layout_${nextValue}`,
+      });
+      return;
+    }
+
+    onChange(nextValue);
+  };
 
   return (
-    <Box sx={{margin: '6px'}}>
+    <Box>
       <Select
-        onChange={(event) => onChange(event.target.value as GalleryType)}
+        onChange={handleChange}
         value={activeValue}
-        sx={{width: '100%'}}
+        sx={{width: '100%', borderRadius: '6px'}}
       >
-        {GalleryTypeOptions.map(({value, title, image}) => {
-          const isSelected: boolean = value === activeValue;
-
+        {GalleryTypeOptions.map(({value, title, image, isPro: requiresPro}) => {
           return (
-            <MenuItem value={value}>
+            <MenuItem key={value} value={value}>
               <div className={'type-panel-select__body'}>
                 {image}
                 <Typography className={'type-panel-select__title'}>
                   {title}
                 </Typography>
+                {requiresPro && isLoaded && !isPro && (
+                  <span className={'type-panel-select__pro-badge'}>
+                    <ProIcon />
+                  </span>
+                )}
               </div>
             </MenuItem>
           );

@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import {
   ICardsSettings,
   ICarouselSettings,
+  ICoverflowSettings,
   ICubeSettings,
   IImageDTO,
   ImageType,
@@ -46,7 +47,11 @@ interface ISwiperGalleryProps {
   scale?: any;
   allowTouchMove: boolean;
   perSlideOffset?: any;
-  settings: ICubeSettings | ICardsSettings | ICarouselSettings;
+  settings:
+    | ICubeSettings
+    | ICardsSettings
+    | ICarouselSettings
+    | ICoverflowSettings;
   breakpoints?: any;
   titleCaptionHeight?: number;
   onClick?: (index: number) => void;
@@ -85,12 +90,19 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
   const [paddingTop, setPaddingTop] = useState<number>(0);
   const key = effects.effect + 'Effect';
+  const coverflowRotate =
+    'rotate' in settings ? (settings as ICoverflowSettings).rotate : undefined;
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;
+    if (!swiper) return;
+
     if (key === 'coverflowEffect') {
       swiper.params.coverflowEffect.scale = scale;
       swiper.params.coverflowEffect.depth = scale > 1 ? -1 : 1;
+      if (typeof coverflowRotate === 'number') {
+        swiper.params.coverflowEffect.rotate = coverflowRotate;
+      }
     } else if (key === 'cardsEffect') {
       swiper.params.cardsEffect.perSlideOffset = perSlideOffset;
     }
@@ -106,7 +118,15 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
           2
         : 0;
     setPaddingTop(paddingTop);
-  }, [scale, height, width, imagesCount, padding, perSlideOffset]);
+  }, [
+    scale,
+    height,
+    width,
+    imagesCount,
+    padding,
+    perSlideOffset,
+    coverflowRotate,
+  ]);
 
   useEffect(() => {
     const swiper = swiperRef.current?.swiper;

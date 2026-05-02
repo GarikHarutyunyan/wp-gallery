@@ -7,8 +7,8 @@ import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
 import Tooltip from '@mui/material/Tooltip';
-import { useTemplates } from 'contexts';
-import { ITemplateReference } from 'contexts/templates/TemplatesContext.types';
+import {useTemplates} from 'contexts';
+import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
 import React, {
   ReactNode,
   SyntheticEvent,
@@ -16,11 +16,11 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { TypeUtils } from 'utils';
-import { ProIcon } from '../alert-dialog/icons/ProIcon';
-import { FeatureHighlighter } from './feature-highlighter/FeatureHighlighter';
+import {TypeUtils} from 'utils';
+import {ProIcon} from '../alert-dialog/icons/ProIcon';
+import {FeatureHighlighter} from './feature-highlighter/FeatureHighlighter';
 import './template-select.css';
-import { useSettings } from './useSettings';
+import {useSettings} from './useSettings';
 
 const storageValue: string | null = localStorage.getItem(
   'reacg-highlight-templates-select'
@@ -52,6 +52,7 @@ const TemplatesSelect: React.FC = () => {
     changeThumbnailSettings,
     changeCubeSettings,
     changeCarouselSettings,
+    changeCoverflowSettings,
     changeCardsSettings,
     changeBlogSettings,
     changeSliderSettings,
@@ -87,6 +88,7 @@ const TemplatesSelect: React.FC = () => {
         thumbnails,
         cube,
         carousel,
+        coverflow,
         cards,
         slider,
         blog,
@@ -96,19 +98,20 @@ const TemplatesSelect: React.FC = () => {
       if (activeType !== type && !!template.template_id) {
         type && changeType!(type);
       }
-      general && changeGeneralSettings(general);
-      lightbox && changeLightboxSettings(lightbox);
-      masonry && changeMasonrySettings(masonry);
-      mosaic && changeMosaicSettings(mosaic);
-      justified && changeJustifiedSettings(justified);
-      slideshow && changeSlideshowSettings(slideshow);
-      thumbnails && changeThumbnailSettings(thumbnails);
-      cube && changeCubeSettings(cube);
-      carousel && changeCarouselSettings(carousel);
-      cards && changeCardsSettings(cards);
-      blog && changeBlogSettings(blog);
-      slider && changeSliderSettings(slider);
-      TypeUtils.isString(css) && changeCss(css);
+      general && changeGeneralSettings?.(general);
+      lightbox && changeLightboxSettings?.(lightbox);
+      masonry && changeMasonrySettings?.(masonry);
+      mosaic && changeMosaicSettings?.(mosaic);
+      justified && changeJustifiedSettings?.(justified);
+      slideshow && changeSlideshowSettings?.(slideshow);
+      thumbnails && changeThumbnailSettings?.(thumbnails);
+      cube && changeCubeSettings?.(cube);
+      carousel && changeCarouselSettings?.(carousel);
+      coverflow && changeCoverflowSettings?.(coverflow);
+      cards && changeCardsSettings?.(cards);
+      blog && changeBlogSettings?.(blog);
+      slider && changeSliderSettings?.(slider);
+      TypeUtils.isString(css) && changeCss?.(css as any);
     }
   }, [template?.template_id]);
 
@@ -510,5 +513,4 @@ const TemplatesSelect: React.FC = () => {
   ) : null;
 };
 
-export { TemplatesSelect };
-
+export {TemplatesSelect};

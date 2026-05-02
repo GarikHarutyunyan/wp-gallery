@@ -206,36 +206,41 @@ const ThumbnailImage = ({
           className={`thumbnail-gallery__title-content_${titlePosition}`}
           title={<span>{image[titleSource] || <br />}</span>}
           subtitle={
-            <>
-              {titlePosition === captionPosition &&
-                showCaption &&
-                image[captionSource] && (
-                  <span className="thumbnail-image__caption">
-                    {image[captionSource]}
+            (titlePosition === captionPosition &&
+              showCaption &&
+              image[captionSource]) ||
+            (titlePosition === buttonPosition && showButton) ? (
+              <>
+                {titlePosition === captionPosition &&
+                  showCaption &&
+                  image[captionSource] && (
+                    <span className="thumbnail-image__caption">
+                      {image[captionSource]}
+                    </span>
+                  )}
+                {titlePosition === buttonPosition && showButton && (
+                  <span className="reacg-action-button-wrap">
+                    <ActionButton
+                      url={buttonUrl}
+                      openInNewTab={openInNewTab}
+                      text={buttonText}
+                      alignment={buttonAlignment}
+                      backgroundColor={buttonColor}
+                      textColor={buttonTextColor}
+                      fontSize={buttonFontSize}
+                      borderSize={buttonBorderSize}
+                      borderColor={buttonBorderColor}
+                      borderRadius={buttonBorderRadius}
+                      isOnHover={
+                        buttonVisibility === TitleVisibility.ON_HOVER &&
+                        buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+                        buttonPosition !== ThumbnailTitlePosition.BELOW
+                      }
+                    />
                   </span>
                 )}
-              {titlePosition === buttonPosition && showButton && (
-                <span className="reacg-action-button-wrap">
-                  <ActionButton
-                    url={buttonUrl}
-                    openInNewTab={openInNewTab}
-                    text={buttonText}
-                    alignment={buttonAlignment}
-                    backgroundColor={buttonColor}
-                    textColor={buttonTextColor}
-                    fontSize={buttonFontSize}
-                    borderSize={buttonBorderSize}
-                    borderColor={buttonBorderColor}
-                    borderRadius={buttonBorderRadius}
-                    isOnHover={
-                      buttonVisibility === TitleVisibility.ON_HOVER &&
-                      buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-                      buttonPosition !== ThumbnailTitlePosition.BELOW
-                    }
-                  />
-                </span>
-              )}
-            </>
+              </>
+            ) : null
           }
           position={
             titlePosition === ThumbnailTitlePosition.CENTER
@@ -318,34 +323,37 @@ const ThumbnailImage = ({
           }}
           className={`thumbnail-gallery__title-content_${captionPosition}`}
           title={
-            <>
-              {showCaption && (
-                <span className="thumbnail-image__caption">
-                  {image[captionSource] || <br />}
-                </span>
-              )}
-              {captionPosition === buttonPosition && showButton && (
-                <span className="reacg-action-button-wrap">
-                  <ActionButton
-                    url={buttonUrl}
-                    openInNewTab={openInNewTab}
-                    text={buttonText}
-                    alignment={buttonAlignment}
-                    backgroundColor={buttonColor}
-                    textColor={buttonTextColor}
-                    fontSize={buttonFontSize}
-                    borderSize={buttonBorderSize}
-                    borderColor={buttonBorderColor}
-                    borderRadius={buttonBorderRadius}
-                    isOnHover={
-                      buttonVisibility === TitleVisibility.ON_HOVER &&
-                      buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-                      buttonPosition !== ThumbnailTitlePosition.BELOW
-                    }
-                  />
-                </span>
-              )}
-            </>
+            (showCaption && image[captionSource]) ||
+            (captionPosition === buttonPosition && showButton) ? (
+              <>
+                {showCaption && image[captionSource] && (
+                  <span className="thumbnail-image__caption">
+                    {image[captionSource]}
+                  </span>
+                )}
+                {captionPosition === buttonPosition && showButton && (
+                  <span className="reacg-action-button-wrap">
+                    <ActionButton
+                      url={buttonUrl}
+                      openInNewTab={openInNewTab}
+                      text={buttonText}
+                      alignment={buttonAlignment}
+                      backgroundColor={buttonColor}
+                      textColor={buttonTextColor}
+                      fontSize={buttonFontSize}
+                      borderSize={buttonBorderSize}
+                      borderColor={buttonBorderColor}
+                      borderRadius={buttonBorderRadius}
+                      isOnHover={
+                        buttonVisibility === TitleVisibility.ON_HOVER &&
+                        buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+                        buttonPosition !== ThumbnailTitlePosition.BELOW
+                      }
+                    />
+                  </span>
+                )}
+              </>
+            ) : null
           }
           position={
             captionPosition === ThumbnailTitlePosition.CENTER

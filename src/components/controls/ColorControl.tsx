@@ -26,6 +26,7 @@ const ColorControl: React.FC<IColorControlProps> = ({
   return (
     <MakedColorPicker
       label={<LabelWithTooltip label={name} tooltip={tooltip} pro={pro} />}
+      placeholder="Transparent"
       variant="standard"
       margin="none"
       InputLabelProps={{

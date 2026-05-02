@@ -16,31 +16,12 @@
   font-size: 16px;
 }
 
-.reacg-slideshow .yarl__toolbar {
-  z-index: 1;
-  top: auto;
-  right: auto;
-  visibility: hidden;
-}
 html.react-lightbox--no-scroll {
   height: auto;
 }
 .react-lightbox--no-scroll {
   overflow: hidden;
   overscroll-behavior: none;
-}
-.reacg-slideshow:hover .yarl__toolbar {
-  visibility: unset;
-}
-
-.reacg-slideshow .yarl__icon {
-  width: 50px;
-  height: 50px;
-  visibility: hidden;
-}
-
-.reacg-slideshow:hover .yarl__icon {
-  visibility: unset;
 }
 
 .reacg-lightbox-control-buttons_hidden

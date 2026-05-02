@@ -8,6 +8,7 @@ import {
   IBlogSettings,
   ICardsSettings,
   ICarouselSettings,
+  ICoverflowSettings,
   ICubeSettings,
   IGeneralSettings,
   IJustifiedSettings,
@@ -32,6 +33,7 @@ import {
   blogMockSettings,
   cardsMockSettings,
   carouselMockSettings,
+  coverflowMockSettings,
   cubeMockSettings,
   generalMockSettings,
   justifiedMockSettings,
@@ -58,22 +60,24 @@ const SettingsContext = React.createContext<{
   slideshowSettings?: ISlideshowSettings;
   cubeSettings?: ICubeSettings;
   carouselSettings?: ICarouselSettings;
+  coverflowSettings?: ICoverflowSettings;
   cardsSettings?: ICardsSettings;
   blogSettings?: IBlogSettings;
   sliderSettings?: ISliderSettings;
-  changeGeneralSettings?: any;
-  changeThumbnailSettings?: any;
-  changeMosaicSettings?: any;
-  changeJustifiedSettings?: any;
-  changeMasonrySettings?: any;
-  changeSlideshowSettings?: any;
-  changeLightboxSettings?: any;
-  changeCubeSettings?: any;
-  changeCarouselSettings?: any;
-  changeCardsSettings?: any;
-  changeBlogSettings?: any;
-  changeSliderSettings?: any;
-  changeCss?: any;
+  changeGeneralSettings?: (settings: IGeneralSettings) => void;
+  changeThumbnailSettings?: (settings: IThumbnailSettings) => void;
+  changeMosaicSettings?: (settings: IMosaicSettings) => void;
+  changeJustifiedSettings?: (settings: IJustifiedSettings) => void;
+  changeMasonrySettings?: (settings: IMasonrySettings) => void;
+  changeSlideshowSettings?: (settings: ISlideshowSettings) => void;
+  changeLightboxSettings?: (settings: ILightboxSettings) => void;
+  changeCubeSettings?: (settings: ICubeSettings) => void;
+  changeCarouselSettings?: (settings: ICarouselSettings) => void;
+  changeCoverflowSettings?: (settings: ICoverflowSettings) => void;
+  changeCardsSettings?: (settings: ICardsSettings) => void;
+  changeBlogSettings?: (settings: IBlogSettings) => void;
+  changeSliderSettings?: (settings: ISliderSettings) => void;
+  changeCss?: (css: string) => void;
   wrapperRef?: any;
   imagesCount?: number;
   changeImagesCount?: (count: number) => void;
@@ -107,6 +111,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [lightboxSettings, setLightboxSettings] = useState<ILightboxSettings>();
   const [cubeSettings, setCubeSettings] = useState<ICubeSettings>();
   const [carouselSettings, setCarouselSettings] = useState<ICarouselSettings>();
+  const [coverflowSettings, setCoverflowSettings] =
+    useState<ICoverflowSettings>();
   const [cardsSettings, setCardsSettings] = useState<ICardsSettings>();
   const [blogSettings, setBlogSettings] = useState<IBlogSettings>();
   const [sliderSettings, setSliderSettings] = useState<ISliderSettings>();
@@ -137,6 +143,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setLightboxSettings(newSettings.lightbox);
     setCubeSettings(newSettings.cube || cubeMockSettings);
     setCarouselSettings(newSettings.carousel || carouselMockSettings);
+    setCoverflowSettings(newSettings.coverflow || coverflowMockSettings);
     setCardsSettings(newSettings.cards || cardsMockSettings);
     setBlogSettings(newSettings.blog || blogMockSettings);
     setSliderSettings(newSettings.slider || sliderMockSettings);
@@ -178,6 +185,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setLightboxSettings(newSettings.lightbox);
       setCubeSettings(newSettings.cube || cubeMockSettings);
       setCarouselSettings(newSettings.carousel || carouselMockSettings);
+      setCoverflowSettings(newSettings.coverflow || coverflowMockSettings);
       setCardsSettings(newSettings.cards || cardsMockSettings);
       setBlogSettings(newSettings.blog || blogMockSettings);
       setSliderSettings(newSettings.slider || sliderMockSettings);
@@ -202,6 +210,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setLightboxSettings(lightboxMockSettings);
       setCubeSettings(cubeMockSettings);
       setCarouselSettings(carouselMockSettings);
+      setCoverflowSettings(coverflowMockSettings);
       setCardsSettings(cardsMockSettings);
       setBlogSettings(blogMockSettings);
       setSliderSettings(sliderMockSettings);
@@ -281,6 +290,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         masonry: masonrySettings,
         cube: cubeSettings,
         carousel: carouselSettings,
+        coverflow: coverflowSettings,
         cards: cardsSettings,
         slideshow: slideshowSettings,
         blog: blogSettings,
@@ -307,6 +317,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
+        setCoverflowSettings(newSettings.coverflow || coverflowMockSettings);
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
         setSliderSettings(newSettings.slider);
@@ -376,6 +387,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setLightboxSettings(newSettings.lightbox);
         setCubeSettings(newSettings.cube);
         setCarouselSettings(newSettings.carousel);
+        setCoverflowSettings(newSettings.coverflow || coverflowMockSettings);
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
         setSliderSettings(newSettings.slider);
@@ -436,21 +448,32 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       >
         {children}
         {css !== '' && (
-          <style>{'#reacg-root' + galleryId + '{' + css + '}'}</style>
+          <style>
+            {'.reacg-gallery[data-gallery-id="' + galleryId + '"]{' + css + '}'}
+          </style>
         )}
         {customCss !== '' && (
-          <style>{'#reacg-root' + galleryId + '{' + customCss + '}'}</style>
+          <style>
+            {'.reacg-gallery[data-gallery-id="' +
+              galleryId +
+              '"]{' +
+              customCss +
+              '}'}
+          </style>
         )}
       </div>
     );
   };
 
-  const createOnChange =
-    (callback: any) =>
-    (...params: any[]) => {
+  const createOnChange = <
+    TCallback extends (...args: Parameters<TCallback>) => ReturnType<TCallback>,
+  >(
+    callback: TCallback
+  ): TCallback =>
+    ((...args: Parameters<TCallback>): ReturnType<TCallback> => {
       setHasChanges(true);
-      callback?.(...params);
-    };
+      return callback(...args);
+    }) as TCallback;
 
   return (
     <SettingsContext.Provider
@@ -467,6 +490,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         lightboxSettings,
         cubeSettings,
         carouselSettings,
+        coverflowSettings,
         cardsSettings,
         blogSettings,
         sliderSettings,
@@ -479,6 +503,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeLightboxSettings: createOnChange(setLightboxSettings),
         changeCubeSettings: createOnChange(setCubeSettings),
         changeCarouselSettings: createOnChange(setCarouselSettings),
+        changeCoverflowSettings: createOnChange(setCoverflowSettings),
         changeCardsSettings: createOnChange(setCardsSettings),
         changeBlogSettings: createOnChange(setBlogSettings),
         changeSliderSettings: createOnChange(setSliderSettings),

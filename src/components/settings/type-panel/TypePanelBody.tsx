@@ -39,7 +39,7 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
               Template Library
             </div>
             <div className={'reacg-templates-library-row__subtitle'}>
-              Choose from 50+ ready-made gallery designs.
+              Choose from 55+ ready-made gallery designs.
             </div>
           </div>
         </div>
@@ -49,7 +49,7 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
         <TypePanelSelect value={type} onChange={onChange} />
       ) : (
         <Aligner className={'type-option__wrapper'} align={Align.SPACE_AROUND}>
-          {GalleryTypeOptions.map(({value, title, image}) => {
+          {GalleryTypeOptions.map(({value, title, image, isPro}) => {
             return (
               <TypeOption
                 key={title}
@@ -57,6 +57,7 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
                 title={title}
                 value={value as GalleryType}
                 isSelected={type === value}
+                requiresPro={!!isPro}
                 onClick={type !== value ? onChange : undefined}
               />
             );

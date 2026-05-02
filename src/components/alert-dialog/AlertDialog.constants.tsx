@@ -2,7 +2,6 @@ import {AlertConfig} from './AlertDialog.types';
 import {CopyableCode} from './CopyableCode';
 import {CustomerService} from './icons/CustomerServiceIcon';
 import {LigthBulbIcon} from './icons/LigthBulbIcon';
-import {ProIcon} from './icons/ProIcon';
 import {TroubleshoutingIcon} from './icons/TroubleshoutingIcon';
 
 const appendUtmMedium = (url: string, utm_medium?: string) => {
@@ -22,39 +21,106 @@ const appendUtmMedium = (url: string, utm_medium?: string) => {
 };
 
 export const premiumConfig: AlertConfig = {
-  image: (
-    <ProIcon
-      width={80}
-      height={80}
-      style={{background: '#d1dae8', borderRadius: '50%', padding: '12px'}}
-    />
-  ),
   description: (
     <>
-      This feature is available with our Pro plans and unlocks advanced options
-      designed to help you build more powerful and professional galleries.
-      <br />
-      <br />
-      You can{' '}
-      <a href={(window as any).reacg_global?.demo_url || ''} target="_blank">
-        <strong>View a Demo</strong>
-      </a>{' '}
-      to see it in action or{' '}
-      <a
-        href={(window as any).reacg_global?.compare_plans_url || ''}
-        target="_blank"
+      <div
+        style={{
+          fontSize: '0.8em',
+          color: '#8769ff',
+          textTransform: 'uppercase',
+          fontWeight: 600,
+        }}
       >
-        <strong>Compare Pro Plans</strong>
-      </a>{' '}
-      to find the option that works best for you.
+        Upgrade Now
+      </div>
+      <div
+        style={{
+          color: '#1d2327',
+          fontSize: '1.5em',
+          margin: '0 0 1em 0',
+          fontWeight: 600,
+        }}
+      >
+        Unlock PRO features
+      </div>
+      <div>
+        <div style={{margin: '5px 0'}}>
+          <span
+            className="dashicons dashicons-yes"
+            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+          ></span>
+          <span>Pre-Built Templates &amp; Template Library</span>
+        </div>
+        <div style={{margin: '5px 0'}}>
+          <span
+            className="dashicons dashicons-yes"
+            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+          ></span>
+          <span>AI Automation for Text &amp; Metadata</span>
+        </div>
+        <div style={{margin: '5px 0'}}>
+          <span
+            className="dashicons dashicons-yes"
+            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+          ></span>
+          <span>Advanced Lightbox Options</span>
+        </div>
+        <div style={{margin: '5px 0'}}>
+          <span
+            className="dashicons dashicons-yes"
+            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+          ></span>
+          <span>eCommerce &amp; Mixed Galleries</span>
+        </div>
+        <div style={{margin: '5px 0'}}>
+          <span
+            className="dashicons dashicons-yes"
+            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+          ></span>
+          <span>Branding, Watermarks &amp; White Labeling</span>
+        </div>
+        <div style={{margin: '5px 0'}}>
+          <span
+            className="dashicons dashicons-yes"
+            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+          ></span>
+          <span>Advanced Customization &amp; Premium Support</span>
+        </div>
+      </div>
     </>
   ),
+  additionalText: (utm_medium?: string) => (
+    <center>
+      <a
+        style={{color: 'black'}}
+        href={appendUtmMedium(
+          (window as any).reacg_global?.demo_url || '',
+          utm_medium
+        )}
+        target="_blank"
+      >
+        <strong>View a Demo</strong>
+      </a>{' '}
+      |{' '}
+      <a
+        style={{color: 'black'}}
+        href={appendUtmMedium(
+          (window as any).reacg_global?.compare_plans_url || '',
+          utm_medium
+        )}
+        target="_blank"
+      >
+        <strong>See all Features</strong>
+      </a>
+    </center>
+  ),
   buttonConfig: {
-    label: (window as any).reacg_global?.upgrade?.text || 'GET STARTED',
-    backgroundColor: '#a7c957',
+    label: 'Upgrade',
+    backgroundColor: '#8769ff',
+    width: '100%',
     onClick: (utm_medium?: string) => {
       const url =
-        (window as any).reacg_global?.upgrade?.url ||
+        (window as any).reacg_global?.upgrade?.discount_url ||
         'https://regallery.team/#pricing';
       window.open(appendUtmMedium(url, utm_medium), '_blank');
     },
