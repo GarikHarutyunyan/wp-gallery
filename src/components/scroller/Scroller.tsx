@@ -4,6 +4,7 @@ import {
   HoverEffect,
   IImageDTO,
   IScrollerSettings,
+  ScrollerDirection,
   ThumbnailTitlePosition,
 } from 'data-structures';
 import React, {useEffect, useRef, useState} from 'react';
@@ -43,6 +44,10 @@ const Scroller: React.FC<IScrollerProps> = ({settings, onClick}) => {
     containerPadding,
     borderRadius,
   } = settings;
+  const reverseScrollDirection: ScrollerDirection =
+    scrollDirection === ScrollerDirection.LEFT
+      ? ScrollerDirection.RIGHT
+      : ScrollerDirection.LEFT;
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -70,8 +75,6 @@ const Scroller: React.FC<IScrollerProps> = ({settings, onClick}) => {
 
     return () => observer.disconnect();
   }, [images.length, width, gap]);
-
-  if (!images.length) return null;
 
   const effectiveContainerWidth =
     containerWidth || wrapperRef.current?.clientWidth || 800;
@@ -161,17 +164,25 @@ const Scroller: React.FC<IScrollerProps> = ({settings, onClick}) => {
         duration: spanWidth / Math.max(animationSpeed, 1),
       };
     });
-  const hasOutsideMetadata =
-    (showTitle &&
-      (titlePosition === ThumbnailTitlePosition.ABOVE ||
-        titlePosition === ThumbnailTitlePosition.BELOW)) ||
-    (showCaption &&
-      (captionPosition === ThumbnailTitlePosition.ABOVE ||
-        captionPosition === ThumbnailTitlePosition.BELOW)) ||
-    (showButton &&
-      (buttonPosition === ThumbnailTitlePosition.ABOVE ||
-        buttonPosition === ThumbnailTitlePosition.BELOW)) ||
-    false;
+
+  const isTitleAbove: boolean = titlePosition === ThumbnailTitlePosition.ABOVE;
+  const isTitleBelow: boolean = titlePosition === ThumbnailTitlePosition.BELOW;
+  const isCaptionAbove: boolean =
+    captionPosition === ThumbnailTitlePosition.ABOVE;
+  const isCaptionBelow: boolean =
+    captionPosition === ThumbnailTitlePosition.BELOW;
+  const isButtonAbove: boolean =
+    buttonPosition === ThumbnailTitlePosition.ABOVE;
+  const isButtonBelow: boolean =
+    buttonPosition === ThumbnailTitlePosition.BELOW;
+  const hasOutsideTitle: boolean = showTitle && (isTitleAbove || isTitleBelow);
+  const hasOutsideCaption: boolean =
+    showCaption && (isCaptionAbove || isCaptionBelow);
+  const hasOutsideButton: boolean =
+    showButton && (isButtonAbove || isButtonBelow);
+
+  const hasOutsideMetadata: boolean =
+    hasOutsideTitle || hasOutsideCaption || hasOutsideButton;
 
   return (
     <div
@@ -187,9 +198,7 @@ const Scroller: React.FC<IScrollerProps> = ({settings, onClick}) => {
       }}
     >
       {rowData.map((row, rowIndex) => {
-        const reverseScrollDirection =
-          scrollDirection === 'left' ? 'right' : 'left';
-        const rowDirection =
+        const rowDirection: ScrollerDirection =
           rowIndex % 2 === 0 ? scrollDirection : reverseScrollDirection;
 
         return (
