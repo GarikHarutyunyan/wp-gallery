@@ -181,6 +181,7 @@ const Gallery = (): ReactElement => {
       case GalleryType.SCROLLER:
         gallery = (
           <Scroller
+            images={images!}
             settings={scrollerSettings!}
             onClick={isClickable ? onImageClick : undefined}
           />

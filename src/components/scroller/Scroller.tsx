@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import {useData} from 'components/data-context/useData';
 import {
   HoverEffect,
   IImageDTO,
@@ -14,12 +13,12 @@ import {getResponsiveScale} from './Scroller.utils';
 import {IScrollerItem, ScrollerItem} from './ScrollerItem';
 
 interface IScrollerProps {
+  images: IImageDTO[];
   settings: IScrollerSettings;
   onClick?: (index: number) => void;
 }
 
-const Scroller: React.FC<IScrollerProps> = ({settings, onClick}) => {
-  const {images = []} = useData();
+const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
   const {
     height,
     equalHeight,
