@@ -17,29 +17,15 @@ export const GalleryTypeOptions = [
     image: <ThumbnailsImage />,
   },
   {
+    value: GalleryType.SCROLLER,
+    title: 'Scroller',
+    image: <ScrollerImage />,
+    isPro: true,
+  },
+  {
     value: GalleryType.MOSAIC,
     title: 'Mosaic',
     image: <MosaicImage />,
-  },
-  {
-    value: GalleryType.MASONRY,
-    title: 'Masonry',
-    image: <MasonryImage />,
-  },
-  {
-    value: GalleryType.JUSTIFIED,
-    title: 'Justified',
-    image: <JustifiedImage />,
-  },
-  {
-    value: GalleryType.SLIDESHOW,
-    title: 'Slider',
-    image: <SlideshowImage />,
-  },
-  {
-    value: GalleryType.CUBE,
-    title: 'Cube',
-    image: <CubeImage />,
   },
   {
     value: GalleryType.CAROUSEL,
@@ -47,14 +33,20 @@ export const GalleryTypeOptions = [
     image: <CarouselImage />,
   },
   {
-    value: GalleryType.CARDS,
-    title: 'Cards',
-    image: <CardsImage />,
+    value: GalleryType.JUSTIFIED,
+    title: 'Justified',
+    image: <JustifiedImage />,
+    isPro: true,
   },
   {
-    value: GalleryType.BLOG,
-    title: 'Blog',
-    image: <BlogImage />,
+    value: GalleryType.MASONRY,
+    title: 'Masonry',
+    image: <MasonryImage />,
+  },
+  {
+    value: GalleryType.SLIDESHOW,
+    title: 'Slider',
+    image: <SlideshowImage />,
   },
   {
     value: GalleryType.COVERFLOW,
@@ -63,8 +55,19 @@ export const GalleryTypeOptions = [
     isPro: true,
   },
   {
-    value: GalleryType.SCROLLER,
-    title: 'Scroller',
-    image: <ScrollerImage />,
+    value: GalleryType.BLOG,
+    title: 'Blog',
+    image: <BlogImage />,
+  },
+  {
+    value: GalleryType.CUBE,
+    title: 'Cube',
+    image: <CubeImage />,
+  },
+  {
+    value: GalleryType.CARDS,
+    title: 'Cards',
+    image: <CardsImage />,
+    isPro: true,
   },
 ];
