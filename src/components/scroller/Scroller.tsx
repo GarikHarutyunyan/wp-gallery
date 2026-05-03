@@ -14,7 +14,7 @@ import {IScrollerItem, ScrollerItem} from './ScrollerItem';
 
 interface IRowData {
   items: IScrollerItem[];
-  spanWidth: number;
+  width: number;
   duration: number;
 }
 
@@ -138,10 +138,10 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
     let offset: number = 0;
 
     for (let rowIndex = 0; rowIndex < normalizedRowCount; rowIndex++) {
-      const rowItemsCount = itemsCountPerRow + (rowIndex < remainder ? 1 : 0);
+      const baseItemsCount = itemsCountPerRow + (rowIndex < remainder ? 1 : 0);
       const baseItems: IScrollerItem[] = scrollerItems.slice(
         offset,
-        offset + rowItemsCount
+        offset + baseItemsCount
       );
 
       if (baseItems.length > 0) {
@@ -156,19 +156,21 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
         );
         const rowItemsGap: number = Math.max(0, rowItems.length - 1) * gap;
         const totalRowItemsWidth = rowItemsWidth + rowItemsGap;
-        const spanWidth = totalRowItemsWidth + gap;
+        const rowWidth = totalRowItemsWidth + gap;
+        const duration = rowWidth / Math.max(animationSpeed, 1);
 
         const newRowData: IRowData = {
           items: rowItems,
-          spanWidth,
-          duration: spanWidth / Math.max(animationSpeed, 1),
+          width: rowWidth,
+          duration,
         };
 
         result.push(newRowData);
 
-        offset += rowItemsCount;
+        offset += baseItemsCount;
       }
     }
+
     return result;
   }, [
     scrollerItems,
@@ -230,7 +232,7 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
           !equalHeight && !hasOutsideMetadata ? responsiveHeight : undefined;
         const isLeftScroll: boolean = rowDirection === ScrollerDirection.LEFT;
         const animationDurationString: string = `${row.duration}s`;
-        const shiftPxString: string = `${row.spanWidth}px`;
+        const shiftPxString: string = `${row.width}px`;
         const gapString: string = `${gap}px`;
 
         return (
