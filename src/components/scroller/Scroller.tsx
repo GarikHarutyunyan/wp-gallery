@@ -9,7 +9,11 @@ import {
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {getLargestSrcItem, ISrcSetItem} from 'utils/imageSrcSet';
 import './scroller.css';
-import {fillWithClones, getResponsiveScale} from './Scroller.utils';
+import {
+  calculateRowChunkWidth,
+  fillWithClones,
+  getResponsiveScale,
+} from './Scroller.utils';
 import {IScrollerItem, ScrollerItem} from './ScrollerItem';
 
 interface IRowData {
@@ -150,18 +154,12 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
           gap,
           effectiveContainerWidth
         );
-        const rowItemsWidth: number = rowItems.reduce(
-          (sumOfWidth: number, item: IScrollerItem) => sumOfWidth + item.width,
-          0
-        );
-        const rowItemsGap: number = Math.max(0, rowItems.length - 1) * gap;
-        const totalRowItemsWidth = rowItemsWidth + rowItemsGap;
-        const rowWidth = totalRowItemsWidth + gap;
-        const duration = rowWidth / Math.max(animationSpeed, 1);
+        const chunkWidth = calculateRowChunkWidth(baseItems, gap);
+        const duration = chunkWidth / Math.max(animationSpeed, 1);
 
         const newRowData: IRowData = {
           items: rowItems,
-          chunkWidth: rowWidth,
+          chunkWidth,
           duration,
         };
 

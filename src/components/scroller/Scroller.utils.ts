@@ -41,3 +41,18 @@ export const fillWithClones = (
 
   return result;
 };
+
+export const calculateRowChunkWidth = (
+  rowItems: IScrollerItem[],
+  gap: number
+): number => {
+  const rowItemsWidth: number = rowItems.reduce(
+    (sumOfWidth: number, item: IScrollerItem) => sumOfWidth + item.width,
+    0
+  );
+  const rowItemsGap: number = Math.max(0, rowItems.length - 1) * gap;
+  const totalRowItemsWidth = rowItemsWidth + rowItemsGap;
+  const rowChunkWidth: number = totalRowItemsWidth + gap;
+
+  return rowChunkWidth;
+};
