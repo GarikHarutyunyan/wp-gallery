@@ -3,7 +3,8 @@ import ReVideo from 'core-components/re-video/ReVideo';
 import {ImageType} from 'data-structures';
 import React from 'react';
 import {getSrcSetString} from 'utils/imageSrcSet';
-import {IScrollerItem} from './ScrollerItem';
+import {IScrollerItem} from '../ScrollerItem';
+import './scroller-media.css';
 
 interface IScrollerMediaProps {
   item: IScrollerItem;
@@ -12,12 +13,12 @@ interface IScrollerMediaProps {
   wrapperRef: React.RefObject<HTMLDivElement>;
 }
 
-const ScrollerMedia: React.FC<IScrollerMediaProps> = ({
+const ScrollerMedia = ({
   item,
   showVideoCover,
   size,
   wrapperRef,
-}) => {
+}: IScrollerMediaProps) => {
   const srcSetString = getSrcSetString(item.image.sizes);
 
   if (item.image.type === ImageType.VIDEO) {
@@ -32,9 +33,9 @@ const ScrollerMedia: React.FC<IScrollerMediaProps> = ({
           sizes: `${size}px`,
           alt: item.image.alt || item.image.title,
           loading: 'eager',
-          className: 'reacg-scroller__media',
+          className: 'reacg-scroller-media',
         }}
-        className="reacg-scroller__media"
+        className="reacg-scroller-media"
       />
     );
   }
@@ -47,7 +48,7 @@ const ScrollerMedia: React.FC<IScrollerMediaProps> = ({
       sizes={`${size}px`}
       alt={item.image.alt || item.image.title}
       loading="eager"
-      className="reacg-scroller__media"
+      className="reacg-scroller-media"
     />
   );
 };
