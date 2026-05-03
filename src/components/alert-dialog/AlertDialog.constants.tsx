@@ -7,6 +7,7 @@ import {TroubleshoutingIcon} from './icons/TroubleshoutingIcon';
 import cardsLayoutScreenshot from './layout-screenshots/cards.webp';
 import coverflowLayoutScreenshot from './layout-screenshots/coverflow.webp';
 import justifiedLayoutScreenshot from './layout-screenshots/justified.webp';
+import scrollerLayoutScreenshot from './layout-screenshots/scroller.webp';
 
 const appendUtmMedium = (url: string, utm_medium?: string) => {
   if (!url || !utm_medium) {
@@ -438,7 +439,7 @@ const layoutPreviewByType: Partial<Record<GalleryType, string>> = {
   [GalleryType.COVERFLOW]: coverflowLayoutScreenshot,
   [GalleryType.JUSTIFIED]: justifiedLayoutScreenshot,
   [GalleryType.CARDS]: cardsLayoutScreenshot,
-  // [GalleryType.SCROLLER]: scrollerLayoutScreenshot,
+  [GalleryType.SCROLLER]: scrollerLayoutScreenshot,
 };
 
 export const getProLayoutDialogConfig = (
