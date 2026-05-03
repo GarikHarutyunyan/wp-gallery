@@ -9,7 +9,7 @@ import {
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {getLargestSrcItem, ISrcSetItem} from 'utils/imageSrcSet';
 import './scroller.css';
-import {getResponsiveScale} from './Scroller.utils';
+import {fillWithClones, getResponsiveScale} from './Scroller.utils';
 import {IScrollerItem, ScrollerItem} from './ScrollerItem';
 
 interface IRowData {
@@ -139,34 +139,17 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
 
     for (let rowIndex = 0; rowIndex < normalizedRowCount; rowIndex++) {
       const rowItemsCount = itemsCountPerRow + (rowIndex < remainder ? 1 : 0);
-      const rowScrollerItems: Array<IScrollerItem> = scrollerItems.slice(
+      const baseItems: IScrollerItem[] = scrollerItems.slice(
         offset,
         offset + rowItemsCount
       );
 
-      if (rowScrollerItems.length > 0) {
-        const baseItems: IScrollerItem[] = rowScrollerItems;
-        const baseItemsWidth: number = baseItems.reduce(
-          (sumOfWidth: number, item: IScrollerItem) => sumOfWidth + item.width,
-          0
+      if (baseItems.length > 0) {
+        const rowItems: IScrollerItem[] = fillWithClones(
+          baseItems,
+          gap,
+          effectiveContainerWidth
         );
-        const baseItemsGap: number =
-          Math.max(0, baseItems.length - 1) * (gap || 0);
-        const totalBaseWidth = baseItemsWidth + baseItemsGap;
-
-        const isSmallerThanContainer: boolean =
-          totalBaseWidth > 0 && totalBaseWidth < effectiveContainerWidth;
-        const repeatCount: number = isSmallerThanContainer
-          ? Math.ceil(effectiveContainerWidth / totalBaseWidth)
-          : 1;
-
-        const rowItems: IScrollerItem[] = [];
-
-        for (let i = 0; i < repeatCount; i++) {
-          baseItems.forEach((item) => {
-            rowItems.push(item);
-          });
-        }
 
         const rowItemsWidth: number = rowItems.reduce(
           (sumOfWidth: number, item: IScrollerItem) => sumOfWidth + item.width,
