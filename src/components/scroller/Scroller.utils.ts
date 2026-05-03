@@ -17,7 +17,7 @@ export const getResponsiveScale = (width: number) => {
 export const fillWithClones = (
   baseItems: IScrollerItem[],
   gap: number,
-  effectiveContainerWidth: number
+  containerWidth: number
 ): IScrollerItem[] => {
   const baseItemsWidth: number = baseItems.reduce(
     (sumOfWidth: number, item: IScrollerItem) => sumOfWidth + item.width,
@@ -27,9 +27,9 @@ export const fillWithClones = (
   const totalBaseWidth = baseItemsWidth + baseItemsGap;
 
   const isSmallerThanContainer: boolean =
-    totalBaseWidth > 0 && totalBaseWidth < effectiveContainerWidth;
+    totalBaseWidth > 0 && totalBaseWidth < containerWidth;
   const repeatCount: number = isSmallerThanContainer
-    ? Math.ceil(effectiveContainerWidth / totalBaseWidth)
+    ? Math.ceil(containerWidth / totalBaseWidth)
     : 1;
   const result: IScrollerItem[] = [];
 
