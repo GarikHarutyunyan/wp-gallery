@@ -1,12 +1,9 @@
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
 import {ActionButton} from 'core-components/action-button';
-import ReImage from 'core-components/re-image/ReImage';
-import ReVideo from 'core-components/re-video/ReVideo';
 import {
   ActionURLSource,
   IImageDTO,
-  ImageType,
   IScrollerSettings,
   ThumbnailTitlePosition,
   TitleAlignment,
@@ -14,8 +11,8 @@ import {
   TitleVisibility,
 } from 'data-structures';
 import React, {useRef} from 'react';
-import {getSrcSetString} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
+import {ScrollerMedia} from './ScrollerMedia';
 
 export interface IScrollerItem {
   image: IImageDTO;
@@ -24,53 +21,6 @@ export interface IScrollerItem {
   width: number;
   height: number;
 }
-
-interface IScrollerMediaProps {
-  item: IScrollerItem;
-  showVideoCover: boolean;
-  size: number;
-  wrapperRef: React.RefObject<HTMLDivElement>;
-}
-
-const ScrollerMedia: React.FC<IScrollerMediaProps> = ({
-  item,
-  showVideoCover,
-  size,
-  wrapperRef,
-}) => {
-  const srcSetString = getSrcSetString(item.image.sizes);
-
-  if (item.image.type === ImageType.VIDEO) {
-    return (
-      <ReVideo
-        wrapperRef={wrapperRef}
-        item={item.image}
-        settings={{showVideoCover, showVideoControls: false}}
-        coverImageProps={{
-          src: item.src,
-          srcSet: srcSetString,
-          sizes: `${size}px`,
-          alt: item.image.alt || item.image.title,
-          loading: 'eager',
-          className: 'reacg-scroller__media',
-        }}
-        className="reacg-scroller__media"
-      />
-    );
-  }
-
-  return (
-    <ReImage
-      wrapperRef={wrapperRef}
-      src={item.src}
-      srcSet={srcSetString}
-      sizes={`${size}px`}
-      alt={item.image.alt || item.image.title}
-      loading="eager"
-      className="reacg-scroller__media"
-    />
-  );
-};
 
 interface IScrollerItemProps {
   item: IScrollerItem;

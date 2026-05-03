@@ -1,24 +1,24 @@
 import clsx from 'clsx';
-import {useData} from 'components/data-context/useData';
-import {useSettings} from 'components/settings';
 import {
   HoverEffect,
   IImageDTO,
   IScrollerSettings,
+  ScrollerDirection,
   ThumbnailTitlePosition,
 } from 'data-structures';
 import React, {useEffect, useRef, useState} from 'react';
 import {getLargestSrcItem} from 'utils/imageSrcSet';
 import './scroller.css';
+import {getResponsiveScale} from './Scroller.utils';
 import {IScrollerItem, ScrollerItem} from './ScrollerItem';
 
 interface IScrollerProps {
+  images: IImageDTO[];
+  settings: IScrollerSettings;
   onClick?: (index: number) => void;
 }
 
-const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
-  const {images = []} = useData();
-  const {scrollerSettings: settings} = useSettings();
+const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
   const {
     height,
     equalHeight,
@@ -42,18 +42,16 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
     backgroundColor,
     containerPadding,
     borderRadius,
-  } = settings as IScrollerSettings;
+  } = settings;
+  const reverseScrollDirection: ScrollerDirection =
+    scrollDirection === ScrollerDirection.LEFT
+      ? ScrollerDirection.RIGHT
+      : ScrollerDirection.LEFT;
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [itemWidth, setItemWidth] = useState<number>(200);
   const [containerWidth, setContainerWidth] = useState<number>(0);
-
-  const getResponsiveScale = (currentWidth: number) => {
-    if (currentWidth < 480) return 0.62;
-    if (currentWidth < 768) return 0.8;
-    return 1;
-  };
 
   useEffect(() => {
     if (!wrapperRef.current || !images.length) return;
@@ -76,8 +74,6 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
 
     return () => observer.disconnect();
   }, [images.length, width, gap]);
-
-  if (!images.length) return null;
 
   const effectiveContainerWidth =
     containerWidth || wrapperRef.current?.clientWidth || 800;
@@ -167,17 +163,37 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
         duration: spanWidth / Math.max(animationSpeed, 1),
       };
     });
-  const hasOutsideMetadata =
-    (showTitle &&
-      (titlePosition === ThumbnailTitlePosition.ABOVE ||
-        titlePosition === ThumbnailTitlePosition.BELOW)) ||
-    (showCaption &&
-      (captionPosition === ThumbnailTitlePosition.ABOVE ||
-        captionPosition === ThumbnailTitlePosition.BELOW)) ||
-    (showButton &&
-      (buttonPosition === ThumbnailTitlePosition.ABOVE ||
-        buttonPosition === ThumbnailTitlePosition.BELOW)) ||
-    false;
+
+  const isTitleAbove: boolean = titlePosition === ThumbnailTitlePosition.ABOVE;
+  const isTitleBelow: boolean = titlePosition === ThumbnailTitlePosition.BELOW;
+  const isCaptionAbove: boolean =
+    captionPosition === ThumbnailTitlePosition.ABOVE;
+  const isCaptionBelow: boolean =
+    captionPosition === ThumbnailTitlePosition.BELOW;
+  const isButtonAbove: boolean =
+    buttonPosition === ThumbnailTitlePosition.ABOVE;
+  const isButtonBelow: boolean =
+    buttonPosition === ThumbnailTitlePosition.BELOW;
+  const hasOutsideTitle: boolean = showTitle && (isTitleAbove || isTitleBelow);
+  const hasOutsideCaption: boolean =
+    showCaption && (isCaptionAbove || isCaptionBelow);
+  const hasOutsideButton: boolean =
+    showButton && (isButtonAbove || isButtonBelow);
+
+  const hasOutsideMetadata: boolean =
+    hasOutsideTitle || hasOutsideCaption || hasOutsideButton;
+
+  const handleMouseEnter = () => {
+    if (pauseOnHover) {
+      setIsPaused(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (pauseOnHover) {
+      setIsPaused(false);
+    }
+  };
 
   return (
     <div
@@ -193,10 +209,14 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
       }}
     >
       {rowData.map((row, rowIndex) => {
-        const reverseScrollDirection =
-          scrollDirection === 'left' ? 'right' : 'left';
-        const rowDirection =
+        const rowDirection: ScrollerDirection =
           rowIndex % 2 === 0 ? scrollDirection : reverseScrollDirection;
+        const rowHeight =
+          !equalHeight && !hasOutsideMetadata ? responsiveHeight : undefined;
+        const isLeftScroll: boolean = rowDirection === ScrollerDirection.LEFT;
+        const animationDurationString: string = `${row.duration}s`;
+        const shiftPxString: string = `${row.spanWidth}px`;
+        const gapString: string = `${gap || 0}px`;
 
         return (
           <div
@@ -205,22 +225,20 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
               'reacg-scroller__track',
               'reacg-scroller__track--animating',
               {
-                [`reacg-scroller__track--${rowDirection}`]: true,
+                'reacg-scroller__track--left': isLeftScroll,
+                'reacg-scroller__track--right': !isLeftScroll,
                 'reacg-scroller__track--paused': isPaused,
                 'reacg-scroller__track--mixed-height': !equalHeight,
               }
             )}
             style={{
-              animationDuration: `${row.duration}s`,
-              height:
-                !equalHeight && !hasOutsideMetadata
-                  ? responsiveHeight
-                  : undefined,
-              ['--reacg-shift-px' as string]: `${row.spanWidth}px`,
-              ['--reacg-gap' as string]: `${gap || 0}px`,
+              animationDuration: animationDurationString,
+              height: rowHeight,
+              ['--reacg-shift-px' as string]: shiftPxString,
+              ['--reacg-gap' as string]: gapString,
             }}
-            onMouseEnter={() => pauseOnHover && setIsPaused(true)}
-            onMouseLeave={() => pauseOnHover && setIsPaused(false)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
           >
             {[0, 1].map((setIndex) => (
               <div
@@ -245,7 +263,7 @@ const Scroller: React.FC<IScrollerProps> = ({onClick}) => {
                       borderRadius={borderRadius}
                       showVideoCover={showVideoCover}
                       onClick={onClick}
-                      settings={settings as IScrollerSettings}
+                      settings={settings}
                     />
                   </div>
                 ))}
