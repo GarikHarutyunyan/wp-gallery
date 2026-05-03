@@ -13,7 +13,7 @@ import {fillWithClones, getResponsiveScale} from './Scroller.utils';
 import {IScrollerItem, ScrollerItem} from './ScrollerItem';
 
 interface IRowData {
-  itemsInSet: IScrollerItem[];
+  items: IScrollerItem[];
   spanWidth: number;
   duration: number;
 }
@@ -159,7 +159,7 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
         const spanWidth = totalRowItemsWidth + gap;
 
         const newRowData: IRowData = {
-          itemsInSet: rowItems,
+          items: rowItems,
           spanWidth,
           duration: spanWidth / Math.max(animationSpeed, 1),
         };
@@ -261,7 +261,7 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
                 className="reacg-scroller__set"
                 aria-hidden={setIndex === 1}
               >
-                {row.itemsInSet.map((item, i) => (
+                {row.items.map((item, i) => (
                   <div
                     key={`${rowIndex}-${setIndex}-${i}-${item.image.id}`}
                     className="reacg-scroller__item"
