@@ -51,6 +51,7 @@ const Gallery = (): ReactElement => {
     thumbnailSettings,
     masonrySettings,
     blogSettings,
+    scrollerSettings,
   } = useSettings();
   const {
     isLoading,
@@ -178,7 +179,13 @@ const Gallery = (): ReactElement => {
         );
         break;
       case GalleryType.SCROLLER:
-        gallery = <Scroller onClick={isClickable ? onImageClick : undefined} />;
+        gallery = (
+          <Scroller
+            images={images!}
+            settings={scrollerSettings!}
+            onClick={isClickable ? onImageClick : undefined}
+          />
+        );
         break;
     }
 

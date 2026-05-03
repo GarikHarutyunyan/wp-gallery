@@ -97,13 +97,6 @@
   cursor: default;
 }
 
-.reacg-scroller__media {
-  display: block;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-}
-
 .reacg-scroller__overlay {
   position: absolute;
   left: 0;
