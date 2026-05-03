@@ -10,6 +10,7 @@ import {useTemplates} from 'contexts';
 import {Section} from 'core-components';
 import {
   GalleryType,
+  ScrollerDirectionOptions,
   SliderNavigation,
   SliderNavigationOptions,
   SliderNavigationPositionOptions,
@@ -42,6 +43,8 @@ const ControlsSection = ({
     changeCardsSettings,
     coverflowSettings,
     changeCoverflowSettings,
+    scrollerSettings,
+    changeScrollerSettings,
   } = useSettings();
 
   const sliderNavigationSettings = useMemo(() => {
@@ -71,6 +74,11 @@ const ControlsSection = ({
           settings: coverflowSettings,
           onChange: changeCoverflowSettings,
         };
+      case GalleryType.SCROLLER:
+        return {
+          settings: scrollerSettings,
+          onChange: changeScrollerSettings,
+        };
       default:
         return null;
     }
@@ -85,6 +93,8 @@ const ControlsSection = ({
     coverflowSettings,
     cubeSettings,
     slideshowSettings,
+    scrollerSettings,
+    changeScrollerSettings,
     type,
   ]);
 
@@ -389,6 +399,57 @@ const ControlsSection = ({
                 </Filter>
               </Grid>
             )}
+          </Grid>
+        }
+      />
+    );
+  }
+
+  if (type === GalleryType.SCROLLER) {
+    const {animationSpeed, pauseOnHover, scrollDirection} =
+      sliderNavigationSettings.settings as any;
+
+    return (
+      <Section
+        header={'Controls'}
+        className="reacg-tab-section"
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'scrollDirection'}
+                name={'Scroll direction'}
+                value={scrollDirection}
+                options={ScrollerDirectionOptions}
+                onChange={onSliderNavigationChange}
+                tooltip={
+                  <p>
+                    Set the scrolling direction of the first row. Each
+                    additional row automatically moves in the opposite direction
+                    of the previous row.
+                  </p>
+                }
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SliderControl
+                id={'animationSpeed'}
+                name={'Scroll speed'}
+                value={animationSpeed}
+                onChange={onSliderNavigationChange}
+                min={0}
+                max={400}
+                step={10}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'pauseOnHover'}
+                name={'Pause on hover'}
+                value={pauseOnHover}
+                onChange={onSliderNavigationChange}
+              />
+            </Filter>
           </Grid>
         }
       />

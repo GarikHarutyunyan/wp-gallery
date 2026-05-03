@@ -102,15 +102,11 @@ const SwiperImage = forwardRef(
 
     const renderTitle = (image: IImageDTO) => {
       let itemPaddingText = '0';
-      let imagePaddingText = '0';
       if (
         titlePosition === ThumbnailTitlePosition.BELOW ||
         titlePosition === ThumbnailTitlePosition.ABOVE
       ) {
         itemPaddingText = (itemBorderRadius || 0) / 2 + '%';
-        imagePaddingText = margin + 'px';
-      } else if (titlePosition !== ThumbnailTitlePosition.CENTER) {
-        imagePaddingText = (borderRadius || 0) / 2 + '%';
       }
 
       return (
@@ -159,8 +155,6 @@ const SwiperImage = forwardRef(
               },
             }}
             style={{
-              paddingLeft: '6px',
-              paddingRight: '6px',
               textAlign: titleAlignment,
               color: titleColor,
               backgroundColor:
@@ -220,15 +214,11 @@ const SwiperImage = forwardRef(
 
     const renderCaption = (image: IImageDTO) => {
       let itemPaddingText = '0';
-      let imagePaddingText = '0';
       if (
         captionPosition === ThumbnailTitlePosition.BELOW ||
         captionPosition === ThumbnailTitlePosition.ABOVE
       ) {
         itemPaddingText = (itemBorderRadius || 0) / 2 + '%';
-        imagePaddingText = margin + 'px';
-      } else if (captionPosition !== ThumbnailTitlePosition.CENTER) {
-        imagePaddingText = (borderRadius || 0) / 2 + '%';
       }
 
       return (
@@ -269,8 +259,6 @@ const SwiperImage = forwardRef(
               },
             }}
             style={{
-              paddingLeft: '6px',
-              paddingRight: '6px',
               textAlign: titleAlignment,
               color: captionFontColor,
               backgroundColor:
@@ -328,15 +316,11 @@ const SwiperImage = forwardRef(
       image: IImageDTO
     ) => {
       let itemPaddingText = '0';
-      let imagePaddingText = '6px';
       if (
         position === ThumbnailTitlePosition.BELOW ||
         position === ThumbnailTitlePosition.ABOVE
       ) {
         itemPaddingText = (itemBorderRadius || 0) / 2 + '%';
-        imagePaddingText = margin + 'px';
-      } else if (position !== ThumbnailTitlePosition.CENTER) {
-        imagePaddingText = (borderRadius || 0) / 2 + '%';
       }
 
       const isOutside =
@@ -366,8 +350,6 @@ const SwiperImage = forwardRef(
         >
           <ImageListItemBar
             style={{
-              paddingLeft: imagePaddingText,
-              paddingRight: imagePaddingText,
               textAlign: buttonAlignment,
               backgroundColor:
                 position !== ThumbnailTitlePosition.BELOW &&
@@ -397,7 +379,10 @@ const SwiperImage = forwardRef(
                   borderSize={buttonBorderSize}
                   borderColor={buttonBorderColor}
                   borderRadius={buttonBorderRadius}
-                  isOnHover={!isOutside}
+                  isOnHover={
+                    buttonVisibility === TitleVisibility.ON_HOVER &&
+                    !isOutside
+                  }
                 />
               </span>
             }

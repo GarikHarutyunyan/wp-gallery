@@ -15,6 +15,7 @@ import {
   ILightboxSettings,
   IMasonrySettings,
   IMosaicSettings,
+  IScrollerSettings,
   ISettingsDTO,
   ISlideshowSettings,
   IThumbnailSettings,
@@ -39,6 +40,7 @@ import {
   lightboxMockSettings,
   masonryMockSettings,
   mosaicMockSettings,
+  scrollerMockSettings,
   slideshowMockSettings,
   thumbnailMockSettings,
 } from './MockSettings';
@@ -61,6 +63,7 @@ const SettingsContext = React.createContext<{
   coverflowSettings?: ICoverflowSettings;
   cardsSettings?: ICardsSettings;
   blogSettings?: IBlogSettings;
+  scrollerSettings?: IScrollerSettings;
   changeGeneralSettings?: (settings: IGeneralSettings) => void;
   changeThumbnailSettings?: (settings: IThumbnailSettings) => void;
   changeMosaicSettings?: (settings: IMosaicSettings) => void;
@@ -73,6 +76,7 @@ const SettingsContext = React.createContext<{
   changeCoverflowSettings?: (settings: ICoverflowSettings) => void;
   changeCardsSettings?: (settings: ICardsSettings) => void;
   changeBlogSettings?: (settings: IBlogSettings) => void;
+  changeScrollerSettings?: (settings: IScrollerSettings) => void;
   changeCss?: (css: string) => void;
   wrapperRef?: any;
   imagesCount?: number;
@@ -111,6 +115,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     useState<ICoverflowSettings>();
   const [cardsSettings, setCardsSettings] = useState<ICardsSettings>();
   const [blogSettings, setBlogSettings] = useState<IBlogSettings>();
+  const [scrollerSettings, setScrollerSettings] = useState<IScrollerSettings>();
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState<GalleryType>();
   const [css, setCss] = useState('');
@@ -141,6 +146,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCoverflowSettings(newSettings.coverflow || coverflowMockSettings);
     setCardsSettings(newSettings.cards || cardsMockSettings);
     setBlogSettings(newSettings.blog || blogMockSettings);
+    setScrollerSettings(newSettings.scroller || scrollerMockSettings);
     initTemplate?.(
       parseInt(
         template_id === '' || template_id === 'none'
@@ -182,6 +188,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCoverflowSettings(newSettings.coverflow || coverflowMockSettings);
       setCardsSettings(newSettings.cards || cardsMockSettings);
       setBlogSettings(newSettings.blog || blogMockSettings);
+      setScrollerSettings(newSettings.scroller || scrollerMockSettings);
       initTemplate?.(
         parseInt(
           template_id === '' || template_id === 'none'
@@ -206,6 +213,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCoverflowSettings(coverflowMockSettings);
       setCardsSettings(cardsMockSettings);
       setBlogSettings(blogMockSettings);
+      setScrollerSettings(scrollerMockSettings);
     }
   };
 
@@ -286,6 +294,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         cards: cardsSettings,
         slideshow: slideshowSettings,
         blog: blogSettings,
+        scroller: scrollerSettings,
         templateType: template?.templateType,
         template_id: template?.template_id,
         css: css || '',
@@ -311,6 +320,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCoverflowSettings(newSettings.coverflow || coverflowMockSettings);
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
+        setScrollerSettings(newSettings.scroller || scrollerMockSettings);
         initTemplate?.(
           parseInt(
             template_id === '' || template_id === 'none'
@@ -380,6 +390,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCoverflowSettings(newSettings.coverflow || coverflowMockSettings);
         setCardsSettings(newSettings.cards);
         setBlogSettings(newSettings.blog);
+        setScrollerSettings(newSettings.scroller || scrollerMockSettings);
         setCss(newSettings.css || '');
         initTemplate?.(
           parseInt(
@@ -482,6 +493,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         coverflowSettings,
         cardsSettings,
         blogSettings,
+        scrollerSettings,
         changeGeneralSettings: createOnChange(setGeneralSettings),
         changeThumbnailSettings: createOnChange(setThumbnailSettings),
         changeMosaicSettings: createOnChange(setMosaicSettings),
@@ -494,6 +506,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeCoverflowSettings: createOnChange(setCoverflowSettings),
         changeCardsSettings: createOnChange(setCardsSettings),
         changeBlogSettings: createOnChange(setBlogSettings),
+        changeScrollerSettings: createOnChange(setScrollerSettings),
         changeCss: createOnChange(setCss),
         wrapperRef,
         imagesCount,

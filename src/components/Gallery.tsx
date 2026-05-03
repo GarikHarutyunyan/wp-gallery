@@ -34,6 +34,7 @@ const CardsGallery = lazy(() => import('./cards-gallery/CardsGallery'));
 const BlogGallery = lazy(() => import('./blog-gallery/BlogGallery'));
 const Carousel = lazy(() => import('./carousel/Carousel'));
 const Coverflow = lazy(() => import('./coverflow/Coverflow'));
+const Scroller = lazy(() => import('./scroller/Scroller'));
 const Lightbox = lazy(() => import('./lightbox/Lightbox'));
 const Slideshow = lazy(() => import('./slideshow/Slideshow'));
 const PaginationProvider = lazy(
@@ -175,6 +176,9 @@ const Gallery = (): ReactElement => {
         gallery = (
           <Coverflow onClick={isClickable ? onImageClick : undefined} />
         );
+        break;
+      case GalleryType.SCROLLER:
+        gallery = <Scroller onClick={isClickable ? onImageClick : undefined} />;
         break;
     }
 

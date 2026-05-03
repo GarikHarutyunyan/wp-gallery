@@ -11,6 +11,7 @@ import {
   LightboxThumbnailsPosition,
   PaginationType,
   Position,
+  ScrollerDirection,
   SizeTypeHeight,
   SizeTypeWidth,
   SliderNavigation,
@@ -472,6 +473,60 @@ export interface IBlogSettings {
   showVideoCover: boolean;
 }
 
+export interface IScrollerSettings {
+  height: number;
+  equalHeight: boolean;
+  width: number;
+  equalWidth: boolean;
+  rowCount: number;
+  scrollDirection: ScrollerDirection;
+  animationSpeed: number;
+  pauseOnHover: boolean;
+  padding: number;
+  paddingColor: string;
+  hoverEffect: HoverEffect;
+  showTitle: boolean;
+  titleSource: TitleSource;
+  titleVisibility: TitleVisibility;
+  titlePosition: ThumbnailTitlePosition;
+  titleFontSize?: number | undefined;
+  titleColor: string;
+  titleAlignment: TitleAlignment;
+  titleFontFamily: string;
+  overlayTextBackground: string;
+  invertTextColor: boolean;
+  showCaption: boolean;
+  captionSource: CaptionSource;
+  captionVisibility: TitleVisibility;
+  captionPosition: ThumbnailTitlePosition;
+  captionFontSize?: number | undefined;
+  captionFontColor: string;
+  showDescription: boolean;
+  descriptionSource: DescriptionSource;
+  descriptionPosition: DescriptionPosition;
+  descriptionFontSize?: number | undefined;
+  descriptionFontColor: string;
+  descriptionMaxRowsCount?: number | undefined;
+  showButton: boolean;
+  buttonText: string;
+  buttonVisibility: TitleVisibility;
+  buttonPosition: ThumbnailTitlePosition;
+  buttonAlignment: TitleAlignment;
+  buttonColor: string;
+  buttonTextColor: string;
+  buttonFontSize: number;
+  buttonBorderSize: number;
+  buttonBorderColor: string;
+  buttonBorderRadius: number;
+  buttonUrlSource: string;
+  openInNewTab: boolean;
+  showVideoCover: boolean;
+  gap: number;
+  backgroundColor: string;
+  containerPadding: number;
+  borderRadius: number;
+}
+
 export interface ISettingsDTO {
   type: GalleryType;
   general: IGeneralSettings;
@@ -486,6 +541,7 @@ export interface ISettingsDTO {
   coverflow: ICoverflowSettings;
   cards: ICardsSettings;
   blog: IBlogSettings;
+  scroller: IScrollerSettings;
   template_id?: number;
   templateType?: string;
   title?: string;
