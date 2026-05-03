@@ -6,11 +6,17 @@ import {
   ScrollerDirection,
   ThumbnailTitlePosition,
 } from 'data-structures';
-import React, {useEffect, useRef, useState} from 'react';
-import {getLargestSrcItem} from 'utils/imageSrcSet';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {getLargestSrcItem, ISrcSetItem} from 'utils/imageSrcSet';
 import './scroller.css';
 import {getResponsiveScale} from './Scroller.utils';
 import {IScrollerItem, ScrollerItem} from './ScrollerItem';
+
+interface IRowData {
+  itemsInSet: IScrollerItem[];
+  spanWidth: number;
+  duration: number;
+}
 
 interface IScrollerProps {
   images: IImageDTO[];
@@ -77,32 +83,17 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
 
   const effectiveContainerWidth =
     containerWidth || wrapperRef.current?.clientWidth || 800;
-  const responsiveScale = getResponsiveScale(effectiveContainerWidth);
-  const responsiveHeight = Math.max(50, Math.round(height * responsiveScale));
+  const responsiveScale: number = getResponsiveScale(effectiveContainerWidth);
+  const responsiveHeight: number = Math.max(
+    50,
+    Math.round(height * responsiveScale)
+  );
 
-  const normalizedRowCount = Math.max(1, Math.min(6, Math.round(rowCount)));
-  const sourceItems = images.map((image, originalIndex) => ({
-    image,
-    originalIndex,
-  }));
-  const rowSources: Array<Array<{image: IImageDTO; originalIndex: number}>> =
-    [];
-  const basePerRow = Math.floor(sourceItems.length / normalizedRowCount);
-  const remainder = sourceItems.length % normalizedRowCount;
-  let offset = 0;
-
-  for (let rowIndex = 0; rowIndex < normalizedRowCount; rowIndex++) {
-    const rowSize = basePerRow + (rowIndex < remainder ? 1 : 0);
-    rowSources.push(sourceItems.slice(offset, offset + rowSize));
-    offset += rowSize;
-  }
-
-  const rowData = rowSources
-    .filter((row) => row.length > 0)
-    .map((row) => {
-      const baseItems: IScrollerItem[] = row.map(({image, originalIndex}) => {
-        const srcItem = getLargestSrcItem(image.sizes);
-        const naturalRatio = srcItem ? srcItem.width / srcItem.height : 1;
+  const scrollerItems: IScrollerItem[] = useMemo(
+    () =>
+      images.map((image: IImageDTO, originalIndex: number) => {
+        const srcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
+        const ratio: number = srcItem ? srcItem.width / srcItem.height : 1;
         let width: number;
         let itemHeight: number;
 
@@ -111,58 +102,101 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
           itemHeight = responsiveHeight;
         } else if (equalWidth) {
           width = itemWidth;
-          itemHeight = Math.min(responsiveHeight, itemWidth / naturalRatio);
+          itemHeight = Math.min(responsiveHeight, itemWidth / ratio);
         } else if (equalHeight) {
           itemHeight = responsiveHeight;
-          width = responsiveHeight * naturalRatio;
+          width = responsiveHeight * ratio;
         } else {
           // Use configured width/height as max bounds and preserve natural ratio.
           const maxWidth = itemWidth;
-          const widthByHeight = responsiveHeight * naturalRatio;
+          const widthByHeight = responsiveHeight * ratio;
           if (widthByHeight <= maxWidth) {
             width = widthByHeight;
             itemHeight = responsiveHeight;
           } else {
             width = maxWidth;
-            itemHeight = maxWidth / naturalRatio;
+            itemHeight = maxWidth / ratio;
           }
         }
 
         const src = srcItem?.src || image.original?.url;
 
         return {image, originalIndex, src, width, height: itemHeight};
-      });
+      }),
+    [images, itemWidth, responsiveHeight, equalWidth, equalHeight]
+  );
 
-      const totalBaseWidth =
-        baseItems.reduce((sum, item) => sum + item.width, 0) +
-        Math.max(0, baseItems.length - 1) * (gap || 0);
+  const rowData: Array<IRowData> = useMemo(() => {
+    // TODO: use constant for 6 rows max and validate rowCount in settings
+    const normalizedRowCount = Math.max(1, Math.min(6, Math.round(rowCount)));
+    const itemsCountPerRow: number = Math.floor(
+      scrollerItems.length / normalizedRowCount
+    );
+    const remainder: number = scrollerItems.length % normalizedRowCount;
 
-      // One set contains available images only. Duplicate within set only if it is narrower than viewport.
-      const repeat =
-        totalBaseWidth > 0 && totalBaseWidth < effectiveContainerWidth
+    const result: Array<IRowData> = [];
+    let offset: number = 0;
+
+    for (let rowIndex = 0; rowIndex < normalizedRowCount; rowIndex++) {
+      const rowItemsCount = itemsCountPerRow + (rowIndex < remainder ? 1 : 0);
+      const rowScrollerItems: Array<IScrollerItem> = scrollerItems.slice(
+        offset,
+        offset + rowItemsCount
+      );
+
+      if (rowScrollerItems.length > 0) {
+        const baseItems: IScrollerItem[] = rowScrollerItems;
+        const baseItemsWidth: number = baseItems.reduce(
+          (sumOfWidth: number, item: IScrollerItem) => sumOfWidth + item.width,
+          0
+        );
+        const baseItemsGap: number =
+          Math.max(0, baseItems.length - 1) * (gap || 0);
+        const totalBaseWidth = baseItemsWidth + baseItemsGap;
+
+        const isSmallerThanContainer: boolean =
+          totalBaseWidth > 0 && totalBaseWidth < effectiveContainerWidth;
+        const repeatCount: number = isSmallerThanContainer
           ? Math.ceil(effectiveContainerWidth / totalBaseWidth)
           : 1;
 
-      const itemsInSet: IScrollerItem[] = [];
-      for (let i = 0; i < repeat; i++) {
-        baseItems.forEach((item) => {
-          itemsInSet.push(item);
-        });
+        const rowItems: IScrollerItem[] = [];
+
+        for (let i = 0; i < repeatCount; i++) {
+          baseItems.forEach((item) => {
+            rowItems.push(item);
+          });
+        }
+
+        const rowItemsWidth: number = rowItems.reduce(
+          (sumOfWidth: number, item: IScrollerItem) => sumOfWidth + item.width,
+          0
+        );
+        const rowItemsGap: number =
+          Math.max(0, rowItems.length - 1) * (gap || 0);
+        const totalRowItemsWidth = rowItemsWidth + rowItemsGap;
+        const spanWidth = totalRowItemsWidth + gap;
+
+        const newRowData: IRowData = {
+          itemsInSet: rowItems,
+          spanWidth,
+          duration: spanWidth / Math.max(animationSpeed, 1),
+        };
+
+        result.push(newRowData);
+
+        offset += rowItemsCount;
       }
-
-      // Width of all items inside one set (without the trailing set boundary gap).
-      const singleSetContentWidth =
-        itemsInSet.reduce((sum, item) => sum + item.width, 0) +
-        Math.max(0, itemsInSet.length - 1) * (gap || 0);
-      // Span from start of one set to start of the cloned set.
-      const spanWidth = singleSetContentWidth + gap;
-
-      return {
-        itemsInSet,
-        spanWidth,
-        duration: spanWidth / Math.max(animationSpeed, 1),
-      };
-    });
+    }
+    return result;
+  }, [
+    scrollerItems,
+    rowCount,
+    gap,
+    animationSpeed,
+    effectiveContainerWidth,
+    itemWidth,
+  ]);
 
   const isTitleAbove: boolean = titlePosition === ThumbnailTitlePosition.ABOVE;
   const isTitleBelow: boolean = titlePosition === ThumbnailTitlePosition.BELOW;
