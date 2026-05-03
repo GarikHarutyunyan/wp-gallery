@@ -14,7 +14,7 @@ import {IScrollerItem, ScrollerItem} from './ScrollerItem';
 
 interface IRowData {
   items: IScrollerItem[];
-  width: number;
+  chunkWidth: number;
   duration: number;
 }
 
@@ -161,7 +161,7 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
 
         const newRowData: IRowData = {
           items: rowItems,
-          width: rowWidth,
+          chunkWidth: rowWidth,
           duration,
         };
 
@@ -232,7 +232,7 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
           !equalHeight && !hasOutsideMetadata ? responsiveHeight : undefined;
         const isLeftScroll: boolean = rowDirection === ScrollerDirection.LEFT;
         const animationDurationString: string = `${row.duration}s`;
-        const shiftPxString: string = `${row.width}px`;
+        const shiftPxString: string = `${row.chunkWidth}px`;
         const gapString: string = `${gap}px`;
 
         return (
@@ -257,15 +257,15 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            {[0, 1].map((setIndex) => (
+            {[0, 1].map((chunkIndex) => (
               <div
-                key={`set-${rowIndex}-${setIndex}`}
+                key={`set-${rowIndex}-${chunkIndex}`}
                 className="reacg-scroller__set"
-                aria-hidden={setIndex === 1}
+                aria-hidden={chunkIndex === 1}
               >
                 {row.items.map((item, i) => (
                   <div
-                    key={`${rowIndex}-${setIndex}-${i}-${item.image.id}`}
+                    key={`${rowIndex}-${chunkIndex}-${i}-${item.image.id}`}
                     className="reacg-scroller__item"
                     style={{
                       width: item.width,
