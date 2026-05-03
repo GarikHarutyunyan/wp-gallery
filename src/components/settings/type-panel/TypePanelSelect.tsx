@@ -1,4 +1,5 @@
 import {Box, MenuItem, Select, Typography} from '@mui/material';
+import {getProLayoutDialogConfig} from 'components/alert-dialog/AlertDialog.constants';
 import {ProIcon} from 'components/alert-dialog/icons/ProIcon';
 import {usePro} from 'contexts/ProContext';
 import {GalleryType} from 'data-structures';
@@ -27,9 +28,9 @@ const TypePanelSelect: React.FC<ITypePanelSelectProps> = ({
     }
 
     if (selectedOption?.isPro && !isPro) {
-      (window as any).reacg_open_premium_offer_dialog?.({
-        utm_medium: `layout_${nextValue}`,
-      });
+      (window as any).reacg_open_pro_layout_dialog?.(
+        getProLayoutDialogConfig(nextValue)
+      );
       return;
     }
 
