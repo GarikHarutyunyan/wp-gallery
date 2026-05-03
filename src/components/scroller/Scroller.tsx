@@ -44,7 +44,7 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
     showButton = false,
     buttonPosition = ThumbnailTitlePosition.BOTTOM,
     showVideoCover,
-    gap,
+    gap = 0,
     backgroundColor,
     containerPadding,
     borderRadius,
@@ -150,13 +150,11 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
           gap,
           effectiveContainerWidth
         );
-
         const rowItemsWidth: number = rowItems.reduce(
           (sumOfWidth: number, item: IScrollerItem) => sumOfWidth + item.width,
           0
         );
-        const rowItemsGap: number =
-          Math.max(0, rowItems.length - 1) * (gap || 0);
+        const rowItemsGap: number = Math.max(0, rowItems.length - 1) * gap;
         const totalRowItemsWidth = rowItemsWidth + rowItemsGap;
         const spanWidth = totalRowItemsWidth + gap;
 
@@ -222,7 +220,7 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
         paddingBottom: containerPadding,
         display: 'flex',
         flexDirection: 'column',
-        rowGap: `${gap || 0}px`,
+        rowGap: `${gap}px`,
       }}
     >
       {rowData.map((row, rowIndex) => {
@@ -233,7 +231,7 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
         const isLeftScroll: boolean = rowDirection === ScrollerDirection.LEFT;
         const animationDurationString: string = `${row.duration}s`;
         const shiftPxString: string = `${row.spanWidth}px`;
-        const gapString: string = `${gap || 0}px`;
+        const gapString: string = `${gap}px`;
 
         return (
           <div
