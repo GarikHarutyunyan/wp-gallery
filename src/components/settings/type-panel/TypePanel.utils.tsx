@@ -30,7 +30,6 @@ export const GalleryTypeOptions = [
     value: GalleryType.JUSTIFIED,
     title: 'Justified',
     image: <JustifiedImage />,
-    isPro: true,
   },
   {
     value: GalleryType.SLIDESHOW,
@@ -51,7 +50,6 @@ export const GalleryTypeOptions = [
     value: GalleryType.CARDS,
     title: 'Cards',
     image: <CardsImage />,
-    isPro: true,
   },
   {
     value: GalleryType.BLOG,

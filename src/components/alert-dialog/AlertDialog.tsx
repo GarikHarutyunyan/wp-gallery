@@ -5,7 +5,6 @@ import {Alert} from './Alert';
 import './alert-dialog.css';
 import {
   errorConfig,
-  getProLayoutDialogConfig,
   needHelpConfig,
   newHereConfig,
   premiumConfig,
@@ -33,9 +32,6 @@ const AlertDialog: React.FC<IAlertDialogProps> = () => {
     (window as any).reacg_open_premium_offer_dialog = (
       customConfig: AlertConfig
     ) => handleOpen({...premiumConfig, ...customConfig});
-    (window as any).reacg_open_pro_layout_dialog = (
-      customConfig: AlertConfig
-    ) => handleOpen({...getProLayoutDialogConfig, ...customConfig});
     (window as any).reacg_open_need_help_dialog = (customConfig: AlertConfig) =>
       handleOpen({...needHelpConfig, ...customConfig});
     (window as any).reacg_open_new_here_dialog = (customConfig: AlertConfig) =>

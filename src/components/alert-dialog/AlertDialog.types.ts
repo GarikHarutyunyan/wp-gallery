@@ -1,5 +1,5 @@
 type ButtonConfig = {
-  label: React.ReactNode;
+  label: string;
   backgroundColor: string;
   width?: string;
   onClick: (utm_medium?: string) => void;

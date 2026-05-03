@@ -1,6 +1,5 @@
 import {Typography} from '@mui/material';
 import clsx from 'clsx';
-import {getProLayoutDialogConfig} from 'components/alert-dialog/AlertDialog.constants';
 import {ProIcon} from 'components/alert-dialog/icons/ProIcon';
 import {usePro} from 'contexts/ProContext';
 import {GalleryType} from 'data-structures';
@@ -31,9 +30,9 @@ const TypeOption: React.FC<ITypeOptionProps> = ({
     }
 
     if (requiresPro && !isPro) {
-      (window as any).reacg_open_pro_layout_dialog?.(
-        getProLayoutDialogConfig(value)
-      );
+      (window as any).reacg_open_premium_offer_dialog?.({
+        utm_medium: `layout_${value}`,
+      });
       return;
     }
 
