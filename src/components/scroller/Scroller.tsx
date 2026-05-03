@@ -48,7 +48,7 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
     showButton = false,
     buttonPosition = ThumbnailTitlePosition.BOTTOM,
     showVideoCover,
-    gap = 0,
+    gap,
     backgroundColor,
     containerPadding,
     borderRadius,
