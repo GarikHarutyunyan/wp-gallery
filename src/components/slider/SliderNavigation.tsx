@@ -80,7 +80,7 @@ export const SliderNavigation: FC<SliderNavigationProps> = ({
     e.stopPropagation(); // stop the click from triggering the slide
     mainRef?.current?.slideNext();
   };
-  console.log(navigationHover);
+
   return (
     <div
       className={clsx(

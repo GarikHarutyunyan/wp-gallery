@@ -9,6 +9,7 @@ import {GridAppearanceSettings} from './gird-settings/GridAppearanceSettings';
 import {JustifiedAppearanceSettings} from './justified-settings/JustifiedAppearanceSettings';
 import {MasonryAppearanceSettings} from './masonry-settings/MasonryAppearanceSettings';
 import {MosaicAppearanceSettings} from './mosaic-settings/MosaicAppearanceSettings';
+import {SliderAppearanceSettings} from './slider-settings/SliderAppearanceSettings';
 import {SlideshowAppearanceSettings} from './slideshow-settings/SlideshowAppearanceSettings';
 import {useSettings} from './useSettings';
 
@@ -43,6 +44,8 @@ const OptionsPanelAppearanceTab = ({
     changeCardsSettings,
     blogSettings,
     changeBlogSettings,
+    sliderSettings,
+    changeSliderSettings,
   } = useSettings();
 
   const isGrid: boolean = type === GalleryType.THUMBNAILS;
@@ -54,6 +57,7 @@ const OptionsPanelAppearanceTab = ({
   const isCarousel: boolean = type === GalleryType.CAROUSEL;
   const isCards: boolean = type === GalleryType.CARDS;
   const isBlog: boolean = type === GalleryType.BLOG;
+  const isSlider: boolean = type === GalleryType.SLIDER;
   const isCoverflow: boolean = type === GalleryType.COVERFLOW;
 
   return (
@@ -126,6 +130,14 @@ const OptionsPanelAppearanceTab = ({
         <BlogAppearanceSettings
           settings={blogSettings}
           onSettingsChange={changeBlogSettings!}
+          isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
+        />
+      )}
+      {isSlider && sliderSettings && (
+        <SliderAppearanceSettings
+          settings={sliderSettings}
+          onSettingsChange={changeSliderSettings!}
           isLoading={isLoading}
           onProFeatureClick={onProFeatureClick}
         />

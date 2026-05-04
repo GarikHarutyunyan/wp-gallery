@@ -41,7 +41,8 @@ const NavigationSettings = ({
     type === GalleryType.CUBE ||
     type === GalleryType.CAROUSEL ||
     type === GalleryType.COVERFLOW ||
-    type === GalleryType.CARDS;
+    type === GalleryType.CARDS ||
+    type === GalleryType.SLIDER;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();

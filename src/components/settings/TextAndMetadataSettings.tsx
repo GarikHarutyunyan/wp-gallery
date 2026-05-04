@@ -10,6 +10,7 @@ import {
   DescriptionSourceOptions,
   GalleryType,
   LightboxTextPositionOptions,
+  SliderTextPositionOptions,
   TextsAlignmentOptions,
   ThumbnailTitlePosition,
   ThumbnailTitlePositionOptions,
@@ -83,6 +84,10 @@ export const TextAndMetadataSettings: React.FC<
       value: settingsContext.blogSettings,
       onChange: settingsContext.changeBlogSettings,
     },
+    [GalleryType.SLIDER]: {
+      value: settingsContext.sliderSettings,
+      onChange: settingsContext.changeSliderSettings,
+    },
     [GalleryType.COVERFLOW]: {
       value: settingsContext.coverflowSettings,
       onChange: settingsContext.changeCoverflowSettings,
@@ -115,12 +120,14 @@ export const TextAndMetadataSettings: React.FC<
     'textBackground' in value ||
     'textVerticalAlignment' in value;
 
-  const usesLightboxTextLayout = galleryType === GalleryType.SLIDESHOW;
+  const usesLightboxTextLayout =
+    galleryType === GalleryType.SLIDESHOW || galleryType === GalleryType.SLIDER;
   const usesThumbnailPositionLayout = [
     GalleryType.THUMBNAILS,
     GalleryType.CUBE,
     GalleryType.CAROUSEL,
     GalleryType.CARDS,
+    GalleryType.SLIDER,
     GalleryType.COVERFLOW,
   ].includes(galleryType);
 
@@ -782,7 +789,11 @@ export const TextAndMetadataSettings: React.FC<
                   id={'textPosition'}
                   name={'Position'}
                   value={value.textPosition}
-                  options={LightboxTextPositionOptions}
+                  options={
+                    galleryType === GalleryType.SLIDER
+                      ? SliderTextPositionOptions
+                      : LightboxTextPositionOptions
+                  }
                   onChange={onInputValueChange}
                 />
               </Filter>
@@ -888,8 +899,7 @@ export const TextAndMetadataSettings: React.FC<
                   onChange={
                     isPro
                       ? onInputValueChange
-                      : () =>
-                        onProFeatureClick('invert_color')
+                      : () => onProFeatureClick('invert_color')
                   }
                 />
               </Filter>

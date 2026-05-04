@@ -1,30 +1,18 @@
-import {InputLabel} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {ProIcon} from 'components/alert-dialog/icons/ProIcon';
 import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
 import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {
-  ActionURLSourceOptions,
   CaptionSourceOptions,
   DescriptionSourceOptions,
   ISliderSettings,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
-  PaddingTypetOptions,
   SizeTypeHeightOptions,
   SizeTypeWidthOptions,
-  SliderAnimationOptions,
-  SliderAutoPlayProgressTypeOptions,
   SliderDirectionOptions,
-  SliderNavigationPositionV2Options,
-  SliderNavigationTypeOptions,
-  SliderPaginationType,
-  SliderPaginationTypeOptions,
-  SliderShadowType,
-  SliderShadowTypeOptions,
   SliderSlidesDesign,
   SliderSlidesDesignOptions,
   SliderTextPositionOptions,
@@ -32,8 +20,7 @@ import {
   TitleAlignmentOptions,
   TitleSourceOptions,
 } from 'data-structures';
-import {SliderPaginationPositionOptions} from 'data-structures/enum/SliderPaginationPosition';
-import React, {ReactNode, useEffect} from 'react';
+import React, {ReactNode} from 'react';
 import {
   ColorControl,
   FontControl,
@@ -41,9 +28,7 @@ import {
   SelectControl,
   SliderControl,
   SwitchControl,
-  TextControl,
 } from '../../controls';
-import {LabelWithTooltip} from '../../controls/LabelWithTooltip';
 import {Filter} from '../Filter';
 
 interface ISliderSettingsProps {
@@ -61,24 +46,11 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
 }) => {
   const {resetTemplate} = useTemplates();
   const {
-    // isFullscreen,
     width,
     height,
-    // areControlButtonsShown,
     widthType,
     heightType,
-    isInfinite,
-    padding,
-    paddingType,
     spaceBetween,
-    isSliderAllowed,
-    autoplay,
-    slideDuration,
-    slideDelay,
-    imageAnimation,
-    shadow,
-    shadowType,
-    shadowColor,
     thumbnailsPosition,
     thumbnailsAlignment,
     thumbnailShowsOnHover,
@@ -125,101 +97,25 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
     thumbnailCaptionFontSize,
     thumbnailCaptionFontColor,
     thumbnailDescriptionFontColor,
-    backgroundColor,
-    textPosition,
-    textFontFamily,
-    textColor,
-    textBackground,
-    invertTextColor,
-    showTitle,
-    titleSource,
-    titleFontSize,
-    titleAlignment,
-    showDescription,
-    descriptionSource,
-    descriptionFontSize,
-    descriptionMaxRowsCount,
-    descriptionFontColor,
-    showCaption,
-    captionSource,
-    captionFontSize,
-    captionFontColor,
-    navigationButton,
-    navigationshowsOnHover,
-    navigationType,
-    navigationColor,
-    navigationBackgroundColor,
-    navigationSize,
-    navigationPosition,
-    navigationPadding,
-    navigationOpacity,
-    navigationBorder,
-    navigationBorderColor,
-    navigationBorderRadius,
-    navigationHover,
-    navigationColorHover,
-    navigationBackgroundColorHover,
-    pagination,
-    paginationPosition,
-    paginationBulletsImage,
-    paginationType,
-    paginationshowsOnHover,
-    paginationBulletsBackgroundColor,
-    paginationBulletsSize,
-    paginationBulletsBorder,
-    paginationBulletsBorderColor,
-    paginationBulletsBorderRadius,
-    paginationActiveBulletBackgroundColor,
-    paginationActiveBulletSize,
-    paginationActiveBulletBorder,
-    paginationActiveBulletBorderColor,
-    paginationActiveBulletBorderRadius,
-    paginationFractionColor,
-    paginationFractionFontSize,
-    paginationFractionTextFontFamily,
     direction,
-    keyboard,
-    mousewheel,
     slidesDesign,
     backgroundBlur,
-    showButton,
-    openInNewTab,
-    buttonText,
-    buttonAlignment,
-    buttonColor,
-    buttonTextColor,
-    buttonFontSize,
-    buttonUrlSource,
-    autoplayProgress,
-    autoplayProgressColor,
-    autoplayProgressType,
   } = settings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
     key && onSettingsChange({...settings, [key]: inputValue});
   };
-
-  useEffect(() => {
-    onSettingsChange({...settings, paginationActiveBulletSize: 0});
-  }, [paginationType]);
+  const {isPro} = usePro();
 
   const renderMainSettings = (): ReactNode => {
     return (
-      <Section
-        header={'Basic'}
-        body={
-          <>
+      <Paper elevation={0} sx={{textAlign: 'left'}}>
+        <Section
+          header={'Layout Settings'}
+          className="reacg-tab-section"
+          body={
             <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-              {/* <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'isFullscreen'}
-                    name={'Full width'}
-                    value={isFullscreen}
-                    onChange={onInputValueChange}
-                  />
-                </Filter> */}
-
               <Filter isLoading={isLoading}>
                 <div className="mixed-fields">
                   <div style={{flexBasis: '80%'}}>
@@ -262,65 +158,38 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                   </div>
                 </div>
               </Filter>
-
               <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id={'autoplay'}
-                  name={'Autoplay'}
-                  value={autoplay}
+                <SelectControl
+                  id={'direction'}
+                  name={'Sldier direction'}
+                  // pro={true}
+                  value={direction}
+                  options={SliderDirectionOptions}
                   onChange={onInputValueChange}
                 />
               </Filter>
-              {autoplay || isSliderAllowed ? (
+
+              <Filter isLoading={isLoading}>
+                <SelectControl
+                  id={'slidesDesign'}
+                  name={'Slides Design'}
+                  value={slidesDesign}
+                  options={SliderSlidesDesignOptions}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              {slidesDesign === SliderSlidesDesign.BLURFIT && (
                 <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'slideDelay'}
-                    name={'Time interval'}
-                    value={slideDelay}
+                  <SliderControl
+                    id={'backgroundBlur'}
+                    name="background Blur(px)"
+                    min={7}
+                    max={45}
+                    value={backgroundBlur}
                     onChange={onInputValueChange}
-                    min={700}
-                    unit={'ms'}
                   />
                 </Filter>
-              ) : null}
-
-              <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id={'isSliderAllowed'}
-                  name={'Play / Pause'}
-                  value={isSliderAllowed}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-              <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id={'isInfinite'}
-                  name={'Loop'}
-                  value={isInfinite}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-              <Filter isLoading={isLoading}>
-                <div className="mixed-fields">
-                  <div style={{flexBasis: '80%'}}>
-                    <NumberControl
-                      id={'padding'}
-                      name={'Padding'}
-                      value={padding}
-                      onChange={onInputValueChange}
-                      min={0}
-                    />
-                  </div>
-                  <div style={{flexBasis: '20%'}}>
-                    <SelectControl
-                      id="paddingType"
-                      value={paddingType}
-                      options={PaddingTypetOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </div>
-                </div>
-              </Filter>
+              )}
               <Filter isLoading={isLoading}>
                 <NumberControl
                   id={'spaceBetween'}
@@ -330,91 +199,57 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                   min={0}
                 />
               </Filter>
+
+              <ClickActionSettings isLoading={isLoading} />
+            </Grid>
+          }
+        />
+        <Section
+          header={'Thumbnails'}
+          className="reacg-tab-section"
+          body={
+            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
               <Filter isLoading={isLoading}>
-                <ColorControl
-                  id={'backgroundColor'}
-                  name="Background color"
-                  value={backgroundColor}
-                  onChange={onInputValueChange}
+                <SelectControl
+                  id={'thumbnailsPosition'}
+                  name={'Position'}
+                  value={thumbnailsPosition}
+                  options={LightboxThumbnailsPositionOptions}
+                  onChange={
+                    isPro
+                      ? onInputValueChange
+                      : () => onProFeatureClick('enable_filmstrip')
+                  }
                 />
               </Filter>
-            </Grid>
-            <ClickActionSettings isLoading={isLoading} />
-          </>
-        }
-      />
-    );
-  };
 
-  const renderFilmstripSettings = (): ReactNode => {
-    return (
-      <Section
-        header={
-          <>
-            Filmstrip
-            <ProIcon />
-          </>
-        }
-        body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <SelectControl
-                id={'thumbnailsPosition'}
-                name={'Position'}
-                value={thumbnailsPosition}
-                options={LightboxThumbnailsPositionOptions}
-                onChange={
-                  isPro
-                    ? onInputValueChange
-                    : () => onProFeatureClick('enable_filmstrip')
-                }
-              />
-            </Filter>
-
-            {/* ───────────────── THUMBNAILS ───────────────── */}
-            {thumbnailsPosition !== LightboxThumbnailsPosition.NONE && (
-              <>
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                    id={'thumbnailsAlignment'}
-                    name={'Alignement'}
-                    value={thumbnailsAlignment}
-                    options={TextsAlignmentOptions}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id="thumbnailShowsOnHover"
-                    name="Shows on hover"
-                    value={thumbnailShowsOnHover}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-
+              {/* ───────────────── THUMBNAILS ───────────────── */}
+              {thumbnailsPosition !== LightboxThumbnailsPosition.NONE && (
                 <>
-                  {/* LABEL */}
-                  <Grid
-                    sx={{marginLeft: 0, paddingTop: 2}}
-                    container
-                    columns={24}
-                    rowSpacing={2}
-                    columnSpacing={4}
-                  >
-                    <Filter isLoading={isLoading}>
-                      <InputLabel shrink variant="filled">
-                        <LabelWithTooltip label="Thumbnail" tooltip="" />
-                      </InputLabel>
-                    </Filter>
-                  </Grid>
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'thumbnailsAlignment'}
+                      name={'Alignement'}
+                      value={thumbnailsAlignment}
+                      options={TextsAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <SwitchControl
+                      id="thumbnailShowsOnHover"
+                      name="Shows on hover"
+                      value={thumbnailShowsOnHover}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
 
-                  {/* CONTROLS */}
                   <Grid
                     container
                     columns={24}
                     rowSpacing={2}
                     columnSpacing={4}
-                    className="reacg-section__container-inherit"
+                    sx={{marginLeft: 0, paddingTop: 2}}
                   >
                     <Filter isLoading={isLoading}>
                       <NumberControl
@@ -506,292 +341,241 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                       />
                     </Filter>
                   </Grid>
+
+                  {/* ─────────────────ACTIVE THUMBNAIL ───────────────── */}
+
+                  <>
+                    {/* CONTROLS */}
+                    <Grid
+                      container
+                      columns={24}
+                      rowSpacing={2}
+                      columnSpacing={4}
+                      sx={{marginLeft: 0, paddingTop: 2}}
+                    >
+                      <Filter isLoading={isLoading}>
+                        <NumberControl
+                          id={'activeThumbnailWidth'}
+                          name={'Active thumbnail width'}
+                          value={activeThumbnailWidth}
+                          onChange={onInputValueChange}
+                          min={0}
+                          unit={'px'}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <NumberControl
+                          id={'activeThumbnailHeight'}
+                          name={'Active thumbnail height'}
+                          value={activeThumbnailHeight}
+                          onChange={onInputValueChange}
+                          min={0}
+                          unit={'px'}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <ColorControl
+                          id={'activeThumbnailBackgroundColor'}
+                          name="Active thumbnail background color"
+                          value={activeThumbnailBackgroundColor}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id={'activeThumbnailPadding'}
+                          name="Active thumbnail padding (px)"
+                          min={0}
+                          max={100}
+                          value={activeThumbnailPadding}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id={'activeThumbnailOpacity'}
+                          name="Active thumbnail opacity"
+                          min={0}
+                          max={1}
+                          step={0.05}
+                          value={activeThumbnailOpacity}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id={'activeThumbnailBorder'}
+                          name="Active thumbnail border (px)"
+                          min={0}
+                          max={20}
+                          value={activeThumbnailBorder}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <ColorControl
+                          id={'activeThumbnailBorderColor'}
+                          name="Active thumbnail border color"
+                          value={activeThumbnailBorderColor}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id={'activeThumbnailBorderRadius'}
+                          name="Active thumbnail border radius (%)"
+                          min={0}
+                          value={activeThumbnailBorderRadius}
+                          max={50}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id={'activeThumbnailGap'}
+                          name="Active thumbnail gap (px)"
+                          min={0}
+                          max={100}
+                          value={activeThumbnailGap}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                    </Grid>
+                  </>
+                  {/* ───────────────── THUMBNAIL BAR ───────────────── */}
+                  <>
+                    <Grid
+                      container
+                      columns={24}
+                      rowSpacing={2}
+                      columnSpacing={4}
+                      sx={{marginLeft: 0, paddingTop: 2}}
+                    >
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id={'thumbnailBarGap'}
+                          name="Thumbnail bar gap (px)"
+                          min={0}
+                          max={100}
+                          value={thumbnailBarGap}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <ColorControl
+                          id={'thumbnailBarBackgroundColor'}
+                          name="Thumbnail bar background color"
+                          value={thumbnailBarBackgroundColor}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id={'thumbnailBarPadding'}
+                          name="Thumbnail bar padding (px)"
+                          min={0}
+                          max={100}
+                          value={thumbnailBarPadding}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id={'thumbnailBarOpacity'}
+                          name="Thumbnail bar opacity"
+                          min={0}
+                          max={1}
+                          step={0.05}
+                          value={thumbnailBarOpacity}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id={'thumbnailBarBorder'}
+                          name="Thumbnail bar border (px)"
+                          min={0}
+                          max={20}
+                          value={thumbnailBarBorder}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <ColorControl
+                          id={'thumbnailBarBorderColor'}
+                          name="Thumbnail bar border color"
+                          value={thumbnailBarBorderColor}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                      <Filter isLoading={isLoading}>
+                        <SliderControl
+                          id={'thumbnailBarBorderRadius'}
+                          name="Thumbnail bar border radius (%)"
+                          min={0}
+                          value={thumbnailBarBorderRadius}
+                          max={50}
+                          onChange={onInputValueChange}
+                        />
+                      </Filter>
+                    </Grid>
+                  </>
                 </>
-                {/* ─────────────────ACTIVE THUMBNAIL ───────────────── */}
-
-                <>
-                  {/* LABEL */}
-                  <Grid
-                    sx={{marginLeft: 0, paddingTop: 2}}
-                    container
-                    columns={24}
-                    rowSpacing={2}
-                    columnSpacing={4}
-                  >
-                    <Filter isLoading={isLoading}>
-                      <InputLabel shrink variant="filled">
-                        <LabelWithTooltip label="Active Thumbnail" tooltip="" />
-                      </InputLabel>
-                    </Filter>
-                  </Grid>
-
-                  {/* CONTROLS */}
-                  <Grid
-                    container
-                    columns={24}
-                    rowSpacing={2}
-                    columnSpacing={4}
-                    className="reacg-section__container-inherit"
-                  >
-                    <Filter isLoading={isLoading}>
-                      <NumberControl
-                        id={'activeThumbnailWidth'}
-                        name={'Width'}
-                        value={activeThumbnailWidth}
-                        onChange={onInputValueChange}
-                        min={0}
-                        unit={'px'}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <NumberControl
-                        id={'activeThumbnailHeight'}
-                        name={'Height'}
-                        value={activeThumbnailHeight}
-                        onChange={onInputValueChange}
-                        min={0}
-                        unit={'px'}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'activeThumbnailBackgroundColor'}
-                        name="Background color"
-                        value={activeThumbnailBackgroundColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id={'activeThumbnailPadding'}
-                        name="Padding (px)"
-                        min={0}
-                        max={100}
-                        value={activeThumbnailPadding}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id={'activeThumbnailOpacity'}
-                        name="Opacity"
-                        min={0}
-                        max={1}
-                        step={0.05}
-                        value={activeThumbnailOpacity}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id={'activeThumbnailBorder'}
-                        name="Border (px)"
-                        min={0}
-                        max={20}
-                        value={activeThumbnailBorder}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'activeThumbnailBorderColor'}
-                        name="Border color"
-                        value={activeThumbnailBorderColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id={'activeThumbnailBorderRadius'}
-                        name="Border radius (%)"
-                        min={0}
-                        value={activeThumbnailBorderRadius}
-                        max={50}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id={'activeThumbnailGap'}
-                        name="Gap (px)"
-                        min={0}
-                        max={100}
-                        value={activeThumbnailGap}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                  </Grid>
-                </>
-                {/* ───────────────── THUMBNAIL BAR ───────────────── */}
-                <>
-                  {/* LABEL */}
-                  <Grid
-                    sx={{marginLeft: 0, paddingTop: 2}}
-                    container
-                    columns={24}
-                    rowSpacing={2}
-                    columnSpacing={4}
-                  >
-                    <Filter isLoading={isLoading}>
-                      <InputLabel shrink variant="filled">
-                        <LabelWithTooltip label="Thumbnail Bar" tooltip="" />
-                      </InputLabel>
-                    </Filter>
-                  </Grid>
-
-                  {/* CONTROLS */}
-                  <Grid
-                    container
-                    columns={24}
-                    rowSpacing={2}
-                    columnSpacing={4}
-                    className="reacg-section__container-inherit"
-                  >
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id={'thumbnailBarGap'}
-                        name="Gap (px)"
-                        min={0}
-                        max={100}
-                        value={thumbnailBarGap}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'thumbnailBarBackgroundColor'}
-                        name="Background color"
-                        value={thumbnailBarBackgroundColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id={'thumbnailBarPadding'}
-                        name="Padding (px)"
-                        min={0}
-                        max={100}
-                        value={thumbnailBarPadding}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id={'thumbnailBarOpacity'}
-                        name="Opacity"
-                        min={0}
-                        max={1}
-                        step={0.05}
-                        value={thumbnailBarOpacity}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id={'thumbnailBarBorder'}
-                        name="Border (px)"
-                        min={0}
-                        max={20}
-                        value={thumbnailBarBorder}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'thumbnailBarBorderColor'}
-                        name="Border color"
-                        value={thumbnailBarBorderColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                    <Filter isLoading={isLoading}>
-                      <SliderControl
-                        id={'thumbnailBarBorderRadius'}
-                        name="Border radius (%)"
-                        min={0}
-                        value={thumbnailBarBorderRadius}
-                        max={50}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                  </Grid>
-                </>
-              </>
-            )}
-          </Grid>
-        }
-        defaultExpanded={false}
-      />
-    );
-  };
-
-  const renderThumbnailTitleSection = (): ReactNode => {
-    return (
-      <Section
-        header={'Thumbnaik Text & Metadata'}
-        body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
-              container
-              columns={24}
-              rowSpacing={2}
-              columnSpacing={4}
-            >
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
+              )}
+            </Grid>
+          }
+        />
+        <Section
+          header={'Thumbnails Content'}
+          className="reacg-tab-section"
+          body={
+            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'thumbnailShowTitle'}
+                  name={'Thumbnails show title'}
+                  value={thumbnailShowTitle}
+                  tooltip={
+                    <p>
+                      The Caption must be set by editing each image from
+                      "Images" section.{' '}
+                      <a
+                        className="seetings__see-more-link"
+                        href="https://youtu.be/ziAG16MADbY"
+                        target="_blank"
+                      >
+                        See more
+                      </a>
+                    </p>
+                  }
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+              {thumbnailShowTitle && (
                 <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'thumbnailShowTitle'}
-                    name={'Show title'}
-                    value={thumbnailShowTitle}
-                    tooltip={
-                      <p>
-                        The Caption must be set by editing each image from
-                        "Images" section.{' '}
-                        <a
-                          className="seetings__see-more-link"
-                          href="https://youtu.be/ziAG16MADbY"
-                          target="_blank"
-                        >
-                          See more
-                        </a>
-                      </p>
-                    }
+                  <SelectControl
+                    id={'thumbnailTitleSource'}
+                    name={'Thumbnails source'}
+                    value={thumbnailTitleSource}
+                    options={TitleSourceOptions}
                     onChange={onInputValueChange}
                   />
                 </Filter>
-                {thumbnailShowTitle && (
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'thumbnailTitleSource'}
-                      name={'Source'}
-                      value={thumbnailTitleSource}
-                      options={TitleSourceOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                )}
-              </Grid>
+              )}
               {thumbnailShowTitle && (
                 <Grid
                   container
                   columns={24}
                   rowSpacing={2}
                   columnSpacing={4}
-                  className="reacg-section__container-inherit"
+                  sx={{marginLeft: 0, paddingTop: 2}}
                 >
                   <Filter isLoading={isLoading}>
                     <NumberControl
                       id={'thumbnailTitleFontSize'}
-                      name={'Font size'}
+                      name={'Thumbnails font size'}
                       value={thumbnailTitleFontSize}
                       onChange={onInputValueChange}
                       unit={'vw'}
@@ -799,26 +583,8 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                       step={0.1}
                     />
                   </Filter>
-
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'thumbnailTitleAlignment'}
-                      name={'Alignement'}
-                      value={thumbnailTitleAlignment}
-                      options={TitleAlignmentOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
                 </Grid>
               )}
-            </Grid>
-            <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
-              container
-              columns={24}
-              rowSpacing={2}
-              columnSpacing={4}
-            >
               <Grid
                 sx={{marginLeft: 0, paddingTop: 2}}
                 container
@@ -829,7 +595,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'thumbnailShowCaption'}
-                    name={'Show caption'}
+                    name={'Thumbnails show caption'}
                     value={thumbnailShowCaption}
                     pro={true}
                     tooltip={
@@ -856,7 +622,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                   <Filter isLoading={isLoading}>
                     <SelectControl
                       id={'thumbnailCaptionSource'}
-                      name={'Source'}
+                      name={'Thumbnails caption source'}
                       value={thumbnailCaptionSource}
                       options={CaptionSourceOptions}
                       onChange={onInputValueChange}
@@ -870,12 +636,12 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                   columns={24}
                   rowSpacing={2}
                   columnSpacing={4}
-                  className="reacg-section__container-inherit"
+                  sx={{marginLeft: 0, paddingTop: 2}}
                 >
                   <Filter isLoading={isLoading}>
                     <NumberControl
                       id={'thumbnailCaptionFontSize'}
-                      name={'Font size'}
+                      name={'Thumbnails caption font size'}
                       value={thumbnailCaptionFontSize}
                       onChange={onInputValueChange}
                       unit={'vw'}
@@ -886,21 +652,13 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                   <Filter isLoading={isLoading}>
                     <ColorControl
                       id={'thumbnailCaptionFontColor'}
-                      name="Color"
+                      name="Thumbnails caption color"
                       value={thumbnailCaptionFontColor}
                       onChange={onInputValueChange}
                     />
                   </Filter>
                 </Grid>
               )}
-            </Grid>
-            <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
-              container
-              columns={24}
-              rowSpacing={2}
-              columnSpacing={4}
-            >
               <Grid
                 sx={{marginLeft: 0, paddingTop: 2}}
                 container
@@ -911,7 +669,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                 <Filter isLoading={isLoading}>
                   <SwitchControl
                     id={'thumbnailShowDescription'}
-                    name={'Show description'}
+                    name={'Thumbnails show description'}
                     value={thumbnailShowDescription}
                     tooltip={
                       <p>
@@ -933,7 +691,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                   <Filter isLoading={isLoading}>
                     <SelectControl
                       id={'thumbnailDescriptionSource'}
-                      name={'Source'}
+                      name={'Thumbnails description Source'}
                       value={thumbnailDescriptionSource}
                       options={DescriptionSourceOptions}
                       onChange={onInputValueChange}
@@ -947,12 +705,12 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                   columns={24}
                   rowSpacing={2}
                   columnSpacing={4}
-                  className="reacg-section__container-inherit"
+                  sx={{marginLeft: 0, paddingTop: 2}}
                 >
                   <Filter isLoading={isLoading}>
                     <NumberControl
                       id={'thumbnailDescriptionFontSize'}
-                      name={'Font size'}
+                      name={'Thumbnails description font size'}
                       value={thumbnailDescriptionFontSize}
                       onChange={onInputValueChange}
                       unit={'vw'}
@@ -964,7 +722,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                   <Filter isLoading={isLoading}>
                     <NumberControl
                       id={'thumbnailDescriptionMaxRowsCount'}
-                      name={'Max rows count'}
+                      name={'Thumbnails description max rows count'}
                       value={thumbnailDescriptionMaxRowsCount}
                       onChange={onInputValueChange}
                       min={1}
@@ -974,51 +732,47 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                   <Filter isLoading={isLoading}>
                     <ColorControl
                       id={'thumbnailDescriptionFontColor'}
-                      name="Color"
+                      name="Thumbnails description color"
                       value={thumbnailDescriptionFontColor}
                       onChange={onInputValueChange}
                     />
                   </Filter>
                 </Grid>
               )}
-            </Grid>
-            {(thumbnailShowTitle ||
-              thumbnailShowCaption ||
-              thumbnailShowDescription) && (
-              <>
+
+              {(thumbnailShowCaption ||
+                thumbnailShowTitle ||
+                thumbnailShowDescription) && (
                 <Grid
+                  container
+                  columns={24}
+                  rowSpacing={2}
+                  columnSpacing={4}
                   sx={{marginLeft: 0, paddingTop: 2}}
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
-                >
-                  <Filter isLoading={isLoading}>
-                    <InputLabel shrink variant="filled">
-                      <LabelWithTooltip label={'Text'} tooltip={''} />
-                    </InputLabel>
-                  </Filter>
-                </Grid>
-                <Grid
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
-                  className="reacg-section__container-inherit"
                 >
                   <Filter isLoading={isLoading}>
                     <SelectControl
+                      id={'thumbnailTitleAlignment'}
+                      name={'Thumbnails alignement'}
+                      value={thumbnailTitleAlignment}
+                      options={TitleAlignmentOptions}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
                       id={'thumbnailTextPosition'}
-                      name={'Position'}
+                      name={'Thumbnails typography position'}
                       value={thumbnailTextPosition}
                       options={SliderTextPositionOptions}
                       onChange={onInputValueChange}
                     />
                   </Filter>
+
                   <Filter isLoading={isLoading}>
                     <FontControl
                       id={'thumbnailTextFontFamily'}
-                      name={'Font family'}
+                      name={'Thumbnails typography font family'}
                       value={thumbnailTextFontFamily}
                       onChange={onInputValueChange}
                     />
@@ -1026,7 +780,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                   <Filter isLoading={isLoading}>
                     <ColorControl
                       id={'thumbnailTextColor'}
-                      name="Color"
+                      name="Thumbnails typography color"
                       value={thumbnailTextColor}
                       onChange={onInputValueChange}
                     />
@@ -1034,7 +788,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                   <Filter isLoading={isLoading}>
                     <ColorControl
                       id={'thumbnailTextBackground'}
-                      name={'Text background'}
+                      name={'Thumbnails typography text background color'}
                       value={thumbnailTextBackground}
                       onChange={onInputValueChange}
                       tooltip={
@@ -1048,7 +802,7 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                   <Filter isLoading={isLoading}>
                     <SwitchControl
                       id={'thumbnailInvertTextColor'}
-                      name={'Invert color'}
+                      name={'Thumbnails typography invert color'}
                       pro={true}
                       tooltip={
                         <p>
@@ -1065,1217 +819,17 @@ const SliderSettings: React.FC<ISliderSettingsProps> = ({
                     />
                   </Filter>
                 </Grid>
-              </>
-            )}
-          </Grid>
-        }
-        defaultExpanded={false}
-      />
-    );
-  };
-
-  const {isPro} = usePro();
-
-  const renderTitleSection = (): ReactNode => {
-    return (
-      <Section
-        header={'Text & Metadata'}
-        body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
-              container
-              columns={24}
-              rowSpacing={2}
-              columnSpacing={4}
-            >
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'showTitle'}
-                    name={'Show title'}
-                    value={showTitle}
-                    tooltip={
-                      <p>
-                        The Caption must be set by editing each image from
-                        "Images" section.{' '}
-                        <a
-                          className="seetings__see-more-link"
-                          href="https://youtu.be/ziAG16MADbY"
-                          target="_blank"
-                        >
-                          See more
-                        </a>
-                      </p>
-                    }
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                {showTitle && (
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'titleSource'}
-                      name={'Source'}
-                      value={titleSource}
-                      options={TitleSourceOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                )}
-              </Grid>
-              {showTitle && (
-                <Grid
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
-                  className="reacg-section__container-inherit"
-                >
-                  <Filter isLoading={isLoading}>
-                    <NumberControl
-                      id={'titleFontSize'}
-                      name={'Font size'}
-                      value={titleFontSize}
-                      onChange={onInputValueChange}
-                      unit={'vw'}
-                      max={5}
-                      step={0.1}
-                    />
-                  </Filter>
-
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'titleAlignment'}
-                      name={'Alignement'}
-                      value={titleAlignment}
-                      options={TitleAlignmentOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                </Grid>
               )}
             </Grid>
-            <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
-              container
-              columns={24}
-              rowSpacing={2}
-              columnSpacing={4}
-            >
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'showCaption'}
-                    name={'Show caption'}
-                    value={showCaption}
-                    pro={true}
-                    tooltip={
-                      <p>
-                        The Caption must be set by editing each image from
-                        "Images" section.{' '}
-                        <a
-                          className="seetings__see-more-link"
-                          href="https://youtu.be/ziAG16MADbY"
-                          target="_blank"
-                        >
-                          See more
-                        </a>
-                      </p>
-                    }
-                    onChange={
-                      isPro
-                        ? onInputValueChange
-                        : () => onProFeatureClick('show_caption')
-                    }
-                  />
-                </Filter>
-                {showCaption && (
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'captionSource'}
-                      name={'Source'}
-                      value={captionSource}
-                      options={CaptionSourceOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                )}
-              </Grid>
-              {showCaption && (
-                <Grid
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
-                  className="reacg-section__container-inherit"
-                >
-                  <Filter isLoading={isLoading}>
-                    <NumberControl
-                      id={'captionFontSize'}
-                      name={'Font size'}
-                      value={captionFontSize}
-                      onChange={onInputValueChange}
-                      unit={'vw'}
-                      max={5}
-                      step={0.1}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'captionFontColor'}
-                      name="Color"
-                      value={captionFontColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                </Grid>
-              )}
-            </Grid>
-            <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
-              container
-              columns={24}
-              rowSpacing={2}
-              columnSpacing={4}
-            >
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'showDescription'}
-                    name={'Show description'}
-                    value={showDescription}
-                    tooltip={
-                      <p>
-                        The Caption must be set by editing each image from
-                        "Images" section.{' '}
-                        <a
-                          className="seetings__see-more-link"
-                          href="https://youtu.be/ziAG16MADbY"
-                          target="_blank"
-                        >
-                          See more
-                        </a>
-                      </p>
-                    }
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                {showDescription && (
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'descriptionSource'}
-                      name={'Source'}
-                      value={descriptionSource}
-                      options={DescriptionSourceOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                )}
-              </Grid>
-              {showDescription && (
-                <Grid
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
-                  className="reacg-section__container-inherit"
-                >
-                  <Filter isLoading={isLoading}>
-                    <NumberControl
-                      id={'descriptionFontSize'}
-                      name={'Font size'}
-                      value={descriptionFontSize}
-                      onChange={onInputValueChange}
-                      unit={'vw'}
-                      max={5}
-                      step={0.1}
-                    />
-                  </Filter>
-
-                  <Filter isLoading={isLoading}>
-                    <NumberControl
-                      id={'descriptionMaxRowsCount'}
-                      name={'Max rows count'}
-                      value={descriptionMaxRowsCount}
-                      onChange={onInputValueChange}
-                      min={1}
-                    />
-                  </Filter>
-
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'descriptionFontColor'}
-                      name="Color"
-                      value={descriptionFontColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                </Grid>
-              )}
-            </Grid>
-
-            <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
-              container
-              columns={24}
-              rowSpacing={2}
-              columnSpacing={4}
-            >
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'showButton'}
-                    name={'Show button'}
-                    value={showButton}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                {showButton && (
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'buttonUrlSource'}
-                      name={'URL source'}
-                      value={buttonUrlSource}
-                      options={ActionURLSourceOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                )}
-              </Grid>
-              {showButton && (
-                <Grid
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
-                  className="reacg-section__container-inherit"
-                >
-                  <Filter isLoading={isLoading}>
-                    <SwitchControl
-                      id={'openInNewTab'}
-                      name={'Open in new tab'}
-                      value={openInNewTab}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <TextControl
-                      id={'buttonText'}
-                      name="Button text"
-                      value={buttonText}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'buttonAlignment'}
-                      name={'Alignment'}
-                      value={buttonAlignment}
-                      options={TitleAlignmentOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <NumberControl
-                      id={'buttonFontSize'}
-                      name={'Font size'}
-                      value={buttonFontSize}
-                      onChange={onInputValueChange}
-                      unit={'vw'}
-                      max={5}
-                      step={0.1}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'buttonColor'}
-                      name="Button color"
-                      value={buttonColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'buttonTextColor'}
-                      name="Text color"
-                      value={buttonTextColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                </Grid>
-              )}
-            </Grid>
-
-            {(showTitle || showCaption || showDescription) && (
-              <>
-                <Grid
-                  sx={{marginLeft: 0, paddingTop: 2}}
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
-                >
-                  <Filter isLoading={isLoading}>
-                    <InputLabel shrink variant="filled">
-                      <LabelWithTooltip label={'Text'} tooltip={''} />
-                    </InputLabel>
-                  </Filter>
-                </Grid>
-                <Grid
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
-                  className="reacg-section__container-inherit"
-                >
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'textPosition'}
-                      name={'Position'}
-                      value={textPosition}
-                      options={SliderTextPositionOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <FontControl
-                      id={'textFontFamily'}
-                      name={'Font family'}
-                      value={textFontFamily}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'textColor'}
-                      name="Color"
-                      value={textColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'textBackground'}
-                      name={'Text background'}
-                      value={textBackground}
-                      onChange={onInputValueChange}
-                      tooltip={
-                        <p>
-                          Set a background color for text displayed on the
-                          image.
-                        </p>
-                      }
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <SwitchControl
-                      id={'invertTextColor'}
-                      name={'Invert color'}
-                      pro={true}
-                      tooltip={
-                        <p>
-                          Enable this to invert the text color dynamically,
-                          ensuring it stays visible against any background.
-                        </p>
-                      }
-                      value={invertTextColor}
-                      onChange={
-                        isPro
-                          ? onInputValueChange
-                          : () => onProFeatureClick('invert_color')
-                      }
-                    />
-                  </Filter>
-                </Grid>
-              </>
-            )}
-          </Grid>
-        }
-        defaultExpanded={false}
-      />
-    );
-  };
-  const renderNavigationSettings = (): ReactNode => {
-    return (
-      <Section
-        header={
-          <>
-            Navigation
-            <ProIcon />
-          </>
-        }
-        body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'navigationButton'}
-                name={'Navigation'}
-                value={navigationButton}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-            {navigationButton && (
-              <>
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id="navigationshowsOnHover"
-                    name="Shows on hover"
-                    value={navigationshowsOnHover}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                    id={'navigationType'}
-                    name={'Type'}
-                    value={navigationType}
-                    options={SliderNavigationTypeOptions}
-                    onChange={
-                      isPro
-                        ? onInputValueChange
-                        : () => onProFeatureClick('enable_filmstrip')
-                    }
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                    id="navigationPosition"
-                    name="Position"
-                    value={navigationPosition}
-                    options={SliderNavigationPositionV2Options}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id="navigationSize"
-                    name="Size (px)"
-                    min={0}
-                    max={300}
-                    value={navigationSize}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id={'navigationPadding'}
-                    name="Padding (px)"
-                    min={0}
-                    max={100}
-                    value={navigationPadding}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id={'navigationOpacity'}
-                    name="Opacity"
-                    min={0}
-                    max={1}
-                    step={0.05}
-                    value={navigationOpacity}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-
-                <Grid
-                  sx={{marginLeft: 0, paddingTop: 2}}
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
-                >
-                  <Filter isLoading={isLoading}>
-                    <SliderControl
-                      id="navigationBorder"
-                      name="Border (px)"
-                      min={0}
-                      max={5}
-                      value={navigationBorder}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <SliderControl
-                      id="navigationBorderRadius"
-                      name="Border radius (%)"
-                      min={0}
-                      max={99}
-                      value={navigationBorderRadius}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id="navigationBorderColor"
-                      name="Border color"
-                      value={navigationBorderColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                </Grid>
-                <Filter isLoading={isLoading}>
-                  <ColorControl
-                    id="navigationColor"
-                    name="color"
-                    value={navigationColor}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <ColorControl
-                    id="navigationBackgroundColor"
-                    name="Background color"
-                    value={navigationBackgroundColor}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-
-                <Grid
-                  sx={{marginLeft: 0, paddingTop: 2}}
-                  container
-                  columns={24}
-                  rowSpacing={2}
-                  columnSpacing={4}
-                >
-                  <Filter isLoading={isLoading}>
-                    <SwitchControl
-                      id="navigationHover"
-                      name="Hover"
-                      value={navigationHover}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                  {navigationHover && (
-                    <>
-                      <Filter isLoading={isLoading}>
-                        <ColorControl
-                          id="navigationColorHover"
-                          name="Color hover"
-                          value={navigationColorHover}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-                      <Filter isLoading={isLoading}>
-                        <ColorControl
-                          id="navigationBackgroundColorHover"
-                          name="Background color hover"
-                          value={navigationBackgroundColorHover}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-                    </>
-                  )}{' '}
-                </Grid>
-              </>
-            )}
-          </Grid>
-        }
-        defaultExpanded={false}
-      />
-    );
-  };
-
-  const renderPaginationSettings = (): ReactNode => {
-    return (
-      <Section
-        header={
-          <>
-            Pagination
-            <ProIcon />
-          </>
-        }
-        body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            {/* ENABLE PAGINATION */}
-            <Filter isLoading={isLoading}>
-              <SwitchControl
-                id="pagination"
-                name="Pagination"
-                value={pagination}
-                onChange={onInputValueChange}
-              />
-            </Filter>
-
-            {pagination && (
-              <>
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                    id={'paginationType'}
-                    name={'Type'}
-                    // pro={true}
-                    value={paginationType}
-                    options={SliderPaginationTypeOptions}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-
-                {/* BASIC OPTIONS */}
-
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id="paginationshowsOnHover"
-                    name="Shows on hover"
-                    value={paginationshowsOnHover}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-
-                {paginationType !== SliderPaginationType.FRACTION &&
-                  paginationType !== SliderPaginationType.NUMBERS && (
-                    <Filter isLoading={isLoading}>
-                      <SwitchControl
-                        id="paginationBulletsImage"
-                        name="Image bullets"
-                        value={paginationBulletsImage}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                  )}
-
-                {paginationType !== SliderPaginationType.DYNAMIC && (
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'paginationPosition'}
-                      name={'Position'}
-                      value={paginationPosition}
-                      options={SliderPaginationPositionOptions}
-                      onChange={
-                        isPro
-                          ? onInputValueChange
-                          : () => onProFeatureClick('enable_filmstrip')
-                      }
-                    />
-                  </Filter>
-                )}
-                {/* ───────────────── BULLETS ───────────────── */}
-
-                {paginationType !== SliderPaginationType.FRACTION && (
-                  <>
-                    {/* LABEL */}
-                    <Grid
-                      sx={{marginLeft: 0, paddingTop: 2}}
-                      container
-                      columns={24}
-                      rowSpacing={2}
-                      columnSpacing={4}
-                    >
-                      <Filter isLoading={isLoading}>
-                        <InputLabel shrink variant="filled">
-                          <LabelWithTooltip label="Bullets" tooltip="" />
-                        </InputLabel>
-                      </Filter>
-                    </Grid>
-
-                    {/* CONTROLS */}
-                    <Grid
-                      container
-                      columns={24}
-                      rowSpacing={2}
-                      columnSpacing={4}
-                      className="reacg-section__container-inherit"
-                    >
-                      {!paginationBulletsImage && (
-                        <Filter isLoading={isLoading}>
-                          <ColorControl
-                            id="paginationBulletsBackgroundColor"
-                            name="Background color"
-                            value={paginationBulletsBackgroundColor}
-                            onChange={onInputValueChange}
-                          />
-                        </Filter>
-                      )}
-
-                      <Filter isLoading={isLoading}>
-                        <SliderControl
-                          id="paginationBulletsSize"
-                          name="Size (px)"
-                          min={0}
-                          max={300}
-                          value={paginationBulletsSize}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-
-                      <Filter isLoading={isLoading}>
-                        <SliderControl
-                          id="paginationBulletsBorder"
-                          name="Border (px)"
-                          min={0}
-                          max={5}
-                          value={paginationBulletsBorder}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-
-                      <Filter isLoading={isLoading}>
-                        <SliderControl
-                          id="paginationBulletsBorderRadius"
-                          name="Border radius (%)"
-                          min={0}
-                          max={99}
-                          value={paginationBulletsBorderRadius}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-
-                      <Filter isLoading={isLoading}>
-                        <ColorControl
-                          id="paginationBulletsBorderColor"
-                          name="Border color"
-                          value={paginationBulletsBorderColor}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-                    </Grid>
-                  </>
-                )}
-                {/* ─────────────── ACTIVE BULLET ─────────────── */}
-                {paginationType !== SliderPaginationType.FRACTION && (
-                  <>
-                    {/* LABEL */}
-                    <Grid
-                      sx={{marginLeft: 0, paddingTop: 2}}
-                      container
-                      columns={24}
-                      rowSpacing={2}
-                      columnSpacing={4}
-                    >
-                      <Filter isLoading={isLoading}>
-                        <InputLabel shrink variant="filled">
-                          <LabelWithTooltip label="Active bullet" tooltip="" />
-                        </InputLabel>
-                      </Filter>
-                    </Grid>
-
-                    {/* CONTROLS */}
-                    <Grid
-                      container
-                      columns={24}
-                      rowSpacing={2}
-                      columnSpacing={4}
-                      className="reacg-section__container-inherit"
-                    >
-                      <Filter isLoading={isLoading}>
-                        <ColorControl
-                          id="paginationActiveBulletBackgroundColor"
-                          name="Background color"
-                          value={paginationActiveBulletBackgroundColor}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-                      <Filter isLoading={isLoading}>
-                        <ColorControl
-                          id="paginationActiveBulletBorderColor"
-                          name="Border color"
-                          value={paginationActiveBulletBorderColor}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-                      {paginationType !== SliderPaginationType.DYNAMIC && (
-                        <Filter isLoading={isLoading}>
-                          <SliderControl
-                            id="paginationActiveBulletSize"
-                            name="Size (px)"
-                            min={0}
-                            max={300}
-                            value={paginationActiveBulletSize}
-                            onChange={onInputValueChange}
-                          />
-                        </Filter>
-                      )}
-
-                      <Filter isLoading={isLoading}>
-                        <SliderControl
-                          id="paginationActiveBulletBorder"
-                          name="Border (px)"
-                          min={0}
-                          max={5}
-                          value={paginationActiveBulletBorder}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-
-                      <Filter isLoading={isLoading}>
-                        <SliderControl
-                          id="paginationActiveBulletBorderRadius"
-                          name="Border radius (%)"
-                          min={0}
-                          max={99}
-                          value={paginationActiveBulletBorderRadius}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-                    </Grid>
-                  </>
-                )}
-
-                {/* ─────────────── FRACTION  NUMBER─────────────── */}
-                {(paginationType === SliderPaginationType.FRACTION ||
-                  paginationType === SliderPaginationType.NUMBERS) && (
-                  <>
-                    {/* LABEL */}
-                    <Grid
-                      sx={{marginLeft: 0, paddingTop: 2}}
-                      container
-                      columns={24}
-                      rowSpacing={2}
-                      columnSpacing={4}
-                    >
-                      <Filter isLoading={isLoading}>
-                        <InputLabel shrink variant="filled">
-                          <LabelWithTooltip
-                            label="Fraction + Number"
-                            tooltip=""
-                          />
-                        </InputLabel>
-                      </Filter>
-                    </Grid>
-
-                    {/* CONTROLS */}
-                    <Grid
-                      container
-                      columns={24}
-                      rowSpacing={2}
-                      columnSpacing={4}
-                      className="reacg-section__container-inherit"
-                    >
-                      <Filter isLoading={isLoading}>
-                        <ColorControl
-                          id={'paginationFractionColor'}
-                          name="Color"
-                          value={paginationFractionColor}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-
-                      <Filter isLoading={isLoading}>
-                        <NumberControl
-                          id={'paginationFractionFontSize'}
-                          name={'Font size'}
-                          value={paginationFractionFontSize}
-                          onChange={onInputValueChange}
-                          unit={'px'}
-                          max={200}
-                          step={1}
-                        />
-                      </Filter>
-
-                      <Filter isLoading={isLoading}>
-                        <FontControl
-                          id={'paginationFractionTextFontFamily'}
-                          name={'Font family'}
-                          value={paginationFractionTextFontFamily}
-                          onChange={onInputValueChange}
-                        />
-                      </Filter>
-                    </Grid>
-                  </>
-                )}
-              </>
-            )}
-          </Grid>
-        }
-        defaultExpanded={false}
-      />
-    );
-  };
-
-  const renderShadowSettings = (): ReactNode => {
-    return (
-      <Section
-        header={'Shadow'}
-        body={
-          <>
-            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-              <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id="shadow"
-                  name="Shadow"
-                  value={shadow}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-
-              {shadow && (
-                <>
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'shadowType'}
-                      name={'Type'}
-                      value={shadowType}
-                      options={SliderShadowTypeOptions}
-                      onChange={
-                        isPro
-                          ? onInputValueChange
-                          : () => onProFeatureClick('enable_filmstrip')
-                      }
-                    />
-                  </Filter>
-                  {shadowType !== SliderShadowType.SINEMA && (
-                    <Filter isLoading={isLoading}>
-                      <ColorControl
-                        id={'shadowColor'}
-                        name="Color"
-                        value={shadowColor}
-                        onChange={onInputValueChange}
-                      />
-                    </Filter>
-                  )}
-                </>
-              )}
-            </Grid>
-          </>
-        }
-        defaultExpanded={false}
-      />
-    );
-  };
-
-  const renderProgress = (): ReactNode => {
-    return (
-      <Section
-        header={'Progress'}
-        body={
-          <>
-            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-              <Filter isLoading={isLoading}>
-                <SwitchControl
-                  id="autoplayProgress"
-                  name="Progress"
-                  value={autoplayProgress}
-                  onChange={onInputValueChange}
-                />
-              </Filter>
-
-              {autoplayProgress && (
-                <>
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'autoplayProgressType'}
-                      name={'Type'}
-                      // pro={true}
-                      value={autoplayProgressType}
-                      options={SliderAutoPlayProgressTypeOptions}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-
-                  <Filter isLoading={isLoading}>
-                    <ColorControl
-                      id={'autoplayProgressColor'}
-                      name="Color"
-                      value={autoplayProgressColor}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                </>
-              )}
-            </Grid>
-          </>
-        }
-        defaultExpanded={false}
-      />
-    );
-  };
-
-  const renderAdvancedSettings = (): ReactNode => {
-    return (
-      <Section
-        header={'Advanced'}
-        body={
-          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
-            <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
-              container
-              columns={24}
-              rowSpacing={2}
-              columnSpacing={4}
-            >
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <InputLabel shrink variant="filled">
-                    <LabelWithTooltip label={'Container'} tooltip={''} />
-                  </InputLabel>
-                </Filter>
-              </Grid>
-              <Grid
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-                className="reacg-section__container-inherit"
-              >
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                    id={'direction'}
-                    name={'Sldier direction'}
-                    // pro={true}
-                    value={direction}
-                    options={SliderDirectionOptions}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'keyboard'}
-                    name={'Keyboard'}
-                    value={keyboard}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'mousewheel'}
-                    name={'Mousewheel'}
-                    value={mousewheel}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-
-                {/* <Filter isLoading={isLoading}>
-                  <ColorControl
-                    id={'backgroundColor'}
-                    name={'Background color'}
-                    value={backgroundColor}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SliderControl
-                    id={'containerPadding'}
-                    name="Padding (px)"
-                    min={0}
-                    max={100}
-                    value={containerPadding}
-                    onChange={onInputValueChange}
-                  />
-                </Filter> */}
-              </Grid>
-            </Grid>
-            <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
-              container
-              columns={24}
-              rowSpacing={2}
-              columnSpacing={4}
-            >
-              <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-              >
-                <Filter isLoading={isLoading}>
-                  <InputLabel shrink variant="filled">
-                    <LabelWithTooltip label={'Images'} tooltip={''} />
-                  </InputLabel>
-                </Filter>
-              </Grid>
-              <Grid
-                container
-                columns={24}
-                rowSpacing={2}
-                columnSpacing={4}
-                className="reacg-section__container-inherit"
-              >
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                    id={'imageAnimation'}
-                    name={'Animation'}
-                    pro={true}
-                    value={imageAnimation}
-                    options={SliderAnimationOptions}
-                    onChange={
-                      isPro
-                        ? onInputValueChange
-                        : () => onProFeatureClick('animation')
-                    }
-                  />
-                </Filter>
-
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'slideDuration'}
-                    name={'Slide duration'}
-                    value={slideDuration}
-                    onChange={onInputValueChange}
-                    min={300}
-                    unit={'ms'}
-                  />
-                </Filter>
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                    id={'slidesDesign'}
-                    name={'Slides Design'}
-                    value={slidesDesign}
-                    options={SliderSlidesDesignOptions}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                {slidesDesign === SliderSlidesDesign.BLURFIT && (
-                  <Filter isLoading={isLoading}>
-                    <SliderControl
-                      id={'backgroundBlur'}
-                      name="background Blur(px)"
-                      min={7}
-                      max={45}
-                      value={backgroundBlur}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                )}
-              </Grid>
-            </Grid>
-          </Grid>
-        }
-        defaultExpanded={false}
-      />
+          }
+        />
+      </Paper>
     );
   };
 
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
       {renderMainSettings()}
-      {renderTitleSection()}
-      {renderFilmstripSettings()}
-      {renderThumbnailTitleSection()}
-      {renderNavigationSettings()}
-      {renderPaginationSettings()}
-      {renderAdvancedSettings()}
-      {renderProgress()}
-      {renderShadowSettings()}
     </Paper>
   );
 };

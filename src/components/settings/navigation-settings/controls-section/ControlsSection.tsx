@@ -17,7 +17,8 @@ import {
 import {ReactElement, useMemo} from 'react';
 import {useSettings} from '../..';
 import {Filter} from '../../Filter';
-
+import SliderArrowsControls from './SliderArrowsControls';
+import SliderDotsControls from './SliderDotsControls';
 interface IControlsSectionProps {
   onProFeatureClick: (utmMedium: string) => void;
   isLoading: boolean;
@@ -42,6 +43,8 @@ const ControlsSection = ({
     changeCardsSettings,
     coverflowSettings,
     changeCoverflowSettings,
+    sliderSettings,
+    changeSliderSettings,
   } = useSettings();
 
   const sliderNavigationSettings = useMemo(() => {
@@ -71,6 +74,11 @@ const ControlsSection = ({
           settings: coverflowSettings,
           onChange: changeCoverflowSettings,
         };
+      case GalleryType.SLIDER:
+        return {
+          settings: sliderSettings,
+          onChange: changeSliderSettings,
+        };
       default:
         return null;
     }
@@ -85,6 +93,8 @@ const ControlsSection = ({
     coverflowSettings,
     cubeSettings,
     slideshowSettings,
+    sliderSettings,
+    changeSliderSettings,
     type,
   ]);
 
@@ -107,6 +117,98 @@ const ControlsSection = ({
         [key]: inputValue,
       } as any);
   };
+
+  if (type === GalleryType.SLIDER) {
+    const {
+      isSliderAllowed,
+      autoplay,
+      slideDelay,
+      isInfinite,
+      keyboard,
+      mousewheel,
+    } = sliderNavigationSettings.settings as any;
+
+    return (
+      <Section
+        header={'Controls'}
+        className="reacg-tab-section"
+        body={
+          <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'isSliderAllowed'}
+                name={'Show Play / Pause button'}
+                value={isSliderAllowed}
+                onChange={onSliderNavigationChange}
+              />
+            </Filter>
+
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'autoplay'}
+                name={'Autoplay'}
+                value={autoplay}
+                onChange={onSliderNavigationChange}
+              />
+            </Filter>
+            {autoplay || isSliderAllowed ? (
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'slideDelay'}
+                  name={'Autoplay speed'}
+                  value={slideDelay}
+                  onChange={onSliderNavigationChange}
+                  min={700}
+                  unit={'ms'}
+                />
+              </Filter>
+            ) : null}
+
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'isInfinite'}
+                name={'Loop'}
+                value={isInfinite}
+                onChange={onSliderNavigationChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'keyboard'}
+                name={'Keyboard'}
+                value={keyboard}
+                onChange={onSliderNavigationChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'mousewheel'}
+                name={'Mousewheel'}
+                value={mousewheel}
+                onChange={onSliderNavigationChange}
+              />
+            </Filter>
+            <SliderArrowsControls
+              isPro={isPro}
+              isLoading={isLoading}
+              values={sliderNavigationSettings.settings}
+              onChange={onSliderNavigationChange}
+              onProFeatureClick={onProFeatureClick}
+            />
+
+            <SliderDotsControls
+              isPro={isPro}
+              isLoading={isLoading}
+              values={sliderNavigationSettings.settings}
+              onChange={onSliderNavigationChange}
+              onProFeatureClick={onProFeatureClick}
+              changeSliderSettings={changeSliderSettings}
+            />
+          </Grid>
+        }
+      />
+    );
+  }
 
   if (type === GalleryType.SLIDESHOW) {
     const {isSlideshowAllowed, autoplay, slideDuration, isInfinite} =
