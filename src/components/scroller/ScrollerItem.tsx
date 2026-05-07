@@ -105,6 +105,29 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
       titleVisibility === TitleVisibility.ON_HOVER &&
       !isTitleBelow &&
       !isTitleAbove;
+    const hasSharedCaption: boolean =
+      titlePosition === captionPosition &&
+      showCaption &&
+      !!image[captionSource];
+    const captionOnHoverAtTitle: boolean =
+      hasSharedCaption &&
+      captionVisibility === TitleVisibility.ON_HOVER &&
+      !isTitleBelow &&
+      !isTitleAbove;
+    const hasSharedButton: boolean =
+      titlePosition === buttonPosition && showButton;
+    const buttonOnHoverAtTitle: boolean =
+      hasSharedButton &&
+      buttonVisibility === TitleVisibility.ON_HOVER &&
+      buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+      buttonPosition !== ThumbnailTitlePosition.BELOW;
+    const hasAlwaysContentAtTitle: boolean =
+      (showTitle && !isHoverAllowed) ||
+      (hasSharedCaption && !captionOnHoverAtTitle) ||
+      (hasSharedButton && !buttonOnHoverAtTitle);
+    const titleContainerOnHover: boolean =
+      !hasAlwaysContentAtTitle &&
+      (isHoverAllowed || captionOnHoverAtTitle || buttonOnHoverAtTitle);
 
     return (
       <div
@@ -112,7 +135,7 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
           'scroller-gallery__title',
           'scroller-gallery__title-caption',
           {
-            'scroller-gallery__title_on-hover': isHoverAllowed,
+            'scroller-gallery__title_on-hover': titleContainerOnHover,
             'scroller-gallery__title_hidden': !showTitle,
             'scroller-gallery__item-outline':
               showTitle && (isTitleBelow || isTitleAbove),
@@ -151,21 +174,24 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
             mixBlendMode: invertTextColor ? 'difference' : 'initial',
           }}
           className={`scroller-gallery__title-content_${titlePosition}`}
-          title={<span>{image[titleSource] || <br />}</span>}
+          title={
+            <span className={clsx({'reacg-content_on-hover': isHoverAllowed})}>
+              {image[titleSource] || <br />}
+            </span>
+          }
           subtitle={
-            (titlePosition === captionPosition &&
-              showCaption &&
-              image[captionSource]) ||
-            (titlePosition === buttonPosition && showButton) ? (
+            hasSharedCaption || hasSharedButton ? (
               <>
-                {titlePosition === captionPosition &&
-                  showCaption &&
-                  image[captionSource] && (
-                    <span className="thumbnail-image__caption">
-                      {image[captionSource]}
-                    </span>
-                  )}
-                {titlePosition === buttonPosition && showButton && (
+                {hasSharedCaption && showCaption && image[captionSource] && (
+                  <span
+                    className={clsx('thumbnail-image__caption', {
+                      'reacg-content_on-hover': captionOnHoverAtTitle,
+                    })}
+                  >
+                    {image[captionSource]}
+                  </span>
+                )}
+                {hasSharedButton && showButton && (
                   <span className="reacg-action-button-wrap">
                     <ActionButton
                       url={image?.[buttonUrlSource as ActionURLSource] || ''}
@@ -178,11 +204,7 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
                       borderSize={buttonBorderSize}
                       borderColor={buttonBorderColor}
                       borderRadius={buttonBorderRadius}
-                      isOnHover={
-                        buttonVisibility === TitleVisibility.ON_HOVER &&
-                        buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-                        buttonPosition !== ThumbnailTitlePosition.BELOW
-                      }
+                      isOnHover={buttonOnHoverAtTitle}
                     />
                   </span>
                 )}
@@ -207,17 +229,32 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
       itemPaddingText = (borderRadius || 0) / 2 + '%';
     }
 
+    const hasCaptionText: boolean = showCaption && !!image[captionSource];
+    const captionOnHover: boolean =
+      hasCaptionText &&
+      captionVisibility === TitleVisibility.ON_HOVER &&
+      !isCaptionBelow &&
+      !isCaptionAbove;
+    const hasSharedButton: boolean =
+      captionPosition === buttonPosition && showButton;
+    const buttonOnHoverAtCaption: boolean =
+      hasSharedButton &&
+      buttonVisibility === TitleVisibility.ON_HOVER &&
+      buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+      buttonPosition !== ThumbnailTitlePosition.BELOW;
+    const hasAlwaysContentAtCaption: boolean =
+      (hasCaptionText && !captionOnHover) ||
+      (hasSharedButton && !buttonOnHoverAtCaption);
+    const captionContainerOnHover: boolean =
+      !hasAlwaysContentAtCaption && (captionOnHover || buttonOnHoverAtCaption);
+
     return (
       <div
         className={clsx(
           'scroller-gallery__title',
           'scroller-gallery__caption',
           {
-            'scroller-gallery__title_on-hover':
-              showCaption &&
-              captionVisibility === TitleVisibility.ON_HOVER &&
-              !isCaptionBelow &&
-              !isCaptionAbove,
+            'scroller-gallery__title_on-hover': captionContainerOnHover,
             'scroller-gallery__title_hidden': !showCaption,
             'scroller-gallery__item-outline':
               showCaption && (isCaptionBelow || isCaptionAbove),
@@ -252,15 +289,18 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
           }}
           className={`scroller-gallery__title-content_${captionPosition}`}
           title={
-            (showCaption && image[captionSource]) ||
-            (captionPosition === buttonPosition && showButton) ? (
+            hasCaptionText || hasSharedButton ? (
               <>
-                {showCaption && image[captionSource] && (
-                  <span className="scroller-image__caption">
+                {hasCaptionText && (
+                  <span
+                    className={clsx('scroller-image__caption', {
+                      'reacg-content_on-hover': captionOnHover,
+                    })}
+                  >
                     {image[captionSource]}
                   </span>
                 )}
-                {captionPosition === buttonPosition && showButton && (
+                {hasSharedButton && showButton && (
                   <span className="reacg-action-button-wrap">
                     <ActionButton
                       url={image?.[buttonUrlSource as ActionURLSource] || ''}
@@ -273,11 +313,7 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
                       borderSize={buttonBorderSize}
                       borderColor={buttonBorderColor}
                       borderRadius={buttonBorderRadius}
-                      isOnHover={
-                        buttonVisibility === TitleVisibility.ON_HOVER &&
-                        buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-                        buttonPosition !== ThumbnailTitlePosition.BELOW
-                      }
+                      isOnHover={buttonOnHoverAtCaption}
                     />
                   </span>
                 )}

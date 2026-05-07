@@ -109,16 +109,41 @@ const SwiperImage = forwardRef(
         itemPaddingText = (itemBorderRadius || 0) / 2 + '%';
       }
 
+      const isInsideTitlePosition =
+        titlePosition !== ThumbnailTitlePosition.BELOW &&
+        titlePosition !== ThumbnailTitlePosition.ABOVE;
+      const titleOnHover =
+        showTitle &&
+        titleVisibility === TitleVisibility.ON_HOVER &&
+        isInsideTitlePosition;
+      const hasSharedCaption =
+        titlePosition === captionPosition &&
+        showCaption &&
+        !!image[captionSource];
+      const captionOnHoverAtTitle =
+        hasSharedCaption &&
+        captionVisibility === TitleVisibility.ON_HOVER &&
+        isInsideTitlePosition;
+      const hasSharedButton = titlePosition === buttonPosition && showButton;
+      const buttonOnHoverAtTitle =
+        hasSharedButton &&
+        buttonVisibility === TitleVisibility.ON_HOVER &&
+        buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+        buttonPosition !== ThumbnailTitlePosition.BELOW;
+      const hasAlwaysContentAtTitle =
+        (showTitle && !titleOnHover) ||
+        (hasSharedCaption && !captionOnHoverAtTitle) ||
+        (hasSharedButton && !buttonOnHoverAtTitle);
+      const titleContainerOnHover =
+        !hasAlwaysContentAtTitle &&
+        (titleOnHover || captionOnHoverAtTitle || buttonOnHoverAtTitle);
+
       return (
         <div
           className={clsx(
             'swiper-gallery__title swiper-gallery__title-caption',
             {
-              'swiper-gallery__title_on-hover':
-                showTitle &&
-                titleVisibility === TitleVisibility.ON_HOVER &&
-                titlePosition !== ThumbnailTitlePosition.BELOW &&
-                titlePosition !== ThumbnailTitlePosition.ABOVE,
+              'swiper-gallery__title_on-hover': titleContainerOnHover,
               'swiper-gallery__title_hidden': !showTitle,
               'swiper-gallery__item-outline':
                 showTitle &&
@@ -162,21 +187,24 @@ const SwiperImage = forwardRef(
               mixBlendMode: invertTextColor ? 'difference' : 'initial',
             }}
             className={`swiper-gallery__title-content_${titlePosition}`}
-            title={<span>{image[titleSource] || <br />}</span>}
+            title={
+              <span className={clsx({'reacg-content_on-hover': titleOnHover})}>
+                {image[titleSource] || <br />}
+              </span>
+            }
             subtitle={
-              (titlePosition === captionPosition &&
-                showCaption &&
-                image[captionSource]) ||
-              (titlePosition === buttonPosition && showButton) ? (
+              hasSharedCaption || hasSharedButton ? (
                 <>
-                  {titlePosition === captionPosition &&
-                    showCaption &&
-                    image[captionSource] && (
-                      <span className="thumbnail-image__caption">
-                        {image[captionSource]}
-                      </span>
-                    )}
-                  {titlePosition === buttonPosition && showButton && (
+                  {hasSharedCaption && showCaption && image[captionSource] && (
+                    <span
+                      className={clsx('thumbnail-image__caption', {
+                        'reacg-content_on-hover': captionOnHoverAtTitle,
+                      })}
+                    >
+                      {image[captionSource]}
+                    </span>
+                  )}
+                  {hasSharedButton && showButton && (
                     <span className="reacg-action-button-wrap">
                       <ActionButton
                         url={image?.[buttonUrlSource as ActionURLSource] || ''}
@@ -189,11 +217,7 @@ const SwiperImage = forwardRef(
                         borderSize={buttonBorderSize}
                         borderColor={buttonBorderColor}
                         borderRadius={buttonBorderRadius}
-                        isOnHover={
-                          buttonVisibility === TitleVisibility.ON_HOVER &&
-                          buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-                          buttonPosition !== ThumbnailTitlePosition.BELOW
-                        }
+                        isOnHover={buttonOnHoverAtTitle}
                       />
                     </span>
                   )}
@@ -221,14 +245,31 @@ const SwiperImage = forwardRef(
         itemPaddingText = (itemBorderRadius || 0) / 2 + '%';
       }
 
+      const isInsideCaptionPosition =
+        captionPosition !== ThumbnailTitlePosition.BELOW &&
+        captionPosition !== ThumbnailTitlePosition.ABOVE;
+      const hasCaptionText = showCaption && !!image[captionSource];
+      const captionOnHover =
+        hasCaptionText &&
+        captionVisibility === TitleVisibility.ON_HOVER &&
+        isInsideCaptionPosition;
+      const hasSharedButton = captionPosition === buttonPosition && showButton;
+      const buttonOnHoverAtCaption =
+        hasSharedButton &&
+        buttonVisibility === TitleVisibility.ON_HOVER &&
+        buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+        buttonPosition !== ThumbnailTitlePosition.BELOW;
+      const hasAlwaysContentAtCaption =
+        (hasCaptionText && !captionOnHover) ||
+        (hasSharedButton && !buttonOnHoverAtCaption);
+      const captionContainerOnHover =
+        !hasAlwaysContentAtCaption &&
+        (captionOnHover || buttonOnHoverAtCaption);
+
       return (
         <div
           className={clsx('swiper-gallery__title swiper-gallery__caption', {
-            'swiper-gallery__title_on-hover':
-              showCaption &&
-              captionVisibility === TitleVisibility.ON_HOVER &&
-              captionPosition !== ThumbnailTitlePosition.BELOW &&
-              captionPosition !== ThumbnailTitlePosition.ABOVE,
+            'swiper-gallery__title_on-hover': captionContainerOnHover,
             'swiper-gallery__title_hidden': !showCaption,
             'swiper-gallery__item-outline':
               showCaption &&
@@ -267,15 +308,18 @@ const SwiperImage = forwardRef(
             }}
             className={`swiper-gallery__title-content_${captionPosition}`}
             title={
-              (showCaption && image[captionSource]) ||
-              (captionPosition === buttonPosition && showButton) ? (
+              hasCaptionText || hasSharedButton ? (
                 <>
-                  {showCaption && image[captionSource] && (
-                    <span className="swiper-image__caption">
+                  {hasCaptionText && (
+                    <span
+                      className={clsx('swiper-image__caption', {
+                        'reacg-content_on-hover': captionOnHover,
+                      })}
+                    >
                       {image[captionSource]}
                     </span>
                   )}
-                  {captionPosition === buttonPosition && showButton && (
+                  {hasSharedButton && showButton && (
                     <span className="reacg-action-button-wrap">
                       <ActionButton
                         url={image?.[buttonUrlSource as ActionURLSource] || ''}
@@ -288,11 +332,7 @@ const SwiperImage = forwardRef(
                         borderSize={buttonBorderSize}
                         borderColor={buttonBorderColor}
                         borderRadius={buttonBorderRadius}
-                        isOnHover={
-                          buttonVisibility === TitleVisibility.ON_HOVER &&
-                          buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-                          buttonPosition !== ThumbnailTitlePosition.BELOW
-                        }
+                        isOnHover={buttonOnHoverAtCaption}
                       />
                     </span>
                   )}
@@ -380,8 +420,7 @@ const SwiperImage = forwardRef(
                   borderColor={buttonBorderColor}
                   borderRadius={buttonBorderRadius}
                   isOnHover={
-                    buttonVisibility === TitleVisibility.ON_HOVER &&
-                    !isOutside
+                    buttonVisibility === TitleVisibility.ON_HOVER && !isOutside
                   }
                 />
               </span>

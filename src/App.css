@@ -37,6 +37,7 @@
 }
 
 .reacg-gallery .reacg-action-button_on-hover,
+.reacg-gallery .reacg-content_on-hover,
 .reacg-gallery .reacg-action-button-container_on-hover {
   opacity: 0;
   pointer-events: none;
@@ -44,6 +45,7 @@
   transition: opacity 0.3s ease-in-out;
 }
 
+.reacg-gallery .reacg-action-button-hover-parent:hover .reacg-content_on-hover,
 .reacg-gallery
   .reacg-action-button-hover-parent:hover
   .reacg-action-button_on-hover,
