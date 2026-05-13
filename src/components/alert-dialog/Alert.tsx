@@ -1,16 +1,29 @@
 import {Box, Typography} from '@mui/material';
 import {Button} from 'core-components/button';
+import {useState} from 'react';
+import {freeTrialFormIntro, getTrialDays} from './AlertDialog.constants';
 import {AlertConfig} from './AlertDialog.types';
 
 interface IAlertProps {
   config: AlertConfig;
 }
 
+export const getTrialEndpoint = () => {
+  const endpoint = (window as any).reacg_global?.activate_trial_url;
+
+  if (typeof endpoint === 'string' && endpoint.trim()) {
+    return endpoint;
+  }
+
+  return 'https://regallery.team/core/wp-json/reacgcore/v2/trial/activate';
+};
+
 const Alert = ({config}: IAlertProps) => {
   const {
     image,
     title,
     description,
+    preButtonContent,
     additionalText,
     errorMessage,
     buttonConfig,
@@ -18,7 +31,88 @@ const Alert = ({config}: IAlertProps) => {
   } = config;
   const {label, backgroundColor, width, onClick} = buttonConfig;
 
-  const handleClick = (utm_medium?: string) => {
+  const [trialEmail, setTrialEmail] = useState('');
+  const [trialSubmitError, setTrialSubmitError] = useState('');
+  const [trialSubmitSuccess, setTrialSubmitSuccess] = useState('');
+  const [isSubmittingTrial, setIsSubmittingTrial] = useState(false);
+
+  const isTrialFlowEnabled = Boolean(getTrialEndpoint());
+
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const submitTrial = async () => {
+    const email = trialEmail.trim();
+
+    if (!email) {
+      setTrialSubmitSuccess('');
+      setTrialSubmitError('Please enter your email address.');
+      return false;
+    }
+
+    if (!isValidEmail(email)) {
+      setTrialSubmitSuccess('');
+      setTrialSubmitError('Please enter a valid email address.');
+      return false;
+    }
+
+    try {
+      setIsSubmittingTrial(true);
+      setTrialSubmitError('');
+      setTrialSubmitSuccess('');
+
+      const response = await fetch(getTrialEndpoint(), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({email}),
+      });
+
+      let body: any = null;
+      try {
+        body = await response.json();
+      } catch (_error) {
+        body = null;
+      }
+
+      if (!response.ok) {
+        const errorsMessage = body?.errors?.message;
+        const errorFromResponse =
+          body?.message ||
+          body?.error ||
+          (Array.isArray(errorsMessage) ? errorsMessage[0] : errorsMessage) ||
+          body?.errors?.[0]?.message;
+
+        setTrialSubmitError(
+          errorFromResponse || 'Unable to enable trial. Please try again.'
+        );
+        return false;
+      }
+
+      setTrialSubmitSuccess(
+        body?.message ||
+          `Trial successfully enabled. You have ${getTrialDays()} days to explore all features.`
+      );
+
+      return true;
+    } catch (_error) {
+      setTrialSubmitError('Network error. Please try again.');
+      return false;
+    } finally {
+      setIsSubmittingTrial(false);
+    }
+  };
+
+  const handleClick = async (utm_medium?: string) => {
+    if (isTrialFlowEnabled) {
+      const isSuccess = await submitTrial();
+      if (!isSuccess) {
+        return;
+      }
+    }
+
     onClick(utm_medium);
   };
 
@@ -28,6 +122,37 @@ const Alert = ({config}: IAlertProps) => {
     }
 
     return additionalText;
+  };
+
+  const renderPreButtonContent = () => {
+    if (isTrialFlowEnabled) {
+      return freeTrialFormIntro({
+        trialEmail,
+        trialSubmitError,
+        trialSubmitSuccess,
+        onEmailChange: (value: string) => {
+          setTrialEmail(value);
+
+          if (trialSubmitError) {
+            setTrialSubmitError('');
+          }
+
+          if (trialSubmitSuccess) {
+            setTrialSubmitSuccess('');
+          }
+        },
+        onEnterPress: (nextUtmMedium?: string) => {
+          void handleClick(nextUtmMedium);
+        },
+        utm_medium,
+      });
+    }
+
+    if (typeof preButtonContent === 'function') {
+      return preButtonContent(utm_medium);
+    }
+
+    return preButtonContent;
   };
 
   const renderErrorMessage = () => {
@@ -106,11 +231,15 @@ const Alert = ({config}: IAlertProps) => {
       >
         {description}
       </Typography>
+      {renderPreButtonContent()}
       <Box
         sx={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}
       >
         <Button
-          onClick={() => handleClick(utm_medium)}
+          onClick={() => {
+            void handleClick(utm_medium);
+          }}
+          disabled={isSubmittingTrial}
           style={{
             background: backgroundColor,
             width: width,
@@ -122,7 +251,19 @@ const Alert = ({config}: IAlertProps) => {
             fontFamily: 'inherit',
           }}
         >
-          {label}
+          {isSubmittingTrial ? (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <span>SUBMITTING...</span>
+            </span>
+          ) : (
+            label
+          )}
         </Button>
       </Box>
       <div>{renderAdditionalText()}</div>

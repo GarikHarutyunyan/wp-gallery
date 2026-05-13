@@ -9,6 +9,10 @@ export type AlertConfig = {
   image?: React.ReactNode;
   title?: string | React.ReactNode;
   description: string | React.ReactNode;
+  preButtonContent?:
+    | string
+    | React.ReactNode
+    | ((utm_medium?: string) => React.ReactNode);
   additionalText?:
     | string
     | React.ReactNode
