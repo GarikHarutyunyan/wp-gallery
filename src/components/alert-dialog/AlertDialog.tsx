@@ -18,6 +18,7 @@ import {AlertConfig} from './AlertDialog.types';
 interface DialogData {
   isVisible: boolean;
   config: AlertConfig;
+  onClose?: () => void;
 }
 
 interface IAlertDialogProps {}
@@ -60,15 +61,19 @@ const AlertDialog: React.FC<IAlertDialogProps> = () => {
       ...prevState,
       isVisible: true,
       config: newConfig,
+      onClose: newConfig.onClose,
     }));
   };
 
   const handleClose = () => {
+    const externalOnClose = data.onClose;
+
     setData((prevState) => ({
       ...prevState,
       isVisible: false,
     }));
-    config.onClose?.();
+
+    externalOnClose?.();
   };
 
   return (
@@ -81,7 +86,7 @@ const AlertDialog: React.FC<IAlertDialogProps> = () => {
       <IconButton onClick={handleClose} className={'modal-close'}>
         <CloseIcon />
       </IconButton>
-      <Alert config={config} />
+      <Alert config={{...config, onClose: handleClose}} />
     </Dialog>
   );
 };

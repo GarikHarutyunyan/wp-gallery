@@ -212,6 +212,33 @@
   gap: 8px;
 }
 
+.trial-success-state {
+  padding: 72px 36px 56px;
+  text-align: center;
+}
+
+.trial-success-state__icon-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.trial-success-state__title {
+  color: #111111;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1.2;
+  margin: 0 0 18px;
+}
+
+.trial-success-state__message {
+  color: #6f6f6f;
+  font-size: 1.1rem;
+  line-height: 1.25;
+  white-space: pre-line;
+  margin: 0;
+}
+
 @media screen and (max-width: 620px) {
   .template-select__youtube-dialog iframe {
     width: 100% !important;

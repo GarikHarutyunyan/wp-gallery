@@ -19,6 +19,14 @@ export const ProProvider: React.FC<{children: React.ReactNode}> = ({
 
   useEffect(() => {
     let cancelled = false;
+
+    const handleProActivated = () => {
+      setIsPro(true);
+      setIsLoaded(true);
+    };
+
+    window.addEventListener('reacg:pro-activated', handleProActivated);
+
     (async () => {
       try {
         const response = await axios.get(
@@ -36,8 +44,10 @@ export const ProProvider: React.FC<{children: React.ReactNode}> = ({
         console.error(error);
       }
     })();
+
     return () => {
       cancelled = true;
+      window.removeEventListener('reacg:pro-activated', handleProActivated);
     };
   }, []);
 

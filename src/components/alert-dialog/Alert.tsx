@@ -1,6 +1,6 @@
 import {Box, Typography} from '@mui/material';
 import {Button} from 'core-components/button';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {freeTrialFormIntro, getTrialDays} from './AlertDialog.constants';
 import {AlertConfig} from './AlertDialog.types';
 
@@ -18,6 +18,10 @@ export const getTrialEndpoint = () => {
   return 'https://regallery.team/core/wp-json/reacgcore/v2/trial/activate';
 };
 
+const activateProOptions = () => {
+  window.dispatchEvent(new Event('reacg:pro-activated'));
+};
+
 const Alert = ({config}: IAlertProps) => {
   const {
     image,
@@ -28,6 +32,7 @@ const Alert = ({config}: IAlertProps) => {
     errorMessage,
     buttonConfig,
     utm_medium,
+    onClose,
   } = config;
   const {label, backgroundColor, width, onClick} = buttonConfig;
 
@@ -37,6 +42,20 @@ const Alert = ({config}: IAlertProps) => {
   const [isSubmittingTrial, setIsSubmittingTrial] = useState(false);
 
   const isTrialFlowEnabled = Boolean(getTrialEndpoint());
+
+  useEffect(() => {
+    if (!trialSubmitSuccess || !onClose) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      onClose();
+    }, 3000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [onClose, trialSubmitSuccess]);
 
   const isValidEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -95,6 +114,8 @@ const Alert = ({config}: IAlertProps) => {
         body?.message ||
           `Trial successfully enabled. You have ${getTrialDays()} days to explore all features.`
       );
+
+      activateProOptions();
 
       return true;
     } catch (_error) {
@@ -190,6 +211,55 @@ const Alert = ({config}: IAlertProps) => {
 
     return null;
   };
+
+  const renderTrialSuccessMessage = () => {
+    if (!trialSubmitSuccess) {
+      return null;
+    }
+
+    return (
+      <Box className={'trial-success-state'}>
+        <Box className={'trial-success-state__icon-wrap'}>
+          <svg
+            width="64"
+            height="64"
+            viewBox="0 0 64 64"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <circle cx="32" cy="32" r="32" fill="#EAF7F1" />
+            <circle cx="32" cy="32" r="24" fill="#55C796" />
+            <path
+              d="M25.5 32.5L29.8 36.8L39.2 27.2"
+              stroke="#FFFFFF"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </Box>
+        <Typography
+          variant={'h4'}
+          component={'div'}
+          className={'trial-success-state__title'}
+        >
+          Success!
+        </Typography>
+        <Typography
+          variant={'body1'}
+          component={'div'}
+          className={'trial-success-state__message'}
+        >
+          {trialSubmitSuccess}
+        </Typography>
+      </Box>
+    );
+  };
+
+  if (trialSubmitSuccess) {
+    return <Box className={'alert'}>{renderTrialSuccessMessage()}</Box>;
+  }
 
   return (
     <Box className={'alert'}>
