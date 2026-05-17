@@ -11,15 +11,15 @@ import {useSettings} from './settings';
 const GalleryWithSettings = (): ReactElement | null => {
   const {
     generalSettings,
-    thumbnailSettings,
+    gridSettings,
     lightboxSettings,
   }: {
-    thumbnailSettings?: IGridSettings;
+    gridSettings?: IGridSettings;
     generalSettings?: IGeneralSettings;
     lightboxSettings?: ILightboxSettings;
   } = useSettings();
 
-  return generalSettings && thumbnailSettings && lightboxSettings ? (
+  return generalSettings && gridSettings && lightboxSettings ? (
     <DataProvider>
       <Gallery />
     </DataProvider>

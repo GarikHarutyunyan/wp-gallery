@@ -40,7 +40,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {
     type,
     generalSettings,
-    thumbnailSettings,
+    gridSettings,
     mosaicSettings,
     justifiedSettings,
     masonrySettings,
@@ -56,7 +56,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       return justifiedSettings!.paginationType;
     }
     if (type === GalleryType.GRID) {
-      return thumbnailSettings!.paginationType;
+      return gridSettings!.paginationType;
     }
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.paginationType;
@@ -70,7 +70,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     type,
     mosaicSettings?.paginationType,
     justifiedSettings?.paginationType,
-    thumbnailSettings?.paginationType,
+    gridSettings?.paginationType,
     masonrySettings?.paginationType,
     blogSettings?.paginationType,
   ]);
@@ -83,7 +83,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       return justifiedSettings!.showAllItems;
     }
     if (type === GalleryType.GRID) {
-      return thumbnailSettings!.showAllItems;
+      return gridSettings!.showAllItems;
     }
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.showAllItems;
@@ -97,7 +97,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     type,
     mosaicSettings?.showAllItems,
     justifiedSettings?.showAllItems,
-    thumbnailSettings?.showAllItems,
+    gridSettings?.showAllItems,
     masonrySettings?.showAllItems,
     blogSettings?.showAllItems,
   ]);

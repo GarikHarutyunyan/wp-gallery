@@ -24,8 +24,8 @@ const OptionsPanelAppearanceTab = ({
 }: IOptionsPanelAppearanceTabProps): ReactElement => {
   const {
     type,
-    thumbnailSettings,
-    changeThumbnailSettings,
+    gridSettings,
+    changeGridSettings,
     mosaicSettings,
     changeMosaicSettings,
     justifiedSettings,
@@ -62,10 +62,10 @@ const OptionsPanelAppearanceTab = ({
 
   return (
     <>
-      {isGrid && thumbnailSettings && (
+      {isGrid && gridSettings && (
         <GridAppearanceSettings
-          settings={thumbnailSettings}
-          onSettingsChange={changeThumbnailSettings!}
+          settings={gridSettings}
+          onSettingsChange={changeGridSettings!}
           onProFeatureClick={onProFeatureClick}
           isLoading={isLoading}
         />

@@ -52,7 +52,7 @@ const SettingsContext = React.createContext<{
   changeType?: (type: GalleryType) => void;
   hasChanges?: boolean;
   generalSettings?: IGeneralSettings;
-  thumbnailSettings?: IGridSettings;
+  gridSettings?: IGridSettings;
   mosaicSettings?: IMosaicSettings;
   lightboxSettings?: ILightboxSettings;
   justifiedSettings?: IJustifiedSettings;
@@ -65,7 +65,7 @@ const SettingsContext = React.createContext<{
   blogSettings?: IBlogSettings;
   scrollerSettings?: IScrollerSettings;
   changeGeneralSettings?: (settings: IGeneralSettings) => void;
-  changeThumbnailSettings?: (settings: IGridSettings) => void;
+  changeGridSettings?: (settings: IGridSettings) => void;
   changeMosaicSettings?: (settings: IMosaicSettings) => void;
   changeJustifiedSettings?: (settings: IJustifiedSettings) => void;
   changeMasonrySettings?: (settings: IMasonrySettings) => void;
@@ -99,7 +99,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     nonce,
     getOptionsTimestamp,
   } = useAppInfo();
-  const [thumbnailSettings, setThumbnailSettings] = useState<IGridSettings>();
+  const [gridSettings, setGridSettings] = useState<IGridSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
   const [justifiedSettings, setJustifiedSettings] =
     useState<IJustifiedSettings>();
@@ -134,7 +134,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCss(newSettings.css || '');
     setCustomCss(newSettings.custom_css || '');
     setGeneralSettings(newSettings.general || generalMockSettings);
-    setThumbnailSettings(newSettings.thumbnails || gridMockSettings);
+    setGridSettings(newSettings.thumbnails || gridMockSettings);
     setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
     setJustifiedSettings(newSettings.justified || justifiedMockSettings);
     setMasonrySettings(newSettings.masonry || mosaicMockSettings);
@@ -176,7 +176,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCss(newSettings.css || '');
       setCustomCss(newSettings.custom_css || '');
       setGeneralSettings(newSettings.general || generalMockSettings);
-      setThumbnailSettings(newSettings.thumbnails || gridMockSettings);
+      setGridSettings(newSettings.thumbnails || gridMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
       setJustifiedSettings(newSettings.justified || justifiedMockSettings);
       setMasonrySettings(newSettings.masonry || mosaicMockSettings);
@@ -201,7 +201,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     } else {
       setType(GalleryType.GRID);
       setGeneralSettings(generalMockSettings);
-      setThumbnailSettings(gridMockSettings);
+      setGridSettings(gridMockSettings);
       setMosaicSettings(mosaicMockSettings);
       setJustifiedSettings(justifiedMockSettings);
       setMasonrySettings(masonryMockSettings);
@@ -282,7 +282,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }
       const settings: ISettingsDTO = {
         general: generalSettings,
-        thumbnails: thumbnailSettings,
+        thumbnails: gridSettings,
         lightbox: lightboxSettings,
         mosaic: mosaicSettings,
         justified: justifiedSettings,
@@ -308,7 +308,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         const template_id = newSettings?.template_id?.toString();
 
         setGeneralSettings(newSettings.general);
-        setThumbnailSettings(newSettings.thumbnails);
+        setGridSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
         setJustifiedSettings(newSettings.justified);
         setMasonrySettings(newSettings.masonry);
@@ -378,7 +378,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         const template_id = newSettings?.template_id?.toString();
 
         setGeneralSettings(newSettings.general);
-        setThumbnailSettings(newSettings.thumbnails);
+        setGridSettings(newSettings.thumbnails);
         setMosaicSettings(newSettings.mosaic);
         setJustifiedSettings(newSettings.justified);
         setMasonrySettings(newSettings.masonry);
@@ -480,7 +480,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         type,
         changeType,
         hasChanges,
-        thumbnailSettings,
+        gridSettings,
         mosaicSettings,
         justifiedSettings,
         masonrySettings,
@@ -494,7 +494,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         blogSettings,
         scrollerSettings,
         changeGeneralSettings: createOnChange(setGeneralSettings),
-        changeThumbnailSettings: createOnChange(setThumbnailSettings),
+        changeGridSettings: createOnChange(setGridSettings),
         changeMosaicSettings: createOnChange(setMosaicSettings),
         changeJustifiedSettings: createOnChange(setJustifiedSettings),
         changeMasonrySettings: createOnChange(setMasonrySettings),

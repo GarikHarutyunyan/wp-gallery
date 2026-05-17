@@ -48,7 +48,7 @@ const Gallery = (): ReactElement => {
     generalSettings,
     mosaicSettings,
     justifiedSettings,
-    thumbnailSettings,
+    gridSettings,
     masonrySettings,
     blogSettings,
     scrollerSettings,
@@ -72,7 +72,7 @@ const Gallery = (): ReactElement => {
       return justifiedSettings!.paginationType;
     }
     if (type === GalleryType.GRID) {
-      return thumbnailSettings!.paginationType;
+      return gridSettings!.paginationType;
     }
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.paginationType;
@@ -86,7 +86,7 @@ const Gallery = (): ReactElement => {
     type,
     mosaicSettings?.paginationType,
     justifiedSettings?.paginationType,
-    thumbnailSettings?.paginationType,
+    gridSettings?.paginationType,
     masonrySettings?.paginationType,
     blogSettings?.paginationType,
   ]);

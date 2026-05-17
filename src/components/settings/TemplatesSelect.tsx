@@ -49,7 +49,7 @@ const TemplatesSelect: React.FC = () => {
     changeMosaicSettings,
     changeJustifiedSettings,
     changeSlideshowSettings,
-    changeThumbnailSettings,
+    changeGridSettings,
     changeCubeSettings,
     changeCarouselSettings,
     changeCoverflowSettings,
@@ -102,7 +102,7 @@ const TemplatesSelect: React.FC = () => {
       mosaic && changeMosaicSettings?.(mosaic);
       justified && changeJustifiedSettings?.(justified);
       slideshow && changeSlideshowSettings?.(slideshow);
-      thumbnails && changeThumbnailSettings?.(thumbnails);
+      thumbnails && changeGridSettings?.(thumbnails);
       cube && changeCubeSettings?.(cube);
       carousel && changeCarouselSettings?.(carousel);
       coverflow && changeCoverflowSettings?.(coverflow);

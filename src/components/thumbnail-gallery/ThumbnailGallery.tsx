@@ -20,7 +20,7 @@ interface IThumbnailGalleryProps {
 
 const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   const {galleryId} = useAppInfo();
-  const {thumbnailSettings: settings} = useSettings();
+  const {gridSettings: settings} = useSettings();
   const {images} = useData();
   const {
     fillContainer,

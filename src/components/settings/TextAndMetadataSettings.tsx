@@ -48,8 +48,8 @@ export const TextAndMetadataSettings: React.FC<
   // Map gallery type to correct settings and change function
   const settingsMap: Record<string, {value: any; onChange: any}> = {
     [GalleryType.GRID]: {
-      value: settingsContext.thumbnailSettings,
-      onChange: settingsContext.changeThumbnailSettings,
+      value: settingsContext.gridSettings,
+      onChange: settingsContext.changeGridSettings,
     },
     [GalleryType.MOSAIC]: {
       value: settingsContext.mosaicSettings,
