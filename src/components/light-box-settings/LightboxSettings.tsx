@@ -30,9 +30,13 @@ import {Filter} from '../settings/Filter';
 
 interface ILightboxSettingsProps {
   isLoading?: boolean;
+  onProFeatureClick?: (utmMedium: string) => void;
 }
 
-const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
+const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
+  isLoading,
+  onProFeatureClick,
+}) => {
   const {resetTemplate} = useTemplates();
 
   const {lightboxSettings: value, changeLightboxSettings: onChange} =
@@ -146,10 +150,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'animation',
-                        })
+                    : () => onProFeatureClick?.('animation')
                 }
               />
             </Filter>
@@ -209,10 +210,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                     onChange={
                       isPro
                         ? onInputValueChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'lightbox_share',
-                            })
+                        : () => onProFeatureClick?.('lightbox_share')
                     }
                   />
                 </Filter>
@@ -225,10 +223,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                     onChange={
                       isPro
                         ? onInputValueChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'lightbox_download',
-                            })
+                        : () => onProFeatureClick?.('lightbox_download')
                     }
                   />
                 </Filter>
@@ -241,10 +236,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                     onChange={
                       isPro
                         ? onInputValueChange
-                        : () =>
-                            (window as any).reacg_open_premium_offer_dialog({
-                              utm_medium: 'lightbox_zoom',
-                            })
+                        : () => onProFeatureClick?.('lightbox_zoom')
                     }
                   />
                 </Filter>
@@ -259,10 +251,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'lightbox_loop',
-                        })
+                    : () => onProFeatureClick?.('lightbox_loop')
                 }
               />
             </Filter>
@@ -275,10 +264,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'lightbox_counter',
-                        })
+                    : () => onProFeatureClick?.('lightbox_counter')
                 }
               />
             </Filter>
@@ -323,10 +309,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'enable_filmstrip',
-                        })
+                    : () => onProFeatureClick?.('enable_filmstrip')
                 }
               />
             </Filter>
@@ -453,9 +436,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                         (option) => option.value === inputValue
                       )?.isPro
                     ) {
-                      (window as any).reacg_open_premium_offer_dialog({
-                        utm_medium: 'titleSource',
-                      });
+                      onProFeatureClick?.('titleSource');
                     } else {
                       onInputValueChange(inputValue, 'titleSource');
                     }
@@ -530,10 +511,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'lightbox_caption',
-                        })
+                    : () => onProFeatureClick?.('lightbox_caption')
                 }
               />
             </Filter>
@@ -551,9 +529,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                         (option) => option.value === inputValue
                       )?.isPro
                     ) {
-                      (window as any).reacg_open_premium_offer_dialog({
-                        utm_medium: 'captionSource',
-                      });
+                      onProFeatureClick?.('captionSource');
                     } else {
                       onInputValueChange(inputValue, 'captionSource');
                     }
@@ -626,10 +602,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'lightbox_description',
-                        })
+                    : () => onProFeatureClick?.('lightbox_description')
                 }
               />
             </Filter>
@@ -647,9 +620,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                         (option) => option.value === inputValue
                       )?.isPro
                     ) {
-                      (window as any).reacg_open_premium_offer_dialog({
-                        utm_medium: 'descriptionSource',
-                      });
+                      onProFeatureClick?.('descriptionSource');
                     } else {
                       onInputValueChange(inputValue, 'descriptionSource');
                     }
@@ -711,10 +682,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'show_button',
-                        })
+                    : () => onProFeatureClick?.('show_button')
                 }
               />
             </Filter>
@@ -887,10 +855,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({isLoading}) => {
                 onChange={
                   isPro
                     ? onInputValueChange
-                    : () =>
-                        (window as any).reacg_open_premium_offer_dialog({
-                          utm_medium: 'invert_color',
-                        })
+                    : () => onProFeatureClick?.('invert_color')
                 }
               />
             </Filter>
