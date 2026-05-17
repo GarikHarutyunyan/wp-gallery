@@ -2,7 +2,7 @@ import ImageList from '@mui/material/ImageList';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {useAppInfo} from 'contexts';
-import {ActionURLSource, IThumbnailSettings} from 'data-structures';
+import {ActionURLSource, IGridSettings} from 'data-structures';
 import React, {
   useCallback,
   useEffect,
@@ -74,7 +74,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     buttonUrlSource,
     openInNewTab,
     showVideoCover,
-  } = settings as IThumbnailSettings;
+  } = settings as IGridSettings;
   const elementRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [imageRatio, setImageRatio] = useState(1);

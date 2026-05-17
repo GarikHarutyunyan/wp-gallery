@@ -3,7 +3,7 @@ import Paper from '@mui/material/Paper';
 import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section/Section';
-import {HoverEffectOptions, IThumbnailSettings} from 'data-structures';
+import {HoverEffectOptions, IGridSettings} from 'data-structures';
 import {
   ColorControl,
   SelectControl,
@@ -13,8 +13,8 @@ import {
 import {Filter} from '../Filter';
 
 interface IGridAppearanceSettingsProps {
-  settings: IThumbnailSettings;
-  onSettingsChange: (settings: IThumbnailSettings) => void;
+  settings: IGridSettings;
+  onSettingsChange: (settings: IGridSettings) => void;
   onProFeatureClick: (feature: string) => void;
   isLoading?: boolean;
 }

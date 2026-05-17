@@ -24,7 +24,7 @@ import {
   TitleVisibility,
 } from 'data-structures';
 
-export interface IThumbnailSettings {
+export interface IGridSettings {
   fillContainer: boolean;
   aspectRatio: string;
   width?: number | undefined;
@@ -530,7 +530,7 @@ export interface IScrollerSettings {
 export interface ISettingsDTO {
   type: GalleryType;
   general: IGeneralSettings;
-  thumbnails: IThumbnailSettings;
+  thumbnails: IGridSettings;
   mosaic: IMosaicSettings;
   justified: IJustifiedSettings;
   masonry: IMasonrySettings;

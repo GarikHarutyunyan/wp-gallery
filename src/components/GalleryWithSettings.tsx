@@ -1,7 +1,7 @@
 import {
   IGeneralSettings,
+  IGridSettings,
   ILightboxSettings,
-  IThumbnailSettings,
 } from 'data-structures';
 import {ReactElement} from 'react';
 import {Gallery} from './Gallery';
@@ -14,7 +14,7 @@ const GalleryWithSettings = (): ReactElement | null => {
     thumbnailSettings,
     lightboxSettings,
   }: {
-    thumbnailSettings?: IThumbnailSettings;
+    thumbnailSettings?: IGridSettings;
     generalSettings?: IGeneralSettings;
     lightboxSettings?: ILightboxSettings;
   } = useSettings();

@@ -11,6 +11,7 @@ import {
   ICoverflowSettings,
   ICubeSettings,
   IGeneralSettings,
+  IGridSettings,
   IJustifiedSettings,
   ILightboxSettings,
   IMasonrySettings,
@@ -18,7 +19,6 @@ import {
   IScrollerSettings,
   ISettingsDTO,
   ISlideshowSettings,
-  IThumbnailSettings,
 } from 'data-structures';
 import {useSnackbar} from 'notistack';
 import React, {
@@ -52,7 +52,7 @@ const SettingsContext = React.createContext<{
   changeType?: (type: GalleryType) => void;
   hasChanges?: boolean;
   generalSettings?: IGeneralSettings;
-  thumbnailSettings?: IThumbnailSettings;
+  thumbnailSettings?: IGridSettings;
   mosaicSettings?: IMosaicSettings;
   lightboxSettings?: ILightboxSettings;
   justifiedSettings?: IJustifiedSettings;
@@ -65,7 +65,7 @@ const SettingsContext = React.createContext<{
   blogSettings?: IBlogSettings;
   scrollerSettings?: IScrollerSettings;
   changeGeneralSettings?: (settings: IGeneralSettings) => void;
-  changeThumbnailSettings?: (settings: IThumbnailSettings) => void;
+  changeThumbnailSettings?: (settings: IGridSettings) => void;
   changeMosaicSettings?: (settings: IMosaicSettings) => void;
   changeJustifiedSettings?: (settings: IJustifiedSettings) => void;
   changeMasonrySettings?: (settings: IMasonrySettings) => void;
@@ -99,8 +99,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     nonce,
     getOptionsTimestamp,
   } = useAppInfo();
-  const [thumbnailSettings, setThumbnailSettings] =
-    useState<IThumbnailSettings>();
+  const [thumbnailSettings, setThumbnailSettings] = useState<IGridSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
   const [justifiedSettings, setJustifiedSettings] =
     useState<IJustifiedSettings>();

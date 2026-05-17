@@ -3,13 +3,13 @@ import Paper from '@mui/material/Paper';
 import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
 import {useTemplates} from 'contexts';
 import {Section} from 'core-components/section/Section';
-import {AspectRatioOptions, IThumbnailSettings} from 'data-structures';
+import {AspectRatioOptions, IGridSettings} from 'data-structures';
 import {NumberControl, SelectControl, SwitchControl} from '../../controls';
 import {Filter} from '../Filter';
 
 interface IGridSettingsProps {
-  settings: IThumbnailSettings;
-  onSettingsChange: (settings: IThumbnailSettings) => void;
+  settings: IGridSettings;
+  onSettingsChange: (settings: IGridSettings) => void;
   isLoading?: boolean;
 }
 

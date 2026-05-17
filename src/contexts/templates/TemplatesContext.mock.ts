@@ -6,11 +6,11 @@ import {
   GalleryType,
   HoverEffect,
   IGeneralSettings,
+  IGridSettings,
   ILightboxSettings,
   ImageClickAction,
   IMasonrySettings,
   ISlideshowSettings,
-  IThumbnailSettings,
   LightboxImageAnimation,
   LightboxTextPosition,
   LightboxThumbnailsPosition,
@@ -23,7 +23,7 @@ import {
   TitleVisibility,
 } from 'data-structures';
 
-const thumbnailMockSettings: IThumbnailSettings = {
+const thumbnailMockSettings: IGridSettings = {
   fillContainer: false,
   aspectRatio: '1.33',
   width: 150,
