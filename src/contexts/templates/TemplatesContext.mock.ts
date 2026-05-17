@@ -263,7 +263,7 @@ const masonryMockSettings: IMasonrySettings = {
 const template1 = {
   id: '1',
   name: 'Thumbnail Default',
-  type: GalleryType.THUMBNAILS,
+  type: GalleryType.GRID,
   thumbnails: thumbnailMockSettings,
   general: generalMockSettings,
   lightbox: lightboxMockSettings,
@@ -286,7 +286,7 @@ const template3 = {
 const template4 = {
   id: '4',
   name: 'Thumbnail Big Items',
-  type: GalleryType.THUMBNAILS,
+  type: GalleryType.GRID,
   thumbnails: thumbnailMockSettings,
   general: generalMockSettings,
   lightbox: lightboxMockSettings,

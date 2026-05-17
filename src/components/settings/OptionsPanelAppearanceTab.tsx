@@ -48,7 +48,7 @@ const OptionsPanelAppearanceTab = ({
     changeScrollerSettings,
   } = useSettings();
 
-  const isGrid: boolean = type === GalleryType.THUMBNAILS;
+  const isGrid: boolean = type === GalleryType.GRID;
   const isMosaic: boolean = type === GalleryType.MOSAIC;
   const isJustified: boolean = type === GalleryType.JUSTIFIED;
   const isMasonry: boolean = type === GalleryType.MASONRY;

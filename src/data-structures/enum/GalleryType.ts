@@ -1,5 +1,5 @@
 export enum GalleryType {
-  THUMBNAILS = 'thumbnails',
+  GRID = 'thumbnails',
   MOSAIC = 'mosaic',
   MASONRY = 'masonry',
   JUSTIFIED = 'justified',

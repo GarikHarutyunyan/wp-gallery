@@ -200,7 +200,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       );
       setIsLoading(false);
     } else {
-      setType(GalleryType.THUMBNAILS);
+      setType(GalleryType.GRID);
       setGeneralSettings(generalMockSettings);
       setThumbnailSettings(thumbnailMockSettings);
       setMosaicSettings(mosaicMockSettings);

@@ -71,7 +71,7 @@ const Gallery = (): ReactElement => {
     if (type === GalleryType.JUSTIFIED) {
       return justifiedSettings!.paginationType;
     }
-    if (type === GalleryType.THUMBNAILS) {
+    if (type === GalleryType.GRID) {
       return thumbnailSettings!.paginationType;
     }
     if (type === GalleryType.MASONRY) {
@@ -150,7 +150,7 @@ const Gallery = (): ReactElement => {
           />
         );
         break;
-      case GalleryType.THUMBNAILS:
+      case GalleryType.GRID:
         gallery = (
           <ThumbnailGallery onClick={isClickable ? onImageClick : undefined} />
         );

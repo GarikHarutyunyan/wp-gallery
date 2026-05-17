@@ -12,7 +12,7 @@ import {SlideshowImage} from './images/SlideshowImage';
 import {ThumbnailsImage} from './images/ThumbnailsImage';
 export const GalleryTypeOptions = [
   {
-    value: GalleryType.THUMBNAILS,
+    value: GalleryType.GRID,
     title: 'Grid',
     image: <ThumbnailsImage />,
   },

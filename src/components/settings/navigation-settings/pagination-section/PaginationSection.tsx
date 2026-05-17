@@ -107,7 +107,7 @@ const PaginationSection = ({
     if (type === GalleryType.JUSTIFIED) {
       return justifiedSettings!.showAllItems;
     }
-    if (type === GalleryType.THUMBNAILS) {
+    if (type === GalleryType.GRID) {
       console.log(thumbnailSettings!.showAllItems);
       return thumbnailSettings!.showAllItems;
     }
@@ -134,7 +134,7 @@ const PaginationSection = ({
     if (type === GalleryType.JUSTIFIED) {
       return justifiedSettings!.paginationType;
     }
-    if (type === GalleryType.THUMBNAILS) {
+    if (type === GalleryType.GRID) {
       return thumbnailSettings!.paginationType;
     }
     if (type === GalleryType.MASONRY) {
@@ -168,7 +168,7 @@ const PaginationSection = ({
           [key]: inputValue,
         } as any);
     }
-    if (type === GalleryType.THUMBNAILS) {
+    if (type === GalleryType.GRID) {
       key &&
         changeThumbnailSettings?.({
           ...thumbnailSettings,

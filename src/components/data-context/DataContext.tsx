@@ -55,7 +55,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (type === GalleryType.JUSTIFIED) {
       return justifiedSettings!.paginationType;
     }
-    if (type === GalleryType.THUMBNAILS) {
+    if (type === GalleryType.GRID) {
       return thumbnailSettings!.paginationType;
     }
     if (type === GalleryType.MASONRY) {
@@ -82,7 +82,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (type === GalleryType.JUSTIFIED) {
       return justifiedSettings!.showAllItems;
     }
-    if (type === GalleryType.THUMBNAILS) {
+    if (type === GalleryType.GRID) {
       return thumbnailSettings!.showAllItems;
     }
     if (type === GalleryType.MASONRY) {
