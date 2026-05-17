@@ -4,17 +4,17 @@ import {CardsImage} from './images/CardsImage';
 import {CarouselImage} from './images/CarouselImage';
 import {CoverflowImage} from './images/CoverflowImage';
 import {CubeImage} from './images/CubeImage';
+import {GridImage} from './images/GridImage';
 import {JustifiedImage} from './images/JustifiedImage';
 import {MasonryImage} from './images/MasonryImage';
 import {MosaicImage} from './images/MosaicImage';
 import {ScrollerImage} from './images/ScrollerImage';
 import {SlideshowImage} from './images/SlideshowImage';
-import {ThumbnailsImage} from './images/ThumbnailsImage';
 export const GalleryTypeOptions = [
   {
     value: GalleryType.GRID,
     title: 'Grid',
-    image: <ThumbnailsImage />,
+    image: <GridImage />,
   },
   {
     value: GalleryType.SCROLLER,
