@@ -37,7 +37,7 @@ import {
   TitleVisibility,
 } from 'data-structures';
 
-const thumbnailMockSettings: IGridSettings = {
+const gridMockSettings: IGridSettings = {
   fillContainer: false,
   aspectRatio: '1.33',
   width: 150,
@@ -678,11 +678,11 @@ export {
   coverflowMockSettings,
   cubeMockSettings,
   generalMockSettings,
+  gridMockSettings,
   justifiedMockSettings,
   lightboxMockSettings,
   masonryMockSettings,
   mosaicMockSettings,
   scrollerMockSettings,
   slideshowMockSettings,
-  thumbnailMockSettings,
 };

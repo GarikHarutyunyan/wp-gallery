@@ -23,7 +23,7 @@ import {
   TitleVisibility,
 } from 'data-structures';
 
-const thumbnailMockSettings: IGridSettings = {
+const gridMockSettings: IGridSettings = {
   fillContainer: false,
   aspectRatio: '1.33',
   width: 150,
@@ -264,7 +264,7 @@ const template1 = {
   id: '1',
   name: 'Thumbnail Default',
   type: GalleryType.GRID,
-  thumbnails: thumbnailMockSettings,
+  thumbnails: gridMockSettings,
   general: generalMockSettings,
   lightbox: lightboxMockSettings,
 };
@@ -287,7 +287,7 @@ const template4 = {
   id: '4',
   name: 'Thumbnail Big Items',
   type: GalleryType.GRID,
-  thumbnails: thumbnailMockSettings,
+  thumbnails: gridMockSettings,
   general: generalMockSettings,
   lightbox: lightboxMockSettings,
 };

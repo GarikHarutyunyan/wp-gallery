@@ -36,13 +36,13 @@ import {
   coverflowMockSettings,
   cubeMockSettings,
   generalMockSettings,
+  gridMockSettings,
   justifiedMockSettings,
   lightboxMockSettings,
   masonryMockSettings,
   mosaicMockSettings,
   scrollerMockSettings,
   slideshowMockSettings,
-  thumbnailMockSettings,
 } from './MockSettings';
 
 const SettingsSections = lazy(() => import('./SettingsSections'));
@@ -134,7 +134,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCss(newSettings.css || '');
     setCustomCss(newSettings.custom_css || '');
     setGeneralSettings(newSettings.general || generalMockSettings);
-    setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
+    setThumbnailSettings(newSettings.thumbnails || gridMockSettings);
     setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
     setJustifiedSettings(newSettings.justified || justifiedMockSettings);
     setMasonrySettings(newSettings.masonry || mosaicMockSettings);
@@ -176,7 +176,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCss(newSettings.css || '');
       setCustomCss(newSettings.custom_css || '');
       setGeneralSettings(newSettings.general || generalMockSettings);
-      setThumbnailSettings(newSettings.thumbnails || thumbnailMockSettings);
+      setThumbnailSettings(newSettings.thumbnails || gridMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
       setJustifiedSettings(newSettings.justified || justifiedMockSettings);
       setMasonrySettings(newSettings.masonry || mosaicMockSettings);
@@ -201,7 +201,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     } else {
       setType(GalleryType.GRID);
       setGeneralSettings(generalMockSettings);
-      setThumbnailSettings(thumbnailMockSettings);
+      setThumbnailSettings(gridMockSettings);
       setMosaicSettings(mosaicMockSettings);
       setJustifiedSettings(justifiedMockSettings);
       setMasonrySettings(masonryMockSettings);
