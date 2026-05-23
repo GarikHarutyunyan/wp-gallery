@@ -1,9 +1,9 @@
-import {GalleryType} from 'data-structures';
-import {AlertConfig} from './AlertDialog.types';
-import {CopyableCode} from './CopyableCode';
-import {CustomerService} from './icons/CustomerServiceIcon';
-import {LigthBulbIcon} from './icons/LigthBulbIcon';
-import {TroubleshoutingIcon} from './icons/TroubleshoutingIcon';
+import { GalleryType } from 'data-structures';
+import { AlertConfig } from './AlertDialog.types';
+import { CopyableCode } from './CopyableCode';
+import { CustomerService } from './icons/CustomerServiceIcon';
+import { LigthBulbIcon } from './icons/LigthBulbIcon';
+import { TroubleshoutingIcon } from './icons/TroubleshoutingIcon';
 import cardsLayoutScreenshot from './layout-screenshots/cards.webp';
 import coverflowLayoutScreenshot from './layout-screenshots/coverflow.webp';
 import justifiedLayoutScreenshot from './layout-screenshots/justified.webp';
