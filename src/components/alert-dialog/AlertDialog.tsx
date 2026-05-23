@@ -78,10 +78,10 @@ const AlertDialog: React.FC<IAlertDialogProps> = () => {
 
   return (
     <Dialog
-      sx={{borderRadius: 2}}
+      sx={{borderRadius: '6px'}}
       open={isVisible}
       onClose={handleClose}
-      PaperProps={{sx: {borderRadius: 4}}}
+      PaperProps={{sx: {borderRadius: '6px'}}}
     >
       <IconButton onClick={handleClose} className={'modal-close'}>
         <CloseIcon />
