@@ -27,6 +27,7 @@ const Alert = ({config}: IAlertProps) => {
     image,
     title,
     description,
+    showFreeTrialForm,
     preButtonContent,
     additionalText,
     errorMessage,
@@ -41,7 +42,7 @@ const Alert = ({config}: IAlertProps) => {
   const [trialSubmitSuccess, setTrialSubmitSuccess] = useState('');
   const [isSubmittingTrial, setIsSubmittingTrial] = useState(false);
 
-  const isTrialFlowEnabled = Boolean(getTrialEndpoint());
+  const shouldRenderTrialForm = showFreeTrialForm;
 
   useEffect(() => {
     if (!trialSubmitSuccess || !onClose) {
@@ -127,7 +128,7 @@ const Alert = ({config}: IAlertProps) => {
   };
 
   const handleClick = async (utm_medium?: string) => {
-    if (isTrialFlowEnabled) {
+    if (shouldRenderTrialForm) {
       const isSuccess = await submitTrial();
       if (!isSuccess) {
         return;
@@ -146,7 +147,7 @@ const Alert = ({config}: IAlertProps) => {
   };
 
   const renderPreButtonContent = () => {
-    if (isTrialFlowEnabled) {
+    if (shouldRenderTrialForm) {
       return freeTrialFormIntro({
         trialEmail,
         trialSubmitError,

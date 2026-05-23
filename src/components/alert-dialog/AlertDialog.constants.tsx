@@ -1,9 +1,9 @@
-import {GalleryType} from 'data-structures';
-import {AlertConfig} from './AlertDialog.types';
-import {CopyableCode} from './CopyableCode';
-import {CustomerService} from './icons/CustomerServiceIcon';
-import {LigthBulbIcon} from './icons/LigthBulbIcon';
-import {TroubleshoutingIcon} from './icons/TroubleshoutingIcon';
+import { GalleryType } from 'data-structures';
+import { AlertConfig } from './AlertDialog.types';
+import { CopyableCode } from './CopyableCode';
+import { CustomerService } from './icons/CustomerServiceIcon';
+import { LigthBulbIcon } from './icons/LigthBulbIcon';
+import { TroubleshoutingIcon } from './icons/TroubleshoutingIcon';
 import cardsLayoutScreenshot from './layout-screenshots/cards.webp';
 import coverflowLayoutScreenshot from './layout-screenshots/coverflow.webp';
 import justifiedLayoutScreenshot from './layout-screenshots/justified.webp';
@@ -571,7 +571,6 @@ export const getProLayoutDialogConfig = (
 const startTrialFlow = () => undefined;
 
 type RenderPreButtonContentArgs = {
-  isTrialFlowEnabled: boolean;
   preButtonContent?: AlertConfig['preButtonContent'];
   utm_medium?: string;
   trialEmail: string;
@@ -588,10 +587,7 @@ export const freeTrialFormIntro = ({
   onEmailChange,
   onEnterPress,
   utm_medium,
-}: Omit<
-  RenderPreButtonContentArgs,
-  'isTrialFlowEnabled' | 'preButtonContent'
->) => (
+}: Omit<RenderPreButtonContentArgs, 'preButtonContent'>) => (
   <>
     <div className="free-trial-intro-banner">
       <span className="free-trial-intro-banner-icon-wrap">
@@ -661,6 +657,7 @@ export const freeTrialFormIntro = ({
 );
 
 export const freeTrialConfig: AlertConfig = {
+  showFreeTrialForm: true,
   description: (
     <>
       <div className="free-trial-heading-kicker">Start Free Trial</div>
@@ -746,6 +743,7 @@ export const getFreeTrialLayoutConfig = (
   layoutType: GalleryType
 ): AlertConfig => {
   return {
+    showFreeTrialForm: true,
     utm_medium: `free_trial_layout_${layoutType}`,
     description: (
       <>

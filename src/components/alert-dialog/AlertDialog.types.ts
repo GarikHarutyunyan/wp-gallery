@@ -9,6 +9,7 @@ export type AlertConfig = {
   image?: React.ReactNode;
   title?: string | React.ReactNode;
   description: string | React.ReactNode;
+  showFreeTrialForm?: boolean;
   preButtonContent?:
     | string
     | React.ReactNode
