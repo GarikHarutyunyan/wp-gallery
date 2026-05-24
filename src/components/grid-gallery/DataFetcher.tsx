@@ -5,6 +5,7 @@ interface IDataFetcherProps {
   onClick: () => void;
 }
 
+// TODO: move to other folder
 const DataFetcher: React.FC<IDataFetcherProps> = ({onClick}) => {
   const button: ReactElement = (
     <input

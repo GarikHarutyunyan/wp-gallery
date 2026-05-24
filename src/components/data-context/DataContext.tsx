@@ -18,8 +18,8 @@ import {
   useRef,
   useState,
 } from 'react';
+import {DataFetcher} from '../grid-gallery/DataFetcher';
 import {useSettings} from '../settings';
-import {DataFetcher} from '../thumbnail-gallery/DataFetcher';
 
 const propsImages: IImageDTO[] = [];
 

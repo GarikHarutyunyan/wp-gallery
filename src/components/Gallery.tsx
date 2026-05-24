@@ -21,7 +21,7 @@ import {useData} from './data-context/useData';
 import './gallery.css';
 import {useSettings} from './settings';
 
-const GridGallery = lazy(() => import('./thumbnail-gallery/GridGallery'));
+const GridGallery = lazy(() => import('./grid-gallery/GridGallery'));
 const MosaicGallery = lazy(() => import('./mosaic-gallery/MosaicGallery'));
 const JustifiedGallery = lazy(
   () => import('./justified-gallery/JustifiedGallery')
@@ -36,7 +36,7 @@ const Scroller = lazy(() => import('./scroller/Scroller'));
 const Lightbox = lazy(() => import('./lightbox/Lightbox'));
 const Slideshow = lazy(() => import('./slideshow/Slideshow'));
 const PaginationProvider = lazy(
-  () => import('./thumbnail-gallery/PaginationProvider')
+  () => import('./grid-gallery/PaginationProvider')
 );
 const FilterProvider = lazy(() => import('./filter-provider/FilterProvider'));
 
