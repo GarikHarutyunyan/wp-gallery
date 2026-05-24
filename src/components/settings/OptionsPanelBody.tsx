@@ -38,7 +38,7 @@ const OptionsPanelBody = ({
   };
 
   const onProFeatureClick = (utmMedium: string) => {
-    (window as any).reacg_open_premium_offer_dialog({
+    (window as any).reacg_open_free_trial_offer_dialog({
       utm_medium: utmMedium,
     });
   };
@@ -92,7 +92,10 @@ const OptionsPanelBody = ({
       </TabPanel>
       {!hideLightboxOptions ? (
         <TabPanel value={'lightbox'} className={'reacg-tab-panel'}>
-          <LightboxSettings isLoading={isLoading} />
+          <LightboxSettings
+            isLoading={isLoading}
+            onProFeatureClick={onProFeatureClick}
+          />
         </TabPanel>
       ) : null}
     </TabContext>

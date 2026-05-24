@@ -1,9 +1,9 @@
-import {GalleryType} from 'data-structures';
-import {AlertConfig} from './AlertDialog.types';
-import {CopyableCode} from './CopyableCode';
-import {CustomerService} from './icons/CustomerServiceIcon';
-import {LigthBulbIcon} from './icons/LigthBulbIcon';
-import {TroubleshoutingIcon} from './icons/TroubleshoutingIcon';
+import { GalleryType } from 'data-structures';
+import { AlertConfig } from './AlertDialog.types';
+import { CopyableCode } from './CopyableCode';
+import { CustomerService } from './icons/CustomerServiceIcon';
+import { LigthBulbIcon } from './icons/LigthBulbIcon';
+import { TroubleshoutingIcon } from './icons/TroubleshoutingIcon';
 import cardsLayoutScreenshot from './layout-screenshots/cards.webp';
 import coverflowLayoutScreenshot from './layout-screenshots/coverflow.webp';
 import justifiedLayoutScreenshot from './layout-screenshots/justified.webp';
@@ -23,6 +23,16 @@ const appendUtmMedium = (url: string, utm_medium?: string) => {
   }
 
   return `${url}${utmQuery}`;
+};
+
+export const getTrialDays = () => {
+  const days = Number((window as any).reacg_global?.trial_days);
+
+  if (Number.isFinite(days) && days > 0) {
+    return days;
+  }
+
+  return 7;
 };
 
 export const premiumConfig: AlertConfig = {
@@ -554,6 +564,298 @@ export const getProLayoutDialogConfig = (
           'https://regallery.team/#pricing';
         window.open(appendUtmMedium(url, utm_medium), '_blank');
       },
+    },
+  };
+};
+
+const startTrialFlow = () => undefined;
+
+type RenderPreButtonContentArgs = {
+  preButtonContent?: AlertConfig['preButtonContent'];
+  utm_medium?: string;
+  trialEmail: string;
+  trialSubmitError: string;
+  trialSubmitSuccess: string;
+  onEmailChange: (value: string) => void;
+  onEnterPress: (utm_medium?: string) => void;
+};
+
+export const freeTrialFormIntro = ({
+  trialEmail,
+  trialSubmitError,
+  trialSubmitSuccess,
+  onEmailChange,
+  onEnterPress,
+  utm_medium,
+}: Omit<RenderPreButtonContentArgs, 'preButtonContent'>) => (
+  <>
+    <div className="free-trial-intro-banner">
+      <span className="free-trial-intro-banner-icon-wrap">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#ffffff"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="3" y="8" width="18" height="4"></rect>
+          <path d="M12 8v11"></path>
+          <path d="M19 12v7H5v-7"></path>
+          <path d="M12 8H8.5a2.5 2.5 0 1 1 0-5c2 0 3.5 2 3.5 5Z"></path>
+          <path d="M12 8h3.5a2.5 2.5 0 1 0 0-5c-2 0-3.5 2-3.5 5Z"></path>
+        </svg>
+      </span>
+      <div>
+        <div className="free-trial-intro-banner-title">
+          No credit card required
+        </div>
+        <div className="free-trial-intro-banner-subtitle">
+          Try all PRO features risk-free for {getTrialDays()} days.
+        </div>
+      </div>
+    </div>
+    <div className="free-trial-email-label">
+      Enter your email to get started
+    </div>
+    <div className="trial-email-input-wrap">
+      <svg
+        className="trial-email-input-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+      </svg>
+      <input
+        className="trial-email-input"
+        type="email"
+        value={trialEmail}
+        onChange={(event) => {
+          onEmailChange(event.target.value);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            onEnterPress(utm_medium);
+          }
+        }}
+        placeholder="youremail@domain.com"
+      />
+    </div>
+    {trialSubmitError && (
+      <div className="free-trial-submit-error">{trialSubmitError}</div>
+    )}
+    {trialSubmitSuccess && (
+      <div className="free-trial-submit-success">{trialSubmitSuccess}</div>
+    )}
+  </>
+);
+
+export const freeTrialConfig: AlertConfig = {
+  showFreeTrialForm: true,
+  description: (
+    <>
+      <div className="free-trial-heading-kicker">Start Free Trial</div>
+      <div className="free-trial-heading-title">Unlock PRO features</div>
+      <div className="free-trial-heading-subtitle">
+        with a {`${getTrialDays()}-day`} free trial
+      </div>
+      <div className="free-trial-heading-description">
+        Get full access to all PRO features.
+      </div>
+      <div>
+        <div className="free-trial-feature-item">
+          <span className="dashicons dashicons-yes free-trial-feature-icon"></span>
+          <span>Pre-Built Templates &amp; Template Library</span>
+        </div>
+        <div className="free-trial-feature-item">
+          <span className="dashicons dashicons-yes free-trial-feature-icon"></span>
+          <span>AI Automation for Text &amp; Metadata</span>
+        </div>
+        <div className="free-trial-feature-item">
+          <span className="dashicons dashicons-yes free-trial-feature-icon"></span>
+          <span>Branding, Watermarks &amp; White Labeling</span>
+        </div>
+      </div>
+    </>
+  ),
+  additionalText: (utm_medium?: string) => (
+    <center className="free-trial-additional-text">
+      <a
+        className="free-trial-additional-link"
+        href={appendUtmMedium(
+          (window as any).reacg_global?.demo_url || '',
+          utm_medium
+        )}
+        target="_blank"
+      >
+        <strong>View a Demo</strong>
+      </a>{' '}
+      |{' '}
+      <a
+        className="free-trial-additional-link"
+        href={appendUtmMedium(
+          (window as any).reacg_global?.compare_plans_url || '',
+          utm_medium
+        )}
+        target="_blank"
+      >
+        <strong>Compare PRO Features</strong>
+      </a>
+    </center>
+  ),
+  buttonConfig: {
+    label: (
+      <span className="free-trial-button-label">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="3" y="8" width="18" height="4"></rect>
+          <path d="M12 8v11"></path>
+          <path d="M19 12v7H5v-7"></path>
+          <path d="M12 8H8.5a2.5 2.5 0 1 1 0-5c2 0 3.5 2 3.5 5Z"></path>
+          <path d="M12 8h3.5a2.5 2.5 0 1 0 0-5c-2 0-3.5 2-3.5 5Z"></path>
+        </svg>
+        <span>START FREE TRIAL</span>
+      </span>
+    ),
+    backgroundColor: '#8769ff',
+    width: '100%',
+    onClick: startTrialFlow,
+  },
+  utm_medium: 'free_trial_dialog',
+};
+
+export const getFreeTrialLayoutConfig = (
+  layoutType: GalleryType
+): AlertConfig => {
+  return {
+    showFreeTrialForm: true,
+    utm_medium: `free_trial_layout_${layoutType}`,
+    description: (
+      <>
+        <div
+          style={{
+            fontSize: '0.9rem',
+            color: '#8769ff',
+            textTransform: 'uppercase',
+            fontWeight: 600,
+            textAlign: 'center',
+          }}
+        >
+          Start Free Trial
+        </div>
+        <div
+          style={{
+            color: '#1d2327',
+            fontSize: '1.5rem',
+            margin: '0.4rem 0',
+            fontWeight: 600,
+            textAlign: 'center',
+          }}
+        >
+          Unlock this PRO layout
+        </div>
+        <div
+          style={{
+            color: '#8769ff',
+            fontSize: '1.2rem',
+            textAlign: 'center',
+            marginBottom: '0.4rem',
+            fontWeight: 600,
+          }}
+        >
+          with a {`${getTrialDays()}-day`} free trial
+        </div>
+        <div
+          style={{
+            color: '#5f6368',
+            fontSize: '0.9rem',
+            textAlign: 'center',
+            marginBottom: '25px',
+          }}
+        >
+          Get this layout and all PRO features.
+        </div>
+        {layoutPreviewByType[layoutType] && (
+          <img
+            src={layoutPreviewByType[layoutType]}
+            alt={`${layoutType} layout preview`}
+            style={
+              {
+                width: '80%',
+                display: 'block',
+                margin: '0 auto',
+              } as any
+            }
+          />
+        )}
+      </>
+    ),
+    additionalText: (utm_medium?: string) => (
+      <center style={{color: '#8769ff', fontSize: '0.9rem'}}>
+        <a
+          style={{color: '#8769ff'}}
+          href={appendUtmMedium(
+            (window as any).reacg_global?.layout_urls?.[`${layoutType}`] || '',
+            utm_medium
+          )}
+          target="_blank"
+        >
+          <strong>View a Demo</strong>
+        </a>{' '}
+        |{' '}
+        <a
+          style={{color: '#8769ff'}}
+          href={appendUtmMedium(
+            (window as any).reacg_global?.compare_plans_url || '',
+            utm_medium
+          )}
+          target="_blank"
+        >
+          <strong>Compare PRO Features</strong>
+        </a>
+      </center>
+    ),
+    buttonConfig: {
+      label: (
+        <span className="free-trial-button-label">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="3" y="8" width="18" height="4"></rect>
+            <path d="M12 8v11"></path>
+            <path d="M19 12v7H5v-7"></path>
+            <path d="M12 8H8.5a2.5 2.5 0 1 1 0-5c2 0 3.5 2 3.5 5Z"></path>
+            <path d="M12 8h3.5a2.5 2.5 0 1 0 0-5c-2 0-3.5 2-3.5 5Z"></path>
+          </svg>
+          <span>START FREE TRIAL</span>
+        </span>
+      ),
+      backgroundColor: '#8769ff',
+      width: '100%',
+      onClick: startTrialFlow,
     },
   };
 };

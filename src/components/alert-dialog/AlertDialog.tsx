@@ -5,6 +5,8 @@ import {Alert} from './Alert';
 import './alert-dialog.css';
 import {
   errorConfig,
+  freeTrialConfig,
+  getFreeTrialLayoutConfig,
   getProLayoutDialogConfig,
   needHelpConfig,
   newHereConfig,
@@ -16,6 +18,7 @@ import {AlertConfig} from './AlertDialog.types';
 interface DialogData {
   isVisible: boolean;
   config: AlertConfig;
+  onClose?: () => void;
 }
 
 interface IAlertDialogProps {}
@@ -36,6 +39,12 @@ const AlertDialog: React.FC<IAlertDialogProps> = () => {
     (window as any).reacg_open_pro_layout_dialog = (
       customConfig: AlertConfig
     ) => handleOpen({...getProLayoutDialogConfig, ...customConfig});
+    (window as any).reacg_open_free_trial_offer_dialog = (
+      customConfig: AlertConfig
+    ) => handleOpen({...freeTrialConfig, ...customConfig});
+    (window as any).reacg_open_free_trial_layout_dialog = (
+      customConfig: AlertConfig
+    ) => handleOpen({...getFreeTrialLayoutConfig, ...customConfig});
     (window as any).reacg_open_need_help_dialog = (customConfig: AlertConfig) =>
       handleOpen({...needHelpConfig, ...customConfig});
     (window as any).reacg_open_new_here_dialog = (customConfig: AlertConfig) =>
@@ -52,28 +61,32 @@ const AlertDialog: React.FC<IAlertDialogProps> = () => {
       ...prevState,
       isVisible: true,
       config: newConfig,
+      onClose: newConfig.onClose,
     }));
   };
 
   const handleClose = () => {
+    const externalOnClose = data.onClose;
+
     setData((prevState) => ({
       ...prevState,
       isVisible: false,
     }));
-    config.onClose?.();
+
+    externalOnClose?.();
   };
 
   return (
     <Dialog
-      sx={{borderRadius: 2}}
+      sx={{borderRadius: '6px'}}
       open={isVisible}
       onClose={handleClose}
-      PaperProps={{sx: {borderRadius: 4}}}
+      PaperProps={{sx: {borderRadius: '6px'}}}
     >
       <IconButton onClick={handleClose} className={'modal-close'}>
         <CloseIcon />
       </IconButton>
-      <Alert config={config} />
+      <Alert config={{...config, onClose: handleClose}} />
     </Dialog>
   );
 };
