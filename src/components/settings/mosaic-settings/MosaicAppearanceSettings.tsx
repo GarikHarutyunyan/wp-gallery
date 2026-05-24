@@ -84,7 +84,12 @@ const MosaicAppearanceSettings = ({
                 value={gap}
                 min={0}
                 max={100}
-                onChange={onInputValueChange}
+                pro={true}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () => onProFeatureClick('spacing')
+                }
               />
             </Filter>
             <Filter isLoading={isLoading}>

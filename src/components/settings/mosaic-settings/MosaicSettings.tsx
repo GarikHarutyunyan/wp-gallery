@@ -2,6 +2,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {ClickActionSettings} from 'components/click-action-settings/ClickActionSettings';
 import {useTemplates} from 'contexts';
+import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
 import {IMosaicSettings} from 'data-structures';
 import {NumberControl, SliderControl} from '../../controls';
@@ -10,15 +11,18 @@ import {Filter} from '../Filter';
 interface IMosaicSettingsProps {
   settings: IMosaicSettings;
   onSettingsChange: (settings: IMosaicSettings) => void;
+  onProFeatureClick: (feature: string) => void;
   isLoading: boolean;
 }
 
 const MosaicSettings = ({
   settings,
   onSettingsChange,
+  onProFeatureClick,
   isLoading,
 }: IMosaicSettingsProps) => {
   const {resetTemplate} = useTemplates();
+  const {isPro} = usePro();
   const {width, columns} = settings;
 
   const onInputValueChange = (inputValue: unknown, key?: string) => {
@@ -48,8 +52,13 @@ const MosaicSettings = ({
                 id={'columns'}
                 name={'Columns'}
                 value={columns}
-                onChange={onInputValueChange}
+                pro={true}
                 min={1}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () => onProFeatureClick('columns')
+                }
               />
             </Filter>
             <ClickActionSettings isLoading={isLoading} />

@@ -314,6 +314,7 @@ const Alert = ({config}: IAlertProps) => {
           style={{
             background: backgroundColor,
             width: width,
+            borderRadius: '6px',
             color: 'white',
             padding: '6px 40px',
             fontSize: 'large',

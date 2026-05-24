@@ -74,6 +74,7 @@ const OptionsPanelGalleryTab = ({
           settings={mosaicSettings}
           onSettingsChange={changeMosaicSettings!}
           isLoading={isLoading}
+          onProFeatureClick={onProFeatureClick}
         />
       )}
       {isJustified && justifiedSettings && (
