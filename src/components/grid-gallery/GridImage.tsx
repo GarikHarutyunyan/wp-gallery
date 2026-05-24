@@ -23,7 +23,7 @@ import {
 } from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
 
-interface IThumbnailImageProps {
+interface IGridImageProps {
   image: IImageDTO;
   width: number;
   height: number;
@@ -73,7 +73,7 @@ interface IThumbnailImageProps {
   showVideoCover: boolean;
 }
 
-const ThumbnailImage = ({
+const GridImage = ({
   image,
   width,
   height,
@@ -121,7 +121,7 @@ const ThumbnailImage = ({
   buttonUrl,
   openInNewTab,
   showVideoCover,
-}: IThumbnailImageProps) => {
+}: IGridImageProps) => {
   if (overlayTextBackground === '') {
     overlayTextBackground = 'unset';
   }
@@ -759,4 +759,4 @@ const ThumbnailImage = ({
   );
 };
 
-export default ThumbnailImage;
+export default GridImage;

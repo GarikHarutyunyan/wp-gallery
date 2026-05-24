@@ -12,7 +12,7 @@ import React, {
   useState,
 } from 'react';
 import './grid-gallery.css';
-import ThumbnailImage from './ThumbnailImage';
+import GridImage from './GridImage';
 
 interface IGridGalleryProps {
   onClick?: (index: number) => void;
@@ -216,7 +216,7 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
           ref={listRef}
         >
           {images?.map((image, index) => (
-            <ThumbnailImage
+            <GridImage
               key={image.original.url + index}
               image={image}
               width={getWidth}
