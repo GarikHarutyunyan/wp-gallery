@@ -11,14 +11,14 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import './thumbnail-gallery.css';
+import './grid-gallery.css';
 import ThumbnailImage from './ThumbnailImage';
 
-interface IThumbnailGalleryProps {
+interface IGridGalleryProps {
   onClick?: (index: number) => void;
 }
 
-const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
+const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
   const {galleryId} = useAppInfo();
   const {gridSettings: settings} = useSettings();
   const {images} = useData();
@@ -273,5 +273,5 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   );
 };
 
-export {ThumbnailGallery, type IThumbnailGalleryProps};
-export default ThumbnailGallery;
+export {GridGallery, type IGridGalleryProps};
+export default GridGallery;

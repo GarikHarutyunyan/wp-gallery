@@ -21,9 +21,7 @@ import {useData} from './data-context/useData';
 import './gallery.css';
 import {useSettings} from './settings';
 
-const ThumbnailGallery = lazy(
-  () => import('./thumbnail-gallery/ThumbnailGallery')
-);
+const GridGallery = lazy(() => import('./thumbnail-gallery/GridGallery'));
 const MosaicGallery = lazy(() => import('./mosaic-gallery/MosaicGallery'));
 const JustifiedGallery = lazy(
   () => import('./justified-gallery/JustifiedGallery')
@@ -152,7 +150,7 @@ const Gallery = (): ReactElement => {
         break;
       case GalleryType.GRID:
         gallery = (
-          <ThumbnailGallery onClick={isClickable ? onImageClick : undefined} />
+          <GridGallery onClick={isClickable ? onImageClick : undefined} />
         );
         break;
       case GalleryType.CUBE:
