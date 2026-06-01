@@ -11,6 +11,7 @@ import {
   ICoverflowSettings,
   ICubeSettings,
   IGeneralSettings,
+  IGridSettings,
   IJustifiedSettings,
   ILightboxSettings,
   ImageClickAction,
@@ -18,7 +19,6 @@ import {
   IMosaicSettings,
   IScrollerSettings,
   ISlideshowSettings,
-  IThumbnailSettings,
   LightboxImageAnimation,
   LightboxTextPosition,
   LightboxThumbnailsPosition,
@@ -37,7 +37,7 @@ import {
   TitleVisibility,
 } from 'data-structures';
 
-const thumbnailMockSettings: IThumbnailSettings = {
+const gridMockSettings: IGridSettings = {
   fillContainer: false,
   aspectRatio: '1.33',
   width: 150,
@@ -678,11 +678,11 @@ export {
   coverflowMockSettings,
   cubeMockSettings,
   generalMockSettings,
+  gridMockSettings,
   justifiedMockSettings,
   lightboxMockSettings,
   masonryMockSettings,
   mosaicMockSettings,
   scrollerMockSettings,
   slideshowMockSettings,
-  thumbnailMockSettings,
 };

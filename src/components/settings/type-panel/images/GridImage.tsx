@@ -1,6 +1,6 @@
 import {ReactElement} from 'react';
 
-const ThumbnailsImage = (): ReactElement => {
+const GridImage = (): ReactElement => {
   return (
     <svg height="70" width="70" viewBox="0 0 24 24">
       <path
@@ -23,4 +23,4 @@ const ThumbnailsImage = (): ReactElement => {
   );
 };
 
-export {ThumbnailsImage};
+export {GridImage};

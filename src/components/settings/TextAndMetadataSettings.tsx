@@ -47,9 +47,9 @@ export const TextAndMetadataSettings: React.FC<
 
   // Map gallery type to correct settings and change function
   const settingsMap: Record<string, {value: any; onChange: any}> = {
-    [GalleryType.THUMBNAILS]: {
-      value: settingsContext.thumbnailSettings,
-      onChange: settingsContext.changeThumbnailSettings,
+    [GalleryType.GRID]: {
+      value: settingsContext.gridSettings,
+      onChange: settingsContext.changeGridSettings,
     },
     [GalleryType.MOSAIC]: {
       value: settingsContext.mosaicSettings,
@@ -121,7 +121,7 @@ export const TextAndMetadataSettings: React.FC<
 
   const usesLightboxTextLayout = galleryType === GalleryType.SLIDESHOW;
   const usesThumbnailPositionLayout = [
-    GalleryType.THUMBNAILS,
+    GalleryType.GRID,
     GalleryType.CUBE,
     GalleryType.CAROUSEL,
     GalleryType.CARDS,

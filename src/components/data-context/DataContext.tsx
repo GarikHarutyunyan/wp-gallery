@@ -18,8 +18,8 @@ import {
   useRef,
   useState,
 } from 'react';
+import {DataFetcher} from '../grid-gallery/DataFetcher';
 import {useSettings} from '../settings';
-import {DataFetcher} from '../thumbnail-gallery/DataFetcher';
 
 const propsImages: IImageDTO[] = [];
 
@@ -40,7 +40,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {
     type,
     generalSettings,
-    thumbnailSettings,
+    gridSettings,
     mosaicSettings,
     justifiedSettings,
     masonrySettings,
@@ -55,8 +55,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (type === GalleryType.JUSTIFIED) {
       return justifiedSettings!.paginationType;
     }
-    if (type === GalleryType.THUMBNAILS) {
-      return thumbnailSettings!.paginationType;
+    if (type === GalleryType.GRID) {
+      return gridSettings!.paginationType;
     }
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.paginationType;
@@ -70,7 +70,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     type,
     mosaicSettings?.paginationType,
     justifiedSettings?.paginationType,
-    thumbnailSettings?.paginationType,
+    gridSettings?.paginationType,
     masonrySettings?.paginationType,
     blogSettings?.paginationType,
   ]);
@@ -82,8 +82,8 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (type === GalleryType.JUSTIFIED) {
       return justifiedSettings!.showAllItems;
     }
-    if (type === GalleryType.THUMBNAILS) {
-      return thumbnailSettings!.showAllItems;
+    if (type === GalleryType.GRID) {
+      return gridSettings!.showAllItems;
     }
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.showAllItems;
@@ -97,7 +97,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     type,
     mosaicSettings?.showAllItems,
     justifiedSettings?.showAllItems,
-    thumbnailSettings?.showAllItems,
+    gridSettings?.showAllItems,
     masonrySettings?.showAllItems,
     blogSettings?.showAllItems,
   ]);

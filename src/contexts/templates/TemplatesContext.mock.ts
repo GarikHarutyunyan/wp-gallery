@@ -6,11 +6,11 @@ import {
   GalleryType,
   HoverEffect,
   IGeneralSettings,
+  IGridSettings,
   ILightboxSettings,
   ImageClickAction,
   IMasonrySettings,
   ISlideshowSettings,
-  IThumbnailSettings,
   LightboxImageAnimation,
   LightboxTextPosition,
   LightboxThumbnailsPosition,
@@ -23,7 +23,7 @@ import {
   TitleVisibility,
 } from 'data-structures';
 
-const thumbnailMockSettings: IThumbnailSettings = {
+const gridMockSettings: IGridSettings = {
   fillContainer: false,
   aspectRatio: '1.33',
   width: 150,
@@ -263,8 +263,8 @@ const masonryMockSettings: IMasonrySettings = {
 const template1 = {
   id: '1',
   name: 'Thumbnail Default',
-  type: GalleryType.THUMBNAILS,
-  thumbnails: thumbnailMockSettings,
+  type: GalleryType.GRID,
+  thumbnails: gridMockSettings,
   general: generalMockSettings,
   lightbox: lightboxMockSettings,
 };
@@ -286,8 +286,8 @@ const template3 = {
 const template4 = {
   id: '4',
   name: 'Thumbnail Big Items',
-  type: GalleryType.THUMBNAILS,
-  thumbnails: thumbnailMockSettings,
+  type: GalleryType.GRID,
+  thumbnails: gridMockSettings,
   general: generalMockSettings,
   lightbox: lightboxMockSettings,
 };

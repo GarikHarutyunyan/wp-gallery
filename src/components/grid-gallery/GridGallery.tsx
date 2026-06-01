@@ -2,7 +2,7 @@ import ImageList from '@mui/material/ImageList';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {useAppInfo} from 'contexts';
-import {ActionURLSource, IThumbnailSettings} from 'data-structures';
+import {ActionURLSource, IGridSettings} from 'data-structures';
 import React, {
   useCallback,
   useEffect,
@@ -11,16 +11,16 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import './thumbnail-gallery.css';
-import ThumbnailImage from './ThumbnailImage';
+import './grid-gallery.css';
+import GridImage from './GridImage';
 
-interface IThumbnailGalleryProps {
+interface IGridGalleryProps {
   onClick?: (index: number) => void;
 }
 
-const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
+const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
   const {galleryId} = useAppInfo();
-  const {thumbnailSettings: settings} = useSettings();
+  const {gridSettings: settings} = useSettings();
   const {images} = useData();
   const {
     fillContainer,
@@ -74,7 +74,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
     buttonUrlSource,
     openInNewTab,
     showVideoCover,
-  } = settings as IThumbnailSettings;
+  } = settings as IGridSettings;
   const elementRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [imageRatio, setImageRatio] = useState(1);
@@ -216,7 +216,7 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
           ref={listRef}
         >
           {images?.map((image, index) => (
-            <ThumbnailImage
+            <GridImage
               key={image.original.url + index}
               image={image}
               width={getWidth}
@@ -273,5 +273,5 @@ const ThumbnailGallery: React.FC<IThumbnailGalleryProps> = ({onClick}) => {
   );
 };
 
-export {ThumbnailGallery, type IThumbnailGalleryProps};
-export default ThumbnailGallery;
+export {GridGallery, type IGridGalleryProps};
+export default GridGallery;

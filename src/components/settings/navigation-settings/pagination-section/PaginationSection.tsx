@@ -68,8 +68,8 @@ const PaginationSection = ({
   const {resetTemplate} = useTemplates();
   const {
     type,
-    thumbnailSettings,
-    changeThumbnailSettings,
+    gridSettings,
+    changeGridSettings,
     mosaicSettings,
     changeMosaicSettings,
     justifiedSettings,
@@ -107,9 +107,8 @@ const PaginationSection = ({
     if (type === GalleryType.JUSTIFIED) {
       return justifiedSettings!.showAllItems;
     }
-    if (type === GalleryType.THUMBNAILS) {
-      console.log(thumbnailSettings!.showAllItems);
-      return thumbnailSettings!.showAllItems;
+    if (type === GalleryType.GRID) {
+      return gridSettings!.showAllItems;
     }
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.showAllItems;
@@ -122,7 +121,7 @@ const PaginationSection = ({
     type,
     mosaicSettings,
     justifiedSettings,
-    thumbnailSettings,
+    gridSettings,
     masonrySettings,
     blogSettings,
   ]);
@@ -134,8 +133,8 @@ const PaginationSection = ({
     if (type === GalleryType.JUSTIFIED) {
       return justifiedSettings!.paginationType;
     }
-    if (type === GalleryType.THUMBNAILS) {
-      return thumbnailSettings!.paginationType;
+    if (type === GalleryType.GRID) {
+      return gridSettings!.paginationType;
     }
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.paginationType;
@@ -148,7 +147,7 @@ const PaginationSection = ({
     type,
     mosaicSettings,
     justifiedSettings,
-    thumbnailSettings,
+    gridSettings,
     masonrySettings,
     blogSettings,
   ]);
@@ -168,10 +167,10 @@ const PaginationSection = ({
           [key]: inputValue,
         } as any);
     }
-    if (type === GalleryType.THUMBNAILS) {
+    if (type === GalleryType.GRID) {
       key &&
-        changeThumbnailSettings?.({
-          ...thumbnailSettings,
+        changeGridSettings?.({
+          ...gridSettings,
           [key]: inputValue,
         } as any);
     }

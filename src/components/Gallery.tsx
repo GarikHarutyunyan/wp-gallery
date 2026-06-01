@@ -21,9 +21,7 @@ import {useData} from './data-context/useData';
 import './gallery.css';
 import {useSettings} from './settings';
 
-const ThumbnailGallery = lazy(
-  () => import('./thumbnail-gallery/ThumbnailGallery')
-);
+const GridGallery = lazy(() => import('./grid-gallery/GridGallery'));
 const MosaicGallery = lazy(() => import('./mosaic-gallery/MosaicGallery'));
 const JustifiedGallery = lazy(
   () => import('./justified-gallery/JustifiedGallery')
@@ -38,7 +36,7 @@ const Scroller = lazy(() => import('./scroller/Scroller'));
 const Lightbox = lazy(() => import('./lightbox/Lightbox'));
 const Slideshow = lazy(() => import('./slideshow/Slideshow'));
 const PaginationProvider = lazy(
-  () => import('./thumbnail-gallery/PaginationProvider')
+  () => import('./grid-gallery/PaginationProvider')
 );
 const FilterProvider = lazy(() => import('./filter-provider/FilterProvider'));
 
@@ -48,7 +46,7 @@ const Gallery = (): ReactElement => {
     generalSettings,
     mosaicSettings,
     justifiedSettings,
-    thumbnailSettings,
+    gridSettings,
     masonrySettings,
     blogSettings,
     scrollerSettings,
@@ -71,8 +69,8 @@ const Gallery = (): ReactElement => {
     if (type === GalleryType.JUSTIFIED) {
       return justifiedSettings!.paginationType;
     }
-    if (type === GalleryType.THUMBNAILS) {
-      return thumbnailSettings!.paginationType;
+    if (type === GalleryType.GRID) {
+      return gridSettings!.paginationType;
     }
     if (type === GalleryType.MASONRY) {
       return masonrySettings!.paginationType;
@@ -86,7 +84,7 @@ const Gallery = (): ReactElement => {
     type,
     mosaicSettings?.paginationType,
     justifiedSettings?.paginationType,
-    thumbnailSettings?.paginationType,
+    gridSettings?.paginationType,
     masonrySettings?.paginationType,
     blogSettings?.paginationType,
   ]);
@@ -150,9 +148,9 @@ const Gallery = (): ReactElement => {
           />
         );
         break;
-      case GalleryType.THUMBNAILS:
+      case GalleryType.GRID:
         gallery = (
-          <ThumbnailGallery onClick={isClickable ? onImageClick : undefined} />
+          <GridGallery onClick={isClickable ? onImageClick : undefined} />
         );
         break;
       case GalleryType.CUBE:

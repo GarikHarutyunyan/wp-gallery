@@ -24,8 +24,8 @@ const OptionsPanelGalleryTab = ({
 }: IOptionsPanelGalleryTabProps): ReactElement => {
   const {
     type,
-    thumbnailSettings,
-    changeThumbnailSettings,
+    gridSettings,
+    changeGridSettings,
     mosaicSettings,
     changeMosaicSettings,
     justifiedSettings,
@@ -48,7 +48,7 @@ const OptionsPanelGalleryTab = ({
     changeScrollerSettings,
   } = useSettings();
 
-  const isGrid: boolean = type === GalleryType.THUMBNAILS;
+  const isGrid: boolean = type === GalleryType.GRID;
   const isMosaic: boolean = type === GalleryType.MOSAIC;
   const isJustified: boolean = type === GalleryType.JUSTIFIED;
   const isMasonry: boolean = type === GalleryType.MASONRY;
@@ -62,11 +62,11 @@ const OptionsPanelGalleryTab = ({
 
   return (
     <>
-      {isGrid && thumbnailSettings && (
+      {isGrid && gridSettings && (
         <GridSettings
           isLoading={isLoading}
-          settings={thumbnailSettings}
-          onSettingsChange={changeThumbnailSettings!}
+          settings={gridSettings}
+          onSettingsChange={changeGridSettings!}
         />
       )}
       {isMosaic && mosaicSettings && (

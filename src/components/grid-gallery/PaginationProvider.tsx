@@ -27,6 +27,7 @@ interface IPaginationProviderProps {
   page: number;
 }
 
+// TODO: move to other folder
 const PaginationProvider: React.FC<IPaginationProviderProps> = ({
   type,
   onLoad,
