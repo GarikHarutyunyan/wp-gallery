@@ -1,6 +1,7 @@
 type ButtonConfig = {
   label: React.ReactNode;
   backgroundColor: string;
+  color?: string;
   width?: string;
   onClick: (utm_medium?: string) => void;
 };
@@ -19,6 +20,7 @@ export type AlertConfig = {
     | React.ReactNode
     | ((utm_medium?: string) => React.ReactNode);
   buttonConfig: ButtonConfig;
+  secondaryButtonConfig?: ButtonConfig;
   errorMessage?: string;
   onClose?: () => void;
   utm_medium?: string;

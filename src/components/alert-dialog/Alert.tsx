@@ -32,6 +32,7 @@ const Alert = ({config}: IAlertProps) => {
     additionalText,
     errorMessage,
     buttonConfig,
+    secondaryButtonConfig,
     utm_medium,
     onClose,
   } = config;
@@ -315,6 +316,9 @@ const Alert = ({config}: IAlertProps) => {
             background: backgroundColor,
             width: width,
             borderRadius: '6px',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderColor: backgroundColor,
             color: 'white',
             padding: '6px 40px',
             fontSize: 'large',
@@ -338,6 +342,33 @@ const Alert = ({config}: IAlertProps) => {
           )}
         </Button>
       </Box>
+      {secondaryButtonConfig && (
+        <Box
+          sx={{display: 'flex', justifyContent: 'center', marginBottom: '14px'}}
+        >
+          <Button
+            onClick={() => {
+              secondaryButtonConfig.onClick(utm_medium);
+            }}
+            style={{
+              background: secondaryButtonConfig.backgroundColor,
+              borderColor: secondaryButtonConfig.color,
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              width: secondaryButtonConfig.width,
+              borderRadius: '6px',
+              color: secondaryButtonConfig.color,
+              padding: '6px 40px',
+              fontSize: 'large',
+              boxShadow: 'unset',
+              fontWeight: 600,
+              fontFamily: 'inherit',
+            }}
+          >
+            {secondaryButtonConfig.label}
+          </Button>
+        </Box>
+      )}
       <div>{renderAdditionalText()}</div>
     </Box>
   );

@@ -1,9 +1,9 @@
-import { GalleryType } from 'data-structures';
-import { AlertConfig } from './AlertDialog.types';
-import { CopyableCode } from './CopyableCode';
-import { CustomerService } from './icons/CustomerServiceIcon';
-import { LigthBulbIcon } from './icons/LigthBulbIcon';
-import { TroubleshoutingIcon } from './icons/TroubleshoutingIcon';
+import {GalleryType} from 'data-structures';
+import {AlertConfig} from './AlertDialog.types';
+import {CopyableCode} from './CopyableCode';
+import {CustomerService} from './icons/CustomerServiceIcon';
+import {LigthBulbIcon} from './icons/LigthBulbIcon';
+import {TroubleshoutingIcon} from './icons/TroubleshoutingIcon';
 import cardsLayoutScreenshot from './layout-screenshots/cards.webp';
 import coverflowLayoutScreenshot from './layout-screenshots/coverflow.webp';
 import justifiedLayoutScreenshot from './layout-screenshots/justified.webp';
@@ -33,6 +33,38 @@ export const getTrialDays = () => {
   }
 
   return 7;
+};
+
+const openUpgradeUrl = (utm_medium?: string) => {
+  const url =
+    (window as any).reacg_global?.upgrade?.url ||
+    'https://regallery.team/#pricing';
+
+  window.open(appendUtmMedium(url, utm_medium), '_blank');
+};
+
+const upgradeSecondaryButtonConfig = {
+  label: (
+    <>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        style={{flexShrink: 0}}
+      >
+        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+      </svg>
+      UPGRADE
+    </>
+  ),
+  color: '#6c58ff',
+  backgroundColor: '#ffffff',
+  width: '100%',
+  onClick: (utm_medium?: string) => {
+    openUpgradeUrl(utm_medium);
+  },
 };
 
 export const premiumConfig: AlertConfig = {
@@ -165,10 +197,7 @@ export const premiumConfig: AlertConfig = {
     backgroundColor: '#6c58ff',
     width: '100%',
     onClick: (utm_medium?: string) => {
-      const url =
-        (window as any).reacg_global?.upgrade?.url ||
-        'https://regallery.team/#pricing';
-      window.open(appendUtmMedium(url, utm_medium), '_blank');
+      openUpgradeUrl(utm_medium);
     },
   },
 };
@@ -559,10 +588,7 @@ export const getProLayoutDialogConfig = (
       backgroundColor: '#6c58ff',
       width: '100%',
       onClick: (utm_medium?: string) => {
-        const url =
-          (window as any).reacg_global?.upgrade?.url ||
-          'https://regallery.team/#pricing';
-        window.open(appendUtmMedium(url, utm_medium), '_blank');
+        openUpgradeUrl(utm_medium);
       },
     },
   };
@@ -736,6 +762,7 @@ export const freeTrialConfig: AlertConfig = {
     width: '100%',
     onClick: startTrialFlow,
   },
+  secondaryButtonConfig: upgradeSecondaryButtonConfig,
   utm_medium: 'free_trial_dialog',
 };
 
@@ -857,5 +884,6 @@ export const getFreeTrialLayoutConfig = (
       width: '100%',
       onClick: startTrialFlow,
     },
+    secondaryButtonConfig: upgradeSecondaryButtonConfig,
   };
 };
