@@ -295,6 +295,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
                   }rem,${descriptionFontSize}vw ,${
                     descriptionFontSize * maxFactor
                   }rem)`,
+                  textAlign: titleAlignment,
                   WebkitLineClamp: descriptionMaxRowsCount,
                   WebkitBoxOrient: 'vertical',
                   display: '-webkit-box',
