@@ -14,9 +14,13 @@ import {
   LightboxThumbnailsPosition,
 } from 'data-structures';
 import React, {ReactElement, useEffect, useMemo, useState} from 'react';
+import {createPortal} from 'react-dom';
 import {getLargestSrcItem, getSrcSet, ISrcSetItem} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
-import Lightbox, {SlideshowRef} from 'yet-another-react-lightbox';
+import Lightbox, {
+  ControllerRef,
+  SlideshowRef,
+} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Inline from 'yet-another-react-lightbox/plugins/inline';
 import YARLSlideshow from 'yet-another-react-lightbox/plugins/slideshow';
@@ -101,12 +105,23 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const [index, setIndex] = useState(0);
   const [buttonContainerHeight, setButtonContainerHeight] = useState<number>(0);
+  const [thumbnailContainer, setThumbnailContainer] =
+    useState<HTMLElement | null>(null);
   const {galleryId} = useAppInfo();
 
   const slideshowRef = React.useRef<SlideshowRef>(null);
+  const controllerRef = React.useRef<ControllerRef>(null);
+  const slideshowRootRef = React.useRef<HTMLDivElement>(null);
 
   const showThumbnails: boolean =
     thumbnailsPosition !== LightboxThumbnailsPosition.END;
+  const imagesCount = images?.length || 0;
+  const areThumbnailArrowsShown: boolean =
+    thumbnailsPosition !== LightboxThumbnailsPosition.NONE && imagesCount > 1;
+  const areThumbnailsVertical: boolean = [
+    LightboxThumbnailsPosition.START,
+    LightboxThumbnailsPosition.END,
+  ].includes(thumbnailsPosition);
   const minHeight: number = showThumbnails
     ? thumbnailHeight + thumbnailPadding * 2
     : height;
@@ -422,6 +437,94 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     setIndex(0);
   }, [isInfinite]);
 
+  useEffect(() => {
+    if (!areThumbnailArrowsShown) {
+      setThumbnailContainer(null);
+      return;
+    }
+
+    let animationFrameId: number | null = null;
+
+    const updateThumbnailContainer = () => {
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+      }
+
+      animationFrameId = requestAnimationFrame(() => {
+        setThumbnailContainer(
+          slideshowRootRef.current?.querySelector(
+            '.yarl__thumbnails_container'
+          ) as HTMLElement | null
+        );
+        animationFrameId = null;
+      });
+    };
+
+    updateThumbnailContainer();
+
+    const observer = new MutationObserver(updateThumbnailContainer);
+    if (slideshowRootRef.current) {
+      observer.observe(slideshowRootRef.current, {
+        childList: true,
+        subtree: true,
+      });
+    }
+
+    return () => {
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      observer.disconnect();
+    };
+  }, [areThumbnailArrowsShown, thumbnailsPosition]);
+
+  const handleThumbnailNavigate = (direction: -1 | 1) => {
+    if (direction === -1) {
+      controllerRef.current?.prev();
+    } else {
+      controllerRef.current?.next();
+    }
+  };
+
+  const thumbnailArrows = areThumbnailArrowsShown ? (
+    <div
+      className={clsx(
+        'reacg-slideshow-thumbnail-arrows',
+        `reacg-slideshow-thumbnail-arrows_${thumbnailsPosition}`,
+        {
+          'reacg-slideshow-thumbnail-arrows_vertical': areThumbnailsVertical,
+        }
+      )}
+    >
+      <button
+        type="button"
+        className={clsx(
+          'reacg-slideshow-thumbnail-arrow',
+          'reacg-slideshow-thumbnail-arrow_prev'
+        )}
+        aria-label="Previous thumbnail"
+        disabled={!isInfinite && index === 0}
+        onClick={(event) => {
+          event.stopPropagation();
+          handleThumbnailNavigate(-1);
+        }}
+      />
+      <button
+        type="button"
+        className={clsx(
+          'reacg-slideshow-thumbnail-arrow',
+          'reacg-slideshow-thumbnail-arrow_next'
+        )}
+        aria-label="Next thumbnail"
+        disabled={!isInfinite && index === imagesCount - 1}
+        onClick={(event) => {
+          event.stopPropagation();
+          handleThumbnailNavigate(1);
+        }}
+      />
+    </div>
+  ) : null;
+
   const WatermarkOverlay: React.FC<{
     rootRef: React.RefObject<HTMLDivElement>;
   }> = ({rootRef}) => {
@@ -490,8 +593,6 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     );
   };
 
-  const slideshowRootRef = React.useRef<HTMLDivElement>(null);
-
   return (
     <Box
       ref={slideshowRootRef}
@@ -523,6 +624,9 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           preload: 5,
           finite: !isInfinite,
           padding,
+        }}
+        controller={{
+          ref: controllerRef,
         }}
         thumbnails={{
           position: thumbnailsPosition as any,
@@ -624,6 +728,9 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           click: ({index: currentIndex}) => onClick?.(currentIndex),
         }}
       />
+      {thumbnailContainer &&
+        thumbnailArrows &&
+        createPortal(thumbnailArrows, thumbnailContainer)}
     </Box>
   );
 };
