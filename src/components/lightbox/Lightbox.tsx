@@ -698,16 +698,10 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           separator: '/',
           container: {
             style: {
-              top:
-                textPosition === LightboxTextPosition.TOP ||
-                textPosition === LightboxTextPosition.ABOVE
-                  ? 'unset'
-                  : 0,
-              bottom:
-                textPosition === LightboxTextPosition.TOP ||
-                textPosition === LightboxTextPosition.ABOVE
-                  ? 0
-                  : 'unset',
+              marginTop: slideMargins.marginTop,
+              marginBottom: slideMargins.marginBottom,
+              top: textPosition === LightboxTextPosition.TOP ? 'unset' : 0,
+              bottom: textPosition === LightboxTextPosition.TOP ? 0 : 'unset',
             },
           },
         }}
@@ -787,6 +781,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           toolbar: {
             marginTop: slideMargins.marginTop,
             marginBottom: slideMargins.marginBottom,
+            top: textPosition === LightboxTextPosition.TOP ? 'unset' : 0,
+            bottom: textPosition === LightboxTextPosition.TOP ? 0 : 'unset',
           },
           navigationPrev: {
             marginTop: slideMargins.marginTop,

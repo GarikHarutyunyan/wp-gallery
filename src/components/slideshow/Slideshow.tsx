@@ -611,6 +611,16 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           ref: slideshowRef,
         }}
         slides={slides}
+        counter={{
+          container: {
+            style: {
+              marginTop: slideMargins.marginTop,
+              marginBottom: slideMargins.marginBottom,
+              top: textPosition === LightboxTextPosition.TOP ? 'unset' : 0,
+              bottom: textPosition === LightboxTextPosition.TOP ? 0 : 'unset',
+            },
+          },
+        }}
         animation={{
           swipe: imageAnimation === LightboxImageAnimation.SLIDEH ? 500 : 1,
           easing: {swipe: 'ease-out', navigation: 'ease-in-out'},
@@ -692,6 +702,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           toolbar: {
             marginTop: slideMargins.marginTop,
             marginBottom: slideMargins.marginBottom,
+            top: textPosition === LightboxTextPosition.TOP ? 'unset' : 0,
+            bottom: textPosition === LightboxTextPosition.TOP ? 0 : 'unset',
           },
           navigationPrev: {
             marginTop: slideMargins.marginTop,
