@@ -463,16 +463,6 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                     step={0.1}
                   />
                 </Filter>
-
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                    id={'titleAlignment'}
-                    name={'Alignement'}
-                    value={titleAlignment}
-                    options={TitleAlignmentOptions}
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
               </Grid>
             )}
           </Grid>
@@ -804,6 +794,15 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
         className="reacg-tab-section"
         body={
           <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'titleAlignment'}
+                name={'Alignement'}
+                value={titleAlignment}
+                options={TitleAlignmentOptions}
+                onChange={onInputValueChange}
+              />
+            </Filter>
             <Filter isLoading={isLoading}>
               <SelectControl
                 id={'textPosition'}

@@ -177,6 +177,102 @@ html.react-lightbox--no-scroll {
 }
 
 .reacg-lightbox
+  .yarl__thumbnails_thumbnail:not(.yarl__thumbnails_thumbnail_active)::after {
+  background: rgba(0, 0, 0, 0.5);
+  content: '';
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.reacg-lightbox-thumbnail-arrows {
+  pointer-events: none;
+  position: absolute;
+  z-index: 11;
+}
+
+.reacg-lightbox-thumbnail-arrows_top,
+.reacg-lightbox-thumbnail-arrows_bottom {
+  display: flex;
+  justify-content: space-between;
+  left: 8px;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.reacg-lightbox-thumbnail-arrows_start,
+.reacg-lightbox-thumbnail-arrows_end {
+  bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  left: 50%;
+  top: 8px;
+  transform: translateX(-50%);
+}
+
+.reacg-lightbox-thumbnail-arrow {
+  align-items: center;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 50%;
+  color: hsla(0, 0%, 100%, 0.8) !important;
+  cursor: pointer;
+  display: flex;
+  filter: var(
+    --yarl__button_filter,
+    drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.8))
+  );
+  height: 28px;
+  justify-content: center;
+  padding: 0 !important;
+  pointer-events: auto;
+  width: 28px !important;
+}
+
+.reacg-lightbox-thumbnail-arrow:hover:not(:disabled),
+.reacg-lightbox-thumbnail-arrow:focus-visible:not(:disabled) {
+  color: #fff !important;
+}
+
+.reacg-lightbox-thumbnail-arrow:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.reacg-lightbox-thumbnail-arrow::before {
+  border-color: currentColor;
+  border-style: solid;
+  content: '';
+  display: block;
+  height: 8px;
+  width: 8px;
+}
+
+.reacg-lightbox-thumbnail-arrow_prev::before {
+  border-width: 0 0 2px 2px;
+  transform: translateX(2px) rotate(45deg);
+}
+
+.reacg-lightbox-thumbnail-arrow_next::before {
+  border-width: 2px 2px 0 0;
+  transform: translateX(-2px) rotate(45deg);
+}
+
+.reacg-lightbox-thumbnail-arrows_vertical
+  .reacg-lightbox-thumbnail-arrow_prev::before {
+  border-width: 2px 2px 0 0;
+  transform: translateY(2px) rotate(-45deg);
+}
+
+.reacg-lightbox-thumbnail-arrows_vertical
+  .reacg-lightbox-thumbnail-arrow_next::before {
+  border-width: 0 0 2px 2px;
+  transform: translateY(-2px) rotate(-45deg);
+}
+
+.reacg-lightbox
   button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button),
 .reacg-lightbox
   button:not(.yarl__thumbnails_thumbnail):not(.reacg-action-button):hover,

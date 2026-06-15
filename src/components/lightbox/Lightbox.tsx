@@ -12,7 +12,7 @@ import React, {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {getLargestSrcItem, getSrcSet, ISrcSetItem} from 'utils/imageSrcSet';
 import {Watermark} from 'utils/renderWatermark';
-import {Lightbox} from 'yet-another-react-lightbox';
+import {ControllerRef, Lightbox} from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import Counter from 'yet-another-react-lightbox/plugins/counter';
 import 'yet-another-react-lightbox/plugins/counter.css';
@@ -226,7 +226,17 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const [index, setIndex] = useState(0);
   const [buttonContainerHeight, setButtonContainerHeight] = useState<number>(0);
+  const [thumbnailContainer, setThumbnailContainer] =
+    useState<HTMLElement | null>(null);
   const {galleryId} = useAppInfo();
+  const controllerRef = React.useRef<ControllerRef>(null);
+  const imagesCount = images?.length || 0;
+  const areThumbnailArrowsShown: boolean =
+    thumbnailsPosition !== LightboxThumbnailsPosition.NONE && imagesCount > 1;
+  const areThumbnailsVertical: boolean = [
+    LightboxThumbnailsPosition.START,
+    LightboxThumbnailsPosition.END,
+  ].includes(thumbnailsPosition);
 
   const minFactor = 1.45;
   const maxFactor = 1.25;
@@ -316,6 +326,28 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    if (!areThumbnailArrowsShown || activeIndex < 0) {
+      setThumbnailContainer(null);
+      return;
+    }
+
+    const updateThumbnailContainer = () => {
+      setThumbnailContainer(
+        document.querySelector(
+          '.reacg-lightbox .yarl__thumbnails_container'
+        ) as HTMLElement | null
+      );
+    };
+
+    updateThumbnailContainer();
+
+    const observer = new MutationObserver(updateThumbnailContainer);
+    observer.observe(document.body, {childList: true, subtree: true});
+
+    return () => observer.disconnect();
+  }, [activeIndex, areThumbnailArrowsShown, thumbnailsPosition]);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -465,6 +497,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
                   }rem, ${descriptionFontSize}vw, ${
                     descriptionFontSize * maxFactor
                   }rem)`,
+                  textAlign: titleAlignment,
                   WebkitLineClamp: descriptionMaxRowsCount,
                   WebkitBoxOrient: 'vertical',
                   display: '-webkit-box',
@@ -594,6 +627,60 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     return padding;
   }, [innerWidth, innerHeight, padding]);
 
+  const handleThumbnailNavigate = (direction: -1 | 1) => {
+    if (direction === -1) {
+      controllerRef.current?.prev();
+    } else {
+      controllerRef.current?.next();
+    }
+  };
+
+  const renderThumbnailArrows = () => {
+    if (!areThumbnailArrowsShown || !thumbnailContainer) {
+      return null;
+    }
+
+    return createPortal(
+      <div
+        className={clsx(
+          'reacg-lightbox-thumbnail-arrows',
+          `reacg-lightbox-thumbnail-arrows_${thumbnailsPosition}`,
+          {
+            'reacg-lightbox-thumbnail-arrows_vertical': areThumbnailsVertical,
+          }
+        )}
+      >
+        <button
+          type="button"
+          className={clsx(
+            'reacg-lightbox-thumbnail-arrow',
+            'reacg-lightbox-thumbnail-arrow_prev'
+          )}
+          aria-label="Previous thumbnail"
+          disabled={!isInfinite && index === 0}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleThumbnailNavigate(-1);
+          }}
+        />
+        <button
+          type="button"
+          className={clsx(
+            'reacg-lightbox-thumbnail-arrow',
+            'reacg-lightbox-thumbnail-arrow_next'
+          )}
+          aria-label="Next thumbnail"
+          disabled={!isInfinite && index === imagesCount - 1}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleThumbnailNavigate(1);
+          }}
+        />
+      </div>,
+      thumbnailContainer
+    );
+  };
+
   const renderLighbox = () => {
     return (
       <Lightbox
@@ -603,7 +690,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         close={handleClose}
         slideshow={{autoplay, delay: slideDuration > 700 ? slideDuration : 700}}
         slides={slides}
-        controller={{closeOnBackdropClick: !drag}}
+        controller={{closeOnBackdropClick: !drag, ref: controllerRef}}
         noScroll={{
           disabled: true,
         }}
@@ -746,6 +833,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   return (
     <>
       {renderLighbox()}
+      {renderThumbnailArrows()}
       <LightboxBackground
         isVisible={activeIndex >= 0}
         onClick={handleClose}
