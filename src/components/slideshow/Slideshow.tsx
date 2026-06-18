@@ -702,8 +702,16 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
           toolbar: {
             marginTop: slideMargins.marginTop,
             marginBottom: slideMargins.marginBottom,
-            top: textPosition === LightboxTextPosition.TOP ? 'unset' : 0,
-            bottom: textPosition === LightboxTextPosition.TOP ? 0 : 'unset',
+            top:
+              (canShare || canDownload || canZoom || canFullscreen) &&
+              textPosition === LightboxTextPosition.TOP
+                ? 'unset'
+                : 0,
+            bottom:
+              (canShare || canDownload || canZoom || canFullscreen) &&
+              textPosition === LightboxTextPosition.TOP
+                ? 0
+                : 'unset',
           },
           navigationPrev: {
             marginTop: slideMargins.marginTop,
