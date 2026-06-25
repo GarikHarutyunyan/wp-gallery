@@ -18,9 +18,20 @@ const ReImage = ({wrapperRef, ...props}: IReImageProps): ReactElement => {
 
   useEffect(() => {
     const wrapperElement = wrapperRef.current;
-
+    wrapperElement?.classList.add('re-image__wrapper_withoutStyles');
     wrapperElement?.classList.add('re-image__wrapper');
   }, []);
+
+  const onLoad = (e: SyntheticEvent) => {
+    props?.onLoad?.(e as any);
+    const img = e.currentTarget;
+    const wrapper = wrapperRef.current;
+    img.classList.add('re-image_loaded');
+    setTimeout(() => {
+      wrapper?.classList.remove('re-image__wrapper_withoutStyles');
+      wrapper?.querySelector('.re-image__placeholder')?.remove();
+    }, 1200);
+  };
 
   useEffect(() => {
     const imageElement = imageRef.current;
@@ -35,22 +46,17 @@ const ReImage = ({wrapperRef, ...props}: IReImageProps): ReactElement => {
     setIsLoaded(false);
   }, [props.src]);
 
-  const onLoad = (e: SyntheticEvent) => {
-    props?.onLoad?.(e as any);
-    const img = e.currentTarget;
-
-    img.classList.add('re-image_loaded');
-    setIsLoaded(true);
-  };
-
   return (
     <>
+      <div className={'re-image__placeholder'} />
+
       {!isLoaded && <div className={'re-image__placeholder'} />}
+
       <img
         ref={imageRef}
         loading={'eager'}
         {...props}
-        className={props.className}
+        className={`re-image_loading ${props.className ?? ''}`}
         onLoad={onLoad}
       />
     </>
