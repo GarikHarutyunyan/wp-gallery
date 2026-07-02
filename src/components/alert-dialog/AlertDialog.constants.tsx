@@ -38,7 +38,7 @@ export const getTrialDays = () => {
 const openUpgradeUrl = (utm_medium?: string) => {
   const url =
     (window as any).reacg_global?.upgrade?.url ||
-    'https://regallery.team/#pricing';
+    'https://regallery.team/pricing';
 
   window.open(appendUtmMedium(url, utm_medium), '_blank');
 };
@@ -468,7 +468,7 @@ export const specialOfferConfig: AlertConfig = {
     onClick: (utm_medium?: string) => {
       const url =
         (window as any).reacg_global?.upgrade?.discount_url ||
-        'https://regallery.team/#pricing';
+        'https://regallery.team/pricing';
       window.open(appendUtmMedium(url, utm_medium), '_blank');
     },
   },

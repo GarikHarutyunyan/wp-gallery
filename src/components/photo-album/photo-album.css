@@ -141,6 +141,19 @@
   margin-left: 0 !important;
 }
 
+/* Push */
+.reacg-gallery .photo-album-item__image-wrapper_push img,
+.reacg-gallery .photo-album-item__image-wrapper_push video {
+  -webkit-transition: -webkit-transform 0.35s ease-in-out;
+  transition: transform 0.35s ease-in-out;
+}
+
+.reacg-gallery .photo-album-item__image-wrapper_push:hover img,
+.reacg-gallery .photo-album-item__image-wrapper_push:hover video {
+  -webkit-transform: translateY(100%);
+  transform: translateY(100%);
+}
+
 /* Rotate */
 .reacg-gallery .photo-album-item__image-wrapper_rotate img,
 .reacg-gallery .photo-album-item__image-wrapper_rotate video {
