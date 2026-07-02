@@ -282,6 +282,18 @@
   margin-left: 0 !important;
 }
 
+.reacg-gallery .reacg-scroller__image-wrapper_push img,
+.reacg-gallery .reacg-scroller__image-wrapper_push video {
+  -webkit-transition: -webkit-transform 0.35s ease-in-out;
+  transition: transform 0.35s ease-in-out;
+}
+
+.reacg-gallery .reacg-scroller__image-wrapper_push:hover img,
+.reacg-gallery .reacg-scroller__image-wrapper_push:hover video {
+  -webkit-transform: translateY(100%);
+  transform: translateY(100%);
+}
+
 .reacg-gallery .reacg-scroller__image-wrapper_rotate img,
 .reacg-gallery .reacg-scroller__image-wrapper_rotate video,
 .reacg-gallery .reacg-scroller__image-wrapper_rotate .re-image__wrapper {

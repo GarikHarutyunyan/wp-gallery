@@ -301,6 +301,23 @@
   margin-left: 0 !important;
 }
 
+/* Push */
+.reacg-gallery .swiper-gallery__image-wrapper_push {
+  background-color: #000000;
+}
+
+.reacg-gallery .swiper-gallery__image-wrapper_push img,
+.reacg-gallery .swiper-gallery__image-wrapper_push video {
+  -webkit-transition: -webkit-transform 0.35s ease-in-out;
+  transition: transform 0.35s ease-in-out;
+}
+
+.reacg-gallery .swiper-gallery__image-wrapper_push:hover img,
+.reacg-gallery .swiper-gallery__image-wrapper_push:hover video {
+  -webkit-transform: translateY(100%);
+  transform: translateY(100%);
+}
+
 /* Rotate */
 .reacg-gallery .swiper-gallery__image-wrapper_rotate img,
 .reacg-gallery .swiper-gallery__image-wrapper_rotate video {
