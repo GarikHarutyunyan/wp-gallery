@@ -20,7 +20,6 @@ export const GalleryTypeOptions = [
     value: GalleryType.SCROLLER,
     title: 'Scroller',
     image: <ScrollerImage />,
-    isPro: true,
   },
   {
     value: GalleryType.MOSAIC,
@@ -52,7 +51,6 @@ export const GalleryTypeOptions = [
     value: GalleryType.COVERFLOW,
     title: 'Coverflow',
     image: <CoverflowImage />,
-    isPro: true,
   },
   {
     value: GalleryType.BLOG,
