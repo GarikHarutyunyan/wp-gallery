@@ -1,4 +1,4 @@
-import { ISettingsDTO } from 'data-structures';
+import {ISettingsDTO} from 'data-structures';
 
 export type TemplateId = number | string;
 
