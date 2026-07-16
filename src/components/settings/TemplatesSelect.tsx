@@ -70,12 +70,9 @@ const TemplatesSelect: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORY);
   const [activeTypeFilter, setActiveTypeFilter] = useState<string>(ALL_TYPES);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const value =
-    template && TypeUtils.isNumber(template.template_id)
-      ? template.template_id
-      : parseInt(galleryId || '');
+  const value = template?.template_id || parseInt(galleryId || '');
   useLayoutEffect(() => {
-    if (template && TypeUtils.isNumber(template.template_id)) {
+    if (template?.template_id || template?.template_id === 0) {
       const {
         type,
         general,
@@ -93,7 +90,7 @@ const TemplatesSelect: React.FC = () => {
         css,
       } = template;
       // !!template.template_id, as default demplate id is 0 we avoid changing gallery type on reseting options
-      if (activeType !== type && !!template.template_id) {
+      if (activeType !== type && String(template.template_id) !== '0') {
         type && changeType!(type);
       }
       general && changeGeneralSettings?.(general);
@@ -252,13 +249,13 @@ const TemplatesSelect: React.FC = () => {
       window.open(preview_url, '_blank');
     };
   const onTemplateSelect = async (id: string, type: 'pre-built' | 'my') => {
-    const parsedTemplateId = parseInt(id);
+    const templateId = type === 'my' ? id : parseInt(id, 10);
 
-    if (!TypeUtils.isNumber(parsedTemplateId)) {
+    if (TypeUtils.isNumber(templateId) && Number.isNaN(templateId)) {
       return;
     }
 
-    const isTemplateApplied = await changeTemplate?.(parsedTemplateId, type);
+    const isTemplateApplied = await changeTemplate?.(templateId, type);
 
     if (isTemplateApplied) {
       setIsTemplatesDialogOpen(false);

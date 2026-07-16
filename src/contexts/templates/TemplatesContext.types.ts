@@ -1,7 +1,9 @@
 import { ISettingsDTO } from 'data-structures';
 
-export interface ITemplate extends Partial<ISettingsDTO> {
-  template_id: number;
+export type TemplateId = number | string;
+
+export interface ITemplate extends Partial<Omit<ISettingsDTO, 'template_id'>> {
+  template_id: TemplateId;
   title: string;
   templateType: string;
 }

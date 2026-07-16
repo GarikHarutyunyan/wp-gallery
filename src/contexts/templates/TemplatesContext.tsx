@@ -2,14 +2,18 @@ import axios from 'axios';
 import {useSnackbar} from 'notistack';
 import React, {useLayoutEffect, useState} from 'react';
 import {useAppInfo} from '../AppInfoContext';
-import {ITemplate, ITemplateReference} from './TemplatesContext.types';
+import {
+  ITemplate,
+  ITemplateReference,
+  TemplateId,
+} from './TemplatesContext.types';
 
 const TemplatesContext = React.createContext<{
   galleryId?: string;
   preBuiltTemplates?: ITemplateReference[];
   myTemplates?: ITemplateReference[];
   template?: ITemplate;
-  changeTemplate?: (id: number, type: string) => Promise<boolean>;
+  changeTemplate?: (id: TemplateId, type: string) => Promise<boolean>;
   resetTemplate?: () => void;
   initTemplate?: (id: number, title: string, type: string) => void;
   isLoading?: boolean;
@@ -56,7 +60,10 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setMyTemplates(myTemplatesData);
   };
 
-  const getTemplate = async (id: number, type: string): Promise<boolean> => {
+  const getTemplate = async (
+    id: TemplateId,
+    type: string
+  ): Promise<boolean> => {
     const coreUrl: string = `https://regallery.team/core/wp-json/reacgcore/v2/template/${id}`;
     const coreUrlQueryStringSeperator: string = coreUrl.includes('?')
       ? '&'
@@ -129,7 +136,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
-  const changeTemplate = async (id: number, type: string) => {
+  const changeTemplate = async (id: TemplateId, type: string) => {
     return getTemplate(id, type);
   };
 
