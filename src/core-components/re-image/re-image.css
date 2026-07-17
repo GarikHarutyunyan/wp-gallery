@@ -1,10 +1,31 @@
 .re-image__wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: center;
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
-.re-image__wrapper img,
+.re-image__wrapper img {
+  flex: 0 0 auto;
+  max-width: min(var(--re-image-original-width, 100%), 100%);
+  max-height: min(var(--re-image-original-height, 100%), 100%);
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.re-image__wrapper img.re-image_portrait {
+  width: 100% !important;
+  height: auto !important;
+}
+
+.re-image__wrapper img.re-image_landscape {
+  width: auto !important;
+  height: 100% !important;
+}
+
 .re-image__wrapper video {
   position: absolute;
   top: 0;

@@ -339,6 +339,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           <ReImage
             wrapperRef={wrapperRef}
             {...imageProps}
+            originalWidth={image.original.width}
+            originalHeight={image.original.height}
             style={{
               width: '100%',
               height: '100%',
@@ -353,6 +355,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             settings={settings}
             coverImageProps={{
               ...imageProps,
+              originalWidth: image.original.width,
+              originalHeight: image.original.height,
               style: {
                 width: '100%',
                 height: '100%',

@@ -691,6 +691,8 @@ const GridImage = ({
                 sizes={`${imageRequestSize}px`}
                 alt={image.alt}
                 loading="eager"
+                originalWidth={image.original.width}
+                originalHeight={image.original.height}
                 style={{
                   width: width + 'px',
                   height: height + 'px',
@@ -712,6 +714,8 @@ const GridImage = ({
                   sizes: `${imageRequestSize}px`,
                   alt: image.alt,
                   loading: 'eager',
+                  originalWidth: image.original.width,
+                  originalHeight: image.original.height,
                   style: {
                     width: width + 'px',
                     height: height + 'px',

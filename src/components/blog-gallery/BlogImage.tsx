@@ -72,6 +72,8 @@ const BlogImage = ({
           srcSet={srcSetString}
           sizes={imageSizes}
           alt={image.alt}
+          originalWidth={image.original.width}
+          originalHeight={image.original.height}
         />
       )}
       {image.type === ImageType.VIDEO && (
@@ -85,6 +87,8 @@ const BlogImage = ({
             alt: image.alt,
             loading: 'eager',
             sizes: imageSizes,
+            originalWidth: image.original.width,
+            originalHeight: image.original.height,
           }}
         />
       )}
