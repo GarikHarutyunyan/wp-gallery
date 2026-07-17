@@ -457,6 +457,7 @@ const SwiperImage = forwardRef(
         <div
           ref={wrapperRef}
           className={clsx(
+            're-image__wrapper',
             'swiper-gallery__image-wrapper',
             'reacg-action-button-hover-parent',
             'swiper-gallery__image-wrapper_overflow',

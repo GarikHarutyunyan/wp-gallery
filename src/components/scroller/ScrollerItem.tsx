@@ -444,6 +444,7 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
         <div
           ref={wrapperRef}
           className={clsx(
+            're-image__wrapper',
             'reacg-scroller__image-wrapper',
             'scroller-gallery__image-wrapper',
             'reacg-action-button-hover-parent',

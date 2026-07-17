@@ -37,12 +37,6 @@ const ReImage = ({
   const imageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    const wrapperElement = wrapperRef.current;
-
-    wrapperElement?.classList.add('re-image__wrapper');
-  }, [wrapperRef]);
-
-  useEffect(() => {
     setOrientation(getOrientation(originalWidth, originalHeight));
   }, [originalWidth, originalHeight]);
 

@@ -53,6 +53,7 @@ const BlogImage = ({
       ref={wrapperRef}
       onClick={() => onClick?.(index)}
       className={clsx(
+        're-image__wrapper',
         'blog-gallery__image-container',
         'photo-album-item__image-wrapper_' + hoverEffect,
         !!onClick

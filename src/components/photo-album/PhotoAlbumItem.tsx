@@ -326,6 +326,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
       <div
         ref={wrapperRef}
         className={clsx(
+          're-image__wrapper',
           'photo-album-item__image-wrapper',
           'reacg-action-button-hover-parent',
           'photo-album-item__image-wrapper_overflow',

@@ -666,6 +666,7 @@ const GridImage = ({
           <div
             ref={wrapperRef}
             className={clsx(
+              're-image__wrapper',
               'thumbnail-gallery__image-wrapper',
               'reacg-action-button-hover-parent',
               'thumbnail-gallery__image-wrapper_overflow',
