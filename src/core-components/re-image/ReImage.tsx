@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import {
   CSSProperties,
   ImgHTMLAttributes,
@@ -11,16 +12,14 @@ import './re-image.css';
 
 interface IReImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   wrapperRef: any;
-  originalWidth?: number;
-  originalHeight?: number;
+  originalWidth: number;
+  originalHeight: number;
 }
 
 const getOrientation = (
-  width?: number,
-  height?: number
-): 'portrait' | 'landscape' | undefined => {
-  if (!width || !height) return undefined;
-
+  width: number,
+  height: number
+): 'portrait' | 'landscape' => {
   return height > width ? 'portrait' : 'landscape';
 };
 
@@ -46,12 +45,6 @@ const ReImage = ({
     // Handle cached/already-complete images that may not trigger onLoad again.
     if (imageElement?.complete && imageElement.naturalWidth > 0) {
       imageElement.classList.add('re-image_loaded');
-      setOrientation(
-        getOrientation(
-          originalWidth || imageElement.naturalWidth,
-          originalHeight || imageElement.naturalHeight
-        )
-      );
       setIsLoaded(true);
       return;
     }
@@ -64,30 +57,18 @@ const ReImage = ({
     const img = e.currentTarget;
 
     img.classList.add('re-image_loaded');
-    setOrientation(
-      getOrientation(
-        originalWidth || img.naturalWidth,
-        originalHeight || img.naturalHeight
-      )
-    );
     setIsLoaded(true);
   };
 
   const imageStyle = {
-    '--re-image-original-width': originalWidth
-      ? `${originalWidth}px`
-      : undefined,
-    '--re-image-original-height': originalHeight
-      ? `${originalHeight}px`
-      : undefined,
+    '--re-image-original-width': `${originalWidth}px`,
+    '--re-image-original-height': `${originalHeight}px`,
     ...props.style,
   } as CSSProperties;
-  const imageClassName = [
-    props.className,
-    orientation ? `re-image_${orientation}` : undefined,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const imageClassName = clsx('re-image', props.className, {
+    're-image_portrait': orientation === 'portrait',
+    're-image_landscape': orientation === 'landscape',
+  });
 
   return (
     <>

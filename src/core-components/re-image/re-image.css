@@ -7,7 +7,7 @@
   height: 100%;
   overflow: hidden;
 }
-.re-image__wrapper img {
+.re-image {
   flex: 0 0 auto;
   max-width: min(var(--re-image-original-width, 100%), 100%);
   max-height: min(var(--re-image-original-height, 100%), 100%);
@@ -16,12 +16,12 @@
   transition: opacity 0.2s ease;
 }
 
-.re-image__wrapper img.re-image_portrait {
+.re-image_portrait {
   width: 100% !important;
   height: auto !important;
 }
 
-.re-image__wrapper img.re-image_landscape {
+.re-image_landscape {
   width: auto !important;
   height: 100% !important;
 }
