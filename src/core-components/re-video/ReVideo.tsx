@@ -26,12 +26,6 @@ const ReVideo = ({
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const wrapperElement = wrapperRef?.current;
-
-    wrapperElement?.classList.add('re-image__wrapper');
-  }, [wrapperRef]);
-
-  useEffect(() => {
     setIsLoaded(false);
   }, [item?.original?.url]);
 

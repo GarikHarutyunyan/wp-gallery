@@ -326,6 +326,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
       <div
         ref={wrapperRef}
         className={clsx(
+          're-image__wrapper',
           'photo-album-item__image-wrapper',
           'reacg-action-button-hover-parent',
           'photo-album-item__image-wrapper_overflow',
@@ -339,6 +340,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
           <ReImage
             wrapperRef={wrapperRef}
             {...imageProps}
+            originalWidth={image.original.width}
+            originalHeight={image.original.height}
             style={{
               width: '100%',
               height: '100%',
@@ -353,6 +356,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             settings={settings}
             coverImageProps={{
               ...imageProps,
+              originalWidth: image.original.width,
+              originalHeight: image.original.height,
               style: {
                 width: '100%',
                 height: '100%',

@@ -34,6 +34,8 @@ const ScrollerMedia = ({
           alt: item.image.alt || item.image.title,
           loading: 'eager',
           className: 'reacg-scroller-media',
+          originalWidth: item.image.original.width,
+          originalHeight: item.image.original.height,
         }}
         className="reacg-scroller-media"
       />
@@ -49,6 +51,8 @@ const ScrollerMedia = ({
       alt={item.image.alt || item.image.title}
       loading="eager"
       className="reacg-scroller-media"
+      originalWidth={item.image.original.width}
+      originalHeight={item.image.original.height}
     />
   );
 };

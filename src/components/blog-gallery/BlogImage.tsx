@@ -53,6 +53,7 @@ const BlogImage = ({
       ref={wrapperRef}
       onClick={() => onClick?.(index)}
       className={clsx(
+        're-image__wrapper',
         'blog-gallery__image-container',
         'photo-album-item__image-wrapper_' + hoverEffect,
         !!onClick
@@ -72,6 +73,8 @@ const BlogImage = ({
           srcSet={srcSetString}
           sizes={imageSizes}
           alt={image.alt}
+          originalWidth={image.original.width}
+          originalHeight={image.original.height}
         />
       )}
       {image.type === ImageType.VIDEO && (
@@ -85,6 +88,8 @@ const BlogImage = ({
             alt: image.alt,
             loading: 'eager',
             sizes: imageSizes,
+            originalWidth: image.original.width,
+            originalHeight: image.original.height,
           }}
         />
       )}

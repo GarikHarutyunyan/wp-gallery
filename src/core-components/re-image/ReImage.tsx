@@ -1,4 +1,6 @@
+import clsx from 'clsx';
 import {
+  CSSProperties,
   ImgHTMLAttributes,
   ReactElement,
   SyntheticEvent,
@@ -10,17 +12,32 @@ import './re-image.css';
 
 interface IReImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   wrapperRef: any;
+  originalWidth: number;
+  originalHeight: number;
 }
 
-const ReImage = ({wrapperRef, ...props}: IReImageProps): ReactElement => {
+const getOrientation = (
+  width: number,
+  height: number
+): 'portrait' | 'landscape' => {
+  return height > width ? 'portrait' : 'landscape';
+};
+
+const ReImage = ({
+  wrapperRef,
+  originalWidth,
+  originalHeight,
+  ...props
+}: IReImageProps): ReactElement => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [orientation, setOrientation] = useState(
+    getOrientation(originalWidth, originalHeight)
+  );
   const imageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    const wrapperElement = wrapperRef.current;
-
-    wrapperElement?.classList.add('re-image__wrapper');
-  }, []);
+    setOrientation(getOrientation(originalWidth, originalHeight));
+  }, [originalWidth, originalHeight]);
 
   useEffect(() => {
     const imageElement = imageRef.current;
@@ -33,15 +50,25 @@ const ReImage = ({wrapperRef, ...props}: IReImageProps): ReactElement => {
     }
 
     setIsLoaded(false);
-  }, [props.src]);
+  }, [props.src, originalWidth, originalHeight]);
 
-  const onLoad = (e: SyntheticEvent) => {
+  const onLoad = (e: SyntheticEvent<HTMLImageElement>) => {
     props?.onLoad?.(e as any);
     const img = e.currentTarget;
 
     img.classList.add('re-image_loaded');
     setIsLoaded(true);
   };
+
+  const imageStyle = {
+    '--re-image-original-width': `${originalWidth}px`,
+    '--re-image-original-height': `${originalHeight}px`,
+    ...props.style,
+  } as CSSProperties;
+  const imageClassName = clsx('re-image', props.className, {
+    're-image_portrait': orientation === 'portrait',
+    're-image_landscape': orientation === 'landscape',
+  });
 
   return (
     <>
@@ -50,7 +77,8 @@ const ReImage = ({wrapperRef, ...props}: IReImageProps): ReactElement => {
         ref={imageRef}
         loading={'eager'}
         {...props}
-        className={props.className}
+        className={imageClassName}
+        style={imageStyle}
         onLoad={onLoad}
       />
     </>

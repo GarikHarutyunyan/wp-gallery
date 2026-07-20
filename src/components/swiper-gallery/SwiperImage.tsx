@@ -457,6 +457,7 @@ const SwiperImage = forwardRef(
         <div
           ref={wrapperRef}
           className={clsx(
+            're-image__wrapper',
             'swiper-gallery__image-wrapper',
             'reacg-action-button-hover-parent',
             'swiper-gallery__image-wrapper_overflow',
@@ -474,6 +475,8 @@ const SwiperImage = forwardRef(
               sizes={`${size}px`}
               srcSet={shouldLoadImage ? srcSetString : undefined}
               alt={image.alt}
+              originalWidth={image.original.width}
+              originalHeight={image.original.height}
             />
           )}
           {image.type === ImageType.VIDEO && (
@@ -488,6 +491,8 @@ const SwiperImage = forwardRef(
                 alt: image.alt,
                 loading: 'eager',
                 sizes: `${size}px`,
+                originalWidth: image.original.width,
+                originalHeight: image.original.height,
               }}
             />
           )}

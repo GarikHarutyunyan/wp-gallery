@@ -666,6 +666,7 @@ const GridImage = ({
           <div
             ref={wrapperRef}
             className={clsx(
+              're-image__wrapper',
               'thumbnail-gallery__image-wrapper',
               'reacg-action-button-hover-parent',
               'thumbnail-gallery__image-wrapper_overflow',
@@ -691,6 +692,8 @@ const GridImage = ({
                 sizes={`${imageRequestSize}px`}
                 alt={image.alt}
                 loading="eager"
+                originalWidth={image.original.width}
+                originalHeight={image.original.height}
                 style={{
                   width: width + 'px',
                   height: height + 'px',
@@ -712,6 +715,8 @@ const GridImage = ({
                   sizes: `${imageRequestSize}px`,
                   alt: image.alt,
                   loading: 'eager',
+                  originalWidth: image.original.width,
+                  originalHeight: image.original.height,
                   style: {
                     width: width + 'px',
                     height: height + 'px',
