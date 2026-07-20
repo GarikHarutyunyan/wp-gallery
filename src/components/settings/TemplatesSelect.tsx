@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
 import Tooltip from '@mui/material/Tooltip';
 import {useTemplates} from 'contexts';
+import {usePro} from 'contexts/ProContext';
 import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
 import React, {
   ReactNode,
@@ -42,6 +43,7 @@ const TemplatesSelect: React.FC = () => {
     changeTemplate,
     isLoading,
   } = useTemplates();
+  const {isPro} = usePro();
   const {
     changeGeneralSettings,
     changeMasonrySettings,
@@ -158,11 +160,11 @@ const TemplatesSelect: React.FC = () => {
 
     return [
       ALL_CATEGORY,
-      ...(freeCategory ? [freeCategory] : []),
+      ...(!isPro && freeCategory ? [freeCategory] : []),
       ...categoriesWithoutFree,
       MY_TEMPLATES_CATEGORY,
     ];
-  }, [preBuiltTemplates]);
+  }, [isPro, preBuiltTemplates]);
 
   const typeFilters = useMemo(() => {
     const allTemplateTypes = [...(preBuiltTemplates || [])]
