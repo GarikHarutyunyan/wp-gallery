@@ -9,8 +9,8 @@
 }
 .re-image {
   flex: 0 0 auto;
-  max-width: min(var(--re-image-original-width, 100%), 100%);
-  max-height: min(var(--re-image-original-height, 100%), 100%);
+  max-width: min(var(--re-image-original-width, 100%), 100%) !important;
+  max-height: min(var(--re-image-original-height, 100%), 100%) !important;
   object-fit: cover;
   opacity: 0;
   transition: opacity 0.2s ease;
