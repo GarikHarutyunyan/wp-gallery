@@ -29,9 +29,11 @@ export const ProProvider: React.FC<{children: React.ReactNode}> = ({
 
     (async () => {
       try {
-        const response = await axios.get(
-          'https://regallery.team/core/wp-json/reacgcore/v2/user'
-        );
+        let restUrl = (window as any).reacg_global?.core_rest_url_v2 + 'user';
+        if (!restUrl) {
+          restUrl = 'https://regallery.team/core/wp-json/reacgcore/v2/user';
+        }
+        const response = await axios.get(restUrl);
         if (!cancelled) {
           setIsPro(!!response.data);
           setIsLoaded(true);

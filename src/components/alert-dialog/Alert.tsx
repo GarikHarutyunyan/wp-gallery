@@ -9,10 +9,11 @@ interface IAlertProps {
 }
 
 export const getTrialEndpoint = () => {
-  const endpoint = (window as any).reacg_global?.activate_trial_url;
+  const restUrl =
+    (window as any).reacg_global?.core_rest_url_v2 + 'trial/activate';
 
-  if (typeof endpoint === 'string' && endpoint.trim()) {
-    return endpoint;
+  if (typeof restUrl === 'string' && restUrl.trim()) {
+    return restUrl;
   }
 
   return 'https://regallery.team/core/wp-json/reacgcore/v2/trial/activate';

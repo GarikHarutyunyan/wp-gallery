@@ -34,14 +34,16 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     if (!showControls) {
       return;
     }
-    const fetchUrl: string =
-      'https://regallery.team/core/wp-json/reacgcore/v3/templates';
+    let restUrl = (window as any).reacg_global?.core_rest_url_v3 + 'templates';
+    if (!restUrl) {
+      restUrl = 'https://regallery.team/core/wp-json/reacgcore/v3/templates';
+    }
 
     try {
-      const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
+      const queryStringSeperator: string = restUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
       queryString += `version=${pluginVersion}`;
-      const response = await axios.get(`${fetchUrl}${queryString}`);
+      const response = await axios.get(`${restUrl}${queryString}`);
       const preBuiltTemplatesData: ITemplateReference[] = response.data;
 
       setPreBuiltTemplates(preBuiltTemplatesData);
@@ -64,12 +66,17 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     id: TemplateId,
     type: string
   ): Promise<boolean> => {
-    const coreUrl: string = `https://regallery.team/core/wp-json/reacgcore/v2/template/${id}`;
-    const coreUrlQueryStringSeperator: string = coreUrl.includes('?')
+    let restUrl =
+      (window as any).reacg_global?.core_rest_url_v2 + 'template/' + id;
+    if (!restUrl) {
+      restUrl =
+        'https://regallery.team/core/wp-json/reacgcore/v2/template/${id}';
+    }
+    const restUrlQueryStringSeperator: string = restUrl.includes('?')
       ? '&'
       : '?';
-    let coreUrlQueryString = coreUrlQueryStringSeperator;
-    coreUrlQueryString += `version=${pluginVersion}`;
+    let restUrlQueryString = restUrlQueryStringSeperator;
+    restUrlQueryString += `version=${pluginVersion}`;
     // baseUrl/options/0 endpoint returns default options
     const optionsUrl: string = baseUrl ? baseUrl + 'options/' + id : '';
     const optionsUrlQueryStringSeperator: string = optionsUrl.includes('?')
@@ -81,7 +88,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const fetchUrl: string =
       id === 0 || type === 'my'
         ? `${optionsUrl}${optionsUrlQueryString}`
-        : `${coreUrl}${coreUrlQueryString}`;
+        : `${restUrl}${restUrlQueryString}`;
 
     if (fetchUrl) {
       setIsLoading(true);
