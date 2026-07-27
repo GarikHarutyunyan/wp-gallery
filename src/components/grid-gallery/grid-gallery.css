@@ -566,11 +566,10 @@
   padding: 0;
 }
 
-.reacg-thumbnails-item
-  li:has(.thumbnail-gallery__item-outline:last-child)
+.reacg-thumbnails-item:has(.thumbnail-gallery__item-outline:last-child)
   .thumbnail-gallery__item-outline:last-child {
   margin-bottom: 0px;
 }
-.reacg-thumbnails-item li .thumbnail-gallery__item-outline:not(:last-child) {
+.reacg-thumbnails-item .thumbnail-gallery__item-outline:not(:last-child) {
   margin-bottom: 8px;
 }
