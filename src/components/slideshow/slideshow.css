@@ -27,8 +27,8 @@
   visibility: unset;
 }
 
-.reacg-slideshow-is-full-cover-image .yarl__slide_image,
-.reacg-slideshow-is-full-cover-image video {
+.reacg-slideshow-is-full-cover-image .yarl__carousel .yarl__slide_image,
+.reacg-slideshow-is-full-cover-image .yarl__carousel video {
   object-fit: cover;
   width: 100% !important;
   height: 100% !important;
