@@ -72,7 +72,7 @@ const TemplatesSelect: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORY);
   const [activeTypeFilter, setActiveTypeFilter] = useState<string>(ALL_TYPES);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const value = template?.template_id || parseInt(galleryId || '');
+  const value = template?.template_id ?? galleryId ?? '';
   useLayoutEffect(() => {
     if (template?.template_id || template?.template_id === 0) {
       const {
@@ -337,8 +337,8 @@ const TemplatesSelect: React.FC = () => {
         </div>
         <div className={'reacg-templates-dialog__grid'}>
           {templates.map((templateReference) => {
-            const templateId = parseInt(templateReference.id);
-            const isSelected = templateId === value;
+            const isSelected =
+              String(templateReference.id) === String(value);
             const thumbnail = templateReference.thumbnail;
             const {paid} = templateReference;
 

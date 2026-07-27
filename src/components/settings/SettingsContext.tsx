@@ -147,11 +147,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setBlogSettings(newSettings.blog || blogMockSettings);
     setScrollerSettings(newSettings.scroller || scrollerMockSettings);
     initTemplate?.(
-      parseInt(
-        template_id === '' || template_id === 'none'
-          ? galleryId || ''
-          : template_id || ''
-      ),
+      template_id === '' || template_id === 'none'
+        ? galleryId || ''
+        : template_id || '',
       newSettings?.title as string,
       newSettings?.templateType as string
     );
@@ -189,11 +187,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setBlogSettings(newSettings.blog || blogMockSettings);
       setScrollerSettings(newSettings.scroller || scrollerMockSettings);
       initTemplate?.(
-        parseInt(
-          template_id === '' || template_id === 'none'
-            ? galleryId || ''
-            : template_id || ''
-        ),
+        template_id === '' || template_id === 'none'
+          ? galleryId || ''
+          : template_id || '',
         newSettings?.title as string,
         newSettings?.templateType as string
       );
@@ -321,11 +317,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setBlogSettings(newSettings.blog);
         setScrollerSettings(newSettings.scroller || scrollerMockSettings);
         initTemplate?.(
-          parseInt(
-            template_id === '' || template_id === 'none'
-              ? galleryId || ''
-              : template_id || ''
-          ),
+          template_id === '' || template_id === 'none'
+            ? galleryId || ''
+            : template_id || '',
           newSettings?.title as string,
           newSettings?.templateType as string
         );
@@ -392,11 +386,9 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setScrollerSettings(newSettings.scroller || scrollerMockSettings);
         setCss(newSettings.css || '');
         initTemplate?.(
-          parseInt(
-            template_id === '' || template_id === 'none'
-              ? galleryId || ''
-              : template_id || ''
-          ),
+          template_id === '' || template_id === 'none'
+            ? galleryId || ''
+            : template_id || '',
           newSettings?.title as string,
           newSettings?.templateType as string
         );

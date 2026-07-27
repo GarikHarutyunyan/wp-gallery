@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {useSnackbar} from 'notistack';
 import React, {useLayoutEffect, useState} from 'react';
 import {useAppInfo} from '../AppInfoContext';
 import {
@@ -15,14 +14,13 @@ const TemplatesContext = React.createContext<{
   template?: ITemplate;
   changeTemplate?: (id: TemplateId, type: string) => Promise<boolean>;
   resetTemplate?: () => void;
-  initTemplate?: (id: number, title: string, type: string) => void;
+  initTemplate?: (id: TemplateId, title: string, type: string) => void;
   isLoading?: boolean;
 }>({});
 
 const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {galleryId, pluginVersion, showControls, baseUrl, getOptionsTimestamp} =
     useAppInfo();
-  const {enqueueSnackbar} = useSnackbar();
   const [preBuiltTemplates, setPreBuiltTemplates] = useState<
     ITemplateReference[]
   >([]);
@@ -120,23 +118,22 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
+  const isCurrentGalleryTemplate = (
+    templateId: TemplateId | undefined
+  ): boolean => {
+    if (!galleryId || templateId === undefined || templateId === null) {
+      return false;
+    }
+
+    return String(templateId) === String(galleryId);
+  };
+
   const resetTemplate = (): void => {
     // If the template is not current.
-    if (galleryId && template?.template_id !== parseInt(galleryId)) {
-      // The Default template's id is fixed 0, to not show warning message in case of changing default template.
-      if (template?.template_id !== 0) {
-        const warningMessage: string =
-          'Please note that when adjusting any parameter, the template will automatically changed to the current gallery template.';
-
-        enqueueSnackbar(warningMessage, {
-          variant: 'warning',
-          anchorOrigin: {horizontal: 'right', vertical: 'top'},
-          style: {maxWidth: '288px'},
-        });
-      }
+    if (galleryId && !isCurrentGalleryTemplate(template?.template_id)) {
       const templateData: ITemplate = {
         title: myTemplates.find((item) => item.id === galleryId)?.title || '',
-        template_id: parseInt(galleryId),
+        template_id: galleryId,
         templateType: 'my',
       };
       setTemplate(templateData);
@@ -147,7 +144,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     return getTemplate(id, type);
   };
 
-  const initTemplate = (id: number, title: string, type: string) => {
+  const initTemplate = (id: TemplateId, title: string, type: string) => {
     setTemplate({
       template_id: id,
       title: title,
