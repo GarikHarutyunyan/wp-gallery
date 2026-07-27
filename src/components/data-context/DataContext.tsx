@@ -379,11 +379,17 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     getData(1, newSearchTerm);
   };
 
-  const onReloadData = async () => {
+  const onReloadData = async (fromWindow: boolean = false) => {
     changeImagesCount?.(0);
     setLightboxImages([]);
     setCurrentPage(0);
     setImageCount(0);
+
+    if (fromWindow) {
+      getDataFromWindow(1);
+      return;
+    }
+
     getData(1, searchTerm);
   };
 

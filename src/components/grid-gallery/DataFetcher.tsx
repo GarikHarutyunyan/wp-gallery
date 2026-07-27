@@ -2,7 +2,7 @@ import React, {ReactElement} from 'react';
 import ReactDOM from 'react-dom';
 
 interface IDataFetcherProps {
-  onClick: () => void;
+  onClick: (fromWindow: boolean) => void;
 }
 
 // TODO: move to other folder
@@ -11,7 +11,15 @@ const DataFetcher: React.FC<IDataFetcherProps> = ({onClick}) => {
     <input
       type={'button'}
       id={'reacg-reloadData'}
-      onClick={onClick}
+      onClick={(event) => {
+        const fromWindow = event.currentTarget.hasAttribute(
+          'data-reacg-from-window'
+        );
+        if (fromWindow) {
+          event.currentTarget.removeAttribute('data-reacg-from-window');
+        }
+        onClick(fromWindow);
+      }}
       style={{display: 'none'}}
     />
   );
