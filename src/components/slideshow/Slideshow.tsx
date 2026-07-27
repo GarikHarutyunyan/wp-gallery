@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {getSlideMargins} from 'components/lightbox/CommonFunctions/getSlideMargins';
 import {Captions} from 'components/lightbox/CustomCaptions/Captions';
+import {renderThumbnailWithAriaLabel} from 'components/lightbox/renderThumbnailWithAriaLabel';
 import {useSettings} from 'components/settings';
 import {ActionButton} from 'core-components/action-button';
 import {
@@ -628,6 +629,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
         render={{
           buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
           slideFooter: () => <WatermarkOverlay rootRef={slideshowRootRef} />,
+          thumbnail: renderThumbnailWithAriaLabel,
         }}
         carousel={{
           spacing: 0,

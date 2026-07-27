@@ -30,6 +30,7 @@ import {useData} from '../data-context/useData';
 import {useSettings} from '../settings/useSettings';
 import {getSlideMargins} from './CommonFunctions/getSlideMargins';
 import {Captions} from './CustomCaptions/Captions';
+import {renderThumbnailWithAriaLabel} from './renderThumbnailWithAriaLabel';
 import './lightbox.css';
 
 interface ILightboxProviderProps {
@@ -712,6 +713,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         render={{
           buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
           slideFooter: () => <WatermarkOverlay />,
+          thumbnail: renderThumbnailWithAriaLabel,
         }}
         carousel={{
           spacing: 0,
