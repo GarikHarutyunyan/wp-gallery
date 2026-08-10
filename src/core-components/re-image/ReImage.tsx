@@ -12,16 +12,9 @@ import './re-image.css';
 
 interface IReImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   wrapperRef: any;
-  originalWidth: number;
-  originalHeight: number;
+  originalWidth?: number;
+  originalHeight?: number;
 }
-
-const getOrientation = (
-  width: number,
-  height: number
-): 'portrait' | 'landscape' => {
-  return height > width ? 'portrait' : 'landscape';
-};
 
 const ReImage = ({
   wrapperRef,
@@ -30,14 +23,7 @@ const ReImage = ({
   ...props
 }: IReImageProps): ReactElement => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [orientation, setOrientation] = useState(
-    getOrientation(originalWidth, originalHeight)
-  );
   const imageRef = useRef<HTMLImageElement | null>(null);
-
-  useEffect(() => {
-    setOrientation(getOrientation(originalWidth, originalHeight));
-  }, [originalWidth, originalHeight]);
 
   useEffect(() => {
     const imageElement = imageRef.current;
@@ -61,14 +47,14 @@ const ReImage = ({
   };
 
   const imageStyle = {
-    '--re-image-original-width': `${originalWidth}px`,
-    '--re-image-original-height': `${originalHeight}px`,
+    '--re-image-original-width': originalWidth
+      ? `${originalWidth}px`
+      : undefined,
+    '--re-image-original-height': originalHeight
+      ? `${originalHeight}px`
+      : undefined,
     ...props.style,
   } as CSSProperties;
-  const imageClassName = clsx('re-image', props.className, {
-    're-image_portrait': orientation === 'portrait',
-    're-image_landscape': orientation === 'landscape',
-  });
 
   return (
     <>
@@ -77,7 +63,7 @@ const ReImage = ({
         ref={imageRef}
         loading={'eager'}
         {...props}
-        className={imageClassName}
+        className={clsx('re-image', props.className)}
         style={imageStyle}
         onLoad={onLoad}
       />
