@@ -130,6 +130,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                         color: titleColor,
                         textAlign: titleAlignment,
                         margin: 0,
+                        lineHeight: 'normal',
                         padding:
                           showButton &&
                           (!showCaption || !image[captionSource]) &&
