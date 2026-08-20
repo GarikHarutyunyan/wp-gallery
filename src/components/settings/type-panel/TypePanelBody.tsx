@@ -43,6 +43,10 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
         caption: data?.caption || '',
         description: data?.description || '',
         alt: data?.alt || '',
+        image_title: data?.image_title || '',
+        image_caption: data?.image_caption || '',
+        image_description: data?.image_description || '',
+        image_alt: data?.image_alt || '',
         original,
         sizes,
       } as IImageDTO;

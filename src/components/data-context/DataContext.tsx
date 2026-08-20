@@ -205,6 +205,10 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         action_url: data.action_url,
         item_url: data.item_url,
         checkout_url: data.checkout_url,
+        image_title: data.image_title || '',
+        image_caption: data.image_caption || '',
+        image_alt: data.image_alt || '',
+        image_description: data.image_description || '',
       }));
 
       return newImages;
@@ -245,6 +249,10 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       action_url: data.action_url,
       item_url: data.item_url,
       checkout_url: data.checkout_url,
+      image_title: data.image_title || '',
+      image_caption: data.image_caption || '',
+      image_alt: data.image_alt || '',
+      image_description: data.image_description || '',
     }));
 
     const loadMoreText: string | undefined =
@@ -329,6 +337,10 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           action_url: data.action_url,
           item_url: data.item_url,
           checkout_url: data.checkout_url,
+          image_title: data.image_title || '',
+          image_caption: data.image_caption || '',
+          image_alt: data.image_alt || '',
+          image_description: data.image_description || '',
         }));
         const newImageCount: number = headers?.['x-images-count'];
         const loadMoreText: string | undefined =

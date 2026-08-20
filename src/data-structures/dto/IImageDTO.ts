@@ -27,4 +27,8 @@ export interface IImageDTO {
   action_url: string;
   item_url: string;
   checkout_url: string;
+  image_title?: string;
+  image_caption?: string;
+  image_alt?: string;
+  image_description?: string;
 }
