@@ -50,6 +50,7 @@ export interface IGridSettings {
   titleColor: string;
   titleAlignment: TitleAlignment;
   titleFontFamily: string;
+  titleMaxRowsCount?: number | undefined;
   overlayTextBackground: string;
   invertTextColor: boolean;
   showCaption: boolean;
@@ -58,6 +59,7 @@ export interface IGridSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  captionMaxRowsCount?: number | undefined;
   showDescription: boolean;
   descriptionSource: DescriptionSource;
   descriptionPosition: DescriptionPosition;
@@ -98,6 +100,7 @@ export interface IMasonrySettings {
   titleFontFamily: string;
   titleColor: string;
   titleFontSize?: number | undefined;
+  titleMaxRowsCount?: number | undefined;
   overlayTextBackground: string;
   invertTextColor: boolean;
   hoverEffect: HoverEffect;
@@ -107,6 +110,7 @@ export interface IMasonrySettings {
   captionSource: CaptionSource;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  captionMaxRowsCount?: number | undefined;
   showTitle: boolean;
   showButton: boolean;
   buttonText: string;
@@ -236,6 +240,7 @@ export interface ICubeSettings {
   titleColor: string;
   titleAlignment: TitleAlignment;
   titleFontFamily: string;
+  titleMaxRowsCount?: number | undefined;
   overlayTextBackground: string;
   invertTextColor: boolean;
   showCaption: boolean;
@@ -244,6 +249,7 @@ export interface ICubeSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  captionMaxRowsCount?: number | undefined;
   showButton: boolean;
   buttonText: string;
   buttonVisibility: TitleVisibility;
@@ -291,6 +297,7 @@ export interface ICarouselSettings {
   titleColor: string;
   titleAlignment: TitleAlignment;
   titleFontFamily: string;
+  titleMaxRowsCount?: number | undefined;
   overlayTextBackground: string;
   invertTextColor: boolean;
   showCaption: boolean;
@@ -299,6 +306,7 @@ export interface ICarouselSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  captionMaxRowsCount?: number | undefined;
   showButton: boolean;
   buttonText: string;
   buttonVisibility: TitleVisibility;
@@ -344,6 +352,7 @@ export interface ICoverflowSettings {
   titleColor: string;
   titleAlignment: TitleAlignment;
   titleFontFamily: string;
+  titleMaxRowsCount?: number | undefined;
   overlayTextBackground: string;
   invertTextColor: boolean;
   showCaption: boolean;
@@ -352,6 +361,7 @@ export interface ICoverflowSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  captionMaxRowsCount?: number | undefined;
   showButton: boolean;
   buttonText: string;
   buttonVisibility: TitleVisibility;
@@ -394,6 +404,7 @@ export interface ICardsSettings {
   titleColor: string;
   titleAlignment: TitleAlignment;
   titleFontFamily: string;
+  titleMaxRowsCount?: number | undefined;
   overlayTextBackground: string;
   invertTextColor: boolean;
   showCaption: boolean;
@@ -402,6 +413,7 @@ export interface ICardsSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  captionMaxRowsCount?: number | undefined;
   showButton: boolean;
   buttonText: string;
   buttonVisibility: TitleVisibility;
@@ -463,12 +475,14 @@ export interface IBlogSettings {
   textVerticalSpacing: number;
   paginationType: PaginationType;
   showAllItems: boolean;
+  titleMaxRowsCount?: number | undefined;
   descriptionMaxRowsCount: number | undefined;
   imagePosition: BlogViewImagePosition;
   showCaption: boolean;
   captionSource: CaptionSource;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  captionMaxRowsCount?: number | undefined;
   buttonUrlSource: string;
   showVideoCover: boolean;
 }
@@ -493,6 +507,7 @@ export interface IScrollerSettings {
   titleColor: string;
   titleAlignment: TitleAlignment;
   titleFontFamily: string;
+  titleMaxRowsCount?: number | undefined;
   overlayTextBackground: string;
   invertTextColor: boolean;
   showCaption: boolean;
@@ -501,6 +516,7 @@ export interface IScrollerSettings {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor: string;
+  captionMaxRowsCount?: number | undefined;
   showDescription: boolean;
   descriptionSource: DescriptionSource;
   descriptionPosition: DescriptionPosition;

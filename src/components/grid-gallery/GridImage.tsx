@@ -1,7 +1,7 @@
-import {ImageListItem} from '@mui/material';
+import { ImageListItem } from '@mui/material';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import clsx from 'clsx';
-import {ActionButton} from 'core-components/action-button';
+import { ActionButton } from 'core-components/action-button';
 import ReImage from 'core-components/re-image/ReImage';
 import ReVideo from 'core-components/re-video/ReVideo';
 import {
@@ -15,13 +15,13 @@ import {
   TitleSource,
   TitleVisibility,
 } from 'data-structures';
-import {useRef} from 'react';
+import { useRef } from 'react';
 import {
   getLargestSrcItem,
   getSrcSetString,
   ISrcSetItem,
 } from 'utils/imageSrcSet';
-import {Watermark} from 'utils/renderWatermark';
+import { Watermark } from 'utils/renderWatermark';
 
 interface IGridImageProps {
   image: IImageDTO;
@@ -44,6 +44,7 @@ interface IGridImageProps {
   titleColor?: string;
   titleAlignment?: TitleAlignment;
   titleFontFamily?: string;
+  titleMaxRowsCount?: number | undefined;
   overlayTextBackground: string;
   invertTextColor: boolean;
   showCaption: boolean;
@@ -51,6 +52,7 @@ interface IGridImageProps {
   captionPosition: ThumbnailTitlePosition;
   captionFontSize?: number | undefined;
   captionFontColor?: string;
+  captionMaxRowsCount?: number | undefined;
   showDescription: boolean;
   descriptionSource: DescriptionSource;
   descriptionPosition: DescriptionPosition;
@@ -93,6 +95,7 @@ const GridImage = ({
   titleColor,
   titleAlignment,
   titleFontFamily,
+  titleMaxRowsCount,
   overlayTextBackground,
   invertTextColor,
   showCaption,
@@ -101,6 +104,7 @@ const GridImage = ({
   captionPosition,
   captionFontSize,
   captionFontColor,
+  captionMaxRowsCount,
   showDescription,
   descriptionSource,
   descriptionPosition,
@@ -204,11 +208,34 @@ const GridImage = ({
               fontFamily: titleFontFamily,
               color: captionFontColor,
               lineHeight: 'normal',
+              whiteSpace:
+                hasSharedCaption && captionMaxRowsCount
+                  ? 'normal !important'
+                  : 'nowrap',
+            },
+            '& .thumbnail-image__caption': {
+              whiteSpace:
+                hasSharedCaption && captionMaxRowsCount
+                  ? 'normal !important'
+                  : 'nowrap',
+              display:
+                hasSharedCaption && captionMaxRowsCount
+                  ? '-webkit-box !important'
+                  : 'block',
+              WebkitLineClamp: hasSharedCaption ? captionMaxRowsCount : undefined,
+              WebkitBoxOrient:
+                hasSharedCaption && captionMaxRowsCount
+                  ? 'vertical'
+                  : 'initial',
             },
             '& .MuiImageListItemBar-title': {
               fontSize: `${titleFontSize}px`,
               fontFamily: titleFontFamily,
               lineHeight: 'normal',
+              whiteSpace: titleMaxRowsCount ? 'normal !important' : 'nowrap',
+              display: titleMaxRowsCount ? '-webkit-box !important' : 'block',
+              WebkitLineClamp: titleMaxRowsCount,
+              WebkitBoxOrient: titleMaxRowsCount ? 'vertical' : 'initial',
             },
           }}
           style={{
@@ -218,19 +245,19 @@ const GridImage = ({
             color: titleColor,
             backgroundColor:
               titlePosition !== ThumbnailTitlePosition.BELOW &&
-              titlePosition !== ThumbnailTitlePosition.ABOVE
+                titlePosition !== ThumbnailTitlePosition.ABOVE
                 ? overlayTextBackground
                 : 'initial',
             mixBlendMode:
               invertTextColor &&
-              titlePosition !== ThumbnailTitlePosition.BELOW &&
-              titlePosition !== ThumbnailTitlePosition.ABOVE
+                titlePosition !== ThumbnailTitlePosition.BELOW &&
+                titlePosition !== ThumbnailTitlePosition.ABOVE
                 ? 'difference'
                 : 'initial',
           }}
           className={`thumbnail-gallery__title-content_${titlePosition}`}
           title={
-            <span className={clsx({'reacg-content_on-hover': titleOnHover})}>
+            <span className={clsx({ 'reacg-content_on-hover': titleOnHover })}>
               {image[titleSource] || <br />}
             </span>
           }
@@ -270,8 +297,8 @@ const GridImage = ({
             titlePosition === ThumbnailTitlePosition.CENTER
               ? 'bottom'
               : titlePosition === ThumbnailTitlePosition.ABOVE
-              ? 'below'
-              : titlePosition
+                ? 'below'
+                : titlePosition
           }
         />
       </div>
@@ -342,6 +369,13 @@ const GridImage = ({
               fontFamily: titleFontFamily,
               color: captionFontColor,
               lineHeight: 'normal',
+              whiteSpace: captionMaxRowsCount ? 'normal !important' : 'nowrap',
+            },
+            '& .thumbnail-image__caption': {
+              whiteSpace: captionMaxRowsCount ? 'normal !important' : 'nowrap',
+              display: captionMaxRowsCount ? '-webkit-box !important' : 'block',
+              WebkitLineClamp: captionMaxRowsCount,
+              WebkitBoxOrient: captionMaxRowsCount ? 'vertical' : 'initial',
             },
           }}
           style={{
@@ -351,13 +385,13 @@ const GridImage = ({
             color: captionFontColor,
             backgroundColor:
               captionPosition !== ThumbnailTitlePosition.BELOW &&
-              captionPosition !== ThumbnailTitlePosition.ABOVE
+                captionPosition !== ThumbnailTitlePosition.ABOVE
                 ? overlayTextBackground
                 : 'initial',
             mixBlendMode:
               invertTextColor &&
-              captionPosition !== ThumbnailTitlePosition.BELOW &&
-              captionPosition !== ThumbnailTitlePosition.ABOVE
+                captionPosition !== ThumbnailTitlePosition.BELOW &&
+                captionPosition !== ThumbnailTitlePosition.ABOVE
                 ? 'difference'
                 : 'initial',
           }}
@@ -398,8 +432,8 @@ const GridImage = ({
             captionPosition === ThumbnailTitlePosition.CENTER
               ? 'bottom'
               : captionPosition === ThumbnailTitlePosition.ABOVE
-              ? 'below'
-              : captionPosition
+                ? 'below'
+                : captionPosition
           }
         />
       </div>
@@ -485,13 +519,13 @@ const GridImage = ({
             textAlign: buttonAlignment,
             backgroundColor:
               position !== ThumbnailTitlePosition.BELOW &&
-              position !== ThumbnailTitlePosition.ABOVE
+                position !== ThumbnailTitlePosition.ABOVE
                 ? overlayTextBackground
                 : 'initial',
             mixBlendMode:
               invertTextColor &&
-              position !== ThumbnailTitlePosition.BELOW &&
-              position !== ThumbnailTitlePosition.ABOVE
+                position !== ThumbnailTitlePosition.BELOW &&
+                position !== ThumbnailTitlePosition.ABOVE
                 ? 'difference'
                 : 'initial',
           }}
@@ -521,8 +555,8 @@ const GridImage = ({
             position === ThumbnailTitlePosition.CENTER
               ? 'bottom'
               : position === ThumbnailTitlePosition.ABOVE
-              ? 'below'
-              : position
+                ? 'below'
+                : position
           }
         />
       </div>
@@ -598,11 +632,11 @@ const GridImage = ({
         boxSizing: 'border-box',
         overflow:
           titlePosition === ThumbnailTitlePosition.BELOW ||
-          titlePosition === ThumbnailTitlePosition.ABOVE ||
-          captionPosition === ThumbnailTitlePosition.BELOW ||
-          captionPosition === ThumbnailTitlePosition.ABOVE ||
-          buttonPosition === ThumbnailTitlePosition.BELOW ||
-          buttonPosition === ThumbnailTitlePosition.ABOVE
+            titlePosition === ThumbnailTitlePosition.ABOVE ||
+            captionPosition === ThumbnailTitlePosition.BELOW ||
+            captionPosition === ThumbnailTitlePosition.ABOVE ||
+            buttonPosition === ThumbnailTitlePosition.BELOW ||
+            buttonPosition === ThumbnailTitlePosition.ABOVE
             ? 'hidden'
             : 'unset',
         justifyContent:
@@ -610,43 +644,43 @@ const GridImage = ({
             captionPosition === ThumbnailTitlePosition.ABOVE) &&
             (!showDescription ||
               descriptionPosition === DescriptionPosition.ABOVE)) ||
-          ((titlePosition !== ThumbnailTitlePosition.ABOVE ||
-            captionPosition !== ThumbnailTitlePosition.ABOVE) &&
-            showDescription &&
-            descriptionPosition === DescriptionPosition.ABOVE)
+            ((titlePosition !== ThumbnailTitlePosition.ABOVE ||
+              captionPosition !== ThumbnailTitlePosition.ABOVE) &&
+              showDescription &&
+              descriptionPosition === DescriptionPosition.ABOVE)
             ? 'end'
             : titlePosition === ThumbnailTitlePosition.ABOVE ||
               captionPosition === ThumbnailTitlePosition.ABOVE
-            ? 'start'
-            : 'initial',
+              ? 'start'
+              : 'initial',
         height:
           ((titlePosition === ThumbnailTitlePosition.ABOVE ||
             captionPosition === ThumbnailTitlePosition.ABOVE) &&
             (!showDescription ||
               descriptionPosition === DescriptionPosition.ABOVE)) ||
-          ((titlePosition !== ThumbnailTitlePosition.ABOVE ||
-            captionPosition !== ThumbnailTitlePosition.ABOVE) &&
-            showDescription &&
-            descriptionPosition === DescriptionPosition.ABOVE)
+            ((titlePosition !== ThumbnailTitlePosition.ABOVE ||
+              captionPosition !== ThumbnailTitlePosition.ABOVE) &&
+              showDescription &&
+              descriptionPosition === DescriptionPosition.ABOVE)
             ? '100%'
             : titlePosition === ThumbnailTitlePosition.ABOVE ||
               captionPosition === ThumbnailTitlePosition.ABOVE
-            ? '100%'
-            : 'initial',
+              ? '100%'
+              : 'initial',
       }}
     >
       {showTitle && titlePosition === ThumbnailTitlePosition.ABOVE
         ? renderTitle(image)
         : null}
       {showCaption &&
-      (titlePosition != captionPosition || !showTitle) &&
-      captionPosition === ThumbnailTitlePosition.ABOVE
+        (titlePosition != captionPosition || !showTitle) &&
+        captionPosition === ThumbnailTitlePosition.ABOVE
         ? renderCaption(image)
         : null}
       {showButton &&
-      (titlePosition != buttonPosition || !showTitle) &&
-      (captionPosition != buttonPosition || !showCaption) &&
-      buttonPosition === ThumbnailTitlePosition.ABOVE
+        (titlePosition != buttonPosition || !showTitle) &&
+        (captionPosition != buttonPosition || !showCaption) &&
+        buttonPosition === ThumbnailTitlePosition.ABOVE
         ? renderButton(buttonPosition)
         : null}
       {showDescription && descriptionPosition === DescriptionPosition.ABOVE
@@ -742,14 +776,14 @@ const GridImage = ({
         ? renderTitle(image)
         : null}
       {showCaption &&
-      (titlePosition != captionPosition || !showTitle) &&
-      captionPosition === ThumbnailTitlePosition.BELOW
+        (titlePosition != captionPosition || !showTitle) &&
+        captionPosition === ThumbnailTitlePosition.BELOW
         ? renderCaption(image)
         : null}
       {showButton &&
-      (titlePosition != buttonPosition || !showTitle) &&
-      (captionPosition != buttonPosition || !showCaption) &&
-      buttonPosition === ThumbnailTitlePosition.BELOW
+        (titlePosition != buttonPosition || !showTitle) &&
+        (captionPosition != buttonPosition || !showCaption) &&
+        buttonPosition === ThumbnailTitlePosition.BELOW
         ? renderButton(buttonPosition)
         : null}
       {showDescription && descriptionPosition === DescriptionPosition.BELOW

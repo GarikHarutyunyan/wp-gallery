@@ -346,6 +346,22 @@ export const TextAndMetadataSettings: React.FC<
                   />
                 </Filter>
               ) : null}
+              {'titleMaxRowsCount' in value ? (
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'titleMaxRowsCount'}
+                    name={'Max rows count'}
+                    value={value.titleMaxRowsCount}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () => onProFeatureClick('titleMaxRowsCount')
+                    }
+                    min={1}
+                  />
+                </Filter>
+              ) : null}
             </Grid>
           )}
         </Grid>
@@ -470,6 +486,22 @@ export const TextAndMetadataSettings: React.FC<
                     name={'Color'}
                     value={value.captionColor}
                     onChange={onInputValueChange}
+                  />
+                </Filter>
+              ) : null}
+              {'captionMaxRowsCount' in value ? (
+                <Filter isLoading={isLoading}>
+                  <NumberControl
+                    id={'captionMaxRowsCount'}
+                    name={'Max rows count'}
+                    value={value.captionMaxRowsCount}
+                    pro={true}
+                    onChange={
+                      isPro
+                        ? onInputValueChange
+                        : () => onProFeatureClick('captionMaxRowsCount')
+                    }
+                    min={1}
                   />
                 </Filter>
               ) : null}

@@ -65,6 +65,7 @@ const SwiperImage = forwardRef(
       titleColor,
       titleAlignment,
       titleFontFamily,
+      titleMaxRowsCount,
       overlayTextBackground,
       invertTextColor,
       showCaption,
@@ -73,6 +74,7 @@ const SwiperImage = forwardRef(
       captionPosition,
       captionFontSize,
       captionFontColor,
+      captionMaxRowsCount,
       showButton,
       buttonText,
       buttonVisibility,
@@ -172,11 +174,34 @@ const SwiperImage = forwardRef(
                 fontFamily: titleFontFamily,
                 color: captionFontColor,
                 lineHeight: 'normal',
+                whiteSpace:
+                  hasSharedCaption && captionMaxRowsCount
+                    ? 'normal !important'
+                    : 'nowrap',
+              },
+              '& .thumbnail-image__caption': {
+                whiteSpace:
+                  hasSharedCaption && captionMaxRowsCount
+                    ? 'normal !important'
+                    : 'nowrap',
+                display:
+                  hasSharedCaption && captionMaxRowsCount
+                    ? '-webkit-box !important'
+                    : 'block',
+                WebkitLineClamp: hasSharedCaption ? captionMaxRowsCount : undefined,
+                WebkitBoxOrient:
+                  hasSharedCaption && captionMaxRowsCount
+                    ? 'vertical'
+                    : 'initial',
               },
               '& .MuiImageListItemBar-title': {
                 fontSize: `${titleFontSize}px`,
                 fontFamily: titleFontFamily,
                 lineHeight: 'normal',
+                whiteSpace: titleMaxRowsCount ? 'normal !important' : 'nowrap',
+                display: titleMaxRowsCount ? '-webkit-box !important' : 'block',
+                WebkitLineClamp: titleMaxRowsCount,
+                WebkitBoxOrient: titleMaxRowsCount ? 'vertical' : 'initial',
               },
             }}
             style={{
@@ -292,6 +317,19 @@ const SwiperImage = forwardRef(
         >
           <ImageListItemBar
             sx={{
+              '& .MuiImageListItemBar-title': {
+                fontSize: `${captionFontSize}px`,
+                fontFamily: titleFontFamily,
+                color: captionFontColor,
+                lineHeight: 'normal',
+                whiteSpace: captionMaxRowsCount ? 'normal !important' : 'nowrap',
+              },
+              '& .swiper-image__caption': {
+                whiteSpace: captionMaxRowsCount ? 'normal !important' : 'nowrap',
+                display: captionMaxRowsCount ? '-webkit-box !important' : 'block',
+                WebkitLineClamp: captionMaxRowsCount,
+                WebkitBoxOrient: captionMaxRowsCount ? 'vertical' : 'initial',
+              },
               '& .MuiImageListItemBar-subtitle': {
                 fontSize: `${captionFontSize}px`,
                 fontFamily: titleFontFamily,

@@ -50,12 +50,14 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     hoverEffect,
     openInNewTab,
     buttonUrlSource,
+    titleMaxRowsCount,
     descriptionMaxRowsCount,
     imagePosition,
     showCaption,
     captionSource,
     captionFontSize,
     captionFontColor,
+    captionMaxRowsCount,
     showVideoCover,
   } = settings as IBlogSettings;
   const isMobile: boolean = containerInnerWidth <= 720;
@@ -137,6 +139,12 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                           (!showDescription || !image[descriptionSource])
                             ? '0px 0px 15px'
                             : 0,
+                        display: titleMaxRowsCount ? '-webkit-box' : 'block',
+                        WebkitLineClamp: titleMaxRowsCount,
+                        WebkitBoxOrient: titleMaxRowsCount ? 'vertical' : 'initial',
+                        overflow: titleMaxRowsCount ? 'hidden' : 'initial',
+                        textOverflow: titleMaxRowsCount ? 'ellipsis' : 'initial',
+                        wordBreak: 'break-word',
                       }}
                     >
                       {image[titleSource]}
@@ -155,6 +163,12 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                           (!showDescription || !image[descriptionSource])
                             ? '0px 0px 15px'
                             : 0,
+                        display: captionMaxRowsCount ? '-webkit-box' : 'block',
+                        WebkitLineClamp: captionMaxRowsCount,
+                        WebkitBoxOrient: captionMaxRowsCount ? 'vertical' : 'initial',
+                        overflow: captionMaxRowsCount ? 'hidden' : 'initial',
+                        textOverflow: captionMaxRowsCount ? 'ellipsis' : 'initial',
+                        wordBreak: 'break-word',
                       }}
                     >
                       {image[captionSource]}
