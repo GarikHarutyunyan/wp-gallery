@@ -54,6 +54,7 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
     titleColor = 'Black',
     titleAlignment = TitleAlignment.LEFT,
     titleFontFamily = 'Roboto',
+    titleMaxRowsCount,
     overlayTextBackground = 'rgba(0, 0, 0, 0.5)',
     invertTextColor = false,
     showCaption = false,
@@ -62,6 +63,7 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
     captionPosition = ThumbnailTitlePosition.BOTTOM,
     captionFontSize = 18,
     captionFontColor = 'Grey',
+    captionMaxRowsCount,
     showButton = false,
     buttonText,
     buttonVisibility = TitleVisibility.ALWAYS_SHOWN,
@@ -159,11 +161,34 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
               fontFamily: titleFontFamily,
               color: captionFontColor,
               lineHeight: 'normal',
+              whiteSpace:
+                hasSharedCaption && captionMaxRowsCount
+                  ? 'normal !important'
+                  : 'nowrap',
+            },
+            '& .thumbnail-image__caption': {
+              whiteSpace:
+                hasSharedCaption && captionMaxRowsCount
+                  ? 'normal !important'
+                  : 'nowrap',
+              display:
+                hasSharedCaption && captionMaxRowsCount
+                  ? '-webkit-box !important'
+                  : 'block',
+              WebkitLineClamp: hasSharedCaption ? captionMaxRowsCount : undefined,
+              WebkitBoxOrient:
+                hasSharedCaption && captionMaxRowsCount
+                  ? 'vertical'
+                  : 'initial',
             },
             '& .MuiImageListItemBar-title': {
               fontSize: `${titleFontSize}px`,
               fontFamily: titleFontFamily,
               lineHeight: 'normal',
+              whiteSpace: titleMaxRowsCount ? 'normal !important' : 'nowrap',
+              display: titleMaxRowsCount ? '-webkit-box !important' : 'block',
+              WebkitLineClamp: titleMaxRowsCount,
+              WebkitBoxOrient: titleMaxRowsCount ? 'vertical' : 'initial',
             },
           }}
           style={{
@@ -273,6 +298,19 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
       >
         <ImageListItemBar
           sx={{
+            '& .MuiImageListItemBar-title': {
+              fontSize: `${captionFontSize}px`,
+              fontFamily: titleFontFamily,
+              color: captionFontColor,
+              lineHeight: 'normal',
+              whiteSpace: captionMaxRowsCount ? 'normal !important' : 'nowrap',
+            },
+            '& .scroller-image__caption': {
+              whiteSpace: captionMaxRowsCount ? 'normal !important' : 'nowrap',
+              display: captionMaxRowsCount ? '-webkit-box !important' : 'block',
+              WebkitLineClamp: captionMaxRowsCount,
+              WebkitBoxOrient: captionMaxRowsCount ? 'vertical' : 'initial',
+            },
             '& .MuiImageListItemBar-subtitle': {
               fontSize: `${captionFontSize}px`,
               fontFamily: titleFontFamily,

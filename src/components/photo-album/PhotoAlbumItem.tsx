@@ -49,6 +49,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
     titleColor,
     titleFontFamily,
     titleFontSize,
+    titleMaxRowsCount,
     overlayTextBackground,
     invertTextColor,
     hoverEffect,
@@ -56,6 +57,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
     captionSource,
     captionFontSize,
     captionFontColor,
+    captionMaxRowsCount,
     showTitle,
     showButton,
     buttonText,
@@ -79,6 +81,10 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
       titlePosition !== TitlePosition.CENTER
         ? imageBorderRadius / 2 + 'px'
         : '0';
+    const hasSharedCaption =
+      titlePosition === captionPosition &&
+      showCaption &&
+      !!image[captionSource];
 
     return (
       <div
@@ -102,12 +108,35 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
               fontSize: `${titleFontSize}px`,
               fontFamily: titleFontFamily,
               lineHeight: 'normal',
+              whiteSpace: titleMaxRowsCount ? 'normal !important' : 'nowrap',
+              display: titleMaxRowsCount ? '-webkit-box !important' : 'block',
+              WebkitLineClamp: titleMaxRowsCount,
+              WebkitBoxOrient: titleMaxRowsCount ? 'vertical' : 'initial',
             },
             '& .MuiImageListItemBar-subtitle': {
               fontSize: `${captionFontSize}px`,
               fontFamily: titleFontFamily,
               color: captionFontColor,
               lineHeight: 'normal',
+              whiteSpace:
+                hasSharedCaption && captionMaxRowsCount
+                  ? 'normal !important'
+                  : 'nowrap',
+            },
+            '& .photo-album-item__caption': {
+              whiteSpace:
+                hasSharedCaption && captionMaxRowsCount
+                  ? 'normal !important'
+                  : 'nowrap',
+              display:
+                hasSharedCaption && captionMaxRowsCount
+                  ? '-webkit-box !important'
+                  : 'block',
+              WebkitLineClamp: hasSharedCaption ? captionMaxRowsCount : undefined,
+              WebkitBoxOrient:
+                hasSharedCaption && captionMaxRowsCount
+                  ? 'vertical'
+                  : 'initial',
             },
           }}
           style={{
@@ -187,6 +216,19 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
       >
         <ImageListItemBar
           sx={{
+            '& .MuiImageListItemBar-title': {
+              fontSize: `${captionFontSize}px`,
+              fontFamily: titleFontFamily,
+              color: captionFontColor,
+              lineHeight: 'normal',
+              whiteSpace: captionMaxRowsCount ? 'normal !important' : 'nowrap',
+            },
+            '& .photo-album-item__caption': {
+              whiteSpace: captionMaxRowsCount ? 'normal !important' : 'nowrap',
+              display: captionMaxRowsCount ? '-webkit-box !important' : 'block',
+              WebkitLineClamp: captionMaxRowsCount,
+              WebkitBoxOrient: captionMaxRowsCount ? 'vertical' : 'initial',
+            },
             '& .MuiImageListItemBar-subtitle': {
               fontSize: `${captionFontSize}px`,
               fontFamily: titleFontFamily,

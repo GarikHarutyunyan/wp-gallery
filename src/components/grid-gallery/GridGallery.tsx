@@ -47,6 +47,7 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
     titleFontFamily,
     titleColor,
     titleFontSize = 1,
+    titleMaxRowsCount,
     overlayTextBackground,
     invertTextColor,
     hoverEffect,
@@ -54,6 +55,7 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
     captionSource,
     captionFontSize,
     captionFontColor,
+    captionMaxRowsCount,
     showDescription,
     descriptionSource,
     descriptionPosition,
@@ -232,6 +234,7 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
               titleFontFamily={titleFontFamily}
               titleColor={titleColor}
               titleFontSize={titleFontSize}
+              titleMaxRowsCount={titleMaxRowsCount}
               overlayTextBackground={overlayTextBackground}
               invertTextColor={invertTextColor}
               itemBorder={itemBorder}
@@ -245,6 +248,7 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
               captionSource={captionSource}
               captionFontSize={captionFontSize}
               captionFontColor={captionFontColor}
+              captionMaxRowsCount={captionMaxRowsCount}
               showDescription={showDescription}
               descriptionSource={descriptionSource}
               descriptionPosition={descriptionPosition}
