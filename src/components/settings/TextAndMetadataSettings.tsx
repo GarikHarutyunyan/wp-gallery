@@ -1,8 +1,8 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {usePro} from 'contexts/ProContext';
-import {useTemplates} from 'contexts/templates/useTemplates';
-import {Section} from 'core-components/section';
+import { usePro } from 'contexts/ProContext';
+import { useTemplates } from 'contexts/templates/useTemplates';
+import { Section } from 'core-components/section';
 import {
   ActionURLSourceOptions,
   CaptionSourceOptions,
@@ -19,7 +19,7 @@ import {
   TitleVisibility,
   TitleVisibilityOptions,
 } from 'data-structures';
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import {
   ColorControl,
   FontControl,
@@ -29,8 +29,8 @@ import {
   SwitchControl,
   TextControl,
 } from '../controls';
-import {Filter} from './Filter';
-import {useSettings} from './useSettings';
+import { Filter } from './Filter';
+import { useSettings } from './useSettings';
 
 interface TextAndMetadataSettingsProps {
   isLoading: boolean;
@@ -40,13 +40,13 @@ interface TextAndMetadataSettingsProps {
 
 export const TextAndMetadataSettings: React.FC<
   TextAndMetadataSettingsProps
-> = ({isLoading, galleryType, onProFeatureClick}) => {
+> = ({ isLoading, galleryType, onProFeatureClick }) => {
   const settingsContext = useSettings();
-  const {isPro} = usePro();
-  const {resetTemplate} = useTemplates();
+  const { isPro } = usePro();
+  const { resetTemplate } = useTemplates();
 
   // Map gallery type to correct settings and change function
-  const settingsMap: Record<string, {value: any; onChange: any}> = {
+  const settingsMap: Record<string, { value: any; onChange: any }> = {
     [GalleryType.GRID]: {
       value: settingsContext.gridSettings,
       onChange: settingsContext.changeGridSettings,
@@ -132,8 +132,8 @@ export const TextAndMetadataSettings: React.FC<
   const titlePositionOptions = usesLightboxTextLayout
     ? LightboxTextPositionOptions
     : usesThumbnailPositionLayout
-    ? ThumbnailTitlePositionOptions
-    : TitlePositionOptions;
+      ? ThumbnailTitlePositionOptions
+      : TitlePositionOptions;
 
   const thumbnailTitlePositionOptions: ISelectOption[] = useMemo(() => {
     if (
@@ -156,11 +156,11 @@ export const TextAndMetadataSettings: React.FC<
       );
 
       if (value.titlePosition === ThumbnailTitlePosition.BELOW) {
-        onChange({...value, titlePosition: ThumbnailTitlePosition.BOTTOM});
+        onChange({ ...value, titlePosition: ThumbnailTitlePosition.BOTTOM });
       }
 
       if (value.titlePosition === ThumbnailTitlePosition.ABOVE) {
-        onChange({...value, titlePosition: ThumbnailTitlePosition.TOP});
+        onChange({ ...value, titlePosition: ThumbnailTitlePosition.TOP });
       }
     }
 
@@ -188,11 +188,11 @@ export const TextAndMetadataSettings: React.FC<
       );
 
       if (value.captionPosition === ThumbnailTitlePosition.BELOW) {
-        onChange({...value, captionPosition: ThumbnailTitlePosition.BOTTOM});
+        onChange({ ...value, captionPosition: ThumbnailTitlePosition.BOTTOM });
       }
 
       if (value.captionPosition === ThumbnailTitlePosition.ABOVE) {
-        onChange({...value, captionPosition: ThumbnailTitlePosition.TOP});
+        onChange({ ...value, captionPosition: ThumbnailTitlePosition.TOP });
       }
     }
 
@@ -220,11 +220,11 @@ export const TextAndMetadataSettings: React.FC<
       );
 
       if (value.buttonPosition === ThumbnailTitlePosition.BELOW) {
-        onChange({...value, buttonPosition: ThumbnailTitlePosition.BOTTOM});
+        onChange({ ...value, buttonPosition: ThumbnailTitlePosition.BOTTOM });
       }
 
       if (value.buttonPosition === ThumbnailTitlePosition.ABOVE) {
-        onChange({...value, buttonPosition: ThumbnailTitlePosition.TOP});
+        onChange({ ...value, buttonPosition: ThumbnailTitlePosition.TOP });
       }
     }
 
@@ -237,7 +237,7 @@ export const TextAndMetadataSettings: React.FC<
 
   const onInputValueChange = (inputValue: unknown, key?: string) => {
     resetTemplate?.();
-    key && onChange?.({...value, [key]: inputValue} as any);
+    key && onChange?.({ ...value, [key]: inputValue } as any);
   };
 
   const renderTitleControls = () => (
@@ -253,15 +253,8 @@ export const TextAndMetadataSettings: React.FC<
               value={value.showTitle}
               tooltip={
                 <p>
-                  The Caption must be set by editing each image from "Images"
-                  section.{' '}
-                  <a
-                    className="seetings__see-more-link"
-                    href="https://youtu.be/ziAG16MADbY"
-                    target="_blank"
-                  >
-                    See more
-                  </a>
+                  The Title must be set by editing each image from "Media"
+                  section.
                 </p>
               }
               onChange={onInputValueChange}
@@ -291,7 +284,7 @@ export const TextAndMetadataSettings: React.FC<
           )}
           {value.showTitle && (
             <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
+              sx={{ marginLeft: 0, paddingTop: 2 }}
               container
               columns={24}
               rowSpacing={2}
@@ -383,15 +376,8 @@ export const TextAndMetadataSettings: React.FC<
               pro={true}
               tooltip={
                 <p>
-                  The Caption must be set by editing each image from "Images"
-                  section.{' '}
-                  <a
-                    className="seetings__see-more-link"
-                    href="https://youtu.be/ziAG16MADbY"
-                    target="_blank"
-                  >
-                    See more
-                  </a>
+                  The Caption must be set by editing each image from "Media"
+                  section.
                 </p>
               }
               onChange={
@@ -425,7 +411,7 @@ export const TextAndMetadataSettings: React.FC<
           )}
           {value.showCaption && (
             <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
+              sx={{ marginLeft: 0, paddingTop: 2 }}
               container
               columns={24}
               rowSpacing={2}
@@ -526,15 +512,8 @@ export const TextAndMetadataSettings: React.FC<
               pro={true}
               tooltip={
                 <p>
-                  The Caption must be set by editing each image from "Images"
-                  section.{' '}
-                  <a
-                    className="seetings__see-more-link"
-                    href="https://youtu.be/ziAG16MADbY"
-                    target="_blank"
-                  >
-                    See more
-                  </a>
+                  The Description must be set by editing each image from "Media"
+                  section.
                 </p>
               }
               onChange={
@@ -568,7 +547,7 @@ export const TextAndMetadataSettings: React.FC<
           )}
           {value.showDescription && (
             <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
+              sx={{ marginLeft: 0, paddingTop: 2 }}
               container
               columns={24}
               rowSpacing={2}
@@ -679,7 +658,7 @@ export const TextAndMetadataSettings: React.FC<
           )}
           {value.showButton && (
             <Grid
-              sx={{marginLeft: 0, paddingTop: 2}}
+              sx={{ marginLeft: 0, paddingTop: 2 }}
               container
               columns={24}
               rowSpacing={2}
@@ -969,7 +948,7 @@ export const TextAndMetadataSettings: React.FC<
   };
 
   return (
-    <Paper elevation={0} sx={{textAlign: 'left'}}>
+    <Paper elevation={0} sx={{ textAlign: 'left' }}>
       {renderTitleControls()}
       {renderCaptionControls()}
       {hasDescriptionControls ? renderDescriptionControls() : null}

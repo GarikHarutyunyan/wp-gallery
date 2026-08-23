@@ -1,32 +1,32 @@
 import Grid from '@mui/material/Grid';
-import {SelectControl, SwitchControl} from 'components/controls';
-import {useSettings} from 'components/settings';
-import {Filter} from 'components/settings/Filter';
-import {useTemplates} from 'contexts';
+import { SelectControl, SwitchControl } from 'components/controls';
+import { useSettings } from 'components/settings';
+import { Filter } from 'components/settings/Filter';
+import { useTemplates } from 'contexts';
 import {
   ActionURLSourceOptions,
   IGeneralSettings,
   ImageClickAction,
   ImageClickActionOptions,
 } from 'data-structures';
-import {ReactElement} from 'react';
+import { ReactElement } from 'react';
 
 interface IClickActionSettingsProps {
   isLoading?: boolean;
 }
 
-const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
-  const {resetTemplate} = useTemplates();
-  const {generalSettings, changeGeneralSettings: onActionChange} =
+const ClickActionSettings = ({ isLoading }: IClickActionSettingsProps) => {
+  const { resetTemplate } = useTemplates();
+  const { generalSettings, changeGeneralSettings: onActionChange } =
     useSettings();
-  const {clickAction, openUrlInNewTab, actionUrlSource} =
+  const { clickAction, openUrlInNewTab, actionUrlSource } =
     generalSettings as IGeneralSettings;
 
   const isClickActionUrl: boolean = clickAction === ImageClickAction.URL;
 
   const onActionValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
-    key && onActionChange?.({...generalSettings, [key]: inputValue} as any);
+    key && onActionChange?.({ ...generalSettings, [key]: inputValue } as any);
   };
 
   const renderClickActionInfo = (): ReactElement => {
@@ -41,16 +41,8 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
         <p>
           <b>{'Open Link:'}</b>
           {
-            ' Clicking an image redirects to a specified URL. The URL must be set by editing each image from "Images" section. '
+            ' Clicking an image redirects to a specified URL. The URL must be set by editing each image from "Media" section. '
           }
-          <a
-            className="seetings__see-more-link"
-            href="https://www.youtube.com/watch?v=u_AAWKQuaTA"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            See more
-          </a>
         </p>
       </>
     );
@@ -58,7 +50,7 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
 
   return (
     <Grid
-      sx={{marginLeft: 0, paddingTop: 2}}
+      sx={{ marginLeft: 0, paddingTop: 2 }}
       container
       columns={24}
       rowSpacing={2}
@@ -99,4 +91,5 @@ const ClickActionSettings = ({isLoading}: IClickActionSettingsProps) => {
   );
 };
 
-export {ClickActionSettings};
+export { ClickActionSettings };
+

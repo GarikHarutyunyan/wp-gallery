@@ -1,9 +1,9 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {useSettings} from 'components/settings';
-import {useTemplates} from 'contexts';
-import {usePro} from 'contexts/ProContext';
-import {Section} from 'core-components/section';
+import { useSettings } from 'components/settings';
+import { useTemplates } from 'contexts';
+import { usePro } from 'contexts/ProContext';
+import { Section } from 'core-components/section';
 import {
   ActionURLSourceOptions,
   CaptionSourceOptions,
@@ -16,7 +16,7 @@ import {
   TitleAlignmentOptions,
   TitleSourceOptions,
 } from 'data-structures';
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
 import {
   ColorControl,
   FontControl,
@@ -26,7 +26,7 @@ import {
   SwitchControl,
   TextControl,
 } from '../controls';
-import {Filter} from '../settings/Filter';
+import { Filter } from '../settings/Filter';
 
 interface ILightboxSettingsProps {
   isLoading?: boolean;
@@ -37,9 +37,9 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
   isLoading,
   onProFeatureClick,
 }) => {
-  const {resetTemplate} = useTemplates();
+  const { resetTemplate } = useTemplates();
 
-  const {lightboxSettings: value, changeLightboxSettings: onChange} =
+  const { lightboxSettings: value, changeLightboxSettings: onChange } =
     useSettings();
   const {
     isFullscreen,
@@ -98,7 +98,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
 
   const onInputValueChange = (inputValue: unknown, key?: string) => {
     resetTemplate?.();
-    key && onChange?.({...value, [key]: inputValue} as any);
+    key && onChange?.({ ...value, [key]: inputValue } as any);
   };
 
   const renderMainSettings = (): ReactNode => {
@@ -392,7 +392,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
     );
   };
 
-  const {isPro} = usePro();
+  const { isPro } = usePro();
 
   const renderTitleSection = (): ReactNode => {
     return (
@@ -408,15 +408,8 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                 value={showTitle}
                 tooltip={
                   <p>
-                    The Caption must be set by editing each image from "Images"
-                    section.{' '}
-                    <a
-                      className="seetings__see-more-link"
-                      href="https://youtu.be/ziAG16MADbY"
-                      target="_blank"
-                    >
-                      See more
-                    </a>
+                    The Title must be set by editing each image from "Media"
+                    section.
                   </p>
                 }
                 onChange={onInputValueChange}
@@ -446,7 +439,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
             )}
             {showTitle && (
               <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
+                sx={{ marginLeft: 0, paddingTop: 2 }}
                 container
                 columns={24}
                 rowSpacing={2}
@@ -487,15 +480,8 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                 pro={true}
                 tooltip={
                   <p>
-                    The Caption must be set by editing each image from "Images"
-                    section.{' '}
-                    <a
-                      className="seetings__see-more-link"
-                      href="https://youtu.be/ziAG16MADbY"
-                      target="_blank"
-                    >
-                      See more
-                    </a>
+                    The Caption must be set by editing each image from "Media"
+                    section.
                   </p>
                 }
                 onChange={
@@ -529,7 +515,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
             )}
             {showCaption && (
               <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
+                sx={{ marginLeft: 0, paddingTop: 2 }}
                 container
                 columns={24}
                 rowSpacing={2}
@@ -577,15 +563,8 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                 value={showDescription}
                 tooltip={
                   <p>
-                    The Caption must be set by editing each image from "Images"
-                    section.{' '}
-                    <a
-                      className="seetings__see-more-link"
-                      href="https://youtu.be/ziAG16MADbY"
-                      target="_blank"
-                    >
-                      See more
-                    </a>
+                    The Description must be set by editing each image from "Media"
+                    section.
                   </p>
                 }
                 pro={true}
@@ -620,7 +599,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
             )}
             {showDescription && (
               <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
+                sx={{ marginLeft: 0, paddingTop: 2 }}
                 container
                 columns={24}
                 rowSpacing={2}
@@ -699,7 +678,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
             )}
             {showButton && (
               <Grid
-                sx={{marginLeft: 0, paddingTop: 2}}
+                sx={{ marginLeft: 0, paddingTop: 2 }}
                 container
                 columns={24}
                 rowSpacing={2}
@@ -866,7 +845,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
   };
 
   return (
-    <Paper elevation={0} sx={{textAlign: 'left'}}>
+    <Paper elevation={0} sx={{ textAlign: 'left' }}>
       {renderMainSettings()}
       {renderTitleSection()}
       {renderCaptionSection()}
@@ -879,4 +858,5 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
   );
 };
 
-export {LightboxSettings};
+export { LightboxSettings };
+
