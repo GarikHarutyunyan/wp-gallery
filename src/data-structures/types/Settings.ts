@@ -558,9 +558,17 @@ export interface ISettingsDTO {
   cards: ICardsSettings;
   blog: IBlogSettings;
   scroller: IScrollerSettings;
-  template_id?: number;
+  template_id?: number | string;
   templateType?: string;
   title?: string;
   css?: string;
   custom_css?: string;
 }
+
+export type ReacgOptions = ISettingsDTO;
+
+export type ReacgOptionsMeta = {
+  hasChanges: boolean;
+  galleryId: string | number;
+};
+

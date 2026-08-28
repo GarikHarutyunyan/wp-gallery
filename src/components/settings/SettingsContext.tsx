@@ -84,6 +84,11 @@ const SettingsContext = React.createContext<{
 }>({});
 
 const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
+  if (typeof window !== 'undefined') {
+    (window as any).reacg_global = (window as any).reacg_global || {};
+    (window as any).reacg_global.options_api_version = 1;
+  }
+
   const {enqueueSnackbar} = useSnackbar();
   const {
     template,
@@ -123,6 +128,39 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const wrapperRef = useRef(null);
   const [imagesCount, setImagesCount] = useState<number>(0);
 
+  const optionsRef = useRef<ISettingsDTO>({
+    type: GalleryType.GRID,
+    general: generalMockSettings,
+    thumbnails: gridMockSettings,
+    mosaic: mosaicMockSettings,
+    justified: justifiedMockSettings,
+    masonry: mosaicMockSettings,
+    slideshow: slideshowMockSettings,
+    lightbox: lightboxMockSettings,
+    cube: cubeMockSettings,
+    carousel: carouselMockSettings,
+    coverflow: coverflowMockSettings,
+    cards: cardsMockSettings,
+    blog: blogMockSettings,
+    scroller: scrollerMockSettings,
+    css: '',
+    custom_css: '',
+  });
+
+  const emitOptionsChange = (options: ISettingsDTO, hasChangesVal: boolean) => {
+    try {
+      const globalObj = (window as any).reacg_global;
+      if (typeof globalObj?.onOptionsChange === 'function') {
+        globalObj.onOptionsChange(options, {
+          hasChanges: hasChangesVal,
+          galleryId: galleryId ?? '',
+        });
+      }
+    } catch (e) {
+      console.error('Error in window.reacg_global.onOptionsChange:', e);
+    }
+  };
+
   const getDataFromWindow = () => {
     const allData = (window as any).reacg_data;
     const currentData = allData?.[galleryId as string];
@@ -153,6 +191,30 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       newSettings?.title as string,
       newSettings?.templateType as string
     );
+
+    const fullOptions: ISettingsDTO = {
+      type: newSettings.type ?? GalleryType.GRID,
+      general: newSettings.general || generalMockSettings,
+      thumbnails: newSettings.thumbnails || gridMockSettings,
+      mosaic: newSettings.mosaic || mosaicMockSettings,
+      justified: newSettings.justified || justifiedMockSettings,
+      masonry: newSettings.masonry || mosaicMockSettings,
+      slideshow: newSettings.slideshow || slideshowMockSettings,
+      lightbox: newSettings.lightbox,
+      cube: newSettings.cube || cubeMockSettings,
+      carousel: newSettings.carousel || carouselMockSettings,
+      coverflow: newSettings.coverflow || coverflowMockSettings,
+      cards: newSettings.cards || cardsMockSettings,
+      blog: newSettings.blog || blogMockSettings,
+      scroller: newSettings.scroller || scrollerMockSettings,
+      template_id: newSettings.template_id,
+      templateType: newSettings.templateType,
+      title: newSettings.title,
+      css: newSettings.css || '',
+      custom_css: newSettings.custom_css || '',
+    };
+    optionsRef.current = fullOptions;
+    emitOptionsChange(fullOptions, false);
   };
 
   const getData = async () => {
@@ -194,6 +256,30 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         newSettings?.templateType as string
       );
       setIsLoading(false);
+
+      const fullOptions: ISettingsDTO = {
+        type: newSettings.type ?? GalleryType.GRID,
+        general: newSettings.general || generalMockSettings,
+        thumbnails: newSettings.thumbnails || gridMockSettings,
+        mosaic: newSettings.mosaic || mosaicMockSettings,
+        justified: newSettings.justified || justifiedMockSettings,
+        masonry: newSettings.masonry || mosaicMockSettings,
+        slideshow: newSettings.slideshow || slideshowMockSettings,
+        lightbox: newSettings.lightbox,
+        cube: newSettings.cube || cubeMockSettings,
+        carousel: newSettings.carousel || carouselMockSettings,
+        coverflow: newSettings.coverflow || coverflowMockSettings,
+        cards: newSettings.cards || cardsMockSettings,
+        blog: newSettings.blog || blogMockSettings,
+        scroller: newSettings.scroller || scrollerMockSettings,
+        template_id: newSettings.template_id,
+        templateType: newSettings.templateType,
+        title: newSettings.title,
+        css: newSettings.css || '',
+        custom_css: newSettings.custom_css || '',
+      };
+      optionsRef.current = fullOptions;
+      emitOptionsChange(fullOptions, false);
     } else {
       setType(GalleryType.GRID);
       setGeneralSettings(generalMockSettings);
@@ -209,10 +295,36 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setCardsSettings(cardsMockSettings);
       setBlogSettings(blogMockSettings);
       setScrollerSettings(scrollerMockSettings);
+
+      const fullOptions: ISettingsDTO = {
+        type: GalleryType.GRID,
+        general: generalMockSettings,
+        thumbnails: gridMockSettings,
+        mosaic: mosaicMockSettings,
+        justified: justifiedMockSettings,
+        masonry: masonryMockSettings,
+        slideshow: slideshowMockSettings,
+        lightbox: lightboxMockSettings,
+        cube: cubeMockSettings,
+        carousel: carouselMockSettings,
+        coverflow: coverflowMockSettings,
+        cards: cardsMockSettings,
+        blog: blogMockSettings,
+        scroller: scrollerMockSettings,
+        css: '',
+        custom_css: '',
+      };
+      optionsRef.current = fullOptions;
+      emitOptionsChange(fullOptions, false);
     }
   };
 
   useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).reacg_global = (window as any).reacg_global || {};
+      (window as any).reacg_global.options_api_version = 1;
+    }
+
     if (!galleryId) {
       return;
     }
@@ -232,8 +344,19 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       ? baseUrl + 'options/' + galleryId
       : undefined;
 
+    setType(newType);
+    setHasChanges(true);
+    const updatedOptions: ISettingsDTO = {
+      ...optionsRef.current,
+      type: newType,
+      templateType: template?.templateType ?? optionsRef.current.templateType,
+      template_id: template?.template_id ?? optionsRef.current.template_id,
+      title: template?.title ?? optionsRef.current.title,
+    };
+    optionsRef.current = updatedOptions;
+    emitOptionsChange(updatedOptions, true);
+
     if (fetchUrl) {
-      setType(newType);
       const settings: ISettingsDTO = {
         type: newType,
       } as ISettingsDTO;
@@ -244,9 +367,23 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         const responseType: GalleryType = response.data.type;
         if (responseType !== newType) {
           setType(responseType);
+          const syncOptions: ISettingsDTO = {
+            ...optionsRef.current,
+            type: responseType,
+          };
+          optionsRef.current = syncOptions;
+          emitOptionsChange(syncOptions, true);
         }
       } catch (error) {
         setType(type);
+        if (type) {
+          const revertOptions: ISettingsDTO = {
+            ...optionsRef.current,
+            type,
+          };
+          optionsRef.current = revertOptions;
+          emitOptionsChange(revertOptions, true);
+        }
         console.error(error);
       }
     }
@@ -260,8 +397,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const {isPro} = usePro();
 
   const onSave = async (): Promise<void> => {
-    setHasChanges(false);
-
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'options/' + galleryId
       : undefined;
@@ -277,6 +412,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         generalSettings.enableWhiteLabel = isPro;
       }
       const settings: ISettingsDTO = {
+        type: type,
         general: generalSettings,
         thumbnails: gridSettings,
         lightbox: lightboxSettings,
@@ -323,6 +459,33 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           newSettings?.title as string,
           newSettings?.templateType as string
         );
+
+        setHasChanges(false);
+
+        const savedOptions: ISettingsDTO = {
+          type: newSettings.type ?? type ?? GalleryType.GRID,
+          general: newSettings.general ?? generalSettings,
+          thumbnails: newSettings.thumbnails ?? gridSettings,
+          mosaic: newSettings.mosaic ?? mosaicSettings,
+          justified: newSettings.justified ?? justifiedSettings,
+          masonry: newSettings.masonry ?? masonrySettings,
+          slideshow: newSettings.slideshow ?? slideshowSettings,
+          lightbox: newSettings.lightbox ?? lightboxSettings,
+          cube: newSettings.cube ?? cubeSettings,
+          carousel: newSettings.carousel ?? carouselSettings,
+          coverflow: newSettings.coverflow ?? (coverflowSettings || coverflowMockSettings),
+          cards: newSettings.cards ?? cardsSettings,
+          blog: newSettings.blog ?? blogSettings,
+          scroller: newSettings.scroller ?? (scrollerSettings || scrollerMockSettings),
+          template_id: newSettings.template_id ?? template?.template_id,
+          templateType: newSettings.templateType ?? template?.templateType,
+          title: newSettings.title ?? template?.title,
+          css: newSettings.css ?? css ?? '',
+          custom_css: newSettings.custom_css ?? (isPro ? customCss : customCss.slice(0, 100)),
+        };
+        optionsRef.current = savedOptions;
+        emitOptionsChange(savedOptions, false);
+
         enqueueSnackbar('Options are up to date!', {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -392,6 +555,33 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           newSettings?.title as string,
           newSettings?.templateType as string
         );
+
+        setHasChanges(false);
+
+        const resetOptions: ISettingsDTO = {
+          type: newSettings.type ?? type ?? GalleryType.GRID,
+          general: newSettings.general ?? generalMockSettings,
+          thumbnails: newSettings.thumbnails ?? gridMockSettings,
+          mosaic: newSettings.mosaic ?? mosaicMockSettings,
+          justified: newSettings.justified ?? justifiedMockSettings,
+          masonry: newSettings.masonry ?? mosaicMockSettings,
+          slideshow: newSettings.slideshow ?? slideshowMockSettings,
+          lightbox: newSettings.lightbox,
+          cube: newSettings.cube ?? cubeMockSettings,
+          carousel: newSettings.carousel ?? carouselMockSettings,
+          coverflow: newSettings.coverflow ?? coverflowMockSettings,
+          cards: newSettings.cards ?? cardsMockSettings,
+          blog: newSettings.blog ?? blogMockSettings,
+          scroller: newSettings.scroller ?? scrollerMockSettings,
+          template_id: newSettings.template_id,
+          templateType: newSettings.templateType,
+          title: newSettings.title,
+          css: newSettings.css || '',
+          custom_css: newSettings.custom_css || '',
+        };
+        optionsRef.current = resetOptions;
+        emitOptionsChange(resetOptions, false);
+
         enqueueSnackbar(successMessage, {
           variant: 'success',
           anchorOrigin: {horizontal: 'right', vertical: 'top'},
@@ -408,7 +598,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }
 
       setIsLoading(false);
-      setHasChanges(false);
     } else {
       enqueueSnackbar('Cannot reset options!', {
         variant: 'error',
@@ -456,15 +645,25 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     );
   };
 
-  const createOnChange = <
-    TCallback extends (...args: Parameters<TCallback>) => ReturnType<TCallback>,
-  >(
-    callback: TCallback
-  ): TCallback =>
-    ((...args: Parameters<TCallback>): ReturnType<TCallback> => {
+  const createOnChange = <T,>(
+    setter: React.Dispatch<React.SetStateAction<T>>,
+    key: keyof ISettingsDTO
+  ) => {
+    return (value: T) => {
       setHasChanges(true);
-      return callback(...args);
-    }) as TCallback;
+      setter(value);
+      const updatedOptions: ISettingsDTO = {
+        ...optionsRef.current,
+        [key]: value,
+        templateType: template?.templateType ?? optionsRef.current.templateType,
+        template_id: template?.template_id ?? optionsRef.current.template_id,
+        title: template?.title ?? optionsRef.current.title,
+      };
+      optionsRef.current = updatedOptions;
+      emitOptionsChange(updatedOptions, true);
+      return value;
+    };
+  };
 
   return (
     <SettingsContext.Provider
@@ -485,20 +684,20 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         cardsSettings,
         blogSettings,
         scrollerSettings,
-        changeGeneralSettings: createOnChange(setGeneralSettings),
-        changeGridSettings: createOnChange(setGridSettings),
-        changeMosaicSettings: createOnChange(setMosaicSettings),
-        changeJustifiedSettings: createOnChange(setJustifiedSettings),
-        changeMasonrySettings: createOnChange(setMasonrySettings),
-        changeSlideshowSettings: createOnChange(setSlideshowSettings),
-        changeLightboxSettings: createOnChange(setLightboxSettings),
-        changeCubeSettings: createOnChange(setCubeSettings),
-        changeCarouselSettings: createOnChange(setCarouselSettings),
-        changeCoverflowSettings: createOnChange(setCoverflowSettings),
-        changeCardsSettings: createOnChange(setCardsSettings),
-        changeBlogSettings: createOnChange(setBlogSettings),
-        changeScrollerSettings: createOnChange(setScrollerSettings),
-        changeCss: createOnChange(setCss),
+        changeGeneralSettings: createOnChange(setGeneralSettings, 'general'),
+        changeGridSettings: createOnChange(setGridSettings, 'thumbnails'),
+        changeMosaicSettings: createOnChange(setMosaicSettings, 'mosaic'),
+        changeJustifiedSettings: createOnChange(setJustifiedSettings, 'justified'),
+        changeMasonrySettings: createOnChange(setMasonrySettings, 'masonry'),
+        changeSlideshowSettings: createOnChange(setSlideshowSettings, 'slideshow'),
+        changeLightboxSettings: createOnChange(setLightboxSettings, 'lightbox'),
+        changeCubeSettings: createOnChange(setCubeSettings, 'cube'),
+        changeCarouselSettings: createOnChange(setCarouselSettings, 'carousel'),
+        changeCoverflowSettings: createOnChange(setCoverflowSettings, 'coverflow'),
+        changeCardsSettings: createOnChange(setCardsSettings, 'cards'),
+        changeBlogSettings: createOnChange(setBlogSettings, 'blog'),
+        changeScrollerSettings: createOnChange(setScrollerSettings, 'scroller'),
+        changeCss: createOnChange(setCss, 'css'),
         wrapperRef,
         imagesCount,
         changeImagesCount: setImagesCount,
