@@ -402,8 +402,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       : undefined;
 
     if (fetchUrl) {
-      setIsLoading(true);
-
       if (generalSettings) {
         if (!isPro) {
           generalSettings.enableWatermark = false;
@@ -473,15 +471,20 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           lightbox: newSettings.lightbox ?? lightboxSettings,
           cube: newSettings.cube ?? cubeSettings,
           carousel: newSettings.carousel ?? carouselSettings,
-          coverflow: newSettings.coverflow ?? (coverflowSettings || coverflowMockSettings),
+          coverflow:
+            newSettings.coverflow ??
+            (coverflowSettings || coverflowMockSettings),
           cards: newSettings.cards ?? cardsSettings,
           blog: newSettings.blog ?? blogSettings,
-          scroller: newSettings.scroller ?? (scrollerSettings || scrollerMockSettings),
+          scroller:
+            newSettings.scroller ?? (scrollerSettings || scrollerMockSettings),
           template_id: newSettings.template_id ?? template?.template_id,
           templateType: newSettings.templateType ?? template?.templateType,
           title: newSettings.title ?? template?.title,
           css: newSettings.css ?? css ?? '',
-          custom_css: newSettings.custom_css ?? (isPro ? customCss : customCss.slice(0, 100)),
+          custom_css:
+            newSettings.custom_css ??
+            (isPro ? customCss : customCss.slice(0, 100)),
         };
         optionsRef.current = savedOptions;
         emitOptionsChange(savedOptions, false);
@@ -500,8 +503,6 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         });
         console.error(error);
       }
-
-      setIsLoading(false);
     } else {
       enqueueSnackbar('Cannot update options!', {
         variant: 'error',
@@ -687,13 +688,22 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         changeGeneralSettings: createOnChange(setGeneralSettings, 'general'),
         changeGridSettings: createOnChange(setGridSettings, 'thumbnails'),
         changeMosaicSettings: createOnChange(setMosaicSettings, 'mosaic'),
-        changeJustifiedSettings: createOnChange(setJustifiedSettings, 'justified'),
+        changeJustifiedSettings: createOnChange(
+          setJustifiedSettings,
+          'justified'
+        ),
         changeMasonrySettings: createOnChange(setMasonrySettings, 'masonry'),
-        changeSlideshowSettings: createOnChange(setSlideshowSettings, 'slideshow'),
+        changeSlideshowSettings: createOnChange(
+          setSlideshowSettings,
+          'slideshow'
+        ),
         changeLightboxSettings: createOnChange(setLightboxSettings, 'lightbox'),
         changeCubeSettings: createOnChange(setCubeSettings, 'cube'),
         changeCarouselSettings: createOnChange(setCarouselSettings, 'carousel'),
-        changeCoverflowSettings: createOnChange(setCoverflowSettings, 'coverflow'),
+        changeCoverflowSettings: createOnChange(
+          setCoverflowSettings,
+          'coverflow'
+        ),
         changeCardsSettings: createOnChange(setCardsSettings, 'cards'),
         changeBlogSettings: createOnChange(setBlogSettings, 'blog'),
         changeScrollerSettings: createOnChange(setScrollerSettings, 'scroller'),
