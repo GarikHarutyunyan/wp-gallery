@@ -13,14 +13,12 @@ import {useSettings} from './useSettings';
 
 interface IOptionsPanelBodyProps {
   isLoading: boolean;
-  isSmall: boolean;
   onSave: () => Promise<void>;
   onReset: () => Promise<void>;
 }
 
 const OptionsPanelBody = ({
   isLoading,
-  isSmall,
   onSave,
   onReset,
 }: IOptionsPanelBodyProps) => {
@@ -51,7 +49,6 @@ const OptionsPanelBody = ({
         onSave={onSave}
         onReset={onReset}
         hideLightboxOptions={hideLightboxOptions}
-        isSmall={isSmall}
       />
       <TabPanel value={'gallery'} className={'reacg-tab-panel'}>
         <OptionsPanelGalleryTab

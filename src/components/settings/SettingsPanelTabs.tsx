@@ -25,7 +25,6 @@ interface ISettingsPanelTabsProps {
   onSave: () => void;
   onReset: () => void;
   hideLightboxOptions: boolean;
-  isSmall: boolean;
 }
 
 const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
@@ -34,7 +33,6 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
   onSave,
   onReset,
   hideLightboxOptions,
-  isSmall,
 }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isReseting, setIsReseting] = useState(false);
@@ -139,9 +137,8 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
         return;
       }
 
-      const actionsWidth = isSmall ? 0 : actionsRef.current?.offsetWidth ?? 0;
-      const availableWidth =
-        containerRef.current.clientWidth - actionsWidth - 24;
+      const actionsWidth = actionsRef.current?.offsetWidth ?? 0;
+      const availableWidth = containerRef.current.clientWidth - actionsWidth;
       const moreWidth = measureMoreRef.current?.offsetWidth ?? 0;
       const tabWidths = tabItems.map(
         (tab) => measureTabRefs.current[tab.value]?.offsetWidth ?? 0
@@ -195,7 +192,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
     return () => {
       resizeObserver.disconnect();
     };
-  }, [activeTab, isSmall, tabItems]);
+  }, [activeTab, tabItems]);
 
   useEffect(() => {
     if (!overflowTabs.length && overflowMenuAnchor) {
@@ -277,12 +274,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
   );
 
   return (
-    <Aligner
-      className={clsx('reacg-settings-panel', {
-        'reacg-settings-panel--small': isSmall,
-      })}
-    >
-      {isSmall ? renderActionButtons(false, true) : null}
+    <Aligner className={'reacg-settings-panel'}>
       <Box className="reacg-settings-panel-tabs" ref={containerRef}>
         <Box className="reacg-settings-panel-tabs__nav">
           <Tabs
@@ -310,7 +302,7 @@ const SettingsPanelTabs: React.FC<ISettingsPanelTabsProps> = ({
             </button>
           ) : null}
         </Box>
-        {!isSmall ? renderActionButtons(false) : null}
+        {renderActionButtons(false)}
         <Box className="reacg-settings-panel-tabs__measure">
           <Tabs value={false} className="reacg-settings-panel-tabs__tabs">
             {tabItems.map((tab) => (
