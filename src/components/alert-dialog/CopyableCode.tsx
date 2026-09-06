@@ -21,7 +21,7 @@ const CopyableCode: React.FC<ICopyableCodeProps> = ({text}) => {
   return (
     <code
       style={{
-        fontSize: '1rem',
+        fontSize: '16px',
         cursor: 'pointer',
         padding: '4px 8px',
         borderRadius: '4px',

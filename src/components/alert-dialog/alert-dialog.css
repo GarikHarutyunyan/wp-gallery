@@ -71,7 +71,7 @@
 .trial-email-input:focus-visible,
 .trial-email-input:active {
   width: 100%;
-  font-size: 1rem;
+  font-size: 16px;
   color: #344054;
   line-height: 1.4 !important;
   border: none !important;
@@ -134,7 +134,7 @@
 
 .free-trial-intro-banner-subtitle {
   color: #5f6368;
-  font-size: 0.9rem;
+  font-size: 14px;
 }
 
 .free-trial-email-label {
@@ -149,7 +149,7 @@
   background-color: #f9f2f4;
   border-radius: 6px;
   padding: 8px 10px;
-  font-size: 0.85rem;
+  font-size: 14px;
 }
 
 .free-trial-submit-success {
@@ -158,11 +158,11 @@
   background-color: #ebf9f0;
   border-radius: 6px;
   padding: 8px 10px;
-  font-size: 0.85rem;
+  font-size: 14px;
 }
 
 .free-trial-heading-kicker {
-  font-size: 0.9rem;
+  font-size: 14px;
   color: #8769ff;
   text-transform: uppercase;
   font-weight: 600;
@@ -170,22 +170,22 @@
 
 .free-trial-heading-title {
   color: #1d2327;
-  font-size: 1.5rem;
-  margin: 0.4rem 0;
+  font-size: 24px;
+  margin: 6px 0;
   font-weight: 600;
 }
 
 .free-trial-heading-subtitle {
   color: #8769ff;
-  font-size: 1.2rem;
-  margin-bottom: 0.4rem;
+  font-size: 19px;
+  margin-bottom: 6px;
   font-weight: 600;
 }
 
 .free-trial-heading-description {
   color: #5f6368;
-  font-size: 1rem;
-  margin: 0 0 1rem 0;
+  font-size: 16px;
+  margin: 0 0 16px 0;
 }
 
 .free-trial-feature-item {
@@ -199,7 +199,7 @@
 
 .free-trial-additional-text {
   color: #8769ff;
-  font-size: 0.9rem;
+  font-size: 14px;
 }
 
 .free-trial-additional-link {
@@ -226,14 +226,14 @@
 .trial-success-state__title {
   color: #111111;
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 32px;
   line-height: 1.2;
   margin: 0 0 18px;
 }
 
 .trial-success-state__message {
   color: #6f6f6f;
-  font-size: 1.1rem;
+  font-size: 18px;
   line-height: 1.25;
   white-space: pre-line;
   margin: 0;

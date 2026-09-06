@@ -351,7 +351,7 @@
   height: 40px;
   background-repeat: no-repeat;
   background-size: contain;
-  font-size: 2rem;
+  font-size: 32px;
   opacity: 0;
   pointer-events: none;
   -webkit-transition: all 0.3s ease-in-out;

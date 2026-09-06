@@ -1,8 +1,8 @@
-import {Box, Typography} from '@mui/material';
-import {Button} from 'core-components/button';
-import {useEffect, useState} from 'react';
-import {freeTrialFormIntro, getTrialDays} from './AlertDialog.constants';
-import {AlertConfig} from './AlertDialog.types';
+import { Box, Typography } from '@mui/material';
+import { Button } from 'core-components/button';
+import { useEffect, useState } from 'react';
+import { freeTrialFormIntro, getTrialDays } from './AlertDialog.constants';
+import { AlertConfig } from './AlertDialog.types';
 
 interface IAlertProps {
   config: AlertConfig;
@@ -23,7 +23,7 @@ const activateProOptions = () => {
   window.dispatchEvent(new Event('reacg:pro-activated'));
 };
 
-const Alert = ({config}: IAlertProps) => {
+const Alert = ({ config }: IAlertProps) => {
   const {
     image,
     title,
@@ -37,7 +37,7 @@ const Alert = ({config}: IAlertProps) => {
     utm_medium,
     onClose,
   } = config;
-  const {label, backgroundColor, width, onClick} = buttonConfig;
+  const { label, backgroundColor, width, onClick } = buttonConfig;
 
   const [trialEmail, setTrialEmail] = useState('');
   const [trialSubmitError, setTrialSubmitError] = useState('');
@@ -89,7 +89,7 @@ const Alert = ({config}: IAlertProps) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({email}),
+        body: JSON.stringify({ email }),
       });
 
       let body: any = null;
@@ -115,7 +115,7 @@ const Alert = ({config}: IAlertProps) => {
 
       setTrialSubmitSuccess(
         body?.message ||
-          `Trial successfully enabled. You have ${getTrialDays()} days to explore all features.`
+        `Trial successfully enabled. You have ${getTrialDays()} days to explore all features.`
       );
 
       activateProOptions();
@@ -266,7 +266,7 @@ const Alert = ({config}: IAlertProps) => {
 
   return (
     <Box className={'alert'}>
-      <Box sx={{display: 'flex', justifyContent: 'center'}}>{image}</Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>{image}</Box>
       {renderErrorMessage()}
       {title && (
         <Typography
@@ -275,7 +275,7 @@ const Alert = ({config}: IAlertProps) => {
           sx={{
             color: 'black',
             fontWeight: 600,
-            fontSize: '1.2rem',
+            fontSize: '19px',
             lineHeight: 1.4,
             textAlign: 'center',
             padding: '20px 8px 0',
@@ -291,7 +291,7 @@ const Alert = ({config}: IAlertProps) => {
         sx={{
           color: 'black',
           fontWeight: 400,
-          fontSize: '1rem',
+          fontSize: '16px',
           lineHeight: 1.4,
           gap: 1,
           alignItems: 'center',
@@ -306,7 +306,7 @@ const Alert = ({config}: IAlertProps) => {
       </Typography>
       {renderPreButtonContent()}
       <Box
-        sx={{display: 'flex', justifyContent: 'center', marginBottom: '10px'}}
+        sx={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}
       >
         <Button
           onClick={() => {
@@ -345,7 +345,7 @@ const Alert = ({config}: IAlertProps) => {
       </Box>
       {secondaryButtonConfig && (
         <Box
-          sx={{display: 'flex', justifyContent: 'center', marginBottom: '14px'}}
+          sx={{ display: 'flex', justifyContent: 'center', marginBottom: '14px' }}
         >
           <Button
             onClick={() => {
@@ -375,4 +375,5 @@ const Alert = ({config}: IAlertProps) => {
   );
 };
 
-export {Alert};
+export { Alert };
+

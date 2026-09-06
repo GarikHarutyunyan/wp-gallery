@@ -1,9 +1,9 @@
-import {GalleryType} from 'data-structures';
-import {AlertConfig} from './AlertDialog.types';
-import {CopyableCode} from './CopyableCode';
-import {CustomerService} from './icons/CustomerServiceIcon';
-import {LigthBulbIcon} from './icons/LigthBulbIcon';
-import {TroubleshoutingIcon} from './icons/TroubleshoutingIcon';
+import { GalleryType } from 'data-structures';
+import { AlertConfig } from './AlertDialog.types';
+import { CopyableCode } from './CopyableCode';
+import { CustomerService } from './icons/CustomerServiceIcon';
+import { LigthBulbIcon } from './icons/LigthBulbIcon';
+import { TroubleshoutingIcon } from './icons/TroubleshoutingIcon';
 import cardsLayoutScreenshot from './layout-screenshots/cards.webp';
 import coverflowLayoutScreenshot from './layout-screenshots/coverflow.webp';
 import justifiedLayoutScreenshot from './layout-screenshots/justified.webp';
@@ -52,7 +52,7 @@ const upgradeSecondaryButtonConfig = {
         height="16"
         viewBox="0 0 24 24"
         fill="currentColor"
-        style={{flexShrink: 0}}
+        style={{ flexShrink: 0 }}
       >
         <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
       </svg>
@@ -72,7 +72,7 @@ export const premiumConfig: AlertConfig = {
     <>
       <div
         style={{
-          fontSize: '0.9rem',
+          fontSize: '14px',
           color: '#8769ff',
           textTransform: 'uppercase',
           fontWeight: 600,
@@ -83,7 +83,7 @@ export const premiumConfig: AlertConfig = {
       <div
         style={{
           color: '#1d2327',
-          fontSize: '1.5rem',
+          fontSize: '24px',
           fontWeight: 600,
         }}
       >
@@ -92,55 +92,55 @@ export const premiumConfig: AlertConfig = {
       <div
         style={{
           color: '#5f6368',
-          fontSize: '1rem',
-          margin: '0 0 1rem 0',
+          fontSize: '16px',
+          margin: '0 0 16px 0',
         }}
       >
         Get all PRO features for{' '}
-        <span style={{color: '#8769ff', fontWeight: 600}}>
+        <span style={{ color: '#8769ff', fontWeight: 600 }}>
           less than $2.50/month
         </span>
       </div>
       <div>
-        <div style={{margin: '5px 0'}}>
+        <div style={{ margin: '5px 0' }}>
           <span
             className="dashicons dashicons-yes"
-            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+            style={{ color: '#8769ff', margin: '3px 3px 3px 0' }}
           ></span>
           <span>Pre-Built Templates &amp; Template Library</span>
         </div>
-        <div style={{margin: '5px 0'}}>
+        <div style={{ margin: '5px 0' }}>
           <span
             className="dashicons dashicons-yes"
-            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+            style={{ color: '#8769ff', margin: '3px 3px 3px 0' }}
           ></span>
           <span>AI Automation for Text &amp; Metadata</span>
         </div>
-        <div style={{margin: '5px 0'}}>
+        <div style={{ margin: '5px 0' }}>
           <span
             className="dashicons dashicons-yes"
-            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+            style={{ color: '#8769ff', margin: '3px 3px 3px 0' }}
           ></span>
           <span>Advanced Lightbox Options</span>
         </div>
-        <div style={{margin: '5px 0'}}>
+        <div style={{ margin: '5px 0' }}>
           <span
             className="dashicons dashicons-yes"
-            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+            style={{ color: '#8769ff', margin: '3px 3px 3px 0' }}
           ></span>
           <span>eCommerce &amp; Mixed Galleries</span>
         </div>
-        <div style={{margin: '5px 0'}}>
+        <div style={{ margin: '5px 0' }}>
           <span
             className="dashicons dashicons-yes"
-            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+            style={{ color: '#8769ff', margin: '3px 3px 3px 0' }}
           ></span>
           <span>Branding, Watermarks &amp; White Labeling</span>
         </div>
-        <div style={{margin: '5px 0'}}>
+        <div style={{ margin: '5px 0' }}>
           <span
             className="dashicons dashicons-yes"
-            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+            style={{ color: '#8769ff', margin: '3px 3px 3px 0' }}
           ></span>
           <span>Advanced Customization &amp; Premium Support</span>
         </div>
@@ -148,9 +148,9 @@ export const premiumConfig: AlertConfig = {
     </>
   ),
   additionalText: (utm_medium?: string) => (
-    <center style={{color: '#8769ff', fontSize: '0.9rem'}}>
+    <center style={{ color: '#8769ff', fontSize: '14px' }}>
       <a
-        style={{color: '#8769ff'}}
+        style={{ color: '#8769ff' }}
         href={appendUtmMedium(
           (window as any).reacg_global?.demo_url || '',
           utm_medium
@@ -161,7 +161,7 @@ export const premiumConfig: AlertConfig = {
       </a>{' '}
       |{' '}
       <a
-        style={{color: '#8769ff'}}
+        style={{ color: '#8769ff' }}
         href={appendUtmMedium(
           (window as any).reacg_global?.compare_plans_url || '',
           utm_medium
@@ -187,7 +187,7 @@ export const premiumConfig: AlertConfig = {
           height="16"
           viewBox="0 0 24 24"
           fill="currentColor"
-          style={{flexShrink: 0}}
+          style={{ flexShrink: 0 }}
         >
           <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
         </svg>
@@ -207,7 +207,7 @@ export const needHelpConfig: AlertConfig = {
     <CustomerService
       width={80}
       height={80}
-      style={{background: '#d1dae8', borderRadius: '50%', padding: '12px'}}
+      style={{ background: '#d1dae8', borderRadius: '50%', padding: '12px' }}
     />
   ),
   title: 'Need Help?',
@@ -217,7 +217,7 @@ export const needHelpConfig: AlertConfig = {
   additionalText: (utm_medium?: string) => (
     <center>
       <a
-        style={{color: 'black'}}
+        style={{ color: 'black' }}
         href={appendUtmMedium(
           (window as any).reacg_global?.demo_url || '',
           utm_medium
@@ -228,7 +228,7 @@ export const needHelpConfig: AlertConfig = {
       </a>{' '}
       |{' '}
       <a
-        style={{color: 'black'}}
+        style={{ color: 'black' }}
         href={appendUtmMedium(
           (window as any).reacg_global?.compare_plans_url || '',
           utm_medium
@@ -257,7 +257,7 @@ export const newHereConfig: AlertConfig = {
     <LigthBulbIcon
       width={80}
       height={80}
-      style={{background: '#d1dae8', borderRadius: '50%', padding: '12px'}}
+      style={{ background: '#d1dae8', borderRadius: '50%', padding: '12px' }}
     />
   ),
   title: 'Need a little help?',
@@ -267,7 +267,7 @@ export const newHereConfig: AlertConfig = {
   additionalText: (utm_medium?: string) => (
     <center>
       <a
-        style={{color: 'black'}}
+        style={{ color: 'black' }}
         href={appendUtmMedium(
           (window as any).reacg_global?.demo_url || '',
           utm_medium
@@ -278,7 +278,7 @@ export const newHereConfig: AlertConfig = {
       </a>{' '}
       |{' '}
       <a
-        style={{color: 'black'}}
+        style={{ color: 'black' }}
         href={appendUtmMedium(
           (window as any).reacg_global?.compare_plans_url || '',
           utm_medium
@@ -307,7 +307,7 @@ export const errorConfig: AlertConfig = {
     <TroubleshoutingIcon
       width={80}
       height={80}
-      style={{background: '#d1dae8', borderRadius: '50%', padding: '12px'}}
+      style={{ background: '#d1dae8', borderRadius: '50%', padding: '12px' }}
     />
   ),
   description: (
@@ -320,7 +320,7 @@ export const errorConfig: AlertConfig = {
   additionalText: (utm_medium?: string) => (
     <center>
       <a
-        style={{color: 'black'}}
+        style={{ color: 'black' }}
         href={appendUtmMedium(
           (window as any).reacg_global?.demo_url || '',
           utm_medium
@@ -331,7 +331,7 @@ export const errorConfig: AlertConfig = {
       </a>{' '}
       |{' '}
       <a
-        style={{color: 'black'}}
+        style={{ color: 'black' }}
         href={appendUtmMedium(
           (window as any).reacg_global?.compare_plans_url || '',
           utm_medium
@@ -378,50 +378,50 @@ export const specialOfferConfig: AlertConfig = {
         Unlock PRO features
       </div>
       <div>
-        <div style={{margin: '5px 0'}}>
+        <div style={{ margin: '5px 0' }}>
           <span
             className="dashicons dashicons-yes"
-            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+            style={{ color: '#8769ff', margin: '3px 3px 3px 0' }}
           ></span>
           <span>Pre-Built Templates &amp; Template Library</span>
         </div>
-        <div style={{margin: '5px 0'}}>
+        <div style={{ margin: '5px 0' }}>
           <span
             className="dashicons dashicons-yes"
-            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+            style={{ color: '#8769ff', margin: '3px 3px 3px 0' }}
           ></span>
           <span>AI Automation for Text &amp; Metadata</span>
         </div>
-        <div style={{margin: '5px 0'}}>
+        <div style={{ margin: '5px 0' }}>
           <span
             className="dashicons dashicons-yes"
-            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+            style={{ color: '#8769ff', margin: '3px 3px 3px 0' }}
           ></span>
           <span>Advanced Lightbox Options</span>
         </div>
-        <div style={{margin: '5px 0'}}>
+        <div style={{ margin: '5px 0' }}>
           <span
             className="dashicons dashicons-yes"
-            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+            style={{ color: '#8769ff', margin: '3px 3px 3px 0' }}
           ></span>
           <span>eCommerce &amp; Mixed Galleries</span>
         </div>
-        <div style={{margin: '5px 0'}}>
+        <div style={{ margin: '5px 0' }}>
           <span
             className="dashicons dashicons-yes"
-            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+            style={{ color: '#8769ff', margin: '3px 3px 3px 0' }}
           ></span>
           <span>Branding, Watermarks &amp; White Labeling</span>
         </div>
-        <div style={{margin: '5px 0'}}>
+        <div style={{ margin: '5px 0' }}>
           <span
             className="dashicons dashicons-yes"
-            style={{color: '#8769ff', margin: '3px 3px 3px 0'}}
+            style={{ color: '#8769ff', margin: '3px 3px 3px 0' }}
           ></span>
           <span>Advanced Customization &amp; Premium Support</span>
         </div>
       </div>
-      <div style={{paddingTop: '18px', fontSize: '0.8rem'}}>
+      <div style={{ paddingTop: '18px', fontSize: '12px' }}>
         Use code <CopyableCode text="DISCOUNT60" /> to{' '}
         <span
           style={{
@@ -439,7 +439,7 @@ export const specialOfferConfig: AlertConfig = {
   additionalText: (utm_medium?: string) => (
     <center>
       <a
-        style={{color: 'black'}}
+        style={{ color: 'black' }}
         href={appendUtmMedium(
           (window as any).reacg_global?.demo_url || '',
           utm_medium
@@ -450,7 +450,7 @@ export const specialOfferConfig: AlertConfig = {
       </a>{' '}
       |{' '}
       <a
-        style={{color: 'black'}}
+        style={{ color: 'black' }}
         href={appendUtmMedium(
           (window as any).reacg_global?.compare_plans_url || '',
           utm_medium
@@ -490,7 +490,7 @@ export const getProLayoutDialogConfig = (
       <>
         <div
           style={{
-            fontSize: '0.9rem',
+            fontSize: '14px',
             color: '#8769ff',
             textTransform: 'uppercase',
             fontWeight: 600,
@@ -502,8 +502,8 @@ export const getProLayoutDialogConfig = (
         <div
           style={{
             color: '#1d2327',
-            fontSize: '1.5rem',
-            margin: '0.4rem 0',
+            fontSize: '24px',
+            margin: '6px 0',
             fontWeight: 600,
             textAlign: 'center',
           }}
@@ -513,13 +513,13 @@ export const getProLayoutDialogConfig = (
         <div
           style={{
             color: '#5f6368',
-            fontSize: '1rem',
+            fontSize: '16px',
             textAlign: 'center',
             marginBottom: '25px',
           }}
         >
           Get this layout and all PRO features for{' '}
-          <div style={{color: '#8769ff', fontWeight: 600}}>
+          <div style={{ color: '#8769ff', fontWeight: 600 }}>
             less than $2.50/month
           </div>
         </div>
@@ -539,9 +539,9 @@ export const getProLayoutDialogConfig = (
       </>
     ),
     additionalText: (utm_medium?: string) => (
-      <center style={{color: '#8769ff', fontSize: '0.9rem'}}>
+      <center style={{ color: '#8769ff', fontSize: '14px' }}>
         <a
-          style={{color: '#8769ff'}}
+          style={{ color: '#8769ff' }}
           href={appendUtmMedium(
             (window as any).reacg_global?.layout_urls?.[`${layoutType}`] || '',
             utm_medium
@@ -552,7 +552,7 @@ export const getProLayoutDialogConfig = (
         </a>{' '}
         |{' '}
         <a
-          style={{color: '#8769ff'}}
+          style={{ color: '#8769ff' }}
           href={appendUtmMedium(
             (window as any).reacg_global?.compare_plans_url || '',
             utm_medium
@@ -578,7 +578,7 @@ export const getProLayoutDialogConfig = (
             height="16"
             viewBox="0 0 24 24"
             fill="currentColor"
-            style={{flexShrink: 0}}
+            style={{ flexShrink: 0 }}
           >
             <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
           </svg>
@@ -776,7 +776,7 @@ export const getFreeTrialLayoutConfig = (
       <>
         <div
           style={{
-            fontSize: '0.9rem',
+            fontSize: '14px',
             color: '#8769ff',
             textTransform: 'uppercase',
             fontWeight: 600,
@@ -788,8 +788,8 @@ export const getFreeTrialLayoutConfig = (
         <div
           style={{
             color: '#1d2327',
-            fontSize: '1.5rem',
-            margin: '0.4rem 0',
+            fontSize: '24px',
+            margin: '6px 0',
             fontWeight: 600,
             textAlign: 'center',
           }}
@@ -799,9 +799,9 @@ export const getFreeTrialLayoutConfig = (
         <div
           style={{
             color: '#8769ff',
-            fontSize: '1.2rem',
+            fontSize: '19px',
             textAlign: 'center',
-            marginBottom: '0.4rem',
+            marginBottom: '6px',
             fontWeight: 600,
           }}
         >
@@ -810,7 +810,7 @@ export const getFreeTrialLayoutConfig = (
         <div
           style={{
             color: '#5f6368',
-            fontSize: '0.9rem',
+            fontSize: '14.4px',
             textAlign: 'center',
             marginBottom: '25px',
           }}
@@ -833,9 +833,9 @@ export const getFreeTrialLayoutConfig = (
       </>
     ),
     additionalText: (utm_medium?: string) => (
-      <center style={{color: '#8769ff', fontSize: '0.9rem'}}>
+      <center style={{ color: '#8769ff', fontSize: '14px' }}>
         <a
-          style={{color: '#8769ff'}}
+          style={{ color: '#8769ff' }}
           href={appendUtmMedium(
             (window as any).reacg_global?.layout_urls?.[`${layoutType}`] || '',
             utm_medium
@@ -846,7 +846,7 @@ export const getFreeTrialLayoutConfig = (
         </a>{' '}
         |{' '}
         <a
-          style={{color: '#8769ff'}}
+          style={{ color: '#8769ff' }}
           href={appendUtmMedium(
             (window as any).reacg_global?.compare_plans_url || '',
             utm_medium

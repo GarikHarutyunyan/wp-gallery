@@ -1,3 +1,4 @@
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {GoogleFontsProvider, TranslationsProvider, useAppInfo} from 'contexts';
 import {ProProvider} from 'contexts/ProContext';
 import ErrorFallback from 'ErrorFallback';
@@ -8,6 +9,14 @@ import './App.css';
 import {GalleryWrapper} from './components/GalleryWrapper';
 
 const AlertDialog = lazy(() => import('components/alert-dialog/AlertDialog'));
+
+const muiTheme = createTheme({
+  typography: {
+    fontSize: 14,
+    htmlFontSize: 16,
+    pxToRem: (size: number) => `${size}px`,
+  } as any,
+});
 
 const App: React.FC = () => {
   const {pluginAssetsUrl, showControls} = useAppInfo();
@@ -43,7 +52,12 @@ const App: React.FC = () => {
     );
   };
 
-  return showControls ? renderAppForAmdin() : renderApp();
+  return (
+    <ThemeProvider theme={muiTheme}>
+      {showControls ? renderAppForAmdin() : renderApp()}
+    </ThemeProvider>
+  );
 };
 
 export default App;
+

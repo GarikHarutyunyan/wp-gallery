@@ -102,7 +102,7 @@ const FeatureHighlighter: React.FC<IFeatureHighlighterProps> = ({
               padding: '16px',
               overflow: 'visible',
               backgroundColor: '#5A558C',
-              fontSize: '0.875rem',
+              fontSize: '14px',
               lineHeight: '1.43',
               letterSpacing: '0.01071em',
               width: '272px',

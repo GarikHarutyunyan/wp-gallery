@@ -443,7 +443,7 @@
     flex-direction: column;
   }
   .type-option__title {
-    font-size: 0.7rem;
+    font-size: 11px;
   }
 }
 
@@ -481,7 +481,7 @@
     flex-direction: column;
   }
   .type-option__wrapper .type-option__title {
-    font-size: 0.6rem;
+    font-size: 10px;
   }
 }
 
@@ -513,7 +513,7 @@
   margin-left: 10px !important;
   font-weight: bold !important;
   color: #85a3b8 !important;
-  font-size: 1.2rem !important;
+  font-size: 19px !important;
 }
 
 .reacg-settings-panel-tabs .Mui-selected svg path,
