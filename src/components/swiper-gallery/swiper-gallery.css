@@ -13,8 +13,8 @@
 }
 .reacg-gallery .swiper-gallery__title_on-hover {
   opacity: 0;
-  -webkit-transition: opacity 0.3s ease-in-out;
-  transition: opacity 0.3s ease-in-out;
+  -webkit-transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease;
 }
 
 .reacg-gallery
@@ -75,13 +75,13 @@
   [class*='swiper-gallery__image-wrapper_overlay']
   .swiper-gallery__title_on-hover
   > div {
-  background: none !important;
+  background-color: transparent !important;
 }
 .reacg-gallery
   .swiper-gallery__image-wrapper_overlay:hover
   .swiper-gallery__title
   > div {
-  background: none;
+  background-color: transparent;
 }
 .reacg-gallery
   [class*='swiper-gallery__image-wrapper_overlay-icon']:hover
@@ -447,7 +447,7 @@
   [class*='swiper-gallery__image-wrapper_overlay']
   .swiper-gallery__title_on-hover
   > div {
-  background: none !important;
+  background-color: transparent !important;
 }
 
 /* Black overlay */
@@ -455,7 +455,7 @@
   .swiper-gallery__image-wrapper_overlay:hover
   .swiper-gallery__title
   > div {
-  background: none;
+  background-color: transparent;
 }
 
 .reacg-gallery .swiper-gallery__image-wrapper_overlay {
@@ -469,13 +469,13 @@
 
 .reacg-gallery .swiper-gallery__image-wrapper_overlay img,
 .reacg-gallery .swiper-gallery__image-wrapper_overlay video {
-  -webkit-transition: opacity 0.3s ease-in-out;
-  transition: opacity 0.3s ease-in-out;
+  -webkit-transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease;
 }
 
 .reacg-gallery .swiper-gallery__image-wrapper_overlay:hover img,
 .reacg-gallery .swiper-gallery__image-wrapper_overlay:hover video {
-  opacity: 0.3;
+  opacity: 0.6;
 }
 
 /* Black overlay with icon */
@@ -488,15 +488,15 @@
 
 .reacg-gallery [class*='swiper-gallery__image-wrapper_overlay-icon'] img,
 .reacg-gallery [class*='swiper-gallery__image-wrapper_overlay-icon'] video {
-  -webkit-transition: opacity 0.3s ease-in-out;
-  transition: opacity 0.3s ease-in-out;
+  -webkit-transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease;
 }
 
 .reacg-gallery [class*='swiper-gallery__image-wrapper_overlay-icon']:hover img,
 .reacg-gallery
   [class*='swiper-gallery__image-wrapper_overlay-icon']:hover
   video {
-  opacity: 0.3;
+  opacity: 0.6;
 }
 
 .reacg-gallery [class*='swiper-gallery__image-wrapper_overlay-icon']::after {
@@ -512,8 +512,8 @@
   font-size: 32px;
   opacity: 0;
   pointer-events: none;
-  -webkit-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.6s ease;
+  transition: all 0.6s ease;
 }
 
 .reacg-gallery

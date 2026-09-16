@@ -29,8 +29,8 @@
 
 .reacg-gallery .thumbnail-gallery__title_on-hover {
   opacity: 0;
-  -webkit-transition: opacity 0.3s ease-in-out;
-  transition: opacity 0.3s ease-in-out;
+  -webkit-transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease;
 }
 
 .reacg-gallery
@@ -287,7 +287,7 @@
   [class*='thumbnail-gallery__image-wrapper_overlay']
   .thumbnail-gallery__title_on-hover
   > div {
-  background: none !important;
+  background-color: transparent !important;
 }
 
 /* Black overlay */
@@ -295,7 +295,7 @@
   .thumbnail-gallery__image-wrapper_overlay:hover
   .thumbnail-gallery__title
   > div {
-  background: none;
+  background-color: transparent;
 }
 
 .reacg-gallery .thumbnail-gallery__image-wrapper_overlay {
@@ -309,13 +309,13 @@
 
 .reacg-gallery .thumbnail-gallery__image-wrapper_overlay img,
 .reacg-gallery .thumbnail-gallery__image-wrapper_overlay video {
-  -webkit-transition: opacity 0.3s ease-in-out;
-  transition: opacity 0.3s ease-in-out;
+  -webkit-transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease;
 }
 
 .reacg-gallery .thumbnail-gallery__image-wrapper_overlay:hover img,
 .reacg-gallery .thumbnail-gallery__image-wrapper_overlay:hover video {
-  opacity: 0.3;
+  opacity: 0.6;
 }
 
 /* Black overlay with icon */
@@ -329,8 +329,8 @@
 
 .reacg-gallery [class*='thumbnail-gallery__image-wrapper_overlay-icon'] img,
 .reacg-gallery [class*='thumbnail-gallery__image-wrapper_overlay-icon'] video {
-  -webkit-transition: opacity 0.3s ease-in-out;
-  transition: opacity 0.3s ease-in-out;
+  -webkit-transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease;
 }
 
 .reacg-gallery
@@ -339,7 +339,7 @@
 .reacg-gallery
   [class*='thumbnail-gallery__image-wrapper_overlay-icon']:hover
   video {
-  opacity: 0.3;
+  opacity: 0.6;
 }
 
 .reacg-gallery [class*='thumbnail-gallery__image-wrapper_overlay-icon']::after {
@@ -355,8 +355,8 @@
   font-size: 32px;
   opacity: 0;
   pointer-events: none;
-  -webkit-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
+  -webkit-transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease;
 }
 
 .reacg-gallery

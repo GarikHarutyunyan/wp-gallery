@@ -209,13 +209,13 @@
   [class*='scroller-gallery__image-wrapper_overlay']
   .scroller-gallery__title_on-hover
   > div {
-  background: none !important;
+  background-color: transparent !important;
 }
 .reacg-gallery
   .scroller-gallery__image-wrapper_overlay:hover
   .scroller-gallery__title
   > div {
-  background: none;
+  background-color: transparent;
 }
 .reacg-gallery
   [class*='scroller-gallery__image-wrapper_overlay-icon']:hover
@@ -245,8 +245,8 @@
   transition:
     transform 0.3s ease-in-out,
     filter 0.3s ease-in-out,
-    opacity 0.3s ease-in-out,
-    margin-left 0.3s ease-in-out;
+    opacity 0.6s ease,
+    margin-left 0.3s ease;
 }
 
 .reacg-gallery .reacg-scroller__image-wrapper_zoom-out img,
@@ -364,7 +364,7 @@
 .reacg-gallery
   [class*='reacg-scroller__image-wrapper_overlay-icon']:hover
   .re-image__wrapper {
-  opacity: 0.3;
+  opacity: 0.6;
 }
 
 .reacg-gallery [class*='reacg-scroller__image-wrapper_overlay-icon']::after {
@@ -379,7 +379,7 @@
   background-size: contain;
   opacity: 0;
   pointer-events: none;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.6s ease;
 }
 
 .reacg-gallery
