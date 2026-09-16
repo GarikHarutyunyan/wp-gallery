@@ -73,6 +73,8 @@ interface IGridImageProps {
   buttonUrl?: string;
   openInNewTab?: boolean;
   showVideoCover: boolean;
+  autoHeight?: boolean;
+  verticalAlignment?: 'top' | 'center' | 'bottom';
 }
 
 const GridImage = ({
@@ -125,6 +127,8 @@ const GridImage = ({
   buttonUrl,
   openInNewTab,
   showVideoCover,
+  autoHeight,
+  verticalAlignment,
 }: IGridImageProps) => {
   if (overlayTextBackground === '') {
     overlayTextBackground = 'unset';
@@ -617,6 +621,12 @@ const GridImage = ({
       )}
       onClick={onClick}
       style={{
+        alignSelf:
+          verticalAlignment === 'bottom'
+            ? 'end'
+            : verticalAlignment === 'center'
+            ? 'center'
+            : 'start',
         padding: itemBorder + 'px',
         background: itemBackgroundColor,
         borderRadius: itemBorderRadius + '%',
@@ -695,7 +705,7 @@ const GridImage = ({
           )}
           style={{
             width: width + 'px',
-            height: height + 'px',
+            height: autoHeight ? 'auto' : height + 'px',
             margin: margin + 'px',
             borderRadius: borderRadius + '%',
             boxSizing: 'border-box',
@@ -717,7 +727,7 @@ const GridImage = ({
               originalHeight={image.original.height}
               style={{
                 width: width + 'px',
-                height: height + 'px',
+                height: autoHeight ? 'auto' : height + 'px',
               }}
             />
           )}
@@ -740,7 +750,7 @@ const GridImage = ({
                 originalHeight: image.original.height,
                 style: {
                   width: width + 'px',
-                  height: height + 'px',
+                  height: autoHeight ? 'auto' : height + 'px',
                 },
               }}
             />

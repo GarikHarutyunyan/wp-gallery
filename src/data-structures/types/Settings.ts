@@ -26,6 +26,8 @@ import {
 
 export interface IGridSettings {
   fillContainer: boolean;
+  autoHeight: boolean;
+  alignment: 'top' | 'center' | 'bottom';
   aspectRatio: string;
   width?: number | undefined;
   height?: number | undefined;
@@ -571,4 +573,3 @@ export type ReacgOptionsMeta = {
   hasChanges: boolean;
   galleryId: string | number;
 };
-

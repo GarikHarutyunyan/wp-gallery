@@ -24,6 +24,8 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
   const {images} = useData();
   const {
     fillContainer,
+    autoHeight = false,
+    alignment = 'top',
     aspectRatio,
     width = 1,
     height = 1,
@@ -214,7 +216,15 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
           className={'reacg-thumbnails-wrapper-' + validColumnsCount}
           cols={validColumnsCount}
           gap={+gap}
-          style={{margin: '0 auto'}}
+          style={{
+            margin: '0 auto',
+            alignItems:
+              alignment === 'top'
+                ? 'start'
+                : alignment === 'bottom'
+                ? 'end'
+                : 'center',
+          }}
           ref={listRef}
         >
           {images?.map((image, index) => (
@@ -223,6 +233,8 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
               image={image}
               width={getWidth}
               height={getHeight}
+              autoHeight={autoHeight}
+              verticalAlignment={alignment}
               onClick={onImageClick(index)}
               showTitle={showTitle}
               titleSource={titleSource}

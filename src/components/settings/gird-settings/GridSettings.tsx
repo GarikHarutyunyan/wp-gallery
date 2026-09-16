@@ -19,7 +19,15 @@ const GridSettings = ({
   isLoading,
 }: IGridSettingsProps) => {
   const {resetTemplate} = useTemplates();
-  const {fillContainer, aspectRatio, width, height, columns} = settings;
+  const {
+    fillContainer,
+    autoHeight,
+    alignment,
+    aspectRatio,
+    width,
+    height,
+    columns,
+  } = settings;
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
@@ -64,6 +72,35 @@ const GridSettings = ({
             ) : (
               <>
                 <Filter isLoading={isLoading}>
+                  <SwitchControl
+                    id={'autoHeight'}
+                    name={'Auto height'}
+                    tooltip={
+                      <p>
+                        Keeps each image’s original proportions by setting its
+                        height automatically.
+                      </p>
+                    }
+                    value={autoHeight}
+                    onChange={onInputValueChange}
+                  />
+                </Filter>
+                {autoHeight && (
+                  <Filter isLoading={isLoading}>
+                    <SelectControl
+                      id={'alignment'}
+                      name={'Alignment'}
+                      value={alignment}
+                      options={[
+                        {value: 'top', title: 'Top'},
+                        {value: 'center', title: 'Center'},
+                        {value: 'bottom', title: 'Bottom'},
+                      ]}
+                      onChange={onInputValueChange}
+                    />
+                  </Filter>
+                )}
+                <Filter isLoading={isLoading}>
                   <NumberControl
                     id={'width'}
                     name={'Image width'}
@@ -73,27 +110,29 @@ const GridSettings = ({
                     unit={'px'}
                   />
                 </Filter>
+                {!autoHeight && (
+                  <Filter isLoading={isLoading}>
+                    <NumberControl
+                      id={'height'}
+                      name={'Image height'}
+                      value={height}
+                      onChange={onInputValueChange}
+                      min={0}
+                      unit={'px'}
+                    />
+                  </Filter>
+                )}
                 <Filter isLoading={isLoading}>
                   <NumberControl
-                    id={'height'}
-                    name={'Image height'}
-                    value={height}
+                    id={'columns'}
+                    name={'Columns'}
+                    value={columns}
                     onChange={onInputValueChange}
-                    min={0}
-                    unit={'px'}
+                    min={1}
                   />
                 </Filter>
               </>
             )}
-            <Filter isLoading={isLoading}>
-              <NumberControl
-                id={'columns'}
-                name={'Columns'}
-                value={columns}
-                onChange={onInputValueChange}
-                min={1}
-              />
-            </Filter>
             <ClickActionSettings isLoading={isLoading} />
           </Grid>
         }
