@@ -108,7 +108,6 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
               fontSize: `${titleFontSize}px`,
               fontFamily: titleFontFamily,
               lineHeight: 'normal',
-              whiteSpace: titleMaxRowsCount ? 'normal !important' : 'nowrap',
               display: titleMaxRowsCount ? '-webkit-box !important' : 'block',
               WebkitLineClamp: titleMaxRowsCount,
               WebkitBoxOrient: titleMaxRowsCount ? 'vertical' : 'initial',
@@ -118,21 +117,15 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
               fontFamily: titleFontFamily,
               color: captionFontColor,
               lineHeight: 'normal',
-              whiteSpace:
-                hasSharedCaption && captionMaxRowsCount
-                  ? 'normal !important'
-                  : 'nowrap',
             },
             '& .photo-album-item__caption': {
-              whiteSpace:
-                hasSharedCaption && captionMaxRowsCount
-                  ? 'normal !important'
-                  : 'nowrap',
               display:
                 hasSharedCaption && captionMaxRowsCount
                   ? '-webkit-box !important'
                   : 'block',
-              WebkitLineClamp: hasSharedCaption ? captionMaxRowsCount : undefined,
+              WebkitLineClamp: hasSharedCaption
+                ? captionMaxRowsCount
+                : undefined,
               WebkitBoxOrient:
                 hasSharedCaption && captionMaxRowsCount
                   ? 'vertical'
@@ -221,10 +214,8 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
               fontFamily: titleFontFamily,
               color: captionFontColor,
               lineHeight: 'normal',
-              whiteSpace: captionMaxRowsCount ? 'normal !important' : 'nowrap',
             },
             '& .photo-album-item__caption': {
-              whiteSpace: captionMaxRowsCount ? 'normal !important' : 'nowrap',
               display: captionMaxRowsCount ? '-webkit-box !important' : 'block',
               WebkitLineClamp: captionMaxRowsCount,
               WebkitBoxOrient: captionMaxRowsCount ? 'vertical' : 'initial',

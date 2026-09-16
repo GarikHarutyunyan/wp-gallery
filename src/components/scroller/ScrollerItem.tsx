@@ -161,21 +161,15 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
               fontFamily: titleFontFamily,
               color: captionFontColor,
               lineHeight: 'normal',
-              whiteSpace:
-                hasSharedCaption && captionMaxRowsCount
-                  ? 'normal !important'
-                  : 'nowrap',
             },
             '& .thumbnail-image__caption': {
-              whiteSpace:
-                hasSharedCaption && captionMaxRowsCount
-                  ? 'normal !important'
-                  : 'nowrap',
               display:
                 hasSharedCaption && captionMaxRowsCount
                   ? '-webkit-box !important'
                   : 'block',
-              WebkitLineClamp: hasSharedCaption ? captionMaxRowsCount : undefined,
+              WebkitLineClamp: hasSharedCaption
+                ? captionMaxRowsCount
+                : undefined,
               WebkitBoxOrient:
                 hasSharedCaption && captionMaxRowsCount
                   ? 'vertical'
@@ -185,7 +179,6 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
               fontSize: `${titleFontSize}px`,
               fontFamily: titleFontFamily,
               lineHeight: 'normal',
-              whiteSpace: titleMaxRowsCount ? 'normal !important' : 'nowrap',
               display: titleMaxRowsCount ? '-webkit-box !important' : 'block',
               WebkitLineClamp: titleMaxRowsCount,
               WebkitBoxOrient: titleMaxRowsCount ? 'vertical' : 'initial',
@@ -303,10 +296,8 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
               fontFamily: titleFontFamily,
               color: captionFontColor,
               lineHeight: 'normal',
-              whiteSpace: captionMaxRowsCount ? 'normal !important' : 'nowrap',
             },
             '& .scroller-image__caption': {
-              whiteSpace: captionMaxRowsCount ? 'normal !important' : 'nowrap',
               display: captionMaxRowsCount ? '-webkit-box !important' : 'block',
               WebkitLineClamp: captionMaxRowsCount,
               WebkitBoxOrient: captionMaxRowsCount ? 'vertical' : 'initial',
