@@ -36,6 +36,7 @@ const ScrollerMedia = ({
           className: 'reacg-scroller-media',
           originalWidth: item.image.original.width,
           originalHeight: item.image.original.height,
+          cropPosition: item.image.crop_position,
         }}
         className="reacg-scroller-media"
       />
@@ -53,6 +54,7 @@ const ScrollerMedia = ({
       className="reacg-scroller-media"
       originalWidth={item.image.original.width}
       originalHeight={item.image.original.height}
+      cropPosition={item.image.crop_position}
     />
   );
 };

@@ -1,3 +1,8 @@
+.reacg-lightbox .reacg-crop-position-container img,
+.reacg-lightbox .reacg-crop-position-container video {
+  object-position: var(--reacg-crop-position, center center);
+}
+
 .react-lightbox__background {
   position: fixed;
   width: 100vw; /* or 100% + padding(which is added to the <body> to compensate for the missing scrollbar to avoid layout shift.) */

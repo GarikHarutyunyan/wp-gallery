@@ -55,6 +55,13 @@ const getThumbnailLabel = (slide: Slide): string => {
   return slideData.alt || '';
 };
 
+const getCropPosition = (slide: Slide): string => {
+  return (
+    (slide as Slide & {cropPosition?: string}).cropPosition ||
+    'center center'
+  );
+};
+
 type RenderThumbnailProps = {
   slide: Slide;
   rect: {width: number; height: number};
@@ -82,6 +89,7 @@ const renderThumbnailWithAriaLabel = ({
           render={render}
           rect={rect}
           imageFit={imageFit}
+          style={{objectPosition: getCropPosition(slide)}}
         />
       </ThumbnailAriaLabel>
     );
@@ -98,6 +106,7 @@ const renderThumbnailWithAriaLabel = ({
             render={render}
             rect={rect}
             imageFit={imageFit}
+            style={{objectPosition: getCropPosition(slide)}}
           />
         ) : null}
         <PlayArrowIcon

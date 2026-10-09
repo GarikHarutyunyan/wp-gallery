@@ -547,6 +547,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         },
         alt: image.alt,
         srcSet: srcSet,
+        cropPosition: image.crop_position || 'center center',
         download: {url: image.original.url, filename: image.title},
       };
     });
@@ -713,6 +714,18 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         render={{
           buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
           slideFooter: () => <WatermarkOverlay />,
+          slideContainer: ({slide, children}: any) => (
+            <div
+              className="reacg-crop-position-container"
+              style={{
+                display: 'contents',
+                '--reacg-crop-position':
+                  slide.cropPosition || 'center center',
+              } as React.CSSProperties}
+            >
+              {children}
+            </div>
+          ),
           thumbnail: renderThumbnailWithAriaLabel,
         }}
         carousel={{

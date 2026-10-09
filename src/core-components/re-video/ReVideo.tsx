@@ -62,6 +62,10 @@ const ReVideo = ({
         poster={poster}
         {...props}
         className={'gallery__video'}
+        style={{
+          ...props.style,
+          objectPosition: item?.crop_position || 'center center',
+        }}
         autoPlay
         muted
         playsInline

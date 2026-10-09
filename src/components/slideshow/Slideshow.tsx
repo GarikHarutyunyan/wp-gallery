@@ -360,6 +360,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
         },
         alt: image.alt,
         srcSet: srcSet,
+        cropPosition: image.crop_position || 'center center',
         download: {url: image.original.url, filename: image.title},
       };
     });
@@ -629,6 +630,18 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
         render={{
           buttonSlideshow: isSlideshowAllowed ? undefined : () => null,
           slideFooter: () => <WatermarkOverlay rootRef={slideshowRootRef} />,
+          slideContainer: ({slide, children}: any) => (
+            <div
+              className="reacg-crop-position-container"
+              style={{
+                display: 'contents',
+                '--reacg-crop-position':
+                  slide.cropPosition || 'center center',
+              } as React.CSSProperties}
+            >
+              {children}
+            </div>
+          ),
           thumbnail: renderThumbnailWithAriaLabel,
         }}
         carousel={{

@@ -375,6 +375,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             {...imageProps}
             originalWidth={image.original.width}
             originalHeight={image.original.height}
+            cropPosition={image.crop_position}
             style={{
               width: '100%',
               height: '100%',
@@ -391,6 +392,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
               ...imageProps,
               originalWidth: image.original.width,
               originalHeight: image.original.height,
+              cropPosition: image.crop_position,
               style: {
                 width: '100%',
                 height: '100%',

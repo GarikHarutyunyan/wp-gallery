@@ -189,6 +189,11 @@
   position: absolute;
 }
 
+.reacg-slideshow .reacg-crop-position-container img,
+.reacg-slideshow .reacg-crop-position-container video {
+  object-position: var(--reacg-crop-position, center center);
+}
+
 .reacg-slideshow-thumbnail-arrows {
   pointer-events: none;
   position: absolute;

@@ -27,6 +27,8 @@ export interface IImageDTO {
   action_url: string;
   item_url: string;
   checkout_url: string;
+  /** CSS object-position used when this image is cropped to fit a layout item. */
+  crop_position?: string;
   image_title?: string;
   image_caption?: string;
   image_alt?: string;

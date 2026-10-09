@@ -725,6 +725,7 @@ const GridImage = ({
               loading="eager"
               originalWidth={image.original.width}
               originalHeight={image.original.height}
+              cropPosition={image.crop_position}
               style={{
                 width: width + 'px',
                 height: autoHeight ? 'auto' : height + 'px',
@@ -748,6 +749,7 @@ const GridImage = ({
                 loading: 'eager',
                 originalWidth: image.original.width,
                 originalHeight: image.original.height,
+                cropPosition: image.crop_position,
                 style: {
                   width: width + 'px',
                   height: autoHeight ? 'auto' : height + 'px',

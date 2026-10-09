@@ -508,6 +508,7 @@ const SwiperImage = forwardRef(
               alt={image.alt}
               originalWidth={image.original.width}
               originalHeight={image.original.height}
+              cropPosition={image.crop_position}
             />
           )}
           {image.type === ImageType.VIDEO && (
@@ -524,6 +525,7 @@ const SwiperImage = forwardRef(
                 sizes: `${size}px`,
                 originalWidth: image.original.width,
                 originalHeight: image.original.height,
+                cropPosition: image.crop_position,
               }}
             />
           )}

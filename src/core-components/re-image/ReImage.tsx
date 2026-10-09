@@ -14,12 +14,14 @@ interface IReImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   wrapperRef: any;
   originalWidth?: number;
   originalHeight?: number;
+  cropPosition?: string;
 }
 
 const ReImage = ({
   wrapperRef,
   originalWidth,
   originalHeight,
+  cropPosition,
   ...props
 }: IReImageProps): ReactElement => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -54,6 +56,7 @@ const ReImage = ({
       ? `${originalHeight}px`
       : undefined,
     ...props.style,
+    objectPosition: cropPosition || undefined,
   } as CSSProperties;
 
   return (
