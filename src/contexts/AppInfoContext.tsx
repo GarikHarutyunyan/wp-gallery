@@ -1,8 +1,18 @@
 import React, {useContext} from 'react';
 
+/**
+ * 'gallery': renders a gallery instance (optionally with its controls
+ *            portaled into `optionsContainerSelector`, as on the dashboard).
+ * 'settings': renders only the settings UI for a gallery. Used by page
+ *            builders, where the preview gallery lives in a canvas iframe and
+ *            receives option changes over postMessage.
+ */
+export type AppMode = 'gallery' | 'settings';
+
 interface IAppInfo {
   galleryId?: string;
   showControls?: boolean;
+  mode?: AppMode;
   baseUrl?: string;
   nonce?: string;
   pluginUrl?: string;
@@ -20,6 +30,7 @@ type AppInfoProviderProps = React.PropsWithChildren & IAppInfo;
 const AppInfoProvider: React.FC<AppInfoProviderProps> = ({
   galleryId,
   showControls,
+  mode = 'gallery',
   baseUrl,
   nonce,
   pluginUrl,
@@ -35,6 +46,7 @@ const AppInfoProvider: React.FC<AppInfoProviderProps> = ({
       value={{
         galleryId,
         showControls,
+        mode,
         baseUrl,
         nonce,
         pluginUrl,

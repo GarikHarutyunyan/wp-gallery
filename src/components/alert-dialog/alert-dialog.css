@@ -49,7 +49,7 @@
   color: #ffffff;
 }
 
-.MuiDialog-root.MuiModal-root {
+.reacg-alert-dialog.MuiDialog-root {
   z-index: 10000000;
 }
 

@@ -25,10 +25,17 @@ import React, {
   lazy,
   ReactNode,
   Suspense,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from 'react';
+import {
+  broadcastOptions,
+  onOptionsMessage,
+  onOptionsRequest,
+  requestOptions,
+} from 'utils/optionsSync';
 import {
   blogMockSettings,
   cardsMockSettings,
@@ -100,10 +107,12 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     galleryId,
     pluginVersion,
     showControls,
+    mode,
     baseUrl,
     nonce,
     getOptionsTimestamp,
   } = useAppInfo();
+  const isSettingsApp: boolean = mode === 'settings';
   const [gridSettings, setGridSettings] = useState<IGridSettings>();
   const [mosaicSettings, setMosaicSettings] = useState<IMosaicSettings>();
   const [justifiedSettings, setJustifiedSettings] =
@@ -147,7 +156,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     custom_css: '',
   });
 
+  const hasChangesRef = useRef<boolean>(false);
+
   const emitOptionsChange = (options: ISettingsDTO, hasChangesVal: boolean) => {
+    hasChangesRef.current = hasChangesVal;
     try {
       const globalObj = (window as any).reacg_global;
       if (typeof globalObj?.onOptionsChange === 'function') {
@@ -159,13 +171,23 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     } catch (e) {
       console.error('Error in window.reacg_global.onOptionsChange:', e);
     }
+
+    // The standalone settings app drives preview galleries that live in
+    // other documents (page builder canvases).
+    if (isSettingsApp && galleryId) {
+      broadcastOptions(String(galleryId), options, hasChangesVal);
+    }
   };
 
-  const getDataFromWindow = () => {
-    const allData = (window as any).reacg_data;
-    const currentData = allData?.[galleryId as string];
-    const optionsData: any = currentData?.options;
-    const newSettings: ISettingsDTO = optionsData;
+  /**
+   * Apply a full options object to the local state. Used for options coming
+   * from the page (`reacg_data`) and for live updates pushed by a settings app
+   * running in another document.
+   */
+  const applyOptions = (newSettings: ISettingsDTO, emit: boolean) => {
+    if (!newSettings) {
+      return;
+    }
     const template_id = newSettings?.template_id?.toString();
 
     setType(newSettings.type);
@@ -214,7 +236,16 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       custom_css: newSettings.custom_css || '',
     };
     optionsRef.current = fullOptions;
-    emitOptionsChange(fullOptions, false);
+    if (emit) {
+      emitOptionsChange(fullOptions, false);
+    }
+  };
+
+  const getDataFromWindow = () => {
+    const allData = (window as any).reacg_data;
+    const currentData = allData?.[galleryId as string];
+    const optionsData: any = currentData?.options;
+    applyOptions(optionsData as ISettingsDTO, true);
   };
 
   const getData = async () => {
@@ -339,6 +370,31 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   }, []);
 
+  // Preview galleries (no controls) accept live option updates from a
+  // settings app hosted in another same-origin document, and ask for the
+  // latest options on mount so unsaved edits survive a builder re-render.
+  useEffect(() => {
+    if (showControls || !galleryId) {
+      return;
+    }
+    const unsubscribe = onOptionsMessage(String(galleryId), (options) => {
+      applyOptions(options, false);
+    });
+    requestOptions(String(galleryId));
+    return unsubscribe;
+  }, [galleryId, showControls]);
+
+  // The settings app answers option requests from preview galleries.
+  useEffect(() => {
+    if (!isSettingsApp || !galleryId) {
+      return;
+    }
+    return onOptionsRequest(String(galleryId), () => ({
+      options: optionsRef.current,
+      hasChanges: hasChangesRef.current,
+    }));
+  }, [galleryId, isSettingsApp]);
+
   const changeType = async (newType: GalleryType) => {
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'options/' + galleryId
@@ -396,7 +452,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
   const {isPro} = usePro();
 
-  const onSave = async (): Promise<void> => {
+  const onSave = async (params?: {silent?: boolean}): Promise<boolean> => {
+    const silent: boolean = !!params?.silent;
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'options/' + galleryId
       : undefined;
@@ -489,10 +546,13 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         optionsRef.current = savedOptions;
         emitOptionsChange(savedOptions, false);
 
-        enqueueSnackbar('Options are up to date!', {
-          variant: 'success',
-          anchorOrigin: {horizontal: 'right', vertical: 'top'},
-        });
+        if (!silent) {
+          enqueueSnackbar('Options are up to date!', {
+            variant: 'success',
+            anchorOrigin: {horizontal: 'right', vertical: 'top'},
+          });
+        }
+        return true;
       } catch (error) {
         enqueueSnackbar('Cannot update options!', {
           variant: 'error',
@@ -502,6 +562,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           errorMessage: 'Cannot update options',
         });
         console.error(error);
+        return false;
       }
     } else {
       enqueueSnackbar('Cannot update options!', {
@@ -511,6 +572,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       (window as any).reacg_open_error_dialog?.({
         errorMessage: 'Cannot update options',
       });
+      return false;
     }
   };
 
@@ -610,7 +672,40 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
   };
 
+  // Expose the mounted controls to host scripts (page builder panels) so they
+  // can flush unsaved changes through the same path as the Save button.
+  const onSaveRef = useRef(onSave);
+  const onResetRef = useRef(onReset);
+  onSaveRef.current = onSave;
+  onResetRef.current = onReset;
+
+  useEffect(() => {
+    if (!showControls || !galleryId || typeof window === 'undefined') {
+      return;
+    }
+    const globalObj = ((window as any).reacg_global =
+      (window as any).reacg_global || {});
+    globalObj.settings_api = globalObj.settings_api || {};
+    const api = {
+      save: (params?: {silent?: boolean}) => onSaveRef.current(params),
+      reset: () => onResetRef.current(),
+      hasChanges: () => hasChangesRef.current,
+      getOptions: () => optionsRef.current,
+    };
+    globalObj.settings_api[String(galleryId)] = api;
+
+    return () => {
+      if (globalObj.settings_api?.[String(galleryId)] === api) {
+        delete globalObj.settings_api[String(galleryId)];
+      }
+    };
+  }, [galleryId, showControls]);
+
   const renderChildren = (): ReactNode => {
+    if (isSettingsApp) {
+      return null;
+    }
+
     const handleContextMenu = (e: React.MouseEvent) => {
       if (generalSettings?.enableRightClickProtection) {
         e.preventDefault();

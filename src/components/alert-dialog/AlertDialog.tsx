@@ -79,6 +79,7 @@ const AlertDialog: React.FC<IAlertDialogProps> = () => {
   return (
     <Dialog
       sx={{borderRadius: '6px'}}
+      className={'reacg-alert-dialog'}
       open={isVisible}
       onClose={handleClose}
       PaperProps={{sx: {borderRadius: '6px'}}}
