@@ -341,6 +341,7 @@ const lightboxMockSettings: ILightboxSettings = {
   thumbnailGap: 10,
   backgroundColor: '',
   textPosition: LightboxTextPosition.BOTTOM,
+  isTextFullWidth: true,
   textFontFamily: 'Roboto',
   textColor: 'White',
   textBackground: 'rgba(0, 0, 0, 0.5)',

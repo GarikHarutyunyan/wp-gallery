@@ -10,14 +10,20 @@ export type DescriptionProps = Pick<any, 'description'>;
 export function Description({description, style}: DescriptionProps | any) {
   const {descriptionTextAlign, descriptionMaxLines} = useCaptionsProps();
   const {styles} = useLightboxProps() as any;
-  const {visible} = useCaptions();
+  const {visible, isSlideReady} = useCaptions();
 
-  if (!visible) return null;
+  if (!visible || !description) return null;
 
   // noinspection SuspiciousTypeOfGuard
   return (
     <div
-      style={{...styles.captionsDescriptionContainer, style}}
+      style={{
+        ...styles.captionsDescriptionContainer,
+        opacity: isSlideReady ? 1 : 0,
+        visibility: isSlideReady ? 'visible' : 'hidden',
+        pointerEvents: isSlideReady ? 'auto' : 'none',
+        style,
+      }}
       className={clsx(
         cssPrefix('captions_container'),
         cssPrefix('description_container')

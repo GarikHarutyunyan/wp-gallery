@@ -193,6 +193,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     thumbnailGap,
     backgroundColor,
     textPosition,
+    isTextFullWidth = true,
     textFontFamily,
     textColor,
     textBackground,
@@ -227,6 +228,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const [index, setIndex] = useState(0);
   const [buttonContainerHeight, setButtonContainerHeight] = useState<number>(0);
+  const [currentMediaWidth, setCurrentMediaWidth] = useState<number | null>(
+    null
+  );
   const [thumbnailContainer, setThumbnailContainer] =
     useState<HTMLElement | null>(null);
   const {galleryId} = useAppInfo();
@@ -452,8 +456,15 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       const srcSet: ISrcSetItem[] = getSrcSet(image.sizes);
       const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
 
+      const hasCaptionContent = Boolean(
+        (showTitle && image[titleSource]) ||
+          (showCaption && image[captionSource]) ||
+          (showDescription && image[descriptionSource]) ||
+          showButton
+      );
+
       return {
-        description: (
+        description: hasCaptionContent ? (
           <>
             {((showTitle && image[titleSource]) ||
               (showCaption && image[captionSource])) && (
@@ -530,7 +541,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               </div>
             )}
           </>
-        ),
+        ) : undefined,
         type: image.type,
         sources: [
           {
@@ -580,6 +591,13 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     openInNewTab,
   ]);
 
+  const responsivePadding = useMemo(() => {
+    if (innerWidth <= 768 || innerHeight <= 576) {
+      return padding / 10;
+    }
+    return padding;
+  }, [innerWidth, innerHeight, padding]);
+
   const slideMargins = useMemo(() => {
     return getSlideMargins({
       images,
@@ -622,12 +640,174 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     buttonContainerHeight,
   ]);
 
-  const responsivePadding = useMemo(() => {
-    if (innerWidth <= 768 || innerHeight <= 576) {
-      return padding / 10;
+  useEffect(() => {
+    if (activeIndex >= 0) {
+      setIndex(activeIndex);
     }
-    return padding;
-  }, [innerWidth, innerHeight, padding]);
+  }, [activeIndex]);
+
+  useEffect(() => {
+    if (activeIndex < 0 || isTextFullWidth) {
+      setCurrentMediaWidth(null);
+      return;
+    }
+
+    let observedSlide: HTMLElement | null = null;
+    let observedMedia: HTMLElement | null = null;
+    let resizeObserver: ResizeObserver | null = null;
+
+    function getRenderedMediaWidth(): number | null {
+      const portalRoot = document.getElementById(
+        `reacg-lightbox__background-helper${lightboxId}`
+      );
+      const scope: ParentNode = portalRoot || document;
+      const slide = scope.querySelector(
+        '.reacg-lightbox .yarl__slide_current'
+      ) as HTMLElement | null;
+
+      const mediaElements = scope.querySelectorAll(
+        '.reacg-lightbox .yarl__slide_current img, .reacg-lightbox .yarl__slide_current video'
+      );
+      const media = (Array.from(mediaElements).find(
+        (el) => (el as HTMLElement).style.visibility !== 'hidden'
+      ) || mediaElements[mediaElements.length - 1]) as HTMLElement | undefined;
+
+      if (slide && slide !== observedSlide) {
+        if (observedSlide) {
+          resizeObserver?.unobserve(observedSlide);
+        }
+        observedSlide = slide;
+        resizeObserver?.observe(slide);
+      }
+
+      if (media && media !== observedMedia) {
+        if (observedMedia) {
+          resizeObserver?.unobserve(observedMedia);
+          observedMedia.removeEventListener('load', updateMediaWidth);
+          observedMedia.removeEventListener('loadedmetadata', updateMediaWidth);
+          observedMedia.removeEventListener('loadeddata', updateMediaWidth);
+        }
+        observedMedia = media;
+        resizeObserver?.observe(media);
+        media.addEventListener('load', updateMediaWidth);
+        media.addEventListener('loadedmetadata', updateMediaWidth);
+        media.addEventListener('loadeddata', updateMediaWidth);
+      }
+
+      if (media) {
+        const boxWidth = media.clientWidth || media.offsetWidth;
+        const boxHeight = media.clientHeight || media.offsetHeight;
+
+        if (boxWidth > 0 && boxHeight > 0) {
+          const objectFit = window.getComputedStyle(media).objectFit;
+          if (objectFit === 'cover') {
+            return Math.round(boxWidth);
+          }
+          if (media instanceof HTMLImageElement) {
+            if (media.naturalWidth > 0 && media.naturalHeight > 0) {
+              return Math.round(
+                Math.min(
+                  boxWidth,
+                  boxHeight * (media.naturalWidth / media.naturalHeight)
+                )
+              );
+            }
+          } else if (media instanceof HTMLVideoElement) {
+            if (media.videoWidth > 0 && media.videoHeight > 0) {
+              return Math.round(
+                Math.min(
+                  boxWidth,
+                  boxHeight * (media.videoWidth / media.videoHeight)
+                )
+              );
+            }
+            return Math.round(boxWidth);
+          } else {
+            return Math.round(boxWidth);
+          }
+        }
+      }
+
+      if (slide) {
+        const currentImage = images?.[index];
+        const largestSrc = currentImage?.sizes?.length
+          ? getLargestSrcItem(currentImage.sizes)
+          : undefined;
+        const fallbackW =
+          largestSrc?.width || currentImage?.original?.width || 0;
+        const fallbackH =
+          largestSrc?.height || currentImage?.original?.height || 0;
+
+        if (fallbackW > 0 && fallbackH > 0) {
+          const slideStyles = window.getComputedStyle(slide);
+          const availWidth =
+            slide.clientWidth -
+            parseFloat(slideStyles.paddingLeft || '0') -
+            parseFloat(slideStyles.paddingRight || '0');
+          const availHeight =
+            slide.clientHeight -
+            parseFloat(slideStyles.paddingTop || '0') -
+            parseFloat(slideStyles.paddingBottom || '0');
+
+          if (availWidth > 0 && availHeight > 0) {
+            const maxW = Math.min(availWidth, fallbackW);
+            const maxH = Math.min(availHeight, fallbackH);
+            return Math.round(Math.min(maxW, maxH * (fallbackW / fallbackH)));
+          }
+        }
+      }
+
+      return null;
+    }
+
+    function updateMediaWidth() {
+      const nextWidth = getRenderedMediaWidth();
+      if (nextWidth && nextWidth > 0) {
+        setCurrentMediaWidth((prevWidth) =>
+          prevWidth !== nextWidth ? nextWidth : prevWidth
+        );
+      }
+    }
+
+    resizeObserver = new ResizeObserver(updateMediaWidth);
+    const mutationObserver = new MutationObserver(updateMediaWidth);
+
+    updateMediaWidth();
+    window.addEventListener('resize', updateMediaWidth);
+    mutationObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'src'],
+    });
+
+    return () => {
+      window.removeEventListener('resize', updateMediaWidth);
+      mutationObserver.disconnect();
+      resizeObserver?.disconnect();
+      if (observedMedia) {
+        observedMedia.removeEventListener('load', updateMediaWidth);
+        observedMedia.removeEventListener('loadedmetadata', updateMediaWidth);
+        observedMedia.removeEventListener('loadeddata', updateMediaWidth);
+      }
+    };
+  }, [
+    activeIndex,
+    isTextFullWidth,
+    index,
+    images,
+    lightboxId,
+    isFullscreen,
+    width,
+    height,
+    responsivePadding,
+    thumbnailsPosition,
+    thumbnailWidth,
+    thumbnailHeight,
+    thumbnailPadding,
+    slideMargins.marginTop,
+    slideMargins.marginBottom,
+  ]);
 
   const handleThumbnailNavigate = (direction: -1 | 1) => {
     if (direction === -1) {
@@ -684,6 +864,12 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
   };
 
   const renderLighbox = () => {
+    const isFullWidthGradient =
+      isTextFullWidth &&
+      textBackground === '' &&
+      (textPosition === LightboxTextPosition.TOP ||
+        textPosition === LightboxTextPosition.BOTTOM);
+
     return (
       <Lightbox
         plugins={plugins}
@@ -747,6 +933,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         video={{
           autoPlay: videoAutoplay,
         }}
+        captions={{
+          hideOnSlideChange: true,
+        }}
         className={clsx(
           'reacg-lightbox',
           'reacg-lightbox-animation-' + imageAnimation,
@@ -777,11 +966,27 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
             '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
+            '--yarl__slide_description_container_top': isFullWidthGradient
+              ? '0px'
+              : `${responsivePadding}px`,
+            '--yarl__slide_description_container_bottom': isFullWidthGradient
+              ? '0px'
+              : `${responsivePadding}px`,
+            '--yarl__slide_captions_container_width': isFullWidthGradient
+              ? '100%'
+              : !isTextFullWidth && currentMediaWidth
+              ? `${currentMediaWidth}px`
+              : `calc(100% - ${2 * responsivePadding}px)`,
+            '--yarl__slide_description_padding': isFullWidthGradient
+              ? textPosition === LightboxTextPosition.TOP
+                ? `calc(10px + ${responsivePadding}px) calc(18px + ${responsivePadding}px) 10px`
+                : `10px calc(18px + ${responsivePadding}px) calc(10px + ${responsivePadding}px)`
+              : '10px 18px',
             '--yarl__slide_captions_container_background':
               textBackground &&
-              ((showTitle && images?.[index]?.title) ||
-                (showCaption && images?.[index]?.caption) ||
-                (showDescription && images?.[index]?.description) ||
+              ((showTitle && images?.[index]?.[titleSource]) ||
+                (showCaption && images?.[index]?.[captionSource]) ||
+                (showDescription && images?.[index]?.[descriptionSource]) ||
                 showButton)
                 ? `${textBackground}`
                 : `none`,
@@ -792,12 +997,6 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
             '--yarl__thumbnails_thumbnail_border_color':
               thumbnailBorderColor || 'transparent',
             '--yarl__thumbnails_thumbnail_border_radius': `${thumbnailBorderRadius}%`,
-          },
-          toolbar: {
-            marginTop: slideMargins.marginTop,
-            marginBottom: slideMargins.marginBottom,
-            top: textPosition === LightboxTextPosition.TOP ? 'unset' : 0,
-            bottom: textPosition === LightboxTextPosition.TOP ? 0 : 'unset',
           },
           navigationPrev: {
             marginTop: slideMargins.marginTop,
@@ -815,8 +1014,20 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           },
           container: {backgroundColor: `${backgroundColor}`},
           slide: {
-            marginTop: slideMargins.marginTop,
-            marginBottom: slideMargins.marginBottom,
+            marginTop:
+              slideMargins.marginTop && slideMargins.marginTop !== '0'
+                ? `calc(${slideMargins.marginTop} + ${responsivePadding}px)`
+                : 0,
+            marginBottom:
+              slideMargins.marginBottom && slideMargins.marginBottom !== '0'
+                ? `calc(${slideMargins.marginBottom} + ${responsivePadding}px)`
+                : 0,
+            ...(slideMargins.marginTop && slideMargins.marginTop !== '0'
+              ? {paddingTop: 0}
+              : {}),
+            ...(slideMargins.marginBottom && slideMargins.marginBottom !== '0'
+              ? {paddingBottom: 0}
+              : {}),
           },
         }}
         portal={{

@@ -67,6 +67,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
     thumbnailGap,
     backgroundColor,
     textPosition,
+    isTextFullWidth = true,
     textFontFamily,
     textColor,
     textBackground,
@@ -788,6 +789,20 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                 name={'Position'}
                 value={textPosition}
                 options={LightboxTextPositionOptions}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'isTextFullWidth'}
+                name={'Full width'}
+                value={isTextFullWidth}
+                tooltip={
+                  <p>
+                    Stretch the text container across the full lightbox width or
+                    match the current image width.
+                  </p>
+                }
                 onChange={onInputValueChange}
               />
             </Filter>

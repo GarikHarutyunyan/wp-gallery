@@ -193,6 +193,7 @@ export interface ISlideshowSettings {
 export interface ILightboxSettings extends ISlideshowSettings {
   areControlButtonsShown: boolean;
   isFullscreen: boolean;
+  isTextFullWidth: boolean;
 }
 
 export interface IGeneralSettings {

@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   addToolbarButton,
   createModule,
@@ -6,6 +7,18 @@ import {
 import {CaptionsButton} from './CaptionsButton';
 import {CaptionsContextProvider} from './CaptionsContext';
 import {Title} from './Title';
+
+declare module 'yet-another-react-lightbox' {
+  interface LightboxProps {
+    captions?: {
+      ref?: React.ForwardedRef<any>;
+      showToggle?: boolean;
+      descriptionTextAlign?: 'start' | 'end' | 'center';
+      descriptionMaxLines?: number;
+      hideOnSlideChange?: boolean;
+    };
+  }
+}
 
 export function Captions({augment, addModule}: any) {
   augment(
@@ -50,6 +63,7 @@ export const defaultCaptionsProps = {
   descriptionTextAlign: 'start' as const,
   descriptionMaxLines: 3,
   showToggle: false,
+  hideOnSlideChange: false,
 };
 
 export const resolveCaptionsProps = (captions: any) => ({
