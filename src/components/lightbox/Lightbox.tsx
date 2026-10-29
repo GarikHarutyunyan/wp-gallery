@@ -30,8 +30,8 @@ import {useData} from '../data-context/useData';
 import {useSettings} from '../settings/useSettings';
 import {getSlideMargins} from './CommonFunctions/getSlideMargins';
 import {Captions} from './CustomCaptions/Captions';
-import {renderThumbnailWithAriaLabel} from './renderThumbnailWithAriaLabel';
 import './lightbox.css';
+import {renderThumbnailWithAriaLabel} from './renderThumbnailWithAriaLabel';
 
 interface ILightboxProviderProps {
   activeIndex: number;
@@ -40,6 +40,7 @@ interface ILightboxProviderProps {
 
 interface ILightboxBackgroundProps {
   id: string;
+  galleryId?: string;
   isVisible: boolean;
   onClick: () => void;
   setDrag: (value: boolean) => void;
@@ -47,6 +48,7 @@ interface ILightboxBackgroundProps {
 
 const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   id,
+  galleryId,
   isVisible,
   onClick,
   setDrag,
@@ -83,6 +85,7 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
     <div
       onClick={onClick}
       className={'react-lightbox__background'}
+      data-gallery-id={galleryId}
       style={{display: isVisible ? 'block' : 'none'}}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -903,11 +906,13 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
           slideContainer: ({slide, children}: any) => (
             <div
               className="reacg-crop-position-container"
-              style={{
-                display: 'contents',
-                '--reacg-crop-position':
-                  slide.cropPosition || 'center center',
-              } as React.CSSProperties}
+              style={
+                {
+                  'display': 'contents',
+                  '--reacg-crop-position':
+                    slide.cropPosition || 'center center',
+                } as React.CSSProperties
+              }
             >
               {children}
             </div>
@@ -1060,6 +1065,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         isVisible={activeIndex >= 0}
         onClick={handleClose}
         id={lightboxId}
+        galleryId={galleryId}
         setDrag={setDrag}
       />
     </>

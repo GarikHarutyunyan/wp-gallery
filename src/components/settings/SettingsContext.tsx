@@ -712,6 +712,10 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }
     };
 
+    const scopeSelector =
+      `.reacg-gallery[data-gallery-id="${galleryId}"], ` +
+      `.react-lightbox__background[data-gallery-id="${galleryId}"]`;
+
     return (
       <div
         ref={wrapperRef}
@@ -723,20 +727,8 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         onContextMenu={handleContextMenu}
       >
         {children}
-        {css !== '' && (
-          <style>
-            {'.reacg-gallery[data-gallery-id="' + galleryId + '"]{' + css + '}'}
-          </style>
-        )}
-        {customCss !== '' && (
-          <style>
-            {'.reacg-gallery[data-gallery-id="' +
-              galleryId +
-              '"]{' +
-              customCss +
-              '}'}
-          </style>
-        )}
+        {css !== '' && <style>{`${scopeSelector}{${css}}`}</style>}
+        {customCss !== '' && <style>{`${scopeSelector}{${customCss}}`}</style>}
       </div>
     );
   };
