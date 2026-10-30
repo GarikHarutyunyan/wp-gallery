@@ -175,10 +175,25 @@
 
 .reacg-template-card__actions {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 8px;
   justify-content: center;
-  flex-wrap: nowrap;
+  padding: 10px;
+}
+
+.reacg-template-card__primary-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.reacg-template-card__secondary-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .reacg-template-card__overlay {
@@ -187,7 +202,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.52);
+  background-color: rgba(0, 0, 0, 0.56);
   opacity: 0;
   pointer-events: none;
   z-index: 4;
@@ -195,20 +210,38 @@
 }
 
 .reacg-template-card:hover .reacg-template-card__overlay,
-.reacg-template-card:focus-within .reacg-template-card__overlay {
+.reacg-template-card:focus-within .reacg-template-card__overlay,
+.reacg-template-card--importing .reacg-template-card__overlay {
   opacity: 1;
   pointer-events: auto;
 }
 
 .reacg-template-card__actions .reacg-template-card__overlay-button {
+  width: 100%;
+  min-width: 148px;
   text-transform: none;
   white-space: nowrap;
   font-size: 12px;
   line-height: 1;
   min-height: 30px;
-  padding: 6px 10px;
+  padding: 6px 12px;
   font-weight: 600;
   border-radius: 15px;
+}
+
+.reacg-template-card__actions .reacg-template-card__import-images-button {
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #0e3e5b;
+}
+
+.reacg-template-card__actions .reacg-template-card__import-images-button:hover {
+  background-color: #ffffff;
+}
+
+.reacg-template-card__actions
+  .reacg-template-card__import-images-button.Mui-disabled {
+  background-color: rgba(255, 255, 255, 0.72);
+  color: rgba(14, 62, 91, 0.65);
 }
 
 .reacg-template-card__action-button {

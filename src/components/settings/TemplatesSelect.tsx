@@ -3,13 +3,22 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
 import Tooltip from '@mui/material/Tooltip';
 import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
-import {ITemplateReference} from 'contexts/templates/TemplatesContext.types';
+import {
+  ITemplate,
+  ITemplateReference,
+} from 'contexts/templates/TemplatesContext.types';
+import {useSnackbar} from 'notistack';
 import React, {
   ReactNode,
   SyntheticEvent,
@@ -41,9 +50,13 @@ const TemplatesSelect: React.FC = () => {
     myTemplates,
     template,
     changeTemplate,
+    fetchPreBuiltTemplate,
+    hasGalleryImages,
+    importTemplateImages,
     isLoading,
   } = useTemplates();
   const {isPro} = usePro();
+  const {enqueueSnackbar} = useSnackbar();
   const {
     changeGeneralSettings,
     changeMasonrySettings,
@@ -57,6 +70,7 @@ const TemplatesSelect: React.FC = () => {
     changeCoverflowSettings,
     changeCardsSettings,
     changeBlogSettings,
+    changeScrollerSettings,
     type: activeType,
     changeType,
     changeCss,
@@ -72,6 +86,13 @@ const TemplatesSelect: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORY);
   const [activeTypeFilter, setActiveTypeFilter] = useState<string>(ALL_TYPES);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [importingState, setImportingState] = useState<{
+    id: string;
+    withImages: boolean;
+  } | null>(null);
+  const [pendingImportTemplate, setPendingImportTemplate] =
+    useState<ITemplate | null>(null);
+  const isBusy = !!importingState;
   const value = template?.template_id ?? galleryId ?? '';
   useLayoutEffect(() => {
     if (template?.template_id || template?.template_id === 0) {
@@ -89,6 +110,7 @@ const TemplatesSelect: React.FC = () => {
         coverflow,
         cards,
         blog,
+        scroller,
         css,
       } = template;
       // !!template.template_id, as default demplate id is 0 we avoid changing gallery type on reseting options
@@ -107,9 +129,10 @@ const TemplatesSelect: React.FC = () => {
       coverflow && changeCoverflowSettings?.(coverflow);
       cards && changeCardsSettings?.(cards);
       blog && changeBlogSettings?.(blog);
+      scroller && changeScrollerSettings?.(scroller);
       TypeUtils.isString(css) && changeCss?.(css as any);
     }
-  }, [template?.template_id]);
+  }, [template]);
 
   const getTemplateThumbnail = (templateReference: ITemplateReference) => {
     const typedReference = templateReference as ITemplateReference &
@@ -251,17 +274,94 @@ const TemplatesSelect: React.FC = () => {
       window.open(preview_url, '_blank');
     };
   const onTemplateSelect = async (id: string, type: 'pre-built' | 'my') => {
+    if (isBusy) {
+      return;
+    }
+
     const templateId = type === 'my' ? id : parseInt(id, 10);
 
     if (TypeUtils.isNumber(templateId) && Number.isNaN(templateId)) {
       return;
     }
 
+    setImportingState({id: String(id), withImages: false});
     const isTemplateApplied = await changeTemplate?.(templateId, type);
+    setImportingState(null);
 
     if (isTemplateApplied) {
       setIsTemplatesDialogOpen(false);
     }
+  };
+
+  const executeImportWithImages = async (templateData: ITemplate) => {
+    setImportingState({
+      id: String(templateData.template_id),
+      withImages: true,
+    });
+    const result = await importTemplateImages?.(templateData);
+    setImportingState(null);
+    setPendingImportTemplate(null);
+
+    if (result?.status === 'ok') {
+      setIsTemplatesDialogOpen(false);
+      enqueueSnackbar(
+        result.count > 0
+          ? 'Template and images imported.'
+          : 'Template imported (no demo images found).',
+        {
+          variant: result.count > 0 ? 'success' : 'info',
+          anchorOrigin: {vertical: 'bottom', horizontal: 'right'},
+          autoHideDuration: 2500,
+        }
+      );
+    } else {
+      enqueueSnackbar('Failed to import template images. Please try again.', {
+        variant: 'error',
+        anchorOrigin: {vertical: 'bottom', horizontal: 'right'},
+      });
+    }
+  };
+
+  const onTemplateImportWithImages = async (
+    templateReference: ITemplateReference
+  ) => {
+    if (isBusy) {
+      return;
+    }
+
+    const templateId = parseInt(templateReference.id, 10);
+    if (Number.isNaN(templateId)) {
+      return;
+    }
+
+    setImportingState({id: String(templateReference.id), withImages: true});
+    const [templateResult, hasExistingMedia] = await Promise.all([
+      fetchPreBuiltTemplate?.(templateId),
+      hasGalleryImages?.(),
+    ]);
+
+    if (!templateResult || templateResult.status === 'no_permission') {
+      setImportingState(null);
+      return;
+    }
+
+    if (templateResult.status === 'error') {
+      setImportingState(null);
+      enqueueSnackbar('Failed to load template. Please try again.', {
+        variant: 'error',
+        anchorOrigin: {vertical: 'bottom', horizontal: 'right'},
+      });
+      return;
+    }
+
+    const templateData = templateResult.data;
+    if (hasExistingMedia) {
+      setImportingState(null);
+      setPendingImportTemplate(templateData);
+      return;
+    }
+
+    await executeImportWithImages(templateData);
   };
 
   const resetPreviewDialogInfo = () =>
@@ -272,48 +372,115 @@ const TemplatesSelect: React.FC = () => {
     type: 'pre-built' | 'my'
   ): ReactNode => {
     const {preview_url, youtube_link} = templateReference;
+    const canImportWithImages = type === 'pre-built' && Number(galleryId) > 0;
+    const isImportingLayout =
+      type === 'pre-built'
+        ? importingState?.id === String(templateReference.id) &&
+          !importingState.withImages
+        : importingState?.id === String(templateReference.id);
+    const isImportingWithImages =
+      canImportWithImages &&
+      importingState?.id === String(templateReference.id) &&
+      importingState.withImages;
 
     return (
       <div className={'reacg-template-card__overlay'}>
         <div className={'reacg-template-card__actions'}>
-          <Tooltip
-            title="Importing this template adds the layout only. Demo images won’t be imported. Add your own images to see the gallery."
-            placement="top"
-            arrow
-            enterDelay={500}
-          >
-            <Button
-              variant={'contained'}
-              size={'small'}
-              onClick={() => onTemplateSelect(templateReference.id, type)}
-              className={
-                'reacg-template-card__overlay-button reacg-template-card__import-button'
-              }
+          <div className={'reacg-template-card__primary-actions'}>
+            <Tooltip
+              title="Importing this template adds the layout only. Demo images won’t be imported. Add your own images to see the gallery."
+              placement="top"
+              arrow
+              enterDelay={500}
             >
-              Import
-            </Button>
-          </Tooltip>
-          {youtube_link ? (
-            <Tooltip title="View Video" placement="top" arrow enterDelay={500}>
-              <IconButton
-                size={'small'}
-                onClick={getOpenYoutubePreview(youtube_link)}
-                className={'reacg-template-card__action-button'}
-              >
-                <VisibilityIcon fontSize={'small'} />
-              </IconButton>
+              <span>
+                <Button
+                  variant={'contained'}
+                  size={'small'}
+                  disabled={isBusy}
+                  startIcon={
+                    isImportingLayout ? (
+                      <CircularProgress size={12} color="inherit" />
+                    ) : undefined
+                  }
+                  onClick={() => onTemplateSelect(templateReference.id, type)}
+                  className={
+                    'reacg-template-card__overlay-button reacg-template-card__import-button'
+                  }
+                >
+                  {isImportingLayout ? 'Importing...' : 'Import'}
+                </Button>
+              </span>
             </Tooltip>
-          ) : null}
-          {preview_url ? (
-            <Tooltip title="View Demo" placement="top" arrow enterDelay={500}>
-              <IconButton
-                size={'small'}
-                onClick={getOpenDemo(templateReference)}
-                className={'reacg-template-card__action-button'}
+            {canImportWithImages ? (
+              <Tooltip
+                title="Import this template along with its demo images into your gallery."
+                placement="top"
+                arrow
+                enterDelay={500}
               >
-                <OpenInNewIcon fontSize={'small'} />
-              </IconButton>
-            </Tooltip>
+                <span>
+                  <Button
+                    variant={'contained'}
+                    size={'small'}
+                    disabled={isBusy}
+                    startIcon={
+                      isImportingWithImages ? (
+                        <CircularProgress size={12} color="inherit" />
+                      ) : undefined
+                    }
+                    onClick={() =>
+                      onTemplateImportWithImages(templateReference)
+                    }
+                    className={
+                      'reacg-template-card__overlay-button reacg-template-card__import-images-button'
+                    }
+                  >
+                    {isImportingWithImages
+                      ? 'Importing...'
+                      : 'Import with Images'}
+                  </Button>
+                </span>
+              </Tooltip>
+            ) : null}
+          </div>
+          {youtube_link || preview_url ? (
+            <div className={'reacg-template-card__secondary-actions'}>
+              {youtube_link ? (
+                <Tooltip
+                  title="View Video"
+                  placement="top"
+                  arrow
+                  enterDelay={500}
+                >
+                  <IconButton
+                    size={'small'}
+                    disabled={isBusy}
+                    onClick={getOpenYoutubePreview(youtube_link)}
+                    className={'reacg-template-card__action-button'}
+                  >
+                    <VisibilityIcon fontSize={'small'} />
+                  </IconButton>
+                </Tooltip>
+              ) : null}
+              {preview_url ? (
+                <Tooltip
+                  title="View Demo"
+                  placement="top"
+                  arrow
+                  enterDelay={500}
+                >
+                  <IconButton
+                    size={'small'}
+                    disabled={isBusy}
+                    onClick={getOpenDemo(templateReference)}
+                    className={'reacg-template-card__action-button'}
+                  >
+                    <OpenInNewIcon fontSize={'small'} />
+                  </IconButton>
+                </Tooltip>
+              ) : null}
+            </div>
           ) : null}
         </div>
       </div>
@@ -339,17 +506,22 @@ const TemplatesSelect: React.FC = () => {
           {templates.map((templateReference) => {
             const isSelected =
               String(templateReference.id) === String(value);
+            const isCardImporting =
+              importingState?.id === String(templateReference.id);
             const thumbnail = templateReference.thumbnail;
             const {paid} = templateReference;
+            const cardClasses = [
+              'reacg-template-card',
+              isSelected ? 'reacg-template-card--selected' : '',
+              isCardImporting ? 'reacg-template-card--importing' : '',
+            ]
+              .filter(Boolean)
+              .join(' ');
 
             return (
               <div
                 key={`${type}-${templateReference.id}`}
-                className={
-                  isSelected
-                    ? 'reacg-template-card reacg-template-card--selected'
-                    : 'reacg-template-card'
-                }
+                className={cardClasses}
               >
                 <div className={'reacg-template-card__image-wrapper'}>
                   {thumbnail ? (
@@ -415,7 +587,11 @@ const TemplatesSelect: React.FC = () => {
       )}
       <Dialog
         open={isTemplatesDialogOpen}
-        onClose={() => setIsTemplatesDialogOpen(false)}
+        onClose={() => {
+          if (!isBusy) {
+            setIsTemplatesDialogOpen(false);
+          }
+        }}
         fullWidth
         maxWidth={'lg'}
         className={'reacg-templates-dialog'}
@@ -424,7 +600,10 @@ const TemplatesSelect: React.FC = () => {
           <div className={'reacg-templates-dialog__title'}>
             Template Library
           </div>
-          <IconButton onClick={() => setIsTemplatesDialogOpen(false)}>
+          <IconButton
+            disabled={isBusy}
+            onClick={() => setIsTemplatesDialogOpen(false)}
+          >
             <CloseIcon />
           </IconButton>
         </Box>
@@ -486,6 +665,50 @@ const TemplatesSelect: React.FC = () => {
             <Box className={'reacg-templates-dialog__empty'}>No templates</Box>
           )}
         </Box>
+      </Dialog>
+      <Dialog
+        open={!!pendingImportTemplate}
+        onClose={() => {
+          if (!isBusy) {
+            setPendingImportTemplate(null);
+          }
+        }}
+        maxWidth={'xs'}
+        fullWidth
+        className={'reacg-templates-confirm-dialog'}
+      >
+        <DialogTitle>Replace existing media?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Importing &ldquo;{pendingImportTemplate?.title}&rdquo; with images
+            will replace the current media items in this gallery. Your existing
+            files will remain in the Media Library.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{padding: '8px 24px 16px'}}>
+          <Button
+            variant={'outlined'}
+            disabled={isBusy}
+            onClick={() => setPendingImportTemplate(null)}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant={'contained'}
+            disabled={isBusy}
+            startIcon={
+              isBusy ? (
+                <CircularProgress size={14} color="inherit" />
+              ) : undefined
+            }
+            onClick={() =>
+              pendingImportTemplate &&
+              executeImportWithImages(pendingImportTemplate)
+            }
+          >
+            {isBusy ? 'Importing...' : 'Replace & Import'}
+          </Button>
+        </DialogActions>
       </Dialog>
       <Dialog
         open={previewDialogInfo.isVisible}
