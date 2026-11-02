@@ -314,6 +314,19 @@ const generalMockSettings: IGeneralSettings = {
   searchPlaceholderText: 'Search',
   enableWhiteLabel: false,
   enableRightClickProtection: false,
+  enableFiltering: false,
+  filterType: 'auto',
+  filterShowAll: true,
+  filterAllText: '',
+  filterShowCount: true,
+  filterAlignment: 'left',
+  filterActiveColor: '#2563eb',
+  filterActiveTextColor: '#ffffff',
+  filterInactiveColor: '#f3f4f6',
+  filterInactiveTextColor: '#374151',
+  filterBorderRadius: 4,
+  filterFontSize: 14,
+  showFrontendSorting: false,
 };
 
 const lightboxMockSettings: ILightboxSettings = {

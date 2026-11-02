@@ -6,6 +6,13 @@ export interface IImageSizeObject {
   height: number;
 }
 
+export interface ICategoryDTO {
+  id: number;
+  name: string;
+  slug: string;
+  count?: number;
+}
+
 export enum ImageType {
   IMAGE = 'image',
   VIDEO = 'video',
@@ -33,4 +40,5 @@ export interface IImageDTO {
   image_caption?: string;
   image_alt?: string;
   image_description?: string;
+  categories?: ICategoryDTO[];
 }

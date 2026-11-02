@@ -95,6 +95,8 @@ const Gallery = (): ReactElement => {
     actionUrlSource,
     enableSearch,
     enableWhiteLabel,
+    enableFiltering,
+    showFrontendSorting,
   } = generalSettings as IGeneralSettings;
   const showLightbox: boolean = clickAction === ImageClickAction.LIGHTBOX;
   const shouldOpenUrl: boolean = clickAction === ImageClickAction.URL;
@@ -279,7 +281,8 @@ const Gallery = (): ReactElement => {
 
   return (
     <>
-      {enableSearch && renderFilterProvider()}
+      {(enableSearch || enableFiltering || showFrontendSorting) &&
+        renderFilterProvider()}
       {!!images?.length && renderGallery()}
       {renderLoader()}
       {paginationType !== PaginationType.NONE && renderPaginationProvider()}

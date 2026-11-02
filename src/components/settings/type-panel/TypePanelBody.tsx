@@ -157,7 +157,7 @@ const TypePanelBody: React.FC<ITypePanelBodyProps> = ({
               Template Library
             </div>
             <div className={'reacg-templates-library-row__subtitle'}>
-              Choose from 55+ ready-made gallery designs.
+              Choose from 70+ ready-made gallery designs.
             </div>
           </div>
         </div>

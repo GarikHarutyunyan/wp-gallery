@@ -222,6 +222,19 @@ export interface IGeneralSettings {
   searchPlaceholderText: string;
   enableWhiteLabel: boolean;
   enableRightClickProtection: boolean;
+  enableFiltering?: boolean;
+  filterType?: string;
+  filterShowAll?: boolean;
+  filterAllText?: string;
+  filterShowCount?: boolean;
+  filterAlignment?: string;
+  filterActiveColor?: string;
+  filterActiveTextColor?: string;
+  filterInactiveColor?: string;
+  filterInactiveTextColor?: string;
+  filterBorderRadius?: number;
+  filterFontSize?: number;
+  showFrontendSorting?: boolean;
 }
 
 export interface ICubeSettings {

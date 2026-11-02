@@ -4,6 +4,7 @@ import {useAppInfo} from 'contexts/AppInfoContext';
 import {TranslationsContext} from 'contexts/TranslationsContext';
 import {
   GalleryType,
+  ICategoryDTO,
   IGeneralSettings,
   IImageDTO,
   PaginationType,
@@ -34,6 +35,11 @@ const DataContext = createContext<{
   itemsPerPage?: number;
   isFullyLoaded?: boolean;
   loadAllLightboxImages?: () => Promise<void>;
+  selectedCategory?: string;
+  onCategoryChange?: (category: string) => void;
+  availableCategories?: ICategoryDTO[];
+  selectedSorting?: string;
+  onSortingChange?: (sorting: string) => void;
 }>({});
 
 const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
@@ -108,8 +114,13 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     orderDirection = 'asc',
   } = generalSettings as IGeneralSettings;
   const {galleryId, baseUrl, getGalleryTimestamp} = useAppInfo();
-  const {noDataText, setLoadMoreText, setNoDataText, setSearchPlaceholder} =
-    useContext(TranslationsContext);
+  const {
+    noDataText,
+    setLoadMoreText,
+    setNoDataText,
+    setSearchPlaceholder,
+    setAllText,
+  } = useContext(TranslationsContext);
   const [images, setImages] = useState<IImageDTO[]>([]);
   const [lightboxImages, setLightboxImages] = useState<
     IImageDTO[] | undefined
@@ -117,6 +128,9 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [imageCount, setImageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedSorting, setSelectedSorting] = useState<string>('default');
+  const [availableCategories, setAvailableCategories] = useState<ICategoryDTO[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const pagesCount: number =
     itemsPerPage > 0 ? Math.ceil(imageCount / itemsPerPage) : imageCount;
@@ -210,6 +224,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         image_caption: data.image_caption || '',
         image_alt: data.image_alt || '',
         image_description: data.image_description || '',
+        categories: data.categories || [],
       }));
 
       return newImages;
@@ -255,7 +270,29 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       image_caption: data.image_caption || '',
       image_alt: data.image_alt || '',
       image_description: data.image_description || '',
+      categories: data.categories || [],
     }));
+
+    if (Array.isArray(data.categories) && data.categories.length > 0) {
+      setAvailableCategories(data.categories);
+    } else if (Array.isArray(imgData)) {
+      const catsMap: {[key: string]: ICategoryDTO} = {};
+      imgData.forEach((item: any) => {
+        if (Array.isArray(item.categories)) {
+          item.categories.forEach((cat: any) => {
+            const key = cat.slug || cat.name;
+            if (!catsMap[key]) {
+              catsMap[key] = {id: cat.id, name: cat.name, slug: key, count: 0};
+            }
+            catsMap[key].count = (catsMap[key].count || 0) + 1;
+          });
+        }
+      });
+      const derived = Object.values(catsMap);
+      if (derived.length > 0) {
+        setAvailableCategories(derived);
+      }
+    }
 
     const loadMoreText: string | undefined =
       (window as any).reacg_global?.text?.load_more || undefined;
@@ -263,10 +300,13 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       (window as any).reacg_global?.text?.no_data || undefined;
     const searchPlaceHolder: string | undefined =
       (window as any).reacg_global?.text?.search || undefined;
+    const allText: string | undefined =
+      (window as any).reacg_global?.text?.all || undefined;
 
     loadMoreText && setLoadMoreText?.(loadMoreText);
     noDataText && setNoDataText?.(noDataText);
     searchPlaceHolder && setSearchPlaceholder?.(searchPlaceHolder);
+    allText && setAllText?.(allText);
     setImageCount(newImageCount);
 
     setImages(newImages);
@@ -274,7 +314,12 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setCurrentPage(page);
   };
 
-  const getData = async (page: number, search: string = '') => {
+  const getData = async (
+    page: number,
+    search: string = searchTerm,
+    category: string = selectedCategory,
+    sorting: string = selectedSorting
+  ) => {
     if (cancelTokenSourceRef.current) {
       cancelTokenSourceRef.current.cancel(
         'Operation canceled due to new request.'
@@ -296,12 +341,31 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setImages([]);
       }
 
+      let sortOrderBy = orderBy;
+      let sortOrder = orderDirection;
+      if (sorting === 'date_desc') {
+        sortOrderBy = 'date';
+        sortOrder = 'desc';
+      } else if (sorting === 'date_asc') {
+        sortOrderBy = 'date';
+        sortOrder = 'asc';
+      } else if (sorting === 'title_asc') {
+        sortOrderBy = 'title';
+        sortOrder = 'asc';
+      } else if (sorting === 'title_desc') {
+        sortOrderBy = 'title';
+        sortOrder = 'desc';
+      }
+
       const queryStringSeperator: string = fetchUrl.includes('?') ? '&' : '?';
       let queryString = queryStringSeperator;
-      queryString += `order_by=${orderBy}`;
-      queryString += `&order=${orderDirection}`;
-      queryString += `&s=${search}`;
+      queryString += `order_by=${sortOrderBy}`;
+      queryString += `&order=${sortOrder}`;
+      queryString += `&s=${encodeURIComponent(search)}`;
       queryString += `&timestamp=${getGalleryTimestamp?.()}`;
+      if (category && category !== 'all') {
+        queryString += `&category=${encodeURIComponent(category)}`;
+      }
       if (paginationType !== PaginationType.NONE || !showAllItems) {
         queryString += `&page=${page}`;
         queryString += `&per_page=${itemsPerPage}`;
@@ -344,17 +408,49 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           image_caption: data.image_caption || '',
           image_alt: data.image_alt || '',
           image_description: data.image_description || '',
+          categories: data.categories || [],
         }));
         const newImageCount: number = headers?.['x-images-count'];
+
+        const rawCategories = headers?.['x-images-categories'];
+        if (rawCategories) {
+          try {
+            const parsed = JSON.parse(decodeURIComponent(rawCategories));
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setAvailableCategories(parsed);
+            }
+          } catch (e) {}
+        } else if (Array.isArray(imgData)) {
+          const catsMap: {[key: string]: ICategoryDTO} = {};
+          imgData.forEach((item: any) => {
+            if (Array.isArray(item.categories)) {
+              item.categories.forEach((cat: any) => {
+                const key = cat.slug || cat.name;
+                if (!catsMap[key]) {
+                  catsMap[key] = {id: cat.id, name: cat.name, slug: key, count: 0};
+                }
+                catsMap[key].count = (catsMap[key].count || 0) + 1;
+              });
+            }
+          });
+          const derived = Object.values(catsMap);
+          if (derived.length > 0) {
+            setAvailableCategories(derived);
+          }
+        }
+
         const loadMoreText: string | undefined =
           (window as any).reacg_global?.text?.load_more || undefined;
         const noDataText: string | undefined =
           (window as any).reacg_global?.text?.no_data || undefined;
         const searchPlaceHolder: string | undefined =
           (window as any).reacg_global?.text?.search || undefined;
+        const allText: string | undefined =
+          (window as any).reacg_global?.text?.all || undefined;
         loadMoreText && setLoadMoreText?.(loadMoreText);
         noDataText && setNoDataText?.(noDataText);
         searchPlaceHolder && setSearchPlaceholder?.(searchPlaceHolder);
+        allText && setAllText?.(allText);
         setImageCount(newImageCount);
 
         if (paginationType === PaginationType.SIMPLE) {
@@ -375,8 +471,35 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         }
       }
     } else {
-      setImages(propsImages);
-      changeImagesCount?.(propsImages.length);
+      const allWinData =
+        (window as any).reacg_data?.[galleryId as string]?.images || propsImages;
+      let filtered: IImageDTO[] = Array.isArray(allWinData) ? [...allWinData] : [];
+      if (category && category !== 'all') {
+        filtered = filtered.filter((img: any) =>
+          img.categories?.some(
+            (c: any) =>
+              c.slug === category ||
+              String(c.id) === category ||
+              c.name === category
+          )
+        );
+      }
+      if (search) {
+        filtered = filtered.filter((img: any) =>
+          (img.title || '').toLowerCase().includes(search.toLowerCase())
+        );
+      }
+      if (sorting === 'title_asc') {
+        filtered.sort((a: any, b: any) =>
+          (a.title || '').localeCompare(b.title || '')
+        );
+      } else if (sorting === 'title_desc') {
+        filtered.sort((a: any, b: any) =>
+          (b.title || '').localeCompare(a.title || '')
+        );
+      }
+      setImages(filtered);
+      changeImagesCount?.(filtered.length);
       setIsLoading(false);
     }
   };
@@ -385,13 +508,25 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     _event?: any,
     newPage: number = currentPage + 1
   ): Promise<void> => {
-    await getData(newPage, searchTerm);
+    await getData(newPage, searchTerm, selectedCategory, selectedSorting);
   };
 
   const onSearch = async (newSearchTerm: string = ''): Promise<void> => {
     setCurrentPage(0);
     setSearchTerm(newSearchTerm);
-    getData(1, newSearchTerm);
+    getData(1, newSearchTerm, selectedCategory, selectedSorting);
+  };
+
+  const onCategoryChange = async (newCategory: string = 'all'): Promise<void> => {
+    setSelectedCategory(newCategory);
+    setCurrentPage(0);
+    getData(1, searchTerm, newCategory, selectedSorting);
+  };
+
+  const onSortingChange = async (newSorting: string = 'default'): Promise<void> => {
+    setSelectedSorting(newSorting);
+    setCurrentPage(0);
+    getData(1, searchTerm, selectedCategory, newSorting);
   };
 
   const onReloadData = async (fromWindow: boolean = false) => {
@@ -405,7 +540,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       return;
     }
 
-    getData(1, searchTerm);
+    getData(1, searchTerm, selectedCategory, selectedSorting);
   };
 
   const renderContentPlaceholder = (): ReactElement => {
@@ -431,6 +566,11 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         itemsPerPage,
         isFullyLoaded,
         loadAllLightboxImages,
+        selectedCategory,
+        onCategoryChange,
+        availableCategories,
+        selectedSorting,
+        onSortingChange,
       }}
     >
       {children}
