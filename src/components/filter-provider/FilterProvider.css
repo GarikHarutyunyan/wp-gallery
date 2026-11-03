@@ -19,22 +19,22 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 38px;
+  min-height: 36px;
   box-sizing: border-box;
   font-family: inherit;
-  font-weight: 600;
-  text-transform: uppercase;
-  border: 1px solid transparent;
+  font-weight: 500;
+  text-transform: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   outline: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   user-select: none;
   white-space: nowrap;
-  line-height: 1;
+  line-height: 1.5;
 }
 
 .reacg-filter-pill:hover {
-  filter: brightness(0.94);
+  filter: brightness(0.95);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
@@ -43,7 +43,9 @@
 }
 
 .reacg-filter-pill--active {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.18) !important;
+  font-weight: 600;
 }
 
 /* Custom Dropdown Trigger */
@@ -57,18 +59,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  height: 38px;
+  min-height: 36px;
   box-sizing: border-box;
   font-family: inherit;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-weight: 500;
+  text-transform: none;
   border: 1px solid rgba(0, 0, 0, 0.08);
   outline: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   user-select: none;
   white-space: nowrap;
-  line-height: 1;
+  line-height: 1.5;
 }
 
 .reacg-filter-dropdown-trigger:hover {
@@ -110,14 +112,14 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  padding: 9px 16px;
+  padding: 8px 16px;
   font-family: inherit;
-  font-weight: 500;
-  text-transform: uppercase;
+  font-weight: 400;
+  text-transform: none;
   cursor: pointer;
   white-space: nowrap;
   user-select: none;
-  line-height: 1.2;
+  line-height: 1.4;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 

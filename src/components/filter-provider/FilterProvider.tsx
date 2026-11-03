@@ -90,7 +90,7 @@ const FilterDropdown: React.FC<IFilterDropdownProps> = ({
           color: inactiveTextColor,
           borderRadius: `${borderRadius}px`,
           fontSize: `${fontSize}px`,
-          padding: '0 16px',
+          padding: '8px 20px',
           gap: '12px',
         }}
       >
@@ -140,8 +140,17 @@ const FilterDropdown: React.FC<IFilterDropdownProps> = ({
                 }}
                 style={{
                   fontSize: `${fontSize}px`,
-                  color: isSelected ? activeTextColor : '#2c3338',
-                  backgroundColor: isSelected ? activeColor : 'transparent',
+                  color: isSelected
+                    ? activeColor.toLowerCase() === '#ffffff'
+                      ? '#000000de'
+                      : activeTextColor
+                    : '#2c3338',
+                  backgroundColor: isSelected
+                    ? activeColor.toLowerCase() === '#ffffff'
+                      ? '#e5e7eb'
+                      : activeColor
+                    : 'transparent',
+                  fontWeight: isSelected ? 600 : 400,
                 }}
               >
                 {option.label}
@@ -155,11 +164,11 @@ const FilterDropdown: React.FC<IFilterDropdownProps> = ({
 };
 
 const SORTING_OPTIONS: IDropdownOption[] = [
-  {value: 'default', label: 'DEFAULT SORTING'},
-  {value: 'date_desc', label: 'DATE: NEW TO OLD'},
-  {value: 'date_asc', label: 'DATE: OLD TO NEW'},
-  {value: 'title_asc', label: 'TITLE: A–Z'},
-  {value: 'title_desc', label: 'TITLE: Z–A'},
+  {value: 'default', label: 'Default sorting'},
+  {value: 'date_desc', label: 'Date: new to old'},
+  {value: 'date_asc', label: 'Date: old to new'},
+  {value: 'title_asc', label: 'Title: A–Z'},
+  {value: 'title_desc', label: 'Title: Z–A'},
 ];
 
 const FilterProvider: React.FC<IFilterProviderProps> = ({
@@ -173,12 +182,12 @@ const FilterProvider: React.FC<IFilterProviderProps> = ({
     filterAllText = '',
     filterShowCount = true,
     filterAlignment = 'left',
-    filterActiveColor = '#1976d2',
-    filterActiveTextColor = '#ffffff',
-    filterInactiveColor = '#f4f6f8',
-    filterInactiveTextColor = '#333333',
+    filterActiveColor = '#FFFFFF',
+    filterActiveTextColor = '#000000de',
+    filterInactiveColor = '#D7D7D7',
+    filterInactiveTextColor = '#000000de',
     filterBorderRadius = 4,
-    filterFontSize = 13,
+    filterFontSize = 14,
     showFrontendSorting = false,
     enableSearch = false,
     searchPlaceholderText,
@@ -255,7 +264,7 @@ const FilterProvider: React.FC<IFilterProviderProps> = ({
                   : filterInactiveTextColor,
               borderRadius: `${filterBorderRadius}px`,
               fontSize: `${filterFontSize}px`,
-              padding: '0 16px',
+              padding: '8px 25px',
             }}
           >
             {effectiveAllText}
@@ -283,7 +292,7 @@ const FilterProvider: React.FC<IFilterProviderProps> = ({
                   : filterInactiveTextColor,
                 borderRadius: `${filterBorderRadius}px`,
                 fontSize: `${filterFontSize}px`,
-                padding: '0 16px',
+                padding: '8px 25px',
               }}
             >
               <span>{cat.name}</span>
