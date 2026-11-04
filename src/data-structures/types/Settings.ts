@@ -7,6 +7,7 @@ import {
   HoverEffect,
   ImageClickAction,
   LightboxImageAnimation,
+  LoadedEffect,
   LightboxTextPosition,
   LightboxThumbnailsPosition,
   PaginationType,
@@ -44,6 +45,7 @@ export interface IGridSettings {
   paginationType: PaginationType;
   showAllItems: boolean;
   hoverEffect: HoverEffect;
+  loadedEffect?: LoadedEffect;
   showTitle: boolean;
   titleSource: TitleSource;
   titleVisibility: TitleVisibility;
@@ -106,6 +108,7 @@ export interface IMasonrySettings {
   overlayTextBackground: string;
   invertTextColor: boolean;
   hoverEffect: HoverEffect;
+  loadedEffect?: LoadedEffect;
   paginationType: PaginationType;
   showAllItems: boolean;
   showCaption: boolean;
@@ -248,6 +251,7 @@ export interface ICubeSettings {
   slideDuration: number;
   shadow: boolean;
   hoverEffect: HoverEffect;
+  loadedEffect?: LoadedEffect;
   showTitle: boolean;
   titleSource: TitleSource;
   titleVisibility: TitleVisibility;
@@ -305,6 +309,7 @@ export interface ICarouselSettings {
   enableScrollByImagesCount: boolean;
   spaceBetween: number;
   hoverEffect: HoverEffect;
+  loadedEffect?: LoadedEffect;
   showTitle: boolean;
   titleSource: TitleSource;
   titleVisibility: TitleVisibility;
@@ -360,6 +365,7 @@ export interface ICoverflowSettings {
   rotate: number;
   imagesCount: number;
   hoverEffect: HoverEffect;
+  loadedEffect?: LoadedEffect;
   showTitle: boolean;
   titleSource: TitleSource;
   titleVisibility: TitleVisibility;
@@ -412,6 +418,7 @@ export interface ICardsSettings {
   autoplay: boolean;
   slideDuration: number;
   hoverEffect: HoverEffect;
+  loadedEffect?: LoadedEffect;
   showTitle: boolean;
   titleSource: TitleSource;
   titleVisibility: TitleVisibility;
@@ -464,6 +471,7 @@ export interface IBlogSettings {
   containerPadding: number;
   imageRadius: number;
   hoverEffect: HoverEffect;
+  loadedEffect?: LoadedEffect;
   textVerticalAlignment: TextsAlignment;
   titleAlignment: TitleAlignment;
   titleColor: string;
@@ -515,6 +523,7 @@ export interface IScrollerSettings {
   padding: number;
   paddingColor: string;
   hoverEffect: HoverEffect;
+  loadedEffect?: LoadedEffect;
   showTitle: boolean;
   titleSource: TitleSource;
   titleVisibility: TitleVisibility;

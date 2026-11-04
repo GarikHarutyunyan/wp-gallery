@@ -35,6 +35,7 @@ interface IGridImageProps {
   borderRadius?: number;
   margin?: number;
   hoverEffect?: string;
+  loadedEffect?: string;
   showTitle: boolean;
   titleSource: TitleSource;
   captionVisibility: TitleVisibility;
@@ -89,6 +90,7 @@ const GridImage = ({
   borderRadius,
   margin,
   hoverEffect,
+  loadedEffect,
   showTitle,
   titleSource,
   titleVisibility,
@@ -569,6 +571,7 @@ const GridImage = ({
     borderRadius,
     margin,
     hoverEffect,
+    loadedEffect,
     showTitle,
     titleSource,
     captionVisibility,
@@ -726,6 +729,7 @@ const GridImage = ({
               originalWidth={image.original.width}
               originalHeight={image.original.height}
               cropPosition={image.crop_position}
+              loadedEffect={loadedEffect}
               style={{
                 width: width + 'px',
                 height: autoHeight ? 'auto' : height + 'px',
@@ -750,6 +754,7 @@ const GridImage = ({
                 originalWidth: image.original.width,
                 originalHeight: image.original.height,
                 cropPosition: image.crop_position,
+                loadedEffect: loadedEffect,
                 style: {
                   width: width + 'px',
                   height: autoHeight ? 'auto' : height + 'px',

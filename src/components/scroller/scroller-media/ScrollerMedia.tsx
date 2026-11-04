@@ -11,6 +11,7 @@ interface IScrollerMediaProps {
   showVideoCover: boolean;
   size: number;
   wrapperRef: React.RefObject<HTMLDivElement>;
+  loadedEffect?: string;
 }
 
 const ScrollerMedia = ({
@@ -18,6 +19,7 @@ const ScrollerMedia = ({
   showVideoCover,
   size,
   wrapperRef,
+  loadedEffect,
 }: IScrollerMediaProps) => {
   const srcSetString = getSrcSetString(item.image.sizes);
 
@@ -37,6 +39,7 @@ const ScrollerMedia = ({
           originalWidth: item.image.original.width,
           originalHeight: item.image.original.height,
           cropPosition: item.image.crop_position,
+          loadedEffect,
         }}
         className="reacg-scroller-media"
       />
@@ -55,6 +58,7 @@ const ScrollerMedia = ({
       originalWidth={item.image.original.width}
       originalHeight={item.image.original.height}
       cropPosition={item.image.crop_position}
+      loadedEffect={loadedEffect}
     />
   );
 };

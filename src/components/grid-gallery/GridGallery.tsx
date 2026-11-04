@@ -53,6 +53,7 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
     overlayTextBackground,
     invertTextColor,
     hoverEffect,
+    loadedEffect,
     showCaption,
     captionSource,
     captionFontSize,
@@ -256,6 +257,7 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
               borderRadius={borderRadius}
               margin={padding}
               hoverEffect={hoverEffect}
+              loadedEffect={loadedEffect}
               showCaption={showCaption}
               captionSource={captionSource}
               captionFontSize={captionFontSize}

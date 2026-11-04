@@ -9,7 +9,11 @@ import {
 import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
-import {HoverEffectOptions, ICubeSettings} from 'data-structures';
+import {
+  HoverEffectOptions,
+  ICubeSettings,
+  LoadedEffectOptions,
+} from 'data-structures';
 import {Filter} from '../Filter';
 
 interface ICubeAppearanceSettingsProps {
@@ -26,8 +30,14 @@ const CubeAppearanceSettings = ({
   onProFeatureClick,
 }: ICubeAppearanceSettingsProps) => {
   const {resetTemplate} = useTemplates();
-  const {backgroundColor, padding, shadow, hoverEffect, showVideoCover} =
-    settings;
+  const {
+    backgroundColor,
+    padding,
+    shadow,
+    hoverEffect,
+    loadedEffect,
+    showVideoCover,
+  } = settings;
 
   const onInputValueChange = (inputValue: unknown, key?: string) => {
     resetTemplate?.();
@@ -105,6 +115,23 @@ const CubeAppearanceSettings = ({
                     onInputValueChange(inputValue, 'hoverEffect');
                   }
                 }}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'loadedEffect'}
+                name={'Loaded effect'}
+                tooltip={
+                  <p>
+                    The animation effect used to display the media, once it has
+                    loaded.
+                  </p>
+                }
+                value={loadedEffect || 'none'}
+                options={LoadedEffectOptions}
+                onChange={(inputValue: any) =>
+                  onInputValueChange(inputValue, 'loadedEffect')
+                }
               />
             </Filter>
             <Filter isLoading={isLoading}>

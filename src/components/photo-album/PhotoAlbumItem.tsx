@@ -53,6 +53,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
     overlayTextBackground,
     invertTextColor,
     hoverEffect,
+    loadedEffect,
     showCaption,
     captionSource,
     captionFontSize,
@@ -376,6 +377,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             originalWidth={image.original.width}
             originalHeight={image.original.height}
             cropPosition={image.crop_position}
+            loadedEffect={loadedEffect}
             style={{
               width: '100%',
               height: '100%',
@@ -393,6 +395,7 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
               originalWidth: image.original.width,
               originalHeight: image.original.height,
               cropPosition: image.crop_position,
+              loadedEffect: loadedEffect,
               style: {
                 width: '100%',
                 height: '100%',

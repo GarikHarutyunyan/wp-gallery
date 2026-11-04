@@ -9,7 +9,11 @@ import {
 import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
-import {HoverEffectOptions, IScrollerSettings} from 'data-structures';
+import {
+  HoverEffectOptions,
+  IScrollerSettings,
+  LoadedEffectOptions,
+} from 'data-structures';
 import {Filter} from '../Filter';
 
 interface IScrollerAppearanceSettingsProps {
@@ -34,6 +38,7 @@ const ScrollerAppearanceSettings = ({
     borderRadius,
     gap,
     hoverEffect,
+    loadedEffect,
     showVideoCover,
   } = settings;
 
@@ -143,6 +148,23 @@ const ScrollerAppearanceSettings = ({
                     onInputValueChange(inputValue, 'hoverEffect');
                   }
                 }}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'loadedEffect'}
+                name={'Loaded effect'}
+                tooltip={
+                  <p>
+                    The animation effect used to display the media, once it has
+                    loaded.
+                  </p>
+                }
+                value={loadedEffect || 'none'}
+                options={LoadedEffectOptions}
+                onChange={(inputValue: any) =>
+                  onInputValueChange(inputValue, 'loadedEffect')
+                }
               />
             </Filter>
             <Filter isLoading={isLoading}>

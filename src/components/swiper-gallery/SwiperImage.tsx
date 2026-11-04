@@ -57,6 +57,7 @@ const SwiperImage = forwardRef(
   ) => {
     const {
       hoverEffect,
+      loadedEffect,
       showTitle,
       titleSource,
       titleVisibility,
@@ -509,6 +510,7 @@ const SwiperImage = forwardRef(
               originalWidth={image.original.width}
               originalHeight={image.original.height}
               cropPosition={image.crop_position}
+              loadedEffect={loadedEffect}
             />
           )}
           {image.type === ImageType.VIDEO && (
@@ -526,6 +528,7 @@ const SwiperImage = forwardRef(
                 originalWidth: image.original.width,
                 originalHeight: image.original.height,
                 cropPosition: image.crop_position,
+                loadedEffect: loadedEffect,
               }}
             />
           )}

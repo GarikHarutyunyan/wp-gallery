@@ -20,6 +20,7 @@ const BlogImage = ({
   imageHeightType,
   imageRadius,
   hoverEffect,
+  loadedEffect,
   onClick,
   showVideoCover,
 }: any) => {
@@ -43,6 +44,7 @@ const BlogImage = ({
     imageHeightType,
     imageRadius,
     hoverEffect,
+    loadedEffect,
     showVideoCover,
   };
   const srcSetString: string = getSrcSetString(image.sizes);
@@ -76,6 +78,7 @@ const BlogImage = ({
           originalWidth={image.original.width}
           originalHeight={image.original.height}
           cropPosition={image.crop_position}
+          loadedEffect={loadedEffect}
         />
       )}
       {image.type === ImageType.VIDEO && (
@@ -92,6 +95,7 @@ const BlogImage = ({
             originalWidth: image.original.width,
             originalHeight: image.original.height,
             cropPosition: image.crop_position,
+            loadedEffect: loadedEffect,
           }}
         />
       )}

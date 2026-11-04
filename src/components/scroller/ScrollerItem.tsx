@@ -490,6 +490,7 @@ const ScrollerItem: React.FC<IScrollerItemProps> = ({
             showVideoCover={showVideoCover}
             size={imageRequestSize}
             wrapperRef={wrapperRef}
+            loadedEffect={settings?.loadedEffect}
           />
           <Watermark />
           {showTitle &&

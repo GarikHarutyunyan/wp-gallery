@@ -15,6 +15,7 @@ interface IReImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   originalWidth?: number;
   originalHeight?: number;
   cropPosition?: string;
+  loadedEffect?: string;
 }
 
 const ReImage = ({
@@ -22,9 +23,11 @@ const ReImage = ({
   originalWidth,
   originalHeight,
   cropPosition,
+  loadedEffect = 'none',
   ...props
 }: IReImageProps): ReactElement => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isAnimationRunning, setIsAnimationRunning] = useState(false);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
@@ -34,11 +37,34 @@ const ReImage = ({
     if (imageElement?.complete && imageElement.naturalWidth > 0) {
       imageElement.classList.add('re-image_loaded');
       setIsLoaded(true);
+      if (loadedEffect && loadedEffect !== 'none') {
+        setIsAnimationRunning(true);
+      } else {
+        setIsAnimationRunning(false);
+      }
       return;
     }
 
     setIsLoaded(false);
-  }, [props.src, originalWidth, originalHeight]);
+    setIsAnimationRunning(Boolean(loadedEffect && loadedEffect !== 'none'));
+  }, [props.src, originalWidth, originalHeight, loadedEffect]);
+
+  useEffect(() => {
+    if (isLoaded && loadedEffect && loadedEffect !== 'none') {
+      setIsAnimationRunning(true);
+    } else {
+      setIsAnimationRunning(false);
+    }
+  }, [loadedEffect, isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded && isAnimationRunning) {
+      const timer = setTimeout(() => {
+        setIsAnimationRunning(false);
+      }, 900);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoaded, isAnimationRunning]);
 
   const onLoad = (e: SyntheticEvent<HTMLImageElement>) => {
     props?.onLoad?.(e as any);
@@ -46,6 +72,16 @@ const ReImage = ({
 
     img.classList.add('re-image_loaded');
     setIsLoaded(true);
+    if (loadedEffect && loadedEffect !== 'none') {
+      setIsAnimationRunning(true);
+    } else {
+      setIsAnimationRunning(false);
+    }
+  };
+
+  const onAnimationEnd = (e: SyntheticEvent<HTMLImageElement>) => {
+    props?.onAnimationEnd?.(e as any);
+    setIsAnimationRunning(false);
   };
 
   const imageStyle = {
@@ -59,16 +95,35 @@ const ReImage = ({
     objectPosition: cropPosition || undefined,
   } as CSSProperties;
 
+  const showPlaceholder = !isLoaded || isAnimationRunning;
+  const hasActiveEffect =
+    isLoaded &&
+    isAnimationRunning &&
+    Boolean(loadedEffect && loadedEffect !== 'none');
+
   return (
     <>
-      {!isLoaded && <div className={'re-image__placeholder'} />}
+      {showPlaceholder && (
+        <div
+          className={clsx(
+            're-image__placeholder',
+            isLoaded && 're-image__placeholder_animating'
+          )}
+        />
+      )}
       <img
         ref={imageRef}
         loading={'eager'}
         {...props}
-        className={clsx('re-image', props.className)}
+        className={clsx(
+          're-image',
+          props.className,
+          isLoaded && 're-image_loaded',
+          hasActiveEffect && `re-image_effect-${loadedEffect}`
+        )}
         style={imageStyle}
         onLoad={onLoad}
+        onAnimationEnd={onAnimationEnd}
       />
     </>
   );

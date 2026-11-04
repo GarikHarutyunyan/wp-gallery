@@ -3,7 +3,11 @@ import Paper from '@mui/material/Paper';
 import {useTemplates} from 'contexts';
 import {usePro} from 'contexts/ProContext';
 import {Section} from 'core-components/section';
-import {HoverEffectOptions, IMasonrySettings} from 'data-structures';
+import {
+  HoverEffectOptions,
+  IMasonrySettings,
+  LoadedEffectOptions,
+} from 'data-structures';
 import {
   ColorControl,
   SelectControl,
@@ -34,6 +38,7 @@ const MasonryAppearanceSettings = ({
     paddingColor,
     borderRadius,
     hoverEffect,
+    loadedEffect,
     showVideoCover,
   } = settings;
 
@@ -143,6 +148,23 @@ const MasonryAppearanceSettings = ({
                     onInputValueChange(inputValue, 'hoverEffect');
                   }
                 }}
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'loadedEffect'}
+                name={'Loaded effect'}
+                tooltip={
+                  <p>
+                    The animation effect used to display the media, once it has
+                    loaded.
+                  </p>
+                }
+                value={loadedEffect || 'none'}
+                options={LoadedEffectOptions}
+                onChange={(inputValue: any) =>
+                  onInputValueChange(inputValue, 'loadedEffect')
+                }
               />
             </Filter>
             <Filter isLoading={isLoading}>

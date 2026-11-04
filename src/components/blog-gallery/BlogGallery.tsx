@@ -48,6 +48,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
     buttonBorderRadius,
     textFontFamily,
     hoverEffect,
+    loadedEffect,
     openInNewTab,
     buttonUrlSource,
     titleMaxRowsCount,
@@ -113,6 +114,7 @@ const BlogGallery: React.FC<IBlogGalleryProps> = ({onClick}) => {
                 imageHeightType={imageHeightType}
                 imageRadius={imageRadius}
                 hoverEffect={hoverEffect}
+                loadedEffect={loadedEffect}
                 showVideoCover={showVideoCover}
                 onClick={onClick}
               />
