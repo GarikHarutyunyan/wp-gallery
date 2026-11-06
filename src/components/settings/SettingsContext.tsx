@@ -32,6 +32,7 @@ import React, {
 } from 'react';
 import {
   broadcastOptions,
+  onImagesCountMessage,
   onOptionsMessage,
   onOptionsRequest,
   requestOptions,
@@ -395,6 +396,59 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }));
   }, [galleryId, isSettingsApp]);
 
+  // Keep imagesCount in sync with the current gallery's image list, whether
+  // images are rendered in the DOM (#reacg-gallery-images) or broadcast from
+  // the canvas preview document via postMessage.
+  useEffect(() => {
+    if (!galleryId) {
+      return;
+    }
+
+    const checkDomCount = () => {
+      if (typeof document === 'undefined') {
+        return;
+      }
+      const el = document.getElementById('reacg-gallery-images');
+      if (el) {
+        const count = el.querySelectorAll(
+          '.reacg_item:not(.reacg_item_new):not(.reacg-template)'
+        ).length;
+        if (count > 0) {
+          setImagesCount(count);
+        }
+      }
+    };
+
+    checkDomCount();
+
+    let observer: MutationObserver | null = null;
+    if (typeof MutationObserver !== 'undefined' && typeof document !== 'undefined') {
+      const targetNode =
+        document.getElementById('reacg-gallery-images') ||
+        document.querySelector('.reacg-builder-panel') ||
+        document.body;
+      if (targetNode) {
+        observer = new MutationObserver(() => {
+          checkDomCount();
+        });
+        observer.observe(targetNode, {childList: true, subtree: true});
+      }
+    }
+
+    const unsubscribe = onImagesCountMessage(String(galleryId), (count) => {
+      if (typeof count === 'number' && count > 0) {
+        setImagesCount(count);
+      }
+    });
+
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+      unsubscribe();
+    };
+  }, [galleryId]);
+
   const changeType = async (newType: GalleryType) => {
     const fetchUrl: string | undefined = baseUrl
       ? baseUrl + 'options/' + galleryId
@@ -691,6 +745,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       reset: () => onResetRef.current(),
       hasChanges: () => hasChangesRef.current,
       getOptions: () => optionsRef.current,
+      setImagesCount: (count: number) => setImagesCount(count),
     };
     globalObj.settings_api[String(galleryId)] = api;
 

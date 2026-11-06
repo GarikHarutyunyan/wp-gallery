@@ -42,7 +42,7 @@ const CarouselSettings = ({
 
   useEffect(() => {
     const totalAvailableImages = allImagesCount ?? 0;
-    if (totalAvailableImages !== 0) {
+    if (totalAvailableImages > 0) {
       const count = Math.min(imagesCount, totalAvailableImages);
       if (count !== imagesCount) {
         onSettingsChange({...settings, imagesCount: count});
@@ -51,6 +51,11 @@ const CarouselSettings = ({
   }, [allImagesCount, imagesCount]);
 
   const {isPro} = usePro();
+
+  const maxImagesCount =
+    typeof allImagesCount === 'number' && allImagesCount > 0
+      ? allImagesCount
+      : undefined;
 
   return (
     <Paper elevation={0} sx={{textAlign: 'left'}}>
@@ -86,7 +91,7 @@ const CarouselSettings = ({
                 value={imagesCount}
                 onChange={onInputValueChange}
                 min={1}
-                max={allImagesCount}
+                max={maxImagesCount}
                 step={1}
               />
             </Filter>

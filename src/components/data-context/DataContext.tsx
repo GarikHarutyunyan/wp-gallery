@@ -21,6 +21,7 @@ import {
 } from 'react';
 import {DataFetcher} from '../grid-gallery/DataFetcher';
 import {useSettings} from '../settings';
+import {broadcastImagesCount} from 'utils/optionsSync';
 
 const propsImages: IImageDTO[] = [];
 
@@ -328,6 +329,9 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
     setImages(newImages);
     changeImagesCount?.(newImages.length);
+    if (galleryId && newImages.length > 0) {
+      broadcastImagesCount(String(galleryId), newImages.length);
+    }
     setCurrentPage(page);
   };
 
@@ -485,6 +489,9 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           setImages((prevImages) => [...prevImages, ...newImages]);
           changeImagesCount?.(newImages.length);
         }
+        if (galleryId && newImages.length > 0) {
+          broadcastImagesCount(String(galleryId), newImages.length);
+        }
         setCurrentPage(page);
         setIsLoading(false);
         setLightboxImages(newImages);
@@ -525,6 +532,9 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       }
       setImages(filtered);
       changeImagesCount?.(filtered.length);
+      if (galleryId && filtered.length > 0) {
+        broadcastImagesCount(String(galleryId), filtered.length);
+      }
       setIsLoading(false);
     }
   };

@@ -10,6 +10,7 @@ import {ReacgOptions} from 'data-structures';
 
 export const OPTIONS_MESSAGE = 'reacg:options';
 export const REQUEST_OPTIONS_MESSAGE = 'reacg:request-options';
+export const IMAGES_COUNT_MESSAGE = 'reacg:images-count';
 
 export interface IOptionsMessage {
   type: typeof OPTIONS_MESSAGE;
@@ -21,6 +22,12 @@ export interface IOptionsMessage {
 export interface IRequestOptionsMessage {
   type: typeof REQUEST_OPTIONS_MESSAGE;
   galleryId: string;
+}
+
+export interface IImagesCountMessage {
+  type: typeof IMAGES_COUNT_MESSAGE;
+  galleryId: string;
+  imagesCount: number;
 }
 
 const isSameOrigin = (event: MessageEvent): boolean => {
@@ -181,3 +188,50 @@ export const onOptionsRequest = (
   window.addEventListener('message', handler);
   return () => window.removeEventListener('message', handler);
 };
+
+/**
+ * Broadcast the images count of a gallery to reachable windows.
+ */
+export const broadcastImagesCount = (
+  galleryId: string,
+  imagesCount: number
+): void => {
+  const message: IImagesCountMessage = {
+    type: IMAGES_COUNT_MESSAGE,
+    galleryId: String(galleryId),
+    imagesCount,
+  };
+  collectWindows().forEach((win) => {
+    if (win !== window) {
+      post(win, message);
+    }
+  });
+};
+
+/**
+ * Subscribe to images count updates for a gallery.
+ */
+export const onImagesCountMessage = (
+  galleryId: string,
+  callback: (imagesCount: number) => void
+): (() => void) => {
+  const handler = (event: MessageEvent) => {
+    if (!isSameOrigin(event)) {
+      return;
+    }
+    const data = event.data as IImagesCountMessage | undefined;
+    if (
+      !data ||
+      data.type !== IMAGES_COUNT_MESSAGE ||
+      String(data.galleryId) !== String(galleryId) ||
+      typeof data.imagesCount !== 'number'
+    ) {
+      return;
+    }
+    callback(data.imagesCount);
+  };
+
+  window.addEventListener('message', handler);
+  return () => window.removeEventListener('message', handler);
+};
+
