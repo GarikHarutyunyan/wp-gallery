@@ -56,9 +56,14 @@ const NavigationSettings = ({
     filterInactiveTextColor = '#000000de',
     filterBorderRadius = 4,
     filterFontSize = 14,
+    noDataText = '',
   } = settings;
   const {isPro} = usePro();
-  const {searchPlaceholder, allText} = useContext(TranslationsContext);
+  const {
+    searchPlaceholder,
+    allText,
+    noDataText: defaultNoDataText,
+  } = useContext(TranslationsContext);
 
   const isSliderLikeGallery: boolean =
     type === GalleryType.SLIDESHOW ||
@@ -329,6 +334,19 @@ const NavigationSettings = ({
                 </Filter>
               </Grid>
             )}
+
+            {/* Row 5: Empty Gallery Text */}
+            <Grid container columns={24} rowSpacing={2} columnSpacing={4}>
+              <Filter isLoading={isLoading}>
+                <TextControl
+                  id={'noDataText'}
+                  name={'Empty gallery text'}
+                  value={noDataText}
+                  placeholder={defaultNoDataText}
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+            </Grid>
           </Box>
         }
       />

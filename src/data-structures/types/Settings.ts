@@ -240,6 +240,7 @@ export interface IGeneralSettings {
   filterBorderRadius?: number;
   filterFontSize?: number;
   showFrontendSorting?: boolean;
+  noDataText?: string;
 }
 
 export interface ICubeSettings {

@@ -333,6 +333,7 @@ const generalMockSettings: IGeneralSettings = {
   filterBorderRadius: 4,
   filterFontSize: 14,
   showFrontendSorting: false,
+  noDataText: '',
 };
 
 const lightboxMockSettings: ILightboxSettings = {

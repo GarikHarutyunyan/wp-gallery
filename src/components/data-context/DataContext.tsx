@@ -112,6 +112,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     itemsPerPage = 1,
     orderBy = 'default',
     orderDirection = 'asc',
+    noDataText: customNoDataText = '',
   } = generalSettings as IGeneralSettings;
   const {galleryId, baseUrl, getGalleryTimestamp} = useAppInfo();
   const {
@@ -571,7 +572,7 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     return (
       <Paper variant={'outlined'} className={'content-placeholder'}>
         <Typography gutterBottom variant="h6" component="div">
-          {noDataText}
+          {customNoDataText || noDataText}
         </Typography>
       </Paper>
     );

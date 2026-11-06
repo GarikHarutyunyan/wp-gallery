@@ -23,8 +23,8 @@ const TranslationsProvider: React.FC<React.PropsWithChildren> = ({
   const [noDataText, setNoDataText] = useState<string | undefined>(
     () =>
       typeof window !== 'undefined'
-        ? (window as any).reacg_global?.text?.no_data
-        : undefined
+        ? (window as any).reacg_global?.text?.no_data || 'There is not data.'
+        : 'There is not data.'
   );
   const [searchPlaceholder, setSearchPlaceholder] = useState<
     string | undefined
