@@ -51,6 +51,19 @@ const collectWindows = (): Window[] => {
     } catch (e) {
       /* Cross-origin frame; skip. */
     }
+    try {
+      if (win.document) {
+        const iframes = win.document.querySelectorAll('iframe');
+        for (let i = 0; i < iframes.length; i++) {
+          const cw = iframes[i].contentWindow;
+          if (cw) {
+            visit(cw);
+          }
+        }
+      }
+    } catch (e) {
+      /* Cross-origin document; skip. */
+    }
   };
 
   let top: Window = window;
@@ -81,6 +94,13 @@ const collectAncestors = (): Window[] => {
   } catch (e) {
     /* Cross-origin ancestor; stop. */
   }
+  try {
+    if (window.top && result.indexOf(window.top) === -1) {
+      result.push(window.top);
+    }
+  } catch (e) {
+    /* Cross-origin top; stop. */
+  }
   return result;
 };
 
@@ -90,6 +110,26 @@ const post = (target: Window, message: object) => {
   } catch (e) {
     /* Ignore unreachable windows. */
   }
+};
+
+/**
+ * Deliver a message to a window exactly once. Same-origin windows whose
+ * document is reachable (including Divi 4's `about:blank` app frame) get a
+ * synchronous CustomEvent; anything else falls back to postMessage.
+ */
+const deliver = (target: Window, message: {type: string}) => {
+  try {
+    // Throws for cross-origin windows.
+    if (target.document) {
+      const EventCtor: typeof CustomEvent =
+        (target as any).CustomEvent || CustomEvent;
+      target.dispatchEvent(new EventCtor(message.type, {detail: message}));
+      return;
+    }
+  } catch (e) {
+    /* Cross-origin window; use postMessage below. */
+  }
+  post(target, message);
 };
 
 /**
@@ -108,7 +148,7 @@ export const broadcastOptions = (
   };
   collectWindows().forEach((win) => {
     if (win !== window) {
-      post(win, message);
+      deliver(win, message);
     }
   });
 };
@@ -122,7 +162,7 @@ export const requestOptions = (galleryId: string): void => {
     type: REQUEST_OPTIONS_MESSAGE,
     galleryId: String(galleryId),
   };
-  collectAncestors().forEach((win) => post(win, message));
+  collectAncestors().forEach((win) => deliver(win, message));
 };
 
 /**
@@ -132,11 +172,7 @@ export const onOptionsMessage = (
   galleryId: string,
   callback: (options: ReacgOptions, hasChanges: boolean) => void
 ): (() => void) => {
-  const handler = (event: MessageEvent) => {
-    if (!isSameOrigin(event)) {
-      return;
-    }
-    const data = event.data as IOptionsMessage | undefined;
+  const handleData = (data: IOptionsMessage | undefined) => {
     if (
       !data ||
       data.type !== OPTIONS_MESSAGE ||
@@ -148,8 +184,24 @@ export const onOptionsMessage = (
     callback(data.options, !!data.hasChanges);
   };
 
+  const handler = (event: MessageEvent) => {
+    if (!isSameOrigin(event)) {
+      return;
+    }
+    handleData(event.data as IOptionsMessage | undefined);
+  };
+
+  const directHandler = (event: Event) => {
+    const customEvt = event as CustomEvent<IOptionsMessage>;
+    handleData(customEvt.detail);
+  };
+
   window.addEventListener('message', handler);
-  return () => window.removeEventListener('message', handler);
+  window.addEventListener(OPTIONS_MESSAGE, directHandler);
+  return () => {
+    window.removeEventListener('message', handler);
+    window.removeEventListener(OPTIONS_MESSAGE, directHandler);
+  };
 };
 
 /**
@@ -159,6 +211,20 @@ export const onOptionsRequest = (
   galleryId: string,
   getOptions: () => {options: ReacgOptions; hasChanges: boolean} | null
 ): (() => void) => {
+  const answer = (source: Window | null) => {
+    const current = getOptions();
+    if (!current || !source) {
+      return;
+    }
+    const message: IOptionsMessage = {
+      type: OPTIONS_MESSAGE,
+      galleryId: String(galleryId),
+      options: current.options,
+      hasChanges: current.hasChanges,
+    };
+    deliver(source, message);
+  };
+
   const handler = (event: MessageEvent) => {
     if (!isSameOrigin(event)) {
       return;
@@ -171,22 +237,34 @@ export const onOptionsRequest = (
     ) {
       return;
     }
-    const current = getOptions();
-    const source = event.source as Window | null;
-    if (!current || !source) {
+    answer(event.source as Window | null);
+  };
+
+  const directHandler = (event: Event) => {
+    const customEvt = event as CustomEvent<IRequestOptionsMessage>;
+    const data = customEvt.detail;
+    if (
+      !data ||
+      data.type !== REQUEST_OPTIONS_MESSAGE ||
+      String(data.galleryId) !== String(galleryId)
+    ) {
       return;
     }
-    const message: IOptionsMessage = {
-      type: OPTIONS_MESSAGE,
-      galleryId: String(galleryId),
-      options: current.options,
-      hasChanges: current.hasChanges,
-    };
-    post(source, message);
+    // A direct event carries no source window: answer every reachable
+    // window; receivers filter by galleryId.
+    collectWindows().forEach((win) => {
+      if (win !== window) {
+        answer(win);
+      }
+    });
   };
 
   window.addEventListener('message', handler);
-  return () => window.removeEventListener('message', handler);
+  window.addEventListener(REQUEST_OPTIONS_MESSAGE, directHandler);
+  return () => {
+    window.removeEventListener('message', handler);
+    window.removeEventListener(REQUEST_OPTIONS_MESSAGE, directHandler);
+  };
 };
 
 /**
@@ -203,7 +281,7 @@ export const broadcastImagesCount = (
   };
   collectWindows().forEach((win) => {
     if (win !== window) {
-      post(win, message);
+      deliver(win, message);
     }
   });
 };
@@ -215,11 +293,7 @@ export const onImagesCountMessage = (
   galleryId: string,
   callback: (imagesCount: number) => void
 ): (() => void) => {
-  const handler = (event: MessageEvent) => {
-    if (!isSameOrigin(event)) {
-      return;
-    }
-    const data = event.data as IImagesCountMessage | undefined;
+  const handleData = (data: IImagesCountMessage | undefined) => {
     if (
       !data ||
       data.type !== IMAGES_COUNT_MESSAGE ||
@@ -231,7 +305,23 @@ export const onImagesCountMessage = (
     callback(data.imagesCount);
   };
 
+  const handler = (event: MessageEvent) => {
+    if (!isSameOrigin(event)) {
+      return;
+    }
+    handleData(event.data as IImagesCountMessage | undefined);
+  };
+
+  const directHandler = (event: Event) => {
+    const customEvt = event as CustomEvent<IImagesCountMessage>;
+    handleData(customEvt.detail);
+  };
+
   window.addEventListener('message', handler);
-  return () => window.removeEventListener('message', handler);
+  window.addEventListener(IMAGES_COUNT_MESSAGE, directHandler);
+  return () => {
+    window.removeEventListener('message', handler);
+    window.removeEventListener(IMAGES_COUNT_MESSAGE, directHandler);
+  };
 };
 
