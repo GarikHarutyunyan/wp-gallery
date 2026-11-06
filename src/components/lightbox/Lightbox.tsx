@@ -68,6 +68,7 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   const handleMouseDown = (e: any) => {
     startPos.current = {x: e.clientX, y: e.clientY};
     dragged.current = false;
+    setDrag(false);
     setIsMouseDown(true);
   };
 
@@ -78,6 +79,7 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
     const dy = Math.abs(e.clientY - startPos.current.y);
     if (dx > dragThreshold || dy > dragThreshold) {
       dragged.current = true;
+      setDrag(true);
     }
   };
 
@@ -88,7 +90,11 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
 
   return createPortal(
     <div
-      onClick={onClick}
+      onClick={() => {
+        if (!dragged.current) {
+          onClick();
+        }
+      }}
       className={clsx(
         'react-lightbox__background',
         `react-lightbox__background_opening-${openingAnimation}`
@@ -944,6 +950,16 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
                     slide.cropPosition || 'center center',
                 } as React.CSSProperties
               }
+              onClick={(e) => {
+                const target = e.target as HTMLElement | null;
+                if (
+                  !drag &&
+                  target &&
+                  target.classList.contains('yarl__slide_wrapper')
+                ) {
+                  controllerRef.current?.close();
+                }
+              }}
             >
               {children}
             </div>
