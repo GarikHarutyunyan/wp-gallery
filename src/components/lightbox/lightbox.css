@@ -3,6 +3,90 @@
   object-position: var(--reacg-crop-position, center center);
 }
 
+@keyframes reacg-lightbox-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes reacg-lightbox-zoom-in {
+  from {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes reacg-lightbox-zoom-out {
+  from {
+    opacity: 0;
+    transform: scale3d(1.3, 1.3, 1.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes reacg-lightbox-slide-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 60px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes reacg-lightbox-slide-down {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -60px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes reacg-lightbox-slide-left {
+  from {
+    opacity: 0;
+    transform: translate3d(60px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes reacg-lightbox-slide-right {
+  from {
+    opacity: 0;
+    transform: translate3d(-60px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes reacg-lightbox-flip {
+  from {
+    opacity: 0;
+    transform: perspective(1000px) rotateY(-65deg);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(0deg);
+  }
+}
+
 .react-lightbox__background {
   position: fixed;
   width: 100vw; /* or 100% + padding(which is added to the <body> to compensate for the missing scrollbar to avoid layout shift.) */
@@ -11,6 +95,62 @@
   left: 0;
   background: rgba(0, 0, 0, 0.8);
   z-index: 1000000;
+  animation: reacg-lightbox-fade-in 0.3s ease;
+}
+
+.react-lightbox__background.react-lightbox__background_opening-none {
+  animation: none;
+}
+
+.reacg-lightbox.reacg-lightbox-opening-none.yarl__portal.yarl__portal_open {
+  animation: none;
+}
+
+.reacg-lightbox.reacg-lightbox-opening-fade-in.yarl__portal.yarl__portal_open {
+  animation: reacg-lightbox-fade-in 0.3s ease;
+}
+
+.reacg-lightbox.reacg-lightbox-opening-zoom-in.yarl__portal.yarl__portal_open {
+  animation: reacg-lightbox-zoom-in 0.3s ease;
+}
+
+.reacg-lightbox.reacg-lightbox-opening-zoom-out.yarl__portal.yarl__portal_open {
+  animation: reacg-lightbox-zoom-out 0.3s ease;
+}
+
+.reacg-lightbox.reacg-lightbox-opening-slide-up.yarl__portal.yarl__portal_open {
+  animation: reacg-lightbox-slide-up 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.reacg-lightbox.reacg-lightbox-opening-slide-down.yarl__portal.yarl__portal_open {
+  animation: reacg-lightbox-slide-down 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.reacg-lightbox.reacg-lightbox-opening-slide-left.yarl__portal.yarl__portal_open {
+  animation: reacg-lightbox-slide-left 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.reacg-lightbox.reacg-lightbox-opening-slide-right.yarl__portal.yarl__portal_open {
+  animation: reacg-lightbox-slide-right 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.reacg-lightbox.reacg-lightbox-opening-flip.yarl__portal.yarl__portal_open {
+  animation: reacg-lightbox-flip 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.reacg-lightbox .yarl__fullscreen:fullscreen .yarl__container,
+.reacg-lightbox .yarl__fullscreen:fullscreen .yarl__thumbnails_container {
+  background-color: var(
+    --yarl__reacg_background_color,
+    rgba(0, 0, 0, 0.2)
+  ) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .react-lightbox__background,
+  .reacg-lightbox.yarl__portal.yarl__portal_open {
+    animation: none !important;
+  }
 }
 
 .reacg-lightbox .yarl__toolbar {

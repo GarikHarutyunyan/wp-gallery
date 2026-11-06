@@ -7,6 +7,7 @@ import {
   HoverEffect,
   ImageClickAction,
   LightboxImageAnimation,
+  LightboxOpeningAnimation,
   LoadedEffect,
   LightboxTextPosition,
   LightboxThumbnailsPosition,
@@ -197,6 +198,7 @@ export interface ILightboxSettings extends ISlideshowSettings {
   areControlButtonsShown: boolean;
   isFullscreen: boolean;
   isTextFullWidth: boolean;
+  openingAnimation?: LightboxOpeningAnimation;
 }
 
 export interface IGeneralSettings {

@@ -10,6 +10,8 @@ import {
   DescriptionSourceOptions,
   ILightboxSettings,
   LightboxImageAnimationOptions,
+  LightboxOpeningAnimation,
+  LightboxOpeningAnimationOptions,
   LightboxTextPositionOptions,
   LightboxThumbnailsPosition,
   LightboxThumbnailsPositionOptions,
@@ -56,6 +58,7 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
     autoplay,
     slideDuration,
     imageAnimation,
+    openingAnimation,
     canFullscreen,
     thumbnailsPosition,
     thumbnailWidth,
@@ -152,6 +155,20 @@ const LightboxSettings: React.FC<ILightboxSettingsProps> = ({
                   isPro
                     ? onInputValueChange
                     : () => onProFeatureClick?.('animation')
+                }
+              />
+            </Filter>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'openingAnimation'}
+                name={'Opening animation'}
+                pro={true}
+                value={openingAnimation || LightboxOpeningAnimation.FADE_IN}
+                options={LightboxOpeningAnimationOptions}
+                onChange={
+                  isPro
+                    ? onInputValueChange
+                    : () => onProFeatureClick?.('opening_animation')
                 }
               />
             </Filter>

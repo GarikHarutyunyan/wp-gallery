@@ -25,4 +25,5 @@ export * from './TitleAlignment';
 export * from './TitlePosition';
 export * from './TitleSource';
 export * from './TitleVisibility';
+export * from './LightboxOpeningAnimation';
 

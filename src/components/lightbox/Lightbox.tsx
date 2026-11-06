@@ -5,6 +5,7 @@ import {
   IImageDTO,
   ILightboxSettings,
   LightboxImageAnimation,
+  LightboxOpeningAnimation,
   LightboxTextPosition,
   LightboxThumbnailsPosition,
 } from 'data-structures';
@@ -42,6 +43,8 @@ interface ILightboxBackgroundProps {
   id: string;
   galleryId?: string;
   isVisible: boolean;
+  backgroundColor?: string;
+  openingAnimation?: LightboxOpeningAnimation;
   onClick: () => void;
   setDrag: (value: boolean) => void;
 }
@@ -50,6 +53,8 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   id,
   galleryId,
   isVisible,
+  backgroundColor,
+  openingAnimation = LightboxOpeningAnimation.FADE_IN,
   onClick,
   setDrag,
 }) => {
@@ -84,7 +89,10 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
   return createPortal(
     <div
       onClick={onClick}
-      className={'react-lightbox__background'}
+      className={clsx(
+        'react-lightbox__background',
+        `react-lightbox__background_opening-${openingAnimation}`
+      )}
       data-gallery-id={galleryId}
       style={{display: isVisible ? 'block' : 'none'}}
       onMouseDown={handleMouseDown}
@@ -93,6 +101,11 @@ const LightboxBackground: React.FC<ILightboxBackgroundProps> = ({
     >
       <div
         id={`reacg-lightbox__background-helper${id}`}
+        style={
+          backgroundColor
+            ? {width: '100%', height: '100%', backgroundColor}
+            : undefined
+        }
         onClick={(e) => e.stopPropagation()}
       />
     </div>,
@@ -117,12 +130,25 @@ const WatermarkOverlay: React.FC = () => {
         // Find the slide container to get its position
         const slide = media.closest('.yarl__slide');
         if (slide) {
-          const slideRect = (slide as HTMLElement).getBoundingClientRect();
+          const slideEl = slide as HTMLElement;
+          const slideRect = slideEl.getBoundingClientRect();
+          const scaleX =
+            slideEl.offsetWidth > 0 ? slideRect.width / slideEl.offsetWidth : 1;
+          const scaleY =
+            slideEl.offsetHeight > 0
+              ? slideRect.height / slideEl.offsetHeight
+              : 1;
           setRect({
-            width: r.width,
-            height: r.height,
-            left: r.left - slideRect.left,
-            top: r.top - slideRect.top,
+            width: scaleX > 0 ? r.width / scaleX : r.width,
+            height: scaleY > 0 ? r.height / scaleY : r.height,
+            left:
+              scaleX > 0
+                ? (r.left - slideRect.left) / scaleX
+                : r.left - slideRect.left,
+            top:
+              scaleY > 0
+                ? (r.top - slideRect.top) / scaleY
+                : r.top - slideRect.top,
           });
         } else {
           setRect({width: r.width, height: r.height, left: 0, top: 0});
@@ -133,10 +159,12 @@ const WatermarkOverlay: React.FC = () => {
     }
     updateRect();
     window.addEventListener('resize', updateRect);
+    document.addEventListener('animationend', updateRect);
     const observer = new MutationObserver(updateRect);
     observer.observe(document.body, {childList: true, subtree: true});
     return () => {
       window.removeEventListener('resize', updateRect);
+      document.removeEventListener('animationend', updateRect);
       observer.disconnect();
     };
   }, []);
@@ -185,6 +213,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
     autoplay,
     slideDuration,
     imageAnimation,
+    openingAnimation = LightboxOpeningAnimation.FADE_IN,
     canFullscreen,
     thumbnailsPosition,
     thumbnailWidth,
@@ -399,7 +428,9 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       const styles = window.getComputedStyle(buttonContainer);
       const marginTop = parseFloat(styles.marginTop || '0');
       const marginBottom = parseFloat(styles.marginBottom || '0');
-      const nextHeight = Math.round(rect.height + marginTop + marginBottom);
+      const nextHeight = Math.round(
+        (buttonContainer.offsetHeight || rect.height) + marginTop + marginBottom
+      );
 
       setButtonContainerHeight((prevHeight) =>
         prevHeight !== nextHeight ? nextHeight : prevHeight
@@ -944,6 +975,7 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
         className={clsx(
           'reacg-lightbox',
           'reacg-lightbox-animation-' + imageAnimation,
+          'reacg-lightbox-opening-' + openingAnimation,
           {
             'reacg-lightbox-control-buttons_hidden': !areControlButtonsShown,
             'reacg-lightbox-texts':
@@ -968,8 +1000,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               ? '100%'
               : `${Math.min(innerHeight, height)}px`,
             'margin': 'auto',
+            '--yarl__reacg_background_color': `${backgroundColor}`,
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
-            '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
+            '--yarl__thumbnails_container_background_color': isFullscreen
+              ? 'transparent'
+              : `${backgroundColor}`,
             '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
             '--yarl__slide_description_container_top': isFullWidthGradient
               ? '0px'
@@ -1017,7 +1052,11 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
               ? {transform: 'translateY(0%)', top: 'auto'}
               : {}),
           },
-          container: {backgroundColor: `${backgroundColor}`},
+          container: {
+            backgroundColor: isFullscreen
+              ? 'transparent'
+              : `${backgroundColor}`,
+          },
           slide: {
             marginTop:
               slideMargins.marginTop && slideMargins.marginTop !== '0'
@@ -1063,6 +1102,8 @@ const VLightbox: React.FC<ILightboxProviderProps> = ({
       {renderThumbnailArrows()}
       <LightboxBackground
         isVisible={activeIndex >= 0}
+        backgroundColor={isFullscreen ? backgroundColor : undefined}
+        openingAnimation={openingAnimation}
         onClick={handleClose}
         id={lightboxId}
         galleryId={galleryId}
