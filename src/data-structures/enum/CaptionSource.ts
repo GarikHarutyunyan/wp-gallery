@@ -11,6 +11,7 @@ export enum CaptionSource {
   IMAGE_CAPTION = 'image_caption',
   IMAGE_ALT = 'image_alt',
   IMAGE_DESCRIPTION = 'image_description',
+  CATEGORY = 'category',
 }
 
 export const CaptionSourceOptions = [
@@ -26,4 +27,5 @@ export const CaptionSourceOptions = [
   {value: CaptionSource.AUTHOR, title: 'Author'},
   {value: CaptionSource.DATECREATED, title: 'Date Created'},
   {value: CaptionSource.EXIF, title: 'Image EXIF'},
+  {value: CaptionSource.CATEGORY, title: 'Category'},
 ];

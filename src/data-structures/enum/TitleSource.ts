@@ -11,6 +11,7 @@ export enum TitleSource {
   IMAGE_CAPTION = 'image_caption',
   IMAGE_ALT = 'image_alt',
   IMAGE_DESCRIPTION = 'image_description',
+  CATEGORY = 'category',
 }
 
 export const TitleSourceOptions = [
@@ -26,4 +27,5 @@ export const TitleSourceOptions = [
   {value: TitleSource.AUTHOR, title: 'Author'},
   {value: TitleSource.DATECREATED, title: 'Date Created'},
   {value: TitleSource.EXIF, title: 'Image EXIF'},
+  {value: TitleSource.CATEGORY, title: 'Category'},
 ];

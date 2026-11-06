@@ -40,5 +40,6 @@ export interface IImageDTO {
   image_caption?: string;
   image_alt?: string;
   image_description?: string;
+  category?: string;
   categories?: ICategoryDTO[];
 }

@@ -224,6 +224,14 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         image_caption: data.image_caption || '',
         image_alt: data.image_alt || '',
         image_description: data.image_description || '',
+        category:
+          data.category ||
+          (Array.isArray(data.categories)
+            ? data.categories
+                .map((cat: any) => cat?.name)
+                .filter(Boolean)
+                .join(', ')
+            : ''),
         categories: data.categories || [],
       }));
 
@@ -270,6 +278,14 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       image_caption: data.image_caption || '',
       image_alt: data.image_alt || '',
       image_description: data.image_description || '',
+      category:
+        data.category ||
+        (Array.isArray(data.categories)
+          ? data.categories
+              .map((cat: any) => cat?.name)
+              .filter(Boolean)
+              .join(', ')
+          : ''),
       categories: data.categories || [],
     }));
 
@@ -408,6 +424,14 @@ const DataProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           image_caption: data.image_caption || '',
           image_alt: data.image_alt || '',
           image_description: data.image_description || '',
+          category:
+            data.category ||
+            (Array.isArray(data.categories)
+              ? data.categories
+                  .map((cat: any) => cat?.name)
+                  .filter(Boolean)
+                  .join(', ')
+              : ''),
           categories: data.categories || [],
         }));
         const newImageCount: number = headers?.['x-images-count'];
