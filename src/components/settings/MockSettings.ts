@@ -4,6 +4,7 @@ import {
   CaptionSource,
   DescriptionPosition,
   DescriptionSource,
+  HeightMode,
   HoverEffect,
   IBlogSettings,
   ICardsSettings,
@@ -19,6 +20,7 @@ import {
   IMosaicSettings,
   IScrollerSettings,
   ISlideshowSettings,
+  LayoutMode,
   LightboxImageAnimation,
   LightboxOpeningAnimation,
   LightboxTextPosition,
@@ -241,6 +243,10 @@ const masonryMockSettings: IMasonrySettings = {
 };
 
 const slideshowMockSettings: ISlideshowSettings = {
+  layoutMode: LayoutMode.BOXED,
+  heightMode: HeightMode.FIXED,
+  aspectRatio: '1.77',
+  isTextFullWidth: true,
   width: 800,
   height: 800,
   isInfinite: false,

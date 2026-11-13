@@ -8,8 +8,10 @@ import {useSettings} from 'components/settings';
 import {ActionButton} from 'core-components/action-button';
 import {
   ActionURLSource,
+  HeightMode,
   IImageDTO,
   ISlideshowSettings,
+  LayoutMode,
   LightboxImageAnimation,
   LightboxTextPosition,
   LightboxThumbnailsPosition,
@@ -47,8 +49,12 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   const {slideshowSettings: settings, wrapperRef} = useSettings();
   const {images} = useData();
   const {
+    layoutMode = LayoutMode.BOXED,
+    heightMode = HeightMode.FIXED,
+    aspectRatio = '1.77',
     width,
     height,
+    isTextFullWidth = true,
     isInfinite,
     padding,
     showCounter,
@@ -108,7 +114,8 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   const [buttonContainerHeight, setButtonContainerHeight] = useState<number>(0);
   const [thumbnailContainer, setThumbnailContainer] =
     useState<HTMLElement | null>(null);
-  const {galleryId} = useAppInfo();
+  const {galleryId, showControls} = useAppInfo();
+  const isPreview = Boolean(showControls);
 
   const slideshowRef = React.useRef<SlideshowRef>(null);
   const controllerRef = React.useRef<ControllerRef>(null);
@@ -123,12 +130,247 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     LightboxThumbnailsPosition.START,
     LightboxThumbnailsPosition.END,
   ].includes(thumbnailsPosition);
+  const isFullScreen = layoutMode === LayoutMode.FULLSCREEN;
+  const isFullWidth = layoutMode === LayoutMode.FULLWIDTH;
+  const isLiveFullScreen = isFullScreen && !isPreview;
+
+  const [measuredRatio, setMeasuredRatio] = useState<number | null>(null);
+  const [currentMediaWidth, setCurrentMediaWidth] = useState<number | null>(null);
+
+  useEffect(() => {
+    const updateWidth = () => {
+      const currentWrapper = wrapperRef.current;
+      const rootEl = slideshowRootRef.current;
+      const detected =
+        currentWrapper?.clientWidth ||
+        rootEl?.parentElement?.clientWidth ||
+        (typeof window !== 'undefined' ? window.innerWidth : width);
+      if (detected > 0) {
+        setInnerWidth(detected);
+      }
+    };
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+
+    return () => window.removeEventListener('resize', updateWidth);
+  }, [wrapperRef, width]);
+
+  useEffect(() => {
+    if (heightMode !== HeightMode.AUTO) {
+      setMeasuredRatio(null);
+      return;
+    }
+
+    const checkImage = () => {
+      const root = slideshowRootRef.current;
+      if (!root) return;
+      const activeImg = root.querySelector<HTMLImageElement | HTMLVideoElement>(
+        '.yarl__slide_current .yarl__slide_image, .yarl__slide_current img, .yarl__slide_current video'
+      );
+      if (activeImg) {
+        if (activeImg instanceof HTMLVideoElement) {
+          if (activeImg.videoWidth > 0 && activeImg.videoHeight > 0) {
+            setMeasuredRatio(activeImg.videoWidth / activeImg.videoHeight);
+          }
+        } else if (activeImg.naturalWidth > 0 && activeImg.naturalHeight > 0) {
+          setMeasuredRatio(activeImg.naturalWidth / activeImg.naturalHeight);
+        }
+      }
+    };
+
+    checkImage();
+
+    const root = slideshowRootRef.current;
+    const activeMedia = root?.querySelector<HTMLImageElement | HTMLVideoElement>(
+      '.yarl__slide_current .yarl__slide_image, .yarl__slide_current img, .yarl__slide_current video'
+    );
+    if (activeMedia) {
+      activeMedia.addEventListener('load', checkImage);
+      activeMedia.addEventListener('loadedmetadata', checkImage);
+      return () => {
+        activeMedia.removeEventListener('load', checkImage);
+        activeMedia.removeEventListener('loadedmetadata', checkImage);
+      };
+    }
+  }, [index, heightMode, images]);
+
+  useEffect(() => {
+    if (isTextFullWidth) {
+      setCurrentMediaWidth(null);
+      return;
+    }
+
+    let observedSlide: HTMLElement | null = null;
+    let observedMedia: HTMLElement | null = null;
+    let resizeObserver: ResizeObserver | null = null;
+
+    function getRenderedMediaWidth(): number | null {
+      const root = slideshowRootRef.current;
+      if (!root) return null;
+      const slide = root.querySelector(
+        '.yarl__slide_current'
+      ) as HTMLElement | null;
+
+      const mediaElements = root.querySelectorAll(
+        '.yarl__slide_current img, .yarl__slide_current video'
+      );
+      const media = (Array.from(mediaElements).find(
+        (el) => (el as HTMLElement).style.visibility !== 'hidden'
+      ) || mediaElements[mediaElements.length - 1]) as HTMLElement | undefined;
+
+      if (slide && slide !== observedSlide) {
+        if (observedSlide) {
+          resizeObserver?.unobserve(observedSlide);
+        }
+        observedSlide = slide;
+        resizeObserver?.observe(slide);
+      }
+
+      if (media && media !== observedMedia) {
+        if (observedMedia) {
+          resizeObserver?.unobserve(observedMedia);
+          observedMedia.removeEventListener('load', updateMediaWidth);
+          observedMedia.removeEventListener('loadedmetadata', updateMediaWidth);
+          observedMedia.removeEventListener('loadeddata', updateMediaWidth);
+        }
+        observedMedia = media;
+        resizeObserver?.observe(media);
+        media.addEventListener('load', updateMediaWidth);
+        media.addEventListener('loadedmetadata', updateMediaWidth);
+        media.addEventListener('loadeddata', updateMediaWidth);
+      }
+
+      if (media) {
+        const boxWidth = media.clientWidth || media.offsetWidth;
+        const boxHeight = media.clientHeight || media.offsetHeight;
+
+        if (boxWidth > 0 && boxHeight > 0) {
+          const objectFit = window.getComputedStyle(media).objectFit;
+          if (objectFit === 'cover') {
+            return Math.round(boxWidth);
+          }
+          if (media instanceof HTMLImageElement) {
+            if (media.naturalWidth > 0 && media.naturalHeight > 0) {
+              return Math.round(
+                Math.min(
+                  boxWidth,
+                  boxHeight * (media.naturalWidth / media.naturalHeight)
+                )
+              );
+            }
+          } else if (media instanceof HTMLVideoElement) {
+            if (media.videoWidth > 0 && media.videoHeight > 0) {
+              return Math.round(
+                Math.min(
+                  boxWidth,
+                  boxHeight * (media.videoWidth / media.videoHeight)
+                )
+              );
+            }
+            return Math.round(boxWidth);
+          } else {
+            return Math.round(boxWidth);
+          }
+        }
+      }
+
+      if (slide) {
+        const curImg = images?.[index];
+        const largestSrc = curImg?.sizes?.length
+          ? getLargestSrcItem(curImg.sizes)
+          : undefined;
+        const fallbackW =
+          largestSrc?.width || curImg?.original?.width || 0;
+        const fallbackH =
+          largestSrc?.height || curImg?.original?.height || 0;
+
+        if (fallbackW > 0 && fallbackH > 0) {
+          const slideStyles = window.getComputedStyle(slide);
+          const availWidth =
+            slide.clientWidth -
+            parseFloat(slideStyles.paddingLeft || '0') -
+            parseFloat(slideStyles.paddingRight || '0');
+          const availHeight =
+            slide.clientHeight -
+            parseFloat(slideStyles.paddingTop || '0') -
+            parseFloat(slideStyles.paddingBottom || '0');
+
+          if (availWidth > 0 && availHeight > 0) {
+            const maxW = Math.min(availWidth, fallbackW);
+            const maxH = Math.min(availHeight, fallbackH);
+            return Math.round(Math.min(maxW, maxH * (fallbackW / fallbackH)));
+          }
+        }
+      }
+
+      return null;
+    }
+
+    function updateMediaWidth() {
+      const nextWidth = getRenderedMediaWidth();
+      if (nextWidth && nextWidth > 0) {
+        setCurrentMediaWidth((prevWidth) =>
+          prevWidth !== nextWidth ? nextWidth : prevWidth
+        );
+      }
+    }
+
+    resizeObserver = new ResizeObserver(updateMediaWidth);
+    const mutationObserver = new MutationObserver(updateMediaWidth);
+
+    updateMediaWidth();
+    window.addEventListener('resize', updateMediaWidth);
+    const root = slideshowRootRef.current;
+    if (root) {
+      mutationObserver.observe(root, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['class', 'src'],
+      });
+    }
+
+    return () => {
+      window.removeEventListener('resize', updateMediaWidth);
+      mutationObserver.disconnect();
+      resizeObserver?.disconnect();
+      if (observedMedia) {
+        observedMedia.removeEventListener('load', updateMediaWidth);
+        observedMedia.removeEventListener('loadedmetadata', updateMediaWidth);
+        observedMedia.removeEventListener('loadeddata', updateMediaWidth);
+      }
+    };
+  }, [index, isTextFullWidth, images]);
+
+  const currentImage = images?.[index];
+  const origWidth = currentImage?.original?.width;
+  const origHeight = currentImage?.original?.height;
+  const fallbackRatio =
+    origWidth && origHeight && origWidth > 0 && origHeight > 0
+      ? origWidth / origHeight
+      : width && height && width > 0 && height > 0
+      ? width / height
+      : 1.77;
+
+  const activeRatio = measuredRatio || fallbackRatio;
+
+  const areThumbnailsHorizontal: boolean =
+    thumbnailsPosition !== LightboxThumbnailsPosition.NONE &&
+    !areThumbnailsVertical;
+
+  const extraThumbnailHeight: number = areThumbnailsHorizontal
+    ? thumbnailHeight + thumbnailPadding * 2 + thumbnailGap
+    : 0;
+
   const minHeight: number = showThumbnails
     ? thumbnailHeight + thumbnailPadding * 2
-    : height;
-  const ratio: number = width / height;
-  const containerWidth: number = Math.min(innerWidth, width);
-  const containerHeight: number = Math.max(minHeight, containerWidth / ratio);
+    : (height || 300);
+
+  const effectiveWidth: number = isLiveFullScreen
+    ? (typeof window !== 'undefined' ? window.innerWidth : (wrapper?.clientWidth || 1080))
+    : isFullWidth || (isFullScreen && isPreview)
+    ? (innerWidth || wrapper?.clientWidth || 1080)
+    : Math.min(innerWidth, width || 1080);
   const minFactor = 1.45;
   const maxFactor = 1.25;
   const paddingAroundText = 10;
@@ -178,14 +420,6 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     showButton,
   ]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setInnerWidth(wrapper?.clientWidth || width);
-    };
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, [wrapper?.clientWidth]);
 
   useEffect(() => {
     if (autoplay) {
@@ -267,7 +501,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
 
       return {
         description: (
-          <>
+          <div className={'reacg-slideshow-texts__content'}>
             {((showTitle && image[titleSource]) ||
               (showCaption && image[captionSource])) && (
               <p
@@ -342,7 +576,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
                 />
               </div>
             )}
-          </>
+          </div>
         ),
         type: image.type,
         sources: [
@@ -595,13 +829,65 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     );
   };
 
+  const extraMarginHeight: number =
+    (parseFloat(String(slideMargins.marginTop)) || 0) +
+    (parseFloat(String(slideMargins.marginBottom)) || 0);
+
+  let containerHeight: number | string;
+  if (isLiveFullScreen) {
+    containerHeight = '100vh';
+  } else if (isFullScreen && isPreview) {
+    // In edit screen preview, scale to fit the preview box (16:9 ratio, max 500px)
+    containerHeight = Math.min(500, Math.round(effectiveWidth / 1.77));
+  } else if (heightMode === HeightMode.ASPECT_RATIO) {
+    const numRatio = Number(aspectRatio) || 1.77;
+    containerHeight = Math.max(
+      thumbnailHeight + thumbnailPadding * 2,
+      Math.round(effectiveWidth / numRatio) + extraThumbnailHeight
+    );
+  } else if (heightMode === HeightMode.AUTO) {
+    const autoMin = areThumbnailsHorizontal
+      ? thumbnailHeight + thumbnailPadding * 2
+      : 100;
+    containerHeight = Math.max(
+      autoMin,
+      Math.round(effectiveWidth / activeRatio) + extraThumbnailHeight + extraMarginHeight
+    );
+  } else {
+    const fixedRatio = width && height ? width / height : 1.77;
+    containerHeight = Math.max(minHeight, Math.round(effectiveWidth / fixedRatio));
+  }
+
   return (
     <Box
       ref={slideshowRootRef}
+      className={clsx('reacg-slideshow-root', {
+        'reacg-slideshow-root_fullwidth': isFullWidth,
+        'reacg-slideshow-root_fullscreen': isFullScreen,
+        'reacg-slideshow-root_preview': isPreview,
+      })}
       sx={{
-        width: `${containerWidth}px`,
-        height: `${containerHeight}px`,
-        mx: 'auto',
+        width: isLiveFullScreen
+          ? '100vw'
+          : isFullWidth || (isFullScreen && isPreview)
+          ? '100%'
+          : `${effectiveWidth}px`,
+        maxWidth: isLiveFullScreen ? '100vw' : '100%',
+        marginLeft: isLiveFullScreen ? 'calc(50% - 50vw)' : 'auto',
+        marginRight: isLiveFullScreen ? 'calc(50% - 50vw)' : 'auto',
+        height:
+          typeof containerHeight === 'number'
+            ? `${containerHeight}px`
+            : containerHeight,
+        transition:
+          heightMode === HeightMode.AUTO
+            ? 'height 0.35s ease-in-out'
+            : undefined,
+        aspectRatio:
+          !isFullScreen && heightMode === HeightMode.ASPECT_RATIO
+            ? `${Number(aspectRatio) || 1.77}`
+            : undefined,
+        mx: isLiveFullScreen ? undefined : 'auto',
       }}
     >
       <Lightbox
@@ -698,11 +984,17 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
             '--yarl__thumbnails_container_padding': `${thumbnailPadding}px`,
             '--yarl__thumbnails_container_background_color': `${backgroundColor}`,
             '--yarl__slide_captions_container_padding': `${paddingAroundText}px`,
+            '--yarl__slide_captions_container_width': '100%',
+            '--yarl__slide_captions_content_width': isTextFullWidth
+              ? '100%'
+              : currentMediaWidth
+              ? `${currentMediaWidth}px`
+              : '100%',
             '--yarl__slide_captions_container_background':
               textBackground &&
-              ((showTitle && images?.[index]?.title) ||
-                (showCaption && images?.[index]?.caption) ||
-                (showDescription && images?.[index]?.description) ||
+              ((showTitle && images?.[index]?.[titleSource]) ||
+                (showCaption && images?.[index]?.[captionSource]) ||
+                (showDescription && images?.[index]?.[descriptionSource]) ||
                 showButton)
                 ? `${textBackground}`
                 : `none`,

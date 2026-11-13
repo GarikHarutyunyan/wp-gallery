@@ -4,8 +4,10 @@ import {
   DescriptionPosition,
   DescriptionSource,
   GalleryType,
+  HeightMode,
   HoverEffect,
   ImageClickAction,
+  LayoutMode,
   LightboxImageAnimation,
   LightboxOpeningAnimation,
   LoadedEffect,
@@ -141,6 +143,9 @@ export interface IJustifiedSettings extends Omit<IMasonrySettings, 'columns'> {
 }
 
 export interface ISlideshowSettings {
+  layoutMode?: LayoutMode;
+  heightMode?: HeightMode;
+  aspectRatio?: string;
   width: number;
   height: number;
   padding: number;
@@ -155,6 +160,7 @@ export interface ISlideshowSettings {
   imageAnimation: LightboxImageAnimation;
   backgroundColor: string;
   textPosition: LightboxTextPosition;
+  isTextFullWidth?: boolean;
   textFontFamily: string;
   textColor: string;
   textBackground: string;

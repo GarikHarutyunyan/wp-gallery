@@ -835,6 +835,22 @@ export const TextAndMetadataSettings: React.FC<
                 />
               </Filter>
             ) : null}
+            {'isTextFullWidth' in value || galleryType === GalleryType.SLIDESHOW ? (
+              <Filter isLoading={isLoading}>
+                <SwitchControl
+                  id={'isTextFullWidth'}
+                  name={'Content full width'}
+                  value={value?.isTextFullWidth ?? true}
+                  tooltip={
+                    <p>
+                      Stretch captions across the full width or match the
+                      width of the active image.
+                    </p>
+                  }
+                  onChange={onInputValueChange}
+                />
+              </Filter>
+            ) : null}
             {'textFontFamily' in value ? (
               <Filter isLoading={isLoading}>
                 <FontControl
