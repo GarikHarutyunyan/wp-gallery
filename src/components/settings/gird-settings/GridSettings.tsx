@@ -122,17 +122,17 @@ const GridSettings = ({
                     />
                   </Filter>
                 )}
-                <Filter isLoading={isLoading}>
-                  <NumberControl
-                    id={'columns'}
-                    name={'Columns'}
-                    value={columns}
-                    onChange={onInputValueChange}
-                    min={1}
-                  />
-                </Filter>
               </>
             )}
+            <Filter isLoading={isLoading}>
+              <NumberControl
+                id={'columns'}
+                name={'Columns'}
+                value={columns}
+                onChange={onInputValueChange}
+                min={1}
+              />
+            </Filter>
             <ClickActionSettings isLoading={isLoading} />
           </Grid>
         }
