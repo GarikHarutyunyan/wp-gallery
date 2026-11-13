@@ -59,47 +59,49 @@ const GridSettings = ({
                 onChange={onInputValueChange}
               />
             </Filter>
-            {fillContainer ? (
+            <Filter isLoading={isLoading}>
+              <SwitchControl
+                id={'autoHeight'}
+                name={'Auto height'}
+                tooltip={
+                  <p>
+                    Keeps each image’s original proportions by setting its
+                    height automatically.
+                  </p>
+                }
+                value={autoHeight}
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            {autoHeight && (
               <Filter isLoading={isLoading}>
                 <SelectControl
-                  id={'aspectRatio'}
-                  name={'Image aspect ratio'}
-                  value={aspectRatio}
-                  options={AspectRatioOptions}
+                  id={'alignment'}
+                  name={'Alignment'}
+                  value={alignment}
+                  options={[
+                    {value: 'top', title: 'Top'},
+                    {value: 'center', title: 'Center'},
+                    {value: 'bottom', title: 'Bottom'},
+                  ]}
                   onChange={onInputValueChange}
                 />
               </Filter>
-            ) : (
-              <>
+            )}
+            {fillContainer ? (
+              !autoHeight && (
                 <Filter isLoading={isLoading}>
-                  <SwitchControl
-                    id={'autoHeight'}
-                    name={'Auto height'}
-                    tooltip={
-                      <p>
-                        Keeps each image’s original proportions by setting its
-                        height automatically.
-                      </p>
-                    }
-                    value={autoHeight}
+                  <SelectControl
+                    id={'aspectRatio'}
+                    name={'Image aspect ratio'}
+                    value={aspectRatio}
+                    options={AspectRatioOptions}
                     onChange={onInputValueChange}
                   />
                 </Filter>
-                {autoHeight && (
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'alignment'}
-                      name={'Alignment'}
-                      value={alignment}
-                      options={[
-                        {value: 'top', title: 'Top'},
-                        {value: 'center', title: 'Center'},
-                        {value: 'bottom', title: 'Bottom'},
-                      ]}
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                )}
+              )
+            ) : (
+              <>
                 <Filter isLoading={isLoading}>
                   <NumberControl
                     id={'width'}
