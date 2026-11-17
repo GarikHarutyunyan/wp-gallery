@@ -164,14 +164,13 @@ const Coverflow: React.FC<ITCoverflowProps> = ({onClick}) => {
   );
 
   return (
-    <>
+    <Box sx={{width: '100%', background: backgroundColor}}>
       <Box
         ref={galleryRef}
         sx={{
           width: `${containerWidth}px`,
           height: `${containerHeight + titleCaptionHeight}px`,
           mx: 'auto',
-          background: backgroundColor,
           padding: `${padding}px`,
           paddingBottom:
             (navigation === SliderNavigation.DOTS ||
@@ -268,7 +267,7 @@ const Coverflow: React.FC<ITCoverflowProps> = ({onClick}) => {
             }}
           />
         )}
-    </>
+    </Box>
   );
 };
 
