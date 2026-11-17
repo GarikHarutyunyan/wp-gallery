@@ -372,7 +372,12 @@ const TemplatesSelect: React.FC = () => {
     type: 'pre-built' | 'my'
   ): ReactNode => {
     const {preview_url, youtube_link} = templateReference;
-    const canImportWithImages = type === 'pre-built' && Number(galleryId) > 0;
+    // Gallery IDs are numeric in WordPress but may be opaque strings in
+    // integrations such as Shopify. `0` is the only sentinel for an unsaved
+    // gallery, so do not require the ID to be numeric here.
+    const hasPersistedGallery =
+      typeof galleryId === 'string' && galleryId.trim() !== '' && galleryId !== '0';
+    const canImportWithImages = type === 'pre-built' && hasPersistedGallery;
     const isImportingLayout =
       type === 'pre-built'
         ? importingState?.id === String(templateReference.id) &&

@@ -40,6 +40,10 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const [myTemplates, setMyTemplates] = useState<ITemplateReference[]>([]);
   const [template, setTemplate] = useState<ITemplate>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  // WordPress uses numeric gallery IDs, while other integrations can use
+  // opaque string IDs. Only an absent/empty ID or the `0` sentinel is invalid.
+  const hasPersistedGallery =
+    typeof galleryId === 'string' && galleryId.trim() !== '' && galleryId !== '0';
 
   const getTemplates = async () => {
     if (!showControls) {
@@ -158,7 +162,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   };
 
   const hasGalleryImages = async (): Promise<boolean> => {
-    if (!baseUrl || !galleryId || Number(galleryId) <= 0) {
+    if (!baseUrl || !hasPersistedGallery) {
       return false;
     }
 
@@ -183,7 +187,7 @@ const TemplatesProvider: React.FC<React.PropsWithChildren> = ({children}) => {
   const importTemplateImages = async (
     templateData: ITemplate
   ): Promise<ImportTemplateImagesResult> => {
-    if (!baseUrl || !galleryId || Number(galleryId) <= 0) {
+    if (!baseUrl || !hasPersistedGallery) {
       return {status: 'error'};
     }
 
