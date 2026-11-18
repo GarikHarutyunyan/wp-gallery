@@ -657,7 +657,7 @@ const GridImage = ({
             : 'start',
         ...(isContain && hasItemBox && !fillContainer
           ? {
-              width: 'fit-content',
+              width: imageWidth + 2 * safeMargin + 2 * itemBorder + 'px',
               justifySelf: 'center',
             }
           : {}),
@@ -772,74 +772,74 @@ const GridImage = ({
               boxSizing: 'border-box',
             }}
           >
-          {image.type === ImageType.IMAGE && (
-            <ReImage
-              wrapperRef={wrapperRef}
-              className={clsx(
-                'thumbnail-gallery__image',
-                'MuiImageListItem-img'
-              )}
-              src={largestSrcItem.src}
-              srcSet={srcSetString}
-              sizes={`${imageRequestSize}px`}
-              alt={image.alt}
-              loading="eager"
-              originalWidth={image.original.width}
-              originalHeight={image.original.height}
-              cropPosition={image.crop_position}
-              loadedEffect={loadedEffect}
-              style={{
-                width: imageWidth + 'px',
-                height: isAutoHeight ? 'auto' : imageHeight + 'px',
-                ...(isContain ? {objectFit: 'contain' as const} : {}),
-              }}
-            />
-          )}
-          {image.type === ImageType.VIDEO && (
-            <ReVideo
-              wrapperRef={wrapperRef}
-              item={image}
-              settings={settings}
-              coverImageProps={{
-                className: clsx(
+            {image.type === ImageType.IMAGE && (
+              <ReImage
+                wrapperRef={wrapperRef}
+                className={clsx(
                   'thumbnail-gallery__image',
                   'MuiImageListItem-img'
-                ),
-                src: largestSrcItem.src,
-                srcSet: srcSetString,
-                sizes: `${imageRequestSize}px`,
-                alt: image.alt,
-                loading: 'eager',
-                originalWidth: image.original.width,
-                originalHeight: image.original.height,
-                cropPosition: image.crop_position,
-                loadedEffect: loadedEffect,
-                style: {
+                )}
+                src={largestSrcItem.src}
+                srcSet={srcSetString}
+                sizes={`${imageRequestSize}px`}
+                alt={image.alt}
+                loading="eager"
+                originalWidth={image.original.width}
+                originalHeight={image.original.height}
+                cropPosition={image.crop_position}
+                loadedEffect={loadedEffect}
+                style={{
                   width: imageWidth + 'px',
                   height: isAutoHeight ? 'auto' : imageHeight + 'px',
                   ...(isContain ? {objectFit: 'contain' as const} : {}),
-                },
-              }}
-            />
-          )}
-          <Watermark />
-          {showTitle &&
-            titlePosition !== ThumbnailTitlePosition.BELOW &&
-            titlePosition !== ThumbnailTitlePosition.ABOVE &&
-            renderTitle(image)}
-          {showCaption &&
-            (titlePosition != captionPosition || !showTitle) &&
-            captionPosition !== ThumbnailTitlePosition.BELOW &&
-            captionPosition !== ThumbnailTitlePosition.ABOVE &&
-            renderCaption(image)}
-          {showButton &&
-            (titlePosition != buttonPosition || !showTitle) &&
-            (captionPosition != buttonPosition || !showCaption) &&
-            buttonPosition !== ThumbnailTitlePosition.BELOW &&
-            buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-            renderButton(buttonPosition)}
+                }}
+              />
+            )}
+            {image.type === ImageType.VIDEO && (
+              <ReVideo
+                wrapperRef={wrapperRef}
+                item={image}
+                settings={settings}
+                coverImageProps={{
+                  className: clsx(
+                    'thumbnail-gallery__image',
+                    'MuiImageListItem-img'
+                  ),
+                  src: largestSrcItem.src,
+                  srcSet: srcSetString,
+                  sizes: `${imageRequestSize}px`,
+                  alt: image.alt,
+                  loading: 'eager',
+                  originalWidth: image.original.width,
+                  originalHeight: image.original.height,
+                  cropPosition: image.crop_position,
+                  loadedEffect: loadedEffect,
+                  style: {
+                    width: imageWidth + 'px',
+                    height: isAutoHeight ? 'auto' : imageHeight + 'px',
+                    ...(isContain ? {objectFit: 'contain' as const} : {}),
+                  },
+                }}
+              />
+            )}
+            <Watermark />
+            {showTitle &&
+              titlePosition !== ThumbnailTitlePosition.BELOW &&
+              titlePosition !== ThumbnailTitlePosition.ABOVE &&
+              renderTitle(image)}
+            {showCaption &&
+              (titlePosition != captionPosition || !showTitle) &&
+              captionPosition !== ThumbnailTitlePosition.BELOW &&
+              captionPosition !== ThumbnailTitlePosition.ABOVE &&
+              renderCaption(image)}
+            {showButton &&
+              (titlePosition != buttonPosition || !showTitle) &&
+              (captionPosition != buttonPosition || !showCaption) &&
+              buttonPosition !== ThumbnailTitlePosition.BELOW &&
+              buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+              renderButton(buttonPosition)}
+          </div>
         </div>
-      </div>
       </div>
       {showTitle && titlePosition === ThumbnailTitlePosition.BELOW
         ? renderTitle(image)
