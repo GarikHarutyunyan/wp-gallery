@@ -28,9 +28,11 @@ import {
   TitleVisibility,
 } from 'data-structures';
 
+export type GridImageFit = 'cover' | 'auto-height' | 'contain';
+
 export interface IGridSettings {
   fillContainer: boolean;
-  autoHeight: boolean;
+  imageFit: GridImageFit;
   alignment: 'top' | 'center' | 'bottom';
   aspectRatio: string;
   width?: number | undefined;

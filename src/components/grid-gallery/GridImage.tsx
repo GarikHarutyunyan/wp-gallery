@@ -8,6 +8,7 @@ import {
   CaptionSource,
   DescriptionPosition,
   DescriptionSource,
+  GridImageFit,
   IImageDTO,
   ImageType,
   ThumbnailTitlePosition,
@@ -74,7 +75,8 @@ interface IGridImageProps {
   buttonUrl?: string;
   openInNewTab?: boolean;
   showVideoCover: boolean;
-  autoHeight?: boolean;
+  fillContainer?: boolean;
+  imageFit?: GridImageFit;
   verticalAlignment?: 'top' | 'center' | 'bottom';
 }
 
@@ -129,7 +131,8 @@ const GridImage = ({
   buttonUrl,
   openInNewTab,
   showVideoCover,
-  autoHeight,
+  fillContainer = false,
+  imageFit = 'cover',
   verticalAlignment,
 }: IGridImageProps) => {
   if (overlayTextBackground === '') {
@@ -140,6 +143,30 @@ const GridImage = ({
     width = width - 2 * itemBorder;
     height = height - 2 * itemBorder;
   }
+
+  const imageRequestSize = Math.max(width, height);
+  const srcSetString: string = getSrcSetString(image.sizes);
+  const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
+
+  const isAutoHeight = imageFit === 'auto-height';
+  const isContain = imageFit === 'contain';
+  const useCoverSize =
+    image.type === ImageType.VIDEO &&
+    showVideoCover &&
+    largestSrcItem?.width &&
+    largestSrcItem?.height;
+  const origW = useCoverSize ? largestSrcItem.width : image.original?.width;
+  const origH = useCoverSize ? largestSrcItem.height : image.original?.height;
+  const containScale =
+    isContain && origW && origH && width > 0 && height > 0
+      ? Math.min(width / origW, height / origH, 1)
+      : 1;
+  const imageWidth =
+    isContain && origW && origH ? origW * containScale : width;
+  const imageHeight =
+    isContain && origW && origH ? origH * containScale : height;
+  const safeMargin = margin || 0;
+  const hasItemBox = Boolean(itemBorder || itemBackgroundColor);
 
   const renderTitle = (image: IImageDTO) => {
     let itemPaddingText = '0';
@@ -438,9 +465,9 @@ const GridImage = ({
   };
 
   const renderDescription = (image: IImageDTO) => {
-    const itemPaddingText = itemBorderRadius
-      ? itemBorderRadius / 2 + '%'
-      : (margin || 0) + 'px';
+    const itemPaddingText = `calc(${(itemBorderRadius || 0) / 2}% + ${
+      margin || 0
+    }px)`;
 
     return (
       <div
@@ -609,10 +636,6 @@ const GridImage = ({
     openInNewTab,
     showVideoCover,
   };
-  const imageRequestSize = Math.max(width, height);
-  const srcSetString: string = getSrcSetString(image.sizes);
-  const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
-
   return (
     <ImageListItem
       key={image.original.url}
@@ -625,11 +648,19 @@ const GridImage = ({
       onClick={onClick}
       style={{
         alignSelf:
-          verticalAlignment === 'bottom'
+          isContain
+            ? 'start'
+            : verticalAlignment === 'bottom'
             ? 'end'
             : verticalAlignment === 'center'
             ? 'center'
             : 'start',
+        ...(isContain && hasItemBox && !fillContainer
+          ? {
+              width: 'fit-content',
+              justifySelf: 'center',
+            }
+          : {}),
         padding: itemBorder + 'px',
         background: itemBackgroundColor,
         borderRadius: itemBorderRadius + '%',
@@ -644,14 +675,20 @@ const GridImage = ({
             ? 'hidden'
             : 'unset',
         justifyContent:
-          ((titlePosition === ThumbnailTitlePosition.ABOVE ||
-            captionPosition === ThumbnailTitlePosition.ABOVE) &&
-            (!showDescription ||
-              descriptionPosition === DescriptionPosition.ABOVE)) ||
-          ((titlePosition !== ThumbnailTitlePosition.ABOVE ||
-            captionPosition !== ThumbnailTitlePosition.ABOVE) &&
-            showDescription &&
-            descriptionPosition === DescriptionPosition.ABOVE)
+          isAutoHeight
+            ? verticalAlignment === 'bottom'
+              ? 'end'
+              : verticalAlignment === 'center'
+              ? 'center'
+              : 'start'
+            : ((titlePosition === ThumbnailTitlePosition.ABOVE ||
+                captionPosition === ThumbnailTitlePosition.ABOVE) &&
+                (!showDescription ||
+                  descriptionPosition === DescriptionPosition.ABOVE)) ||
+              ((titlePosition !== ThumbnailTitlePosition.ABOVE ||
+                captionPosition !== ThumbnailTitlePosition.ABOVE) &&
+                showDescription &&
+                descriptionPosition === DescriptionPosition.ABOVE)
             ? 'end'
             : titlePosition === ThumbnailTitlePosition.ABOVE ||
               captionPosition === ThumbnailTitlePosition.ABOVE
@@ -691,29 +728,50 @@ const GridImage = ({
         ? renderDescription(image)
         : null}
       <div
-        className="thumbnail-gallery__item-outline"
-        style={{
-          background: backgroundColor,
-          borderRadius: borderRadius + '%',
-        }}
+        style={
+          isContain
+            ? {
+                width:
+                  hasItemBox && !fillContainer
+                    ? 'fit-content'
+                    : width + 2 * safeMargin + 'px',
+                height: height + 2 * safeMargin + 'px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: hasItemBox && !fillContainer ? '0 auto' : undefined,
+              }
+            : undefined
+        }
       >
         <div
-          ref={wrapperRef}
-          className={clsx(
-            're-image__wrapper',
-            'thumbnail-gallery__image-wrapper',
-            'reacg-action-button-hover-parent',
-            'thumbnail-gallery__image-wrapper_overflow',
-            'thumbnail-gallery__image-wrapper_' + hoverEffect
-          )}
+          className="thumbnail-gallery__item-outline"
           style={{
-            width: width + 'px',
-            height: autoHeight ? 'auto' : height + 'px',
-            margin: margin + 'px',
+            display: 'flex',
+            width: 'fit-content',
+            margin: isContain ? '0 auto' : undefined,
+            background: backgroundColor,
             borderRadius: borderRadius + '%',
-            boxSizing: 'border-box',
           }}
         >
+          <div
+            ref={wrapperRef}
+            className={clsx(
+              're-image__wrapper',
+              'thumbnail-gallery__image-wrapper',
+              'reacg-action-button-hover-parent',
+              'thumbnail-gallery__image-wrapper_overflow',
+              'thumbnail-gallery__image-wrapper_' + hoverEffect,
+              {'thumbnail-gallery__image-wrapper_contain': isContain}
+            )}
+            style={{
+              width: imageWidth + 'px',
+              height: isAutoHeight ? 'auto' : imageHeight + 'px',
+              margin: margin + 'px',
+              borderRadius: borderRadius + '%',
+              boxSizing: 'border-box',
+            }}
+          >
           {image.type === ImageType.IMAGE && (
             <ReImage
               wrapperRef={wrapperRef}
@@ -731,8 +789,9 @@ const GridImage = ({
               cropPosition={image.crop_position}
               loadedEffect={loadedEffect}
               style={{
-                width: width + 'px',
-                height: autoHeight ? 'auto' : height + 'px',
+                width: imageWidth + 'px',
+                height: isAutoHeight ? 'auto' : imageHeight + 'px',
+                ...(isContain ? {objectFit: 'contain' as const} : {}),
               }}
             />
           )}
@@ -756,8 +815,9 @@ const GridImage = ({
                 cropPosition: image.crop_position,
                 loadedEffect: loadedEffect,
                 style: {
-                  width: width + 'px',
-                  height: autoHeight ? 'auto' : height + 'px',
+                  width: imageWidth + 'px',
+                  height: isAutoHeight ? 'auto' : imageHeight + 'px',
+                  ...(isContain ? {objectFit: 'contain' as const} : {}),
                 },
               }}
             />
@@ -779,6 +839,7 @@ const GridImage = ({
             buttonPosition !== ThumbnailTitlePosition.ABOVE &&
             renderButton(buttonPosition)}
         </div>
+      </div>
       </div>
       {showTitle && titlePosition === ThumbnailTitlePosition.BELOW
         ? renderTitle(image)

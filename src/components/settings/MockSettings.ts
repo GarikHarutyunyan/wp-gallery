@@ -43,7 +43,7 @@ import {
 
 const gridMockSettings: IGridSettings = {
   fillContainer: false,
-  autoHeight: false,
+  imageFit: 'cover',
   alignment: 'top',
   aspectRatio: '1.33',
   width: 150,

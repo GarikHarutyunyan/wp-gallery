@@ -2,7 +2,7 @@ import ImageList from '@mui/material/ImageList';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {useAppInfo} from 'contexts';
-import {ActionURLSource, IGridSettings} from 'data-structures';
+import {ActionURLSource, GridImageFit, IGridSettings} from 'data-structures';
 import React, {
   useCallback,
   useEffect,
@@ -24,7 +24,7 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
   const {images} = useData();
   const {
     fillContainer,
-    autoHeight = false,
+    imageFit: rawImageFit,
     alignment = 'top',
     aspectRatio,
     width = 1,
@@ -80,6 +80,8 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
     openInNewTab,
     showVideoCover,
   } = settings as IGridSettings;
+  const imageFit: GridImageFit =
+    rawImageFit ?? ((settings as any).autoHeight ? 'auto-height' : 'cover');
   const elementRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [imageRatio, setImageRatio] = useState(1);
@@ -234,7 +236,8 @@ const GridGallery: React.FC<IGridGalleryProps> = ({onClick}) => {
               image={image}
               width={getWidth}
               height={getHeight}
-              autoHeight={autoHeight}
+              fillContainer={fillContainer}
+              imageFit={imageFit}
               verticalAlignment={alignment}
               onClick={onImageClick(index)}
               showTitle={showTitle}

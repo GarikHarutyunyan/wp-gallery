@@ -71,6 +71,10 @@
   position: relative;
 }
 
+.reacg-gallery .thumbnail-gallery__image-wrapper_contain video {
+  object-fit: contain;
+}
+
 .reacg-gallery .thumbnail-gallery__image-wrapper_overflow {
   overflow: hidden;
 }

@@ -21,13 +21,17 @@ const GridSettings = ({
   const {resetTemplate} = useTemplates();
   const {
     fillContainer,
-    autoHeight,
+    imageFit: rawImageFit,
     alignment,
     aspectRatio,
     width,
     height,
     columns,
   } = settings;
+
+  const imageFit =
+    rawImageFit ?? ((settings as any).autoHeight ? 'auto-height' : 'cover');
+  const isAutoHeight = imageFit === 'auto-height';
 
   const onInputValueChange = (inputValue: any, key?: string) => {
     resetTemplate?.();
@@ -60,20 +64,28 @@ const GridSettings = ({
               />
             </Filter>
             <Filter isLoading={isLoading}>
-              <SwitchControl
-                id={'autoHeight'}
-                name={'Auto height'}
+              <SelectControl
+                id={'imageFit'}
+                name={'Image fit'}
                 tooltip={
                   <p>
-                    Keeps each image’s original proportions by setting its
-                    height automatically.
+                    Choose how images fit their thumbnail box: Cover crops to
+                    fill the box (crop position can be changed for each image
+                    separately or in bulk during image edit), Auto height keeps
+                    original proportions by adjusting height, and Contain fits
+                    the entire image inside the box without cropping.
                   </p>
                 }
-                value={autoHeight}
+                value={imageFit}
+                options={[
+                  {value: 'cover', title: 'Cover'},
+                  {value: 'auto-height', title: 'Auto height'},
+                  {value: 'contain', title: 'Contain'},
+                ]}
                 onChange={onInputValueChange}
               />
             </Filter>
-            {autoHeight && (
+            {isAutoHeight && (
               <Filter isLoading={isLoading}>
                 <SelectControl
                   id={'alignment'}
@@ -89,7 +101,7 @@ const GridSettings = ({
               </Filter>
             )}
             {fillContainer ? (
-              !autoHeight && (
+              !isAutoHeight && (
                 <Filter isLoading={isLoading}>
                   <SelectControl
                     id={'aspectRatio'}
@@ -112,7 +124,7 @@ const GridSettings = ({
                     unit={'px'}
                   />
                 </Filter>
-                {!autoHeight && (
+                {!isAutoHeight && (
                   <Filter isLoading={isLoading}>
                     <NumberControl
                       id={'height'}
