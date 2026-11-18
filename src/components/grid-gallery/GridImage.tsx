@@ -167,6 +167,7 @@ const GridImage = ({
     isContain && origW && origH ? origH * containScale : height;
   const safeMargin = margin || 0;
   const hasItemBox = Boolean(itemBorder || itemBackgroundColor);
+  const containExtraV = isContain ? Math.max(0, (height - imageHeight) / 2) : 0;
 
   const renderTitle = (image: IImageDTO) => {
     let itemPaddingText = '0';
@@ -728,117 +729,108 @@ const GridImage = ({
         ? renderDescription(image)
         : null}
       <div
+        className="thumbnail-gallery__item-outline"
         style={
-          isContain
-            ? {
-                width:
-                  hasItemBox && !fillContainer
-                    ? 'fit-content'
-                    : width + 2 * safeMargin + 'px',
-                height: height + 2 * safeMargin + 'px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: hasItemBox && !fillContainer ? '0 auto' : undefined,
-              }
-            : undefined
+          {
+            ...(isContain
+              ? {
+                  display: 'flex',
+                  width: 'fit-content',
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                  marginTop: containExtraV + 'px',
+                  '--reacg-contain-mb': containExtraV + 'px',
+                }
+              : {}),
+            background: backgroundColor,
+            borderRadius: borderRadius + '%',
+          } as React.CSSProperties
         }
       >
         <div
-          className="thumbnail-gallery__item-outline"
+          ref={wrapperRef}
+          className={clsx(
+            're-image__wrapper',
+            'thumbnail-gallery__image-wrapper',
+            'reacg-action-button-hover-parent',
+            'thumbnail-gallery__image-wrapper_overflow',
+            'thumbnail-gallery__image-wrapper_' + hoverEffect,
+            {'thumbnail-gallery__image-wrapper_contain': isContain}
+          )}
           style={{
-            display: 'flex',
-            width: 'fit-content',
-            margin: isContain ? '0 auto' : undefined,
-            background: backgroundColor,
+            width: imageWidth + 'px',
+            height: isAutoHeight ? 'auto' : imageHeight + 'px',
+            margin: margin + 'px',
             borderRadius: borderRadius + '%',
+            boxSizing: 'border-box',
           }}
         >
-          <div
-            ref={wrapperRef}
-            className={clsx(
-              're-image__wrapper',
-              'thumbnail-gallery__image-wrapper',
-              'reacg-action-button-hover-parent',
-              'thumbnail-gallery__image-wrapper_overflow',
-              'thumbnail-gallery__image-wrapper_' + hoverEffect,
-              {'thumbnail-gallery__image-wrapper_contain': isContain}
-            )}
-            style={{
-              width: imageWidth + 'px',
-              height: isAutoHeight ? 'auto' : imageHeight + 'px',
-              margin: margin + 'px',
-              borderRadius: borderRadius + '%',
-              boxSizing: 'border-box',
-            }}
-          >
-            {image.type === ImageType.IMAGE && (
-              <ReImage
-                wrapperRef={wrapperRef}
-                className={clsx(
+          {image.type === ImageType.IMAGE && (
+            <ReImage
+              wrapperRef={wrapperRef}
+              className={clsx(
+                'thumbnail-gallery__image',
+                'MuiImageListItem-img'
+              )}
+              src={largestSrcItem.src}
+              srcSet={srcSetString}
+              sizes={`${imageRequestSize}px`}
+              alt={image.alt}
+              loading="eager"
+              originalWidth={image.original.width}
+              originalHeight={image.original.height}
+              cropPosition={image.crop_position}
+              loadedEffect={loadedEffect}
+              style={{
+                width: imageWidth + 'px',
+                height: isAutoHeight ? 'auto' : imageHeight + 'px',
+                ...(isContain ? {objectFit: 'contain' as const} : {}),
+              }}
+            />
+          )}
+          {image.type === ImageType.VIDEO && (
+            <ReVideo
+              wrapperRef={wrapperRef}
+              item={image}
+              settings={settings}
+              coverImageProps={{
+                className: clsx(
                   'thumbnail-gallery__image',
                   'MuiImageListItem-img'
-                )}
-                src={largestSrcItem.src}
-                srcSet={srcSetString}
-                sizes={`${imageRequestSize}px`}
-                alt={image.alt}
-                loading="eager"
-                originalWidth={image.original.width}
-                originalHeight={image.original.height}
-                cropPosition={image.crop_position}
-                loadedEffect={loadedEffect}
-                style={{
+                ),
+                src: largestSrcItem.src,
+                srcSet: srcSetString,
+                sizes: `${imageRequestSize}px`,
+                alt: image.alt,
+                loading: 'eager',
+                originalWidth: image.original.width,
+                originalHeight: image.original.height,
+                cropPosition: image.crop_position,
+                loadedEffect: loadedEffect,
+                style: {
                   width: imageWidth + 'px',
                   height: isAutoHeight ? 'auto' : imageHeight + 'px',
                   ...(isContain ? {objectFit: 'contain' as const} : {}),
-                }}
-              />
-            )}
-            {image.type === ImageType.VIDEO && (
-              <ReVideo
-                wrapperRef={wrapperRef}
-                item={image}
-                settings={settings}
-                coverImageProps={{
-                  className: clsx(
-                    'thumbnail-gallery__image',
-                    'MuiImageListItem-img'
-                  ),
-                  src: largestSrcItem.src,
-                  srcSet: srcSetString,
-                  sizes: `${imageRequestSize}px`,
-                  alt: image.alt,
-                  loading: 'eager',
-                  originalWidth: image.original.width,
-                  originalHeight: image.original.height,
-                  cropPosition: image.crop_position,
-                  loadedEffect: loadedEffect,
-                  style: {
-                    width: imageWidth + 'px',
-                    height: isAutoHeight ? 'auto' : imageHeight + 'px',
-                    ...(isContain ? {objectFit: 'contain' as const} : {}),
-                  },
-                }}
-              />
-            )}
-            <Watermark />
-            {showTitle &&
-              titlePosition !== ThumbnailTitlePosition.BELOW &&
-              titlePosition !== ThumbnailTitlePosition.ABOVE &&
-              renderTitle(image)}
-            {showCaption &&
-              (titlePosition != captionPosition || !showTitle) &&
-              captionPosition !== ThumbnailTitlePosition.BELOW &&
-              captionPosition !== ThumbnailTitlePosition.ABOVE &&
-              renderCaption(image)}
-            {showButton &&
-              (titlePosition != buttonPosition || !showTitle) &&
-              (captionPosition != buttonPosition || !showCaption) &&
-              buttonPosition !== ThumbnailTitlePosition.BELOW &&
-              buttonPosition !== ThumbnailTitlePosition.ABOVE &&
-              renderButton(buttonPosition)}
-          </div>
+                },
+              }}
+            />
+          )}
+          <Watermark />
+          {showTitle &&
+            titlePosition !== ThumbnailTitlePosition.BELOW &&
+            titlePosition !== ThumbnailTitlePosition.ABOVE &&
+            renderTitle(image)}
+          {showCaption &&
+            (titlePosition != captionPosition || !showTitle) &&
+            captionPosition !== ThumbnailTitlePosition.BELOW &&
+            captionPosition !== ThumbnailTitlePosition.ABOVE &&
+            renderCaption(image)}
+          {showButton &&
+            (titlePosition != buttonPosition || !showTitle) &&
+            (captionPosition != buttonPosition || !showCaption) &&
+            buttonPosition !== ThumbnailTitlePosition.BELOW &&
+            buttonPosition !== ThumbnailTitlePosition.ABOVE &&
+            renderButton(buttonPosition)}
         </div>
       </div>
       {showTitle && titlePosition === ThumbnailTitlePosition.BELOW
