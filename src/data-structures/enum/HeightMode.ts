@@ -4,11 +4,13 @@ export enum HeightMode {
   FIXED = 'fixed',
   AUTO = 'auto',
   ASPECT_RATIO = 'aspectRatio',
+  FULLSCREEN = 'fullscreen',
 }
 
 export const HeightModeOptions: ISelectOption[] = [
   {value: HeightMode.FIXED, title: 'Fixed'},
   {value: HeightMode.AUTO, title: 'Auto height'},
   {value: HeightMode.ASPECT_RATIO, title: 'Aspect ratio'},
+  {value: HeightMode.FULLSCREEN, title: 'Full screen'},
 ];
 

@@ -50,7 +50,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   const {images} = useData();
   const {
     layoutMode = LayoutMode.BOXED,
-    heightMode = HeightMode.FIXED,
+    heightMode: rawHeightMode,
     aspectRatio = '1.77',
     width,
     height,
@@ -105,9 +105,11 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     buttonUrlSource,
     openInNewTab,
   } = settings as ISlideshowSettings;
-  const wrapper = wrapperRef.current;
-  const [innerWidth, setInnerWidth] = useState<number>(
-    wrapper?.clientWidth || width
+  const [windowWidth, setWindowWidth] = useState<number>(() =>
+    typeof window !== 'undefined' ? window.innerWidth : 1080
+  );
+  const [containerWidth, setContainerWidth] = useState<number>(() =>
+    wrapperRef.current?.clientWidth || width || 1080
   );
   const [videoAutoplay, setVideoAutoplay] = useState<boolean>(false);
   const [index, setIndex] = useState(0);
@@ -122,7 +124,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   const slideshowRootRef = React.useRef<HTMLDivElement>(null);
 
   const showThumbnails: boolean =
-    thumbnailsPosition !== LightboxThumbnailsPosition.END;
+    thumbnailsPosition !== LightboxThumbnailsPosition.NONE;
   const imagesCount = images?.length || 0;
   const areThumbnailArrowsShown: boolean =
     thumbnailsPosition !== LightboxThumbnailsPosition.NONE && imagesCount > 1;
@@ -134,25 +136,47 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
   const isFullWidth = layoutMode === LayoutMode.FULLWIDTH;
   const isLiveFullScreen = isFullScreen && !isPreview;
 
+  const heightMode =
+    rawHeightMode ||
+    (isFullScreen ? HeightMode.FULLSCREEN : HeightMode.FIXED);
+
   const [measuredRatio, setMeasuredRatio] = useState<number | null>(null);
   const [currentMediaWidth, setCurrentMediaWidth] = useState<number | null>(null);
 
   useEffect(() => {
-    const updateWidth = () => {
+    const handleResize = () => {
+      const winW = typeof window !== 'undefined' ? window.innerWidth : 1080;
+      setWindowWidth(winW);
+
       const currentWrapper = wrapperRef.current;
       const rootEl = slideshowRootRef.current;
       const detected =
         currentWrapper?.clientWidth ||
         rootEl?.parentElement?.clientWidth ||
-        (typeof window !== 'undefined' ? window.innerWidth : width);
+        winW;
       if (detected > 0) {
-        setInnerWidth(detected);
+        setContainerWidth(detected);
       }
     };
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
 
-    return () => window.removeEventListener('resize', updateWidth);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    const resizeObserver = new ResizeObserver(() => {
+      handleResize();
+    });
+
+    if (wrapperRef.current) {
+      resizeObserver.observe(wrapperRef.current);
+    }
+    if (slideshowRootRef.current?.parentElement) {
+      resizeObserver.observe(slideshowRootRef.current.parentElement);
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
+    };
   }, [wrapperRef, width]);
 
   useEffect(() => {
@@ -367,10 +391,10 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     : (height || 300);
 
   const effectiveWidth: number = isLiveFullScreen
-    ? (typeof window !== 'undefined' ? window.innerWidth : (wrapper?.clientWidth || 1080))
+    ? windowWidth
     : isFullWidth || (isFullScreen && isPreview)
-    ? (innerWidth || wrapper?.clientWidth || 1080)
-    : Math.min(innerWidth, width || 1080);
+    ? (containerWidth || 1080)
+    : Math.min(containerWidth, width || 1080);
   const minFactor = 1.45;
   const maxFactor = 1.25;
   const paddingAroundText = 10;
@@ -834,11 +858,10 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
     (parseFloat(String(slideMargins.marginBottom)) || 0);
 
   let containerHeight: number | string;
-  if (isLiveFullScreen) {
-    containerHeight = '100vh';
-  } else if (isFullScreen && isPreview) {
-    // In edit screen preview, scale to fit the preview box (16:9 ratio, max 500px)
-    containerHeight = Math.min(500, Math.round(effectiveWidth / 1.77));
+  if (heightMode === HeightMode.FULLSCREEN) {
+    containerHeight = isPreview
+      ? Math.min(500, Math.round(effectiveWidth / 1.77))
+      : '100vh';
   } else if (heightMode === HeightMode.ASPECT_RATIO) {
     const numRatio = Number(aspectRatio) || 1.77;
     containerHeight = Math.max(
@@ -854,8 +877,18 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
       Math.round(effectiveWidth / activeRatio) + extraThumbnailHeight + extraMarginHeight
     );
   } else {
-    const fixedRatio = width && height ? width / height : 1.77;
-    containerHeight = Math.max(minHeight, Math.round(effectiveWidth / fixedRatio));
+    // Fixed height mode: exact configured height on desktop, scaling down on tablet/mobile
+    const targetHeight = height || 608;
+    const desktopBreakpoint =
+      layoutMode === LayoutMode.BOXED ? width || 1080 : 1024;
+    const scaledHeight =
+      effectiveWidth >= desktopBreakpoint
+        ? targetHeight
+        : Math.round(targetHeight * (effectiveWidth / desktopBreakpoint));
+    const minHeightConstraint = areThumbnailsHorizontal
+      ? thumbnailHeight + thumbnailPadding * 2 + thumbnailGap + 60
+      : 120;
+    containerHeight = Math.max(minHeightConstraint, scaledHeight);
   }
 
   return (
@@ -884,7 +917,7 @@ const Slideshow = ({onClick}: ISlideshowProps): ReactElement => {
             ? 'height 0.35s ease-in-out'
             : undefined,
         aspectRatio:
-          !isFullScreen && heightMode === HeightMode.ASPECT_RATIO
+          heightMode === HeightMode.ASPECT_RATIO
             ? `${Number(aspectRatio) || 1.77}`
             : undefined,
         mx: isLiveFullScreen ? undefined : 'auto',

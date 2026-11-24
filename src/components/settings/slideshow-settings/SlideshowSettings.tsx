@@ -41,7 +41,9 @@ const SlideshowSettings = ({
   const isGalleryEditPage = mode !== 'settings';
   const {
     layoutMode = LayoutMode.BOXED,
-    heightMode = HeightMode.FIXED,
+    heightMode = layoutMode === LayoutMode.FULLSCREEN
+      ? settings.heightMode || HeightMode.FULLSCREEN
+      : settings.heightMode || HeightMode.FIXED,
     aspectRatio = '1.77',
     width,
     height,
@@ -63,6 +65,14 @@ const SlideshowSettings = ({
 
   const onInputValueChange = (inputValue: unknown, key?: string) => {
     resetTemplate?.();
+    if (key === 'layoutMode' && inputValue === LayoutMode.FULLSCREEN && !settings.heightMode) {
+      onSettingsChange({
+        ...settings,
+        layoutMode: LayoutMode.FULLSCREEN,
+        heightMode: HeightMode.FULLSCREEN,
+      });
+      return;
+    }
     key && onSettingsChange({...settings, [key]: inputValue});
   };
 
@@ -84,7 +94,7 @@ const SlideshowSettings = ({
                 tooltip={
                   isGalleryEditPage ? (
                     <p>
-                      Full screen mode fills the full browser window (100vw &times; 100vh) on published pages. In this edit screen, it is scaled to fit the preview container.
+                      Full screen mode stretches across the full browser window width (100vw) on published pages. In this edit screen, it is scaled to fit the preview container.
                     </p>
                   ) : undefined
                 }
@@ -103,56 +113,52 @@ const SlideshowSettings = ({
                 />
               </Filter>
             ) : null}
-            {layoutMode !== LayoutMode.FULLSCREEN ? (
-              <>
-                <Filter isLoading={isLoading}>
-                  <SelectControl
-                    id={'heightMode'}
-                    name={'Height mode'}
-                    value={heightMode}
-                    options={HeightModeOptions}
-                    tooltip={
-                      <p>
-                        Choose how the slider height is determined: Fixed
-                        (exact height in px), Auto height (adapts to active
-                        image proportions), or Aspect ratio (keeps a consistent
-                        ratio).
-                      </p>
-                    }
-                    onChange={onInputValueChange}
-                  />
-                </Filter>
-                {heightMode === HeightMode.FIXED ? (
-                  <Filter isLoading={isLoading}>
-                    <NumberControl
-                      id={'height'}
-                      name={'Height'}
-                      value={height}
-                      onChange={onInputValueChange}
-                      min={0}
-                      unit={'px'}
-                    />
-                  </Filter>
-                ) : null}
-                {heightMode === HeightMode.ASPECT_RATIO ? (
-                  <Filter isLoading={isLoading}>
-                    <SelectControl
-                      id={'aspectRatio'}
-                      name={'Aspect ratio'}
-                      value={aspectRatio}
-                      options={AspectRatioOptions}
-                      tooltip={
-                        <p>
-                          Set the proportional aspect ratio (e.g. 16:9
-                          widescreen, 4:3 landscape, or 1:1 square) for the
-                          slider container.
-                        </p>
-                      }
-                      onChange={onInputValueChange}
-                    />
-                  </Filter>
-                ) : null}
-              </>
+            <Filter isLoading={isLoading}>
+              <SelectControl
+                id={'heightMode'}
+                name={'Height mode'}
+                value={heightMode}
+                options={HeightModeOptions}
+                tooltip={
+                  <p>
+                    Choose how the slider height is determined: Fixed
+                    (exact height in px), Auto height (adapts to active
+                    image proportions), Aspect ratio (keeps a consistent
+                    ratio), or Full screen (fills the browser window height).
+                  </p>
+                }
+                onChange={onInputValueChange}
+              />
+            </Filter>
+            {heightMode === HeightMode.FIXED ? (
+              <Filter isLoading={isLoading}>
+                <NumberControl
+                  id={'height'}
+                  name={'Height'}
+                  value={height}
+                  onChange={onInputValueChange}
+                  min={0}
+                  unit={'px'}
+                />
+              </Filter>
+            ) : null}
+            {heightMode === HeightMode.ASPECT_RATIO ? (
+              <Filter isLoading={isLoading}>
+                <SelectControl
+                  id={'aspectRatio'}
+                  name={'Aspect ratio'}
+                  value={aspectRatio}
+                  options={AspectRatioOptions}
+                  tooltip={
+                    <p>
+                      Set the proportional aspect ratio (e.g. 16:9
+                      widescreen, 4:3 landscape, or 1:1 square) for the
+                      slider container.
+                    </p>
+                  }
+                  onChange={onInputValueChange}
+                />
+              </Filter>
             ) : null}
             <Filter isLoading={isLoading}>
               <SwitchControl
