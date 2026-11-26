@@ -5,6 +5,7 @@ import ReImage from 'core-components/re-image/ReImage';
 import ReVideo from 'core-components/re-video/ReVideo';
 import {
   ActionURLSource,
+  DescriptionPosition,
   ICardsSettings,
   ICarouselSettings,
   ICoverflowSettings,
@@ -76,6 +77,12 @@ const SwiperImage = forwardRef(
       captionFontSize,
       captionFontColor,
       captionMaxRowsCount,
+      showDescription,
+      descriptionSource,
+      descriptionPosition,
+      descriptionFontSize,
+      descriptionFontColor,
+      descriptionMaxRowsCount,
       showButton,
       buttonText,
       buttonVisibility,
@@ -127,7 +134,8 @@ const SwiperImage = forwardRef(
         hasSharedCaption &&
         captionVisibility === TitleVisibility.ON_HOVER &&
         isInsideTitlePosition;
-      const hasSharedButton = titlePosition === buttonPosition && showButton;
+      const hasSharedButton =
+        titlePosition === buttonPosition && showButton && isInsideTitlePosition;
       const buttonOnHoverAtTitle =
         hasSharedButton &&
         buttonVisibility === TitleVisibility.ON_HOVER &&
@@ -140,6 +148,10 @@ const SwiperImage = forwardRef(
       const titleContainerOnHover =
         !hasAlwaysContentAtTitle &&
         (titleOnHover || captionOnHoverAtTitle || buttonOnHoverAtTitle);
+
+      if (!image[titleSource] && !hasSharedCaption && !hasSharedButton) {
+        return null;
+      }
 
       return (
         <div
@@ -272,7 +284,10 @@ const SwiperImage = forwardRef(
         hasCaptionText &&
         captionVisibility === TitleVisibility.ON_HOVER &&
         isInsideCaptionPosition;
-      const hasSharedButton = captionPosition === buttonPosition && showButton;
+      const hasSharedButton =
+        captionPosition === buttonPosition &&
+        showButton &&
+        isInsideCaptionPosition;
       const buttonOnHoverAtCaption =
         hasSharedButton &&
         buttonVisibility === TitleVisibility.ON_HOVER &&
@@ -284,6 +299,10 @@ const SwiperImage = forwardRef(
       const captionContainerOnHover =
         !hasAlwaysContentAtCaption &&
         (captionOnHover || buttonOnHoverAtCaption);
+
+      if (!hasCaptionText && !hasSharedButton) {
+        return null;
+      }
 
       return (
         <div
@@ -469,23 +488,74 @@ const SwiperImage = forwardRef(
       );
     };
 
+    const renderDescription = (image: IImageDTO) => {
+      if (!image[descriptionSource]) {
+        return null;
+      }
+
+      let itemPaddingText = '0';
+      if (
+        descriptionPosition === DescriptionPosition.BELOW ||
+        descriptionPosition === DescriptionPosition.ABOVE
+      ) {
+        itemPaddingText = (itemBorderRadius || 0) / 2 + '%';
+      }
+
+      return (
+        <div
+          className={clsx(
+            'swiper-gallery__description',
+            'swiper-gallery__item-outline'
+          )}
+          style={{
+            fontSize: `${descriptionFontSize}px`,
+            color: descriptionFontColor,
+            fontFamily: titleFontFamily,
+            lineHeight: 'normal',
+            paddingLeft: itemPaddingText,
+            paddingRight: itemPaddingText,
+            textAlign: titleAlignment,
+            boxSizing: 'border-box',
+            flexShrink: 0,
+          }}
+        >
+          <div
+            className="swiper-gallery__description-content"
+            style={{
+              WebkitLineClamp: descriptionMaxRowsCount || undefined,
+              display: descriptionMaxRowsCount ? '-webkit-box' : 'block',
+              WebkitBoxOrient: descriptionMaxRowsCount ? 'vertical' : undefined,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              wordBreak: 'break-word',
+            }}
+          >
+            {image[descriptionSource]}
+          </div>
+        </div>
+      );
+    };
+
     const srcSetString: string = getSrcSetString(image.sizes);
     const largestSrcItem: ISrcSetItem = getLargestSrcItem(image.sizes);
 
     return (
       <>
-        {showTitle &&
-          titlePosition === ThumbnailTitlePosition.ABOVE &&
-          renderTitle(image)}
-        {showCaption &&
-          (titlePosition != captionPosition || !showTitle) &&
-          captionPosition === ThumbnailTitlePosition.ABOVE &&
-          renderCaption(image)}
-        {showButton &&
-          (titlePosition != buttonPosition || !showTitle) &&
-          (captionPosition != buttonPosition || !showCaption) &&
-          buttonPosition === ThumbnailTitlePosition.ABOVE &&
-          renderButton(buttonPosition, image)}
+        <div className="swiper-gallery__above-items">
+          {showTitle &&
+            titlePosition === ThumbnailTitlePosition.ABOVE &&
+            renderTitle(image)}
+          {showCaption &&
+            (titlePosition != captionPosition || !showTitle) &&
+            captionPosition === ThumbnailTitlePosition.ABOVE &&
+            renderCaption(image)}
+          {showDescription &&
+            descriptionPosition === DescriptionPosition.ABOVE &&
+            renderDescription(image)}
+          {showButton &&
+            buttonPosition === ThumbnailTitlePosition.ABOVE &&
+            renderButton(buttonPosition, image)}
+        </div>
         <div
           ref={wrapperRef}
           className={clsx(
@@ -497,6 +567,7 @@ const SwiperImage = forwardRef(
           )}
           style={{
             height: `calc(100% - ${titleCaptionHeight}px)`,
+            flexShrink: 0,
           }}
         >
           {image.type === ImageType.IMAGE && (
@@ -556,9 +627,10 @@ const SwiperImage = forwardRef(
           (titlePosition != captionPosition || !showTitle) &&
           captionPosition === ThumbnailTitlePosition.BELOW &&
           renderCaption(image)}
+        {showDescription &&
+          descriptionPosition === DescriptionPosition.BELOW &&
+          renderDescription(image)}
         {showButton &&
-          (titlePosition != buttonPosition || !showTitle) &&
-          (captionPosition != buttonPosition || !showCaption) &&
           buttonPosition === ThumbnailTitlePosition.BELOW &&
           renderButton(buttonPosition, image)}
       </>

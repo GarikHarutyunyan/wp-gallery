@@ -27,6 +27,11 @@
   height: 100%;
 }
 
+.reacg-scroller__track--mixed-height.reacg-scroller__track--has-outside-metadata
+  .reacg-scroller__set {
+  align-items: flex-start;
+}
+
 .reacg-scroller__track--animating {
   animation-timing-function: linear;
   animation-iteration-count: infinite;
@@ -70,8 +75,19 @@
 .reacg-scroller__item-card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   width: 100%;
+}
+
+.reacg-scroller__track:not(.reacg-scroller__track--mixed-height)
+  .reacg-scroller__item-card {
+  height: 100%;
+}
+
+.reacg-gallery .scroller-gallery__above-items {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  min-height: var(--reacg-above-height, 0px);
 }
 
 .reacg-scroller__meta-stack {
@@ -200,6 +216,62 @@
   text-overflow: ellipsis;
   white-space: pre-line;
   box-sizing: border-box;
+}
+
+.reacg-gallery .scroller-gallery__title .MuiImageListItemBar-subtitle {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reacg-gallery
+  .scroller-gallery__title.scroller-gallery__item-outline
+  .MuiImageListItemBar-titleWrap {
+  padding: 0;
+}
+
+.reacg-gallery .scroller-gallery__description {
+  width: 100%;
+  box-sizing: border-box;
+  white-space: pre-line;
+}
+
+.reacg-gallery .scroller-gallery__description-content {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+
+.reacg-gallery
+  .scroller-gallery__above-items
+  > .scroller-gallery__item-outline
+  + .scroller-gallery__item-outline,
+.reacg-gallery
+  .reacg-scroller__item-card
+  > .scroller-gallery__item-outline
+  + .scroller-gallery__item-outline,
+.reacg-gallery
+  .reacg-scroller__item-card
+  > .reacg-scroller__media-shell
+  + .scroller-gallery__item-outline {
+  padding-top: 10px;
+}
+
+.reacg-gallery
+  .scroller-gallery__above-items
+  > .scroller-gallery__item-outline:last-child {
+  padding-bottom: 10px;
+}
+
+.reacg-scroller__track:not(.reacg-scroller__track--mixed-height)
+  .reacg-scroller__item-card
+  > .scroller-gallery__button.scroller-gallery__item-outline:last-child,
+.reacg-scroller__track:not(.reacg-scroller__track--mixed-height)
+  .scroller-gallery__above-items
+  > .scroller-gallery__button.scroller-gallery__item-outline:last-child {
+  margin-top: auto;
 }
 .reacg-gallery
   [class*='scroller-gallery__image-wrapper_overlay']:hover

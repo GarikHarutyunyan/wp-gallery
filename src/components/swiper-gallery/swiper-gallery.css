@@ -67,6 +67,12 @@
   white-space: pre-line;
   box-sizing: border-box;
 }
+
+.reacg-gallery .swiper-gallery__title .MuiImageListItemBar-subtitle {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 .reacg-gallery
   [class*='swiper-gallery__image-wrapper_overlay']:hover
   .swiper-gallery__title
@@ -126,6 +132,23 @@
   background-position: center;
   background-size: cover;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.reacg-gallery .swiper-slide .swiper-gallery__item-outline {
+  flex-shrink: 0;
+}
+
+.reacg-gallery .swiper-slide .swiper-gallery__image-wrapper {
+  flex-shrink: 0;
+}
+
+.reacg-gallery .swiper-gallery__above-items {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  min-height: var(--reacg-above-height, 0px);
 }
 .reacg-gallery .swiper-coverflow .swiper-slide {
   pointer-events: fill;
@@ -700,4 +723,54 @@
     height: 200%;
     opacity: 0;
   }
+}
+
+.reacg-gallery .swiper-gallery__description {
+  width: 100%;
+  box-sizing: border-box;
+  white-space: pre-line;
+}
+
+.reacg-gallery .swiper-gallery__description-content {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+
+.reacg-gallery
+  .swiper-gallery__title.swiper-gallery__item-outline
+  .MuiImageListItemBar-titleWrap {
+  padding: 0;
+}
+
+.reacg-gallery
+  .swiper-gallery__above-items
+  > .swiper-gallery__item-outline
+  + .swiper-gallery__item-outline,
+.reacg-gallery
+  .swiper-slide
+  > .swiper-gallery__item-outline
+  + .swiper-gallery__item-outline,
+.reacg-gallery
+  .swiper-slide
+  > .swiper-gallery__image-wrapper
+  + .swiper-gallery__item-outline {
+  padding-top: 10px;
+}
+
+.reacg-gallery
+  .swiper-gallery__above-items
+  > .swiper-gallery__item-outline:last-child {
+  padding-bottom: 10px;
+}
+
+.reacg-gallery
+  .swiper-slide
+  > .swiper-gallery__button.swiper-gallery__item-outline:last-child,
+.reacg-gallery
+  .swiper-gallery__above-items
+  > .swiper-gallery__button.swiper-gallery__item-outline:last-child {
+  margin-top: auto;
 }

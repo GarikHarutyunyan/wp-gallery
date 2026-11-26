@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import {useData} from 'components/data-context/useData';
 import {useSettings} from 'components/settings';
 import {SwiperGallery} from 'components/swiper-gallery/SwiperGallery';
+import {useSwiperTitleCaptionHeight} from 'components/swiper-gallery/useSwiperTitleCaptionHeight';
 import {
   ICubeSettings,
   SliderNavigation,
@@ -42,13 +43,16 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
     shadow,
     showTitle,
     showCaption,
+    showDescription,
     showButton,
     titlePosition,
     captionPosition,
+    descriptionPosition,
     buttonPosition,
     titleFontSize,
     playAndPauseAllowed,
     captionFontSize,
+    descriptionFontSize,
     buttonFontSize,
     buttonBorderSize,
     navigation,
@@ -66,8 +70,11 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
   const containerWidth: number = Math.min(innerWidth, width);
   const containerHeight: number = containerWidth / ratio;
 
-  const [titleCaptionHeight, setTitleCaptionHeight] = useState(0);
   const galleryRef = useRef<HTMLDivElement>(null);
+  const titleCaptionHeight = useSwiperTitleCaptionHeight(galleryRef, [
+    settings,
+    images,
+  ]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -89,59 +96,6 @@ const CubeGallery = ({onClick}: ICubeGalleryProps) => {
       (cubeShadow as HTMLElement).style.width = shadow ? '100%' : '0%';
     }
   }, [shadow]);
-
-  useEffect(() => {
-    if (!galleryRef.current) return;
-
-    const measureTitleCaptionHeight = () => {
-      const title = galleryRef.current?.querySelector(
-        '.swiper-gallery__title-caption.swiper-gallery__item-outline:not(.swiper-gallery__button)'
-      ) as HTMLElement;
-      const caption = galleryRef.current?.querySelector(
-        '.swiper-gallery__caption.swiper-gallery__item-outline'
-      ) as HTMLElement;
-      const button = galleryRef.current?.querySelector(
-        '.swiper-gallery__button.swiper-gallery__item-outline'
-      ) as HTMLElement;
-
-      let totalHeight = 0;
-      if (title) totalHeight += title.offsetHeight;
-      if (caption) totalHeight += caption.offsetHeight;
-      if (button) totalHeight += button.offsetHeight;
-
-      setTitleCaptionHeight(totalHeight);
-    };
-
-    // Initial measurement
-    measureTitleCaptionHeight();
-
-    // Watch for changes using ResizeObserver
-    const resizeObserver = new ResizeObserver(() => {
-      measureTitleCaptionHeight();
-    });
-
-    const swiperSlide = galleryRef.current.querySelector(
-      '.swiper-slide'
-    ) as HTMLElement;
-    if (swiperSlide) {
-      resizeObserver.observe(swiperSlide);
-    }
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [
-    showTitle,
-    showCaption,
-    showButton,
-    titlePosition,
-    captionPosition,
-    buttonPosition,
-    titleFontSize,
-    captionFontSize,
-    buttonFontSize,
-    buttonBorderSize,
-  ]);
 
   const dynamicThreshold = 6;
 

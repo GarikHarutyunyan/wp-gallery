@@ -2,6 +2,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import IconButton from '@mui/material/IconButton';
 import {
+  DescriptionPosition,
   ICardsSettings,
   ICarouselSettings,
   ICoverflowSettings,
@@ -194,17 +195,33 @@ const SwiperGallery: React.FC<ISwiperGalleryProps> = ({
 
   const dynamicThreshold = 6;
 
-  const aboveItemsCount = [
-    settings.titlePosition,
-    settings.captionPosition,
-    settings.buttonPosition,
-  ].filter((position) => position === ThumbnailTitlePosition.ABOVE).length;
+  const isDescriptionAbove =
+    'showDescription' in settings &&
+    Boolean(settings.showDescription) &&
+    'descriptionPosition' in settings &&
+    settings.descriptionPosition === DescriptionPosition.ABOVE;
 
-  const belowItemsCount = [
-    settings.titlePosition,
-    settings.captionPosition,
-    settings.buttonPosition,
-  ].filter((position) => position === ThumbnailTitlePosition.BELOW).length;
+  const isDescriptionBelow =
+    'showDescription' in settings &&
+    Boolean(settings.showDescription) &&
+    'descriptionPosition' in settings &&
+    settings.descriptionPosition === DescriptionPosition.BELOW;
+
+  const aboveItemsCount =
+    [
+      settings.titlePosition,
+      settings.captionPosition,
+      settings.buttonPosition,
+    ].filter((position) => position === ThumbnailTitlePosition.ABOVE).length +
+    (isDescriptionAbove ? 1 : 0);
+
+  const belowItemsCount =
+    [
+      settings.titlePosition,
+      settings.captionPosition,
+      settings.buttonPosition,
+    ].filter((position) => position === ThumbnailTitlePosition.BELOW).length +
+    (isDescriptionBelow ? 1 : 0);
 
   const navigationVerticalOffset =
     titleCaptionHeight && aboveItemsCount > 0 && belowItemsCount === 0

@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import {
+  DescriptionPosition,
   HoverEffect,
   IImageDTO,
   IScrollerSettings,
@@ -45,6 +46,8 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
     titlePosition = ThumbnailTitlePosition.BOTTOM,
     showCaption = false,
     captionPosition = ThumbnailTitlePosition.BOTTOM,
+    showDescription = false,
+    descriptionPosition = DescriptionPosition.BELOW,
     showButton = false,
     buttonPosition = ThumbnailTitlePosition.BOTTOM,
     showVideoCover,
@@ -185,6 +188,10 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
     captionPosition === ThumbnailTitlePosition.ABOVE;
   const isCaptionBelow: boolean =
     captionPosition === ThumbnailTitlePosition.BELOW;
+  const isDescriptionAbove: boolean =
+    descriptionPosition === DescriptionPosition.ABOVE;
+  const isDescriptionBelow: boolean =
+    descriptionPosition === DescriptionPosition.BELOW;
   const isButtonAbove: boolean =
     buttonPosition === ThumbnailTitlePosition.ABOVE;
   const isButtonBelow: boolean =
@@ -192,11 +199,65 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
   const hasOutsideTitle: boolean = showTitle && (isTitleAbove || isTitleBelow);
   const hasOutsideCaption: boolean =
     showCaption && (isCaptionAbove || isCaptionBelow);
+  const hasOutsideDescription: boolean =
+    showDescription && (isDescriptionAbove || isDescriptionBelow);
   const hasOutsideButton: boolean =
     showButton && (isButtonAbove || isButtonBelow);
 
   const hasOutsideMetadata: boolean =
-    hasOutsideTitle || hasOutsideCaption || hasOutsideButton;
+    hasOutsideTitle ||
+    hasOutsideCaption ||
+    hasOutsideDescription ||
+    hasOutsideButton;
+
+  useEffect(() => {
+    const container = wrapperRef.current;
+    if (!container) return;
+
+    if (!hasOutsideMetadata) {
+      container.style.setProperty('--reacg-above-height', '0px');
+      return;
+    }
+
+    const measureAboveHeight = () => {
+      let maxAboveHeight = 0;
+      container
+        .querySelectorAll<HTMLElement>('.reacg-scroller__item-card')
+        .forEach((card) => {
+          let cardAbove = 0;
+          card
+            .querySelectorAll<HTMLElement>(
+              '.scroller-gallery__above-items > .scroller-gallery__item-outline'
+            )
+            .forEach((el) => {
+              cardAbove += el.offsetHeight;
+            });
+          if (cardAbove > maxAboveHeight) {
+            maxAboveHeight = cardAbove;
+          }
+        });
+      container.style.setProperty(
+        '--reacg-above-height',
+        `${maxAboveHeight}px`
+      );
+    };
+
+    measureAboveHeight();
+    const frameId = requestAnimationFrame(measureAboveHeight);
+
+    const resizeObserver = new ResizeObserver(() => {
+      measureAboveHeight();
+    });
+
+    container
+      .querySelectorAll('.scroller-gallery__above-items > .scroller-gallery__item-outline')
+      .forEach((el) => resizeObserver.observe(el));
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      resizeObserver.disconnect();
+    };
+  }, [equalHeight, hasOutsideMetadata, settings, images]);
 
   const handleMouseEnter = () => {
     if (pauseOnHover) {
@@ -244,6 +305,8 @@ const Scroller: React.FC<IScrollerProps> = ({images, settings, onClick}) => {
                 'reacg-scroller__track--right': !isLeftScroll,
                 'reacg-scroller__track--paused': isPaused,
                 'reacg-scroller__track--mixed-height': !equalHeight,
+                'reacg-scroller__track--has-outside-metadata':
+                  hasOutsideMetadata,
               }
             )}
             style={{
