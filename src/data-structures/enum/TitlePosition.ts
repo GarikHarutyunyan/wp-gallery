@@ -19,9 +19,9 @@ export const TitlePositionOptions = [
 ];
 
 export const ThumbnailTitlePositionOptions = [
+  {value: ThumbnailTitlePosition.ABOVE, title: 'Above'},
   {value: ThumbnailTitlePosition.TOP, title: 'Top'},
   {value: ThumbnailTitlePosition.CENTER, title: 'Center'},
   {value: ThumbnailTitlePosition.BOTTOM, title: 'Bottom'},
-  {value: ThumbnailTitlePosition.ABOVE, title: 'Above'},
   {value: ThumbnailTitlePosition.BELOW, title: 'Below'},
 ];

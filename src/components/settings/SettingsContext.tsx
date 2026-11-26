@@ -144,7 +144,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     thumbnails: gridMockSettings,
     mosaic: mosaicMockSettings,
     justified: justifiedMockSettings,
-    masonry: mosaicMockSettings,
+    masonry: masonryMockSettings,
     slideshow: slideshowMockSettings,
     lightbox: lightboxMockSettings,
     cube: cubeMockSettings,
@@ -198,7 +198,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     setGridSettings(newSettings.thumbnails || gridMockSettings);
     setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
     setJustifiedSettings(newSettings.justified || justifiedMockSettings);
-    setMasonrySettings(newSettings.masonry || mosaicMockSettings);
+    setMasonrySettings(newSettings.masonry || masonryMockSettings);
     setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
     setLightboxSettings(newSettings.lightbox);
     setCubeSettings(newSettings.cube || cubeMockSettings);
@@ -221,7 +221,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       thumbnails: newSettings.thumbnails || gridMockSettings,
       mosaic: newSettings.mosaic || mosaicMockSettings,
       justified: newSettings.justified || justifiedMockSettings,
-      masonry: newSettings.masonry || mosaicMockSettings,
+      masonry: newSettings.masonry || masonryMockSettings,
       slideshow: newSettings.slideshow || slideshowMockSettings,
       lightbox: newSettings.lightbox,
       cube: newSettings.cube || cubeMockSettings,
@@ -271,7 +271,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
       setGridSettings(newSettings.thumbnails || gridMockSettings);
       setMosaicSettings(newSettings.mosaic || mosaicMockSettings);
       setJustifiedSettings(newSettings.justified || justifiedMockSettings);
-      setMasonrySettings(newSettings.masonry || mosaicMockSettings);
+      setMasonrySettings(newSettings.masonry || masonryMockSettings);
       setSlideshowSettings(newSettings.slideshow || slideshowMockSettings);
       setLightboxSettings(newSettings.lightbox);
       setCubeSettings(newSettings.cube || cubeMockSettings);
@@ -295,7 +295,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         thumbnails: newSettings.thumbnails || gridMockSettings,
         mosaic: newSettings.mosaic || mosaicMockSettings,
         justified: newSettings.justified || justifiedMockSettings,
-        masonry: newSettings.masonry || mosaicMockSettings,
+        masonry: newSettings.masonry || masonryMockSettings,
         slideshow: newSettings.slideshow || slideshowMockSettings,
         lightbox: newSettings.lightbox,
         cube: newSettings.cube || cubeMockSettings,
@@ -681,7 +681,7 @@ const SettingsProvider: React.FC<React.PropsWithChildren> = ({children}) => {
           thumbnails: newSettings.thumbnails ?? gridMockSettings,
           mosaic: newSettings.mosaic ?? mosaicMockSettings,
           justified: newSettings.justified ?? justifiedMockSettings,
-          masonry: newSettings.masonry ?? mosaicMockSettings,
+          masonry: newSettings.masonry ?? masonryMockSettings,
           slideshow: newSettings.slideshow ?? slideshowMockSettings,
           lightbox: newSettings.lightbox,
           cube: newSettings.cube ?? cubeMockSettings,

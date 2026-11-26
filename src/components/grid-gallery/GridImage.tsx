@@ -161,8 +161,7 @@ const GridImage = ({
     isContain && origW && origH && width > 0 && height > 0
       ? Math.min(width / origW, height / origH, 1)
       : 1;
-  const imageWidth =
-    isContain && origW && origH ? origW * containScale : width;
+  const imageWidth = isContain && origW && origH ? origW * containScale : width;
   const imageHeight =
     isContain && origW && origH ? origH * containScale : height;
   const safeMargin = margin || 0;
@@ -197,7 +196,8 @@ const GridImage = ({
       hasSharedCaption &&
       captionVisibility === TitleVisibility.ON_HOVER &&
       isInsideTitlePosition;
-    const hasSharedButton = titlePosition === buttonPosition && showButton;
+    const hasSharedButton =
+      titlePosition === buttonPosition && showButton && isInsideTitlePosition;
     const buttonOnHoverAtTitle =
       hasSharedButton &&
       buttonVisibility === TitleVisibility.ON_HOVER &&
@@ -353,7 +353,10 @@ const GridImage = ({
       hasCaptionText &&
       captionVisibility === TitleVisibility.ON_HOVER &&
       isInsideCaptionPosition;
-    const hasSharedButton = captionPosition === buttonPosition && showButton;
+    const hasSharedButton =
+      captionPosition === buttonPosition &&
+      showButton &&
+      isInsideCaptionPosition;
     const buttonOnHoverAtCaption =
       hasSharedButton &&
       buttonVisibility === TitleVisibility.ON_HOVER &&
@@ -648,14 +651,13 @@ const GridImage = ({
       )}
       onClick={onClick}
       style={{
-        alignSelf:
-          isContain
-            ? 'start'
-            : verticalAlignment === 'bottom'
-            ? 'end'
-            : verticalAlignment === 'center'
-            ? 'center'
-            : 'start',
+        alignSelf: isContain
+          ? 'start'
+          : verticalAlignment === 'bottom'
+          ? 'end'
+          : verticalAlignment === 'center'
+          ? 'center'
+          : 'start',
         ...(isContain && hasItemBox && !fillContainer
           ? {
               width: imageWidth + 2 * safeMargin + 2 * itemBorder + 'px',
@@ -675,26 +677,25 @@ const GridImage = ({
           buttonPosition === ThumbnailTitlePosition.ABOVE
             ? 'hidden'
             : 'unset',
-        justifyContent:
-          isAutoHeight
-            ? verticalAlignment === 'bottom'
-              ? 'end'
-              : verticalAlignment === 'center'
-              ? 'center'
-              : 'start'
-            : ((titlePosition === ThumbnailTitlePosition.ABOVE ||
-                captionPosition === ThumbnailTitlePosition.ABOVE) &&
-                (!showDescription ||
-                  descriptionPosition === DescriptionPosition.ABOVE)) ||
-              ((titlePosition !== ThumbnailTitlePosition.ABOVE ||
-                captionPosition !== ThumbnailTitlePosition.ABOVE) &&
-                showDescription &&
-                descriptionPosition === DescriptionPosition.ABOVE)
+        justifyContent: isAutoHeight
+          ? verticalAlignment === 'bottom'
             ? 'end'
-            : titlePosition === ThumbnailTitlePosition.ABOVE ||
-              captionPosition === ThumbnailTitlePosition.ABOVE
-            ? 'start'
-            : 'initial',
+            : verticalAlignment === 'center'
+            ? 'center'
+            : 'start'
+          : ((titlePosition === ThumbnailTitlePosition.ABOVE ||
+              captionPosition === ThumbnailTitlePosition.ABOVE) &&
+              (!showDescription ||
+                descriptionPosition === DescriptionPosition.ABOVE)) ||
+            ((titlePosition !== ThumbnailTitlePosition.ABOVE ||
+              captionPosition !== ThumbnailTitlePosition.ABOVE) &&
+              showDescription &&
+              descriptionPosition === DescriptionPosition.ABOVE)
+          ? 'end'
+          : titlePosition === ThumbnailTitlePosition.ABOVE ||
+            captionPosition === ThumbnailTitlePosition.ABOVE
+          ? 'start'
+          : 'initial',
         height:
           ((titlePosition === ThumbnailTitlePosition.ABOVE ||
             captionPosition === ThumbnailTitlePosition.ABOVE) &&
@@ -719,14 +720,11 @@ const GridImage = ({
       captionPosition === ThumbnailTitlePosition.ABOVE
         ? renderCaption(image)
         : null}
-      {showButton &&
-      (titlePosition != buttonPosition || !showTitle) &&
-      (captionPosition != buttonPosition || !showCaption) &&
-      buttonPosition === ThumbnailTitlePosition.ABOVE
-        ? renderButton(buttonPosition)
-        : null}
       {showDescription && descriptionPosition === DescriptionPosition.ABOVE
         ? renderDescription(image)
+        : null}
+      {showButton && buttonPosition === ThumbnailTitlePosition.ABOVE
+        ? renderButton(buttonPosition)
         : null}
       <div
         className="thumbnail-gallery__item-outline"
@@ -734,11 +732,11 @@ const GridImage = ({
           {
             ...(isContain
               ? {
-                  display: 'flex',
-                  width: 'fit-content',
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                  marginTop: containExtraV + 'px',
+                  'display': 'flex',
+                  'width': 'fit-content',
+                  'marginLeft': 'auto',
+                  'marginRight': 'auto',
+                  'marginTop': containExtraV + 'px',
                   '--reacg-contain-mb': containExtraV + 'px',
                 }
               : {}),
@@ -841,14 +839,11 @@ const GridImage = ({
       captionPosition === ThumbnailTitlePosition.BELOW
         ? renderCaption(image)
         : null}
-      {showButton &&
-      (titlePosition != buttonPosition || !showTitle) &&
-      (captionPosition != buttonPosition || !showCaption) &&
-      buttonPosition === ThumbnailTitlePosition.BELOW
-        ? renderButton(buttonPosition)
-        : null}
       {showDescription && descriptionPosition === DescriptionPosition.BELOW
         ? renderDescription(image)
+        : null}
+      {showButton && buttonPosition === ThumbnailTitlePosition.BELOW
+        ? renderButton(buttonPosition)
         : null}
     </ImageListItem>
   );

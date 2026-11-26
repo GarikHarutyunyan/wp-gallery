@@ -101,11 +101,11 @@ export interface IMasonrySettings {
   columns?: number | undefined;
   borderRadius: number;
   titleSource: TitleSource;
-  titlePosition: TitlePosition;
+  titlePosition: ThumbnailTitlePosition;
   titleAlignment: TitleAlignment;
   titleVisibility: TitleVisibility;
   captionVisibility: TitleVisibility;
-  captionPosition: TitlePosition;
+  captionPosition: ThumbnailTitlePosition;
   titleFontFamily: string;
   titleColor: string;
   titleFontSize?: number | undefined;
@@ -121,11 +121,17 @@ export interface IMasonrySettings {
   captionFontSize?: number | undefined;
   captionFontColor: string;
   captionMaxRowsCount?: number | undefined;
+  showDescription: boolean;
+  descriptionSource: DescriptionSource;
+  descriptionPosition: DescriptionPosition;
+  descriptionFontSize?: number | undefined;
+  descriptionFontColor: string;
+  descriptionMaxRowsCount?: number | undefined;
   showTitle: boolean;
   showButton: boolean;
   buttonText: string;
   buttonVisibility: TitleVisibility;
-  buttonPosition: TitlePosition;
+  buttonPosition: ThumbnailTitlePosition;
   buttonAlignment: TitleAlignment;
   buttonColor: string;
   buttonTextColor: string;
@@ -138,7 +144,23 @@ export interface IMasonrySettings {
   showVideoCover: boolean;
 }
 
-export interface IMosaicSettings extends IMasonrySettings {}
+export interface IMosaicSettings
+  extends Omit<
+    IMasonrySettings,
+    | 'titlePosition'
+    | 'captionPosition'
+    | 'buttonPosition'
+    | 'showDescription'
+    | 'descriptionSource'
+    | 'descriptionPosition'
+    | 'descriptionFontSize'
+    | 'descriptionFontColor'
+    | 'descriptionMaxRowsCount'
+  > {
+  titlePosition: TitlePosition;
+  captionPosition: TitlePosition;
+  buttonPosition: TitlePosition;
+}
 
 export interface IJustifiedSettings extends Omit<IMasonrySettings, 'columns'> {
   rowHeight: number;

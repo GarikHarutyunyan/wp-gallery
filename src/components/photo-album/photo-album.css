@@ -555,3 +555,26 @@
 .reacg-gallery .photo-album-item__title .MuiImageListItemBar-titleWrap {
   color: inherit;
 }
+
+.reacg-gallery .photo-album-item__description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  white-space: pre-line;
+}
+
+.reacg-gallery
+  .photo-album-item__title.photo-album-item__item-outline
+  .MuiImageListItemBar-titleWrap {
+  padding: 0;
+}
+
+.reacg-gallery .photo-album-item__item-outline:has(~ :not(:empty)) {
+  margin-bottom: 8px;
+}
+
+.reacg-gallery .photo-album-item__image-wrapper + .photo-album-item__item-outline {
+  margin-top: 8px;
+}

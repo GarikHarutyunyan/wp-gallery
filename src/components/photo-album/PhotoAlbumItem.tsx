@@ -5,11 +5,16 @@ import ReImage from 'core-components/re-image/ReImage';
 import ReVideo from 'core-components/re-video/ReVideo';
 import {
   ActionURLSource,
+  DescriptionPosition,
+  DescriptionSource,
   IImageDTO,
+  IJustifiedSettings,
   IMasonrySettings,
+  IMosaicSettings,
   ImageType,
   TitleAlignment,
   TitlePosition,
+  ThumbnailTitlePosition,
   TitleVisibility,
 } from 'data-structures';
 import React, {CSSProperties, ReactNode, useRef} from 'react';
@@ -22,7 +27,7 @@ interface IPhotoAlbumItemProps extends React.PropsWithChildren {
   width: number;
   height: number;
   onClick?: () => void;
-  settings: IMasonrySettings;
+  settings: IMasonrySettings | IMosaicSettings | IJustifiedSettings;
   style: CSSProperties;
 }
 
@@ -74,33 +79,96 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
     buttonUrlSource,
     openInNewTab,
   } = settings;
+  const showDescription =
+    'showDescription' in settings ? settings.showDescription : false;
+  const descriptionSource =
+    'descriptionSource' in settings
+      ? settings.descriptionSource
+      : DescriptionSource.DESCRIPTION;
+  const descriptionPosition =
+    'descriptionPosition' in settings
+      ? settings.descriptionPosition
+      : DescriptionPosition.BELOW;
+  const descriptionFontSize =
+    'descriptionFontSize' in settings
+      ? settings.descriptionFontSize
+      : undefined;
+  const descriptionFontColor =
+    'descriptionFontColor' in settings ? settings.descriptionFontColor : '';
+  const descriptionMaxRowsCount =
+    'descriptionMaxRowsCount' in settings
+      ? settings.descriptionMaxRowsCount
+      : undefined;
   const imageBorderRadius =
     padding < borderRadius / 2 ? borderRadius - padding : borderRadius / 2;
 
+  const isOutsidePosition = (pos: ThumbnailTitlePosition | TitlePosition) =>
+    pos === ThumbnailTitlePosition.ABOVE ||
+    pos === ThumbnailTitlePosition.BELOW;
+
+  const getBarPosition = (pos: ThumbnailTitlePosition | TitlePosition) =>
+    pos === ThumbnailTitlePosition.CENTER || pos === TitlePosition.CENTER
+      ? 'bottom'
+      : pos === ThumbnailTitlePosition.ABOVE
+      ? 'below'
+      : pos;
+
   const renderTitle = (image: IImageDTO): ReactNode => {
+    const isOutside = isOutsidePosition(titlePosition);
     const paddingTitle =
-      titlePosition !== TitlePosition.CENTER
+      titlePosition !== ThumbnailTitlePosition.CENTER
         ? imageBorderRadius / 2 + 'px'
         : '0';
+    const isInsideTitlePosition = !isOutside;
+    const titleOnHover =
+      showTitle &&
+      titleVisibility === TitleVisibility.ON_HOVER &&
+      isInsideTitlePosition;
     const hasSharedCaption =
       titlePosition === captionPosition &&
       showCaption &&
       !!image[captionSource];
+    const captionOnHoverAtTitle =
+      hasSharedCaption &&
+      captionVisibility === TitleVisibility.ON_HOVER &&
+      isInsideTitlePosition;
+    const hasSharedButton =
+      titlePosition === buttonPosition && showButton && isInsideTitlePosition;
+    if (
+      isOutside &&
+      !image?.[titleSource] &&
+      !hasSharedCaption &&
+      !hasSharedButton
+    ) {
+      return null;
+    }
+    const buttonOnHoverAtTitle =
+      hasSharedButton &&
+      buttonVisibility === TitleVisibility.ON_HOVER &&
+      !isOutsidePosition(buttonPosition);
+    const hasAlwaysContentAtTitle =
+      (showTitle && !titleOnHover) ||
+      (hasSharedCaption && !captionOnHoverAtTitle) ||
+      (hasSharedButton && !buttonOnHoverAtTitle);
+    const titleContainerOnHover =
+      !hasAlwaysContentAtTitle &&
+      (titleOnHover || captionOnHoverAtTitle || buttonOnHoverAtTitle);
 
     return (
       <div
         className={clsx('photo-album-item__title', {
-          'photo-album-item__title_on-hover':
-            showTitle && titleVisibility === TitleVisibility.ON_HOVER,
+          'photo-album-item__title_on-hover': titleContainerOnHover,
           'photo-album-item__title_hidden': !showTitle,
+          'photo-album-item__item-outline': showTitle && isOutside,
           'reacg-gallery__text-background-top-gradient':
-            overlayTextBackground === '' && titlePosition === TitlePosition.TOP,
+            overlayTextBackground === '' &&
+            titlePosition === ThumbnailTitlePosition.TOP,
           'reacg-gallery__text-background-bottom-gradient':
             overlayTextBackground === '' &&
-            titlePosition === TitlePosition.BOTTOM,
+            titlePosition === ThumbnailTitlePosition.BOTTOM,
           'reacg-gallery__text-background-center-gradient':
             overlayTextBackground === '' &&
-            titlePosition === TitlePosition.CENTER,
+            titlePosition === ThumbnailTitlePosition.CENTER,
         })}
       >
         <ImageListItemBar
@@ -138,26 +206,35 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             paddingLeft: paddingTitle,
             paddingRight: paddingTitle,
             color: titleColor,
-            backgroundColor:
-              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
-            mixBlendMode: invertTextColor ? 'difference' : 'initial',
+            backgroundColor: isOutside
+              ? 'initial'
+              : overlayTextBackground === ''
+              ? 'unset'
+              : overlayTextBackground,
+            mixBlendMode:
+              invertTextColor && !isOutside ? 'difference' : 'initial',
           }}
           className={`photo-album-item__title-content_${titlePosition}`}
-          title={showTitle && <span>{image?.[titleSource] || <br />}</span>}
+          title={
+            showTitle && (!isOutside || image?.[titleSource]) ? (
+              <span className={clsx({'reacg-content_on-hover': titleOnHover})}>
+                {image?.[titleSource] || <br />}
+              </span>
+            ) : null
+          }
           subtitle={
-            (titlePosition === captionPosition &&
-              showCaption &&
-              image[captionSource]) ||
-            (titlePosition === buttonPosition && showButton) ? (
+            hasSharedCaption || hasSharedButton ? (
               <>
-                {titlePosition === captionPosition &&
-                  showCaption &&
-                  image[captionSource] && (
-                    <span className="photo-album-item__caption">
-                      {image[captionSource]}
-                    </span>
-                  )}
-                {titlePosition === buttonPosition && showButton && (
+                {hasSharedCaption && (
+                  <span
+                    className={clsx('photo-album-item__caption', {
+                      'reacg-content_on-hover': captionOnHoverAtTitle,
+                    })}
+                  >
+                    {image[captionSource]}
+                  </span>
+                )}
+                {hasSharedButton && (
                   <span className="reacg-action-button-wrap">
                     <ActionButton
                       url={image?.[buttonUrlSource as ActionURLSource] || ''}
@@ -170,42 +247,63 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
                       borderSize={buttonBorderSize}
                       borderColor={buttonBorderColor}
                       borderRadius={buttonBorderRadius}
-                      isOnHover={buttonVisibility === TitleVisibility.ON_HOVER}
+                      isOnHover={buttonOnHoverAtTitle}
                     />
                   </span>
                 )}
               </>
             ) : null
           }
-          position={
-            titlePosition !== TitlePosition.CENTER ? titlePosition : 'bottom'
-          }
+          position={getBarPosition(titlePosition)}
         />
       </div>
     );
   };
 
   const renderCaption = (image: IImageDTO): ReactNode => {
+    const isOutside = isOutsidePosition(captionPosition);
     const paddingTitle =
-      titlePosition !== TitlePosition.CENTER
+      captionPosition !== ThumbnailTitlePosition.CENTER
         ? imageBorderRadius / 2 + 'px'
         : '0';
+    const isInsideCaptionPosition = !isOutside;
+    const hasCaptionText = showCaption && !!image[captionSource];
+    const captionOnHover =
+      hasCaptionText &&
+      captionVisibility === TitleVisibility.ON_HOVER &&
+      isInsideCaptionPosition;
+    const hasSharedButton =
+      captionPosition === buttonPosition &&
+      showButton &&
+      isInsideCaptionPosition;
+    if (isOutside && !hasCaptionText && !hasSharedButton) {
+      return null;
+    }
+    const buttonOnHoverAtCaption =
+      hasSharedButton &&
+      buttonVisibility === TitleVisibility.ON_HOVER &&
+      !isOutsidePosition(buttonPosition);
+    const hasAlwaysContentAtCaption =
+      (hasCaptionText && !captionOnHover) ||
+      (hasSharedButton && !buttonOnHoverAtCaption);
+    const captionContainerOnHover =
+      !hasAlwaysContentAtCaption && (captionOnHover || buttonOnHoverAtCaption);
 
     return (
       <div
         className={clsx('photo-album-item__title', {
-          'photo-album-item__title_on-hover':
-            showCaption && captionVisibility === TitleVisibility.ON_HOVER,
+          'photo-album-item__title_on-hover': captionContainerOnHover,
           'photo-album-item__title_hidden': !showCaption,
+          'photo-album-item__item-outline': showCaption && isOutside,
           'reacg-gallery__text-background-top-gradient':
             overlayTextBackground === '' &&
-            captionPosition === TitlePosition.TOP,
+            captionPosition === ThumbnailTitlePosition.TOP,
           'reacg-gallery__text-background-bottom-gradient':
             overlayTextBackground === '' &&
-            captionPosition === TitlePosition.BOTTOM,
+            captionPosition === ThumbnailTitlePosition.BOTTOM,
           'reacg-gallery__text-background-center-gradient':
             overlayTextBackground === '' &&
-            captionPosition === TitlePosition.CENTER,
+            captionPosition === ThumbnailTitlePosition.CENTER,
         })}
       >
         <ImageListItemBar
@@ -233,21 +331,28 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             paddingLeft: paddingTitle,
             paddingRight: paddingTitle,
             color: captionFontColor,
-            backgroundColor:
-              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
-            mixBlendMode: invertTextColor ? 'difference' : 'initial',
+            backgroundColor: isOutside
+              ? 'initial'
+              : overlayTextBackground === ''
+              ? 'unset'
+              : overlayTextBackground,
+            mixBlendMode:
+              invertTextColor && !isOutside ? 'difference' : 'initial',
           }}
           className={`photo-album-item__title-content_${captionPosition}`}
           title={
-            (showCaption && image[captionSource]) ||
-            (captionPosition === buttonPosition && showButton) ? (
+            hasCaptionText || hasSharedButton ? (
               <>
-                {showCaption && image[captionSource] && (
-                  <span className="photo-album-item__caption">
+                {hasCaptionText && (
+                  <span
+                    className={clsx('photo-album-item__caption', {
+                      'reacg-content_on-hover': captionOnHover,
+                    })}
+                  >
                     {image[captionSource]}
                   </span>
                 )}
-                {captionPosition === buttonPosition && showButton && (
+                {hasSharedButton && (
                   <span className="reacg-action-button-wrap">
                     <ActionButton
                       url={image?.[buttonUrlSource as ActionURLSource] || ''}
@@ -260,18 +365,14 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
                       borderSize={buttonBorderSize}
                       borderColor={buttonBorderColor}
                       borderRadius={buttonBorderRadius}
-                      isOnHover={buttonVisibility === TitleVisibility.ON_HOVER}
+                      isOnHover={buttonOnHoverAtCaption}
                     />
                   </span>
                 )}
               </>
             ) : null
           }
-          position={
-            captionPosition !== TitlePosition.CENTER
-              ? captionPosition
-              : 'bottom'
-          }
+          position={getBarPosition(captionPosition)}
         />
       </div>
     );
@@ -280,8 +381,9 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
   const wrapperRef = useRef(null);
 
   const renderButton = (image: IImageDTO): ReactNode => {
+    const isOutside = isOutsidePosition(buttonPosition);
     const paddingTitle =
-      buttonPosition !== TitlePosition.CENTER
+      buttonPosition !== ThumbnailTitlePosition.CENTER
         ? imageBorderRadius / 2 + 'px'
         : '0';
 
@@ -289,17 +391,20 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
       <div
         className={clsx('photo-album-item__title', {
           'reacg-action-button-container_on-hover':
-            showButton && buttonVisibility === TitleVisibility.ON_HOVER,
+            showButton &&
+            buttonVisibility === TitleVisibility.ON_HOVER &&
+            !isOutside,
           'photo-album-item__title_hidden': !showButton,
+          'photo-album-item__item-outline': isOutside,
           'reacg-gallery__text-background-top-gradient':
             overlayTextBackground === '' &&
-            buttonPosition === TitlePosition.TOP,
+            buttonPosition === ThumbnailTitlePosition.TOP,
           'reacg-gallery__text-background-bottom-gradient':
             overlayTextBackground === '' &&
-            buttonPosition === TitlePosition.BOTTOM,
+            buttonPosition === ThumbnailTitlePosition.BOTTOM,
           'reacg-gallery__text-background-center-gradient':
             overlayTextBackground === '' &&
-            buttonPosition === TitlePosition.CENTER,
+            buttonPosition === ThumbnailTitlePosition.CENTER,
         })}
       >
         <ImageListItemBar
@@ -313,9 +418,13 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             textAlign: buttonAlignment,
             paddingLeft: paddingTitle,
             paddingRight: paddingTitle,
-            backgroundColor:
-              overlayTextBackground === '' ? 'unset' : overlayTextBackground,
-            mixBlendMode: invertTextColor ? 'difference' : 'initial',
+            backgroundColor: isOutside
+              ? 'initial'
+              : overlayTextBackground === ''
+              ? 'unset'
+              : overlayTextBackground,
+            mixBlendMode:
+              invertTextColor && !isOutside ? 'difference' : 'initial',
           }}
           className={`photo-album-item__title-content_${buttonPosition}`}
           title={
@@ -331,17 +440,73 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
                 borderSize={buttonBorderSize}
                 borderColor={buttonBorderColor}
                 borderRadius={buttonBorderRadius}
-                isOnHover={buttonVisibility === TitleVisibility.ON_HOVER}
+                isOnHover={
+                  buttonVisibility === TitleVisibility.ON_HOVER && !isOutside
+                }
               />
             </span>
           }
-          position={
-            buttonPosition !== TitlePosition.CENTER ? buttonPosition : 'bottom'
-          }
+          position={getBarPosition(buttonPosition)}
         />
       </div>
     );
   };
+
+  const renderDescription = (image: IImageDTO): ReactNode => {
+    const paddingText = imageBorderRadius / 2 + 'px';
+
+    return (
+      <div
+        className={clsx(
+          'photo-album-item__description',
+          'photo-album-item__item-outline'
+        )}
+        style={{
+          WebkitLineClamp: descriptionMaxRowsCount,
+          fontSize: descriptionFontSize,
+          color: descriptionFontColor,
+          fontFamily: titleFontFamily,
+          lineHeight: 'normal',
+          paddingLeft: paddingText,
+          paddingRight: paddingText,
+          textAlign: titleAlignment,
+        }}
+      >
+        {image[descriptionSource]}
+      </div>
+    );
+  };
+
+  const hasTitleText = showTitle && Boolean(image?.[titleSource]);
+  const hasCaptionText = showCaption && Boolean(image?.[captionSource]);
+  const hasDescriptionText =
+    showDescription && Boolean(image?.[descriptionSource]);
+
+  const hasContentAtOutsidePosition = (
+    pos: ThumbnailTitlePosition,
+    descPos: DescriptionPosition
+  ) =>
+    (showTitle &&
+      titlePosition === pos &&
+      (hasTitleText ||
+        (captionPosition === pos && hasCaptionText) ||
+        (buttonPosition === pos && showButton))) ||
+    (showCaption &&
+      captionPosition === pos &&
+      (hasCaptionText || (buttonPosition === pos && showButton))) ||
+    (showButton && buttonPosition === pos) ||
+    (hasDescriptionText && descriptionPosition === descPos);
+
+  const hasAboveContent = hasContentAtOutsidePosition(
+    ThumbnailTitlePosition.ABOVE,
+    DescriptionPosition.ABOVE
+  );
+  const hasBelowContent = hasContentAtOutsidePosition(
+    ThumbnailTitlePosition.BELOW,
+    DescriptionPosition.BELOW
+  );
+
+  const hasOutsideContent = hasAboveContent || hasBelowContent;
 
   return (
     <div
@@ -354,9 +519,32 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
         background: paddingColor,
         borderRadius: `${borderRadius}px`,
         ...style,
+        ...(hasOutsideContent
+          ? {
+              aspectRatio: 'unset',
+              display: 'flex',
+              flexDirection: 'column',
+            }
+          : {}),
       }}
       onClick={onClick}
     >
+      {showTitle && titlePosition === ThumbnailTitlePosition.ABOVE
+        ? renderTitle(image)
+        : null}
+      {showCaption &&
+      (titlePosition !== captionPosition || !showTitle) &&
+      captionPosition === ThumbnailTitlePosition.ABOVE
+        ? renderCaption(image)
+        : null}
+      {showDescription &&
+      image[descriptionSource] &&
+      descriptionPosition === DescriptionPosition.ABOVE
+        ? renderDescription(image)
+        : null}
+      {showButton && buttonPosition === ThumbnailTitlePosition.ABOVE
+        ? renderButton(image)
+        : null}
       <div
         ref={wrapperRef}
         className={clsx(
@@ -368,6 +556,12 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
         )}
         style={{
           borderRadius: `${imageBorderRadius}px`,
+          ...(hasOutsideContent
+            ? {
+                height: 'auto',
+                ...(style?.aspectRatio ? {aspectRatio: style.aspectRatio} : {}),
+              }
+            : {}),
         }}
       >
         {image.type === ImageType.IMAGE && (
@@ -380,7 +574,10 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
             loadedEffect={loadedEffect}
             style={{
               width: '100%',
-              height: '100%',
+              height: hasOutsideContent ? 'auto' : '100%',
+              ...(hasOutsideContent && style?.aspectRatio
+                ? {aspectRatio: style.aspectRatio}
+                : {}),
               display: 'block',
             }}
           />
@@ -398,22 +595,43 @@ const PhotoAlbumItem: React.FC<IPhotoAlbumItemProps> = ({
               loadedEffect: loadedEffect,
               style: {
                 width: '100%',
-                height: '100%',
+                height: hasOutsideContent ? 'auto' : '100%',
+                ...(hasOutsideContent && style?.aspectRatio
+                  ? {aspectRatio: style.aspectRatio}
+                  : {}),
                 display: 'block',
               },
             }}
           />
         )}
         <Watermark />
-        {showTitle && renderTitle(image)}
+        {showTitle && !isOutsidePosition(titlePosition) && renderTitle(image)}
         {showCaption &&
-          (titlePosition != captionPosition || !showTitle) &&
+          (titlePosition !== captionPosition || !showTitle) &&
+          !isOutsidePosition(captionPosition) &&
           renderCaption(image)}
         {showButton &&
-          (titlePosition != buttonPosition || !showTitle) &&
-          (captionPosition != buttonPosition || !showCaption) &&
+          (titlePosition !== buttonPosition || !showTitle) &&
+          (captionPosition !== buttonPosition || !showCaption) &&
+          !isOutsidePosition(buttonPosition) &&
           renderButton(image)}
       </div>
+      {showTitle && titlePosition === ThumbnailTitlePosition.BELOW
+        ? renderTitle(image)
+        : null}
+      {showCaption &&
+      (titlePosition !== captionPosition || !showTitle) &&
+      captionPosition === ThumbnailTitlePosition.BELOW
+        ? renderCaption(image)
+        : null}
+      {showDescription &&
+      image[descriptionSource] &&
+      descriptionPosition === DescriptionPosition.BELOW
+        ? renderDescription(image)
+        : null}
+      {showButton && buttonPosition === ThumbnailTitlePosition.BELOW
+        ? renderButton(image)
+        : null}
     </div>
   );
 };

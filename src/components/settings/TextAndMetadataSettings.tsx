@@ -122,6 +122,8 @@ export const TextAndMetadataSettings: React.FC<
   const usesLightboxTextLayout = galleryType === GalleryType.SLIDESHOW;
   const usesThumbnailPositionLayout = [
     GalleryType.GRID,
+    GalleryType.MASONRY,
+    GalleryType.JUSTIFIED,
     GalleryType.CUBE,
     GalleryType.CAROUSEL,
     GalleryType.CARDS,

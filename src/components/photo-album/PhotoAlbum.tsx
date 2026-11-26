@@ -1,7 +1,9 @@
 import {Box} from '@mui/material';
 import {
   IImageDTO,
+  IJustifiedSettings,
   IMasonrySettings,
+  IMosaicSettings,
   WithStyleAndClassName,
 } from 'data-structures';
 import React, {
@@ -28,7 +30,7 @@ interface IPhotoAlbumProps extends WithStyleAndClassName {
   rowHeight?: number;
   backgroundColor: string;
   containerPadding: number;
-  settings: IMasonrySettings;
+  settings: IMasonrySettings | IMosaicSettings | IJustifiedSettings;
   onClick?: (index: number) => void;
 }
 
